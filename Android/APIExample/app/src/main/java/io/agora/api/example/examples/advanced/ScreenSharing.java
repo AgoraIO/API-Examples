@@ -23,11 +23,13 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -66,7 +68,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         tipsId = R.string.screensharing
 )
 public class ScreenSharing extends BaseFragment implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
+        CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = ScreenSharing.class.getSimpleName();
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
@@ -81,6 +83,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
     private final ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
 
     private Intent fgServiceIntent;
+    private Spinner screenScenarioType;
 
     @Nullable
     @Override
@@ -102,7 +105,9 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         screenPreview = view.findViewById(R.id.screen_preview);
         screenAudio = view.findViewById(R.id.screen_audio);
         screenAudioVolume = view.findViewById(R.id.screen_audio_volume);
+        screenScenarioType = view.findViewById(R.id.spinner_screen_scenario_type);
 
+        screenScenarioType.setOnItemSelectedListener(this);
         screenPreview.setOnCheckedChangeListener(this);
         screenAudio.setOnCheckedChangeListener(this);
         screenAudioVolume.setOnSeekBarChangeListener(this);
@@ -506,6 +511,18 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == screenScenarioType) {
+            engine.setScreenCaptureScenario(Constants.ScreenScenarioType.valueOf(screenScenarioType.getSelectedItem().toString()));
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 

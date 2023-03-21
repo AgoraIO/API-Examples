@@ -77,11 +77,37 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_screen_scenario_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/ll_screen_volume"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="ScreenScenarioType"
+            android:textColor="@android:color/black" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_screen_scenario_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:entries="@array/screen_scenario_type"
+            android:hint="Select a screen scenario type"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
     <Switch
         android:id="@+id/screen_audio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ll_screen_volume"
+        android:layout_above="@+id/ll_screen_scenario_type"
         android:layout_marginBottom="16dp"
         android:paddingHorizontal="16dp"
         android:checked="true"
