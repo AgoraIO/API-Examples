@@ -120,6 +120,7 @@
     <string name="item_third_party_beauty">第三方美颜</string>
     <string name="item_ktv_copyright_music">KTV版权音乐</string>
     <string name="item_media_recorder">本地/远端录制</string>
+    <string name="item_localvideotranscoding">本地合图</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -139,6 +140,7 @@
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
     <string name="screensharing">此示例演示了在音视频通话过程中如何进行屏幕共享的方法。</string>
+    <string name="localvideotranscoding">此示例演示了在音视频通话过程中如何进行本地合图的方法。</string>
     <string name="switchcamerascreen">此示例演示了在音视频通话过程中，视频如何在摄像头流和屏幕分享流之间灵活切换。</string>
     <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
     <string name="geofencing">此示例演示了在音视频通话过程中如何通过AreaCode指定SDK访问限制。</string>
@@ -307,4 +309,5 @@
     <string name="first_frame_optimization_tip">开启后无法关闭，并且需要主辅两端都开启时才生效</string>
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
+
 </resources>
