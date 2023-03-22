@@ -241,6 +241,8 @@ class JoinChannelVideoRecorder: BaseViewController {
         agoraKit.disableAudio()
         agoraKit.disableVideo()
         if isJoined {
+            agoraKit.destroy(localRecord)
+            agoraKit.destroy(remoteRecord)
             agoraKit.stopPreview()
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -259,7 +261,7 @@ class JoinChannelVideoRecorder: BaseViewController {
             config.maxDurationMs = 10 * 1000
             localRecord.startRecording(config)
         } else {
-            agoraKit.destroy(localRecord)
+            localRecord.stopRecording()
             ToastView.show(text: path)
         }
     }
@@ -274,7 +276,7 @@ class JoinChannelVideoRecorder: BaseViewController {
             config.maxDurationMs = 10 * 1000
             remoteRecord.startRecording(config)
         } else {
-            agoraKit.destroy(remoteRecord)
+            remoteRecord.stopRecording()
             ToastView.show(text: path)
         }
     }
