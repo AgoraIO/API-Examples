@@ -24,6 +24,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Join a channel (Token)".localized, identifier: "menuCell", controller: "JoinChannelVideoToken", storyboard: "JoinChannelVideoToken"),
         MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
         MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
+        MenuItem(name: "Local or remote recording".localized, identifier: "menuCell", controller: "JoinChannelVideoRecorder", storyboard: "JoinChannelVideoRecorder"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "Live Streaming".localized, identifier: "menuCell", controller: "LiveStreaming", storyboard: "LiveStreaming"),
         MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),

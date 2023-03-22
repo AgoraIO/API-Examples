@@ -128,6 +128,9 @@
 		E77D54D628F56D3A00D51C1E /* sample.yuv in Resources */ = {isa = PBXBuildFile; fileRef = E77D54D528F56D3A00D51C1E /* sample.yuv */; };
 		E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E77D54D728F5702B00D51C1E /* SampleBufferDisplayView.xib */; };
 		E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BD32860B2F600851463 /* NSData+Extension.swift */; };
+		E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */; };
+		E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */; };
+		E7AD0DEC29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -294,6 +297,9 @@
 		E77D54D528F56D3A00D51C1E /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
 		E77D54D728F5702B00D51C1E /* SampleBufferDisplayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SampleBufferDisplayView.xib; sourceTree = "<group>"; };
 		E7899BD32860B2F600851463 /* NSData+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Extension.swift"; sourceTree = "<group>"; };
+		E7AD0DE629CAAF2B00C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoRecorder.strings"; sourceTree = "<group>"; };
+		E7AD0DE829CAAF2B00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
+		E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +335,7 @@
 		0333E63924FA335C0063C5B0 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				E7AD0DE429CAAF2B00C9A4B0 /* JoinChannelVideo(Recorder) */,
 				E77D54B828F553DA00D51C1E /* JoinChannelVideo(Token) */,
 				034C626A25259FC200296ECF /* JoinChannelVideo */,
 				034C62652525857200296ECF /* JoinChannelAudio */,
@@ -794,6 +801,16 @@
 			path = "JoinChannelVideo(Token)";
 			sourceTree = "<group>";
 		};
+		E7AD0DE429CAAF2B00C9A4B0 /* JoinChannelVideo(Recorder) */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */,
+				E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */,
+				E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */,
+			);
+			path = "JoinChannelVideo(Recorder)";
+			sourceTree = "<group>";
+		};
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -910,6 +927,7 @@
 				E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */,
 				E77D54BF28F553DA00D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
+				E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
 				E77D54BE28F553DA00D51C1E /* JoinChannelVideoToken.strings in Resources */,
 				57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */,
@@ -946,6 +964,7 @@
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
 				E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
+				E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */,
 				033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */,
@@ -1064,6 +1083,7 @@
 				67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */,
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
 				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
+				E7AD0DEC29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift in Sources */,
 				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
 				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
 				67033723279E76560069F4B3 /* VideoProcess.swift in Sources */,
@@ -1312,6 +1332,22 @@
 				E77D54BC28F553DA00D51C1E /* Base */,
 			);
 			name = JoinChannelVideoToken.storyboard;
+			sourceTree = "<group>";
+		};
+		E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DE629CAAF2B00C9A4B0 /* zh-Hans */,
+			);
+			name = JoinChannelVideoRecorder.strings;
+			sourceTree = "<group>";
+		};
+		E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DE829CAAF2B00C9A4B0 /* Base */,
+			);
+			name = JoinChannelVideoRecorder.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
