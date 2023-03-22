@@ -156,6 +156,7 @@ class VideoProcess: BaseViewController {
             })
             
         } else {
+            agoraKit.stopPreview()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.videos[0].uid = nil
@@ -249,10 +250,17 @@ class VideoProcess: BaseViewController {
         case .blur:
             backgroundSource.blurDegree = .high
             break
+            
+        case .video:
+            let videoPath = Bundle.main.path(forResource: "sample", ofType: "mov")
+            backgroundSource.backgroundSourceType = .video
+            backgroundSource.source = videoPath
+            
         default:
             break
         }
-        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state.rawValue != 0,
+        backgroundSource.backgroundSourceType = virtualBackgroundSwitch.state == .on ? backgroundSource.backgroundSourceType : .none
+        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state == .on,
                                          backData: backgroundSource,
                                          segData: AgoraSegmentationProperty())
     }
