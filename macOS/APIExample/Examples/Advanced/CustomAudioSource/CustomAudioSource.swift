@@ -19,6 +19,7 @@ class CustomAudioSource: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
     var pcmSourcePush: AgoraPcmSourcePush!
+    private var trackId: Int32 = 0
     
     /**
      --- Microphones Picker ---
@@ -158,6 +159,9 @@ class CustomAudioSource: BaseViewController {
         } else {
             pcmSourcePush.stop()
         }
+        let mediaOption = AgoraRtcChannelMediaOptions()
+        mediaOption.publishCustomAudioTrack = sender.state == .on
+        agoraKit.updateChannel(with: mediaOption)
     }
     
     let sampleRate:UInt = 44100, audioChannel:UInt = 1, bitPerSample = 16, samples = 441 * 10
@@ -197,12 +201,9 @@ class CustomAudioSource: BaseViewController {
 
             pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                                channelsPerFrame: Int(audioChannel), bitPerSample: bitPerSample, samples: samples)
-            agoraKit.setExternalAudioSource(true,
-                                            sampleRate: Int(sampleRate),
-                                            channels: Int(audioChannel),
-                                            sourceNumber: 2,
-                                            localPlayback: true,
-                                            publish: true)
+            let trackConfig = AgoraAudioTrackConfig()
+            trackConfig.enableLocalPlayback = true
+            trackId = agoraKit.createCustomAudioTrack(.mixable, config: trackConfig)
                         
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -216,6 +217,7 @@ class CustomAudioSource: BaseViewController {
             option.publishMicrophoneTrack = true
             option.publishCustomAudioTrack = true
             option.publishCameraTrack = false
+            option.publishCustomAudioTrackId = Int(trackId)
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
@@ -229,6 +231,7 @@ class CustomAudioSource: BaseViewController {
             })
         } else {
             isProcessing = true
+            agoraKit.destroyCustomAudioTrack(Int(trackId))
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
@@ -332,6 +335,11 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
 
 extension CustomAudioSource: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
-        agoraKit.pushExternalAudioFrameRawData(data, samples: Int(samples), sourceId: 0, timestamp: 0)
+        agoraKit.pushExternalAudioFrameRawData(data,
+                                               samples: samples,
+                                               sampleRate: Int(sampleRate),
+                                               channels: Int(audioChannel),
+                                               trackId: Int(trackId),
+                                               timestamp: 0)
     }
 }

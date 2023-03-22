@@ -1440,8 +1440,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = APIExample/APIExample.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.20220311.37381;
 				DEVELOPMENT_TEAM = YS397FG5PA;
@@ -1458,7 +1458,7 @@
 				MARKETING_VERSION = 3.8.200;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = apiexamplemac;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1470,8 +1470,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = APIExample/APIExample.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.20220311.37381;
 				DEVELOPMENT_TEAM = YS397FG5PA;
@@ -1488,7 +1488,7 @@
 				MARKETING_VERSION = 3.8.200;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = apiexamplemac;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
