@@ -195,3 +195,4 @@
 "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "开启后无法关闭，并且需要主辅两端都开启时才生效";
 "Recording" = "开始录制";
 "Stop Recording" = "停止录制";
+"Local composite graph" = "本地合图";
