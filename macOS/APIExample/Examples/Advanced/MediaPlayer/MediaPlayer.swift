@@ -24,7 +24,7 @@ class MediaPlayer: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayer: AgoraRtcMediaPlayerProtocol!
-    let mediaUrl = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+    let mediaUrl = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
     
     var isJoinChannel: Bool = false {
         didSet {
