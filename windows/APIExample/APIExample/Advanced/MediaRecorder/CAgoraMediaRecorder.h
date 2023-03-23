@@ -88,15 +88,30 @@ private:
     HWND m_hMsgHanlder;
 };
 
+
 class CAgoraMediaRecorderObserver : public IMediaRecorderObserver
 {
+	
 
 public:
-    void onRecorderStateChanged(const char* channelId, rtc::uid_t uid, RecorderState state, RecorderErrorCode error) {};
+	//set the message notify window handler
+	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+
+    void onRecorderStateChanged(const char* channelId, rtc::uid_t uid, RecorderState state, RecorderErrorCode error) {
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RECORDER_STATE_CHANGE), (WPARAM)state, (LPARAM)error);
+		}
+	};
 
 
-    void onRecorderInfoUpdated(const char* channelId, rtc::uid_t uid, const RecorderInfo& info) {};
-
+    void onRecorderInfoUpdated(const char* channelId, rtc::uid_t uid, const RecorderInfo& info) {
+		if (m_hMsgHanlder) {
+            std::string* filePath = new std::string(info.fileName);
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RECORDER_INFO_UPDATE), (WPARAM)uid, (LPARAM)filePath);
+		}
+	};
+private:
+	HWND m_hMsgHanlder;
 };
 
 class CAgoraMediaRecorder : public CDialogEx
@@ -127,10 +142,13 @@ public:
 	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDRecorderStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDRecorderInfoUpdated(WPARAM wParam, LPARAM lParam);
 
 	afx_msg void OnBnClickedButtonJoinchannel();
 	afx_msg void OnBnClickedButtonLocalRecorder();
 	afx_msg void OnBnClickedButtonRemoteRecorder();
+	afx_msg void OnSelchangeListInfo();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	
 
@@ -145,6 +163,7 @@ private:
 	CListBox m_lstInfo;
 	CStatic m_staVideoArea;
 	CEdit m_edtChannelName;
+    CEdit m_edtDetailInfo;
 
 	IRtcEngine* m_rtcEngine = nullptr;
     CAgoraMediaRecorderEventHandler m_eventHandler;
