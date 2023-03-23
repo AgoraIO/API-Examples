@@ -132,6 +132,9 @@
 		E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */; };
 		E7AD0DEC29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */; };
 		E7AD0DEE29CAF60900C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DED29CAF60900C9A4B0 /* sample.mov */; };
+		E7AD0DF529CAF78C00C9A4B0 /* LocalCompositeGraph.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF029CAF78C00C9A4B0 /* LocalCompositeGraph.strings */; };
+		E7AD0DF629CAF78C00C9A4B0 /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */; };
+		E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF329CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -302,6 +305,9 @@
 		E7AD0DE829CAAF2B00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
 		E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorder.swift; sourceTree = "<group>"; };
 		E7AD0DED29CAF60900C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = sample.mov; path = ../../../iOS/APIExample/APIExample/Resources/sample.mov; sourceTree = "<group>"; };
+		E7AD0DF129CAF78C00C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalCompositeGraph.strings"; sourceTree = "<group>"; };
+		E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraph.swift; sourceTree = "<group>"; };
+		E7AD0DF429CAF78C00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,6 +510,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7AD0DEF29CAF78C00C9A4B0 /* LocalCompositeGraph */,
 				E702C1E028B4DB4800D7C7ED /* LiveStreaming */,
 				E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */,
 				67033720279E75770069F4B3 /* VideoProcess */,
@@ -814,6 +821,16 @@
 			path = "JoinChannelVideo(Recorder)";
 			sourceTree = "<group>";
 		};
+		E7AD0DEF29CAF78C00C9A4B0 /* LocalCompositeGraph */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD0DF029CAF78C00C9A4B0 /* LocalCompositeGraph.strings */,
+				E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */,
+				E7AD0DF329CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard */,
+			);
+			path = LocalCompositeGraph;
+			sourceTree = "<group>";
+		};
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -948,6 +965,7 @@
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */,
+				E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				67B8C89A28058AA500195106 /* RawVideoData.storyboard in Resources */,
@@ -962,6 +980,7 @@
 				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
 				67E40B2427EC82F900C7A6E9 /* SpatialAudio.storyboard in Resources */,
 				671BD67B27E0A4F50076D5E1 /* output.raw in Resources */,
+				E7AD0DF529CAF78C00C9A4B0 /* LocalCompositeGraph.strings in Resources */,
 				E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */,
 				E702C1E628B4DB4800D7C7ED /* LiveStreaming.strings in Resources */,
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
@@ -1071,6 +1090,7 @@
 				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
+				E7AD0DF629CAF78C00C9A4B0 /* LocalCompositeGraph.swift in Sources */,
 				8BCCA45B26271F7A001FD4CE /* AgoraYUVImageSourcePush.m in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
@@ -1352,6 +1372,22 @@
 				E7AD0DE829CAAF2B00C9A4B0 /* Base */,
 			);
 			name = JoinChannelVideoRecorder.storyboard;
+			sourceTree = "<group>";
+		};
+		E7AD0DF029CAF78C00C9A4B0 /* LocalCompositeGraph.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DF129CAF78C00C9A4B0 /* zh-Hans */,
+			);
+			name = LocalCompositeGraph.strings;
+			sourceTree = "<group>";
+		};
+		E7AD0DF329CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DF429CAF78C00C9A4B0 /* Base */,
+			);
+			name = LocalCompositeGraph.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
