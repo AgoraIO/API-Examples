@@ -37,7 +37,7 @@ public:
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 
-	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
+	virtual bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) { return true; }
 
 	/*
 		Obtain video data from the local camera.After successfully registering
@@ -55,25 +55,8 @@ public:
 		True: No ignore.
 		False: Ignored, the frame data is not sent back to the SDK.
 	*/
-	bool onCaptureVideoFrame(VideoFrame& videoFrame) override;
+	bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override;
 
-
-	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
-
-
-	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
-
-
-	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
-
-
-	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
-
-
-	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
-
-
-	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
 
 private:
 	LPBYTE				m_lpImageBuffer;

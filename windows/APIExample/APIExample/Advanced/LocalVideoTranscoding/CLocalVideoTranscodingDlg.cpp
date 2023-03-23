@@ -115,7 +115,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		}
 
 		//start primary camera capture
-		int ret = m_rtcEngine->startPrimaryCameraCapture( config);
+		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 
 		//start Screen capture
@@ -124,7 +124,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		int i = 0;
 		//screen
 		++i;
-		stream_infos[i].sourceType = PRIMARY_SCREEN_SOURCE;
+		stream_infos[i].sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
 	
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -134,7 +134,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].zOrder = 1;
 		//camera
 		++i;
-		stream_infos[i].sourceType = PRIMARY_CAMERA_SOURCE;
+		stream_infos[i].sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 360;
@@ -145,7 +145,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		
 		//png imge
 		++i;
-		stream_infos[i].sourceType = RTC_IMAGE_PNG_SOURCE;
+		stream_infos[i].sourceType = VIDEO_SOURCE_RTC_IMAGE_PNG;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -156,7 +156,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].zOrder = 3;
 		//jpg image
 		++i;
-		stream_infos[i].sourceType = RTC_IMAGE_JPEG_SOURCE;
+		stream_infos[i].sourceType = VIDEO_SOURCE_RTC_IMAGE_JPEG;
 		
 		stream_infos[i].x = 640 - 64;
 		stream_infos[i].y = 180 - 64;
@@ -175,7 +175,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		// local transcoder configuration
 		agora::rtc::LocalTranscoderConfiguration transcoder_config;
 		transcoder_config.streamCount = 4;
-		transcoder_config.VideoInputStreams = stream_infos;
+		transcoder_config.videoInputStreams = stream_infos;
 		transcoder_config.videoOutputConfiguration = encoder_config;
 		ret = m_rtcEngine->startLocalVideoTranscoder(transcoder_config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("start local video Transcoder"));

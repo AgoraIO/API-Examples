@@ -28,6 +28,7 @@
 #include "Advanced/Beauty/CDlgBeauty.h"
 #include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
 #include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
+#include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -93,6 +94,7 @@ private:
 	CAgoraMediaEncryptDlg		*m_pMediaEncrptDlg		= nullptr;
 	CAgoraEffectDlg				*m_pEffectDlg			= nullptr;
 	CAgoraMediaPlayer			*m_pmediaPlayerDlg = nullptr;
+	CAgoraMediaRecorder			*m_pmediaRecorderDlg = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
 	CAgoraBeautyAudio           *m_pDlgBeautyAudio = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
