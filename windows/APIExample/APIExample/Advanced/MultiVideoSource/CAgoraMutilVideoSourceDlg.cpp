@@ -365,7 +365,7 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 			//leave channel primary camera
 			m_joinChannel = !m_rtcEngine->leaveChannel();
 			//stop primary camera capture
-			m_rtcEngine->stopPrimaryCameraCapture();
+			m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
 			m_conn_camera = 0;
 			m_joinChannel = false;
 		}
@@ -377,7 +377,7 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 			m_bScecondJoin = false;
 		}
 		if (m_bStartCapture2) {
-			m_rtcEngine->stopSecondaryCameraCapture();
+			m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY);
 			m_bStartCapture2 = false;
 		}
 
@@ -717,7 +717,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 			}
 		}
 		//start primary camera capture
-		m_rtcEngine->startPrimaryCameraCapture(config);
+		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 		VideoCanvas canvas;
 		canvas.uid = 0;
@@ -735,7 +735,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 	}
 	else {
 		//stop primary camera capture
-		m_rtcEngine->stopPrimaryCameraCapture();
+		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop primary camera capture"));
 		m_btnCapture1.SetWindowText(MultiVideoSourceStartCapture);
 		m_videoWnds[0].Reset();
@@ -770,7 +770,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		}
 
 		//start secondary camera capture
-		m_rtcEngine->startSecondaryCameraCapture(config2);
+		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY, config2);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start secondary camera capture"));
 		m_btnCapture2.SetWindowText(MultiVideoSourceStopCapture);
 		VideoCanvas canvas;
@@ -793,7 +793,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 
 		m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_SECONDARY);
 		//stop secondary camera capture
-		m_rtcEngine->stopSecondaryCameraCapture();
+		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop secondary camera capture"));
 		m_btnCapture2.SetWindowText(MultiVideoSourceStartCapture);
 

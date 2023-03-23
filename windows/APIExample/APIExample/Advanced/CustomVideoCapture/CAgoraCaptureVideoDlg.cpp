@@ -30,7 +30,7 @@ END_MESSAGE_MAP()
 	True: No ignore.
 	False: Ignored, the frame data is not sent back to the SDK.
 */
-bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CExtendVideoFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type,VideoFrame & videoFrame)
 {
 	int bufSize = videoFrame.width * videoFrame.height * 3 / 2;
 	int timestamp = GetTickCount();
@@ -59,40 +59,6 @@ bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 }
 
 
-bool CExtendVideoFrameObserver::onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
-
-
-bool CExtendVideoFrameObserver::onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
-
-
-bool CExtendVideoFrameObserver::onScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
-
-
-bool CExtendVideoFrameObserver::onPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
-
-
-bool CExtendVideoFrameObserver::onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
-
-
-bool CExtendVideoFrameObserver::onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return false;
-}
 
 bool CExtendVideoFrameObserver::onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)
 {
