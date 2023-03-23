@@ -445,6 +445,7 @@ extension VideoProcess: AgoraRtcEngineDelegate {
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
             videoCanvas.renderMode = .hidden
+            videoCanvas.enableAlphaMask = true
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
