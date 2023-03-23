@@ -271,8 +271,9 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         }
         fl_local.addView(surfaceView);
         // Setup local video to render your local media player view
-        VideoCanvas videoCanvas = new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, Constants.VIDEO_MIRROR_MODE_AUTO,
-                Constants.VIDEO_SOURCE_MEDIA_PLAYER,  mediaPlayer.getMediaPlayerId(), 0);
+        VideoCanvas videoCanvas = new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN,  0);
+        videoCanvas.sourceType = Constants.VIDEO_SOURCE_MEDIA_PLAYER;
+        videoCanvas.mediaPlayerId = mediaPlayer.getMediaPlayerId();
         engine.setupLocalVideo(videoCanvas);
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);

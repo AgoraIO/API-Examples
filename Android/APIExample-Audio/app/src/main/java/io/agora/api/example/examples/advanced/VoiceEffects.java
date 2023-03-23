@@ -27,6 +27,10 @@ import static io.agora.rtc2.Constants.TIMBRE_TRANSFORMATION_VIGOROUS;
 import static io.agora.rtc2.Constants.ULTRA_HIGH_QUALITY_VOICE;
 import static io.agora.rtc2.Constants.VOICE_BEAUTIFIER_OFF;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_BASS;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_CARTOON;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_CHILDLIKE;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_CHIPMUNK;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_DARTH_VADER;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_BOY;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_GIRL;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_HULK;
@@ -34,9 +38,16 @@ import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_OLDMAN;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_PIGKING;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_SISTER;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_UNCLE;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_GIRLISH_MAN;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_GROOT;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_IRON_LADY;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_MONSTER;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_NEUTRAL;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_PHONE_OPERATOR;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_SHIN_CHAN;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_SOLID;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_SWEET;
+import static io.agora.rtc2.Constants.VOICE_CHANGER_TRANSFORMERS;
 import static io.agora.rtc2.Constants.VOICE_CONVERSION_OFF;
 
 import android.content.Context;
@@ -97,7 +108,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion,
             customBandFreq, customReverbKey;
     private ViewGroup _voice3DLayout, _pitchModeLayout, _pitchValueLayout;
-    private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue;
+    private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue, customVoiceFormant;
 
     private AudioSeatManager audioSeatManager;
 
@@ -159,10 +170,12 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         customBandGain = view.findViewById(R.id.audio_custom_band_gain); // engine.setLocalVoiceEqualization()
         customReverbKey = view.findViewById(R.id.audio_custom_reverb_key);
         customReverbValue = view.findViewById(R.id.audio_custom_reverb_value); //engine.setLocalVoiceReverb()
+        customVoiceFormant = view.findViewById(R.id.audio_voice_formant_value); //engine.setLocalVoiceFormant()
 
         customPitch.setOnSeekBarChangeListener(this);
         customBandGain.setOnSeekBarChangeListener(this);
         customReverbValue.setOnSeekBarChangeListener(this);
+        customVoiceFormant.setOnSeekBarChangeListener(this);
         customBandFreq.setOnItemSelectedListener(this);
         customReverbKey.setOnItemSelectedListener(this);
 
@@ -194,6 +207,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         customBandGain.setEnabled(joined);
         customReverbKey.setEnabled(joined);
         customReverbValue.setEnabled(joined);
+        customVoiceFormant.setEnabled(joined);
 
 
         chatBeautifier.setSelection(0);
@@ -206,6 +220,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         customPitch.setProgress(0);
         customBandGain.setProgress(0);
         customReverbValue.setProgress(0);
+        customVoiceFormant.setProgress(50);
     }
 
     @Override
@@ -407,8 +422,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
-         * en: https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
         public void onError(int err) {
@@ -617,6 +632,28 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 return VOICE_CHANGER_SOLID;
             case "VOICE_CHANGER_BASS":
                 return VOICE_CHANGER_BASS;
+            case "VOICE_CHANGER_CARTOON":
+                return VOICE_CHANGER_CARTOON;
+            case "VOICE_CHANGER_CHILDLIKE":
+                return VOICE_CHANGER_CHILDLIKE;
+            case "VOICE_CHANGER_PHONE_OPERATOR":
+                return VOICE_CHANGER_PHONE_OPERATOR;
+            case "VOICE_CHANGER_MONSTER":
+                return VOICE_CHANGER_MONSTER;
+            case "VOICE_CHANGER_TRANSFORMERS":
+                return VOICE_CHANGER_TRANSFORMERS;
+            case "VOICE_CHANGER_GROOT":
+                return VOICE_CHANGER_GROOT;
+            case "VOICE_CHANGER_DARTH_VADER":
+                return VOICE_CHANGER_DARTH_VADER;
+            case "VOICE_CHANGER_IRON_LADY":
+                return VOICE_CHANGER_IRON_LADY;
+                case "VOICE_CHANGER_SHIN_CHAN":
+                return VOICE_CHANGER_SHIN_CHAN;
+            case "VOICE_CHANGER_GIRLISH_MAN":
+                return VOICE_CHANGER_GIRLISH_MAN;
+            case "VOICE_CHANGER_CHIPMUNK":
+                return VOICE_CHANGER_CHIPMUNK;
             case "VOICE_CONVERSION_OFF":
             default:
                 return VOICE_CONVERSION_OFF;
@@ -743,6 +780,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (!fromUser) {
+            return;
+        }
         if(seekBar == _voice3DCircle){
             int cicle = (int) (1 + 59 * progress * 1.0f / seekBar.getMax());
             // [1,60], 10 default
@@ -771,6 +811,10 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 value = (int) (100 * progress * 1.0f / seekBar.getMax());
             }
             engine.setLocalVoiceReverb(reverbKey, value);
+        } else if (seekBar == customVoiceFormant) {
+            // [-1, 1]
+            double value = (progress - 50) * 1.0f / 100;
+            engine.setLocalVoiceFormant(value);
         }
     }
 

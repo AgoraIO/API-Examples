@@ -19,7 +19,7 @@ public interface IBeautySenseTime {
      * @return new Texture ID to render
      */
     public int process(
-            byte[] nv21, int textureId, int texFormat, int width, int height, int orientation);
+            byte[] nv21, int textureId, int texFormat, int width, int height, int orientation, float[] transformMatrix);
 
 
     int process(

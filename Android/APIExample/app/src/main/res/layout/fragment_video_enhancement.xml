@@ -288,6 +288,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/virtual_background_blur"/>
 
+                    <RadioButton
+                        android:id="@+id/virtual_bg_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/virtual_background_video"/>
+
                 </RadioGroup>
 
             </LinearLayout>
