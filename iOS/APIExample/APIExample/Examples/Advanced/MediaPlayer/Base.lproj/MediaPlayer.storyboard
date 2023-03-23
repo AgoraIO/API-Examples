@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>
@@ -70,19 +70,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="372.5"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="372.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="sSr-Z8-XSr" secondAttribute="height" multiplier="20:18" id="8Wr-HN-KP2" userLabel="aspect = 16:18"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtM-0I-8yU">
-                                <rect key="frame" x="20" y="426.5" width="325" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtM-0I-8yU">
+                                <rect key="frame" x="20" y="430.5" width="325" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="URL" returnKeyType="done" textContentType="url"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bBH-Cp-zvD">
-                                <rect key="frame" x="350" y="428.5" width="64" height="30"/>
+                                <rect key="frame" x="350" y="432.5" width="64" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="64" id="Qh4-a2-BbU"/>
                                 </constraints>
@@ -92,19 +92,19 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qN0-s6-ZGP">
-                                <rect key="frame" x="18" y="470.5" width="334.5" height="31"/>
+                                <rect key="frame" x="18" y="474.5" width="334.5" height="31"/>
                                 <connections>
                                     <action selector="doSeekWithSender:" destination="jxp-ZN-2yG" eventType="valueChanged" id="pnh-Up-W0k"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4et-fL-YHJ">
-                                <rect key="frame" x="360.5" y="477.5" width="43.5" height="16"/>
+                                <rect key="frame" x="360.5" y="481.5" width="43.5" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="bNQ-vJ-1XB">
-                                <rect key="frame" x="20" y="510.5" width="374" height="30"/>
+                                <rect key="frame" x="20" y="514.5" width="374" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdv-zd-3aD">
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
@@ -148,25 +148,25 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Playout Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDn-o2-Vmd">
-                                <rect key="frame" x="20" y="560.5" width="87.5" height="14.5"/>
+                                <rect key="frame" x="20" y="564.5" width="87.5" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="400" translatesAutoresizingMaskIntoConstraints="NO" id="hGl-9W-ThE" userLabel="Playout Volume Slider">
-                                <rect key="frame" x="126" y="553" width="270" height="31"/>
+                                <rect key="frame" x="126" y="557" width="270" height="31"/>
                                 <connections>
                                     <action selector="doAdjustPlayoutVolumeWithSender:" destination="jxp-ZN-2yG" eventType="valueChanged" id="irA-GP-tVd"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Publish Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kIh-KH-AhZ">
-                                <rect key="frame" x="20" y="604.5" width="87" height="14.5"/>
+                                <rect key="frame" x="20" y="608.5" width="87" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="0qz-ne-Fgw" userLabel="Publish Volume Slider">
-                                <rect key="frame" x="125.5" y="597" width="270.5" height="31"/>
+                                <rect key="frame" x="125.5" y="601" width="270.5" height="31"/>
                                 <connections>
                                     <action selector="doAdjustPublishVolumeWithSender:" destination="jxp-ZN-2yG" eventType="valueChanged" id="jwd-Jg-gQx"/>
                                 </connections>
