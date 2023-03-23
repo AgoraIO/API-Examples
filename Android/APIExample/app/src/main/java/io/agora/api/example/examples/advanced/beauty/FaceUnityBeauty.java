@@ -1,7 +1,10 @@
 package io.agora.api.example.examples.advanced.beauty;
 
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -14,6 +17,7 @@ import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Random;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
@@ -29,6 +33,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class FaceUnityBeauty extends BaseFragment {
     private static final String TAG = "SceneTimeBeauty";
@@ -209,7 +214,7 @@ public class FaceUnityBeauty extends BaseFragment {
 
             mVideoFrameObserver = new IVideoFrameObserver() {
                 @Override
-                public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+                public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
                     if (isDestroyed) {
                         return true;
                     }
@@ -249,17 +254,7 @@ public class FaceUnityBeauty extends BaseFragment {
                 }
 
                 @Override
-                public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
+                public boolean onPreEncodeVideoFrame(int sourceType, VideoFrame videoFrame) {
                     return false;
                 }
 
@@ -299,6 +294,13 @@ public class FaceUnityBeauty extends BaseFragment {
                 }
             };
             rtcEngine.registerVideoFrameObserver(mVideoFrameObserver);
+            // Setup video encoding configs
+            rtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                    ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                    STANDARD_BITRATE,
+                    VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+            ));
             rtcEngine.enableVideo();
             rtcEngine.disableAudio();
 
@@ -308,17 +310,15 @@ public class FaceUnityBeauty extends BaseFragment {
     }
 
     private VideoFrame.TextureBuffer processSingleInput(VideoFrame.TextureBuffer texBuffer) {
-
-        int width = texBuffer.getWidth();
-        int height = texBuffer.getHeight();
+        Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
 
         Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
                 texBuffer.getTextureId(),
-                width, height
+                captureOriginSize.getWidth(), captureOriginSize.getHeight()
         ));
 
         return mTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
+                texBuffer.getWidth(), texBuffer.getHeight(), VideoFrame.TextureBuffer.Type.RGB, processTexId,
                 texBuffer.getTransformMatrix());
     }
 
@@ -371,7 +371,7 @@ public class FaceUnityBeauty extends BaseFragment {
 
         mLocalVideoLayout = new VideoReportLayout(requireContext());
         TextureView videoView = new TextureView(requireContext());
-        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN));
+        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN, 0));
         mLocalVideoLayout.addView(videoView);
         rtcEngine.startPreview();
 
@@ -416,11 +416,4 @@ public class FaceUnityBeauty extends BaseFragment {
         });
     }
 
-    private void doOnBeautyReleasingBegin() {
-        Log.d(TAG, "doOnBeautyReleasingBegin...");
-    }
-
-    private void doOnBeautyReleasingEnd() {
-        Log.d(TAG, "doOnBeautyReleasingEnd.");
-    }
 }

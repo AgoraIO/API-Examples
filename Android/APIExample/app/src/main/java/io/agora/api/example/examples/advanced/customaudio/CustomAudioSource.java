@@ -34,6 +34,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
+import io.agora.rtc2.audio.AudioTrackConfig;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -54,10 +55,11 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public static RtcEngineEx engine;
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
-    private volatile int pushTimes = 0;
+    private int pushTimes = 0;
 
     private AudioSeatManager audioSeatManager;
     private AudioFileReader audioPushingHelper;
+    private int customAudioTrack = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,9 +157,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
 
             audioPushingHelper = new AudioFileReader(requireContext(), (buffer, timestamp) -> {
-                if(joined && engine != null){
-                    Log.i(TAG, "pushExternalAudioFrame times:" + pushTimes++);
-                    engine.pushExternalAudioFrame(buffer, 0);
+                if(joined && engine != null && customAudioTrack != -1){
+                    int ret = engine.pushExternalAudioFrame(buffer, timestamp, AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, Constants.BytesPerSample.TWO_BYTES_PER_SAMPLE, customAudioTrack);
+                    Log.i(TAG, "pushExternalAudioFrame times:" + (++pushTimes) + ", ret=" + ret);
                 }
             });
         } catch (Exception e) {
@@ -169,6 +171,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(customAudioTrack != -1){
+            engine.destroyCustomAudioTrack(customAudioTrack);
+            customAudioTrack = -1;
+        }
         if(audioPushingHelper != null){
             audioPushingHelper.stop();
         }
@@ -187,9 +193,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             option.publishMicrophoneTrack = checked;
             engine.updateChannelMediaOptions(option);
         } else if (compoundButton.getId() == R.id.localAudio) {
+            option.publishCustomAudioTrackId = customAudioTrack;
             option.publishCustomAudioTrack = checked;
             engine.updateChannelMediaOptions(option);
-            engine.enableCustomAudioLocalPlayback(0, checked);
+            engine.enableCustomAudioLocalPlayback(customAudioTrack, checked);
         }
     }
 
@@ -268,10 +275,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true,
-                AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, AudioFileReader.SAMPLE_NUM_OF_CHANNEL,
-                false, true);
-
+        AudioTrackConfig config = new AudioTrackConfig();
+        config.enableLocalPlayback = false;
+        customAudioTrack = engine.createCustomAudioTrack(Constants.AudioTrackType.AUDIO_TRACK_MIXABLE, config);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see

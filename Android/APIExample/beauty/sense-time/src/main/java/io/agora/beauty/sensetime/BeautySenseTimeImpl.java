@@ -23,18 +23,18 @@ public class BeautySenseTimeImpl implements IBeautySenseTime {
     }
 
     @Override
-    public int process(byte[] nv21, int textureId, int texFormat, int width, int height, int orientation) {
+    public int process(byte[] nv21, int textureId, int texFormat, int width, int height, int rotation, float[] transformMatrix) {
         return mSTRenderer.preProcess(
-                width, height, orientation,
+                width, height, rotation,
                 nv21, STCommonNative.ST_PIX_FMT_NV21,
-                textureId, texFormat
+                textureId, texFormat, transformMatrix
         );
     }
 
     @Override
-    public int process(byte[] nv21, int width, int height, int orientation) {
+    public int process(byte[] nv21, int width, int height, int rotation) {
         return mSTRenderer.preProcess(
-                width, height, orientation,
+                width, height, rotation,
                 nv21, STCommonNative.ST_PIX_FMT_NV21
         );
     }

@@ -1,13 +1,13 @@
 package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Matrix;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,82 +17,83 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.concurrent.Callable;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.advanced.videoRender.GLTextureView;
-import io.agora.api.example.examples.advanced.videoRender.YuvUploader;
+import io.agora.api.example.common.widget.VideoReportLayout;
+import io.agora.api.example.examples.basic.JoinChannelVideo;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
-import io.agora.base.TextureBufferHelper;
-import io.agora.base.VideoFrame;
-import io.agora.base.internal.video.EglBase10;
-import io.agora.base.internal.video.GlRectDrawer;
-import io.agora.base.internal.video.RendererCommon;
+import io.agora.rtc2.AgoraMediaRecorder;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.IMediaRecorderCallback;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RecorderInfo;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-/**
- * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
- */
 @Example(
-        index = 8,
+        index = 17,
         group = ADVANCED,
-        name = R.string.item_customremoterender,
-        actionId = R.id.action_mainFragment_to_CustomRemoteRender,
-        tipsId = R.string.customremoterender
+        name = R.string.item_media_recorder,
+        actionId = R.id.action_mainFragment_to_MediaRecorder,
+        tipsId = R.string.media_recorder
 )
-public class CustomRemoteVideoRender extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = CustomRemoteVideoRender.class.getSimpleName();
+public class MediaRecorder extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private VideoReportLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
+    private Button join, switch_camera;
     private EditText et_channel;
     private RtcEngine engine;
-    private int myUid, remoteUid;
+    private int myUid;
+    private String channelId;
     private boolean joined = false;
-    private GLTextureView mSurfaceView;
-    private VideoFrame lastI420Frame;
-    private int viewportWidth, viewportHeight;
-    private TextureBufferHelper textureBufferHelper;
-    private final GlRectDrawer drawer = new GlRectDrawer();
-    private final YuvUploader yuvUploader = new YuvUploader();
-    private final Matrix renderMatrix = new Matrix();
+    private final Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
+    private AgoraMediaRecorder localMediaRecorder;
+    private final Map<Integer, AgoraMediaRecorder> remoteMediaRecorders = new HashMap<>();
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_remoterender, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_media_recorder, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        switch_camera = view.findViewById(R.id.btn_switch_camera);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        switch_camera.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        fl_remote_2 = view.findViewById(R.id.fl_remote2);
+        fl_remote_3 = view.findViewById(R.id.fl_remote3);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -142,8 +143,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -152,23 +152,16 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopAllMediaRecorder();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (textureBufferHelper != null) {
-            textureBufferHelper.dispose();
-            textureBufferHelper = null;
-        }
-        if (yuvUploader != null) {
-            yuvUploader.release();
-        }
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
@@ -177,15 +170,25 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                List<String> permissionList = new ArrayList<>();
+                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
+                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
+                permissionList.add(Permission.RECORD_AUDIO);
+                permissionList.add(Permission.CAMERA);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+                }
+
+                String[] permissionArray = new String[permissionList.size()];
+                permissionList.toArray(permissionArray);
+
+                if (AndPermission.hasPermissions(this, permissionArray)) {
                     joinChannel(channelId);
                     return;
                 }
                 // Request permission
                 AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
+                        permissionArray
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
@@ -193,6 +196,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 }).start();
             } else {
                 joined = false;
+                stopAllMediaRecorder();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -211,9 +215,18 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
-                remoteUid = 0;
                 join.setText(getString(R.string.join));
+                for (ViewGroup value : remoteViews.values()) {
+                    value.removeAllViews();
+                    resetLayoutRecording(value);
+                }
+                remoteViews.clear();
+                fl_local.removeAllViews();
+                resetLayoutRecording(fl_local);
+            }
+        } else if (v.getId() == switch_camera.getId()) {
+            if (engine != null && joined) {
+                engine.switchCamera();
             }
         }
     }
@@ -227,62 +240,187 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
-        // Add to the local container
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Add to the local container
+        fl_local.addView(surfaceView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setupLayoutRecording(fl_local, () -> startLocalMediaRecorder(channelId), this::stopLocalMediaRecorder);
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
+        // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        engine.registerVideoFrameObserver(videoFrameObserver);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        engine.startPreview();
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishMicrophoneTrack = true;
+        option.publishCameraTrack = true;
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        TokenUtils.gen(requireContext(), channelId, 0, new TokenUtils.OnTokenGenCallback<String>() {
-            @Override
-            public void onTokenGen(String ret) {
+        TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-                /** Allows a user to join a channel.
-                 if you do not specify the uid, we will generate the uid for you*/
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
+            int res = engine.joinChannel(ret, channelId, 0, option);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
+    }
 
-                ChannelMediaOptions option = new ChannelMediaOptions();
-                option.autoSubscribeAudio = true;
-                option.autoSubscribeVideo = true;
-                int res = engine.joinChannel(ret, channelId, 0, option);
-                if (res != 0) {
-                    // Usually happens with invalid parameters
-                    // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                    showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-                    return;
+    private void stopAllMediaRecorder(){
+        stopLocalMediaRecorder();
+        Set<Integer> remoteUidList = remoteMediaRecorders.keySet();
+        for (Integer uid : remoteUidList) {
+            stopRemoteMediaRecorder(uid);
+        }
+    }
+
+    private void stopRemoteMediaRecorder(int uid) {
+        AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
+        if(mediaRecorder == null){
+            return;
+        }
+        // Stop Local Recording
+        int ret = mediaRecorder.stopRecording();
+        Toast.makeText(requireContext(), "StopRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+        mediaRecorder.setMediaRecorderObserver(null);
+        engine.destroyMediaRecorder(mediaRecorder);
+        remoteMediaRecorders.remove(uid);
+    }
+
+    private void startRemoteMediaRecorder(String channelId, int uid) {
+        // Start Local Recording
+        AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
+        String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_" + uid + ".mp4";
+        if (mediaRecorder == null) {
+            mediaRecorder = engine.createRemoteMediaRecorder(channelId, uid);
+            // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
+            mediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
+                @Override
+                public void onRecorderStateChanged(String channelId, int uid, int state, int error) {
+                    Log.d(TAG, "RemoteMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
+                    if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
+                        showRecordMediaPathDialog(storagePath);
+                    }
                 }
-                // Prevent repeated entry
-                join.setEnabled(false);
+
+                @Override
+                public void onRecorderInfoUpdated(String channelId, int uid, RecorderInfo info) {
+                    Log.d(TAG, "RemoteMediaRecorder -- onRecorderInfoUpdated channelId=" + channelId + ", uid=" + uid + ", fileName=" + info.fileName + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize);
+                }
+            });
+            remoteMediaRecorders.put(uid, mediaRecorder);
+        }
+        int ret = mediaRecorder.startRecording(new AgoraMediaRecorder.MediaRecorderConfiguration(
+                storagePath,
+                AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
+        ));
+        Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+    }
+
+    private void stopLocalMediaRecorder() {
+        if(localMediaRecorder == null){
+            return;
+        }
+        // Stop Local Recording
+        int ret = localMediaRecorder.stopRecording();
+        Toast.makeText(requireContext(), "StopRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+        localMediaRecorder.setMediaRecorderObserver(null);
+        engine.destroyMediaRecorder(localMediaRecorder);
+        localMediaRecorder = null;
+    }
+
+    private void startLocalMediaRecorder(String channelId) {
+        // Start Local Recording
+        String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4";
+
+        if (localMediaRecorder == null) {
+            localMediaRecorder = engine.createLocalMediaRecorder(new RtcConnection(channelId, myUid));
+            // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
+            localMediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
+                @Override
+                public void onRecorderStateChanged(String channelId, int uid, int state, int error) {
+                    Log.d(TAG, "LocalMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
+                    if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
+                        showRecordMediaPathDialog(storagePath);
+                    }
+                }
+
+                @Override
+                public void onRecorderInfoUpdated(String channelId, int uid, RecorderInfo info) {
+                    Log.d(TAG, "LocalMediaRecorder -- onRecorderInfoUpdated channelId=" + channelId + ", uid=" + uid + ", fileName=" + info.fileName + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize);
+                }
+            });
+        }
+        int ret = localMediaRecorder.startRecording(new AgoraMediaRecorder.MediaRecorderConfiguration(
+                storagePath,
+                AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
+        ));
+        Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupLayoutRecording(@NonNull ViewGroup reportLayout, @NonNull Runnable onStart, @NonNull Runnable onStop) {
+        Button btnRecording = ((ViewGroup)reportLayout.getParent()).findViewWithTag(getString(R.string.recording_tag));
+        if (btnRecording == null) {
+            return;
+        }
+        btnRecording.setText(R.string.start_recording);
+        btnRecording.setVisibility(View.VISIBLE);
+        btnRecording.setOnClickListener(v -> {
+            if (btnRecording.getText().equals(getString(R.string.start_recording))) {
+
+                btnRecording.setText(R.string.stop_recording);
+                onStart.run();
+            } else {
+                // Stop Recording
+                btnRecording.setText(R.string.start_recording);
+                onStop.run();
             }
         });
+    }
 
+    private void showRecordMediaPathDialog(String path){
+        runOnUIThread(() -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("MediaFilePath")
+                    .setMessage(path)
+                    .setPositiveButton(R.string.confirm, (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+    }
+
+    private void resetLayoutRecording(@NonNull ViewGroup reportLayout) {
+        Button btnRecording = ((ViewGroup)reportLayout.getParent()).findViewWithTag(getString(R.string.recording_tag));
+        if (btnRecording == null) {
+            return;
+        }
+        btnRecording.setVisibility(View.GONE);
+        btnRecording.setText(R.string.start_recording);
     }
 
     /**
@@ -297,7 +435,19 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          */
         @Override
         public void onError(int err) {
-            Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            super.onError(err);
+            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
+            if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
+                engine.leaveChannel();
+                runOnUIThread(() -> join.setEnabled(true));
+
+                if (Constants.ERR_INVALID_TOKEN == err) {
+                    showAlert(getString(R.string.token_invalid));
+                }
+                if (Constants.ERR_TOKEN_EXPIRED == err) {
+                    showAlert(getString(R.string.token_expired));
+                }
+            }
         }
 
         /**Occurs when a user leaves the channel.
@@ -308,10 +458,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
-            lastI420Frame = null;
-            if(mSurfaceView != null){
-                mSurfaceView.requestRender();
-            }
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -325,12 +471,14 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
+            channelId = channel;
             joined = true;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    fl_local.setReportUid(uid);
                 }
             });
         }
@@ -421,32 +569,35 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
-            remoteUid = uid;
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null || mSurfaceView != null) {
+            if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
-                mSurfaceView = new GLTextureView(context);
-                mSurfaceView.setPreserveEGLContextOnPause(true);
-                mSurfaceView.setEGLContextClientVersion(2);
-                mSurfaceView.setRenderer(glRenderer);
-                mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-                if (fl_remote.getChildCount() > 0)
+            if (remoteViews.containsKey(uid)) {
+                return;
+            } else {
+                handler.post(() ->
                 {
-                    fl_remote.removeAllViews();
-                }
-                // Add to the remote container
-                fl_remote.addView(mSurfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            });
+                    /**Display remote video stream*/
+                    SurfaceView surfaceView = null;
+                    // Create render view by RtcEngine
+                    surfaceView = new SurfaceView(context);
+                    surfaceView.setZOrderMediaOverlay(true);
+                    VideoReportLayout view = getAvailableView();
+                    view.setReportUid(uid);
+                    setupLayoutRecording(view, () -> startRemoteMediaRecorder(channelId, uid), () -> stopRemoteMediaRecorder(uid));
+                    remoteViews.put(uid, view);
+                    // Add to the remote container
+                    view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    // Setup remote video to render
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                });
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -463,108 +614,61 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(mSurfaceView != null){
-                mSurfaceView.requestRender();
-            }
-            remoteUid = 0;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    stopRemoteMediaRecorder(uid);
+                    ViewGroup viewGroup = remoteViews.get(uid);
+                    resetLayoutRecording(viewGroup);
+                    viewGroup.removeAllViews();
+                    remoteViews.remove(uid);
+                }
+            });
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            fl_local.setLocalAudioStats(stats);
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            fl_remote.setRemoteAudioStats(stats);
+            fl_remote_2.setRemoteAudioStats(stats);
+            fl_remote_3.setRemoteAudioStats(stats);
+        }
+
+        @Override
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            fl_local.setLocalVideoStats(stats);
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            fl_remote.setRemoteVideoStats(stats);
+            fl_remote_2.setRemoteVideoStats(stats);
+            fl_remote_3.setRemoteVideoStats(stats);
         }
     };
 
-    IVideoFrameObserver videoFrameObserver = new IVideoFrameObserver() {
-        @Override
-        public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
-            return false;
+    private VideoReportLayout getAvailableView() {
+        if (fl_remote.getChildCount() == 0) {
+            return fl_remote;
+        } else if (fl_remote_2.getChildCount() == 0) {
+            return fl_remote_2;
+        } else if (fl_remote_3.getChildCount() == 0) {
+            return fl_remote_3;
+        } else {
+            return fl_remote;
         }
+    }
 
-        @Override
-        public boolean onPreEncodeVideoFrame(int sourceType, VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onMediaPlayerVideoFrame(VideoFrame videoFrame, int i) {
-            return false;
-        }
-
-        @Override
-        public boolean onRenderVideoFrame(String s, int i, VideoFrame videoFrame) {
-//            Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
-            if (mSurfaceView != null && videoFrame != lastI420Frame){
-                Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + s + "  buffer: " + videoFrame.getBuffer());
-                lastI420Frame = videoFrame;
-                textureBufferHelper.invoke(new Callable<Void>() {
-                    @Override
-                    public Void call() throws Exception {
-                        if (lastI420Frame.getBuffer() instanceof VideoFrame.I420Buffer) {
-                            final VideoFrame.I420Buffer i420Buffer = (VideoFrame.I420Buffer) lastI420Frame.getBuffer();
-                            yuvUploader.uploadFromBuffer(i420Buffer);
-                        }
-                        return null;
-                    }
-                });
-                mSurfaceView.requestRender();
-            }
-            return false;
-        }
-
-        @Override
-        public int getVideoFrameProcessMode() {
-            return PROCESS_MODE_READ_ONLY;
-        }
-
-        @Override
-        public int getVideoFormatPreference() {
-            return 0;
-        }
-
-        @Override
-        public boolean getRotationApplied() {
-            return false;
-        }
-
-        @Override
-        public boolean getMirrorApplied() {
-            return false;
-        }
-
-        @Override
-        public int getObservedFramePosition() {
-            return 0;
-        }
-    };
-    GLTextureView.Renderer glRenderer = new GLTextureView.Renderer(){
-        @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            Log.d(TAG, "onSurfaceCreated");
-            textureBufferHelper = TextureBufferHelper.create("bufferHelper", new EglBase10.Context(mSurfaceView.getEglContext()));
-        }
-
-        @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            Log.d(TAG, "onSurfaceCreated  w: " + width + "  h: " + height);
-            viewportWidth = width;
-            viewportHeight = height;
-        }
-
-        @Override
-        public void onDrawFrame(GL10 gl) {
-            GLES20.glClearColor(0 /* red */, 0 /* green */, 0 /* blue */, 0 /* alpha */);
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-            if (lastI420Frame == null) return;
-            Log.d(TAG, "onDrawFrame: " + lastI420Frame.getRotation());
-            renderMatrix.reset();
-            renderMatrix.preTranslate(0.5f, 0.5f);
-            renderMatrix.preScale(1f, -1f); // I420-frames are upside down
-            renderMatrix.preRotate(lastI420Frame.getRotation());
-            renderMatrix.preTranslate(-0.5f, -0.5f);
-            try {
-                drawer.drawYuv(yuvUploader.getYuvTextures(),
-                        RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix), lastI420Frame.getRotatedWidth(),
-                        lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight);
-            }
-            catch (NullPointerException exception){
-                Log.e(TAG, "skip empty buffer!");
-            }
-        }
-    };
 }
