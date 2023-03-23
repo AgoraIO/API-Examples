@@ -297,6 +297,9 @@ class VoiceChangerMain: BaseViewController {
         LogUtils.log(message: "onLocalVoicePitch \(Double(sender.value))", level: .info)
         agoraKit.setLocalVoicePitch(Double(sender.value))
     }
+    @IBAction func onVoiceFormantChange(_ sender: UISlider) {
+        agoraKit.setLocalVoiceFormant(Double(sender.value))
+    }
     
     @IBAction func onLocalVoiceEqualizaitonFreq(_ sender:UIButton) {
         let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
