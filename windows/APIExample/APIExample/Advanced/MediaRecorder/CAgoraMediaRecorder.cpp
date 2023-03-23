@@ -57,6 +57,7 @@ void CAgoraMediaRecorder::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
 	DDX_Control(pDX, IDC_BUTTON_LOCALRECORDER, m_btnLocalRecord);
 	DDX_Control(pDX, IDC_BUTTON_REMOTERECORDER, m_btnRemoteRecord);
+	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
 }
 
 BEGIN_MESSAGE_MAP(CAgoraMediaRecorder, CDialogEx)
@@ -67,6 +68,9 @@ BEGIN_MESSAGE_MAP(CAgoraMediaRecorder, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaRecorder::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaRecorder::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaRecorder::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_RECORDER_STATE_CHANGE), &CAgoraMediaRecorder::OnEIDRecorderStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_RECORDER_INFO_UPDATE), &CAgoraMediaRecorder::OnEIDRecorderInfoUpdated)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMediaRecorder::OnSelchangeListInfo)
 	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
@@ -115,6 +119,12 @@ bool CAgoraMediaRecorder::InitAgora()
 void CAgoraMediaRecorder::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		if (m_localRecorder != nullptr) {
+			OnBnClickedButtonLocalRecorder();
+		}
+		if (m_remoteRecorder != nullptr) {
+			OnBnClickedButtonRemoteRecorder();
+		}
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
 		//stop preview in the window.
@@ -214,6 +224,8 @@ LRESULT CAgoraMediaRecorder::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		//setup remote video in engine to the canvas.
 		m_rtcEngine->setupRemoteVideo(canvas);
 		m_remoteVideoWnd.SetUID(wParam);
+		m_btnRemoteRecord.ShowWindow(TRUE);
+		m_btnRemoteRecord.SetWindowText(mediaRecorderStartRecording);
 	}
 	return 0;
 }
@@ -234,8 +246,31 @@ LRESULT CAgoraMediaRecorder::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	if (m_remoteVideoWnd.GetUID() == remoteUid) {
 		m_remoteVideoWnd.SetUID(0);
 		m_remoteVideoWnd.Invalidate();
+		m_btnRemoteRecord.ShowWindow(FALSE);
+		if (m_remoteRecorder != nullptr) {
+			OnBnClickedButtonRemoteRecorder();
+		}
 	}
 
+	return 0;
+}
+
+LRESULT CAgoraMediaRecorder::OnEIDRecorderStateChanged(WPARAM wParam, LPARAM lParam)
+{
+	CString strInfo;
+	strInfo.Format(_T("Recorder state:%d, error:%d"), wParam, lParam);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
+LRESULT CAgoraMediaRecorder::OnEIDRecorderInfoUpdated(WPARAM wParam, LPARAM lParam)
+{
+	uid_t uid = wParam;
+	std::string* filePath = (std::string*)lParam;
+	CString strInfo;
+	strInfo.Format(_T("Recorder fileName:%s"), utf82cs(*filePath));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	delete filePath;
 	return 0;
 }
 
@@ -264,6 +299,13 @@ void CAgoraMediaRecorder::OnBnClickedButtonJoinchannel()
 		}
 	}
 	else {
+		if (m_localRecorder != nullptr) {
+			OnBnClickedButtonLocalRecorder();
+		}
+		if (m_remoteRecorder != nullptr) {
+			OnBnClickedButtonRemoteRecorder();
+		}
+
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
@@ -277,25 +319,71 @@ void CAgoraMediaRecorder::OnBnClickedButtonJoinchannel()
 
 void CAgoraMediaRecorder::OnBnClickedButtonLocalRecorder()
 {
-	if (m_rtcEngine && m_joinChannel) {
-		RtcConnection conn;
-		conn.channelId = m_channelName.c_str();
-		conn.localUid = m_uid;
-		m_localRecorder = m_rtcEngine->createLocalMediaRecorder(conn).get();
-		MediaRecorderConfiguration config;
-		config.storagePath = "media_recording_local.mp4";
-		m_localRecorder->setMediaRecorderObserver(&m_localRecorderObserver);
-		int ret = m_localRecorder->startRecording(config);
-		CString strInfo;
-		strInfo.Format(_T("startRecording : ret=%d"), ret);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (m_rtcEngine) {
+		if (m_localRecorder == nullptr) {
+			RtcConnection conn;
+			conn.channelId = m_channelName.c_str();
+			conn.localUid = m_uid;
+			m_localRecorder = m_rtcEngine->createLocalMediaRecorder(conn).get();
+			MediaRecorderConfiguration config;
+			config.storagePath = "media_recording_local.mp4";
+			m_localRecorderObserver.SetMsgReceiver(m_hWnd);
+			m_localRecorder->setMediaRecorderObserver(&m_localRecorderObserver);
+			int ret = m_localRecorder->startRecording(config);
+			CString strInfo;
+			strInfo.Format(_T("startLocalRecording : ret=%d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			m_btnLocalRecord.SetWindowText(mediaRecorderStopRecording);
+		}
+		else {
+			m_localRecorder->stopRecording();
+			m_rtcEngine->destroyMediaRecorder(m_localRecorder);
+			m_localRecorder = nullptr;
+			m_btnLocalRecord.SetWindowText(mediaRecorderStartRecording);
+
+			CString strInfo;
+			strInfo.Format(_T("stop and destroy localMediaRecorder"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		}
 	}
 }
 
 
 void CAgoraMediaRecorder::OnBnClickedButtonRemoteRecorder()
 {
+	if (m_rtcEngine) {
+		if (m_remoteRecorder == nullptr) {
+			m_remoteRecorder = m_rtcEngine->createRemoteMediaRecorder(m_channelName.c_str(), m_remoteVideoWnd.GetUID()).get();
+			MediaRecorderConfiguration config;
+			config.storagePath = "media_recording_remote.mp4";
+			m_remoteRecorderObserver.SetMsgReceiver(m_hWnd);
+			m_remoteRecorder->setMediaRecorderObserver(&m_remoteRecorderObserver);
+			int ret = m_remoteRecorder->startRecording(config);
+			CString strInfo;
+			strInfo.Format(_T("startRemoteRecording : ret=%d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			m_btnRemoteRecord.SetWindowText(mediaRecorderStopRecording);
+		}
+		else {
+			m_remoteRecorder->stopRecording();
+			m_rtcEngine->destroyMediaRecorder(m_remoteRecorder);
+			m_remoteRecorder = nullptr;
+			m_btnRemoteRecord.SetWindowText(mediaRecorderStartRecording);
 
+			CString strInfo;
+			strInfo.Format(_T("stop and destroy remoteMediaRecorder"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		}
+	}
+}
+
+void CAgoraMediaRecorder::OnSelchangeListInfo()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_edtDetailInfo.SetWindowText(strDetail);
 }
 
 void CAgoraMediaRecorder::OnShowWindow(BOOL bShow, UINT nStatus)
