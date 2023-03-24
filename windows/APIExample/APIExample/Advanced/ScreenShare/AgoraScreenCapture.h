@@ -182,6 +182,7 @@ public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     afx_msg void OnBnClickedButtonUpdateparam();
     CComboBox m_cmbScreenRegion;
+    CComboBox m_cmbScreenScenario;
     CButton m_chkShareCursor;
     CEdit m_edtFPS;
     CEdit m_edtBitrate;
@@ -201,4 +202,5 @@ public:
     
     afx_msg void OnLbnSelchangeListInfoBroadcasting();
     afx_msg void OnCbnDropDownComboScreenCapture();
+    afx_msg void OnCbnSelchangeComboScreenCaptureScenario();
 };
