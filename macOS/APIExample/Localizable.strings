@@ -19,6 +19,9 @@
 "Custom Audio Render" = "音频自渲染";
 "Custom Video Source(MediaIO)" = "视频自采集(MediaIO)";
 "Custom Video Source(Push)" = "视频自采集(Push)";
+"Custom Video Source(Multi)" = "多路视频自采集";
+"Create Video Track" = "创建采集Track";
+"Destory Video Track" = "销毁采集Track";
 "Custom Video Render" = "视频自渲染(Metal)";
 "Quick Switch Channel" = "快速切换频道";
 "Switch Channel" = "切换频道";

@@ -135,6 +135,9 @@
 		E7AD0DF629CAF78C00C9A4B0 /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */; };
 		E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF329CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard */; };
 		E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF829CD84F800C9A4B0 /* sample.mov */; };
+		E7AD0E0029CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DFB29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings */; };
+		E7AD0E0129CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DFD29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard */; };
+		E7AD0E0229CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -308,6 +311,9 @@
 		E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraph.swift; sourceTree = "<group>"; };
 		E7AD0DF429CAF78C00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
 		E7AD0DF829CD84F800C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
+		E7AD0DFC29CDA4F100C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourcePushMulti.strings"; sourceTree = "<group>"; };
+		E7AD0DFE29CDA4F100C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePushMulti.storyboard; sourceTree = "<group>"; };
+		E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePushMulti.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -510,6 +516,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7AD0DFA29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti */,
 				E7AD0DEF29CAF78C00C9A4B0 /* LocalCompositeGraph */,
 				E702C1E028B4DB4800D7C7ED /* LiveStreaming */,
 				E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */,
@@ -831,6 +838,16 @@
 			path = LocalCompositeGraph;
 			sourceTree = "<group>";
 		};
+		E7AD0DFA29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD0DFB29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings */,
+				E7AD0DFD29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard */,
+				E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */,
+			);
+			path = CustomVideoSourcePushMulti;
+			sourceTree = "<group>";
+		};
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -948,6 +965,7 @@
 				E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */,
 				E77D54BF28F553DA00D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
+				E7AD0E0029CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings in Resources */,
 				E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
 				E77D54BE28F553DA00D51C1E /* JoinChannelVideoToken.strings in Resources */,
@@ -965,6 +983,7 @@
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */,
+				E7AD0E0129CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard in Resources */,
 				E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
@@ -1126,6 +1145,7 @@
 				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,
 				671BD67527E0717D0076D5E1 /* MediaPlayer.swift in Sources */,
 				57887A75258859D8006E962A /* SettingsController.swift in Sources */,
+				E7AD0E0229CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				67E40B2527EC82F900C7A6E9 /* SpatialAudio.swift in Sources */,
 				033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */,
@@ -1388,6 +1408,22 @@
 				E7AD0DF429CAF78C00C9A4B0 /* Base */,
 			);
 			name = LocalCompositeGraph.storyboard;
+			sourceTree = "<group>";
+		};
+		E7AD0DFB29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DFC29CDA4F100C9A4B0 /* zh-Hans */,
+			);
+			name = CustomVideoSourcePushMulti.strings;
+			sourceTree = "<group>";
+		};
+		E7AD0DFD29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7AD0DFE29CDA4F100C9A4B0 /* Base */,
+			);
+			name = CustomVideoSourcePushMulti.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
