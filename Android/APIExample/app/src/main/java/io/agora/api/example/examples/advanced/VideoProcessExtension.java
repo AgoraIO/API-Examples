@@ -143,7 +143,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 backgroundSource.blurDegree = VirtualBackgroundSource.BLUR_DEGREE_MEDIUM;
             } else if (checkedId == R.id.virtual_bg_video) {
                 backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_VIDEO;
-                backgroundSource.source = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+                backgroundSource.source = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
             }
             engine.enableVirtualBackground(true, backgroundSource, segproperty);
         }else{

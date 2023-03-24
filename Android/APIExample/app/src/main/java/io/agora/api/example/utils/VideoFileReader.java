@@ -5,9 +5,6 @@ import android.content.Context;
 import java.io.IOException;
 import java.io.InputStream;
 
-import io.agora.base.JavaI420Buffer;
-import io.agora.base.VideoFrame;
-
 public class VideoFileReader {
     private final String RAW_VIDEO_PATH = "sample.yuv";
     private final int RAW_VIDEO_WIDTH = 320;
@@ -51,7 +48,7 @@ public class VideoFileReader {
 
 
     public interface OnVideoReadListener {
-        void onVideoRead(VideoFrame videoFrame);
+        void onVideoRead(byte[] buffer, int width, int height);
     }
 
     private class InnerThread extends Thread {
@@ -77,12 +74,8 @@ public class VideoFileReader {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(RAW_VIDEO_WIDTH, RAW_VIDEO_HEIGHT);
-                i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
-                i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
-                i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
                 if(videoReadListener != null){
-                    videoReadListener.onVideoRead(new VideoFrame(i420Buffer, 0, System.nanoTime()));
+                    videoReadListener.onVideoRead(buffer, RAW_VIDEO_WIDTH, RAW_VIDEO_HEIGHT);
                 }
                 long consume = System.nanoTime() - start;
 

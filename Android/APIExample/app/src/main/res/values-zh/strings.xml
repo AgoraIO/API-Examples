@@ -310,5 +310,6 @@
     <string name="first_frame_optimization_tip">开启后无法关闭，并且需要主辅两端都开启时才生效</string>
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
+    <string name="transparent_background">透明背景</string>
 
 </resources>
