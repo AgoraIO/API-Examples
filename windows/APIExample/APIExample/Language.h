@@ -36,6 +36,7 @@ extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
+extern wchar_t advancedMediaRecorder[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
 extern wchar_t advancedMultiVideoSource[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
@@ -331,3 +332,6 @@ extern wchar_t SpatialAudioMoveInfo[INFO_LEN];
 extern wchar_t SpatialAudioPrepareInfo[INFO_LEN];
 // beauty
 extern wchar_t beautyFace[INFO_LEN];
+
+extern wchar_t mediaRecorderStartRecording[INFO_LEN];
+extern wchar_t mediaRecorderStopRecording[INFO_LEN];

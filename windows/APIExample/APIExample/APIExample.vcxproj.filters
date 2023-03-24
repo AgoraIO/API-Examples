@@ -97,6 +97,9 @@
     <Filter Include="Advanced\MultiChannel">
       <UniqueIdentifier>{0b7c44e6-e661-44e6-981a-25e1ab54bb43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\MediaRecorder">
+      <UniqueIdentifier>{33ddb658-b378-4cf7-8c4c-c3e616528e24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h">
       <Filter>Advanced\MultiChannel</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\MediaRecorder\CAgoraMediaRecorder.h">
+      <Filter>Advanced\MediaRecorder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -346,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp">
       <Filter>Advanced\MultiChannel</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaRecorder\CAgoraMediaRecorder.cpp">
+      <Filter>Advanced\MediaRecorder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

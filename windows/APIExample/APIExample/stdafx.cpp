@@ -37,6 +37,7 @@ wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
+wchar_t advancedMediaRecorder[INFO_LEN]			= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
 wchar_t advancedMultiVideoSource[INFO_LEN]		= { 0 };
 wchar_t advancedAudioEffect[INFO_LEN] = { 0 };
@@ -297,6 +298,10 @@ wchar_t SpatialAudio[INFO_LEN] = { 0 };
 wchar_t SpatialAudioInitInfo[INFO_LEN] = { 0 };
 wchar_t SpatialAudioMoveInfo[INFO_LEN] = { 0 };
 wchar_t SpatialAudioPrepareInfo[INFO_LEN] = { 0 };
+
+wchar_t mediaRecorderStartRecording[INFO_LEN] = { 0 };
+wchar_t mediaRecorderStopRecording[INFO_LEN] = { 0 };
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -445,6 +450,7 @@ void InitKeyInfomation()
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
+	_tcscpy_s(advancedMediaRecorder, INFO_LEN, Str(_T("Advanced.MediaRecorder")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
 	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
 	
@@ -725,6 +731,10 @@ void InitKeyInfomation()
 	_tcscpy_s(SpatialAudioInitInfo, INFO_LEN, Str(_T("SpatialAudio.Init.Info")));
 	_tcscpy_s(SpatialAudioMoveInfo, INFO_LEN, Str(_T("SpatialAudio.Move.Info")));
 	_tcscpy_s(SpatialAudioPrepareInfo, INFO_LEN, Str(_T("SpatialAudio.Prepare.Info")));
+
+
+	_tcscpy_s(mediaRecorderStartRecording, INFO_LEN, Str(_T("MediaRecoder.StartRecording")));
+	_tcscpy_s(mediaRecorderStopRecording, INFO_LEN, Str(_T("MediaRecoder.StopRecording")));
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

@@ -38,6 +38,7 @@
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
 #define IDD_DIALOG_MULTI_VIDEO_SOURCE   159
+#define IDD_DIALOG_MEDIA_RECORDER       160
 #define IDB_BITMAP_LOCAL                168
 #define IDB_BITMAP_REMOTE               170
 #define IDB_BITMAP_SPEAKER              171
@@ -76,12 +77,15 @@
 #define IDC_BUTTON_JOINCHANNEL2         1022
 #define IDC_COMBO_PERSONS2              1022
 #define IDC_COMBO_ENCODER               1022
+#define IDC_BUTTON_LOCALRECORDER        1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_EDIT_FPS                    1023
 #define IDC_EDIT_VIDEO_SOURCE           1023
+#define IDC_BUTTON_JOINCHANNEL3         1023
+#define IDC_BUTTON_REMOTERECORDER       1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
@@ -350,7 +354,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1130
+#define _APS_NEXT_CONTROL_VALUE         1131
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
