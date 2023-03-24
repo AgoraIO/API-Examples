@@ -12,15 +12,16 @@
         android:id="@+id/videoReportLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/ll_join"/>
+        android:layout_above="@id/btn_transparent_background"/>
 
 
-    <Button
-        android:id="@+id/btn_switch_camera"
+    <Switch
+        android:id="@+id/btn_transparent_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/switch_camera"
+        android:text="@string/transparent_background"
         android:layout_above="@+id/ll_join"
+        android:layout_marginVertical="12dp"
         android:layout_alignParentEnd="true"/>
 
     <LinearLayout
