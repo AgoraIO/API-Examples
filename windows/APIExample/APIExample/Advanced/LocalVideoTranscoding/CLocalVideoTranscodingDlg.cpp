@@ -30,6 +30,7 @@ void CLocalVideoTranscodingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_STATIC_Cameras, m_staCamra);
 	DDX_Control(pDX, IDC_COMBO_CAMERAS, m_cmbCamera);
+	DDX_Control(pDX, IDC_CHECK_VIRTUAL_BG, m_chkVirtualBg);
 }
 
 
@@ -39,6 +40,7 @@ BEGIN_MESSAGE_MAP(CLocalVideoTranscodingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel)
 	ON_WM_SHOWWINDOW()
 	ON_CBN_SELCHANGE(IDC_COMBO_CAMERAS, &CLocalVideoTranscodingDlg::OnSelchangeComboCameras)
+	ON_BN_CLICKED(IDC_CHECK_VIRTUAL_BG, &CLocalVideoTranscodingDlg::OnBnClickedCheckVirtualBg)
 END_MESSAGE_MAP()
 
 
@@ -83,33 +85,20 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		::GetWindowRect(GetDesktopWindow()->GetSafeHwnd(), &rc);
 		rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
 
-		//setup local video in the engine to canvas.
-		agora::rtc::VideoCanvas canvas;
-		canvas.renderMode = media::base::RENDER_MODE_FIT;
-		canvas.uid = 0;
-		canvas.view = m_videoWnds[0].GetSafeHwnd();
-		canvas.sourceType = VIDEO_SOURCE_TRANSCODED;
-		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
-		m_rtcEngine->setupLocalVideo(canvas);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+		
 		//primary camera configuration
 		CameraCapturerConfiguration config;
 		config.format.width = 640;
 		config.format.height = 360;
 		config.format.fps = 15;
-
-		IVideoDeviceCollection* collections = (*videoDeviceManager)->enumerateVideoDevices();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize video device manager"));
-
-		for (int i = 0; i < collections->getCount(); ++i) {
-			char deviceId[512] = { 0 };
-			char deviceName[512] = { 0 };
-			// Get camera information
-			collections->getDevice(i, deviceName, deviceId);
+		//get selected camera device id
+		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
+		{
+			LOCALVIDEOTRANSCODING_CAMERAINFO info = m_vecCameraInfos[i];
 			CString strName;
 			m_cmbCamera.GetWindowText(strName);
-			if (cs2utf8(strName).compare(deviceName) == 0) {
-				strcpy_s(config.deviceId, 512, deviceId);
+			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
+				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
 				break;
 			}
 		}
@@ -119,11 +108,10 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 
 		//start Screen capture
-		m_rtcEngine->startScreenCaptureByScreenRect(rect, rect, params);
+		ret = m_rtcEngine->startScreenCaptureByScreenRect(rect, rect, params);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start Screen capture"));
 		int i = 0;
 		//screen
-		++i;
 		stream_infos[i].sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
 	
 		stream_infos[i].x = 0;
@@ -132,8 +120,9 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].height = 720;
 		stream_infos[i].mirror = false;
 		stream_infos[i].zOrder = 1;
-		//camera
 		++i;
+		//camera
+		
 		stream_infos[i].sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
 		
 		stream_infos[i].x = 0;
@@ -142,9 +131,10 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].height = 360;
 		stream_infos[i].mirror = true;
 		stream_infos[i].zOrder = 2;
+		++i;
 		
 		//png imge
-		++i;
+		
 		stream_infos[i].sourceType = VIDEO_SOURCE_RTC_IMAGE_PNG;
 		
 		stream_infos[i].x = 0;
@@ -154,8 +144,10 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].imageUrl = m_imgPng.c_str();
 		stream_infos[i].mirror = false;
 		stream_infos[i].zOrder = 3;
-		//jpg image
 		++i;
+
+		//jpg image
+		
 		stream_infos[i].sourceType = VIDEO_SOURCE_RTC_IMAGE_JPEG;
 		
 		stream_infos[i].x = 640 - 64;
@@ -165,6 +157,8 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].imageUrl = m_imgJpg.c_str();
 		stream_infos[i].mirror = false;
 		stream_infos[i].zOrder = 4;
+		++i;
+
 		//video encoder configuration
 		agora::rtc::VideoEncoderConfiguration encoder_config;
 		encoder_config.codecType = agora::rtc::VIDEO_CODEC_H264;
@@ -174,15 +168,26 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		
 		// local transcoder configuration
 		agora::rtc::LocalTranscoderConfiguration transcoder_config;
-		transcoder_config.streamCount = 4;
+		transcoder_config.streamCount = i;
 		transcoder_config.videoInputStreams = stream_infos;
 		transcoder_config.videoOutputConfiguration = encoder_config;
 		ret = m_rtcEngine->startLocalVideoTranscoder(transcoder_config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("start local video Transcoder"));
 
+		//setup local video in the engine to canvas.
+		agora::rtc::VideoCanvas canvas;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
+		canvas.uid = 0;
+		canvas.view = m_videoWnds[0].GetSafeHwnd();
+		canvas.sourceType = VIDEO_SOURCE_TRANSCODED;
+		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+
 		//start preview
-		m_rtcEngine->startPreview(VIDEO_SOURCE_TRANSCODED);
+		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
+		
 
 		//join channel
 		agora::rtc::ChannelMediaOptions op;
@@ -198,9 +203,11 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	}
 	else {
+
 		//leave channel
 		m_rtcEngine->leaveChannel();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("leave channel"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leave channel"));
+
 		// stop local video transcoder
 		m_rtcEngine->stopLocalVideoTranscoder();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop local video transcoder"));
@@ -208,10 +215,17 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		//stop screen capture
 		m_rtcEngine->stopScreenCapture();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop screen capture"));
+		//stop screen capture
+		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop camera capture"));
 		//stop preview
-		m_rtcEngine->stopPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop preview"));
+		//m_rtcEngine->stopPreview();
+		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop preview"));
+		
+
 		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+		m_videoWnds[0].Invalidate();
+
 	}
 	m_joinChannel = !m_joinChannel;
 }
@@ -275,6 +289,11 @@ bool CLocalVideoTranscodingDlg::InitAgora()
 		// Get camera information
 		collections->getDevice(i, deviceName, deviceId);
 		m_cmbCamera.InsertString(i, utf82cs(deviceName));
+
+		LOCALVIDEOTRANSCODING_CAMERAINFO cameraInfo;
+		cameraInfo.deviceId = deviceId;
+		cameraInfo.deviceName = deviceName;
+		m_vecCameraInfos.push_back(cameraInfo);
 	}
 	m_cmbCamera.SetCurSel(0);
 	return true;
@@ -283,6 +302,8 @@ bool CLocalVideoTranscodingDlg::InitAgora()
 void CLocalVideoTranscodingDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		m_vecCameraInfos.clear();
+
 		if (m_joinChannel) {
 			//leave channel primary camera
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -317,6 +338,7 @@ void CLocalVideoTranscodingDlg::InitCtrlText()
 	m_staCamra.SetWindowText(PerCallTestCtrlCamera);//MultiVideoSourceCtrlUnPublish
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_chkVirtualBg.SetWindowText(localVideoTranscodingVirtualBg);
 }
 
 // resume window status.
@@ -473,4 +495,29 @@ void CLocalVideoTranscodingDlg::OnSelchangeComboCameras()
 	// Get camera information
 	collections->getDevice(sel, deviceName, deviceId);
 	(*videoDeviceManager)->setDevice(deviceId);
+}
+
+
+
+
+void CLocalVideoTranscodingDlg::OnBnClickedCheckVirtualBg()
+{
+	if (m_rtcEngine == nullptr) {
+		return;
+	}
+	int isCheck = m_chkVirtualBg.GetCheck();
+	if (isCheck) {
+		VirtualBackgroundSource virtualBackgroundSource;
+		virtualBackgroundSource.color = 0;
+		m_rtcEngine->enableVirtualBackground(true, virtualBackgroundSource, SegmentationProperty(), PRIMARY_CAMERA_SOURCE);
+		CString strInfo;
+		strInfo.Format(_T("enableVirtualBackground"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	else {
+		m_rtcEngine->enableVirtualBackground(false, VirtualBackgroundSource(), SegmentationProperty(), PRIMARY_CAMERA_SOURCE);
+		CString strInfo;
+		strInfo.Format(_T("disableVirtualBackground"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
 }
