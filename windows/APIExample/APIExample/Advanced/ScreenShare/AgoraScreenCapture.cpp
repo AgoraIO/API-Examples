@@ -32,6 +32,7 @@ void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_FPS, m_edtFPS);
 	DDX_Control(pDX, IDC_EDIT_BITRATE, m_edtBitrate);
 	DDX_Control(pDX, IDC_COMBO_SCREEN_SCREEN, m_cmbScreenRegion);
+	DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE_SCENARIO, m_cmbScreenScenario);
 
 
 	DDX_Control(pDX, IDC_BUTTON_START_SHARE_SCREEN, m_btnShareScreen);
@@ -240,6 +241,7 @@ BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_START_SHARE_SCREEN, &CAgoraScreenCapture::OnBnClickedButtonStartShareScreen)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting)
 	ON_CBN_DROPDOWN(IDC_COMBO_SCREEN_CAPTURE, &CAgoraScreenCapture::OnCbnDropDownComboScreenCapture)
+	ON_CBN_SELCHANGE(IDC_COMBO_SCREEN_CAPTURE_SCENARIO, &CAgoraScreenCapture::OnCbnSelchangeComboScreenCaptureScenario)
 END_MESSAGE_MAP()
 
 
@@ -255,6 +257,11 @@ BOOL CAgoraScreenCapture::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	m_cmbScreenScenario.InsertString(0, _T("Document"));
+	m_cmbScreenScenario.InsertString(1, _T("Gaming"));
+	m_cmbScreenScenario.InsertString(2, _T("Video"));
+	m_cmbScreenScenario.InsertString(3, _T("RDC"));
 	ResumeStatus();
     InitMonitorInfos();
 	return TRUE;  
@@ -480,6 +487,7 @@ void CAgoraScreenCapture::ResumeStatus()
     m_chkShareCursor.SetCheck(TRUE);
     m_edtFPS.SetWindowText(_T("15"));
     m_edtBitrate.SetWindowText(_T(""));
+	m_cmbScreenScenario.SetCurSel(0);
 }
 
 /*
@@ -865,4 +873,32 @@ void CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting()
 void CAgoraScreenCapture::OnCbnDropDownComboScreenCapture()
 {
 	ReFreshWnd(m_cmbScreenCap.GetCurSel());
+}
+
+
+void CAgoraScreenCapture::OnCbnSelchangeComboScreenCaptureScenario()
+{
+	CString str;
+	m_cmbScreenScenario.GetWindowText(str);
+	
+	SCREEN_SCENARIO_TYPE type;
+	if (str.Compare(_T("Gaming")) == 0) {
+		type = SCREEN_SCENARIO_GAMING;
+	}
+	else if (str.Compare(_T("Video")) == 0) {
+		type = SCREEN_SCENARIO_VIDEO;
+	}
+	else if (str.Compare(_T("RDC")) == 0) {
+		type = SCREEN_SCENARIO_RDC;
+	}
+	else {
+		type = SCREEN_SCENARIO_DOCUMENT;
+	}
+	if (m_rtcEngine) {
+		m_rtcEngine->setScreenCaptureScenario(type);
+
+		CString strInfo;
+		strInfo.Format(_T("setScreenCaptureScenario %d"), type);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
 }
