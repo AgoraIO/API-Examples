@@ -44,6 +44,10 @@ void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, m_cmbContrast);
+	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_BLUR, m_radioVirtualBgBlur);
+	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_COLOR, m_radioVirtualBgColor);
+	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_IMAGE, m_radioVirtualBgImage);
+	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_VIDEO, m_radioVirtualBgVideo);
 }
 
 
@@ -62,6 +66,7 @@ BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CDlgBeauty::OnBnClickedCheckVideoDenoise)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE2, &CDlgBeauty::OnBnClickedCheckVideoDenoise2)
 	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty::OnBnClickedCheckLowlight)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_VIRTUAL_BG_BLUR, IDC_RADIO_VIRTUAL_BG_IMAGE, &CDlgBeauty::OnBnClickedStaticVirtualBgChoose)
 END_MESSAGE_MAP()
 
 
@@ -301,6 +306,8 @@ BOOL CDlgBeauty::OnInitDialog()
 		//set window background color.
 		m_videoWnds[i].SetFaceColor(RGB(0x58, 0x58, 0x58));
 	}
+	CString strPath = GetExePath() + _T("\\agora.png");
+	m_imgPath = cs2utf8(strPath);
 	ResumeStatus();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -420,6 +427,10 @@ void CDlgBeauty::OnBnClickedCheckVideoDenoise2()
 	CString strInfo;
 	strInfo.Format(_T("enableVirtualBackground: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_radioVirtualBgBlur.SetCheck(TRUE);
+	m_radioVirtualBgColor.SetCheck(FALSE);
+	m_radioVirtualBgImage.SetCheck(FALSE);
+	m_radioVirtualBgVideo.SetCheck(FALSE);
 	//m_rtcEngine->setExtensionProperty("video_segmentation_provider", "PortraitSegmentation", "configs", "{\"enable\":true,\"seg_params\":{\"matting_mode\":1},\"back_replace_params\":{\"type\":1,\"color\":16723281,\"source\":\"/sdcard/canoe_water_nature.jpg\", \"blur_degree\":2}}");
 	//
 }
@@ -431,4 +442,32 @@ void CDlgBeauty::OnBnClickedCheckLowlight()
 		m_chkLowlight.GetCheck() != 0, 1, 1);
 	LowlightEnhanceOptions options(LowlightEnhanceOptions::LOW_LIGHT_ENHANCE_MANUAL, LowlightEnhanceOptions::LOW_LIGHT_ENHANCE_LEVEL_FAST);
 	m_rtcEngine->setLowlightEnhanceOptions(m_chkLowlight.GetCheck() != 0, options);
+}
+
+
+
+
+void CDlgBeauty::OnBnClickedStaticVirtualBgChoose(UINT idCtl)
+{
+	int isChecked = m_chkVirtual.GetCheck();
+	if (isChecked && m_rtcEngine) {
+		VirtualBackgroundSource source;
+
+		if (idCtl == IDC_RADIO_VIRTUAL_BG_BLUR) {
+			source.background_source_type = VirtualBackgroundSource::BACKGROUND_BLUR;
+		}
+		else if (idCtl == IDC_RADIO_VIRTUAL_BG_COLOR) {
+			source.background_source_type = VirtualBackgroundSource::BACKGROUND_COLOR;
+			source.color = 0x0000ff;
+		}
+		else if (idCtl == IDC_RADIO_VIRTUAL_BG_IMAGE) {
+			source.background_source_type = VirtualBackgroundSource::BACKGROUND_IMG;
+			source.source = m_imgPath.c_str();
+		}
+		else if (idCtl == IDC_RADIO_VIRTUAL_BG_VIDEO) {
+			source.background_source_type = VirtualBackgroundSource::BACKGROUND_VIDEO;
+			source.source = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
+		}
+		m_rtcEngine->enableVirtualBackground(true, source, SegmentationProperty(), PRIMARY_CAMERA_SOURCE);
+	}
 }
