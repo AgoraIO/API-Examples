@@ -131,10 +131,10 @@
 		E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */; };
 		E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */; };
 		E7AD0DEC29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */; };
-		E7AD0DEE29CAF60900C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DED29CAF60900C9A4B0 /* sample.mov */; };
 		E7AD0DF529CAF78C00C9A4B0 /* LocalCompositeGraph.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF029CAF78C00C9A4B0 /* LocalCompositeGraph.strings */; };
 		E7AD0DF629CAF78C00C9A4B0 /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */; };
 		E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF329CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard */; };
+		E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF829CD84F800C9A4B0 /* sample.mov */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -304,10 +304,10 @@
 		E7AD0DE629CAAF2B00C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoRecorder.strings"; sourceTree = "<group>"; };
 		E7AD0DE829CAAF2B00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
 		E7AD0DE929CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorder.swift; sourceTree = "<group>"; };
-		E7AD0DED29CAF60900C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = sample.mov; path = ../../../iOS/APIExample/APIExample/Resources/sample.mov; sourceTree = "<group>"; };
 		E7AD0DF129CAF78C00C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalCompositeGraph.strings"; sourceTree = "<group>"; };
 		E7AD0DF229CAF78C00C9A4B0 /* LocalCompositeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraph.swift; sourceTree = "<group>"; };
 		E7AD0DF429CAF78C00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
+		E7AD0DF829CD84F800C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,11 +486,11 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7AD0DF829CD84F800C9A4B0 /* sample.mov */,
 				E77D54D528F56D3A00D51C1E /* sample.yuv */,
 				E7218BA528BF5E65005A01D5 /* agora-logo.png */,
 				67033725279E81DF0069F4B3 /* bg.jpg */,
 				671BD67A27E0A4F50076D5E1 /* output.raw */,
-				E7AD0DED29CAF60900C9A4B0 /* sample.mov */,
 				57A635F32593544600EDC2F7 /* effectA.wav */,
 				034C629E25297ABB00296ECF /* audioeffect.mp3 */,
 				034C629F25297ABB00296ECF /* audiomixing.mp3 */,
@@ -944,8 +944,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7AD0DEE29CAF60900C9A4B0 /* sample.mov in Resources */,
 				E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */,
+				E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */,
 				E77D54BF28F553DA00D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
 				E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */,
