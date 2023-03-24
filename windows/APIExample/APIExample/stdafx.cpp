@@ -302,6 +302,8 @@ wchar_t SpatialAudioPrepareInfo[INFO_LEN] = { 0 };
 wchar_t mediaRecorderStartRecording[INFO_LEN] = { 0 };
 wchar_t mediaRecorderStopRecording[INFO_LEN] = { 0 };
 
+wchar_t localVideoTranscodingVirtualBg[INFO_LEN] = { 0 };
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -735,6 +737,8 @@ void InitKeyInfomation()
 
 	_tcscpy_s(mediaRecorderStartRecording, INFO_LEN, Str(_T("MediaRecoder.StartRecording")));
 	_tcscpy_s(mediaRecorderStopRecording, INFO_LEN, Str(_T("MediaRecoder.StopRecording")));
+
+	_tcscpy_s(localVideoTranscodingVirtualBg, INFO_LEN, Str(_T("LocalVideoTranscoding.VirtualBg")));
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

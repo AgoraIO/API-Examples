@@ -335,3 +335,5 @@ extern wchar_t beautyFace[INFO_LEN];
 
 extern wchar_t mediaRecorderStartRecording[INFO_LEN];
 extern wchar_t mediaRecorderStopRecording[INFO_LEN];
+
+extern wchar_t localVideoTranscodingVirtualBg[INFO_LEN];
