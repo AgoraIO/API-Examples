@@ -29,6 +29,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Live Streaming".localized, identifier: "menuCell", controller: "LiveStreaming", storyboard: "LiveStreaming"),
         MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
         MenuItem(name: "Custom Video Source(Push)".localized, identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
+        MenuItem(name: "Custom Video Source(Multi)".localized, identifier: "menuCell", controller: "CustomVideoSourcePushMulti", storyboard: "CustomVideoSourcePushMulti"),
         MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
         MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
         MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
