@@ -32,6 +32,8 @@ import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
+import io.agora.base.JavaI420Buffer;
+import io.agora.base.VideoFrame;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -262,9 +264,13 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 engine.destroyCustomVideoTrack(videoTrack);
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
             } else {
-                VideoFileReader videoFileReader = new VideoFileReader(requireContext(), videoFrame -> {
+                VideoFileReader videoFileReader = new VideoFileReader(requireContext(), (buffer, width, height) -> {
                     if (engine != null && joined) {
-                        engine.pushExternalVideoFrameEx(videoFrame, videoTrack);
+                        JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
+                        i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
+                        i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+                        i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+                        engine.pushExternalVideoFrameEx(new VideoFrame(i420Buffer, 0, System.nanoTime()), videoTrack);
                     }
                 });
                 videoFileReader.start();
