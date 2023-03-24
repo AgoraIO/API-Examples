@@ -137,6 +137,7 @@
 #define IDC_CHK_TRANS_CODING            1054
 #define IDC_CHECK_REPORT                1054
 #define IDC_CHECK_AUDIO_SOURCE_MUTE     1054
+#define IDC_CHECK_VIRTUAL_BG            1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -354,7 +355,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1131
+#define _APS_NEXT_CONTROL_VALUE         1132
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

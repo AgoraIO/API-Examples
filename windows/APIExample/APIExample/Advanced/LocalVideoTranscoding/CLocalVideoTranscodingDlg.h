@@ -3,7 +3,11 @@
 #include "AGVideoWnd.h"
 
 // CLocalVideoTranscodingDlg 
-
+typedef struct CLocalVideoTranscodingCameraInfos {
+	std::string deviceId;
+	std::string deviceName;
+	std::vector<agora::rtc::VideoFormat> videoFormats;
+}LOCALVIDEOTRANSCODING_CAMERAINFO, * LOCALVIDEOTRANSCODING_PCAMERAINFO;
 
 class CLocalVideoTranscodingEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
@@ -132,6 +136,7 @@ private:
 	CLocalVideoTranscodingEventHandler m_eventHandler;
 
 	agora::rtc::TranscodingVideoStream stream_infos[MAX_TRANSCODING_STREAM_COUNT];
+	std::vector<LOCALVIDEOTRANSCODING_CAMERAINFO> m_vecCameraInfos;
 public:
 	CListBox m_lstInfo;
 	CEdit m_edtChannel;
@@ -140,10 +145,13 @@ public:
 	CStatic m_staVideoArea;
 	CStatic m_staChannel;
 	CStatic m_staCamra;
+	CButton m_chkVirtualBg;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 
 	CComboBox m_cmbCamera;
 	afx_msg void OnSelchangeComboCameras();
+
+	afx_msg void OnBnClickedCheckVirtualBg();
 };
