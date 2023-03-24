@@ -221,6 +221,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
    m_vecAdvanced.push_back(advancedMediaPlayer);
+   m_vecAdvanced.push_back(advancedMediaRecorder);
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
@@ -310,6 +311,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pmediaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
    m_pmediaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
    m_pmediaPlayerDlg->MoveWindow(&rcWnd);
+
+   //media recorder
+   m_pmediaRecorderDlg = new CAgoraMediaRecorder(&m_staMainArea);
+   m_pmediaRecorderDlg->Create(CAgoraMediaRecorder::IDD);
+   m_pmediaRecorderDlg->MoveWindow(&rcWnd);
 
    //per call test
    m_pPerCallTestDlg = new CAgoraPreCallTestDlg(&m_staMainArea);
@@ -563,6 +569,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pSpatialAudioDlg->InitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedMediaRecorder) == 0) {
+		m_pmediaRecorderDlg->InitAgora();
+		m_pmediaRecorderDlg->ShowWindow(SW_SHOW);
+	}
 	
 	Sleep(500);
 }
@@ -653,6 +663,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(SpatialAudio) == 0) {
 		m_pSpatialAudioDlg->UnInitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedMediaRecorder) == 0) {
+		m_pmediaRecorderDlg->UnInitAgora();
+		m_pmediaRecorderDlg->ShowWindow(SW_HIDE);
 	}
 	Sleep(500);
 }
