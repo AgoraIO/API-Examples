@@ -30,6 +30,8 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
+import io.agora.base.JavaI420Buffer;
+import io.agora.base.VideoFrame;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -309,9 +311,13 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                     join.setText(getString(R.string.leave));
 
                     if (videoFileReader == null) {
-                        videoFileReader = new VideoFileReader(requireContext(), videoFrame -> {
+                        videoFileReader = new VideoFileReader(requireContext(), (buffer, width, height) -> {
                             if(joined && engine != null){
-                                engine.pushExternalVideoFrame(videoFrame);
+                                JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
+                                i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
+                                i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+                                i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+                                engine.pushExternalVideoFrame(new VideoFrame(i420Buffer, 0, System.nanoTime()));
                             }
                         });
                     }

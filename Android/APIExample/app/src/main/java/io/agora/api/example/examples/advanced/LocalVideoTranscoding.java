@@ -15,8 +15,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,12 +53,13 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
         actionId = R.id.action_mainFragment_to_LocalVideoTranscoding,
         tipsId = R.string.localvideotranscoding
 )
-public class LocalVideoTranscoding extends BaseFragment implements View.OnClickListener
+public class LocalVideoTranscoding extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
     private static final String TAG = LocalVideoTranscoding.class.getSimpleName();
 
     private VideoReportLayout videoReportLayout;
-    private Button join, switch_camera;
+    private Button join;
+    private Switch switchTransparentBackground;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -75,10 +78,10 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        switch_camera = view.findViewById(R.id.btn_switch_camera);
+        switchTransparentBackground = view.findViewById(R.id.btn_transparent_background);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        switch_camera.setOnClickListener(this);
+        switchTransparentBackground.setOnCheckedChangeListener(this);
         videoReportLayout = view.findViewById(R.id.videoReportLayout);
     }
 
@@ -196,11 +199,6 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
                 engine.stopScreenCapture();
                 join.setText(getString(R.string.join));
                 videoReportLayout.removeAllViews();
-
-            }
-        }else if(v.getId() == switch_camera.getId()){
-            if(engine != null && joined){
-                engine.switchCamera();
             }
         }
     }
@@ -286,8 +284,6 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         videoReportLayout.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_TRANSCODED);
-
-        engine.enableVirtualBackground(true, new VirtualBackgroundSource(VirtualBackgroundSource.BACKGROUND_COLOR, Color.TRANSPARENT, "", VirtualBackgroundSource.BLUR_DEGREE_HIGH), new SegmentationProperty());
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -489,4 +485,10 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
 
     };
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView == switchTransparentBackground){
+            engine.enableVirtualBackground(isChecked, new VirtualBackgroundSource(VirtualBackgroundSource.BACKGROUND_COLOR, Color.TRANSPARENT, "", VirtualBackgroundSource.BLUR_DEGREE_HIGH), new SegmentationProperty());
+        }
+    }
 }

@@ -322,4 +322,5 @@
     <string name="start_recording">Start Recording</string>
     <string name="stop_recording">Stop Recording</string>
     <string name="recording_tag" translatable="false">RecordingTag</string>
+    <string name="transparent_background">TransparentBackground</string>
 </resources>
