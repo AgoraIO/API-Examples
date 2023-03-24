@@ -73,7 +73,8 @@
 - (void)setMakeup: (BOOL)isSelected {
 #if __has_include("st_mobile_common.h")
     if (isSelected) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"qise.zip" ofType:nil];
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
         __weak VideoProcessingManager *weakself = self;
         [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
             [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_MAKEUP strength:0.5];
@@ -88,7 +89,8 @@
 - (void)setSticker: (BOOL)isSelected {
 #if __has_include("st_mobile_common.h")
     if (isSelected) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"lianxingface.zip" ofType:nil];
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"lianxingface.zip" ofType:nil];
         [self.effectsProcess setStickerWithPath:path callBack:^(st_result_t state, int stickerId, uint64_t action) {
                  
         }];
@@ -100,7 +102,8 @@
 - (void)setFilter: (BOOL)isSelected {
 #if __has_include("st_mobile_common.h")
     if (isSelected) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"qise.zip" ofType:nil];
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
         __weak VideoProcessingManager *weakself = self;
         [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
             [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_FILTER strength:0.5];
