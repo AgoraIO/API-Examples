@@ -12,6 +12,7 @@ Pod::Spec.new do |spec|
    spec.library = "z"
    spec.vendored_libraries = "SenseLib/**/*.a"
    spec.resource_bundles    = {"SenseLib" => "SenseLib/**/*.bundle"}
+   spec.resources = "SenseLib/**/*.zip"
    spec.requires_arc  = true
    spec.ios.deployment_target  = '9.0'
  end
