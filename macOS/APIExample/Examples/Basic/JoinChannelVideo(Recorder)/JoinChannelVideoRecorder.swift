@@ -425,8 +425,8 @@ class JoinChannelVideoRecordMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = true
-            option.clientRoleType = .broadcaster
+            option.publishCameraTrack = role == .broadcaster
+            option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, uid: localUid, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: self.localUid, mediaOptions: option)
                 if result != 0 {
