@@ -130,6 +130,17 @@
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     int width = (int)CVPixelBufferGetWidth(pixelBuffer);
     int heigh = (int)CVPixelBufferGetHeight(pixelBuffer);
+    if (_outTexture) {
+        int _cacheW = (int)CVPixelBufferGetWidth(_outputPixelBuffer);
+        int _cacheH = (int)CVPixelBufferGetHeight(_outputPixelBuffer);
+        if (_cacheH != heigh || _cacheW != width) {
+            GLuint testTexture = 0;
+            [self.effectsProcess deleteTexture:&testTexture pixelBuffer:&_outputPixelBuffer cvTexture:&_outputCVTexture];
+            _outTexture = 0;
+            _outputPixelBuffer = NULL;
+            _outputCVTexture = NULL;
+        }
+    }
     if(!_outTexture){
 #if __has_include("st_mobile_common.h")
         [self.effectsProcess createGLObjectWith:width
