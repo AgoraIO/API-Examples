@@ -61,8 +61,8 @@ class RawVideoDataViewController: BaseViewController {
         agoraKit.startPreview()
         
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
+        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)

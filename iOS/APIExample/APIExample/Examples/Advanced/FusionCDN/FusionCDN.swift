@@ -124,7 +124,7 @@ class FusionCDNHost: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -197,8 +197,8 @@ class FusionCDNHost: BaseViewController {
         agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingAudioConfiguration(.default)
         let options = AgoraDirectCdnStreamingMediaOptions()
-        options.publishCameraTrack = true
-        options.publishMicrophoneTrack = true
+        options.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        options.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
         if ret == 0 {
             streamingButton.setTitle("Streaming", for: .normal)
@@ -214,8 +214,8 @@ class FusionCDNHost: BaseViewController {
     private func switchToRtcStreaming() {
         guard let channelName = configs["channelName"] as? String else {return}
         let options = AgoraRtcChannelMediaOptions()
-        options.publishCameraTrack = true
-        options.publishMicrophoneTrack = true
+        options.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        options.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         options.clientRoleType = .broadcaster
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token,

@@ -79,7 +79,7 @@ class PictureInPictureMain: BaseViewController {
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         
         // enable video module and set up video encoding configs

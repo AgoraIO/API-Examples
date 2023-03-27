@@ -117,8 +117,8 @@ class CustomVideoSourcePushMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCustomAudioTrack = false
-        option.publishCustomVideoTrack = true
+        option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishCustomVideoTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)

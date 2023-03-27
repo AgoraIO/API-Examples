@@ -96,8 +96,8 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = true
-        option.publishCustomAudioTrack = true
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in

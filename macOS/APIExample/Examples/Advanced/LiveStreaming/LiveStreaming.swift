@@ -436,8 +436,8 @@ class LiveStreamingMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = true
-            option.clientRoleType = .broadcaster
+            option.publishCameraTrack = role == .broadcaster
+            option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
