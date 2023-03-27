@@ -98,6 +98,10 @@ class RawVideoDataViewController: BaseViewController {
 // MARK: - AgoraVideoFrameDelegate
 extension RawVideoDataViewController: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        return true
+    }
+    
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if isSnapShoting {
             isSnapShoting = false
             let image = MediaUtils.pixelBuffer(toImage: videoFrame.pixelBuffer!)
@@ -105,10 +109,6 @@ extension RawVideoDataViewController: AgoraVideoFrameDelegate {
                 self.imageView.image = image
             }
         }
-        return true
-    }
-    
-    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         return true
     }
 }
