@@ -199,7 +199,8 @@ class ScreenShare: BaseViewController {
     }
     
     private func saveThumbnailToDesktop(result: [AgoraScreenCaptureSourceInfo]?, type: AgoraScreenCaptureSourceType) {
-        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
         let path = "/Users/\(programPath)/Downloads/thumbnail"
         try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         var isShowAlert: Bool = false

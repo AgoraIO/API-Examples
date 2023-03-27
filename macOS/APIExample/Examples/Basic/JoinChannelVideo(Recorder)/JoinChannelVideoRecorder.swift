@@ -22,7 +22,8 @@ class JoinChannelVideoRecordMain: BaseViewController {
     @IBOutlet weak var Container: AGEVideoContainer!
     
     private var storagePath: String {
-        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
         let path = "/Users/\(programPath)/Downloads"
         return path
     }

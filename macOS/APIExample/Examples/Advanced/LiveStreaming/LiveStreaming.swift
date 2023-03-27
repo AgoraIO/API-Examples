@@ -229,7 +229,8 @@ class LiveStreamingMain: BaseViewController {
     }
     @IBOutlet weak var snapShot: NSButton!
     @IBAction func onTakeSnapshot(_ sender: Any) {
-        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
         let path = "/Users/\(programPath)/Downloads/1.png"
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
     }
