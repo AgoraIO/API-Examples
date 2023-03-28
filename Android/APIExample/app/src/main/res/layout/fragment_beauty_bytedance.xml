@@ -47,6 +47,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <Switch
+        android:id="@+id/switchVideoEffect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/ll_beauty"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"
+        android:text="@string/colorful_enhance"/>
+
     <LinearLayout
         android:id="@+id/ll_beauty"
         android:layout_width="match_parent"

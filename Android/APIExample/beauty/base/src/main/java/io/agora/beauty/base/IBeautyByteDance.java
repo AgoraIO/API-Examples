@@ -8,6 +8,8 @@ public interface IBeautyByteDance {
 
     int process(int oesTexId, int width, int height, int rotation);
 
+    int process(byte[] nv21, int width, int height, int rotation);
+
     void release();
 
     void setFaceBeautifyEnable(boolean enable);

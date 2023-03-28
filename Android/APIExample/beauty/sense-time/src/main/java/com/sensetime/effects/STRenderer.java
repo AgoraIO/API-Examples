@@ -66,6 +66,7 @@ public class STRenderer {
     private long mDetectConfig = -1;
 
     private STGLRender mGLRenderBefore;
+    private STGLRender mGLRenderAfter;
     private int[] mTextureOutId;
     private byte[] mImageDataBuffer = null;
     protected STHumanAction[] mSTHumanAction = new STHumanAction[2];
@@ -184,6 +185,7 @@ public class STRenderer {
 
     private void initGLRender() {
         mGLRenderBefore = new STGLRender(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        mGLRenderAfter = new STGLRender(GLES20.GL_TEXTURE_2D);
     }
 
 
@@ -276,6 +278,14 @@ public class STRenderer {
         mImageWidth = width;
         mImageHeight = height;
 
+        if (mTextureOutId == null) {
+            mTextureOutId = new int[2];
+            GlUtil.initEffectTexture(mImageWidth, mImageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
+        } else if (sizeChange || mTextureOutId.length != 2) {
+            GLES20.glDeleteTextures(mTextureOutId.length, mTextureOutId, 0);
+            mTextureOutId = null;
+            return -1;
+        }
 
         if (sizeChange || mImageDataBuffer == null) {
             mImageDataBuffer = new byte[cameraPixel.length];
@@ -287,7 +297,6 @@ public class STRenderer {
 
         // prepare params
         updateHumanActionDetectConfig();
-        //mSTHumanActionNative.nativeHumanActionPtrCopy();
 
         int ret = mSTHumanActionNative.nativeHumanActionDetectPtr(
                 mImageDataBuffer,
@@ -296,6 +305,7 @@ public class STRenderer {
                 getCurrentOrientation(rotation),
                 width,
                 height);
+        mSTHumanActionNative.nativeHumanActionPtrCopy();
         if (ret == 0) {
             if (mNeedAnimalDetect) {
                 animalDetect(mImageDataBuffer, pixelFormat, getCurrentOrientation(rotation), width, height, 0);
@@ -305,14 +315,7 @@ public class STRenderer {
         }
 
         // >>>>>> 2. upload nv21 to texture
-        if (mTextureOutId == null) {
-            mTextureOutId = new int[2];
-            GlUtil.initEffectTexture(mImageWidth, mImageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
-        } else if (sizeChange) {
-            GLES20.glDeleteTextures(mTextureOutId.length, mTextureOutId, 0);
-            mTextureOutId = null;
-            return -1;
-        }
+
 
         mSTMobileColorConvertNative.setTextureSize(mImageWidth, mImageHeight);
         mSTMobileColorConvertNative.nv21BufferToRgbaTexture(width, height,
@@ -331,7 +334,7 @@ public class STRenderer {
 
         //渲染接口输入参数
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
-                mSTHumanActionNative.getNativeHumanActionResultPtr(),
+                mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
                 0,
                 0,
@@ -350,6 +353,9 @@ public class STRenderer {
         if (ret == 0 && stEffectRenderOutParam.getTexture() != null) {
             textureId = stEffectRenderOutParam.getTexture().getId();
         }
+
+        mGLRenderAfter.adjustRenderSize(mImageWidth, mImageHeight, 0, false, false);
+        textureId = mGLRenderAfter.process(textureId, STGLRender.IDENTITY_MATRIX);
 
         GLES20.glFinish();
 
@@ -386,7 +392,7 @@ public class STRenderer {
         if (mTextureOutId == null) {
             mTextureOutId = new int[1];
             GlUtil.initEffectTexture(mImageWidth, mImageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
-        } else if (sizeChange) {
+        } else if (sizeChange || mTextureOutId.length != 1) {
             GLES20.glDeleteTextures(mTextureOutId.length, mTextureOutId, 0);
             mTextureOutId = null;
             return -1;
@@ -415,6 +421,7 @@ public class STRenderer {
                     getCurrentOrientation(rotation),
                     width,
                     height);
+            mSTHumanActionNative.nativeHumanActionPtrCopy();
             //STHumanAction nativeHumanAction = mSTHumanActionNative.getNativeHumanAction();
             //LogUtils.i(TAG, "human action detect cost time: %d, ret: %d", System.currentTimeMillis() - startHumanAction, ret);
             if (ret == 0) {
@@ -436,7 +443,7 @@ public class STRenderer {
 
         //渲染接口输入参数
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
-                mSTHumanActionNative.getNativeHumanActionResultPtr(),
+                mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
                 0,
                 0,
@@ -451,6 +458,9 @@ public class STRenderer {
         if (ret == 0 && stEffectRenderOutParam.getTexture() != null) {
             textureId = stEffectRenderOutParam.getTexture().getId();
         }
+
+        mGLRenderAfter.adjustRenderSize(mImageWidth, mImageHeight, 0, false, false);
+        textureId = mGLRenderAfter.process(textureId, STGLRender.IDENTITY_MATRIX);
 
         GLES20.glFinish();
 
@@ -597,6 +607,7 @@ public class STRenderer {
         deleteTextures();
         mGLRenderBefore.destroyPrograms();
         mImageWidth = mImageHeight = 0;
+        mGLRenderAfter.destroyPrograms();
     }
 
     private void deleteTextures() {

@@ -6,9 +6,9 @@ import java.lang.reflect.Constructor;
 
 public interface IBeautyFaceUnity {
 
-    int process(int oesTexId, int width, int height);
+    int process(byte[] nv21, int width, int height, boolean isFront);
 
-    int process(byte[] nv21, int oesTexId, int width, int height);
+    int process(int oesTexId, int width, int height, boolean isFront);
 
     void release();
 
