@@ -1,7 +1,9 @@
 package io.agora.api.example.examples.advanced.beauty;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Random;
 
@@ -20,17 +23,20 @@ import io.agora.api.example.databinding.FragmentBeautyBytedanceBinding;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.YuvHelper;
 import io.agora.beauty.base.IBeautyByteDance;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.gl.EglBaseProvider;
+import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 
 public class ByteDanceBeauty extends BaseFragment {
     private static final String TAG = "SceneTimeBeauty";
-
+    private static final Matrix IDENTITY_MATRIX = new Matrix();
     private IBeautyByteDance iBeautyByteDance;
     private FragmentBeautyBytedanceBinding mBinding;
     private RtcEngine rtcEngine;
@@ -47,6 +53,8 @@ public class ByteDanceBeauty extends BaseFragment {
 
     private volatile boolean isDestroyed = false;
     private int mFrameRotation;
+    private ByteBuffer nv21ByteBuffer;
+    private byte[] nv21ByteArray;
 
     @Nullable
     @Override
@@ -67,6 +75,13 @@ public class ByteDanceBeauty extends BaseFragment {
         initVideoView();
         initRtcEngine();
         joinChannel();
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            ColorEnhanceOptions options = new ColorEnhanceOptions();
+            options.strengthLevel = (float) 0.5f;
+            options.skinProtectLevel = (float) 0.5f;
+            rtcEngine.setColorEnhanceOptions(isChecked, options);
+        });
     }
 
     @Override
@@ -200,46 +215,7 @@ public class ByteDanceBeauty extends BaseFragment {
             mVideoFrameObserver = new IVideoFrameObserver() {
                 @Override
                 public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
-                    if (isDestroyed) {
-                        return false;
-                    }
-                    VideoFrame.Buffer buffer = videoFrame.getBuffer();
-                    if (!(buffer instanceof VideoFrame.TextureBuffer)) {
-                        return false;
-                    }
-
-                    VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
-
-                    if (mTextureBufferHelper == null) {
-                        doOnBeautyCreatingBegin();
-                        mTextureBufferHelper = TextureBufferHelper.create("STRender", texBuffer.getEglBaseContext());
-                        mTextureBufferHelper.invoke(() -> {
-                            iBeautyByteDance = IBeautyByteDance.create(getContext());
-                            return null;
-                        });
-                        doOnBeautyCreatingEnd();
-                    }
-
-                    int width = texBuffer.getWidth();
-                    int height = texBuffer.getHeight();
-
-                    Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
-                            texBuffer.getTextureId(),
-                            width, height, mFrameRotation
-                    ));
-
-                    // drag one frame to avoid reframe when switching camera.
-                    if(mFrameRotation != videoFrame.getRotation()){
-                        mFrameRotation = videoFrame.getRotation();
-                        return false;
-                    }
-
-                    VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
-                            width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
-                            texBuffer.getTransformMatrix());
-
-                    videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
-                    return true;
+                    return processBeauty(videoFrame);
                 }
 
                 @Override
@@ -289,6 +265,85 @@ public class ByteDanceBeauty extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean processBeauty(VideoFrame videoFrame) {
+        if (isDestroyed) {
+            return false;
+        }
+        VideoFrame.Buffer buffer = videoFrame.getBuffer();
+        if (mTextureBufferHelper == null) {
+            doOnBeautyCreatingBegin();
+            mTextureBufferHelper = TextureBufferHelper.create("ByteDanceProcess", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
+            mTextureBufferHelper.invoke(() -> {
+                iBeautyByteDance = IBeautyByteDance.create(getContext());
+                return null;
+            });
+            doOnBeautyCreatingEnd();
+        }
+
+        int width = buffer.getWidth();
+        int height = buffer.getHeight();
+
+
+        int processTexId;
+        Matrix transformMatrix = IDENTITY_MATRIX;
+        int rotation = videoFrame.getRotation();
+        if (buffer instanceof VideoFrame.TextureBuffer) {
+            VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
+            transformMatrix = texBuffer.getTransformMatrix();
+            Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
+            processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
+                    texBuffer.getTextureId(),
+                    captureOriginSize.getWidth(), captureOriginSize.getHeight(), rotation
+            ));
+            if (nv21ByteBuffer != null) {
+                nv21ByteBuffer.clear();
+                nv21ByteBuffer = null;
+                return false;
+            }
+        } else {
+            // Obtain nv21 pixel data
+            int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
+            if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
+                if (nv21ByteBuffer != null) {
+                    nv21ByteBuffer.clear();
+                }
+                nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
+                nv21ByteArray = new byte[nv21Size];
+                return false;
+            }
+
+            VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+            YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
+                    i420Buffer.getDataV(), i420Buffer.getStrideV(),
+                    i420Buffer.getDataU(), i420Buffer.getStrideU(),
+                    nv21ByteBuffer, width, height);
+            nv21ByteBuffer.position(0);
+            nv21ByteBuffer.get(nv21ByteArray);
+            i420Buffer.release();
+
+            processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
+                    nv21ByteArray,
+                    width, height, rotation
+            ));
+        }
+        if(processTexId < 0){
+            return false;
+        }
+
+        // drag one frame to avoid reframe when switching camera.
+        if (mFrameRotation != videoFrame.getRotation()) {
+            mFrameRotation = videoFrame.getRotation();
+            return false;
+        }
+
+        VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
+                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
+                transformMatrix);
+
+        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
+        return true;
     }
 
     private void joinChannel() {
