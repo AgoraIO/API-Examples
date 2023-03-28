@@ -96,8 +96,9 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = true
-        option.publishCustomAudioTrack = true
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -116,6 +117,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
             // leave channel when exiting the view
             pcmSourcePush?.stop()
             if isJoined {
+                agoraKit.destroyCustomAudioTrack(Int(trackId))
                 agoraKit.disableAudio()
                 pcmSourcePush?.stop()
                 agoraKit.leaveChannel { (stats) -> Void in
@@ -132,6 +134,9 @@ class CustomPcmAudioSourceMain: BaseViewController {
         } else {
             pcmSourcePush?.stop()
         }
+        let mediaOption = AgoraRtcChannelMediaOptions()
+        mediaOption.publishCustomAudioTrack = sender.isOn
+        agoraKit.updateChannel(with: mediaOption)
     }
 }
 
