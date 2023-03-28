@@ -83,8 +83,10 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 # 压缩archive
 7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
+pushd ${WORKSPACE}
 # 签名
 sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
+popd
 
 # 删除archive文件
 rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"
