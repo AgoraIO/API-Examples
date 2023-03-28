@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -37,6 +36,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.gl.EglBaseProvider;
+import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -59,9 +59,9 @@ public class SceneTimeBeauty extends BaseFragment {
 
     // Beauty process require parameters
     private TextureBufferHelper mTextureBufferHelper;
-    private CountDownLatch unInitBeautyLatch;
     private ByteBuffer nv21ByteBuffer;
     private byte[] nv21ByteArray;
+    private volatile boolean isDestroyed = false;
 
     @Nullable
     @Override
@@ -73,20 +73,28 @@ public class SceneTimeBeauty extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isDestroyed = false;
         if (!IBeautySenseTime.hasIntegrated()) {
             mBinding.tvIntegrateTip.setVisibility(View.VISIBLE);
             return;
         }
-
         channelId = getArguments().getString(getString(R.string.key_channel_name));
         initVideoView();
         initRtcEngine();
         joinChannel();
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            ColorEnhanceOptions options = new ColorEnhanceOptions();
+            options.strengthLevel = (float) 0.5f;
+            options.skinProtectLevel = (float) 0.5f;
+            rtcEngine.setColorEnhanceOptions(isChecked, options);
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        isDestroyed = true;
         unInitBeauty();
         if (rtcEngine != null) {
             rtcEngine.leaveChannel();
@@ -266,27 +274,19 @@ public class SceneTimeBeauty extends BaseFragment {
     }
 
     private void unInitBeauty() {
-        unInitBeautyLatch = new CountDownLatch(1);
-        try {
-            unInitBeautyLatch.wait();
-        } catch (Exception e) {
-            // do nothing
+        if (mTextureBufferHelper != null) {
+            mTextureBufferHelper.invoke(() -> {
+                iBeautySenseTime.release();
+                iBeautySenseTime = null;
+                return null;
+            });
+            mTextureBufferHelper.dispose();
+            mTextureBufferHelper = null;
         }
-        unInitBeautyLatch = null;
     }
 
     private boolean processBeauty(VideoFrame videoFrame) {
-        if (unInitBeautyLatch != null) {
-            if (mTextureBufferHelper != null) {
-                mTextureBufferHelper.invoke(() -> {
-                    iBeautySenseTime.release();
-                    iBeautySenseTime = null;
-                    return null;
-                });
-                mTextureBufferHelper.dispose();
-                mTextureBufferHelper = null;
-            }
-            unInitBeautyLatch.countDown();
+        if (isDestroyed) {
             return false;
         }
         VideoFrame.Buffer buffer = videoFrame.getBuffer();
@@ -315,7 +315,7 @@ public class SceneTimeBeauty extends BaseFragment {
 
         if (mTextureBufferHelper == null) {
             Log.d(TAG, "doOnBeautyCreatingBegin...");
-            mTextureBufferHelper = TextureBufferHelper.create("STRender", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
+             mTextureBufferHelper = TextureBufferHelper.create("STRender", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
             mTextureBufferHelper.invoke(() -> {
                 iBeautySenseTime = IBeautySenseTime.create(getContext());
                 return null;
@@ -346,11 +346,13 @@ public class SceneTimeBeauty extends BaseFragment {
                     width, height, videoFrame.getRotation()
             ));
         }
+        if (processTexId < 0) {
+            return false;
+        }
 
         VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
                 width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, new Matrix());
         videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
-        buffer.release();
         return true;
     }
 

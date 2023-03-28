@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.faceunity.FUConfig;
 import com.faceunity.core.entity.FUBundleData;
+import com.faceunity.core.enumeration.FUTransformMatrixEnum;
 import com.faceunity.core.faceunity.FUAIKit;
 import com.faceunity.core.faceunity.FURenderKit;
 import com.faceunity.core.model.bodyBeauty.BodyBeauty;
@@ -75,19 +76,37 @@ public class BeautyFaceUnityImpl implements IBeautyFaceUnity {
     }
 
     @Override
-    public int process(int oesTexId, int width, int height) {
+    public int process(byte[] nv21, int width, int height, boolean isFront) {
         if (isReleased) {
             return -1;
         }
-        return fuRenderer.onDrawFrameInput(oesTexId, width, height);
+        if(isFront){
+            fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0);
+            fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0);
+            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0);
+        }else{
+            fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+            fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+        }
+        return fuRenderer.onDrawFrameInput(nv21, width, height);
     }
 
     @Override
-    public int process(byte[] nv21, int oesTexId, int width, int height) {
+    public int process(int oesTexId, int width, int height, boolean isFront) {
         if (isReleased) {
             return -1;
         }
-        return fuRenderer.onDrawFrameDualInput(nv21, oesTexId, width, height);
+        if (isFront) {
+            fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0);
+            fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0);
+            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+        } else {
+            fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+            fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
+            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0);
+        }
+        return fuRenderer.onDrawFrameDualInput(oesTexId, width, height);
     }
 
     @Override

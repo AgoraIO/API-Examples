@@ -2,6 +2,7 @@ package io.agora.api.example.examples.advanced.beauty;
 
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -31,6 +32,8 @@ import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.gl.EglBaseProvider;
+import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -47,7 +50,6 @@ public class FaceUnityBeauty extends BaseFragment {
     private boolean isFrontCamera = true;
 
     private TextureBufferHelper mTextureBufferHelper;
-    private boolean isSingleInput = true;
 
     private VideoReportLayout mLocalVideoLayout;
     private VideoReportLayout mRemoteVideoLayout;
@@ -77,6 +79,13 @@ public class FaceUnityBeauty extends BaseFragment {
         initVideoView();
         initRtcEngine();
         joinChannel();
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            ColorEnhanceOptions options = new ColorEnhanceOptions();
+            options.strengthLevel = (float) 0.5f;
+            options.skinProtectLevel = (float) 0.5f;
+            rtcEngine.setColorEnhanceOptions(isChecked, options);
+        });
     }
 
     @Override
@@ -126,11 +135,6 @@ public class FaceUnityBeauty extends BaseFragment {
         mBinding.ivCamera.setOnClickListener(v -> {
             rtcEngine.switchCamera();
             isFrontCamera = !isFrontCamera;
-        });
-        mBinding.tvBeautyInput.setText(isSingleInput ? R.string.beauty_input_single : R.string.beauty_input_double);
-        mBinding.tvBeautyInput.setOnClickListener(v -> {
-            isSingleInput = !isSingleInput;
-            mBinding.tvBeautyInput.setText(isSingleInput ? R.string.beauty_input_single : R.string.beauty_input_double);
         });
         mBinding.smallVideoContainer.setOnClickListener(v -> updateVideoLayouts(!FaceUnityBeauty.this.isLocalFull));
     }
@@ -215,42 +219,7 @@ public class FaceUnityBeauty extends BaseFragment {
             mVideoFrameObserver = new IVideoFrameObserver() {
                 @Override
                 public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
-                    if (isDestroyed) {
-                        return true;
-                    }
-                    VideoFrame.Buffer buffer = videoFrame.getBuffer();
-                    if (!(buffer instanceof VideoFrame.TextureBuffer)) {
-                        return true;
-                    }
-
-                    VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
-
-                    if (mTextureBufferHelper == null) {
-                        doOnBeautyCreatingBegin();
-                        mTextureBufferHelper = TextureBufferHelper.create("STRender", texBuffer.getEglBaseContext());
-                        mTextureBufferHelper.invoke(() -> {
-                            iBeautyFaceUnity = IBeautyFaceUnity.create(getContext());
-                            return null;
-                        });
-                        doOnBeautyCreatingEnd();
-                    }
-
-                    VideoFrame.TextureBuffer processBuffer;
-                    if (isSingleInput) {
-                        processBuffer = processSingleInput(texBuffer);
-                    } else {
-                        processBuffer = processDoubleInput(texBuffer);
-                    }
-                    if(processBuffer == null){
-                        return true;
-                    }
-                    // drag one frame to avoid reframe when switching camera.
-                    if(mFrameRotation != videoFrame.getRotation()){
-                        mFrameRotation = videoFrame.getRotation();
-                        return false;
-                    }
-                    videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
-                    return true;
+                    return processBeauty(videoFrame);
                 }
 
                 @Override
@@ -309,52 +278,74 @@ public class FaceUnityBeauty extends BaseFragment {
         }
     }
 
-    private VideoFrame.TextureBuffer processSingleInput(VideoFrame.TextureBuffer texBuffer) {
-        Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
-
-        Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
-                texBuffer.getTextureId(),
-                captureOriginSize.getWidth(), captureOriginSize.getHeight()
-        ));
-
-        return mTextureBufferHelper.wrapTextureBuffer(
-                texBuffer.getWidth(), texBuffer.getHeight(), VideoFrame.TextureBuffer.Type.RGB, processTexId,
-                texBuffer.getTransformMatrix());
-    }
-
-    private VideoFrame.TextureBuffer processDoubleInput(VideoFrame.TextureBuffer texBuffer) {
-
-        int textureId = texBuffer.getTextureId();
-        int width = texBuffer.getWidth();
-        int height = texBuffer.getHeight();
-
-        int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
-        if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
-            if (nv21ByteBuffer != null) {
-                nv21ByteBuffer.clear();
-            }
-            nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
-            nv21ByteArray = new byte[nv21Size];
+    private boolean processBeauty(VideoFrame videoFrame) {
+        if (isDestroyed) {
+            return true;
         }
 
+        if (mTextureBufferHelper == null) {
+            doOnBeautyCreatingBegin();
+            mTextureBufferHelper = TextureBufferHelper.create("STRender", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
+            mTextureBufferHelper.invoke(() -> {
+                iBeautyFaceUnity = IBeautyFaceUnity.create(getContext());
+                return null;
+            });
+            doOnBeautyCreatingEnd();
+        }
 
-        VideoFrame.I420Buffer i420Buffer = texBuffer.toI420();
-        YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
-                i420Buffer.getDataV(), i420Buffer.getStrideV(),
-                i420Buffer.getDataU(), i420Buffer.getStrideU(),
-                nv21ByteBuffer, width, height);
-        nv21ByteBuffer.position(0);
-        nv21ByteBuffer.get(nv21ByteArray);
-        i420Buffer.release();
+        VideoFrame.Buffer buffer = videoFrame.getBuffer();
+        int width = buffer.getWidth();
+        int height = buffer.getHeight();
 
-        Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
-                nv21ByteArray,
-                textureId,
-                width, height
-        ));
+        int processTexId;
+        Matrix transformMatrix = new Matrix();
+        if (buffer instanceof VideoFrame.TextureBuffer) {
+            VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
+            transformMatrix = texBuffer.getTransformMatrix();
+            Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
+            processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
+                    texBuffer.getTextureId(),
+                    captureOriginSize.getWidth(), captureOriginSize.getHeight(),
+                    videoFrame.getSourceType() == VideoFrame.SourceType.kFrontCamera
+            ));
+        }else {
+            int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
+            if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
+                if (nv21ByteBuffer != null) {
+                    nv21ByteBuffer.clear();
+                }
+                nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
+                nv21ByteArray = new byte[nv21Size];
+            }
 
-        return mTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, texBuffer.getTransformMatrix());
+            VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+            YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
+                    i420Buffer.getDataV(), i420Buffer.getStrideV(),
+                    i420Buffer.getDataU(), i420Buffer.getStrideU(),
+                    nv21ByteBuffer, width, height);
+            nv21ByteBuffer.position(0);
+            nv21ByteBuffer.get(nv21ByteArray);
+            i420Buffer.release();
+
+            processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
+                    nv21ByteArray,
+                    width, height,
+                    videoFrame.getSourceType() == VideoFrame.SourceType.kFrontCamera
+            ));
+        }
+        if(processTexId < 0){
+            return false;
+        }
+
+        // drag one frame to avoid reframe when switching camera.
+        if(mFrameRotation != videoFrame.getRotation()){
+            mFrameRotation = videoFrame.getRotation();
+            return false;
+        }
+        VideoFrame.TextureBuffer textureBuffer = mTextureBufferHelper.wrapTextureBuffer(
+                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, transformMatrix);
+        videoFrame.replaceBuffer(textureBuffer, mFrameRotation, videoFrame.getTimestampNs());
+        return true;
     }
 
     private void joinChannel() {
