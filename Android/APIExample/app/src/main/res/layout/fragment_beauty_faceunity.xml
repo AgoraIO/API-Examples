@@ -47,19 +47,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/tv_beauty_input"
-        android:layout_width="match_parent"
+    <Switch
+        android:id="@+id/switchVideoEffect"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#99000000"
-        android:button="@null"
-        tools:checked="true"
-        android:gravity="center"
-        android:paddingVertical="12dp"
-        android:text="@string/beauty_input_double"
-        android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/ll_beauty"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"
+        android:text="@string/colorful_enhance"/>
 
     <LinearLayout
         android:id="@+id/ll_beauty"
