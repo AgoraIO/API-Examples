@@ -91,9 +91,6 @@ CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # 编译环境
 
-# 导出路径
-EXPORT_PATH="${PROJECT_PATH}/${TARGET_NAME} ${CURRENT_TIME}"
-
 # plist路径
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 
@@ -111,7 +108,7 @@ sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xc
 popd
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${EXPORT_PATH}/${TARGET_NAME}_iOS.ipa"
+7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${WORKSPACE}/${TARGET_NAME}_iOS.ipa"
 
 # 删除IPA文件夹
 rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"

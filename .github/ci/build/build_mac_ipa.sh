@@ -90,12 +90,9 @@ popd
 
 # 删除archive文件
 rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"
-rm -rf "${EXPORT_PATH}/Packaging.log"
-rm -rf "${EXPORT_PATH}/ExportOptions.plist"
-rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}/${TARGET_NAME}_Mac"
+7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${WORKSPACE}/${TARGET_NAME}_Mac"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
