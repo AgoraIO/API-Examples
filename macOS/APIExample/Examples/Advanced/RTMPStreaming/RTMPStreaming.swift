@@ -349,7 +349,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         if(state == .running) {
             self.showAlert(title: "Notice", message: "\(url) Publish Success")
         } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errCode.rawValue)")
+//            self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errCode.rawValue)")
         } else if(state == .idle) {
             self.showAlert(title: "Notice", message: "\(url) Publish Stopped")
         }
