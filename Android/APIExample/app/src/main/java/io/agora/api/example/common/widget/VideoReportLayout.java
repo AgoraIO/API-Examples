@@ -48,8 +48,10 @@ public class VideoReportLayout extends FrameLayout {
 
                 @Override
                 public void onViewDetachedFromWindow(View v) {
-                    reportTextView.removeOnAttachStateChangeListener(this);
-                    reportTextView = null;
+                    if (reportTextView != null) {
+                        reportTextView.removeOnAttachStateChangeListener(this);
+                        reportTextView = null;
+                    }
                 }
             });
             reportTextView.setTextColor(Color.parseColor("#eeeeee"));
