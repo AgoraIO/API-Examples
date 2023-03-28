@@ -269,8 +269,8 @@ public class SceneTimeBeauty extends BaseFragment {
         unInitBeautyLatch = new CountDownLatch(1);
         try {
             unInitBeautyLatch.wait();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            // do nothing
         }
         unInitBeautyLatch = null;
     }
@@ -335,16 +335,16 @@ public class SceneTimeBeauty extends BaseFragment {
             int textureFormat = texBuffer.getType() == VideoFrame.TextureBuffer.Type.OES ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES : GLES20.GL_TEXTURE_2D;
             float[] transformMatrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(texBuffer.getTransformMatrix());
 
-            processTexId = iBeautySenseTime.process(
+            processTexId = mTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
                     nv21ByteArray,
                     texBuffer.getTextureId(), textureFormat,
                     width, height, videoFrame.getRotation(), transformMatrix
-            );
+            ));
         } else {
-            processTexId = iBeautySenseTime.process(
+            processTexId = mTextureBufferHelper.invoke(() ->iBeautySenseTime.process(
                     nv21ByteArray,
                     width, height, videoFrame.getRotation()
-            );
+            ));
         }
 
         VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
