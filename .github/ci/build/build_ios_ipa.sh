@@ -88,7 +88,7 @@ xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -sch
 CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 
 # 归档路径
-ARCHIVE_PATH="${PROJECT_PATH}/${TARGET_NAME} ${CURRENT_TIME}/${TARGET_NAME}.xcarchive"
+ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # 编译环境
 
 # 导出路径
@@ -100,16 +100,19 @@ PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 echo PLIST_PATH: $PLIST_PATH
 
 # archive 这边使用的工作区间 也可以使用project
-xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS'
+xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit
 
-# 导出ipa
-xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
+# 压缩archive
+7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+
+# 签名
+sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${EXPORT_PATH}/${TARGET_NAME}.ipa"
+7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${EXPORT_PATH}/${TARGET_NAME}_iOS.ipa"
 
 # 删除IPA文件夹
-rm -rf "${EXPORT_PATH}"
+rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"
 
 # rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
 # rm -rf "${EXPORT_PATH}/Packaging.log"
