@@ -12,9 +12,11 @@
 	<dict>
 		<key>io.agora.api.examples</key>
 		<string>apiexample_ios</string>
+		<key>io.agora.api.examples.Agora-ScreenShare-Extension</key>
+		<string>apiexample_ios_screenShare</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>Apple Development</string>
+	<string>E40A63338EDCCBA764C8E0FC2D2184973746F22E</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
