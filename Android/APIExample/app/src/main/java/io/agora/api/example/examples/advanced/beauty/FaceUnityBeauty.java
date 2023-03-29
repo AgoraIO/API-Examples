@@ -5,11 +5,11 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,19 +92,38 @@ public class FaceUnityBeauty extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         isDestroyed = true;
+        if (rtcEngine != null) {
+            rtcEngine.leaveChannel();
+        }
         if (mTextureBufferHelper != null) {
             mTextureBufferHelper.invoke(() -> {
                 iBeautyFaceUnity.release();
                 iBeautyFaceUnity = null;
                 return null;
             });
-            mTextureBufferHelper.dispose();
+            boolean disposeSuccess = false;
+            while (!disposeSuccess) {
+                try {
+                    mTextureBufferHelper.dispose();
+                    disposeSuccess = true;
+                } catch (Exception e) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        // do nothing
+                    }
+                }
+            }
             mTextureBufferHelper = null;
         }
-        if (rtcEngine != null) {
-            rtcEngine.leaveChannel();
-        }
         RtcEngine.destroy();
+    }
+
+    @Override
+    protected void onBackPressed() {
+        mBinding.fullVideoContainer.removeAllViews();
+        mBinding.smallVideoContainer.removeAllViews();
+        super.onBackPressed();
     }
 
     private void initVideoView() {
@@ -265,10 +284,10 @@ public class FaceUnityBeauty extends BaseFragment {
             rtcEngine.registerVideoFrameObserver(mVideoFrameObserver);
             // Setup video encoding configs
             rtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                    ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                    ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                     STANDARD_BITRATE,
-                    VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                    VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
             ));
             rtcEngine.enableVideo();
             rtcEngine.disableAudio();
@@ -297,54 +316,54 @@ public class FaceUnityBeauty extends BaseFragment {
         int width = buffer.getWidth();
         int height = buffer.getHeight();
 
-        int processTexId;
+        int processTexId = -1;
         Matrix transformMatrix = new Matrix();
-        if (buffer instanceof VideoFrame.TextureBuffer) {
-            VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
-            transformMatrix = texBuffer.getTransformMatrix();
-            Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
-            processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
-                    texBuffer.getTextureId(),
-                    captureOriginSize.getWidth(), captureOriginSize.getHeight(),
-                    videoFrame.getSourceType() == VideoFrame.SourceType.kFrontCamera
-            ));
-        }else {
-            int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
-            if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
-                if (nv21ByteBuffer != null) {
-                    nv21ByteBuffer.clear();
-                }
-                nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
-                nv21ByteArray = new byte[nv21Size];
+        int rotation = videoFrame.getRotation();
+        boolean skipFrame = false;
+        int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
+        if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
+            if (nv21ByteBuffer != null) {
+                nv21ByteBuffer.clear();
             }
+            nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
+            nv21ByteArray = new byte[nv21Size];
+            skipFrame = true;
+        }
 
-            VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-            YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
-                    i420Buffer.getDataV(), i420Buffer.getStrideV(),
-                    i420Buffer.getDataU(), i420Buffer.getStrideU(),
-                    nv21ByteBuffer, width, height);
-            nv21ByteBuffer.position(0);
-            nv21ByteBuffer.get(nv21ByteArray);
-            i420Buffer.release();
+        VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+        YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
+                i420Buffer.getDataV(), i420Buffer.getStrideV(),
+                i420Buffer.getDataU(), i420Buffer.getStrideU(),
+                nv21ByteBuffer, width, height);
+        nv21ByteBuffer.position(0);
+        nv21ByteBuffer.get(nv21ByteArray);
+        i420Buffer.release();
 
+        if (mTextureBufferHelper != null) {
             processTexId = mTextureBufferHelper.invoke(() -> iBeautyFaceUnity.process(
                     nv21ByteArray,
                     width, height,
                     videoFrame.getSourceType() == VideoFrame.SourceType.kFrontCamera
             ));
         }
-        if(processTexId < 0){
+
+
+        // drag one frame to avoid reframe when switching camera.
+        if (mFrameRotation != rotation) {
+            mFrameRotation = rotation;
+            skipFrame = true;
+        }
+
+        if (processTexId < 0 || skipFrame) {
             return false;
         }
 
-        // drag one frame to avoid reframe when switching camera.
-        if(mFrameRotation != videoFrame.getRotation()){
-            mFrameRotation = videoFrame.getRotation();
-            return false;
+        if (mTextureBufferHelper != null) {
+            VideoFrame.TextureBuffer textureBuffer = mTextureBufferHelper.wrapTextureBuffer(
+                    width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, transformMatrix);
+            videoFrame.replaceBuffer(textureBuffer, mFrameRotation, videoFrame.getTimestampNs());
         }
-        VideoFrame.TextureBuffer textureBuffer = mTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, transformMatrix);
-        videoFrame.replaceBuffer(textureBuffer, mFrameRotation, videoFrame.getTimestampNs());
+
         return true;
     }
 
@@ -371,24 +390,47 @@ public class FaceUnityBeauty extends BaseFragment {
 
     private void updateVideoLayouts(boolean isLocalFull) {
         this.isLocalFull = isLocalFull;
-        mBinding.fullVideoContainer.removeAllViews();
-        mBinding.smallVideoContainer.removeAllViews();
         if (isLocalFull) {
             if (mLocalVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                } else if (parent == null) {
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                }
             }
 
             if (mRemoteVideoLayout != null) {
                 mRemoteVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!FaceUnityBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                } else if (parent == null) {
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         } else {
             if (mLocalVideoLayout != null) {
                 mLocalVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!FaceUnityBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                } else if (parent == null) {
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                }
             }
+
             if (mRemoteVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                } else if (parent == null) {
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         }
     }
