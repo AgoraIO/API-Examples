@@ -20,7 +20,7 @@ KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
 METHOD_PATH=${PROJECT_PATH}"/ExportOptions.plist"
 
 # 打包环境
-CONFIGURATION=$method
+CONFIGURATION="Debug"
 
 #工程文件路径
 APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
