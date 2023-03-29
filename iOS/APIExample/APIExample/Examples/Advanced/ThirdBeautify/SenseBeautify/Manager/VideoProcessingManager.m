@@ -135,7 +135,9 @@
         int _cacheH = (int)CVPixelBufferGetHeight(_outputPixelBuffer);
         if (_cacheH != heigh || _cacheW != width) {
             GLuint testTexture = 0;
+#if __has_include("st_mobile_common.h")
             [self.effectsProcess deleteTexture:&testTexture pixelBuffer:&_outputPixelBuffer cvTexture:&_outputCVTexture];
+#endif
             _outTexture = 0;
             _outputPixelBuffer = NULL;
             _outputCVTexture = NULL;
