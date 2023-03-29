@@ -39,9 +39,9 @@
 
     <ImageView
         android:id="@+id/iv_camera"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="8dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:padding="20dp"
         android:src="@drawable/ic_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
