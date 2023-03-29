@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.agora.api.examples</key>
-		<string>apiexample_ios</string>
+		<string>apiexamples_all</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Development</string>
