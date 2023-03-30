@@ -42,7 +42,6 @@ class PictureInPictureMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var pipController: AgoraPictureInPictureController?
     var remoteUid: UInt?
-    
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
@@ -198,7 +197,16 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
-        remoteVideo.videoView.reset()
+//        remoteVideo.videoView.reset()
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
+        guard muted else { return }
+        let pixelBuffer = MediaUtils.cvPixelBufferRef(from: UIImage(named: "agora-logo") ?? UIImage()).takeRetainedValue()
+        let videoFrame = AgoraOutputVideoFrame()
+        videoFrame.pixelBuffer = pixelBuffer
+        videoFrame.width = Int32(remoteVideo.videoView.frame.width)
+        videoFrame.height = Int32(remoteVideo.videoView.frame.height)
+        remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
     }
 }
 
