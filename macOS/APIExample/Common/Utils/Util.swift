@@ -29,4 +29,15 @@ enum Util {
             agoraKit?.setLocalAccessPoint(withConfig: localAccessPointConfig)
         }
     }
+    
+    static func storagePath() -> String {
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
+        let path = "/Users/\(programPath)/Downloads"
+        return path
+    }
+    
+    static func logFile() -> String {
+        storagePath() + "/AgoraLog/agorasdk.log"
+    }
 }
