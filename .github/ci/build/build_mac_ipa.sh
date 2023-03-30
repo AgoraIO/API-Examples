@@ -96,7 +96,7 @@ rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # 上传IPA
 PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
 mkdir PAYLOAD_PATH
-mv "${TARGET_NAME}_Mac" $PAYLOAD_PATH
+mv "${TARGET_NAME}_${BUILD_NUMBER}_Mac" $PAYLOAD_PATH
 7za a "${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${PAYLOAD_PATH}"
 
 #复原Keycenter文件
