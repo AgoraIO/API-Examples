@@ -102,11 +102,17 @@ pushd ${WORKSPACE}
 sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 popd
 
+cd ${WORKSPACE}
+
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${WORKSPACE}/${TARGET_NAME}_iOS.ipa"
+PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
+mkdir PAYLOAD_PATH
+mv "${TARGET_NAME}_iOS.ipa" $PAYLOAD_PATH
+
+7za a "${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r ${PAYLOAD_PATH}
 
 # 删除IPA文件夹
-rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"
+rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
 # rm -rf "${EXPORT_PATH}/Packaging.log"
