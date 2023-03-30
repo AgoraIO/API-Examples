@@ -88,11 +88,16 @@ pushd ${WORKSPACE}
 sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 popd
 
+cd ${WORKSPACE}
+
 # 删除archive文件
-rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip"
+rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${WORKSPACE}/${TARGET_NAME}_Mac"
+PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
+mkdir PAYLOAD_PATH
+mv "${TARGET_NAME}_Mac" $PAYLOAD_PATH
+7za a "${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${PAYLOAD_PATH}"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
