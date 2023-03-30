@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -87,20 +88,40 @@ public class ByteDanceBeauty extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        isDestroyed = true;
+        if (rtcEngine != null) {
+            rtcEngine.leaveChannel();
+        }
         if (mTextureBufferHelper != null) {
             mTextureBufferHelper.invoke(() -> {
                 iBeautyByteDance.release();
                 iBeautyByteDance = null;
                 return null;
             });
-            mTextureBufferHelper.dispose();
+            boolean disposeSuccess = false;
+            while (!disposeSuccess) {
+                try {
+                    mTextureBufferHelper.dispose();
+                    disposeSuccess = true;
+                } catch (Exception e) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        // do nothing
+                    }
+                }
+            }
             mTextureBufferHelper = null;
         }
-        if (rtcEngine != null) {
-            rtcEngine.leaveChannel();
-        }
         RtcEngine.destroy();
+    }
+
+    @Override
+    protected void onBackPressed() {
+        isDestroyed = true;
+        mBinding.fullVideoContainer.removeAllViews();
+        mBinding.smallVideoContainer.removeAllViews();
+        super.onBackPressed();
+
     }
 
     private void initVideoView() {
@@ -286,9 +307,10 @@ public class ByteDanceBeauty extends BaseFragment {
         int height = buffer.getHeight();
 
 
-        int processTexId;
+        int processTexId = -1;
         Matrix transformMatrix = IDENTITY_MATRIX;
         int rotation = videoFrame.getRotation();
+        boolean skipFrame = false;
         if (buffer instanceof VideoFrame.TextureBuffer) {
             VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
             transformMatrix = texBuffer.getTransformMatrix();
@@ -300,7 +322,7 @@ public class ByteDanceBeauty extends BaseFragment {
             if (nv21ByteBuffer != null) {
                 nv21ByteBuffer.clear();
                 nv21ByteBuffer = null;
-                return false;
+                skipFrame = true;
             }
         } else {
             // Obtain nv21 pixel data
@@ -311,7 +333,7 @@ public class ByteDanceBeauty extends BaseFragment {
                 }
                 nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
                 nv21ByteArray = new byte[nv21Size];
-                return false;
+                skipFrame = true;
             }
 
             VideoFrame.I420Buffer i420Buffer = buffer.toI420();
@@ -322,27 +344,29 @@ public class ByteDanceBeauty extends BaseFragment {
             nv21ByteBuffer.position(0);
             nv21ByteBuffer.get(nv21ByteArray);
             i420Buffer.release();
-
-            processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
-                    nv21ByteArray,
-                    width, height, rotation
-            ));
-        }
-        if(processTexId < 0){
-            return false;
+            if(mTextureBufferHelper != null){
+                processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
+                        nv21ByteArray,
+                        width, height, rotation
+                ));
+            }
         }
 
         // drag one frame to avoid reframe when switching camera.
-        if (mFrameRotation != videoFrame.getRotation()) {
-            mFrameRotation = videoFrame.getRotation();
-            return false;
+        if (mFrameRotation != rotation) {
+            mFrameRotation = rotation;
+            skipFrame = true;
         }
 
-        VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
-                transformMatrix);
-
-        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
+        if(processTexId < 0 || skipFrame){
+            return false;
+        }
+        if(mTextureBufferHelper != null){
+            VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
+                    width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
+                    transformMatrix);
+            videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
+        }
         return true;
     }
 
@@ -371,24 +395,47 @@ public class ByteDanceBeauty extends BaseFragment {
 
     private void updateVideoLayouts(boolean isLocalFull) {
         this.isLocalFull = isLocalFull;
-        mBinding.fullVideoContainer.removeAllViews();
-        mBinding.smallVideoContainer.removeAllViews();
         if (isLocalFull) {
             if (mLocalVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                } else if (parent == null) {
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                }
             }
 
             if (mRemoteVideoLayout != null) {
                 mRemoteVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!ByteDanceBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                } else if(parent == null){
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         } else {
             if (mLocalVideoLayout != null) {
                 mLocalVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!ByteDanceBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                } else if(parent == null){
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                }
             }
+
             if (mRemoteVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                } else if(parent == null) {
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         }
     }
