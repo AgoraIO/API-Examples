@@ -10,7 +10,7 @@
 	<string>development</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>io.agora.api.examples</key>
+		<key>io.agora.api.examples.audio</key>
 		<string>apiexamples_all</string>
 	</dict>
 	<key>signingCertificate</key>
