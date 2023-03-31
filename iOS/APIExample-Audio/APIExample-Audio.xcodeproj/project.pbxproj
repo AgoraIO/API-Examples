@@ -1033,7 +1033,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples.audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
@@ -1103,7 +1103,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples.audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
