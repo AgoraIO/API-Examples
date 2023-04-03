@@ -85,19 +85,16 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 
 pushd ${WORKSPACE}
 # 签名
-sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
+sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 popd
 
 cd ${WORKSPACE}
 
 # 删除archive文件
-# rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
+rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # 上传IPA
-PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
-mkdir "${PAYLOAD_PATH}"
-mv "${TARGET_NAME}_${BUILD_NUMBER}_Mac" "${PAYLOAD_PATH}"
-7za a "${TARGET_NAME}_${BUILD_NUMBER}_APP.zip" -r "${PAYLOAD_PATH}"
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
