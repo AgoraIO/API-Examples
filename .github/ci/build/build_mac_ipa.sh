@@ -17,7 +17,7 @@ TARGET_NAME=${PROJECT_PATH##*/}
 KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
 
 # 打包环境
-CONFIGURATION=developer-id 
+CONFIGURATION=Release
 
 #工程文件路径
 APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
