@@ -91,7 +91,7 @@ popd
 cd ${WORKSPACE}
 
 # 删除archive文件
-rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
+# rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # 上传IPA
 python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
