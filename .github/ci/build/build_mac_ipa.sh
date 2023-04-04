@@ -84,13 +84,12 @@ cd ${WORKSPACE}
 
 # 压缩archive
 7za a -slp "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
-# zip -yqr "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
 # 签名
 sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
 # 删除archive文件
-# rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
+rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # 上传IPA
 python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
