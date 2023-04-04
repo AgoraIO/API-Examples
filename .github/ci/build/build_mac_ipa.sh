@@ -87,7 +87,7 @@ cd ${WORKSPACE}
 zip -yqr "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
 # 签名
-sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
+sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
 # 删除archive文件
 # rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
