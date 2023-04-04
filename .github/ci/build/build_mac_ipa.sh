@@ -80,16 +80,14 @@ echo PLIST_PATH: $PLIST_PATH
 # archive 这边使用的工作区间 也可以使用project
 xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}"
 
+cd ${WORKSPACE}
+
 # 压缩archive
 # 7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 zip -yqr "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
-pushd ${WORKSPACE}
 # 签名
-sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
-popd
-
-cd ${WORKSPACE}
+sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
 # 删除archive文件
 # rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
