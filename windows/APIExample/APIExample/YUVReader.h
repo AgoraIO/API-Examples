@@ -16,7 +16,7 @@ public:
 	const char* FILE_PATH = "sample.yuv";
 	const static int VIDEO_WIDTH = 320;
 	const static int VIDEO_HEIGHT = 180;
-	const static int VIDEO_FRAME_SIZE = VIDEO_WIDTH * VIDEO_HEIGHT * 2 / 3;
+	const static int VIDEO_FRAME_SIZE = VIDEO_WIDTH * VIDEO_HEIGHT * 3 / 2;
 	const static int VIDEO_FRAME_RATE = 15;
 	const static int VIDEO_FRAME_INTERVAL_MS = 1000 / VIDEO_FRAME_RATE;
 

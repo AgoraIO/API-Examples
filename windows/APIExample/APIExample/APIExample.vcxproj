@@ -118,7 +118,8 @@
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
-copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)
+if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -160,7 +161,9 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <Command>if exist $(SolutionDir)\sdk (copy $(SolutionDir)sdk\x64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Platform)\$(Configuration)
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Platform)\$(Configuration)
+if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
