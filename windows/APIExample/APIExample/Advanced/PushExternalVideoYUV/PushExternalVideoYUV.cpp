@@ -93,6 +93,10 @@ bool PushExternalVideoYUV::InitAgora()
 	VideoEncoderConfiguration config;
 	config.dimensions.width = YUVReader::VIDEO_WIDTH;
 	config.dimensions.height = YUVReader::VIDEO_HEIGHT;
+	//set video encoder configuration.
+	m_rtcEngine->setVideoEncoderConfiguration(config);
+
+
 	m_videoFrame.stride = YUVReader::VIDEO_WIDTH;
 	m_videoFrame.height = YUVReader::VIDEO_HEIGHT;
 	m_videoFrame.rotation = 0;
@@ -102,9 +106,6 @@ bool PushExternalVideoYUV::InitAgora()
 	m_videoFrame.cropTop = 0;
 	m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
 	m_videoFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
-	//set video encoder configuration.
-	m_rtcEngine->setVideoEncoderConfiguration(config);
-
 	m_imgBuffer = new BYTE[YUVReader::VIDEO_FRAME_SIZE]{0};
 
 	m_rtcEngine->startPreview(VIDEO_SOURCE_CUSTOM);
@@ -141,10 +142,16 @@ void PushExternalVideoYUV::UnInitAgora()
 BOOL PushExternalVideoYUV::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
+
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	m_localVideoWnd.MoveWindow(rcArea.left, rcArea.top, (rcArea.right - rcArea.left) / 2, rcArea.bottom - rcArea.top, TRUE);
+
+	m_remoteVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 101);
+	m_remoteVideoWnd.MoveWindow(rcArea.left + (rcArea.right - rcArea.left) / 2, rcArea.top, (rcArea.right - rcArea.left) / 2, rcArea.bottom - rcArea.top, TRUE);
+
 	ResumeStatus();
 	return TRUE;
 }
@@ -225,6 +232,7 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 		ChannelMediaOptions options;
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.autoSubscribeVideo = true;
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
@@ -238,18 +246,19 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			yuvReader.stop();
+			
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
 void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffer, int size) {
-	int bufSize = size;
-	memcpy_s(m_imgBuffer, bufSize, buffer, bufSize);
+	memcpy_s(m_imgBuffer, size, buffer, size);
 	m_videoFrame.buffer = m_imgBuffer;
 	m_videoFrame.timestamp = GetTickCount();
-	m_mediaEngine->pushVideoFrame(&m_videoFrame);
+	if (m_joinChannel) {
+		m_mediaEngine->pushVideoFrame(&m_videoFrame);
+	}
 }
 
 BOOL PushExternalVideoYUV::PreTranslateMessage(MSG* pMsg)
@@ -288,15 +297,30 @@ LRESULT PushExternalVideoYUV::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
+
+	yuvReader.stop();
+	m_remoteVideoWnd.Reset();
+	m_remoteVideoWnd.SetUID(0);
+
 	return 0;
 }
 
 //EID_USER_JOINED message window handler.
 LRESULT PushExternalVideoYUV::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
+	int remoteUid = wParam;
 	CString strInfo;
-	strInfo.Format(_T("%u joined"), wParam);
+	strInfo.Format(_T("%u joined"), remoteUid);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (m_remoteVideoWnd.GetUID() == 0) {
+		m_remoteVideoWnd.SetUID(remoteUid);
+		VideoCanvas canvas;
+		canvas.view = m_remoteVideoWnd.GetSafeHwnd();
+		canvas.uid = remoteUid;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
+		m_rtcEngine->setupRemoteVideo(canvas);
+	}
 	return 0;
 }
 
@@ -308,6 +332,11 @@ LRESULT PushExternalVideoYUV::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (m_remoteVideoWnd.GetUID() == remoteUid) {
+		m_remoteVideoWnd.SetUID(0);
+		m_remoteVideoWnd.Reset();
+	}
 
 	return 0;
 }

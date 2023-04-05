@@ -34,10 +34,11 @@ void YUVReader::run()
 	}
 	else {
 		// success
+		fileStream.seekg(0, std::ios::beg);
 		while (isReading) {
 			if (fileStream.good()) {
-				memset(buffer, 0, VIDEO_FRAME_SIZE);
 				fileStream.read(reinterpret_cast<char*>(buffer), VIDEO_FRAME_SIZE);
+				
 				if (callback != nullptr) {
 					callback(VIDEO_WIDTH, VIDEO_HEIGHT, buffer, VIDEO_FRAME_SIZE);
 				}

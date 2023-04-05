@@ -119,6 +119,7 @@ protected:
 
 	PushExternalVideoYUVEventHandler m_eventHandler;
 	CAGVideoWnd m_localVideoWnd;
+	CAGVideoWnd m_remoteVideoWnd;
 	agora::media::base::ExternalVideoFrame m_videoFrame;
 
 
