@@ -272,6 +272,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
+    <ClInclude Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -298,6 +299,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="YUVReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
@@ -318,6 +320,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
@@ -357,6 +360,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="YUVReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc" />
@@ -367,6 +371,8 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="res\sample.yuv" />
+    <None Include="sample.yuv" />
     <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
