@@ -233,6 +233,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
+   m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
    m_vecAdvanced.push_back(advancedPerCallTest);
    m_vecAdvanced.push_back(advancedAudioVolume);
    //m_vecAdvanced.push_back(advancedReportInCall);
@@ -365,6 +366,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pPushExternalVideoYUV = new PushExternalVideoYUV(&m_staMainArea);
    m_pPushExternalVideoYUV->Create(PushExternalVideoYUV::IDD);
    m_pPushExternalVideoYUV->MoveWindow(&rcWnd);
+
+   m_pMultiVideoSourceTracks = new MultiVideoSourceTracks(&m_staMainArea);
+   m_pMultiVideoSourceTracks->Create(MultiVideoSourceTracks::IDD);
+   m_pMultiVideoSourceTracks->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -556,6 +561,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pMultiVideoSourceDlg->InitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->InitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_SHOW);
+	}
 	else if (selectedText.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->InitAgora();
 		m_pDlgBeautyAudio->ShowWindow(SW_SHOW);
@@ -647,6 +656,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMultiVideoSource) == 0) {
 		m_pMultiVideoSourceDlg->UnInitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->UnInitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_HIDE);
 	}
 	else if (str.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->UnInitAgora();

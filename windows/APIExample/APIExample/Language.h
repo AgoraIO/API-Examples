@@ -39,6 +39,7 @@ extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedMediaRecorder[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
 extern wchar_t advancedMultiVideoSource[INFO_LEN];
+extern wchar_t advancedMultiVideoSourceTracks[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
 extern wchar_t advancedPerCallTest[INFO_LEN];
 extern wchar_t advancedAudioVolume[INFO_LEN];

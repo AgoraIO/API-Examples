@@ -40,6 +40,7 @@ wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
 wchar_t advancedMediaRecorder[INFO_LEN]			= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
 wchar_t advancedMultiVideoSource[INFO_LEN]		= { 0 };
+wchar_t advancedMultiVideoSourceTracks[INFO_LEN]		= { 0 };
 wchar_t advancedAudioEffect[INFO_LEN] = { 0 };
 wchar_t advancedPerCallTest[INFO_LEN] = { 0 };
 wchar_t advancedAudioVolume[INFO_LEN] = { 0 };
@@ -455,6 +456,7 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedMediaRecorder, INFO_LEN, Str(_T("Advanced.MediaRecorder")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
 	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
+	_tcscpy_s(advancedMultiVideoSourceTracks, INFO_LEN, Str(_T("Advanced.MultiVideoSourceTracks")));
 	
 	_tcscpy_s(advancedAudioEffect, INFO_LEN, Str(_T("Advanced.AudioEffect")));
 	_tcscpy_s(advancedPerCallTest, INFO_LEN, Str(_T("Advanced.PerCallTest")));
