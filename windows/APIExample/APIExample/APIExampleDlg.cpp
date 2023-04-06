@@ -233,6 +233,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
+   m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
    m_vecAdvanced.push_back(advancedPerCallTest);
    m_vecAdvanced.push_back(advancedAudioVolume);
    //m_vecAdvanced.push_back(advancedReportInCall);
@@ -277,9 +278,9 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pAudioMixingDlg->MoveWindow(&rcWnd);
 
    //custom video capture
-   m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
-   m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
-   m_pCaputreVideoDlg->MoveWindow(&rcWnd);
+//    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
+//    m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
+//    m_pCaputreVideoDlg->MoveWindow(&rcWnd);
    
    //original video process
    m_pOriginalVideoDlg = new CAgoraOriginalVideoDlg(&m_staMainArea);
@@ -361,6 +362,14 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
    m_pSpatialAudioDlg->Create(CAgoraSpatialAudioDlg::IDD);
    m_pSpatialAudioDlg->MoveWindow(&rcWnd);
+
+   m_pPushExternalVideoYUV = new PushExternalVideoYUV(&m_staMainArea);
+   m_pPushExternalVideoYUV->Create(PushExternalVideoYUV::IDD);
+   m_pPushExternalVideoYUV->MoveWindow(&rcWnd);
+
+   m_pMultiVideoSourceTracks = new MultiVideoSourceTracks(&m_staMainArea);
+   m_pMultiVideoSourceTracks->Create(MultiVideoSourceTracks::IDD);
+   m_pMultiVideoSourceTracks->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -503,11 +512,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
         m_pScreenCap->InitAgora();
         m_pScreenCap->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
-        m_pCaputreVideoDlg->InitAgora();
-        m_pCaputreVideoDlg->ShowWindow(SW_SHOW);
+        m_pPushExternalVideoYUV->InitAgora();
+		m_pPushExternalVideoYUV->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
         m_pCaptureAudioDlg->InitAgora();
-        m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
+		m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->InitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
@@ -551,6 +560,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	else if (selectedText.Compare(advancedMultiVideoSource) == 0) {
 		m_pMultiVideoSourceDlg->InitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
+	}
+	else if (selectedText.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->InitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_SHOW);
 	}
 	else if (selectedText.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->InitAgora();
@@ -598,11 +611,11 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         m_pScreenCap->UnInitAgora();
         m_pScreenCap->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedCustomVideoCapture) == 0) {
-        m_pCaputreVideoDlg->UnInitAgora();
-        m_pCaputreVideoDlg->ShowWindow(SW_HIDE);
+        m_pPushExternalVideoYUV->UnInitAgora();
+		m_pPushExternalVideoYUV->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedCustomAudioCapture) == 0) {
         m_pCaptureAudioDlg->UnInitAgora();
-        m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
+		m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->UnInitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
@@ -643,6 +656,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMultiVideoSource) == 0) {
 		m_pMultiVideoSourceDlg->UnInitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->UnInitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_HIDE);
 	}
 	else if (str.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->UnInitAgora();
