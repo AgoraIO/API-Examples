@@ -238,8 +238,7 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 
-			yuvReader.setReadCallback(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-			yuvReader.start();
+			yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 		}
 	}
 	else {

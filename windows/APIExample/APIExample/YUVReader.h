@@ -22,12 +22,8 @@ public:
 
 
 	YUVReader();
-	
-	void setReadCallback(IYUVCallback callback) {
-		this->callback = callback;
-	}
 
-	void start();
+	void start(IYUVCallback callback);
 
 	void stop();
 

@@ -109,6 +109,34 @@ private:
 	int m_Id = 0;
 };
 
+
+class MultiVideoSourceTracksYUVReaderHander {
+
+public:
+
+	int GetVideoTrackId() {
+		return m_videoTrackId;
+	}
+
+	void Setup(agora::media::IMediaEngine* mediaEngine, int videoTrackId) {
+		m_mediaEngine = mediaEngine;
+		m_videoTrackId = videoTrackId;
+	}
+
+	void Release() {
+		m_mediaEngine = nullptr;
+		m_videoTrackId = 0;
+	}
+
+
+	void OnYUVRead(int width, int height, unsigned char* buffer, int size);
+
+private:
+	agora::media::base::ExternalVideoFrame m_videoFrame;
+	agora::media::IMediaEngine* m_mediaEngine = nullptr;;
+	int m_videoTrackId = 0;
+};
+
 class MultiVideoSourceTracks : public CDialogEx
 {
 	DECLARE_DYNAMIC(MultiVideoSourceTracks)
@@ -128,8 +156,8 @@ public:
 
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedButtonJoinchannel();
-// 	afx_msg void OnBnClickedButtonCreateTrack();
-// 	afx_msg void OnBnClickedButtonDestroyTrack();
+	afx_msg void OnBnClickedButtonCreateTrack();
+	afx_msg void OnBnClickedButtonDestroyTrack();
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -153,13 +181,16 @@ private:
 	bool m_initialize;
 
 	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
+	agora::util::AutoPtr<agora::media::IMediaEngine> m_mediaEngine;
 	MultiVideoSourceTracksEventHandler m_eventHandler;
 	CAGVideoWnd m_videoWnds[VIDEO_WINDOWS_SIZE];
 
 	agora::rtc::RtcConnection m_trackConnections[VIDEO_TRACK_SIZE];
 	MultiVideoSourceTracksEventHandler m_trackEventHandlers[VIDEO_TRACK_SIZE];
-	int m_trackUids[VIDEO_TRACK_SIZE];
+	int m_trackUids[VIDEO_TRACK_SIZE]{ 0 };
+	int m_trackVideoTrackIds[VIDEO_TRACK_SIZE]{ 0 };
 	YUVReader m_yuvReaders[VIDEO_TRACK_SIZE];
+	MultiVideoSourceTracksYUVReaderHander m_yuvReaderHandlers[VIDEO_TRACK_SIZE];
 	
 	
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
