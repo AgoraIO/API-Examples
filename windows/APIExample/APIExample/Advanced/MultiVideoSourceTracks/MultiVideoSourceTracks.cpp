@@ -6,6 +6,27 @@
 
 IMPLEMENT_DYNAMIC(MultiVideoSourceTracks, CDialogEx)
 
+
+
+
+BEGIN_MESSAGE_MAP(MultiVideoSourceTracks, CDialogEx)
+	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &MultiVideoSourceTracks::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_CREATE_TRACK, &MultiVideoSourceTracks::OnBnClickedButtonCreateTrack)
+	ON_BN_CLICKED(IDC_BUTTON_DESTROY_TRACK, &MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &MultiVideoSourceTracks::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &MultiVideoSourceTracks::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &MultiVideoSourceTracks::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &MultiVideoSourceTracks::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &MultiVideoSourceTracks::OnEIDLocalAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &MultiVideoSourceTracks::OnEIDLocalVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &MultiVideoSourceTracks::OnEIDRemoteAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &MultiVideoSourceTracks::OnEIDRemoteVideoStats)
+END_MESSAGE_MAP()
+
+
+// MultiVideoSourceTracks
+
 MultiVideoSourceTracks::MultiVideoSourceTracks(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD, pParent)
 {
@@ -27,24 +48,6 @@ void MultiVideoSourceTracks::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_CREATE_TRACK, m_btnCreateTrack);
 	DDX_Control(pDX, IDC_BUTTON_DESTROY_TRACK, m_btnDestroyTrack);
 }
-
-
-BEGIN_MESSAGE_MAP(MultiVideoSourceTracks, CDialogEx)
-	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &MultiVideoSourceTracks::OnBnClickedButtonJoinchannel)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &MultiVideoSourceTracks::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &MultiVideoSourceTracks::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &MultiVideoSourceTracks::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &MultiVideoSourceTracks::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &MultiVideoSourceTracks::OnEIDLocalAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &MultiVideoSourceTracks::OnEIDLocalVideoStats)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &MultiVideoSourceTracks::OnEIDRemoteAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &MultiVideoSourceTracks::OnEIDRemoteVideoStats)
-END_MESSAGE_MAP()
-
-
-// MultiVideoSourceTracks
-
 
 BOOL MultiVideoSourceTracks::OnInitDialog()
 {
@@ -92,16 +95,107 @@ void MultiVideoSourceTracks::OnBnClickedButtonJoinchannel()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannel primary camera, use ChannelMediaOption"));
 
 		m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
+
+		m_strChannel = szChannelId;
 	}
 	else {
 		//leaveChannel primary camera
 		m_rtcEngine->leaveChannel();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel primary camera"));
 
-		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+		// Reset video tracks
+		for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
+		{
+			if(m_trackUids[i] != 0){
+				m_rtcEngine->leaveChannelEx(m_trackConnections[i]);
+				m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[i]);
+			}
+			m_trackUids[i] = 0;
+			m_yuvReaders[i].stop();
+			m_yuvReaderHandlers[i].Release();
+		}
+
+		// Reset windows
+		for (int i = 0; i < VIDEO_WINDOWS_SIZE; i++)
+		{
+			m_videoWnds[i].SetUID(0);
+			m_videoWnds[i].ShowStatsInfo(FALSE);
+			m_videoWnds[i].Reset();
+		}
+
 	}
 
 	m_joinChannel = !m_joinChannel;
+}
+
+void MultiVideoSourceTracks::OnBnClickedButtonCreateTrack() {
+	if (!m_joinChannel) {
+		return;
+	}
+	int trackIndex = -1;
+	for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
+	{
+		if (m_trackUids[i] == 0) {
+			trackIndex = i;
+			break;
+		}
+	}
+	if (trackIndex == -1) {
+		return;
+	}
+
+	int uid = 10001 + trackIndex;
+	m_trackUids[trackIndex] = uid;
+	m_trackConnections[trackIndex].channelId = m_strChannel.c_str();
+	m_trackConnections[trackIndex].localUid = uid;
+	m_trackEventHandlers[trackIndex].SetId(trackIndex + 1);
+	m_trackEventHandlers[trackIndex].SetMsgReceiver(m_hWnd);
+
+	int videoTrackId = m_rtcEngine->createCustomVideoTrack();
+	m_trackVideoTrackIds[trackIndex] = videoTrackId;
+
+
+	ChannelMediaOptions mediaOptions;
+	mediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
+	mediaOptions.publishCustomVideoTrack = true;
+	mediaOptions.autoSubscribeVideo = false;
+	mediaOptions.autoSubscribeAudio = false;
+	mediaOptions.customVideoTrackId = videoTrackId;
+	int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, m_trackConnections[trackIndex], mediaOptions, &m_trackEventHandlers[trackIndex]);
+
+	
+
+	// Push video frame
+	m_yuvReaderHandlers[trackIndex].Setup(m_mediaEngine.get(), videoTrackId);
+	m_yuvReaders[trackIndex].start(std::bind(&MultiVideoSourceTracksYUVReaderHander::OnYUVRead, m_yuvReaderHandlers[trackIndex], std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+}
+
+void MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack() {
+	if (!m_joinChannel) {
+		return;
+	}
+
+	int trackIndex = -1;
+	for (int i = VIDEO_TRACK_SIZE - 1; i >= 0 ; i--)
+	{
+		if (m_trackUids[i] != 0) {
+			trackIndex = i;
+			break;
+		}
+	}
+	if (trackIndex == -1) {
+		return;
+	}
+	int uid = m_trackUids[trackIndex];
+	m_trackUids[trackIndex] = 0;
+
+
+	m_yuvReaders[trackIndex].stop();
+	m_yuvReaderHandlers[trackIndex].Release();
+
+
+	m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[trackIndex]);
+	m_rtcEngine->leaveChannelEx(m_trackConnections[trackIndex]);
 }
 
 void MultiVideoSourceTracks::ShowVideoWnds()
@@ -154,10 +248,6 @@ void MultiVideoSourceTracks::ShowVideoWnds()
 			m_videoWnds[nIndex].MoveWindow(x, y, w, h, TRUE);
 			m_videoWnds[nIndex].ShowWindow(SW_SHOW);
 			m_videoWnds[nIndex].SetParent(this);
-
-			if (!m_videoWnds[nIndex].IsWindowVisible()) {
-				m_videoWnds[nIndex].ShowWindow(SW_SHOW);
-			}
 		}
 	}
 
@@ -173,6 +263,14 @@ void MultiVideoSourceTracks::ResumeStatus()
 	m_joinChannel = false;
 
 	m_btnJoinChannel.EnableWindow(TRUE);
+
+	// Reset windows
+	for (int i = 0; i < VIDEO_WINDOWS_SIZE; i++)
+	{
+		m_videoWnds[i].SetUID(0);
+		m_videoWnds[i].ShowStatsInfo(FALSE);
+		m_videoWnds[i].Reset();
+	}
 }
 
 //Initialize the Agora SDK
@@ -210,12 +308,26 @@ bool MultiVideoSourceTracks::InitAgora()
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 
+	m_mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
+
 	return true;
 }
 //UnInitialize the Agora SDK
 void MultiVideoSourceTracks::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		// Reset video tracks
+		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
+		{
+			if (m_trackUids[i] != 0) {
+				m_rtcEngine->leaveChannelEx(m_trackConnections[i]);
+				m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[i]);
+			}
+			m_trackUids[i] = 0;
+			m_yuvReaders[i].stop();
+			m_yuvReaderHandlers[i].Release();
+		}
+
 		if (m_joinChannel) {
 			//leave channel primary camera
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -239,17 +351,21 @@ void MultiVideoSourceTracks::OnShowWindow(BOOL bShow, UINT nStatus)
 
 
 
+// RTC event message window handlers implements.
+
 LRESULT MultiVideoSourceTracks::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
-	int cId = (int)lParam;
-	unsigned int uid = (unsigned int)wParam;
+	int cId = (int)wParam;
+	unsigned int uid = (unsigned int)lParam;
 
-	m_btnJoinChannel.EnableWindow(TRUE);
+	
 	CString strInfo;
-	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), m_strChannel.c_str(), wParam, uid);
+	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), utf82cs(m_strChannel), wParam, uid);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	
-
+	if (cId == 0) {
+		m_btnJoinChannel.EnableWindow(TRUE);
+	}
 	return 0;
 }
 
@@ -257,14 +373,15 @@ LRESULT MultiVideoSourceTracks::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 LRESULT MultiVideoSourceTracks::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 
-	int cId = (int)lParam;
-	unsigned int uid = (unsigned int)lParam;
-	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	int cId = (int)wParam;
+	
 	CString strInfo;
-	strInfo.Format(_T("leave channel:%s "), m_strChannel.c_str());
+	strInfo.Format(_T("leave channel:%s, cId=%u"), utf82cs(m_strChannel), cId);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-
+	if (cId == 0) {
+		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	}
 	return 0;
 }
 
@@ -272,25 +389,39 @@ LRESULT MultiVideoSourceTracks::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	int cId = wParam;
 	int uid = lParam;
-	if (cId == 0) {
-		int idleVideoWndIndex = -1;
-		for (int Index = 0; Index < sizeof(m_videoWnds) ; Index++)
-		{
-			if (m_videoWnds[Index].GetUID() == 0) {
-				idleVideoWndIndex = Index;
-				break;
-			}
-		}
-		if (idleVideoWndIndex != -1) {
-			m_videoWnds[idleVideoWndIndex].SetUID(uid);
-			VideoCanvas canvas;
-			canvas.uid = uid;
-			canvas.view = m_videoWnds[idleVideoWndIndex].GetSafeHwnd();
-			canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
-			m_rtcEngine->setupRemoteVideo(canvas);
+	if (cId != 0) {
+		return 0;
+	}
+
+
+	int idleWndIndex = -1;
+	for (int i = 0; i < VIDEO_WINDOWS_SIZE; i++)
+	{
+		if (m_videoWnds[i].GetUID() == 0) {
+			idleWndIndex = i;
+			break;
 		}
 	}
-	
+	if (idleWndIndex == -1) {
+		return 0;
+	}
+
+	bool isTrackUser = false;
+	for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
+	{
+		if (m_trackUids[i] == uid) {
+			isTrackUser = true;
+			break;
+		}
+	}
+
+	m_videoWnds[idleWndIndex].SetUID(uid);
+	VideoCanvas canvas;
+	canvas.uid = uid;
+	canvas.view = m_videoWnds[idleWndIndex].GetSafeHwnd();
+	canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
+	m_rtcEngine->setupRemoteVideo(canvas);
+	m_videoWnds[idleWndIndex].ShowStatsInfo(TRUE, !isTrackUser);
 
 	return 0;
 }
@@ -300,14 +431,22 @@ LRESULT MultiVideoSourceTracks::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	int cId = wParam;
 	int uid = lParam;
-	if (cId == 0) {
-		for (int Index = 0; Index < sizeof(m_videoWnds); Index++)
-		{
-			if (m_videoWnds[Index].GetUID() == uid) {
-				m_videoWnds[Index].Reset();
-				m_videoWnds[Index].SetUID(0);
-				break;
-			}
+	if (cId != 0) {
+		return 0;
+	}
+	
+
+	for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
+	{
+		if (m_videoWnds[i].GetUID() == uid) {
+			m_videoWnds[i].SetUID(0);
+			m_videoWnds[i].ShowStatsInfo(FALSE);
+			m_videoWnds[i].Reset();
+
+			VideoCanvas canvas;
+			canvas.uid = uid;
+			m_rtcEngine->setupRemoteVideo(canvas);
+			break;
 		}
 	}
 	
@@ -322,9 +461,14 @@ LRESULT MultiVideoSourceTracks::OnEIDLocalVideoStats(WPARAM wParam, LPARAM lPara
 
 	if (cId > 0)
 	{
-		if (m_videoWnds[cId - 1].GetUID() != 0) {
-			m_videoWnds[cId - 1].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
-				stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+		int uid = m_trackUids[cId - 1];
+		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
+		{
+			if (m_videoWnds[i].GetUID() == uid) {
+				m_videoWnds[i].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
+					stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+				break;
+			}
 		}
 	}
 	
@@ -338,10 +482,16 @@ LRESULT MultiVideoSourceTracks::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lPara
 	int cId = wParam;
 	LocalAudioStats* stats = reinterpret_cast<LocalAudioStats*>(lParam);
 
+
 	if (cId > 0)
 	{
-		if (m_videoWnds[cId - 1].GetUID() != 0) {
-			m_videoWnds[cId - 1].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+		int uid = m_trackUids[cId - 1];
+		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
+		{
+			if (m_videoWnds[i].GetUID() == uid) {
+				m_videoWnds[i].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+				break;
+			}
 		}
 	}
 
@@ -353,16 +503,38 @@ LRESULT MultiVideoSourceTracks::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lPara
 LRESULT MultiVideoSourceTracks::OnEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam)
 {
 	int cId = wParam;
-	RemoteVideoStats* stats = reinterpret_cast<RemoteVideoStats*>(wParam);
+	RemoteVideoStats* stats = reinterpret_cast<RemoteVideoStats*>(lParam);
+	if (stats == nullptr) {
+		return 0;
+	}
+	int uid = stats->uid;
+
+	
 
 	if (cId == 0)
 	{
-		if (m_videoWnds[cId - 1].GetUID() != 0) {
-			m_videoWnds[cId - 1].SetVideoStatsInfo(stats->width, stats->height,
-				stats->decoderOutputFrameRate, stats->receivedBitrate, stats->packetLossRate, stats->delay);
+		bool isTrackUser = false;
+		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
+		{
+			if (m_trackUids[i] == uid) {
+				isTrackUser = true;
+				break;
+			}
+		}
+		if (isTrackUser) {
+			return 0;
+		}
+
+		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
+		{
+			if (m_videoWnds[i].GetUID() == uid) {
+				m_videoWnds[i].SetVideoStatsInfo(stats->width, stats->height,
+					stats->decoderOutputFrameRate, stats->receivedBitrate, stats->packetLossRate, stats->delay);
+				break;
+			}
 		}
 	}
-
+	delete stats;
 	return 0;
 }
 
@@ -371,11 +543,28 @@ LRESULT MultiVideoSourceTracks::OnEIDRemoteAudioStats(WPARAM wParam, LPARAM lPar
 {
 	int cId = wParam;
 	RemoteAudioStats* stats = reinterpret_cast<RemoteAudioStats*>(lParam);
+	int uid = stats->uid;
 
 	if (cId > 0)
 	{
-		if (m_videoWnds[cId - 1].GetUID() != 0) {
-			m_videoWnds[cId - 1].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+		bool isTrackUser = false;
+		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
+		{
+			if (m_trackUids[i] == uid) {
+				isTrackUser = true;
+				break;
+			}
+		}
+		if (isTrackUser) {
+			return 0;
+		}
+
+		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
+		{
+			if (m_videoWnds[i].GetUID() == uid) {
+				m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+				break;
+			}
 		}
 	}
 
@@ -510,4 +699,19 @@ void MultiVideoSourceTracksEventHandler::onRemoteVideoStats(const RemoteVideoSta
 		*_stats = stats;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATS), (WPARAM)m_Id, (LPARAM)_stats);
 	}
+}
+
+// MultiVideoSourceTracksYUVReaderHander implements
+
+void MultiVideoSourceTracksYUVReaderHander::OnYUVRead(int width, int height, unsigned char* buffer, int size)
+{
+	if (m_mediaEngine == nullptr) {
+		return;
+	}
+	m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
+	m_videoFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
+	m_videoFrame.height = height;
+	m_videoFrame.stride = width;
+	m_videoFrame.buffer = buffer;
+	m_mediaEngine->pushVideoFrame(&m_videoFrame, m_videoTrackId);
 }
