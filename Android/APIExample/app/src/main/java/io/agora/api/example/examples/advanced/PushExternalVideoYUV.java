@@ -6,6 +6,7 @@ import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,21 +25,33 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.examples.advanced.videoRender.YuvFboProgram;
+import io.agora.api.example.examples.advanced.videoRender.YuvUploader;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
+import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.JavaI420Buffer;
+import io.agora.base.NV12Buffer;
+import io.agora.base.NV21Buffer;
+import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.EglBase;
+import io.agora.base.internal.video.YuvHelper;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
+import io.agora.rtc2.gl.EglBaseProvider;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -55,10 +69,15 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     private Button join;
     private EditText et_channel;
     private RtcEngineEx engine;
+    private Spinner sp_push_buffer_type;
     private int myUid;
     private volatile boolean joined = false;
 
     private VideoFileReader videoFileReader;
+
+    private YuvFboProgram yuvFboProgram;
+    private TextureBufferHelper textureBufferHelper;
+
 
     @Nullable
     @Override
@@ -75,6 +94,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        sp_push_buffer_type = view.findViewById(R.id.sp_buffer_type);
     }
 
     @Override
@@ -124,6 +144,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
+
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -135,6 +157,17 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     public void onDestroy() {
         if(videoFileReader != null){
             videoFileReader.stop();
+        }
+        if(textureBufferHelper != null){
+            textureBufferHelper.invoke(() -> {
+                if(yuvFboProgram != null){
+                    yuvFboProgram.release();
+                    yuvFboProgram = null;
+                }
+                return null;
+            });
+            textureBufferHelper.dispose();
+            textureBufferHelper = null;
         }
 
         /**leaveChannel and Destroy the RtcEngine instance*/
@@ -232,7 +265,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
          * @param pushMode
          *                   VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME.
          *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
-        engine.setExternalVideoSource(true, false, Constants.ExternalVideoSourceType.VIDEO_FRAME);
+        engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         TextureView textureView = new TextureView(getContext());
         VideoCanvas local = new VideoCanvas(textureView, Constants.RENDER_MODE_FIT,  0);
@@ -312,12 +345,17 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
 
                     if (videoFileReader == null) {
                         videoFileReader = new VideoFileReader(requireContext(), (buffer, width, height) -> {
-                            if(joined && engine != null){
-                                JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
-                                i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
-                                i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
-                                i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
-                                engine.pushExternalVideoFrame(new VideoFrame(i420Buffer, 0, System.nanoTime()));
+                            if (joined && engine != null) {
+                                String selectedItem = (String) sp_push_buffer_type.getSelectedItem();
+                                if("I420".equals(selectedItem)){
+                                    pushVideoFrameI420(buffer, width, height);
+                                }else if("NV21".equals(selectedItem)){
+                                    pushVideoFrameNV21(buffer, width, height);
+                                }else if("NV12".equals(selectedItem)){
+                                    pushVideoFrameNV12(buffer, width, height);
+                                }else if("Texture2D".equals(selectedItem)){
+                                    pushVideoFrameTexture(buffer, width, height);
+                                }
                             }
                         });
                     }
@@ -384,5 +422,89 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             });
         }
     };
+
+    private void pushVideoFrameI420(byte[] buffer, int width, int height) {
+        JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
+        i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
+        i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+        i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+        engine.pushExternalVideoFrame(new VideoFrame(i420Buffer, 0, System.nanoTime()));
+    }
+
+    private void pushVideoFrameNV21(byte[] yuv, int width, int height) {
+        int srcStrideY = width;
+        int srcHeightY = height;
+        int srcSizeY = srcStrideY * srcHeightY;
+        ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
+        srcY.put(yuv, 0, srcSizeY);
+
+        int srcStrideU = width / 2;
+        int srcHeightU = height / 2;
+        int srcSizeU = srcStrideU * srcHeightU;
+        ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
+        srcU.put(yuv, srcSizeY, srcSizeU);
+
+        int srcStrideV = width / 2;
+        int srcHeightV = height / 2;
+        int srcSizeV = srcStrideV * srcHeightV;
+        ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
+        srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
+
+        int desSize = srcSizeY + srcSizeU + srcSizeV;
+        ByteBuffer des = ByteBuffer.allocateDirect(desSize);
+        YuvHelper.I420ToNV12(srcY, srcStrideY, srcV, srcStrideV, srcU, srcStrideU, des, width, height);
+
+        byte[] nv21 = new byte[desSize];
+        des.position(0);
+        des.get(nv21);
+
+        NV21Buffer nv21Buffer = new NV21Buffer(nv21, width, height, null);
+        engine.pushExternalVideoFrame(new VideoFrame(nv21Buffer, 0, System.nanoTime()));
+    }
+
+    private void pushVideoFrameNV12(byte[] yuv, int width, int height) {
+        int srcStrideY = width;
+        int srcHeightY = height;
+        int srcSizeY = srcStrideY * srcHeightY;
+        ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
+        srcY.put(yuv, 0, srcSizeY);
+
+        int srcStrideU = width / 2;
+        int srcHeightU = height / 2;
+        int srcSizeU = srcStrideU * srcHeightU;
+        ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
+        srcU.put(yuv, srcSizeY, srcSizeU);
+
+        int srcStrideV = width / 2;
+        int srcHeightV = height / 2;
+        int srcSizeV = srcStrideV * srcHeightV;
+        ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
+        srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
+
+        int desSize = srcSizeY + srcSizeU + srcSizeV;
+        ByteBuffer des = ByteBuffer.allocateDirect(desSize);
+        YuvHelper.I420ToNV12(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, des, width, height);
+
+
+        NV12Buffer nv12Buffer = new NV12Buffer(width, height, width, height, des, null);
+        engine.pushExternalVideoFrame(new VideoFrame(nv12Buffer, 0, System.nanoTime()));
+    }
+
+
+    private void pushVideoFrameTexture(byte[] yuv, int width, int height) {
+        if(textureBufferHelper == null){
+            textureBufferHelper = TextureBufferHelper.create("PushExternalVideoYUV", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
+        }
+        if(yuvFboProgram == null){
+            textureBufferHelper.invoke((Callable<Void>) () -> {
+                yuvFboProgram = new YuvFboProgram();
+                return null;
+            });
+        }
+        Integer textureId = textureBufferHelper.invoke(() -> yuvFboProgram.drawYuv(yuv, width, height));
+        VideoFrame.TextureBuffer textureBuffer = textureBufferHelper.wrapTextureBuffer(width, height, VideoFrame.TextureBuffer.Type.RGB, textureId, new Matrix());
+        engine.pushExternalVideoFrame(new VideoFrame(textureBuffer, 0, System.nanoTime()));
+    }
+
 
 }
