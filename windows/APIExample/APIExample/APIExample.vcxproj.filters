@@ -100,6 +100,12 @@
     <Filter Include="Advanced\MediaRecorder">
       <UniqueIdentifier>{33ddb658-b378-4cf7-8c4c-c3e616528e24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\PushExternalVideoYUV">
+      <UniqueIdentifier>{b88bb5af-125e-4ecd-b138-b475aed36f5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MultiVideoSourceTracks">
+      <UniqueIdentifier>{a7d62827-b116-4a28-b8e7-2e5fddbce712}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -234,6 +240,15 @@
     <ClInclude Include="Advanced\MediaRecorder\CAgoraMediaRecorder.h">
       <Filter>Advanced\MediaRecorder</Filter>
     </ClInclude>
+    <ClInclude Include="YUVReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.h">
+      <Filter>Advanced\PushExternalVideoYUV</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.h">
+      <Filter>Advanced\MultiVideoSourceTracks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -356,6 +371,15 @@
     <ClCompile Include="Advanced\MediaRecorder\CAgoraMediaRecorder.cpp">
       <Filter>Advanced\MediaRecorder</Filter>
     </ClCompile>
+    <ClCompile Include="YUVReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.cpp">
+      <Filter>Advanced\PushExternalVideoYUV</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.cpp">
+      <Filter>Advanced\MultiVideoSourceTracks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -370,6 +394,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="en.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\sample.yuv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="sample.yuv">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

@@ -29,6 +29,8 @@
 #include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
 #include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
 #include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
+#include "Advanced/PushExternalVideoYUV/PushExternalVideoYUV.h"
+#include "Advanced/MultiVideoSourceTracks/MultiVideoSourceTracks.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -99,6 +101,8 @@ private:
 	CAgoraBeautyAudio           *m_pDlgBeautyAudio = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
+    PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
+    MultiVideoSourceTracks     *m_pMultiVideoSourceTracks = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;

@@ -118,7 +118,8 @@
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
-copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)
+if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -160,7 +161,9 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <Command>if exist $(SolutionDir)\sdk (copy $(SolutionDir)sdk\x64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Platform)\$(Configuration)
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Platform)\$(Configuration)
+if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
@@ -268,10 +271,12 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
     <ClInclude Include="Advanced\MediaRecorder\CAgoraMediaRecorder.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
+    <ClInclude Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
+    <ClInclude Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -298,6 +303,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="YUVReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
@@ -314,10 +320,12 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
     <ClCompile Include="Advanced\MediaRecorder\CAgoraMediaRecorder.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
+    <ClCompile Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
@@ -357,6 +365,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="YUVReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc" />
@@ -367,6 +376,8 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="res\sample.yuv" />
+    <None Include="sample.yuv" />
     <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
