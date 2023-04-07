@@ -65,7 +65,8 @@ public class STRenderer {
     private boolean mIsCreateHumanActionHandleSucceeded = false;
     private long mDetectConfig = -1;
 
-    private STGLRender mGLRenderBefore;
+    private STGLRender mGLRenderOESBefore;
+    private STGLRender mGLRender2DBefore;
     private STGLRender mGLRenderAfter;
     private int[] mTextureOutId;
     private byte[] mImageDataBuffer = null;
@@ -184,7 +185,8 @@ public class STRenderer {
 
 
     private void initGLRender() {
-        mGLRenderBefore = new STGLRender(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        mGLRenderOESBefore = new STGLRender(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        mGLRender2DBefore = new STGLRender(GLES20.GL_TEXTURE_2D);
         mGLRenderAfter = new STGLRender(GLES20.GL_TEXTURE_2D);
     }
 
@@ -400,8 +402,11 @@ public class STRenderer {
 
         int textureId = cameraTextureId;
         if (texFormat == GLES11Ext.GL_TEXTURE_EXTERNAL_OES) {
-            mGLRenderBefore.adjustRenderSize(mImageWidth, mImageHeight, 0, false, true);
-            textureId = mGLRenderBefore.process(cameraTextureId, transformMatrix);
+            mGLRenderOESBefore.adjustRenderSize(mImageWidth, mImageHeight, 0, false, true);
+            textureId = mGLRenderOESBefore.process(cameraTextureId, transformMatrix);
+        } else {
+            mGLRender2DBefore.adjustRenderSize(mImageWidth, mImageHeight, 0, false, true);
+            textureId = mGLRender2DBefore.process(cameraTextureId, transformMatrix);
         }
 
         // >>>>>> 2. detect human point info using cameraData
@@ -605,7 +610,8 @@ public class STRenderer {
         mChangeStickerManagerThread.quit();
         mChangeStickerManagerThread = null;
         deleteTextures();
-        mGLRenderBefore.destroyPrograms();
+        mGLRenderOESBefore.destroyPrograms();
+        mGLRender2DBefore.destroyPrograms();
         mImageWidth = mImageHeight = 0;
         mGLRenderAfter.destroyPrograms();
     }

@@ -1,6 +1,8 @@
 package io.agora.api.example.examples.advanced.beauty;
 
 import android.graphics.Matrix;
+import android.opengl.GLES11Ext;
+import android.opengl.GLES20;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -317,6 +319,7 @@ public class ByteDanceBeauty extends BaseFragment {
             Size captureOriginSize = VideoCaptureUtils.getCaptureOriginSize(texBuffer);
             processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
                     texBuffer.getTextureId(),
+                    texBuffer.getType() == VideoFrame.TextureBuffer.Type.OES ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES : GLES20.GL_TEXTURE_2D,
                     captureOriginSize.getWidth(), captureOriginSize.getHeight(), rotation
             ));
             if (nv21ByteBuffer != null) {

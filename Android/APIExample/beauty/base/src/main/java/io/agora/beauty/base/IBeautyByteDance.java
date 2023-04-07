@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor;
 
 public interface IBeautyByteDance {
 
-    int process(int oesTexId, int width, int height, int rotation);
+    int process(int texId, int texType, int width, int height, int rotation);
 
     int process(byte[] nv21, int width, int height, int rotation);
 
