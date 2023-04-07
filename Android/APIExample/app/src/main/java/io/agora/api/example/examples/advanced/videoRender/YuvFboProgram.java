@@ -3,8 +3,6 @@ package io.agora.api.example.examples.advanced.videoRender;
 import android.graphics.Matrix;
 import android.opengl.GLES20;
 
-import java.nio.ByteBuffer;
-
 import io.agora.base.JavaI420Buffer;
 import io.agora.base.internal.video.GlRectDrawer;
 import io.agora.base.internal.video.GlUtil;
@@ -82,6 +80,9 @@ public class YuvFboProgram {
         matrix.preScale(1f, -1f);// I420-frames are upside down
         matrix.preTranslate(-0.5f, -0.5f);
         glRectDrawer.drawYuv(yuvUploader.getYuvTextures(), RendererCommon.convertMatrixFromAndroidGraphicsMatrix(matrix), width, height, 0, 0, width, height);
+
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        GLES20.glFlush();
 
         return mFboTextureId[1];
     }
