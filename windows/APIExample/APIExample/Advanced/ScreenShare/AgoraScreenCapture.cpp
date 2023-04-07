@@ -412,7 +412,7 @@ void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow) {
 		RenderLocalVideo();
-		ReFreshWnd();
+		//ReFreshWnd();
 	}
 	else {
 		ResumeStatus();
@@ -453,7 +453,7 @@ void CAgoraScreenCapture::ReFreshWnd(int select)
 //Get ScreenCaptureParameters from ctrl
 void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam)
 {
-    //capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
+    capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
     CString str;
     m_edtFPS.GetWindowText(str);
     if (str.IsEmpty()) 
@@ -483,8 +483,8 @@ void CAgoraScreenCapture::ResumeStatus()
     m_screenShare = false;
     m_edtChannel.SetWindowText(_T(""));
     m_cmbScreenCap.ResetContent();
-	m_chkShareCursor.EnableWindow(FALSE);
-    m_chkShareCursor.SetCheck(TRUE);
+// 	m_chkShareCursor.EnableWindow(FALSE);
+//     m_chkShareCursor.SetCheck(TRUE);
     m_edtFPS.SetWindowText(_T("15"));
     m_edtBitrate.SetWindowText(_T(""));
 	m_cmbScreenScenario.SetCurSel(0);
