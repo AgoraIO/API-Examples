@@ -438,7 +438,7 @@
     <CopyFileToFolders Include="res\ic_speaker.bmp">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="res\sample.yuv">
+    <CopyFileToFolders Include="sample.yuv">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
   </ItemGroup>
