@@ -125,82 +125,112 @@ public:
     bool InitAgora();
     //UnInitialize the Agora SDK
     void UnInitAgora();
-    //set control text from config.
-    void InitCtrlText();
-    //render local video from SDK local capture.
-    void RenderLocalVideo();
-    //callback window enum.
-    static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
-    //refresh window to show.
-    void ReFreshWnd(int select = 0);
-    //resume window
-    void ResumeStatus();
-    //refresh window info to list.
-    int	RefreashWndInfo();
 
     // 对话框数据
     enum { IDD = IDD_DIALOG_SCREEN_SHARE };
-    afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+    
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
     DECLARE_MESSAGE_MAP()
+    
+    virtual BOOL OnInitDialog();
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual void DoDataExchange(CDataExchange* pDX);
+    
+private:
+	CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWnd;
+    CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWndExecluded;
+	CScreenCaputreEventHandler m_eventHandler;
+
+	IRtcEngine* m_rtcEngine = nullptr;
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	bool m_addInjectStream = false;
+	bool m_windowShare = false;
+	bool m_screenShare = false;
+    agora::rtc::ScreenCaptureParameters m_screenParam;
+    agora::rtc::Rectangle m_screenRegion;
+	CMonitors m_monitors;
 
     CAGVideoWnd m_localVideoWnd;
-    CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWnd;
-    CScreenCaputreEventHandler m_eventHandler;
-
-    IRtcEngine* m_rtcEngine = nullptr;
-    bool m_joinChannel = false;
-    bool m_initialize = false;
-    bool m_addInjectStream = false;
-    bool m_windowShare = false;
-    bool m_screenShare = false;
-    CMonitors m_monitors;
-
-    void GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam);
-    void InitMonitorInfos();
-public:
-    virtual BOOL OnInitDialog();
-    afx_msg void OnBnClickedButtonJoinchannel();
-    afx_msg void OnBnClickedButtonStartShare();
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-
     CStatic m_staVideoArea;
+
     CStatic m_staChannel;
     CEdit m_edtChannel;
-    CStatic m_staScreenCap;
-    CComboBox m_cmbScreenCap;
-    CButton m_btnStartCap;
     CButton m_btnJoinChannel;
     CListBox m_lstInfo;
     CStatic m_staDetail;
-    virtual BOOL PreTranslateMessage(MSG* pMsg);
-    afx_msg void OnBnClickedButtonUpdateparam();
+
+    CStatic m_staScreenCap;
+    CComboBox m_cmbScreenCap;
+    CButton m_btnStartCap;
+
     CComboBox m_cmbScreenRegion;
-    CComboBox m_cmbScreenScenario;
-    CButton m_chkShareCursor;
-    CEdit m_edtFPS;
-    CEdit m_edtBitrate;
-    //afx_msg void OnBnClickedButtonShareDesktop();
-    //afx_msg void OnCbnSelchangeComboScreenRegion();
-    CComboBox m_cmbShareDesktopRect;
-    CComboBox m_cmbShareRegion;
-    afx_msg void OnBnClickedButtonStartShareScreen();
+   
+    CStatic m_StaScreen;
     CButton m_btnShareScreen;
-    CStatic m_staScreenInfo;
-    CStatic m_staScreenInfo2;
-	CStatic m_staFPS;
-	CStatic m_staBitrate;
-	CStatic m_staGeneral;
-	CButton m_btnUpdateCaptureParam;
-	CStatic m_StaScreen;
-    
+	
+    CComboBox m_cmbScreenScenario;
+
+
+    CStatic m_staSetting;
+
+    CStatic m_staFPS;
+    CStatic m_staFPSValue;
+    CSliderCtrl m_sldFPS;
+
+    CStatic m_staBitrate;
+    CStatic m_staBitrateValue;
+    CSliderCtrl m_sldBitrate;
+
+	CStatic m_staScale;
+	CStatic m_staScaleValue;
+	CSliderCtrl m_sldScale;
+
+    CStatic m_staSettingWnds;
+    CComboBox m_cmbSettingWnds;
+    CButton m_btnWndExeclude;
+
+	CButton m_chkShareCursor;
+	CButton m_chkHighLight;
+
+
+	//set control text from config.
+	void InitCtrlText();
+	//render local video from SDK local capture.
+	void RenderLocalVideo();
+	//refresh window to show.
+	void ReFreshShareWnd(int select = 0);
+	void ReFreshSettingWnd(int select = 0);
+	//resume window
+	void ResumeStatus();
+	//refresh window info to list.
+	int	RefreashWndInfo();
+	void InitMonitorInfos();
+
+	afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+
+public:
+
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
     afx_msg void OnLbnSelchangeListInfoBroadcasting();
     afx_msg void OnCbnDropDownComboScreenCapture();
+    
     afx_msg void OnCbnSelchangeComboScreenCaptureScenario();
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonStartShare();
+    afx_msg void OnBnClickedButtonStartShareScreen();
+	
+    afx_msg void OnNMCustomdrawSliderFps(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnNMCustomdrawSliderBitrate(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnNMCustomdrawSliderScale(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnCbnDropDownComboHwnd();
+    afx_msg void OnCbnSelchangeComboHwnd();
+    afx_msg void OnBnClickedButtonHwndExeclude();
+    afx_msg void OnBnClickedCheckCursor();
+    afx_msg void OnBnClickedCheckHighLight();
 };

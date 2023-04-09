@@ -380,8 +380,9 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <None Include="res\sample.yuv" />
-    <None Include="sample.yuv" />
+    <CopyFileToFolders Include="res\sample.yuv">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
