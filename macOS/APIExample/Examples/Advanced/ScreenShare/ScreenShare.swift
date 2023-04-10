@@ -134,20 +134,31 @@ class ScreenShare: BaseViewController {
     /**
      --- DisplayHint Picker ---
      */
-    @IBOutlet weak var selectDisplayHintPicker: Picker!
-    var displayHints = ["Default", "Motion", "Detail"]
-    func initSelectDisplayHintPicker() {
-//        selectDisplayHintPicker.label.stringValue = "Display Hint".localized
-//        selectDisplayHintPicker.picker.addItems(withTitles: displayHints)
-//
-//        selectDisplayHintPicker.onSelectChanged {
-//            if !self.isJoined {
-//                return
-//            }
-//            guard let displayHint = self.selectedDisplayHint else { return }
-//            print("setScreenCapture")
-//            self.agoraKit.setScreenCapture(displayHint)
-//        }
+    @IBOutlet weak var selectExcludeWindowPicker: Picker!
+    var excludeWindowlist:[Window] = []
+    var selecteExcludedWindow: Window? {
+        let index = self.selectExcludeWindowPicker.indexOfSelectedItem - 1
+        if index >= 0 && index < excludeWindowlist.count {
+            return excludeWindowlist[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectExcludeWindowPicker() {
+        selectExcludeWindowPicker.label.stringValue = "Exclude Window".localized
+        excludeWindowlist = windowManager.items.filter({$0.type == .window})
+        let windows = ["none"] + excludeWindowlist.map {"\($0.name ?? "Unknown")(\($0.id))"}
+        selectExcludeWindowPicker.picker.addItems(withTitles: windows)
+
+        selectExcludeWindowPicker.onSelectChanged { [weak self] in
+            guard let self = self else { return }
+            if !self.isJoined {
+                return
+            }
+            let captureParams = AgoraScreenCaptureParameters()
+            captureParams.excludeWindowList = self.selecteExcludedWindow?.id == nil ? [] : [self.selecteExcludedWindow?.id ?? ""]
+            self.agoraKit.updateScreenCaptureParameters(captureParams)
+        }
     }
     
     var windowManager: WindowList = WindowList()
@@ -216,29 +227,6 @@ class ScreenShare: BaseViewController {
         })
     }
     
-    private func createFile() {
-        //在桌面上创建一个文件
-        let manager = FileManager.default
-        let urlForDocument = manager.urls( for: .desktopDirectory,
-                                              in:.userDomainMask)
-        let url = urlForDocument[0]
-        createFile(name:"test.txt", fileBaseUrl: url)
-    }
-    //根据文件名和路径创建文件
-    func createFile(name:String, fileBaseUrl:URL){
-        let manager = FileManager.default
-        
-        let file = fileBaseUrl.appendingPathComponent(name)
-        print("文件: \(file)")
-        let exist = manager.fileExists(atPath: file.path)
-        if !exist {
-            //在文件中随便写入一些内容
-            let data = Data(base64Encoded:"aGVsbG8gd29ybGQ=" ,options:.ignoreUnknownCharacters)
-            let createSuccess = manager.createFile(atPath: file.path, contents:data,attributes:nil)
-            print("文件创建结果: \(createSuccess)")
-        }
-    }
-    
     @IBAction func onScreenShare(_ sender: NSButton) {
         if !isScreenSharing {
             guard let resolution = self.selectedResolution,
@@ -253,7 +241,15 @@ class ScreenShare: BaseViewController {
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
-            let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
+            
+            var result: Int32 = 0
+            if selecteExcludedWindow?.id == nil {
+                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
+            } else {
+                let captureParams = AgoraScreenCaptureParameters()
+                captureParams.excludeWindowList = [selecteExcludedWindow?.id ?? ""]
+                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: captureParams)
+            }
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -428,7 +424,7 @@ class ScreenShare: BaseViewController {
         
         initSelectResolutionPicker()
         initSelectFpsPicker()
-        initSelectDisplayHintPicker()
+        initSelectExcludeWindowPicker()
         initSelectLayoutPicker()
         initSelectScreenPicker()
         initScreenShareButton()
