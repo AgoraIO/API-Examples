@@ -6,10 +6,11 @@ YUVReader::YUVReader()
 
 }
 
-void YUVReader::start()
+void YUVReader::start(IYUVCallback callback)
 {
 	if (thread == nullptr) {
 		isReading = true;
+		this->callback = callback;
 		thread = new std::thread(std::bind(&YUVReader::run, this));
 	}
 }
@@ -20,8 +21,8 @@ void YUVReader::stop()
 	if (thread != nullptr) {
 		thread->join();
 		thread = nullptr;
+		this->callback = nullptr;
 	}
-
 }
 
 void YUVReader::run()

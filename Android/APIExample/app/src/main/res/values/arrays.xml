@@ -232,5 +232,11 @@
         <item>SCREEN_SCENARIO_GAMING</item>
         <item>SCREEN_SCENARIO_VIDEO</item>
     </string-array>
+    <string-array name="push_buffer_type" >
+        <item>I420</item>
+        <item>NV21</item>
+        <item>NV12</item>
+        <item>Texture2D</item>
+    </string-array>
 
 </resources>

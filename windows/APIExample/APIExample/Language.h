@@ -124,7 +124,11 @@ extern wchar_t  screenShareCtrlStopShare[INFO_LEN];
 extern wchar_t  screenShareCtrlGeneralSettings[INFO_LEN];
 extern wchar_t  screenShareCtrlFPS[INFO_LEN];
 extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
+extern wchar_t  screenShareCtrlScale[INFO_LEN];
 extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
+extern wchar_t  screenShareCtrlHighLight[INFO_LEN];
+extern wchar_t  screenShareCtrlInclude[INFO_LEN];
+extern wchar_t  screenShareCtrlExeclude[INFO_LEN];
 extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
 
 

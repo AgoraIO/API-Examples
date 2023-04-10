@@ -1,6 +1,7 @@
 package io.agora.beauty.bytedance;
 
 import android.content.Context;
+import android.opengl.GLES11Ext;
 
 import com.bytedance.labcv.core.Config;
 import com.bytedance.labcv.core.effect.EffectManager;
@@ -117,7 +118,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
     }
 
     @Override
-    public int process(int oesTexId, int width, int height, int rotation) {
+    public int process(int texId, int texType,  int width, int height, int rotation) {
         if (isReleased) {
             return -1;
         }
@@ -134,8 +135,8 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         if(rotation == 270){
             transition.scale(1.f, -1.0f);
         }
-        int texture2d = mImageUtil.transferTextureToTexture(oesTexId,
-                BytedEffectConstants.TextureFormat.Texture_Oes,
+        int texture2d = mImageUtil.transferTextureToTexture(texId,
+                texType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES ? BytedEffectConstants.TextureFormat.Texture_Oes : BytedEffectConstants.TextureFormat.Texure2D,
                 BytedEffectConstants.TextureFormat.Texure2D,
                 width, height, transition);
         // CV SDK 特效处理
