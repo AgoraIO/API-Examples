@@ -46,12 +46,11 @@ This project contains third-party beauty integration examples, which are disable
 
 ### For Agora Extension Developers
 
-从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：
 Since version 4.0.0, Agora SDK provides an Extension Interface Framework. Developers could publish their own video/audio extension to Agora Extension Market. In this project includes a sample SimpleFilter example, by default it is disabled.
 In order to enable it, you could do as follows:
 
 1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. Download [Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.1.0_FULL.zip), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
+2. Download [Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
 3. Modify simpleFilter to true in Android/APIExample/gradle.properties
 
 ## Contact Us
