@@ -51,7 +51,7 @@
 从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：
 
 1. 下载 [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. 手动下载[Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.2.0_FULL.zip), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
+2. 手动下载[Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
 3. 修改Android/APIExample/gradle.properties配置文件中simpleFilter值为true
 
 ## 联系我们
