@@ -51,7 +51,7 @@ Since version 4.0.0, Agora SDK provides an Extension Interface Framework. Develo
 In order to enable it, you could do as follows:
 
 1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. Download [Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.1.0_FULL.zip), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
+2. Download [Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
 3. Modify simpleFilter to true in Android/APIExample/gradle.properties
 
 ## Contact Us

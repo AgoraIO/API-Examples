@@ -8,12 +8,12 @@
 
 | 平台 | 语言 | 项目位置     | SDK                                                                                                                             |
 | -------- | -------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Android  | Java     | [/Android/APIExample](/Android/APIExample) | [RTC Java Video SDK](https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/rtc_api_overview_ng.html) |
-| Android | Java | [/Android/APIExample-Audio](/Android/APIExample-Audio) | [RTC Java Audio SDK](https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/rtc_api_overview_ng.html) |
-| iOS      | Swift    | [/iOS/APIExample](/iOS/APIExample) | [RTC Objective-C Video SDK](https://docs.agora.io/cn/video-call-4.x/API%20Reference/ios_ng/API/rtc_api_overview_ng.html) |
-| iOS | Swift | [/iOS/APIExample-Audio](/iOS/APIExample-Audio) | [RTC Objective-C Audio SDK](https://docs.agora.io/cn/voice-call-4.x/API%20Reference/ios_ng/API/rtc_api_overview_ng.html) |
-| macOS    | Swift    | [/macOS](/macOS)     | [RTC Objective-C Video SDK](https://docs.agora.io/cn/video-call-4.x/API%20Reference/mac_ng/API/rtc_api_overview_ng.html) |
-| Windows  | C++      | [/windows](/windows) | [RTC C++ Video SDK](https://docs.agora.io/cn/video-call-4.x/API%20Reference/windows_ng/API/rtc_api_overview_ng.html) |
+| Android  | Java     | [/Android/APIExample](/Android/APIExample) | [RTC Java Video SDK](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android) |
+| Android | Java | [/Android/APIExample-Audio](/Android/APIExample-Audio) | [RTC Java Audio SDK](https://docs.agora.io/cn/voice-call-4.x/downloads?platform=Android) |
+| iOS      | Swift    | [/iOS/APIExample](/iOS/APIExample) | [RTC Objective-C Video SDK](https://docs.agora.io/cn/video-call-4.x/downloads?platform=iOS) |
+| iOS | Swift | [/iOS/APIExample-Audio](/iOS/APIExample-Audio) | [RTC Objective-C Audio SDK](https://docs.agora.io/cn/voice-call-4.x/downloads?platform=iOS) |
+| macOS    | Swift    | [/macOS](/macOS)     | [RTC Objective-C Video SDK](https://docs.agora.io/cn/video-call-4.x/downloads?platform=macOS) |
+| Windows  | C++      | [/windows](/windows) | [RTC C++ Video SDK](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Windows) |
 
 你可以进入不同平台的项目进行试用或参考源代码。
 
