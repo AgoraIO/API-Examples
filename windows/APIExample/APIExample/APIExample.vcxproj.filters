@@ -396,12 +396,6 @@
     <None Include="en.ini">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\sample.yuv">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="sample.yuv">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">
@@ -442,6 +436,9 @@
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="res\ic_speaker.bmp">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="sample.yuv">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
   </ItemGroup>

@@ -142,7 +142,11 @@ wchar_t screenShareCtrlStopShare[INFO_LEN]				= { 0 };
 wchar_t screenShareCtrlGeneralSettings[INFO_LEN]		= { 0 };
 wchar_t screenShareCtrlFPS[INFO_LEN]					= { 0 };
 wchar_t screenShareCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlScale[INFO_LEN]			= { 0 };
 wchar_t screenShareCtrlShareCursor[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlHighLight[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlInclude[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlExeclude[INFO_LEN]			= { 0 };
 wchar_t screenShareCtrlUpdateCaptureParam[INFO_LEN]		= { 0 };
 
 wchar_t screenCtrlRectInfo[INFO_LEN]					= { 0 };
@@ -528,7 +532,11 @@ void InitKeyInfomation()
 	_tcscpy_s(screenShareCtrlGeneralSettings, INFO_LEN, Str(_T("ScreenShare.Ctrl.GeneralSettings")));
 	_tcscpy_s(screenShareCtrlFPS, INFO_LEN, Str(_T("ScreenShare.Ctrl.FPS")));
 	_tcscpy_s(screenShareCtrlBitrate, INFO_LEN, Str(_T("ScreenShare.Ctrl.Bitrate")));
+	_tcscpy_s(screenShareCtrlScale, INFO_LEN, Str(_T("ScreenShare.Ctrl.Scale")));
 	_tcscpy_s(screenShareCtrlShareCursor, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareCursor")));
+	_tcscpy_s(screenShareCtrlHighLight, INFO_LEN, Str(_T("ScreenShare.Ctrl.HighLight")));
+	_tcscpy_s(screenShareCtrlInclude, INFO_LEN, Str(_T("ScreenShare.Ctrl.Include")));
+	_tcscpy_s(screenShareCtrlExeclude, INFO_LEN, Str(_T("ScreenShare.Ctrl.Execlude")));
 	_tcscpy_s(screenShareCtrlUpdateCaptureParam, INFO_LEN, Str(_T("ScreenShare.Ctrl.UpdateCaptureParam")));
 
 

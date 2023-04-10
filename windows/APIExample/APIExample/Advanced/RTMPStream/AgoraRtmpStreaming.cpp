@@ -311,6 +311,7 @@ void CAgoraRtmpStreamingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 //remove all rtmp stream in the engine.
 void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
 {
+	m_removeUrlCount = 0;
 	m_bRemoveAll = true;
 	CString strUrl;
 	//remove all publish stream in the engine.
@@ -337,7 +338,8 @@ void CAgoraRtmpStreamingDlg::ResumeStatus()
 	m_chkTransCoding.SetCheck(0);
 	m_edtChannelName.SetWindowText(_T(""));
 	m_staDetail.SetWindowText(_T(""));
-
+	m_cmbRtmpUrl.Clear();
+	m_cmbRtmpUrl.ResetContent();
 }
 
 //join or leave channel button handler.
@@ -437,19 +439,16 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream()
 //remove all streams in the engine.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream()
 {
-	if (m_cmbRtmpUrl.GetCount() == 0 && m_cmbRtmpUrl.GetCurSel() >= 0) {
-		return;
-	}
+	
 	if (!m_rtcEngine || !m_initialize)
 		return;
 
 	CString strUrl;
-	m_cmbRtmpUrl.GetWindowText(strUrl);
-
-	std::string szUrl = cs2utf8(strUrl);
-	//remove public stream in the engine.
-	m_rtcEngine->stopRtmpStream(szUrl.c_str());
-	m_btnRemoveStream.EnableWindow(FALSE);
+	for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
+		m_cmbRtmpUrl.GetLBText(i, strUrl);
+		std::string szUrl = cs2utf8(strUrl);
+		m_rtcEngine->stopRtmpStream(szUrl.c_str());
+	}
 }
 
 //EID_JOINCHANNEL_SUCCESS message window handler.
@@ -536,30 +535,35 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 	{
 	case RTMP_STREAM_PUBLISH_STATE_IDLE:
 	{
-		strInfo.Format(_T("%s:%S��"), agoraRtmpStateIdle, rtmpState->url);
+		strInfo.Format(_T("%s:%S"), agoraRtmpStateIdle, rtmpState->url);
 		CString strUrl;
 		strUrl.Format(_T("%S"), rtmpState->url);
 		int sel = m_cmbRtmpUrl.GetCurSel();
 		m_cmbRtmpUrl.DeleteString(sel);
-		m_cmbRtmpUrl.ResetContent();
 		if (m_cmbRtmpUrl.GetCount() > 0) {
 			m_cmbRtmpUrl.SetCurSel(0);
 		}
-		for (auto iter = m_urlSet.begin(); iter != m_urlSet.end(); ++iter)
-			if (strUrl.Compare(*iter) == 0) {
-				m_urlSet.erase(iter);
-				break;
-			}
+		else {
+			m_cmbRtmpUrl.Clear();
+			m_cmbRtmpUrl.ResetContent();
+		}
+
 		if (m_bRemoveAll) {
 			m_removeUrlCount++;
 			if (m_removeUrlCount == m_urlSet.size()) {//remove all url when leave channel
-				m_urlSet.clear();
 				m_bRemoveAll = false;
+				m_urlSet.clear();
 				m_rtcEngine->leaveChannel();
 				m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel"));
 			}
 		}
-
+		else {
+			for (auto iter = m_urlSet.begin(); iter != m_urlSet.end(); ++iter)
+				if (strUrl.Compare(*iter) == 0) {
+					m_urlSet.erase(iter);
+					break;
+				}
+		}
 	}
 	break;
 	case RTMP_STREAM_PUBLISH_STATE_CONNECTING:

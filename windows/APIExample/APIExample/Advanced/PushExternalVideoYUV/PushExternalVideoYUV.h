@@ -105,10 +105,6 @@ public:
 	void UnInitAgora();
 	//set control text from config.
 	void InitCtrlText();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
-	// update window view and control.
-	void UpdateViews();
 	// resume window status.
 	void ResumeStatus();
 

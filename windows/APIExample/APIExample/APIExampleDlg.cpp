@@ -462,18 +462,17 @@ void CAPIExampleDlg::OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
     HTREEITEM hAdvancedItem = m_lstAdvanced.GetSelectedItem();
+	HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
 
-    if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hOldItem)) == 0) {
-        ReleaseScene(m_lstBasicScene, hOldItem);
-    }
-    else  if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hAdvancedItem)) == 0) {
-       // m_lstAdvanced.SetItemState(hAdvancedItem, 0, TVIS_SELECTED);
-        m_lstAdvanced.SelectItem(NULL);
-        ReleaseScene(m_lstAdvanced, hAdvancedItem);
-    }
+	if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hOldItem)) == 0) {
+		ReleaseScene(m_lstBasicScene, hOldItem);
+	}
+	else  if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hAdvancedItem)) == 0) {
+		// m_lstAdvanced.SetItemState(hAdvancedItem, 0, TVIS_SELECTED);
+		m_lstAdvanced.SelectItem(NULL);
+	}
 
-    HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
-    *pResult = 0;
+	*pResult = 0;
 }
 
 void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
@@ -481,13 +480,14 @@ void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
     HTREEITEM hBasicItem = m_lstBasicScene.GetSelectedItem();
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
-    if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
-        m_lstBasicScene.SelectItem(NULL);
-        ReleaseScene(m_lstBasicScene, hBasicItem);
-    }
-    else if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hOldItem)) == 0) {
-        ReleaseScene(m_lstAdvanced, hOldItem);
-    }
+	HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
+
+	if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
+		m_lstBasicScene.SelectItem(NULL);
+	}
+	else if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hOldItem)) == 0) {
+		ReleaseScene(m_lstAdvanced, hOldItem);
+	}
     
     *pResult = 0;
 }
@@ -587,7 +587,7 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pmediaRecorderDlg->ShowWindow(SW_SHOW);
 	}
 	
-	Sleep(500);
+	//Sleep(500);
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -685,7 +685,7 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pmediaRecorderDlg->UnInitAgora();
 		m_pmediaRecorderDlg->ShowWindow(SW_HIDE);
 	}
-	Sleep(500);
+	//Sleep(500);
 }
 
 LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)

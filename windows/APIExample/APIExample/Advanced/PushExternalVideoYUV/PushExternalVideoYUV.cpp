@@ -79,6 +79,7 @@ bool PushExternalVideoYUV::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+	m_rtcEngine->enableVideo();
 
 	
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
@@ -118,8 +119,14 @@ bool PushExternalVideoYUV::InitAgora()
 void PushExternalVideoYUV::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		yuvReader.stop();
+		delete m_imgBuffer;
+
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+		VideoCanvas canvas;
+		canvas.sourceType = VIDEO_SOURCE_CUSTOM;
+		m_rtcEngine->setupLocalVideo(canvas);
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -130,8 +137,6 @@ void PushExternalVideoYUV::UnInitAgora()
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
-		yuvReader.stop();
-		delete m_imgBuffer;
 	}
 }
 
@@ -157,14 +162,6 @@ BOOL PushExternalVideoYUV::OnInitDialog()
 }
 
 
-// update window view and control.
-void PushExternalVideoYUV::UpdateViews()
-{
-	// render local video
-	RenderLocalVideo();
-}
-
-
 // resume window status.
 void PushExternalVideoYUV::ResumeStatus()
 {
@@ -173,26 +170,13 @@ void PushExternalVideoYUV::ResumeStatus()
 	m_joinChannel = false;
 	m_initialize = false;
 	m_edtChannel.SetWindowText(_T(""));
+	m_remoteVideoWnd.Reset();
+	m_remoteVideoWnd.SetUID(0);
+	m_localVideoWnd.Reset();
+	m_localVideoWnd.SetUID(0);
 }
 
 
-/*
-	set up canvas and local video view.
-*/
-void PushExternalVideoYUV::RenderLocalVideo()
-{
-	if (m_rtcEngine) {
-		VideoCanvas canvas;
-		canvas.renderMode = media::base::RENDER_MODE_FIT;
-		canvas.uid = 0;
-		canvas.view = m_localVideoWnd.GetSafeHwnd();
-		canvas.sourceType = VIDEO_SOURCE_CUSTOM;
-		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
-		//setup local video in the engine to canvas.
-		m_rtcEngine->setupLocalVideo(canvas);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
-	}
-}
 
 
 /*
@@ -204,8 +188,6 @@ void PushExternalVideoYUV::OnShowWindow(BOOL bShow, UINT nStatus)
 	if (bShow) {
 		//init control text.
 		InitCtrlText();
-		//update window.
-		UpdateViews();
 	}
 	else {
 		//resume window status.
@@ -228,6 +210,17 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
+
+		VideoCanvas canvas;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
+		canvas.uid = 0;
+		canvas.view = m_localVideoWnd.GetSafeHwnd();
+		canvas.sourceType = VIDEO_SOURCE_CUSTOM;
+		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
+		//setup local video in the engine to canvas.
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
+
 		std::string szChannelId = cs2utf8(strChannelName);
 		ChannelMediaOptions options;
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -238,15 +231,22 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 
-			yuvReader.setReadCallback(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-			yuvReader.start();
+			yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 		}
 	}
 	else {
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			
+
+			yuvReader.stop();
+			m_remoteVideoWnd.Reset();
+			m_remoteVideoWnd.SetUID(0);
+			m_localVideoWnd.Reset();
+			m_localVideoWnd.SetUID(0);
+			VideoCanvas canvas;
+			canvas.sourceType = VIDEO_SOURCE_CUSTOM;
+			m_rtcEngine->setupLocalVideo(canvas);
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -256,7 +256,7 @@ void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffe
 	memcpy_s(m_imgBuffer, size, buffer, size);
 	m_videoFrame.buffer = m_imgBuffer;
 	m_videoFrame.timestamp = GetTickCount();
-	if (m_joinChannel) {
+	if (m_joinChannel && m_mediaEngine.get() != nullptr) {
 		m_mediaEngine->pushVideoFrame(&m_videoFrame);
 	}
 }
@@ -297,11 +297,6 @@ LRESULT PushExternalVideoYUV::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
-
-	yuvReader.stop();
-	m_remoteVideoWnd.Reset();
-	m_remoteVideoWnd.SetUID(0);
-
 	return 0;
 }
 
