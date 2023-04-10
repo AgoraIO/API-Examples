@@ -196,7 +196,7 @@
                         <outlet property="joinChannelButton" destination="m5Y-g9-nbd" id="IWF-DR-p6U"/>
                         <outlet property="screenShareButton" destination="r9I-9E-LeA" id="LCe-S0-Dqk"/>
                         <outlet property="screenThumbnailButton" destination="M4d-F9-fzD" id="COa-4u-Xjs"/>
-                        <outlet property="selectDisplayHintPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
+                        <outlet property="selectExcludeWindowPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
                         <outlet property="selectFpsPicker" destination="UdM-Ys-Izc" id="TMO-Lz-aO4"/>
                         <outlet property="selectLayoutPicker" destination="DnN-dH-8wx" id="WtR-QX-e1M"/>
                         <outlet property="selectResolutionPicker" destination="wRZ-XO-4yb" id="6ZL-0l-P82"/>
