@@ -90,65 +90,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self->_videoWidth = videoData.width;
         self->_videoHeight = videoData.height;
-        
+
         [self layoutDisplayLayer];
     });
-    size_t width = videoData.width;
-    size_t height = videoData.height;
-    size_t yStride = videoData.yStride;
-    size_t uStride = videoData.uStride;
-    size_t vStride = videoData.vStride;
-    
-    void* yBuffer = videoData.yBuffer;
-    void* uBuffer = videoData.uBuffer;
-    void* vBuffer = videoData.vBuffer;
-    
+
     @autoreleasepool {
-        CVPixelBufferRef pixelBuffer = NULL;
-        NSDictionary *pixelAttributes = @{(id)kCVPixelBufferIOSurfacePropertiesKey : @{}};
-        CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_420YpCbCr8Planar, (__bridge CFDictionaryRef)(pixelAttributes), &pixelBuffer);
-
-        if (result != kCVReturnSuccess) {
-            NSLog(@"Unable to create cvpixelbuffer %d", result);
-        }
-
-        CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-        
-        void *yPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-        int pixelBufferYBytes = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-
-        if (yStride == pixelBufferYBytes) {
-            memcpy(yPlane, yBuffer, yStride*height);
-        }else {
-            for (int i = 0; i < height; ++i) {
-                memcpy(yPlane + pixelBufferYBytes * i, yBuffer + yStride * i, MIN(yStride, pixelBufferYBytes));
-            }
-        }
-
-        void *uPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-        int pixelBufferUBytes = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
-        if (uStride == pixelBufferUBytes) {
-            memcpy(uPlane, uBuffer, uStride*height/2);
-        }else {
-            for (int i = 0; i < height/2; ++i) {
-                memcpy(uPlane + pixelBufferUBytes * i, uBuffer + uStride * i, MIN(uStride, pixelBufferUBytes));
-            }
-        }
-
-        void *vPlane = (void *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 2);
-        int pixelBufferVBytes = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 2);
-        if (vStride == pixelBufferVBytes) {
-            memcpy(vPlane, vBuffer, vStride*height/2);
-        }else {
-            for (int i = 0; i < height/2; ++i) {
-                memcpy(vPlane + pixelBufferVBytes * i, vBuffer + vStride * i, MIN(vStride, pixelBufferVBytes));
-            }
-        }
-
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+        CVPixelBufferUnlockBaseAddress(videoData.pixelBuffer, 0);
 
         CMVideoFormatDescriptionRef videoInfo;
-        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &videoInfo);
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, videoData.pixelBuffer, &videoInfo);
         
         CMSampleTimingInfo timingInfo;
         timingInfo.duration = kCMTimeZero;
@@ -156,7 +106,7 @@
         timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
         
         CMSampleBufferRef sampleBuffer;
-        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
+        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, videoData.pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
 
         [self.displayLayer enqueueSampleBuffer:sampleBuffer];
         if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
@@ -164,8 +114,6 @@
         }
         CMSampleBufferInvalidate(sampleBuffer);
         CFRelease(sampleBuffer);
-        
-        CVPixelBufferRelease(pixelBuffer);
     }
 }
 
