@@ -238,6 +238,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 join.setText(getString(R.string.join));
                 mic.setEnabled(false);
                 pcm.setEnabled(false);
+                pcm.setChecked(false);
+                mic.setChecked(true);
                 if(audioPushingHelper != null){
                     audioPushingHelper.stop();
                 }

@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:hint="@string/url"
             android:singleLine="true"
-            android:text="rtmp://mdetest.push.agoramde.agoraio.cn/live/xxx" />
+            android:text="rtmp://push.webdemo.agoraio.cn/lbhd/test" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_publish"

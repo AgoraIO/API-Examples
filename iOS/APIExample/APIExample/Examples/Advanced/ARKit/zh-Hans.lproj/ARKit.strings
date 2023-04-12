@@ -1,0 +1,11 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Move Camera to find a planar  (Shown as Red Rectangle)"; ObjectID = "bEC-x6-7dT"; */
+"bEC-x6-7dT.text" = "移动相机以找到一个平面  (以红色方块显示)";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+"2xt-aD-ydA.text" = "首帧出图";

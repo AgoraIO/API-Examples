@@ -111,6 +111,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:checked="true"
+        android:enabled="false"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="64dp"/>
 
@@ -121,6 +122,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
+        android:enabled="false"
         android:layout_marginBottom="110dp"
         android:text="@string/publish_local_audio" />
 

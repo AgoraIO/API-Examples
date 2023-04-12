@@ -154,7 +154,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         if (engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -208,7 +207,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 send.setEnabled(false);
                 join.setText(getString(R.string.join));
             }
@@ -257,7 +255,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
          *         < 0：Failure*/
         int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
         Log.e(TAG, code + "");
-        engine.startPreview();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
