@@ -148,7 +148,6 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -211,7 +210,6 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
                 et_password.setEnabled(true);
                 encry_mode.setEnabled(true);
@@ -250,7 +248,6 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
-        engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 VD_640x360,

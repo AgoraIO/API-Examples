@@ -82,6 +82,15 @@ class SimpleFilterMain: BaseViewController {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
+        
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
         agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: "1")

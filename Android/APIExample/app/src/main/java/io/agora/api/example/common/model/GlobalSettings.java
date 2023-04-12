@@ -37,7 +37,7 @@ public class GlobalSettings {
 
     public String getVideoEncodingDimension() {
         if (videoEncodingDimension == null)
-            return "VD_640x360";
+            return "VD_960x540";
         else
             return videoEncodingDimension;
     }

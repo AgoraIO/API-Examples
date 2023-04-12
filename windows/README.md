@@ -21,6 +21,7 @@ To build and run the sample application, get an App ID:
 
     ```
     #define APP_ID _T("Your App ID")
+    #define APP_TOKEN _T("Your Token")
     ```
 6. (Optional)Alternate approach to setup your APPID is to create an AppId.ini file under Debug/Release. Modify the appId value to the App ID you just applied.
 

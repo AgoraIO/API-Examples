@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:layout_gravity="bottom"
+    tools:context=".examples.advanced.LiveStreaming">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:padding="12dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_low_latency"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/enable_low_latency" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_watermark"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/watermark" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_low_stream"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/low_stream" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <LinearLayout
+        android:id="@+id/fl_encoder_type"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/encode_type"/>
+
+        <Spinner
+            android:id="@+id/sp_encoder_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:entries="@array/encoder_type" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_b_frame"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/b_frame" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_first_frame"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/first_frame_optimization" />
+
+</LinearLayout>

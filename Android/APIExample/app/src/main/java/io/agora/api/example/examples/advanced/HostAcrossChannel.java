@@ -152,7 +152,6 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
             engine.stopChannelMediaRelay();
             mediaRelaying = false;
         }
@@ -277,7 +276,6 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
-        engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),

@@ -35,6 +35,7 @@ struct StatisticsInfo {
     }
     
     var type: StatisticsType
+    var firstFrameElapsedTime: Double = 0
     
     init(type: StatisticsType) {
         self.type = type
@@ -119,6 +120,10 @@ struct StatisticsInfo {
         }
     }
     
+    mutating func updateFirstFrameInfo(_ info: AgoraVideoRenderingTracingInfo) {
+        firstFrameElapsedTime = Double(info.elapsedTime)
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -131,6 +136,7 @@ struct StatisticsInfo {
     func localDescription(info: LocalInfo, audioOnly: Bool) -> String {
         var results:[String] = []
         
+        let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -156,14 +162,16 @@ struct StatisticsInfo {
                 results.append("Send Loss: \(channelStats.txPacketLossRate)%")
             }
         }
-        
+        if firstFrameElapsedTime > 0 {
+            results.append(firstFrame)
+        }
         return results.joined(separator: "\n")
     }
     
     func remoteDescription(info: RemoteInfo, audioOnly: Bool) -> String {
         var results:[String] = []
         
-        
+        let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -190,7 +198,9 @@ struct StatisticsInfo {
                 results.append("AQuality: \(audioQuality.description())")
             }
         }
-        
+        if firstFrameElapsedTime > 0 {
+            results.append(firstFrame)
+        }
         return results.joined(separator: "\n")
     }
 }

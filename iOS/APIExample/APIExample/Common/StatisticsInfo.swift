@@ -34,6 +34,7 @@ struct StatisticsInfo {
     
     var dimension = CGSize.zero
     var fps:UInt = 0
+    var firstFrameElapsedTime: Double = 0
     
     var type: StatisticsType
     
@@ -108,6 +109,9 @@ struct StatisticsInfo {
             break
         }
     }
+    mutating func updateFirstFrameInfo(_ info: AgoraVideoRenderingTracingInfo) {
+        firstFrameElapsedTime = Double(info.elapsedTime)
+    }
     
     func description(audioOnly:Bool) -> String {
         var full: String
@@ -132,10 +136,14 @@ struct StatisticsInfo {
         let vSendLoss = "VSend Loss: MISSING%"
         let aSendLoss = "ASend Loss: MISSING%"
         
+        let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
+        
         if(audioOnly) {
-            return [lastmile,audioSend,cpu,aSendLoss].joined(separator: "\n")
+            let array = firstFrameElapsedTime > 0 ? [firstFrame, lastmile,audioSend,cpu,aSendLoss] : [lastmile,audioSend,cpu,aSendLoss]
+            return array.joined(separator: "\n")
         }
-        return [dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss].joined(separator: "\n")
+        let array = firstFrameElapsedTime > 0 ? [firstFrame, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss] : [dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss]
+        return array.joined(separator: "\n")
     }
     
     func remoteDescription(info: RemoteInfo, audioOnly: Bool) -> String {
@@ -148,6 +156,7 @@ struct StatisticsInfo {
             audioQuality = AgoraNetworkQuality.unknown
         }
         
+        let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
         let videoRecv = "VRecv: \(info.videoStats.receivedBitrate)kbps"
         let audioRecv = "ARecv: \(info.audioStats.receivedBitrate)kbps"
         
@@ -155,8 +164,10 @@ struct StatisticsInfo {
         let audioLoss = "ALoss: \(info.audioStats.audioLossRate)%"
         let aquality = "AQuality: \(audioQuality.description())"
         if(audioOnly) {
-            return [audioRecv,audioLoss,aquality].joined(separator: "\n")
+            let array = firstFrameElapsedTime > 0 ? [firstFrame, audioRecv,audioLoss,aquality] : [audioRecv,audioLoss,aquality]
+            return array.joined(separator: "\n")
         }
-        return [dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality].joined(separator: "\n")
+        let array = firstFrameElapsedTime > 0 ? [firstFrame, dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality] : [dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality]
+        return array.joined(separator: "\n")
     }
 }
