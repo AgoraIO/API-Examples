@@ -4,18 +4,10 @@
 
 This project presents you a set of API examples to help you understand how to use Agora APIs.
 
-## Problem
-After users upgrade their iOS devices to iOS 14.0, and use an app that integrates the Agora RTC SDK for iOS for the first time, users see a prompt for finding local network devices. The following picture shows the pop-up prompt:
-
-![](../pictures/ios_14_privacy.png)
-
-[Solution](https://docs.agora.io/en/faq/local_network_privacy)
 
 ## Prerequisites
 
 - Xcode 13.0+
-- Physical iOS device (iPhone or iPad)
-- iOS simulator is NOT supported
 
 ## Quick Start
 
@@ -23,7 +15,7 @@ This section shows you how to prepare, build, and run the sample application.
 
 ### Prepare Dependencies
 
-Change directory into **iOS** folder, run following command to install project dependencies,
+Change directory into **macOS** folder, run following command to install project dependencies,
 
 use cocoapods
 
@@ -68,8 +60,6 @@ To build and run the sample application, get an App Id:
      static var Certificate: String? = <#YOUR Certificate#>
         
     ```
-
-You are all set. Now connect your iPhone or iPad device and run the project.
 
 ## Contact Us
 
