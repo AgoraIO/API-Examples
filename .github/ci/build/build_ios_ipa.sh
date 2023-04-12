@@ -68,7 +68,6 @@ echo PBXPROJ_PATH: $PBXPROJ_PATH
 #修改打包方式
 /usr/libexec/PlistBuddy -c "Set :method $CONFIGURATION" $METHOD_PATH
 
-
 # 读取APPID环境变量
 echo AGORA_APP_ID:$APP_ID
 echo $AGORA_APP_ID
