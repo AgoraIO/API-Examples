@@ -39,6 +39,7 @@ class SpatialAudioMain: BaseViewController {
     @IBOutlet weak var remoteUserButton1: UIButton!
     @IBOutlet weak var remoteUserButton2: UIButton!
     
+    private var isJoined: Bool = false
     private lazy var actionView1 = SpatialAudioActionSheet()
     private lazy var actionView2 = SpatialAudioActionSheet()
     var agoraKit: AgoraRtcEngineKit!
@@ -76,13 +77,16 @@ class SpatialAudioMain: BaseViewController {
         localSpatial.setAudioRecvRange(Float(SCREENSIZE.height))
         localSpatial.setMaxAudioRecvCount(2)
         localSpatial.setDistanceUnit(1)
-                
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard isJoined == false else { return }
         mediaPlayer1 = agoraKit.createMediaPlayer(with: self)
         mediaPlayer1.setLoopCount(10000)
         mediaPlayer1.open("https://webdemo.agora.io/audiomixing.mp3", startPos: 0)
         localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
         localSpatial.setPlayerAttenuation(0.2, playerId: UInt(mediaPlayer1.getMediaPlayerId()), forceSet: false)
-        
         
         mediaPlayer2 = agoraKit.createMediaPlayer(with: self)
         mediaPlayer2.setLoopCount(10000)
@@ -95,12 +99,12 @@ class SpatialAudioMain: BaseViewController {
         joinChannel()
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            agoraKit = nil
-            AgoraLocalSpatialAudioKit.destroy()
-            AgoraRtcEngineKit.destroy()
-        }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit = nil
+        AgoraLocalSpatialAudioKit.destroy()
+        AgoraRtcEngineKit.destroy()
+        isJoined = false
     }
     
     private func joinChannel() {
@@ -113,6 +117,7 @@ class SpatialAudioMain: BaseViewController {
             if result != 0 {
                 print("join channel fail")
             }
+            self.isJoined = true
         })
     }
     
@@ -209,6 +214,7 @@ class SpatialAudioMain: BaseViewController {
     
     private func getPlayerPostion(view: UIView) -> AgoraRemoteVoicePositionInfo {
         let position = getViewCenterPostion(view: view)
+        print("player postion == \(position)")
         let positionInfo = AgoraRemoteVoicePositionInfo()
         positionInfo.position = position
         positionInfo.forward = forward
@@ -316,7 +322,7 @@ class SpatialAudioActionSheet: UIView {
     }()
     private lazy var attenuationLabel: UILabel = {
         let label = UILabel()
-        label.text = "Attenuatuin".localized
+        label.text = "Attenuation".localized
         return label
     }()
     private lazy var muteSwitch: UISwitch = {
@@ -350,7 +356,11 @@ class SpatialAudioActionSheet: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            backgroundColor = .tertiarySystemBackground
+        } else {
+            backgroundColor = .white
+        }
         addSubview(muteLabel)
         addSubview(voiceBlurLabel)
         addSubview(airborneLabel)

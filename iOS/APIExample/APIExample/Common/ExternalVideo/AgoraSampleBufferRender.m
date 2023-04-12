@@ -152,6 +152,9 @@
         CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
 
         [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+        if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
+            [self.displayLayer flush];
+        }
         CMSampleBufferInvalidate(sampleBuffer);
         CFRelease(sampleBuffer);
         

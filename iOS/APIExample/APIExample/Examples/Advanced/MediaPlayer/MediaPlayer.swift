@@ -119,10 +119,14 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension960x720,
-                                                                             frameRate: .fps30,
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative, mirrorMode: .auto))
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else { return }
                 

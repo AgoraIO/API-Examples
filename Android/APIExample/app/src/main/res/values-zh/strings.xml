@@ -301,4 +301,6 @@
     <string name="media_player_error">播放器错误: %s</string>
     <string name="media_player_complete">播放器播放结束。</string>
     <string name="reopen_url_again">是否重新打开url？</string>
+    <string name="first_frame_optimization">首帧出图优化</string>
+    <string name="first_frame_optimization_tip">开启后无法关闭，并且需要主辅两端都开启时才生效</string>
 </resources>

@@ -188,6 +188,7 @@
         <item>VD_480x480</item>
         <item>VD_640x480</item>
         <item>VD_840x480</item>
+        <item>VD_960x540</item>
         <item>VD_960x720</item>
         <item>VD_1280x720</item>
     </string-array>
