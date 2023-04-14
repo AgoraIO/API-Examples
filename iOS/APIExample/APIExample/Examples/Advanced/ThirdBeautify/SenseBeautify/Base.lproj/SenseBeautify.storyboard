@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -18,20 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
-                                <rect key="frame" x="10" y="80" width="394" height="698"/>
-                                <mutableString key="text">You have not enabled the beauty feature of Shang Tang, please follow the steps below:
-1: replace SENSEME.lic in SenseBeautify- &gt; Manager- &gt;.
-2: replace the Bundle identifier bound by license 3: open the pod 'senseLib' comment in Podfile.
-4: Create the SenseLib folder in the iOS -&gt;APIExample directory
-5: add a remoteSourcesLib folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
-6: add the st_mobile_sdk folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
-7: execute pod install.
-8: rerun the project to see the effect</mutableString>
-                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
-                                <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j45-oz-rOr">
                                 <rect key="frame" x="0.0" y="92" width="414" height="770"/>
                                 <subviews>
@@ -69,11 +55,11 @@
                                             <constraint firstItem="VMl-94-MjB" firstAttribute="centerX" secondItem="hdY-rx-a2S" secondAttribute="centerX" id="wmY-L5-Axw"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWx-QX-dVl">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="rWx-QX-dVl">
                                         <rect key="frame" x="0.0" y="720" width="414" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CrL-Yf-Cev" userLabel="Beauty">
-                                                <rect key="frame" x="0.0" y="0.0" width="103.5" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="77.5" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Beauty"/>
                                                 <connections>
@@ -81,7 +67,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hp-ZM-MMW">
-                                                <rect key="frame" x="103.5" y="0.0" width="103.5" height="50"/>
+                                                <rect key="frame" x="115" y="0.0" width="84.5" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Makeup"/>
                                                 <connections>
@@ -89,7 +75,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UdR-D4-uNu">
-                                                <rect key="frame" x="207" y="0.0" width="103.5" height="50"/>
+                                                <rect key="frame" x="237.5" y="0.0" width="77" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Sticker"/>
                                                 <connections>
@@ -97,7 +83,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3f-4k-VQ1">
-                                                <rect key="frame" x="310.5" y="0.0" width="103.5" height="50"/>
+                                                <rect key="frame" x="352" y="0.0" width="62" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Filter"/>
                                                 <connections>
@@ -124,6 +110,20 @@
                                     <constraint firstAttribute="trailing" secondItem="rWx-QX-dVl" secondAttribute="trailing" id="vEp-gL-IEv"/>
                                 </constraints>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
+                                <rect key="frame" x="10" y="80" width="394" height="698"/>
+                                <string key="text">You have not enabled the beauty feature of Shang Tang, please follow the steps below:
+1: replace SENSEME.lic in SenseBeautify- &gt; Manager- &gt;.
+2: replace the Bundle identifier bound by license 3: open the pod 'senseLib' comment in Podfile.
+4: Create the SenseLib folder in the iOS -&gt;APIExample directory
+5: add a remoteSourcesLib folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
+6: add the st_mobile_sdk folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
+7: execute pod install.
+8: rerun the project to see the effect</string>
+                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
+                                <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
