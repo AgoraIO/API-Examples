@@ -222,7 +222,7 @@ extension PictureInPictureMain: AgoraVideoFrameDelegate {
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        .cvPixelI420
+        .I420
     }
     func getRotationApplied() -> Bool {
         true
