@@ -123,12 +123,11 @@ class PictureInPictureMain: BaseViewController {
     }
         
     @IBAction func onPIP(_btn: UIButton) {
-        guard let currentPipController = pipController else {return}
-        
-        if currentPipController.pipController.isPictureInPicturePossible {
+        if let currentPipController = pipController, currentPipController.pipController.isPictureInPicturePossible {
             currentPipController.pipController.startPictureInPicture()
+        } else {
+            showAlert(message: "PIP Support iOS 15+".localized)
         }
-
     }
     
     override func willMove(toParent parent: UIViewController?) {

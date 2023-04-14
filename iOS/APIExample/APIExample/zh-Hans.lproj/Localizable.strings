@@ -156,3 +156,4 @@
 "Tap to place remote video canvas" = "点击屏幕以放置视频画布";
 "Recording" = "开始录制";
 "Stop Recording" = "停止录制";
+"PIP Support iOS 15+" = "画中画只支持iOS15及以上版本";
