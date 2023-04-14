@@ -14,7 +14,7 @@
 @interface FUBeautifyVC () <AgoraRtcEngineDelegate, AgoraVideoFrameDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
-@property (weak, nonatomic) IBOutlet UIStackView *container;
+@property (weak, nonatomic) IBOutlet UIView *container;
 @property (weak, nonatomic) IBOutlet UIView *localVideo;
 @property (weak, nonatomic) IBOutlet UIView *remoteVideo;
 
@@ -113,7 +113,7 @@
 }
 
 - (BOOL)getMirrorApplied{
-    return NO;
+    return YES;
 }
 
 - (BOOL)getRotationApplied {

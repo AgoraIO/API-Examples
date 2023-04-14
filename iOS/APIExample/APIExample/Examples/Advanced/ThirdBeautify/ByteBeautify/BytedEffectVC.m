@@ -44,6 +44,9 @@
     
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:KeyCenter.AppId delegate:self];
     
+    AgoraVideoEncoderConfiguration *encoderConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(375, 667) frameRate:(AgoraVideoFrameRateFps15) bitrate:15 orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait) mirrorMode:(AgoraVideoMirrorModeEnabled)];
+    [self.rtcEngineKit setVideoEncoderConfiguration:encoderConfig];
+    
     // setup videoFrameDelegate
     [self.rtcEngineKit setVideoFrameDelegate:self];
     
