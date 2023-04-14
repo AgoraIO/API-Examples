@@ -71,9 +71,10 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         if (!resourceReady) {
             return -1;
         }
+        boolean isFront = rotation == 270;
         configSdkDefault();
         // 是否为前置摄像头
-        mEffectManager.setCameraPosition(true);
+        mEffectManager.setCameraPosition(isFront);
         // 生成目标承载纹理
         int dstTexture = mImageUtil.prepareTexture(width, height);
         // NV21转2D纹理
@@ -125,14 +126,15 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         if (!resourceReady) {
             return -1;
         }
+        boolean isFront = rotation == 270;
         configSdkDefault();
         // 是否为前置摄像头
-        mEffectManager.setCameraPosition(true);
+        mEffectManager.setCameraPosition(isFront);
         // 生成目标承载纹理
         int dstTexture = mImageUtil.prepareTexture(width, height);
         // OES 纹理转2D纹理
         ImageUtil.Transition transition = new ImageUtil.Transition();
-        if(rotation == 270){
+        if(isFront){
             transition.scale(1.f, -1.0f);
         }
         int texture2d = mImageUtil.transferTextureToTexture(texId,
