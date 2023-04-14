@@ -99,7 +99,8 @@ xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${
 
 # 签名
 pushd ${WORKSPACE}
-sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
+# sh sign "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
+sh export "${PROJECT_PATH}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 popd
 
 cd ${WORKSPACE}
@@ -107,7 +108,8 @@ cd ${WORKSPACE}
 # 上传IPA
 PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
 mkdir "${PAYLOAD_PATH}"
-mv "${TARGET_NAME}_${BUILD_NUMBER}_iOS.ipa" "${PAYLOAD_PATH}"
+# mv "${TARGET_NAME}_${BUILD_NUMBER}_iOS.ipa" "${PAYLOAD_PATH}"
+mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
 7za a "${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
 
