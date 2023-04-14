@@ -113,8 +113,8 @@ mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
 # 删除IPA文件夹
 rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
-rm -rf *.zip
-rm -rf ${PAYLOAD_PATH}
+# rm -rf *.zip
+# rm -rf ${PAYLOAD_PATH}
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
