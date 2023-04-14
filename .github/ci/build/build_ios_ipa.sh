@@ -110,11 +110,12 @@ mkdir "${PAYLOAD_PATH}"
 mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
 7za a "${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" --project
 
 # 删除IPA文件夹
 rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
-# rm -rf *.zip
-# rm -rf ${PAYLOAD_PATH}
+rm -rf *.zip
+rm -rf ${PAYLOAD_PATH}
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
