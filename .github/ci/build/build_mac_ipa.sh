@@ -92,8 +92,8 @@ sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarc
 python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
 
 # 删除archive文件
-rm -rf "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
-rm -rf "*.zip"
+rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
+rm -rf *.zip
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
