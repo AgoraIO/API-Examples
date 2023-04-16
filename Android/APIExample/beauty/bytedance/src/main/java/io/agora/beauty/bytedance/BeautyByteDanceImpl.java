@@ -107,7 +107,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         // CV SDK 特效处理
         boolean process = mEffectManager.process(texture2d, dstTexture, width, height,
                 BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
-                System.currentTimeMillis());
+                System.nanoTime());
         if (!process) {
             return -1;
         }
@@ -129,7 +129,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         boolean isFront = rotation == 270;
         configSdkDefault();
         // 是否为前置摄像头
-        mEffectManager.setCameraPosition(isFront);
+        // mEffectManager.setCameraPosition(isFront);
         // 生成目标承载纹理
         int dstTexture = mImageUtil.prepareTexture(width, height);
         // OES 纹理转2D纹理
