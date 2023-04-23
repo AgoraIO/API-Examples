@@ -133,13 +133,18 @@ class JoinChannelVideoRecorder: BaseViewController {
         }
     }
     private lazy var localRecord: AgoraMediaRecorder = {
-        let connection = AgoraRtcConnection(channelId: title ?? "", localUid: Int(localUid))
-        let record = agoraKit.createLocalMediaRecorder(connection)
+        let streamInfo = AgoraRecorderStreamInfo()
+        streamInfo.channelId = title ?? ""
+        streamInfo.uid = localUid
+        let record = agoraKit.createMediaRecorder(withInfo: streamInfo)
         record?.setMediaRecorderDelegate(self)
         return record!
     }()
     private lazy var remoteRecord: AgoraMediaRecorder = {
-        let record = agoraKit.createRemoteMediaRecorder(title ?? "", uid: remoteUid)
+        let streamInfo = AgoraRecorderStreamInfo()
+        streamInfo.channelId = title ?? ""
+        streamInfo.uid = remoteUid
+        let record = agoraKit.createMediaRecorder(withInfo: streamInfo)
         record?.setMediaRecorderDelegate(self)
         return record!
     }()
