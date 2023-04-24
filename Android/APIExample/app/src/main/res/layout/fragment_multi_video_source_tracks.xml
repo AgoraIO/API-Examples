@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="50dp"
+        android:layout_above="@id/ll_buffer_type"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/video_container_row1"
@@ -67,8 +67,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_capture_track"
-        android:layout_above="@+id/ll_join"
+        android:layout_above="@+id/ll_buffer_type"
         android:layout_alignParentEnd="true"/>
+
+    <LinearLayout
+        android:id="@+id/ll_buffer_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_join"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="Push Video Frame Type"/>
+
+        <Spinner
+            android:id="@+id/sp_buffer_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/push_buffer_type" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_join"

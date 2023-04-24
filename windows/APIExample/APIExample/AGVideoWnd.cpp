@@ -146,11 +146,11 @@ void CAGInfoWnd::OnPaint()
 		GetClientRect(&rcClient);
 		rcClient.top += 4;
 		if (m_isRemote) {
-			strTip.Format(_T("%dx%d, %dfps\nVRecv: %dkbps\nVLossRate: %d£¥\nVDelay: %dms\nARecv: %dkbps\nALossRate: %d£¥\nADelay: %dms"),
+			strTip.Format(_T("%dx%d, %dfps\nVRecv: %dkbps\nVLossRate: %d%%\nVDelay: %dms\nARecv: %dkbps\nALossRate: %d%%\nADelay: %dms"),
 				m_nWidth, m_nHeight, m_nFps, m_nVideoBitrate, m_nVideoLossRate, m_nVideoDelay, m_nAudioBitrate, m_nAudioLossRate, m_nAudioDelay);
 		}
 		else {
-			strTip.Format(_T("%dx%d, %dfps\nVSent: %dkbps\nVLossRate: %d£¥\nASent: %dkbps\nALossRate: %d£¥"),
+			strTip.Format(_T("%dx%d, %dfps\nVSent: %dkbps\nVLossRate: %d%%\nASent: %dkbps\nALossRate: %d%%"),
 				m_nWidth, m_nHeight, m_nFps, m_nVideoBitrate, m_nVideoLossRate, m_nAudioBitrate, m_nAudioLossRate);
 		}
 		
