@@ -300,7 +300,7 @@ class LocalCompositeGraph: BaseViewController {
             config.videoInputStreams = [cameraStream, screenStream]
             agoraKit.startLocalVideoTranscoder(config)
             let mediaOptions = AgoraRtcChannelMediaOptions()
-            mediaOptions.publishTrancodedVideoTrack = true
+            mediaOptions.publishTranscodedVideoTrack = true
             agoraKit.updateChannel(with: mediaOptions)
             
         } else {
