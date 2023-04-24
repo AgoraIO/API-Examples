@@ -289,7 +289,7 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         option.publishMicrophoneTrack = true;
-        option.publishTrancodedVideoTrack = true;
+        option.publishTranscodedVideoTrack = true;
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
