@@ -191,7 +191,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 
 		//join channel
 		agora::rtc::ChannelMediaOptions op;
-		op.publishTrancodedVideoTrack = true;
+		op.publishTranscodedVideoTrack = true;
 		op.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		op.clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, op)) {
