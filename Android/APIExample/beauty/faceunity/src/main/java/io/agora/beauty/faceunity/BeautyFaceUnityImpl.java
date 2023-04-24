@@ -83,7 +83,7 @@ public class BeautyFaceUnityImpl implements IBeautyFaceUnity {
         if(isFront){
             fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0);
             fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0);
-            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0);
+            fuRenderer.setOutputMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
         }else{
             fuRenderer.setInputBufferMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
             fuRenderer.setInputTextureMatrix(FUTransformMatrixEnum.CCROT0_FLIPVERTICAL);
