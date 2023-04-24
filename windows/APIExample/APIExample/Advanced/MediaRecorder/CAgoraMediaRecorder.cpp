@@ -321,10 +321,10 @@ void CAgoraMediaRecorder::OnBnClickedButtonLocalRecorder()
 {
 	if (m_rtcEngine) {
 		if (m_localRecorder == nullptr) {
-			RtcConnection conn;
-			conn.channelId = m_channelName.c_str();
-			conn.localUid = m_uid;
-			m_localRecorder = m_rtcEngine->createLocalMediaRecorder(conn).get();
+			RecorderStreamInfo streamInfo;
+			streamInfo.channelId = m_channelName.c_str();
+			streamInfo.uid = m_uid;
+			m_localRecorder = m_rtcEngine->createMediaRecorder(streamInfo).get();
 			MediaRecorderConfiguration config;
 			config.storagePath = "media_recording_local.mp4";
 			m_localRecorderObserver.SetMsgReceiver(m_hWnd);
@@ -353,7 +353,10 @@ void CAgoraMediaRecorder::OnBnClickedButtonRemoteRecorder()
 {
 	if (m_rtcEngine) {
 		if (m_remoteRecorder == nullptr) {
-			m_remoteRecorder = m_rtcEngine->createRemoteMediaRecorder(m_channelName.c_str(), m_remoteVideoWnd.GetUID()).get();
+			RecorderStreamInfo streamInfo;
+			streamInfo.channelId = m_channelName.c_str();
+			streamInfo.uid = m_remoteVideoWnd.GetUID();
+			m_remoteRecorder = m_rtcEngine->createMediaRecorder(streamInfo).get();
 			MediaRecorderConfiguration config;
 			config.storagePath = "media_recording_remote.mp4";
 			m_remoteRecorderObserver.SetMsgReceiver(m_hWnd);
