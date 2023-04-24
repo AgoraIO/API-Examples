@@ -53,6 +53,9 @@ class PictureInPictureMain: BaseViewController {
         container.layoutStream(views: [localVideo, remoteVideo])
         
         pipController = AgoraPictureInPictureController(displayView: remoteVideo.videoView)
+        if #available(iOS 14.2, *) {
+            pipController?.pipController.canStartPictureInPictureAutomaticallyFromInline = true
+        }
         pipController?.pipController.delegate = self
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
@@ -120,10 +123,27 @@ class PictureInPictureMain: BaseViewController {
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
-    }
         
+//        rtcEngine(agoraKit, didVideoMuted: true, byUid: 0)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didEnterBackgroundNotification),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+    }
+    
+    deinit {
+        pipController?.releasePIP()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc
+    private func didEnterBackgroundNotification() {
+        onPIP(_btn: UIButton())
+    }
+    
     @IBAction func onPIP(_btn: UIButton) {
-        if let currentPipController = pipController, currentPipController.pipController.isPictureInPicturePossible {
+        if let currentPipController = pipController {
             currentPipController.pipController.startPictureInPicture()
         } else {
             showAlert(message: "PIP Support iOS 15+".localized)
@@ -221,7 +241,7 @@ extension PictureInPictureMain: AgoraVideoFrameDelegate {
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        .I420
+        .BGRA
     }
     func getRotationApplied() -> Bool {
         true

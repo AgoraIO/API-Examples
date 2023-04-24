@@ -107,7 +107,7 @@
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = NULL;
         NSDictionary *pixelAttributes = @{(id)kCVPixelBufferIOSurfacePropertiesKey : @{}};
-        CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_420YpCbCr8Planar, (__bridge CFDictionaryRef)(pixelAttributes), &pixelBuffer);
+        CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef)(pixelAttributes), &pixelBuffer);
         
         if (result != kCVReturnSuccess) {
             NSLog(@"Unable to create cvpixelbuffer %d", result);
@@ -186,7 +186,9 @@
         CVPixelBufferRef pixelBuffer = videoData.pixelBuffer;
         
         CMVideoFormatDescriptionRef videoInfo;
-        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &videoInfo);
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault,
+                                                     pixelBuffer,
+                                                     &videoInfo);
         
         CMSampleTimingInfo timingInfo;
         timingInfo.duration = kCMTimeZero;
@@ -194,9 +196,16 @@
         timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
         
         CMSampleBufferRef sampleBuffer;
-        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
+        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault,
+                                                 pixelBuffer,
+                                                 videoInfo,
+                                                 &timingInfo,
+                                                 &sampleBuffer);
         
         [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+        if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
+            [self.displayLayer flush];
+        }
         CMSampleBufferInvalidate(sampleBuffer);
         CFRelease(sampleBuffer);
     }
