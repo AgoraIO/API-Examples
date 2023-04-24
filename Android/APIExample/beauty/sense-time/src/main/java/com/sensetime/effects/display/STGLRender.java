@@ -22,7 +22,7 @@ public class STGLRender {
     }
 
     public void adjustRenderSize(int width, int height, int rotation, boolean flipH, boolean flipV) {
-        boolean change = mRenderProgram.resize(width, height) || mRotation != rotation || mFlipH != flipH && mFlipV != flipV;
+        boolean change = mRenderProgram.resize(width, height) || mRotation != rotation || mFlipH != flipH || mFlipV != flipV;
         if (change) {
             mRotation = rotation;
             mFlipH = flipH;
