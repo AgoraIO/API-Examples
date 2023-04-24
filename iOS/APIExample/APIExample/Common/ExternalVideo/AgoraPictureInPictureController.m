@@ -10,10 +10,6 @@
 
 @interface AgoraPictureInPictureController () <AVPictureInPictureSampleBufferPlaybackDelegate>
 
-@property (nonatomic, strong) AVPictureInPictureController *pipController;
-
-@property (nonatomic, strong) AgoraSampleBufferRender *displayView;
-
 @end
 
 @implementation AgoraPictureInPictureController
@@ -34,6 +30,12 @@
     return nil;
 }
 
+- (void)releasePIP {
+    _pipController.delegate = nil;
+    _pipController = nil;
+    [_displayView reset];
+    _displayView = nil;
+}
 
 #pragma mark - <AVPictureInPictureSampleBufferPlaybackDelegate>
 
