@@ -255,7 +255,7 @@ class LiveStreamingMain: BaseViewController {
     
     @IBOutlet weak var dualStreamTips: NSTextField!
     @IBAction func onDualStreaming(_ sender: NSSwitch) {
-        dualStreamTips.stringValue = sender.state == .on ? "已开启" : "(默认: 大流)"
+        dualStreamTips.stringValue = sender.state == .on ? "Opening".localized : "(Default: flow)".localized
         agoraKit.enableDualStreamMode(sender.state == .on)
     }
     

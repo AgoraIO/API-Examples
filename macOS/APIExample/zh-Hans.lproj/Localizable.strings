@@ -200,3 +200,5 @@
 "Stop Recording" = "停止录制";
 "Local composite graph" = "本地合图";
 "Exclude Window" = "屏蔽窗口";
+"Opening" = "已开启";
+"(Default: flow)" = "(默认: 大流)";

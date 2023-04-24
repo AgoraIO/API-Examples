@@ -1,31 +1,36 @@
 
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "4rc-r1-Ay6"; */
-"4rc-r1-Ay6.title" = "离开频道";
+/* Class = "NSTextFieldCell"; title = "water"; ObjectID = "8YN-Yd-UZv"; */
+"8YN-Yd-UZv.title" = "水印";
 
-/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "Iws-j3-l2h"; */
-"Iws-j3-l2h.title" = "1V1";
+/* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
 
-/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "Mmi-d8-vOm"; */
-"Mmi-d8-vOm.title" = "1V15";
+/* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[0] = "Auto"; ObjectID = "D2B-fw-Vnp"; */
+"D2B-fw-Vnp.ibShadowedLabels[0]" = "自动";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "PtD-n2-sEW"; */
-"PtD-n2-sEW.placeholderString" = "输入频道号";
+/* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[1] = "Soft knitting"; ObjectID = "D2B-fw-Vnp"; */
+"D2B-fw-Vnp.ibShadowedLabels[1]" = "软编";
 
-/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "VNU-so-ajb"; */
-"VNU-so-ajb.title" = "1V3";
+/* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[2] = "Hard knitting"; ObjectID = "D2B-fw-Vnp"; */
+"D2B-fw-Vnp.ibShadowedLabels[2]" = "硬编";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入频道";
+
+/* Class = "NSTextFieldCell"; title = "first frame is drawn"; ObjectID = "PDX-e5-ZpY"; */
+"PDX-e5-ZpY.title" = "首帧出图";
+
+/* Class = "NSTextFieldCell"; title = "S or l flow"; ObjectID = "XH3-Ib-cXr"; */
+"XH3-Ib-cXr.title" = "大小流";
 
 /* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
 "YjT-yy-DnJ.title" = "实时视频通话/直播";
 
-/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "cH4-ft-u77"; */
-"cH4-ft-u77.title" = "1V8";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "guU-jX-Wkg"; */
-"guU-jX-Wkg.title" = "加入频道";
-
-"8YN-Yd-UZv.title" = "水印";
-
+/* Class = "NSButtonCell"; title = "Snap Shot"; ObjectID = "cDh-B1-x3E"; */
 "cDh-B1-x3E.title" = "截图";
 
-"D2B-fw-Vnp.title.0" = "自动";
-"z1l-XW-dGp.title.0" = "wwww";
+/* Class = "NSTextFieldCell"; title = "(Default: flow)"; ObjectID = "d9V-RQ-OX6"; */
+"d9V-RQ-OX6.title" = "(默认: 大流)";
+
+/* Class = "NSTextFieldCell"; title = "BF"; ObjectID = "gt3-r0-jqt"; */
+"gt3-r0-jqt.title" = "B帧";
