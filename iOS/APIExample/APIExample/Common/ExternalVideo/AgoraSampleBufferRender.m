@@ -82,6 +82,19 @@
     [self.displayLayer flushAndRemoveImage];
 }
 
+- (OSType)getFormatType: (NSInteger)type {
+    switch (type) {
+        case 1:
+            return kCVPixelFormatType_420YpCbCr8Planar;
+            
+        case 2:
+            return kCVPixelFormatType_32BGRA;
+            
+        default:
+            return kCVPixelFormatType_32BGRA;
+    }
+}
+
 - (void)renderVideoData:(AgoraOutputVideoFrame *_Nonnull)videoData {
     if (!videoData) {
         return;
@@ -107,7 +120,13 @@
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = NULL;
         NSDictionary *pixelAttributes = @{(id)kCVPixelBufferIOSurfacePropertiesKey : @{}};
-        CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef)(pixelAttributes), &pixelBuffer);
+        OSType type = [self getFormatType:videoData.type];
+        CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault,
+                                              width,
+                                              height,
+                                              type,
+                                              (__bridge CFDictionaryRef)(pixelAttributes),
+                                              &pixelBuffer);
         
         if (result != kCVReturnSuccess) {
             NSLog(@"Unable to create cvpixelbuffer %d", result);
