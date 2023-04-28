@@ -386,7 +386,9 @@ public class SceneTimeBeauty extends BaseFragment {
 
         mLocalVideoLayout = new VideoReportLayout(requireContext());
         TextureView videoView = new TextureView(requireContext());
-        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN, 0));
+        VideoCanvas local = new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN, 0);
+        local.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED;
+        rtcEngine.setupLocalVideo(local);
         mLocalVideoLayout.addView(videoView);
 
         updateVideoLayouts(isLocalFull);

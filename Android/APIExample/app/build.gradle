@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk-android"
+def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
 android {
     compileSdkVersion 32

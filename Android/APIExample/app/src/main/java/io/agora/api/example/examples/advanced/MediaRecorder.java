@@ -48,7 +48,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IMediaRecorderCallback;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RecorderInfo;
-import io.agora.rtc2.RtcConnection;
+import io.agora.rtc2.RecorderStreamInfo;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
@@ -318,7 +318,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_" + uid + ".mp4";
         if (mediaRecorder == null) {
-            mediaRecorder = engine.createRemoteMediaRecorder(channelId, uid);
+            mediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, uid));
             // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
             mediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
                 @Override
@@ -360,7 +360,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4";
 
         if (localMediaRecorder == null) {
-            localMediaRecorder = engine.createLocalMediaRecorder(new RtcConnection(channelId, myUid));
+            localMediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, myUid));
             // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
             localMediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
                 @Override
