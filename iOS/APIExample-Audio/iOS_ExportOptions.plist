@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.agora.api.examples.audio</key>
-		<string>AgoraLab2020</string>
+		<string>apiexamples_all</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Development</string>
@@ -20,7 +20,7 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>JDPG69R49Z</string>
+	<string>YS397FG5PA</string>
 	<key>thinning</key>
 	<string>&lt;none&gt;</string>
 </dict>

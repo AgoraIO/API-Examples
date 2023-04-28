@@ -11,9 +11,9 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.agora.api.examples</key>
-		<string>apiexamples_all</string>
+		<string>AgoraLab2020</string>
 		<key>io.agora.api.examples.Agora-ScreenShare-Extension</key>
-		<string>apiexamples_all</string>
+		<string>AgoraLab2020</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Development</string>
@@ -22,7 +22,7 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>YS397FG5PA</string>
+	<string>JDPG69R49Z</string>
 	<key>thinning</key>
 	<string>&lt;none&gt;</string>
 </dict>
