@@ -231,17 +231,17 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
 
 // MARK: - AgoraVideoDataFrameProtocol
 extension PictureInPictureMain: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         true
     }
     
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
-        remoteVideo.videoView.renderVideoData(videoFrame)
+        remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
         return true
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        .BGRA
+        .cvPixelBGRA
     }
     func getRotationApplied() -> Bool {
         true

@@ -106,8 +106,8 @@ func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
 }
 
 extension AgoraMetalRender: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-        return true
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        true
     }
 
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
@@ -155,9 +155,8 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         return .readOnly
     }
     
-    
-    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-        return true
+    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        true
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
