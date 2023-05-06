@@ -125,7 +125,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -152,12 +152,12 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroy() {
-        if(videoFileReader != null){
+        if (videoFileReader != null) {
             videoFileReader.stop();
         }
-        if(textureBufferHelper != null){
+        if (textureBufferHelper != null) {
             textureBufferHelper.invoke(() -> {
-                if(yuvFboProgram != null){
+                if (yuvFboProgram != null) {
                     yuvFboProgram.release();
                     yuvFboProgram = null;
                 }
@@ -219,7 +219,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));
-                if(videoFileReader != null){
+                if (videoFileReader != null) {
                     videoFileReader.stop();
                 }
                 fl_remote.removeAllViews();
@@ -265,8 +265,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         TextureView textureView = new TextureView(getContext());
-        VideoCanvas local = new VideoCanvas(textureView, Constants.RENDER_MODE_FIT,  0);
-        local.mirrorMode =  Constants.VIDEO_MIRROR_MODE_DISABLED;
+        VideoCanvas local = new VideoCanvas(textureView, Constants.RENDER_MODE_FIT, 0);
+        local.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED;
         local.sourceType = Constants.VIDEO_SOURCE_CUSTOM;
         engine.setupLocalVideo(local);
         // Add to the local container
@@ -415,8 +415,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                                     }
                                     Integer textureId = textureBufferHelper.invoke(() -> yuvFboProgram.drawYuv(yuv, width, height));
                                     frameBuffer = textureBufferHelper.wrapTextureBuffer(width, height, VideoFrame.TextureBuffer.Type.RGB, textureId, new Matrix());
-                                } else //if("I420".equals(selectedItem))
-                                {
+                                } else {
+                                    // I420 type default
                                     JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
                                     i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
                                     i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
@@ -430,9 +430,9 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                                  */
                                 long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
                                 /*
-                                 * Create a video frame to push. The video frame can
+                                 * Create a video frame to push.
                                  */
-                                VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs);
+                                VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
 
                                 /*
                                  * Pushes the external video frame to the app.
