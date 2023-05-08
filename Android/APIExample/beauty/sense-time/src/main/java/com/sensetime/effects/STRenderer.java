@@ -338,8 +338,8 @@ public class STRenderer {
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
                 mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
-                0,
-                0,
+                getCurrentOrientation(rotation),
+                getCurrentOrientation(rotation),
                 false,
                 null,
                 stEffectTexture,
@@ -451,8 +451,8 @@ public class STRenderer {
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
                 mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
-                0,
-                0,
+                getCurrentOrientation(rotation),
+                getCurrentOrientation(rotation),
                 false,
                 null,
                 stEffectTexture,
