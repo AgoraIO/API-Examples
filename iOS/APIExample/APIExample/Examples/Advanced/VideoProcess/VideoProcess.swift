@@ -78,6 +78,8 @@ class VideoProcessMain : BaseViewController
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // enable filters
+        agoraKit.enableExtension(withVendor: "agora_video_filters_clear_vision", extension: "clear_vision", enabled: true, sourceType: .primaryCamera)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         // make myself a broadcaster
