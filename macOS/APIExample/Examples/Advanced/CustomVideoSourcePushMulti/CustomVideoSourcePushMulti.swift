@@ -148,7 +148,7 @@ class CustomVideoSourcePushMulti: BaseViewController {
     // indicate for doing something
     var isProcessing: Bool = false {
         didSet {
-            joinChannelButton.isEnabled = !isProcessing
+//            joinChannelButton.isEnabled = !isProcessing
         }
     }
     
@@ -247,13 +247,13 @@ class CustomVideoSourcePushMulti: BaseViewController {
             isProcessing = true
             joinChannel(uid: 999, trackId: customCamera?.trackId ?? 0)
         } else {
-            isProcessing = true
             self.customCamera?.stopSource()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                LogUtils.log(message: "Left channel", level: .info)
-                self.isProcessing = false
-                self.isJoined = false
+                print(stats)
             }
+            LogUtils.log(message: "Left channel", level: .info)
+            isProcessing = false
+            isJoined = false
         }
     }
     
