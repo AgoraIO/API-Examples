@@ -262,6 +262,7 @@ class CustomVideoSourcePushMulti: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCustomVideoTrack = true
         option.publishMicrophoneTrack = false
+        option.publishCameraTrack = false
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = true
         option.customVideoTrackId = Int(trackId)
@@ -410,7 +411,7 @@ extension CustomVideoSourcePushMulti: AgoraYUVImageSourcePushDelegate {
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
         //once we have the video frame, we can push to agora sdk
-        agoraKit?.pushExternalVideoFrame(videoFrame)
+        agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
         
         let outputVideoFrame = AgoraOutputVideoFrame()
         outputVideoFrame.width = Int32(size.width)
