@@ -153,26 +153,13 @@ bool CDlgBeauty::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 
-	ret = m_rtcEngine->loadExtensionProvider("libagora_segmentation_extension.dll");
+
 	CString strInfo;
-	strInfo.Format(_T("libagora_segmentation_extension: %d"), ret);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("libagora_segmentation_extension.dll"));
-	ret = m_rtcEngine->enableExtension("agora_video_filters_segmentation", "portrait_segmentation", true);
+	ret = m_rtcEngine->enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 	strInfo.Format(_T("enableExtension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_segmentation"));
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("PortraitSegmentation"));
-	
-
-	ret = m_rtcEngine->loadExtensionProvider("libagora_video_process_extension.dll");
-	strInfo.Format(_T("libagora_video_process_extension: %d"), ret);
-
-	ret = m_rtcEngine->enableExtension("agora", "beauty", true);
-	strInfo.Format(_T("enableExtension: %d"), ret);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora"));
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("beauty"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_video_filters_clear_vision"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("clear_vision"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
