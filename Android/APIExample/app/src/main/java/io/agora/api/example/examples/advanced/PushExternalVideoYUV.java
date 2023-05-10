@@ -287,7 +287,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            option.publishCameraTrack = false;
             option.publishCustomVideoTrack = true;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
             if (res != 0) {

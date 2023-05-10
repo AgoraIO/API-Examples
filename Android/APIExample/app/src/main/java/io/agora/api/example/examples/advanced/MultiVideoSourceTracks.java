@@ -239,8 +239,6 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            option.publishCameraTrack = false;
-            option.publishMicrophoneTrack = false;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
             if (res != 0) {
                 // Usually happens with invalid parameters
@@ -284,7 +282,6 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            option.publishCameraTrack = false;
             option.publishCustomVideoTrack = true;
             /*
             specify custom video track id to publish in this channel.
