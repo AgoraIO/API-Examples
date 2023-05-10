@@ -12,22 +12,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 
 import com.sensetime.effects.glutils.STUtils;
-import com.sensetime.sensearsourcemanager.SenseArMaterial;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,38 +28,87 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by sensetime on 16-11-16.
- */
-
 public class FileUtils {
-    public static final String MODEL_NAME_FACE_ATTRIBUTE = "models/M_SenseME_Attribute_1.0.1.model";
-    public static final String MODEL_NAME_AVATAR_HELP = "models/M_SenseME_Avatar_Help_2.2.0.model";
-    public static final String MODEL_NAME_CATFACE_CORE = "models/M_SenseME_CatFace_3.0.0.model";
-    public static final String MODEL_NAME_FACE_EXTRA = "models/M_SenseME_Face_Extra_Advanced_6.0.13.model";// 282
-    public static final String MODEL_NAME_LIPS_PARSING = "models/M_SenseME_Segment_MouthOcclusion_FastV1_1.1.3.model";//嘴唇分割
+    public static final String MODEL_NAME_ACTION = "M_SenseME_Face_Video_7.0.0.model";
+    public static final String MODEL_NAME_FACE_ATTRIBUTE = "M_SenseME_Attribute_1.0.1.model";
+    public static final String MODEL_NAME_EYEBALL_CENTER = "M_Eyeball_Center.model";
+    public static final String MODEL_NAME_EYEBALL_CONTOUR = "M_SenseME_Iris_2.0.0.model";
+    public static final String MODEL_NAME_FACE_EXTRA = "M_SenseME_Face_Extra_Advanced_6.0.11.model";
+    public static final String MODEL_NAME_AVATAR_CORE = "M_SenseME_Avatar_Core_2.0.0.model";
+    public static final String MODEL_NAME_CATFACE_CORE = "M_SenseME_CatFace_3.0.0.model";
 
-    public static final String MODEL_NAME_ACTION = "models/M_SenseME_Face_Video_7.0.0.model";
-    public static final String MODEL_NAME_HAND = "models/M_SenseME_Hand_5.4.0.model";
-    public static final String MODEL_NAME_SEGMENT = "models/M_SenseME_Segment_4.14.1.model";// 前后背景
-    public static final String MODEL_NAME_HAIR = "models/M_SenseME_Segment_Hair_1.3.4.model";
-    public static final String HEAD_SEGMENT_MODEL_NAME = "models/M_SenseME_Segment_Head_1.0.3.model";
-
-    public static final String HEAD_SEGMENT_DBL = "models/M_SenseME_Segment_DBL_Face_1.0.7.model";// 妆容遮挡
-    public static final String MODEL_SEGMENT_SKY = "models/M_SenseME_Segment_Sky_1.0.3.model";// 天空分割
-    public static final String MODEL_NAME_DOG = "models/M_SenseME_DogFace_2.0.0.model";// 狗脸关键点
-    public static final String MODEL_SEGMENT_SKIN = "models/M_SenseME_Segment_Skin_1.1.1.model";// 皮肤分割
-    public static final String MODEL_3DMESH = "models/M_SenseME_3DMesh_Face_2.0.2.model";// 3DMesh
-
-    public static final String MODEL_FOOT = "models/M_SenseME_Foot_1.0.2.model";// 脚的检测
-    public static final String MODEL_PANT = "models/M_Segment_DBLV2_Pant_1.1.6.model";// 裤腿的检测
 
     public static String getActionModelName() {
         return MODEL_NAME_ACTION;
     }
 
+    public static String getEyeBallCenterModelName() {
+        return MODEL_NAME_EYEBALL_CENTER;
+    }
+
+    public static String getEyeBallContourModelName() {
+        return MODEL_NAME_EYEBALL_CONTOUR;
+    }
+
     public static String getFaceExtraModelName() {
         return MODEL_NAME_FACE_EXTRA;
+    }
+
+    public static List<String> getLicenseFilesFromAssets(Context context, String path){
+        String files[] = null;
+        ArrayList<String> modelFiles = new ArrayList<String>();
+
+        try {
+            files = context.getAssets().list(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < files.length; i++) {
+            String str = files[i];
+            if(str.indexOf(".lic") != -1){
+                modelFiles.add(path + File.separator + files[i]);
+            }
+        }
+
+        return modelFiles;
+    }
+
+    public static List<String> getLicenseFilesFromPath(Context context, String modelPath) {
+        ArrayList<String> modelFiles = new ArrayList<String>();
+
+        String folderpath = null;
+        File dataDir = context.getExternalFilesDir(null);
+        if (dataDir != null) {
+            folderpath = modelPath;
+
+            File folder = new File(folderpath);
+
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+        }
+
+        File file = new File(folderpath);
+        File[] subFile = file.listFiles();
+
+        if (subFile == null || subFile.length == 0) {
+            return modelFiles;
+        }
+
+        for (int i = 0; i < subFile.length; i++) {
+            // 判断是否为文件夹
+            if (!subFile[i].isDirectory()) {
+                String filename = subFile[i].getAbsolutePath();
+                String path = subFile[i].getPath();
+                // 判断是否为lic结尾
+                if (filename.trim().toLowerCase().endsWith(".lic")) {
+                    modelFiles.add(filename);
+                }
+            }
+        }
+
+        return modelFiles;
     }
 
     public static ArrayList<String> copyStickerFiles(Context context) {
@@ -213,6 +253,7 @@ public class FileUtils {
         //action模型会从asset直接读取
         //copyFileIfNeed(context, MODEL_NAME_ACTION);
         copyFileIfNeed(context, MODEL_NAME_FACE_ATTRIBUTE);
+        copyFileIfNeed(context, MODEL_NAME_AVATAR_CORE);
         copyFileIfNeed(context, MODEL_NAME_CATFACE_CORE);
     }
 
@@ -226,14 +267,13 @@ public class FileUtils {
         return getFilePath(context, MODEL_NAME_FACE_ATTRIBUTE);
     }
 
+    public static String getAvatarCoreModelPath(Context context) {
+        return getFilePath(context, MODEL_NAME_AVATAR_CORE);
+    }
 
     public static void copyStickerFiles(Context context, String index) {
         copyStickerZipFiles(context, index);
         copyStickerIconFiles(context, index);
-    }
-
-    public static void copyModelsFiles(Context context, String index) {
-        copyStickerZipFiles(context, index);
     }
 
     public static void copyFilterFiles(Context context, String index) {
@@ -418,44 +458,6 @@ public class FileUtils {
         return iconFiles;
     }
 
-    public static Map<String, String> getStickerIconUrlFilesFromSd(Context context, String className) {
-        TreeMap<String, String> iconFiles = new TreeMap<String, String>();
-
-        String folderpath = null;
-        File dataDir = context.getExternalFilesDir(null);
-        if (dataDir != null) {
-            folderpath = dataDir.getAbsolutePath() + File.separator + className;
-
-            File folder = new File(folderpath);
-
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-        }
-
-        File file = new File(folderpath);
-        File[] subFile = file.listFiles();
-
-        if (subFile == null || subFile.length == 0) {
-            return iconFiles;
-        }
-
-        for (int i = 0; i < subFile.length; i++) {
-            // 判断是否为文件夹
-            if (!subFile[i].isDirectory()) {
-                String filename = subFile[i].getAbsolutePath();
-                String path = subFile[i].getPath();
-                // 判断是否为png结尾
-                if (filename.trim().toLowerCase().endsWith(".png") && filename.indexOf("mode_") == -1) {
-                    String name = subFile[i].getName();
-                    iconFiles.put(getFileNameNoEx(name), filename);
-                }
-            }
-        }
-
-        return iconFiles;
-    }
-
     public static List<String> getStickerNames(Context context, String className) {
         ArrayList<String> modelNames = new ArrayList<String>();
         String folderpath = null;
@@ -490,7 +492,6 @@ public class FileUtils {
 
         return modelNames;
     }
-
 
     public static List<String> copyFilterModelFiles(Context context, String index) {
         String files[] = null;
@@ -593,57 +594,6 @@ public class FileUtils {
         return iconFiles;
     }
 
-    public static Map<String, String> copyFilterIconFiles2(Context context, String index) {
-        String files[] = null;
-        TreeMap<String, String> iconFiles = new TreeMap<String, String>();
-
-        try {
-            files = context.getAssets().list(index);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String folderpath = null;
-        File dataDir = context.getExternalFilesDir(null);
-        if (dataDir != null) {
-            folderpath = dataDir.getAbsolutePath() + File.separator + index;
-
-            File folder = new File(folderpath);
-
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-        }
-        for (int i = 0; i < files.length; i++) {
-            String str = files[i];
-            if (str.indexOf(".png") != -1) {
-                copyFileIfNeed(context, str, index);
-            }
-        }
-
-        File file = new File(folderpath);
-        File[] subFile = file.listFiles();
-
-        if (subFile == null || subFile.length == 0) {
-            return iconFiles;
-        }
-
-        for (int i = 0; i < subFile.length; i++) {
-            // 判断是否为文件夹
-            if (!subFile[i].isDirectory()) {
-                String filename = subFile[i].getAbsolutePath();
-                String path = subFile[i].getPath();
-                // 判断是否为png结尾
-                if (filename.trim().toLowerCase().endsWith(".png") && filename.indexOf("filter") != -1) {
-                    String name = subFile[i].getName().substring(13);
-                    iconFiles.put(getFileNameNoEx(name), filename);
-                }
-            }
-        }
-
-        return iconFiles;
-    }
-
     public static List<String> getFilterNames(Context context, String index) {
         ArrayList<String> modelNames = new ArrayList<String>();
         String folderpath = null;
@@ -689,78 +639,6 @@ public class FileUtils {
         return filename;
     }
 
-    public static void writeMaterialsToJsonFile(List<SenseArMaterial> materials, String groupId, String rootPath) {
-        if (materials != null && materials.size() > 0) {
-            JSONObject jsonObject = new JSONObject();
-            JSONArray materialsJson = new JSONArray();
-            try {
-                for (SenseArMaterial material : materials) {
-                    JSONObject jsonMaterial = new JSONObject();
-                    jsonMaterial.put("type", material.type);
-                    jsonMaterial.put("id", material.id);
-                    jsonMaterial.put("materialFileId", material.materialFileId);
-                    jsonMaterial.put("materialInstructions", material.materialInstructions);
-                    jsonMaterial.put("extend_info", material.extend_info);
-                    jsonMaterial.put("extend_info2", material.extend_info2);
-                    jsonMaterial.put("thumbnail", material.thumbnail);
-                    jsonMaterial.put("name", material.name);
-                    jsonMaterial.put("cachedPath", material.cachedPath);
-                    materialsJson.put(jsonMaterial);
-                }
-                jsonObject.put("materials", materialsJson);
-                String jsonStr = jsonObject.toString();
-                File file = new File(rootPath + "/" + groupId);
-                file.createNewFile();
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(jsonStr.getBytes());
-                fileOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static List<SenseArMaterial> getMaterialsFromJsonFile(String groupId, String rootPath) {
-        List<SenseArMaterial> result = new ArrayList<>();
-        File file = new File(rootPath + "/" + groupId);
-        if (file.exists()) {
-            try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader br = new BufferedReader(inputStreamReader);
-                String line;
-                StringBuilder builder = new StringBuilder();
-                while ((line = br.readLine()) != null) {
-                    builder.append(line);
-                }
-                br.close();
-                inputStreamReader.close();
-                fileInputStream.close();
-
-                JSONObject jsonObject = new JSONObject(builder.toString());
-                JSONArray array = jsonObject.optJSONArray("materials");
-                if (array != null && array.length() > 0) {
-                    for (int i = 0; i < array.length(); i++) {
-                        SenseArMaterial senseArMaterial = new SenseArMaterial();
-                        JSONObject jsonMaterial = array.getJSONObject(i);
-                        senseArMaterial.type = jsonMaterial.optInt("type");
-                        senseArMaterial.id = jsonMaterial.optString("id");
-                        senseArMaterial.materialFileId = jsonMaterial.optString("materialFileId");
-                        senseArMaterial.materialInstructions = jsonMaterial.optString("materialInstructions");
-                        senseArMaterial.extend_info = jsonMaterial.optString("extend_info");
-                        senseArMaterial.extend_info2 = jsonMaterial.optString("extend_info2");
-                        senseArMaterial.thumbnail = jsonMaterial.optString("thumbnail");
-                        senseArMaterial.name = jsonMaterial.optString("name");
-                        senseArMaterial.cachedPath = jsonMaterial.optString("cachedPath");
-                        result.add(senseArMaterial);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
 
     public static List<String> getMakeupFilePathFromAssets(Context context, String className){
         String files[] = null;
@@ -818,7 +696,6 @@ public class FileUtils {
         return image;
     }
 
-
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
 
@@ -870,12 +747,6 @@ public class FileUtils {
         }
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            if (isQQMediaDocument(uri)) {
-                String path = uri.getPath();
-                File fileDir = Environment.getExternalStorageDirectory();
-                File file = new File(fileDir, path.substring("/QQBrowser".length()));
-                return file.exists() ? file.toString() : null;
-            }
             return getDataColumn(context, uri, null, null);
         }
         // File
@@ -961,97 +832,6 @@ public class FileUtils {
         }
         return p + fileName;
     }
-
-    public static boolean isQQMediaDocument(Uri uri) {
-        return "com.tencent.mtt.fileprovider".equals(uri.getAuthority());
-    }
-
-
-    private static final String SEPARATOR = File.separator;
-
-    public static void copyFilesFromAssets(Context context, String assetsPath, String storagePath) {
-        String temp = "";
-
-        if (TextUtils.isEmpty(storagePath)) {
-            return;
-        } else if (storagePath.endsWith(SEPARATOR)) {
-            storagePath = storagePath.substring(0, storagePath.length() - 1);
-        }
-
-        if (TextUtils.isEmpty(assetsPath) || assetsPath.equals(SEPARATOR)) {
-            assetsPath = "";
-        } else if (assetsPath.endsWith(SEPARATOR)) {
-            assetsPath = assetsPath.substring(0, assetsPath.length() - 1);
-        }
-
-        AssetManager assetManager = context.getAssets();
-        try {
-            File file = new File(storagePath);
-            if (!file.exists()) {//如果文件夹不存在，则创建新的文件夹
-                file.mkdirs();
-            }
-
-            // 获取assets目录下的所有文件及目录名
-            String[] fileNames = assetManager.list(assetsPath);
-            if (fileNames.length > 0) {//如果是目录 apk
-                for (String fileName : fileNames) {
-                    if (!TextUtils.isEmpty(assetsPath)) {
-                        temp = assetsPath + SEPARATOR + fileName;//补全assets资源路径
-                    }
-
-                    String[] childFileNames = assetManager.list(temp);
-                    if (!TextUtils.isEmpty(temp) && childFileNames.length > 0) {//判断是文件还是文件夹：如果是文件夹
-                        copyFilesFromAssets(context, temp, storagePath + SEPARATOR + fileName);
-                    } else {//如果是文件
-                        InputStream inputStream = assetManager.open(temp);
-                        readInputStream(storagePath + SEPARATOR + fileName, inputStream);
-                    }
-                }
-            } else {//如果是文件 doc_test.txt或者apk/app_test.apk
-                InputStream inputStream = assetManager.open(assetsPath);
-                if (assetsPath.contains(SEPARATOR)) {//apk/app_test.apk
-                    assetsPath = assetsPath.substring(assetsPath.lastIndexOf(SEPARATOR), assetsPath.length());
-                }
-                readInputStream(storagePath + SEPARATOR + assetsPath, inputStream);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * 读取输入流中的数据写入输出流
-     *
-     * @param storagePath 目标文件路径
-     * @param inputStream 输入流
-     */
-    public static void readInputStream(String storagePath, InputStream inputStream) {
-        File file = new File(storagePath);
-        try {
-            if (!file.exists()) {
-                // 1.建立通道对象
-                FileOutputStream fos = new FileOutputStream(file);
-                // 2.定义存储空间
-                byte[] buffer = new byte[inputStream.available()];
-                // 3.开始读文件
-                int lenght = 0;
-                while ((lenght = inputStream.read(buffer)) != -1) {// 循环从输入流读取buffer字节
-                    // 将Buffer中的数据写到outputStream对象中
-                    fos.write(buffer, 0, lenght);
-                }
-                fos.flush();// 刷新缓冲区
-                // 4.关闭流
-                fos.close();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
 
 

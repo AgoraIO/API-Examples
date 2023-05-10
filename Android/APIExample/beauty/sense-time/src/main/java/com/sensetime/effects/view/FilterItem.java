@@ -3,6 +3,7 @@ package com.sensetime.effects.view;
 import android.graphics.Bitmap;
 
 public class FilterItem {
+
     public String name;
     public Bitmap icon;
     public String model;

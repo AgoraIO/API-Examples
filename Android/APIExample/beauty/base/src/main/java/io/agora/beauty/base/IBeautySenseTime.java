@@ -1,31 +1,15 @@
 package io.agora.beauty.base;
 
 import android.content.Context;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
 
 import java.lang.reflect.Constructor;
+
+import io.agora.rtc2.video.IVideoFrameObserver;
 
 public interface IBeautySenseTime {
 
 
-    /**
-     * @param width       camera preview width
-     * @param height      camera preview height
-     * @param orientation camera preview orientation
-     * @param nv21        camera preview pixel data
-     * @param textureId   camera preview texture id
-     * @param texFormat   {@link GLES11Ext#GL_TEXTURE_EXTERNAL_OES} or {@link GLES20#GL_TEXTURE_2D}
-     * @return new Texture ID to render
-     */
-    public int process(
-            byte[] nv21, int textureId, int texFormat, int width, int height, int orientation);
-
-
-    int process(
-            byte[] nv21,
-            int width, int height, int orientation
-    );
+    IVideoFrameObserver getVideoFrameObserver();
 
     void release();
 

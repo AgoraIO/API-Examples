@@ -25,4 +25,5 @@ dependencies {
     api fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation project(":beauty:base")
+    implementation "io.agora.rtc:full-sdk:${rootProject.ext.agora_sdk_version}"
 }

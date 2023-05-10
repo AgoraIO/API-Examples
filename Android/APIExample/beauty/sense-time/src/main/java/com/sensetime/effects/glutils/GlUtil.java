@@ -17,6 +17,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+/**
+ * Created by jerikc on 16/2/23.
+ */
 public class GlUtil {
     private static final String TAG = "GlUtil";
     /** Identity matrix for general use.  Don't modify or life will get weird. */
@@ -121,6 +124,7 @@ public class GlUtil {
             GLES20.glGenTextures(len, textureId, 0);
         }
         for (int i = 0; i < len; i++) {
+            ByteBuffer data = ByteBuffer.allocate(width * height * 4);
             GLES20.glBindTexture(type, textureId[i]);
             GLES20.glTexParameterf(type,
                     GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
@@ -131,7 +135,7 @@ public class GlUtil {
             GLES20.glTexParameterf(type,
                     GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
             GLES20.glTexImage2D(type, 0, GLES20.GL_RGBA, width, height, 0,
-                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, data);
         }
     }
     /**

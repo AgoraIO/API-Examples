@@ -7,3 +7,7 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext{
+    agora_sdk_version = "4.1.1"
+}

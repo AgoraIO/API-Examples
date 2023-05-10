@@ -1,5 +1,9 @@
 package com.sensetime.effects.view;
 
+/**
+ * Created by sensetime on 17-6-7.
+ */
+
 public class ObjectItem {
     public String name;
     public int drawableID;

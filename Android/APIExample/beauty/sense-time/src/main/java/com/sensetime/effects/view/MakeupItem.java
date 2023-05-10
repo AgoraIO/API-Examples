@@ -3,6 +3,7 @@ package com.sensetime.effects.view;
 import android.graphics.Bitmap;
 
 public class MakeupItem {
+
     public String name;
     public Bitmap icon;
     public String path;

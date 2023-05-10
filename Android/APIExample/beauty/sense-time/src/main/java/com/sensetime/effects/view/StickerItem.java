@@ -3,6 +3,10 @@ package com.sensetime.effects.view;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
+/**
+ * Created by sensetime on 17-6-8.
+ */
+
 public class StickerItem {
     public String name;
     public Bitmap icon;
