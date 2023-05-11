@@ -77,7 +77,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:digits="@string/chanel_support_char"
         android:hint="@string/app_id"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/et_token" />
@@ -87,7 +86,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:digits="@string/chanel_support_char"
         android:hint="@string/token"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/ll_join" />

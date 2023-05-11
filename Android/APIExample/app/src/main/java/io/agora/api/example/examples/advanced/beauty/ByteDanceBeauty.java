@@ -233,6 +233,7 @@ public class ByteDanceBeauty extends BaseFragment {
             if (rtcEngine == null) {
                 return;
             }
+            rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 
 
             mVideoFrameObserver = new IVideoFrameObserver() {

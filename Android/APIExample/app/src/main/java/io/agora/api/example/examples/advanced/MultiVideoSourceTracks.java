@@ -239,8 +239,6 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            option.publishCameraTrack = false;
-            option.publishMicrophoneTrack = false;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
             if (res != 0) {
                 // Usually happens with invalid parameters
@@ -284,7 +282,6 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            option.publishCameraTrack = false;
             option.publishCustomVideoTrack = true;
             /*
             specify custom video track id to publish in this channel.
@@ -402,8 +399,8 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                             }
                             Integer textureId = textureBufferHelper.invoke(() -> yuvFboProgram.drawYuv(yuv, width, height));
                             frameBuffer = textureBufferHelper.wrapTextureBuffer(width, height, VideoFrame.TextureBuffer.Type.RGB, textureId, new Matrix());
-                        } else //if("I420".equals(selectedItem))
-                        {
+                        } else {
+                            // I420 type default
                             JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
                             i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
                             i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
@@ -418,9 +415,9 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                          */
                         long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
                         /*
-                         * Create a video frame to push. The video frame can
+                         * Create a video frame to push.
                          */
-                        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs);
+                        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
 
                         /*
                          * Pushes the external video frame to the app.
