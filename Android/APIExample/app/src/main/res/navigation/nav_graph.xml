@@ -69,6 +69,9 @@
             android:id="@+id/action_mainFragment_to_ProcessRawData"
             app:destination="@id/ProcessRawData" />
         <action
+            android:id="@+id/action_mainFragment_to_ProcessRawDataNative"
+            app:destination="@id/ProcessRawDataNative" />
+        <action
             android:id="@+id/action_mainFragment_to_SwitchCameraScreenShare"
             app:destination="@id/SwitchCameraScreenShare" />
         <action
@@ -260,6 +263,11 @@
         android:id="@+id/ProcessRawData"
         android:name="io.agora.api.example.examples.advanced.ProcessRawData"
         android:label="@string/item_processraw"
+        tools:layout="@layout/fragment_process_rawdata" />
+    <fragment
+        android:id="@+id/ProcessRawDataNative"
+        android:name="io.agora.api.example.examples.advanced.ProcessRawDataNative"
+        android:label="@string/item_processraw_native"
         tools:layout="@layout/fragment_process_rawdata" />
     <fragment
         android:id="@+id/SwitchCameraScreenShare"

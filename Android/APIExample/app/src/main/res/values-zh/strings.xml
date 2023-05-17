@@ -103,6 +103,7 @@
     <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始视频数据</string>
+    <string name="item_processraw_native">原始视频数据(Native)</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>
     <string name="item_streamencrypt">媒体流加密(自定义)</string>
     <string name="item_channelencryption">媒体流加密</string>

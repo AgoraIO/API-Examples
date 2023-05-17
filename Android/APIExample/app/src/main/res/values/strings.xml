@@ -108,6 +108,7 @@
     <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
+    <string name="item_processraw_native">Raw Video Data(Native)</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
     <string name="item_streamencrypt">Media Stream Encryption(Custom Encoder)</string>
     <string name="item_channelencryption">Media Stream Encryption</string>
