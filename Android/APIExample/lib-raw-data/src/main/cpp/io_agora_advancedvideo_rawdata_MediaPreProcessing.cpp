@@ -123,7 +123,7 @@ public:
      *     false: Ignore the current video frame, and do not send it back to the SDK.
      * PS:
      *   This callback does not support sending processed RGBA video data back to the SDK.*/
-    virtual bool onCaptureVideoFrame(VideoFrame &videoFrame) override
+    virtual bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame &videoFrame) override
     {
         getVideoFrame(videoFrame, captureVideoMethodId, _javaDirectPlayBufferCapture, 0);
         __android_log_print(ANDROID_LOG_DEBUG, "AgoraVideoFrameObserver", "onCaptureVideoFrame");
@@ -172,7 +172,7 @@ public:
      *     false: Ignore the current video frame, and do not send it back to the SDK.
      * PS:
      *   This callback does not support sending processed RGBA video data back to the SDK.*/
-    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override {
+    virtual bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override {
         getVideoFrame(videoFrame, preEncodeVideoMethodId, _javaDirectPlayBufferCapture, 0);
         __android_log_print(ANDROID_LOG_DEBUG, "AgoraVideoFrameObserver", "onPreEncodeVideoFrame");
         writebackVideoFrame(videoFrame, _javaDirectPlayBufferCapture);
@@ -191,29 +191,6 @@ public:
         return true;
     }
 
-    virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
-
-    virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
-
-    virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
-
-    virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
-
-    virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
-
-    virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame){
-        return true;
-    }
 };
 
 /**Listener to get audio frame*/

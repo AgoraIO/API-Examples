@@ -521,6 +521,18 @@ public:
    */
   virtual int setSoundPositionParams(float pan, float gain) = 0;
 
+  /**
+   * Set delay of playback to local device.
+   *
+   *@param delay_ms The delay_ms for playback to local device:
+   * - for default, the pipeline default is 160ms, 16 buffer before pipeline start consuming
+   * - for playeffect, it need to play as soon as possible for short file, sugguest to used 50ms
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setAudioPlaybackDelay(int delay_ms) = 0;
+
 };
 
 /**

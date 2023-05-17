@@ -274,7 +274,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
     private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
         @Override
-        public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+        public boolean onCaptureVideoFrame(int type, VideoFrame videoFrame) {
             Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
 
             long startTime = System.currentTimeMillis();
@@ -339,17 +339,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
 
         @Override
-        public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
+        public boolean onPreEncodeVideoFrame(int type, VideoFrame videoFrame) {
             return false;
         }
 

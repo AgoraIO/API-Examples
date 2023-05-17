@@ -77,29 +77,17 @@ class IMediaEngine {
   /**
    * Pushes the external audio data to the app.
    *
-   * @param type deprecated.
    * @param frame The audio buffer data.
-   * @param wrap deprecated.
-   * @param sourceId The audio track ID.
+   * @param trackId The audio track ID.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int pushAudioFrame(MEDIA_SOURCE_TYPE type, IAudioFrameObserver::AudioFrame* frame,
-                             bool wrap = false, int sourceId = 0) = 0;
-
+  virtual int pushAudioFrame(IAudioFrameObserver::AudioFrame* frame, rtc::track_id_t trackId = 0) = 0;
+  
   virtual int pushCaptureAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
 
   virtual int pushReverseAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
-  /**
-   * @brief Directly push audio frame to the rtc channel without mixing with other sources
-   *
-   * @param frame The audio data buffer
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int pushDirectAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
 
   /**
    * Pulls the remote audio data.
@@ -149,6 +137,8 @@ class IMediaEngine {
    * @note
    * Ensure that you call this method before joining the channel.
    *
+   * @deprecated This method is deprecated. Use createCustomAudioTrack(rtc::AUDIO_TRACK_TYPE trackType, const rtc::AudioTrackConfig& config) instead.
+   *
    * @param enabled Determines whether to enable the external audio source:
    * - true: Enable the external audio source.
    * - false: (default) Disable the external audio source.
@@ -157,12 +147,45 @@ class IMediaEngine {
    * @param channels The number of channels of the external audio source, which can be set as 1 or 2:
    * - 1: Mono.
    * - 2: Stereo.
-   * @param sourceNumber The number of the external audio sources, should be greater than 0.
+   * @param localPlayback Enable/Disables the local playback of external audio track:
+   * - true: Enable local playback
+   * - false: (Default) Do not enable local playback
+   * @param publish Determines whether to publish the external audio track:
+   * - true: (Default) Publish the external audio track.
+   * - false: Don`t publish the external audio track.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setExternalAudioSource(bool enabled, int sampleRate, int channels, int sourceNumber = 1, bool localPlayback = false, bool publish = true) = 0;
+  virtual int setExternalAudioSource(bool enabled, int sampleRate, int channels, bool localPlayback = false, bool publish = true) = 0;
+
+  /**
+   * Create a custom audio track and get the audio track id.
+   *
+   * @note Ensure that you call this method before calling `joinChannel`.
+   *
+   * @param trackType The type of custom audio track
+   * See AUDIO_TRACK_TYPE.
+   *
+   * @param config The config of custom audio track
+   * See AudioTrackConfig.
+   *
+   * @return
+   * - If the call is successful, SDK returns audio track id.
+   * - If the call fails, SDK returns 0xffffffff.
+   */
+  virtual rtc::track_id_t createCustomAudioTrack(rtc::AUDIO_TRACK_TYPE trackType, const rtc::AudioTrackConfig& config) = 0;
+
+  /**
+   * Destroy custom audio track by trackId
+   *
+   * @param trackId The custom audio track id.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int destroyCustomAudioTrack(rtc::track_id_t trackId) = 0;
 
   /**
    * Sets the external audio sink.
@@ -194,31 +217,20 @@ class IMediaEngine {
   virtual int setExternalAudioSink(bool enabled, int sampleRate, int channels) = 0;
 
   /**
-   * Sets the external audio source.
+   * Sets the external audio track.
    *
    * @note
    * Ensure that you call this method before joining the channel.
    *
-   * @param sourceId custom audio source id.
-   * @param enabled Determines whether to local playback the external audio source:
-   * - true: Local playback the external audio source.
-   * - false: Local don`t playback the external audio source.
+   * @param trackId The custom audio track id.
+   * @param enabled Enable/Disables the local playback of external audio track:
+   * - true: Enable local playback
+   * - false: Do not enable local playback
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableCustomAudioLocalPlayback(int sourceId, bool enabled) = 0;
-
-  /**
-   * @brief Enable/Disable the direct external audio source
-   *
-   * @param enable Determines whether to enable the direct external audio source
-   * @param localPlayback Determines whether to enable the local playback of the direct external audio source
-   * @return int
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int setDirectExternalAudioSource(bool enable, bool localPlayback = false) = 0;
+  virtual int enableCustomAudioLocalPlayback(rtc::track_id_t trackId, bool enabled) = 0;
 
   /**
    * Pushes the external video frame to the app.

@@ -1453,6 +1453,37 @@ public:
      * - < 0: Failure.
      */
     virtual int enableLoopbackRecordingEx(const RtcConnection& connection, bool enabled, const char* deviceName = NULL) = 0;
+    
+    /**
+     * Adjusts the recording volume.
+     *
+     * @param volume The recording volume, which ranges from 0 to 400:
+     * - 0  : Mute the recording volume.
+     * - 100: The original volume.
+     * - 400: (Maximum) Four times the original volume with signal clipping protection.
+     *
+     * @param connection The RtcConnection object.
+     *
+     * @return
+     * - 0  : Success.
+     * - < 0: Failure.
+     */
+    virtual int adjustRecordingSignalVolumeEx(int volume, const RtcConnection& connection) = 0;
+    
+    /**
+     * Mute or resume recording signal volume.
+     *
+     * @param mute Determines whether to mute or resume the recording signal volume.
+     * -  true: Mute the recording signal volume.
+     * - false: (Default) Resume the recording signal volume.
+     *
+     * @param connection The RtcConnection object.
+     *
+     * @return
+     * - 0  : Success.
+     * - < 0: Failure.
+     */
+    virtual int muteRecordingSignalEx(bool mute, const RtcConnection& connection) = 0;
 
     /**
      * Adjust the playback signal volume of a specified remote user.

@@ -269,7 +269,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
         engine.setExternalAudioSource(true,
-                AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, AudioFileReader.SAMPLE_NUM_OF_CHANNEL,
+                AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL,
                 false, true);
 
 

@@ -24,6 +24,7 @@ dependencyResolutionManagement {
 }
 rootProject.name='APIExample'
 include ':app'
+include ':lib-raw-data'
 if (simpleFilter.toBoolean()) {
     include ':agora-simple-filter'
 }

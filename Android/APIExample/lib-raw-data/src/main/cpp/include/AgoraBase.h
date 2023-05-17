@@ -985,11 +985,11 @@ enum FRAME_RATE {
 };
 
 enum FRAME_WIDTH {
-  FRAME_WIDTH_640 = 640,
+  FRAME_WIDTH_960 = 960,
 };
 
 enum FRAME_HEIGHT {
-  FRAME_HEIGHT_360 = 360,
+  FRAME_HEIGHT_540 = 540,
 };
 
 
@@ -1018,7 +1018,7 @@ enum ORIENTATION_MODE {
   /**
    * 0: The output video always follows the orientation of the captured video. The receiver takes
    * the rotational information passed on from the video encoder. This mode applies to scenarios
-   * where video orientation can be adjusted on the receiver：
+   * where video orientation can be adjusted on the receiver:
    * - If the captured video is in landscape mode, the output video is in landscape mode.
    * - If the captured video is in portrait mode, the output video is in portrait mode.
    */
@@ -1118,6 +1118,15 @@ const int DEFAULT_MIN_BITRATE = -1;
  * -2: (For future use) Set minimum bitrate the same as target bitrate.
  */
 const int DEFAULT_MIN_BITRATE_EQUAL_TO_TARGET_BITRATE = -2;
+
+/**
+ * screen sharing supported capability level.
+ */
+enum SCREEN_CAPTURE_CAPABILITY_LEVEL {
+  SCREEN_CAPTURE_CAPABILITY_LEVEL_15_FPS = 0,
+  SCREEN_CAPTURE_CAPABILITY_LEVEL_30_FPS = 1,
+  SCREEN_CAPTURE_CAPABILITY_LEVEL_60_FPS = 2,
+};
 
 /**
  * The video codec types.
@@ -1695,6 +1704,44 @@ enum VIDEO_MIRROR_MODE_TYPE {
   VIDEO_MIRROR_MODE_DISABLED = 2,
 };
 
+#if defined(__APPLE__) && TARGET_OS_IOS
+/**
+ * Camera capturer configuration for format type.
+ */
+enum CAMERA_FORMAT_TYPE {
+  /** 0: (Default) NV12. */
+  CAMERA_FORMAT_NV12,
+  /** 1: BGRA. */
+  CAMERA_FORMAT_BGRA,
+};
+#endif
+
+/** Supported codec type bit mask. */
+enum CODEC_CAP_MASK {
+  /** 0: No codec support. */
+  CODEC_CAP_MASK_NONE = 0,
+
+  /** bit 1: Hardware decoder support flag. */
+  CODEC_CAP_MASK_HW_DEC = 1 << 0,
+
+  /** bit 2: Hardware encoder support flag. */
+  CODEC_CAP_MASK_HW_ENC = 1 << 1,
+
+  /** bit 3: Software decoder support flag. */
+  CODEC_CAP_MASK_SW_DEC = 1 << 2,
+
+  /** bit 4: Software encoder support flag. */
+  CODEC_CAP_MASK_SW_ENC = 1 << 3,
+};
+
+/** The codec support information. */
+struct CodecCapInfo {
+  /** The codec type: #VIDEO_CODEC_TYPE. */
+  VIDEO_CODEC_TYPE codec_type;
+  /** The codec support flag. */
+  int codec_cap_mask;
+};
+
 /**
  * The definition of the VideoEncoderConfiguration struct.
  */
@@ -1836,7 +1883,7 @@ struct VideoEncoderConfiguration {
       advanceOptions(config.advanceOptions) {}
   VideoEncoderConfiguration()
     : codecType(VIDEO_CODEC_H264),
-      dimensions(FRAME_WIDTH_640, FRAME_HEIGHT_360),
+      dimensions(FRAME_WIDTH_960, FRAME_HEIGHT_540),
       frameRate(FRAME_RATE_FPS_15),
       bitrate(STANDARD_BITRATE),
       minBitrate(DEFAULT_MIN_BITRATE),
@@ -2218,68 +2265,6 @@ struct RtcStats {
 };
 
 /**
- * The capture type of the custom video source.
- */
-enum VIDEO_SOURCE_TYPE {
-  /**
-   * 0: The primary camera.
-   */
-  VIDEO_SOURCE_CAMERA_PRIMARY = 0,
-  /**
-   * The camera.
-   */
-  VIDEO_SOURCE_CAMERA = VIDEO_SOURCE_CAMERA_PRIMARY,
-  /**
-   * 1: The secondary camera.
-   */
-  VIDEO_SOURCE_CAMERA_SECONDARY = 1,
-  /**
-   * 2: The primary screen.
-   */
-  VIDEO_SOURCE_SCREEN_PRIMARY = 2,
-  /**
-   * The screen.
-   */
-  VIDEO_SOURCE_SCREEN = VIDEO_SOURCE_SCREEN_PRIMARY,
-  /**
-   * 3: The secondary screen.
-   */
-  VIDEO_SOURCE_SCREEN_SECONDARY = 3,
-  /**
-   * 4: The custom video source.
-   */
-  VIDEO_SOURCE_CUSTOM = 4,
-  /**
-   * 5: The video source from the media player.
-   */
-  VIDEO_SOURCE_MEDIA_PLAYER = 5,
-  /**
-   * 6: The video source is a PNG image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_PNG = 6,
-  /**
-   * 7: The video source is a JPEG image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_JPEG = 7,
-  /**
-   * 8: The video source is a GIF image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_GIF = 8,
-  /**
-   * 9: The video source is remote video acquired by the network.
-   */
-  VIDEO_SOURCE_REMOTE = 9,
-  /**
-   * 10: A transcoded video source.
-   */
-  VIDEO_SOURCE_TRANSCODED = 10,
-  /**
-   * 100: An unknown video source.
-   */
-  VIDEO_SOURCE_UNKNOWN = 100
-};
-
-/**
  * User role types.
  */
 enum CLIENT_ROLE_TYPE {
@@ -2376,111 +2361,6 @@ enum EXPERIENCE_POOR_REASON {
    * As a result, audio transmission quality is undermined.
    */
   WIFI_BLUETOOTH_COEXIST = 8,
-};
-
-/**
- * Audio statistics of the remote user.
- */
-struct RemoteAudioStats
-{
-  /**
-   * User ID of the remote user sending the audio stream.
-   */
-  uid_t uid;
-  /**
-   * The quality of the remote audio: #QUALITY_TYPE.
-   */
-  int quality;
-  /**
-   * The network delay (ms) from the sender to the receiver.
-   */
-  int networkTransportDelay;
-  /**
-   * The network delay (ms) from the receiver to the jitter buffer.
-   * @note When the receiving end is an audience member and `audienceLatencyLevel` of `ClientRoleOptions`
-   * is 1, this parameter does not take effect.
-   */
-  int jitterBufferDelay;
-  /**
-   * The audio frame loss rate in the reported interval.
-   */
-  int audioLossRate;
-  /**
-   * The number of channels.
-   */
-  int numChannels;
-  /**
-   * The sample rate (Hz) of the remote audio stream in the reported interval.
-   */
-  int receivedSampleRate;
-  /**
-   * The average bitrate (Kbps) of the remote audio stream in the reported
-   * interval.
-   */
-  int receivedBitrate;
-  /**
-   * The total freeze time (ms) of the remote audio stream after the remote
-   * user joins the channel.
-   *
-   * In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
-   */
-  int totalFrozenTime;
-  /**
-   * The total audio freeze time as a percentage (%) of the total time when the
-   * audio is available.
-   */
-  int frozenRate;
-  /**
-   * The quality of the remote audio stream as determined by the Agora
-   * real-time audio MOS (Mean Opinion Score) measurement method in the
-   * reported interval. The return value ranges from 0 to 500. Dividing the
-   * return value by 100 gets the MOS score, which ranges from 0 to 5. The
-   * higher the score, the better the audio quality.
-   *
-   * | MOS score       | Perception of audio quality                                                                                                                                 |
-   * |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-   * | Greater than 4  | Excellent. The audio sounds clear and smooth.                                                                                                               |
-   * | From 3.5 to 4   | Good. The audio has some perceptible impairment, but still sounds clear.                                                                                    |
-   * | From 3 to 3.5   | Fair. The audio freezes occasionally and requires attentive listening.                                                                                      |
-   * | From 2.5 to 3   | Poor. The audio sounds choppy and requires considerable effort to understand.                                                                               |
-   * | From 2 to 2.5   | Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.  |
-   * | Less than 2     | Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible. |
-   */
-  int mosValue;
-  /**
-   * The total time (ms) when the remote user neither stops sending the audio
-   * stream nor disables the audio module after joining the channel.
-   */
-  int totalActiveTime;
-  /**
-   * The total publish duration (ms) of the remote audio stream.
-   */
-  int publishDuration;
-  /**
-   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See #EXPERIENCE_QUALITY_TYPE.
-   */
-  int qoeQuality;
-  /**
-   * The reason for poor QoE of the local user when receiving a remote audio stream. See #EXPERIENCE_POOR_REASON.
-   */
-  int qualityChangedReason;
-
-  RemoteAudioStats() :
-    uid(0),
-    quality(0),
-    networkTransportDelay(0),
-    jitterBufferDelay(0),
-    audioLossRate(0),
-    numChannels(0),
-    receivedSampleRate(0),
-    receivedBitrate(0),
-    totalFrozenTime(0),
-    frozenRate(0),
-    mosValue(0),
-    totalActiveTime(0),
-    publishDuration(0),
-    qoeQuality(0),
-    qualityChangedReason(0) {}
 };
 
 /**
@@ -2589,7 +2469,7 @@ struct VideoFormat {
    * The video frame rate (fps).
    */
   int fps;
-  VideoFormat() : width(FRAME_WIDTH_640), height(FRAME_HEIGHT_360), fps(FRAME_RATE_FPS_15) {}
+  VideoFormat() : width(FRAME_WIDTH_960), height(FRAME_HEIGHT_540), fps(FRAME_RATE_FPS_15) {}
   VideoFormat(int w, int h, int f) : width(w), height(h), fps(f) {}
 
   bool operator<(const VideoFormat& fmt) const {
@@ -2800,9 +2680,9 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE = 4,
   /**
-   * 5: The local video encoding fails.
+   * 5: The local video encoder is not supported.
    */
-  LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE = 5,
+  LOCAL_VIDEO_STREAM_ERROR_CODEC_NOT_SUPPORT = 5,
   /**
    * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be
    * performed normally when the app is in the background.
@@ -3024,6 +2904,10 @@ enum REMOTE_VIDEO_STATE_REASON {
     /** (iOS only) 12: The app of the remote user is in background.
    */
   REMOTE_VIDEO_STATE_REASON_SDK_IN_BACKGROUND = 12,
+
+  /** 13: The remote video stream is not supported by the decoder
+   */
+  REMOTE_VIDEO_STATE_REASON_CODEC_NOT_SUPPORT = 13,
 
 };
 
@@ -3334,6 +3218,10 @@ struct LocalAudioStats
    * The audio delay of the device, contains record and playout delay
    */
   int audioDeviceDelay;
+  /**
+   * The playout delay of the device
+   */
+  int audioPlayoutDelay;
 };
 
 
@@ -3758,7 +3646,7 @@ struct TranscodingVideoStream {
   /**
    * The source type of video for the video mixing on the local client. See #VIDEO_SOURCE_TYPE.
    */
-  agora::media::MEDIA_SOURCE_TYPE sourceType;
+  VIDEO_SOURCE_TYPE sourceType;
   /**
    * The ID of the remote user.
    * @note Use this parameter only when the source type of the video for the video mixing on the local client is `VIDEO_SOURCE_REMOTE`.
@@ -3769,6 +3657,10 @@ struct TranscodingVideoStream {
    * @note Use this parameter only when the source type of the video for the video mixing on the local client is `RTC_IMAGE`.
    */
   const char* imageUrl;
+  /**
+   * MediaPlayer id if sourceType is MEDIA_PLAYER_SOURCE.
+   */
+  int mediaPlayerId;
   /**
    * The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
    */
@@ -3804,9 +3696,10 @@ struct TranscodingVideoStream {
   bool mirror;
 
   TranscodingVideoStream()
-    : sourceType(agora::media::PRIMARY_CAMERA_SOURCE),
+    : sourceType(VIDEO_SOURCE_CAMERA_PRIMARY),
       remoteUserUid(0),
       imageUrl(NULL),
+      mediaPlayerId(0),
       x(0),
       y(0),
       width(0),
@@ -3828,7 +3721,7 @@ struct LocalTranscoderConfiguration {
   /**
    * The video streams for the video mixing on the local client. See TranscodingVideoStream.
    */
-  TranscodingVideoStream* VideoInputStreams;
+  TranscodingVideoStream* videoInputStreams;
   /**
    * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration.
    */
@@ -3842,9 +3735,40 @@ struct LocalTranscoderConfiguration {
 
   LocalTranscoderConfiguration()
     : streamCount(0),
-      VideoInputStreams(NULL),
+      videoInputStreams(NULL),
       videoOutputConfiguration(),
       syncWithPrimaryCamera(true) {}
+};
+
+enum VIDEO_TRANSCODER_ERROR {
+  /**
+   * No error
+   */
+  VT_ERR_OK = 0,
+  /**
+   * The video track of the video source is not started.
+   */
+  VT_ERR_VIDEO_SOURCE_NOT_READY = 1,
+  /**
+   * The video source type is not supported.
+   */
+  VT_ERR_INVALID_VIDEO_SOURCE_TYPE = 2,
+  /**
+   * The image url is not correctly of image source.
+   */
+  VT_ERR_INVALID_IMAGE_PATH = 3,
+  /**
+   * The image format not the type png/jpeg/gif of image source.
+   */
+  VT_ERR_UNSUPPORT_IMAGE_FORMAT = 4,
+  /**
+   * The layout is invalid such as width is zero.
+   */
+  VT_ERR_INVALID_LAYOUT = 5,
+  /**
+   * Internal error.
+   */
+  VT_ERR_INTERNAL = 20
 };
 
 /**
@@ -4450,6 +4374,42 @@ struct SegmentationProperty {
   SegmentationProperty() : modelType(SEG_MODEL_AI), greenCapacity(0.5){}
 };
 
+/** The type of custom audio track
+*/
+enum AUDIO_TRACK_TYPE {
+  /** 
+   * -1: Invalid audio track
+   */
+  AUDIO_TRACK_INVALID = -1,
+  /** 
+   * 0: Mixable audio track
+   * You can push more than one mixable Audio tracks into one RTC connection(channel id + uid), 
+   * and SDK will mix these tracks into one audio track automatically.
+   * However, compare to direct audio track, mixable track might cause extra 30ms+ delay.
+   */
+  AUDIO_TRACK_MIXABLE = 0,
+  /**
+   * 1: Direct audio track
+   * You can only push one direct (non-mixable) audio track into one RTC connection(channel id + uid). 
+   * Compare to mixable stream, you can have lower lantency using direct audio track.
+   */
+  AUDIO_TRACK_DIRECT = 1,
+};
+
+/** The configuration of custom audio track
+*/
+struct AudioTrackConfig {
+  /**
+   * Enable local playback, enabled by default
+   * true: (Default) Enable local playback
+   * false: Do not enable local playback
+   */
+  bool enableLocalPlayback;
+
+  AudioTrackConfig()
+    : enableLocalPlayback(true) {}
+};
+
 /**
  * Preset local voice reverberation options.
  * bitmap allocation:
@@ -4542,9 +4502,14 @@ enum VOICE_BEAUTIFIER_PRESET {
  * For better voice effects, Agora recommends setting the `profile` parameter of `setAudioProfile` to `AUDIO_PROFILE_MUSIC_HIGH_QUALITY` or `AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO` before using the following presets:
  *
  * - `ROOM_ACOUSTICS_KTV`
+ * - `AUDIO_EFFECT_OFF_HARMONY`
+ * - `ROOM_ACOUSTICS_KTV_HARMONY`
  * - `ROOM_ACOUSTICS_VOCAL_CONCERT`
+ * - `ROOM_ACOUSTICS_VOCAL_CONCERT_HARMONY`
  * - `ROOM_ACOUSTICS_STUDIO`
+ * - `ROOM_ACOUSTICS_STUDIO_HARMONY`
  * - `ROOM_ACOUSTICS_PHONOGRAPH`
+ * - `ROOM_ACOUSTICS_PHONOGRAPH_HARMONY`
  * - `ROOM_ACOUSTICS_SPACIAL`
  * - `ROOM_ACOUSTICS_ETHEREAL`
  * - `VOICE_CHANGER_EFFECT_UNCLE`
@@ -4560,18 +4525,38 @@ enum AUDIO_EFFECT_PRESET {
   /** Turn off voice effects, that is, use the original voice.
    */
   AUDIO_EFFECT_OFF = 0x00000000,
+  /** The voice effect for backing vocals when the lead vocal turns off audio effect.
+  * @note: When this effect is used, the voice of the backing vocals will be softer.
+  */
+  AUDIO_EFFECT_OFF_HARMONY = 0x02010120,
   /** The voice effect typical of a KTV venue.
    */
   ROOM_ACOUSTICS_KTV = 0x02010100,
+  /** The voice effect typical of a KTV venue for backing vocals.
+  * @note: This effect is used for backing vocals when KTV venue is chosen for the lead vocal.
+  */
+  ROOM_ACOUSTICS_KTV_HARMONY = 0x02010110,
   /** The voice effect typical of a concert hall.
    */
   ROOM_ACOUSTICS_VOCAL_CONCERT = 0x02010200,
+  /** The voice effect typical of a concert hall for backing vocals.
+  * @note: This effect is used for backing vocals when concert hall is chosen for the lead vocal.
+  */
+  ROOM_ACOUSTICS_VOCAL_CONCERT_HARMONY = 0x02010210,
   /** The voice effect typical of a recording studio.
    */
   ROOM_ACOUSTICS_STUDIO = 0x02010300,
+  /** The voice effect typical of a studio venue for backing vocals.
+  * @note: This effect is used for backing vocals when studio venue is chosen for the lead vocal.
+  */
+  ROOM_ACOUSTICS_STUDIO_HARMONY = 0x02010310,
   /** The voice effect typical of a vintage phonograph.
    */
   ROOM_ACOUSTICS_PHONOGRAPH = 0x02010400,
+  /** The voice effect typical of a phonograph venue for backing vocals.
+  * @note: This effect is used for backing vocals when phonograph venue is chosen for the lead vocal.
+  */
+  ROOM_ACOUSTICS_PHONOGRAPH_HARMONY = 0x02010410,
   /** The virtual stereo effect, which renders monophonic audio as stereo audio.
    *
    * @note Before using this preset, set the `profile` parameter of `setAudioProfile`
@@ -5043,6 +5028,10 @@ enum AREA_CODE_EX {
      * United States
      */
     AREA_CODE_US = 0x00000800,
+    /**
+     * Russia
+     */
+    AREA_CODE_RU = 0x00001000,
     /**
      * The global area (except China)
      */

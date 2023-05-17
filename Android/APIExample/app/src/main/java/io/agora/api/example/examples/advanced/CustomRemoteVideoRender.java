@@ -472,22 +472,12 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
     IVideoFrameObserver videoFrameObserver = new IVideoFrameObserver() {
         @Override
-        public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+        public boolean onCaptureVideoFrame(int type, VideoFrame videoFrame) {
             return false;
         }
 
         @Override
-        public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
+        public boolean onPreEncodeVideoFrame(int type, VideoFrame videoFrame) {
             return false;
         }
 

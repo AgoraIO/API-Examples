@@ -329,6 +329,117 @@ struct LocalVideoStats
     int hwEncoderAccelerating;
 };
 
+
+/**
+ * Audio statistics of the remote user.
+ */
+struct RemoteAudioStats
+{
+  /**
+   * User ID of the remote user sending the audio stream.
+   */
+  uid_t uid;
+  /**
+   * The quality of the remote audio: #QUALITY_TYPE.
+   */
+  int quality;
+  /**
+   * The network delay (ms) from the sender to the receiver.
+   */
+  int networkTransportDelay;
+  /**
+   * The network delay (ms) from the receiver to the jitter buffer.
+   * @note When the receiving end is an audience member and `audienceLatencyLevel` of `ClientRoleOptions`
+   * is 1, this parameter does not take effect.
+   */
+  int jitterBufferDelay;
+  /**
+   * The audio frame loss rate in the reported interval.
+   */
+  int audioLossRate;
+  /**
+   * The number of channels.
+   */
+  int numChannels;
+  /**
+   * The sample rate (Hz) of the remote audio stream in the reported interval.
+   */
+  int receivedSampleRate;
+  /**
+   * The average bitrate (Kbps) of the remote audio stream in the reported
+   * interval.
+   */
+  int receivedBitrate;
+  /**
+   * The total freeze time (ms) of the remote audio stream after the remote
+   * user joins the channel.
+   *
+   * In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
+   */
+  int totalFrozenTime;
+  /**
+   * The total audio freeze time as a percentage (%) of the total time when the
+   * audio is available.
+   */
+  int frozenRate;
+  /**
+   * The quality of the remote audio stream as determined by the Agora
+   * real-time audio MOS (Mean Opinion Score) measurement method in the
+   * reported interval. The return value ranges from 0 to 500. Dividing the
+   * return value by 100 gets the MOS score, which ranges from 0 to 5. The
+   * higher the score, the better the audio quality.
+   *
+   * | MOS score       | Perception of audio quality                                                                                                                                 |
+   * |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+   * | Greater than 4  | Excellent. The audio sounds clear and smooth.                                                                                                               |
+   * | From 3.5 to 4   | Good. The audio has some perceptible impairment, but still sounds clear.                                                                                    |
+   * | From 3 to 3.5   | Fair. The audio freezes occasionally and requires attentive listening.                                                                                      |
+   * | From 2.5 to 3   | Poor. The audio sounds choppy and requires considerable effort to understand.                                                                               |
+   * | From 2 to 2.5   | Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.  |
+   * | Less than 2     | Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible. |
+   */
+  int mosValue;
+  /**
+   * The total time (ms) when the remote user neither stops sending the audio
+   * stream nor disables the audio module after joining the channel.
+   */
+  int totalActiveTime;
+  /**
+   * The total publish duration (ms) of the remote audio stream.
+   */
+  int publishDuration;
+  /**
+   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See #EXPERIENCE_QUALITY_TYPE.
+   */
+  int qoeQuality;
+  /**
+   * The reason for poor QoE of the local user when receiving a remote audio stream. See #EXPERIENCE_POOR_REASON.
+   */
+  int qualityChangedReason;
+  /**
+   * The total number of audio bytes received (bytes), inluding the FEC bytes, represented by an aggregate value.
+   */
+  unsigned int rxAudioBytes;
+
+  RemoteAudioStats() :
+    uid(0),
+    quality(0),
+    networkTransportDelay(0),
+    jitterBufferDelay(0),
+    audioLossRate(0),
+    numChannels(0),
+    receivedSampleRate(0),
+    receivedBitrate(0),
+    totalFrozenTime(0),
+    frozenRate(0),
+    mosValue(0),
+    totalActiveTime(0),
+    publishDuration(0),
+    qoeQuality(0),
+    qualityChangedReason(0),
+    rxAudioBytes(0) {}
+};
+
 /**
  * The statistics of the remote video stream.
  */
@@ -405,6 +516,10 @@ struct RemoteVideoStats {
    * @note For textured video data, this parameter always returns 0.
    */
   int mosValue;
+  /**
+   * The total number of video bytes received (bytes), inluding the FEC bytes, represented by an aggregate value.
+   */
+  unsigned int rxVideoBytes;
 };
 
 struct VideoCompositingLayout {
@@ -614,10 +729,6 @@ struct PublisherConfiguration {
         extraInfo(NULL) {}
 };
 
-struct AudioTrackConfig {
-  bool enableLocalPlayback;
-  AudioTrackConfig() : enableLocalPlayback(true) {}
-};
 /**
  * The camera direction.
  */
@@ -800,13 +911,24 @@ struct ScreenCaptureSourceInfo {
    */
   bool primaryMonitor;
   bool isOccluded;
+  /**
+   * The relative position of the shared region to the screen space (A virtual space include all the screens). See Rectangle.
+   */
+  Rectangle position;
 #if defined(_WIN32)
   /**
    * Determines whether the window is minimized.
    */
   bool minimizeWindow;
+  /**
+   * The display ID to the window of interest.
+   * If the window intersects one or more display monitor rectangles, the return value is an valid
+   * ID to the display monitor that has the largest area of intersection with the window, Otherwise
+   * the return value is -2.
+   */
+  view_t sourceDisplayId;
   ScreenCaptureSourceInfo() : type(ScreenCaptureSourceType_Unknown), sourceId(nullptr), sourceName(nullptr),
-                              processPath(nullptr), sourceTitle(nullptr), primaryMonitor(false), isOccluded(false), minimizeWindow(false) {}
+                              processPath(nullptr), sourceTitle(nullptr), primaryMonitor(false), isOccluded(false), minimizeWindow(false), sourceDisplayId((view_t)-2) {}
 #else
   ScreenCaptureSourceInfo() : type(ScreenCaptureSourceType_Unknown), sourceId(nullptr), sourceName(nullptr), processPath(nullptr), sourceTitle(nullptr), primaryMonitor(false), isOccluded(false) {}
 #endif
@@ -927,24 +1049,9 @@ struct ChannelMediaOptions {
    */
   Optional<bool> publishCustomAudioTrack;
   /**
-   * The ID of the custom audio source to publish. The default value is 0.
-   *
-   * If you have set the value of `sourceNumber` greater than 1 in `setExternalAudioSource`, the SDK creates the
-   * corresponding number of custom audio tracks and assigns an ID to each audio track starting from 0.
+   * The custom audio track id. The default value is 0.
    */
-  Optional<int> publishCustomAudioSourceId;
-  /**
-   * Whether to enable AEC when publishing the captured audio from a custom source:
-   * - `true`: Enable AEC when publishing the captured audio from a custom source.
-   * - `false`: (Default) Do not enable AEC when publishing the captured audio from a custom source.
-   */
-  Optional<bool> publishCustomAudioTrackEnableAec;
-  /**
-   * Whether to publish direct custom audio track.
-   * - `true`: Publish.
-   * - `false`: (Default) Do not publish.
-   */
-  Optional<bool> publishDirectCustomAudioTrack;
+  Optional<int> publishCustomAudioTrackId;
   /**
    * Whether to publish AEC custom audio track.
    * - `true`: Publish AEC track.
@@ -1093,9 +1200,7 @@ struct ChannelMediaOptions {
 #endif
       SET_FROM(publishTrancodedVideoTrack);
       SET_FROM(publishCustomAudioTrack);
-      SET_FROM(publishDirectCustomAudioTrack);
-      SET_FROM(publishCustomAudioSourceId);
-      SET_FROM(publishCustomAudioTrackEnableAec);
+      SET_FROM(publishCustomAudioTrackId);
       SET_FROM(publishCustomAudioTrackAec);
       SET_FROM(publishCustomVideoTrack);
       SET_FROM(publishEncodedVideoTrack);
@@ -1138,9 +1243,7 @@ struct ChannelMediaOptions {
 #endif
       ADD_COMPARE(publishTrancodedVideoTrack);
       ADD_COMPARE(publishCustomAudioTrack);
-      ADD_COMPARE(publishDirectCustomAudioTrack);
-      ADD_COMPARE(publishCustomAudioSourceId);
-      ADD_COMPARE(publishCustomAudioTrackEnableAec);
+      ADD_COMPARE(publishCustomAudioTrackId);
       ADD_COMPARE(publishCustomAudioTrackAec);
       ADD_COMPARE(publishCustomVideoTrack);
       ADD_COMPARE(publishEncodedVideoTrack);
@@ -1186,9 +1289,7 @@ struct ChannelMediaOptions {
 #endif
         REPLACE_BY(publishTrancodedVideoTrack);
         REPLACE_BY(publishCustomAudioTrack);
-        REPLACE_BY(publishDirectCustomAudioTrack);
-        REPLACE_BY(publishCustomAudioSourceId);
-        REPLACE_BY(publishCustomAudioTrackEnableAec);
+        REPLACE_BY(publishCustomAudioTrackId);
         REPLACE_BY(publishCustomAudioTrackAec);
         REPLACE_BY(publishCustomVideoTrack);
         REPLACE_BY(publishEncodedVideoTrack);
@@ -1242,6 +1343,11 @@ enum PROXY_TYPE {
   /** 4: auto fallback to tcp cloud proxy
    */
   TCP_PROXY_AUTO_FALLBACK_TYPE = 4,
+};
+
+enum FeatureType {
+  VIDEO_VIRTUAL_BACKGROUND = 1,
+  VIDEO_BEAUTY_EFFECT = 2,
 };
 
 struct LogUploadServerInfo {
@@ -2773,6 +2879,18 @@ class IRtcEngineEventHandler {
     (void)currentEvent;
     (void)tracingInfo;
   }
+
+   /**
+   * Occurs when local video transcoder stream has an error.
+   *
+   * @param stream Stream type of TranscodingVideoStream.
+   * @param error Error code of VIDEO_TRANSCODER_ERROR.
+   */
+  virtual void onLocalVideoTranscoderError(const TranscodingVideoStream& stream, VIDEO_TRANSCODER_ERROR error){
+    (void)stream;
+    (void)error;
+  }
+
 };
 
 /**
@@ -3018,13 +3136,20 @@ struct RtcEngineContext {
    */
   bool domainLimit;
 
+  /**
+   * Whether to automatically register Agora extensions when initializing RtcEngine.
+   * -true: (Default) Automatically register Agora extensions.
+   * -false: Do not automatically register Agora extensions. The user calls EnableExtension to manually register an Agora extension.
+   */
+  bool autoRegisterAgoraExtensions;
+
   RtcEngineContext()
       : eventHandler(NULL), appId(NULL), context(NULL),
         channelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING),
         license(NULL),
         audioScenario(AUDIO_SCENARIO_DEFAULT),
         areaCode(AREA_CODE_GLOB),
-        logConfig(), useExternalEglContext(false), domainLimit(false) {}
+        logConfig(), useExternalEglContext(false), domainLimit(false), autoRegisterAgoraExtensions(true) {}
 };
 
 /** Definition of IMetadataObserver
@@ -3418,6 +3543,17 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual const char* getErrorDescription(int code) = 0;
 
+  /**
+   * Queries the capacity of the current device codec.
+   *
+   * @param codec_info An array of the codec cap information: CodecCapInfo.
+   * @param size The array size.
+   * @return 
+   * 0: Success.
+   * < 0: Failure.
+   */
+  virtual int queryCodecCapability(CodecCapInfo* codec_info, int& size) = 0;
+  
   /**
    * Joins a channel.
    *
@@ -4097,7 +4233,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) __deprecated = 0;
-
+  
   /**
    * Sets the audio profile.
    *
@@ -5724,6 +5860,22 @@ class IRtcEngine : public agora::base::IEngineBase {
                                  const SimulcastStreamConfig& streamConfig) = 0;
 
   /**
+   * Sets the external audio track.
+   *
+   * @note
+   * Ensure that you call this method before joining the channel.
+   *
+   * @param trackId custom audio track id.
+   * @param enabled Determines whether to local playback the external audio track:
+   * - true: Local playback the external audio track.
+   * - false: Local don`t playback the external audio track.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableCustomAudioLocalPlayback(track_id_t trackId, bool enabled) = 0;
+  
+  /**
    * Enables or disables echo cancellation.
    *
    * @param enabled Whether to enable echo cancellation.
@@ -5733,58 +5885,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int enableEchoCancellationExternal(bool enabled, int audioSourceDelay) = 0;
-
-  /**
-   * Sets the external audio source.
-   *
-   * @note
-   * Ensure that you call this method before joining the channel.
-   *
-   * @param sourceId custom audio source id.
-   * @param enabled Determines whether to local playback the external audio source:
-   * - true: Local playback the external audio source.
-   * - false: Local don`t playback the external audio source.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableCustomAudioLocalPlayback(int sourceId, bool enabled) = 0;
-
-  /**
-   * Start primary custom audio track local playback.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int startPrimaryCustomAudioTrack(const AudioTrackConfig& config) = 0;
-
-  /**
-   * Stop primary custom audio track local playback.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopPrimaryCustomAudioTrack() = 0;
-
-  /**
-   * Start secondary custom audio track local playback.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int startSecondaryCustomAudioTrack(const AudioTrackConfig& config) = 0;
-
-  /**
-   * Stop secondary custom audio track local playback.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopSecondaryCustomAudioTrack() = 0;
 
   /**
    * Sets the audio recording format for the
@@ -6112,11 +6212,11 @@ class IRtcEngine : public agora::base::IEngineBase {
 #endif
 
   /**
-   * Set extension provider specific property.
+   * Sets the provider property of an extension.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
-   * @param key Key for the property.
-   * @param value Property value of json format.
+   * @param key The key of the extension.
+   * @param value The json formatted value of the extension key.
    *
    * @return
    * - 0: Success.
@@ -6126,11 +6226,12 @@ class IRtcEngine : public agora::base::IEngineBase {
       const char* provider, const char* key, const char* value) = 0;
 
   /**
-   * Registers an extension.
+   * Registers an extension. Normally you should call this function immediately after engine initialization.
+   * Once an extension is registered, SDK will create and add extension to pipeline automatically.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
-   * @param type The name of media source type, e.g. PRIMARY_CAMERA_SOURCE.
+   * @param type The source type of the extension, e.g. PRIMARY_CAMERA_SOURCE. The default is UNKNOWN_MEDIA_SOURCE.
    *
    * @return
    * - 0: Success.
@@ -6140,13 +6241,20 @@ class IRtcEngine : public agora::base::IEngineBase {
                         agora::media::MEDIA_SOURCE_TYPE type = agora::media::UNKNOWN_MEDIA_SOURCE) = 0;
 
   /**
-   * Enable/Disable extension.
+   * Enable/Disable an extension.
+   * By calling this function, you can dynamically enable/disable the extension without changing the pipeline.
+   * For example, enabling/disabling Extension_A means the data will be adapted/bypassed by Extension_A.
+   *
+   * NOTE: For compatible reason, if you haven't call registerExtension,
+   * enableExtension will automatically register the specified extension.
+   * We suggest you call registerExtension explicitly.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
-   * @param enable Enable or disable extension.
-   * - true: enable.
-   * - false: disable.
+   * @param enable Whether to enable the extension extension:
+   * - true: (Default) Enable the extension.
+   * - false: Disable the extension.
+   * @param type The source type of the extension, e.g. PRIMARY_CAMERA_SOURCE. The default is UNKNOWN_MEDIA_SOURCE.
    *
    * @return
    * - 0: Success.
@@ -6156,12 +6264,34 @@ class IRtcEngine : public agora::base::IEngineBase {
       const char* provider, const char* extension, bool enable=true, agora::media::MEDIA_SOURCE_TYPE type = agora::media::UNKNOWN_MEDIA_SOURCE) = 0;
 
   /**
-   * Set extension specific property.
+   * Enable/Disable an extension.
+   * By calling this function, you can dynamically enable/disable the extension without changing the pipeline.
+   * For example, enabling/disabling Extension_A means the data will be adapted/bypassed by Extension_A.
+   *
+   * NOTE: For compatible reason, if you haven't call registerExtension,
+   * enableExtension will automatically register the specified extension.
+   * We suggest you call registerExtension explicitly.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
-   * @param key Key for the property.
-   * @param value Property value of json format.
+   * @param extensionInfo The information for extension.
+   * @param enable Whether to enable the extension extension:
+   * - true: (Default) Enable the extension.
+   * - false: Disable the extension.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableExtension(const char* provider, const char* extension, const ExtensionInfo& extensionInfo, bool enable = true) = 0;
+
+  /**
+   * Sets the properties of an extension.
+   *
+   * @param provider The name of the extension provider, e.g. agora.io.
+   * @param extension The name of the extension, e.g. agora.beauty.
+   * @param key The key of the extension.
+   * @param value The json formatted value of the extension key.
    *
    * @return
    * - 0: Success.
@@ -6172,13 +6302,13 @@ class IRtcEngine : public agora::base::IEngineBase {
       const char* key, const char* value, agora::media::MEDIA_SOURCE_TYPE type = agora::media::UNKNOWN_MEDIA_SOURCE) = 0;
 
   /**
-   * Get extension specific property.
+   * Gets the properties of an extension.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
-   * @param key Key for the property.
-   * @param value Property value of json format.
-   * @param buf_len Max length of the json value buffer
+   * @param key The key of the extension.
+   * @param value The value of the extension key.
+   * @param buf_len Maximum length of the JSON string indicating the extension property.
    *
    * @return
    * - 0: Success.
@@ -6189,29 +6319,13 @@ class IRtcEngine : public agora::base::IEngineBase {
       const char* key, char* value, int buf_len, agora::media::MEDIA_SOURCE_TYPE type = agora::media::UNKNOWN_MEDIA_SOURCE) = 0;
 
   /**
-   * Enable/Disable extension.
+   * Sets the properties of an extension.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
    * @param extensionInfo The information for extension.
-   * @param enable Enable or disable.
-   * - true: enable.
-   * - false: disable.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableExtension(const char* provider, const char* extension, const ExtensionInfo& extensionInfo, bool enable = true) = 0;
-
-  /**
-   * Set extension specific property.
-   *
-   * @param provider The name of the extension provider, e.g. agora.io.
-   * @param extension The name of the extension, e.g. agora.beauty.
-   * @param extensionInfo The information for extension.
-   * @param key Key for the property.
-   * @param value Property value of json format.
+   * @param key The key of the extension.
+   * @param value The json formatted value of the extension key.
    *
    * @return
    * - 0: Success.
@@ -6220,14 +6334,14 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setExtensionProperty(const char* provider, const char* extension, const ExtensionInfo& extensionInfo, const char* key, const char* value) = 0;
 
   /**
-   * Get extension specific property.
+   * Gets the properties of an extension.
    *
    * @param provider The name of the extension provider, e.g. agora.io.
    * @param extension The name of the extension, e.g. agora.beauty.
    * @param extensionInfo The information for extension.
-   * @param key Key for the property.
-   * @param value Property value of json format.
-   * @param buf_len Max length of the json value buffer
+   * @param key The key of the extension.
+   * @param value The value of the extension key.
+   * @param buf_len Maximum length of the JSON string indicating the extension property.
    *
    * @return
    * - 0: Success.
@@ -6676,24 +6790,6 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setScreenCaptureContentHint(VIDEO_CONTENT_HINT contentHint) = 0;
 
   /**
-   * Sets the screen sharing scenario.
-   *
-   *
-   * When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario.
-   *
-   *
-   * @param screenScenario The screen sharing scenario. See #SCREEN_SCENARIO_TYPE.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   * - ERR_NOT_SUPPORTED (4): unable to set screencapture scenario
-   * - ERR_FAILED (1): A general error occurs (no specified reason).
-   * - ERR_NOT_INITIALIZED (7): You have not initialized IRtcEngine when set screencapture scenario.
-   */
-  virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
-
-  /**
    * Updates the screen sharing region.
    *
    * @param regionRect Sets the relative location of the region to the screen or
@@ -6749,9 +6845,40 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int updateScreenCapture(const ScreenCaptureParameters2& captureParams) = 0;
+    
+   /**
+   * Queries the ability of screen sharing to support the minimum frame rate.
+   *
+   * @since v4.2.0
+   * 
+   * @return
+   * - 0: support 15 fps, Low devices.
+   * - 1: support 30 fps, Usually low - to mid-range devices.
+   * - 2: support 60 fps, Advanced devices.
+   * - < 0: Failure.
+   */
+  virtual int queryScreenCaptureCapability() = 0;
 #endif
 
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__)
+  /**
+   * Sets the screen sharing scenario.
+   *
+   *
+   * When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario.
+   *
+   *
+   * @param screenScenario The screen sharing scenario. See #SCREEN_SCENARIO_TYPE.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   * - ERR_NOT_SUPPORTED (4): unable to set screencapture scenario
+   * - ERR_FAILED (1): A general error occurs (no specified reason).
+   * - ERR_NOT_INITIALIZED (7): You have not initialized IRtcEngine when set screencapture scenario.
+   */
+  virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
+  
   /**
    * Stops the screen sharing.
    *
@@ -6760,7 +6887,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int stopScreenCapture() = 0;
-
 #endif  // _WIN32 || (__APPLE__ && !TARGET_OS_IPHONE && TARGET_OS_MAC) || __ANDROID__
 
   /**
@@ -6893,41 +7019,27 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int updateLocalTranscoderConfiguration(const LocalTranscoderConfiguration& config) = 0;
   virtual int stopLocalVideoTranscoder() = 0;
   /**
-   * Starts video capture with a primary camera.
+   * Starts video capture with a camera.
    *
    * @param config The configuration of the video capture with a primary camera. For details, see CameraCaptureConfiguration.
+   * @param type Source type of camera. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startPrimaryCameraCapture(const CameraCapturerConfiguration& config) = 0;
+  virtual int startCameraCapture(VIDEO_SOURCE_TYPE type, const CameraCapturerConfiguration& config) = 0;
+
   /**
-   * Starts video capture with a secondary camera.
+   * Stops capturing video through camera.
    *
-   * @param config The onfiguration of the video capture with a secondary camera. For details, see CameraCaptureConfiguration.
+   * You can call this method to stop capturing video through the first camera after calling `startCameraCapture`.
+   *
+   * @param type Source type of camera. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startSecondaryCameraCapture(const CameraCapturerConfiguration& config) = 0;
-  /**
-   * Stops capturing video through the primary camera.
-   *
-   * You can call this method to stop capturing video through the first camera after calling `startPrimaryCameraCapture`.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopPrimaryCameraCapture() = 0;
-  /**
-   * Stops capturing video through the secondary camera.
-   *
-   * You can call this method to stop capturing video through the first camera after calling `startSecondaryCameraCapture`.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopSecondaryCameraCapture() = 0;
+  virtual int stopCameraCapture(VIDEO_SOURCE_TYPE type) = 0;
   /**
    * Sets the rotation angle of the video captured by the camera.
    *
@@ -6954,43 +7066,27 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setScreenCaptureOrientation(VIDEO_SOURCE_TYPE type, VIDEO_ORIENTATION orientation) = 0;
 
   /**
-   * Starts sharing a primary screen.
+   * Starts sharing a screen.
    *
    * @param config The configuration of the captured screen. For details, see ScreenCaptureConfiguration.
+   * @param type source type of screen. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startPrimaryScreenCapture(const ScreenCaptureConfiguration& config) = 0;
+  virtual int startScreenCapture(VIDEO_SOURCE_TYPE type, const ScreenCaptureConfiguration& config) = 0;
+
   /**
-   * Starts sharing a secondary screen.
+   * Stop sharing the screen.
    *
-   * @param config The configuration of the captured screen. For details, see ScreenCaptureConfiguration.
+   * After calling `startScreenCapture`, you can call this method to stop sharing the first screen.
+   * 
+   * @param type source type of screen. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startSecondaryScreenCapture(const ScreenCaptureConfiguration& config) = 0;
-  /**
-   * Stop sharing the primary screen.
-   *
-   * After calling `startPrimaryScreenCapture`, you can call this method to stop sharing the first screen.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopPrimaryScreenCapture() = 0;
-    /**
-   * Stop sharing a secondary screen.
-   *
-   * After calling `startSecondaryScreenCapture`, you can call this method to stop sharing the first screen.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int stopSecondaryScreenCapture() = 0;
+  virtual int stopScreenCapture(VIDEO_SOURCE_TYPE type) = 0;
 
   /** Gets the current connection state of the SDK.
 
@@ -7716,7 +7812,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param filePath The local path (including filename extensions) of the snapshot. For example:
    * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
    * - iOS: `/App Sandbox/Library/Caches/example.jpg`
-   * - macOS: `～/Library/Logs/example.jpg`
+   * - macOS: `~/Library/Logs/example.jpg`
    * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
    *
    * Ensure that the path you specify exists and is writable.
@@ -7736,26 +7832,26 @@ class IRtcEngine : public agora::base::IEngineBase {
     */
   virtual int enableContentInspect(bool enabled, const media::ContentInspectConfig &config) = 0;
   /*
-   * Adjust the custom audio publish volume by source id.
-   * @param sourceId custom audio source id.
+   * Adjust the custom audio publish volume by track id.
+   * @param trackId custom audio track id.
    * @param volume The volume, range is [0,100]:
    * 0: mute, 100: The original volume
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int adjustCustomAudioPublishVolume(int32_t sourceId, int volume) = 0;
+  virtual int adjustCustomAudioPublishVolume(track_id_t trackId, int volume) = 0;
 
   /*
-   * Adjust the custom audio playout volume by source id.
-   * @param sourceId custom audio source id.
+   * Adjust the custom audio playout volume by track id.
+   * @param trackId custom audio track id.
    * @param volume The volume, range is [0,100]:
    * 0: mute, 100: The original volume
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int adjustCustomAudioPlayoutVolume(int32_t sourceId, int volume) = 0;
+  virtual int adjustCustomAudioPlayoutVolume(track_id_t trackId, int volume) = 0;
 
   /** Sets the Agora cloud proxy service.
    *
@@ -7867,6 +7963,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int enableWirelessAccelerate(bool enabled) = 0;
+
   /**
   * get network type value
   *
@@ -7923,6 +8020,22 @@ class IRtcEngine : public agora::base::IEngineBase {
     - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
    */
   virtual int enableInstantMediaRendering() = 0;
+
+  /**
+   * Return current NTP(unix timestamp) time in milliseconds.
+   */
+  virtual uint64_t getNtpWallTimeInMs() = 0;
+
+  /** 
+   * @brief Whether the device support target feautre.
+   * @since v4.1.0
+   * @param type The feature type. See FeatureType.
+   * @return
+   * - true: support.
+   * - false: not support.
+   */
+  virtual bool isFeatureAvailableOnDevice(FeatureType type) = 0;
+
 };
 
 class AAudioDeviceManager : public agora::util::AutoPtr<IAudioDeviceManager> {
