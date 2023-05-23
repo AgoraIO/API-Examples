@@ -39,6 +39,10 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
+import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -64,6 +68,60 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
     private int myUid;
     private boolean joined = false;
 
+    private IMediaPlayer mediaPlayer;
+
+    private final IMediaPlayerObserver iIMediaPlayerObserver = new IMediaPlayerObserver() {
+
+        @Override
+        public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerError error) {
+
+        }
+
+        @Override
+        public void onPositionChanged(long position_ms) {
+
+        }
+
+        @Override
+        public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent eventCode, long elapsedTime, String message) {
+
+        }
+
+        @Override
+        public void onMetaData(io.agora.mediaplayer.Constants.MediaPlayerMetadataType type, byte[] data) {
+
+        }
+
+        @Override
+        public void onPlayBufferUpdated(long playCachedBuffer) {
+
+        }
+
+        @Override
+        public void onPreloadEvent(String src, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent event) {
+
+        }
+
+        @Override
+        public void onAgoraCDNTokenWillExpire() {
+
+        }
+
+        @Override
+        public void onPlayerSrcInfoChanged(SrcInfo from, SrcInfo to) {
+
+        }
+
+        @Override
+        public void onPlayerInfoUpdated(PlayerUpdatedInfo info) {
+
+        }
+
+        @Override
+        public void onAudioVolumeIndication(int volume) {
+
+        }
+    };
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +170,13 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
 
+            mediaPlayer = engine.createMediaPlayer();
+            mediaPlayer.registerPlayerObserver(iIMediaPlayerObserver);
+
             MediaDataObserverPlugin plugin = MediaDataObserverPlugin.the();
             MediaPreProcessing.setCallback(engine.getNativeHandle(), plugin);
             MediaPreProcessing.setVideoCaptureByteBuffer(plugin.byteBufferCapture);
+
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -313,6 +375,10 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+
+                    String url = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+                    mediaPlayer.open(url, 0);
+                    mediaPlayer.play();
                 }
             });
         }

@@ -17,6 +17,9 @@ public class MediaPreProcessing {
          *                 180, 270 degrees clockwise.
          * @param renderTimeMs The timestamp of the external audio frame. It is mandatory. You can
          *                     use this parameter for the following purposes:*/
+        void onMediaPlayerVideoFrame(int videoFrameType, int width, int height,
+                                     int bufferLength, int yStride, int uStride, int vStride,
+                                     int rotation, long renderTimeMs, int mediaPlayerId);
         void onCaptureVideoFrame(int videoFrameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs);
 
         /**

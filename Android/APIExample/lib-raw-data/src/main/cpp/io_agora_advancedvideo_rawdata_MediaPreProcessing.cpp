@@ -21,6 +21,7 @@ jmethodID mixAudioMethodId = nullptr;
 jmethodID captureVideoMethodId = nullptr;
 jmethodID preEncodeVideoMethodId = nullptr;
 jmethodID renderVideoMethodId = nullptr;
+jmethodID mediaPlayerVideoMethodId = nullptr;
 void *_javaDirectPlayBufferCapture = nullptr;
 void *_javaDirectPlayBufferRecordAudio = nullptr;
 void *_javaDirectPlayBufferPlayAudio = nullptr;
@@ -48,7 +49,7 @@ public:
 
     void
     getVideoFrame(VideoFrame &videoFrame, _jmethodID *jmethodID, void *_byteBufferObject,
-                  unsigned int uid)
+                  unsigned int uid, long res_id=-1)
     {
         if (_byteBufferObject == nullptr)
         {
@@ -76,13 +77,19 @@ public:
             return;
         }
 
-        if (uid == 0)
-        {
+        if (uid == 0 && jmethodID == mediaPlayerVideoMethodId) {
+            env->CallVoidMethod(gCallBack, jmethodID, videoFrame.type, width, height, length,
+                                videoFrame.yStride, videoFrame.uStride,
+                                videoFrame.vStride, videoFrame.rotation,
+                                videoFrame.renderTimeMs, res_id);
+        }
+        else if(uid == 0 ) {
             env->CallVoidMethod(gCallBack, jmethodID, videoFrame.type, width, height, length,
                                 videoFrame.yStride, videoFrame.uStride,
                                 videoFrame.vStride, videoFrame.rotation,
                                 videoFrame.renderTimeMs);
-        } else
+        }
+        else
         {
             env->CallVoidMethod(gCallBack, jmethodID, uid, videoFrame.type, width, height,
                                 length,
@@ -110,6 +117,16 @@ public:
     }
 
 public:
+
+    virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override
+    {
+        getVideoFrame(videoFrame, mediaPlayerVideoMethodId, _javaDirectPlayBufferCapture, 0);
+        __android_log_print(ANDROID_LOG_DEBUG, "111AgoraVideoFrameObserver222", "onMediaPlayerVideoFrame");
+        writebackVideoFrame(videoFrame, _javaDirectPlayBufferCapture);
+
+        return true;
+    }
+
     /**Occurs each time the SDK receives a video frame captured by the local camera.
      * After you successfully register the video frame observer, the SDK triggers this callback each
      *  time a video frame is received. In this callback, you can get the video data captured by the
@@ -181,10 +198,6 @@ public:
 
     virtual agora::media::base::VIDEO_PIXEL_FORMAT getVideoFormatPreference() override {
         return agora::media::base::VIDEO_PIXEL_FORMAT::VIDEO_PIXEL_I420; // Please don't modify videoFormatPreference in this raw data processing plugin, otherwise it won't work.
-    }
-
-    virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId){
-        return true;
     }
 
     virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame) {
@@ -405,6 +418,8 @@ JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_se
 
         captureVideoMethodId = env->GetMethodID(gCallbackClass, "onCaptureVideoFrame",
                                                 "(IIIIIIIIJ)V");
+        mediaPlayerVideoMethodId = env->GetMethodID(gCallbackClass, "onMediaPlayerVideoFrame", "(IIIIIIIIJI)V");
+
         preEncodeVideoMethodId = env->GetMethodID(gCallbackClass, "onPreEncodeVideoFrame",
                                                   "(IIIIIIIIJ)V");
         renderVideoMethodId = env->GetMethodID(gCallbackClass, "onRenderVideoFrame",
@@ -495,6 +510,7 @@ JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_re
     captureVideoMethodId = nullptr;
     preEncodeVideoMethodId = nullptr;
     renderVideoMethodId = nullptr;
+    mediaPlayerVideoMethodId = nullptr;
 
     _javaDirectPlayBufferCapture = nullptr;
     _javaDirectPlayBufferRecordAudio = nullptr;

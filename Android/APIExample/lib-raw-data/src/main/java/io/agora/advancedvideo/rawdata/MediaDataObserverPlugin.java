@@ -100,6 +100,24 @@ public class MediaDataObserverPlugin implements MediaPreProcessing.ProgressCallb
     }
 
     @Override
+    public void onMediaPlayerVideoFrame(int videoFrameType, int width, int height,
+                                 int bufferLength, int yStride, int uStride, int vStride,
+                                 int rotation, long renderTimeMs, int mediaPlayerId) {
+        byte[] buf = new byte[bufferLength];
+        byteBufferCapture.limit(bufferLength);
+        byteBufferCapture.get(buf);
+        byteBufferCapture.flip();
+
+        for (MediaDataVideoObserver observer : videoObserverList) {
+            observer.onMediaplayerVideoFrame(buf, videoFrameType, width, height, bufferLength,
+                    yStride, uStride, vStride, rotation, renderTimeMs, mediaPlayerId);
+        }
+
+        byteBufferCapture.put(buf);
+        byteBufferCapture.flip();
+    }
+
+    @Override
     public void onCaptureVideoFrame(int videoFrameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
         byte[] buf = new byte[bufferLength];
         byteBufferCapture.limit(bufferLength);

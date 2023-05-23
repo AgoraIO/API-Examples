@@ -43,6 +43,10 @@ import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.NV21Buffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.YuvHelper;
+import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -70,6 +74,62 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private boolean joined = false, isSnapshot = false;
     private ByteBuffer videoNV21Buffer;
     private byte[] videoNV21;
+
+    private IMediaPlayer player;
+
+    private final IMediaPlayerObserver iIMediaPlayerObserver = new IMediaPlayerObserver() {
+
+        @Override
+        public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerError error) {
+
+        }
+
+        @Override
+        public void onPositionChanged(long position_ms) {
+
+        }
+
+        @Override
+        public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent eventCode, long elapsedTime, String message) {
+
+        }
+
+        @Override
+        public void onMetaData(io.agora.mediaplayer.Constants.MediaPlayerMetadataType type, byte[] data) {
+
+        }
+
+        @Override
+        public void onPlayBufferUpdated(long playCachedBuffer) {
+
+        }
+
+        @Override
+        public void onPreloadEvent(String src, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent event) {
+
+        }
+
+        @Override
+        public void onAgoraCDNTokenWillExpire() {
+
+        }
+
+        @Override
+        public void onPlayerSrcInfoChanged(SrcInfo from, SrcInfo to) {
+
+        }
+
+        @Override
+        public void onPlayerInfoUpdated(PlayerUpdatedInfo info) {
+
+        }
+
+        @Override
+        public void onAudioVolumeIndication(int volume) {
+
+        }
+    };
+    private IMediaPlayer mediaPlayer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,6 +178,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
+            mediaPlayer = engine.createMediaPlayer();
+            mediaPlayer.registerPlayerObserver(iIMediaPlayerObserver);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -345,7 +408,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public boolean onMediaPlayerVideoFrame(VideoFrame videoFrame, int i) {
-            return false;
+            return true;
         }
 
         @Override
@@ -422,6 +485,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+
+                    String url = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+                    mediaPlayer.open(url, 0);
+                    mediaPlayer.play();
                 }
             });
         }

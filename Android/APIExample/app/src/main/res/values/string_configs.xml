@@ -16,7 +16,7 @@
 
     进入声网控制台(https://console.agora.io/)，创建一个项目，进入项目配置页，即可看到APP ID。
     -->
-    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    <string name="agora_app_id" translatable="false">826dd9230eac428aba2e532b5d2fbdb4</string>
 
 
     <!--
@@ -34,6 +34,6 @@
     进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。
     注意：如果项目没有开启证书鉴权，这个字段留空。
     -->
-    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    <string name="agora_app_certificate" translatable="false"></string>
 
 </resources>
