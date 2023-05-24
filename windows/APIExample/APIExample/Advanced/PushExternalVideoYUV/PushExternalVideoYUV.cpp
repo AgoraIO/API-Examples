@@ -255,7 +255,7 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffer, int size) {
 	memcpy_s(m_imgBuffer, size, buffer, size);
 	m_videoFrame.buffer = m_imgBuffer;
-	m_videoFrame.timestamp = GetTickCount();
+	m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
 	if (m_joinChannel && m_mediaEngine.get() != nullptr) {
 		m_mediaEngine->pushVideoFrame(&m_videoFrame);
 	}

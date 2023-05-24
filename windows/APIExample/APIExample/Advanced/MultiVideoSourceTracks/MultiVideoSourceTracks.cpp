@@ -166,7 +166,7 @@ void MultiVideoSourceTracks::OnBnClickedButtonCreateTrack() {
 	
 
 	// Push video frame
-	m_yuvReaderHandlers[trackIndex].Setup(m_mediaEngine.get(), videoTrackId);
+	m_yuvReaderHandlers[trackIndex].Setup(m_rtcEngine, m_mediaEngine.get(), videoTrackId);
 	m_yuvReaders[trackIndex].start(std::bind(&MultiVideoSourceTracksYUVReaderHander::OnYUVRead, m_yuvReaderHandlers[trackIndex], std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
@@ -705,7 +705,7 @@ void MultiVideoSourceTracksEventHandler::onRemoteVideoStats(const RemoteVideoSta
 
 void MultiVideoSourceTracksYUVReaderHander::OnYUVRead(int width, int height, unsigned char* buffer, int size)
 {
-	if (m_mediaEngine == nullptr) {
+	if (m_mediaEngine == nullptr || m_rtcEngine == nullptr) {
 		return;
 	}
 	m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
@@ -713,5 +713,6 @@ void MultiVideoSourceTracksYUVReaderHander::OnYUVRead(int width, int height, uns
 	m_videoFrame.height = height;
 	m_videoFrame.stride = width;
 	m_videoFrame.buffer = buffer;
+	m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
 	m_mediaEngine->pushVideoFrame(&m_videoFrame, m_videoTrackId);
 }

@@ -29,7 +29,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -118,13 +118,15 @@ public:
 		return m_videoTrackId;
 	}
 
-	void Setup(agora::media::IMediaEngine* mediaEngine, int videoTrackId) {
+	void Setup(agora::rtc::IRtcEngineEx* rtcEngine, agora::media::IMediaEngine* mediaEngine, int videoTrackId) {
+		m_rtcEngine = rtcEngine;
 		m_mediaEngine = mediaEngine;
 		m_videoTrackId = videoTrackId;
 	}
 
 	void Release() {
 		m_mediaEngine = nullptr;
+		m_rtcEngine = nullptr;
 		m_videoTrackId = 0;
 	}
 
@@ -133,7 +135,8 @@ public:
 
 private:
 	agora::media::base::ExternalVideoFrame m_videoFrame;
-	agora::media::IMediaEngine* m_mediaEngine = nullptr;;
+	agora::media::IMediaEngine* m_mediaEngine = nullptr;
+	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
 	int m_videoTrackId = 0;
 };
 
