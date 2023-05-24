@@ -61,6 +61,8 @@ public class MediaPreProcessing {
 
     public static native void setVideoCaptureByteBuffer(ByteBuffer byteBuffer);
 
+    public static native void testCSD56863(long handler, String fileName);
+
     public static native void setAudioRecordByteBuffer(ByteBuffer byteBuffer);
 
     public static native void setAudioPlayByteBuffer(ByteBuffer byteBuffer);

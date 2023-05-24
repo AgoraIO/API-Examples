@@ -7,6 +7,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_testCSD56863
+(JNIEnv *, jclass, jlong handler, jstring fileName);
 /*
  * Class:     io_agora_advancedvideo_rawdata_MediaPreProcessing
  * Method:    setCallback

@@ -126,6 +126,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(this);
         } catch (Exception e) {
@@ -228,10 +229,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         } else if (v.getId() == R.id.open) {
             String url = et_url.getText().toString();
             if (!TextUtils.isEmpty(url)) {
-                mediaPlayer.open(url, 0);
+                int ret = mediaPlayer.open(url, 0);
+                Log.i(TAG, String.valueOf(ret));
             }
         } else if (v.getId() == R.id.play) {
-            mediaPlayer.play();
+            int ret = mediaPlayer.play();
             playerDuration = mediaPlayer.getDuration();
         } else if (v.getId() == R.id.stop) {
             mediaPlayer.stop();

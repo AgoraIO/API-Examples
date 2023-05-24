@@ -2,7 +2,9 @@
 #include <android/log.h>
 #include <cstring>
 #include "include/IAgoraMediaEngine.h"
-
+#include "include/IAgoraMediaPlayer.h"
+#include "include/IAgoraMediaPlayerSource.h"
+#include <string>
 #include "include/IAgoraRtcEngine.h"
 #include <string.h>
 #include "io_agora_advancedvideo_rawdata_MediaPreProcessing.h"
@@ -32,6 +34,67 @@ volatile bool mAvailable = false;
 
 static JavaVM *gJVM = nullptr;
 
+agora::rtc::IMediaPlayer *g_player = nullptr;
+
+namespace agora {
+
+
+class TestPlayerObserver : public agora::rtc::IMediaPlayerSourceObserver {
+public:
+    void onPlayerSourceStateChanged(agora::media::base::MEDIA_PLAYER_STATE state,
+                                    agora::media::base::MEDIA_PLAYER_ERROR ec) {
+
+        __android_log_print(ANDROID_LOG_DEBUG, "onPlayerSourceStateChanged", "onPlayerSourceStateChanged - Peter: state:%d, ec:%d", state, ec);
+
+        if(state == agora::media::base::MEDIA_PLAYER_STATE::PLAYER_STATE_OPEN_COMPLETED) {
+            int ret = g_player->play();
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame play()", "Peter8888: %d", ret);
+        }
+    }
+
+    void onPositionChanged(int64_t position_ms) {
+
+    }
+
+    void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT eventCode,
+                       int64_t elapsedTime, const char* message) {
+
+    }
+
+    void onMetaData(const void* data, int length) {
+
+    }
+
+    void onPlayBufferUpdated(int64_t playCachedBuffer) {
+
+    }
+
+    void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) {
+
+    }
+
+    void onCompleted() {
+
+    }
+
+    void onAgoraCDNTokenWillExpire() {
+
+    }
+
+    void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) {
+
+    }
+
+    void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info){
+
+    }
+
+    void onAudioVolumeIndication(int volume) {
+
+    };
+
+};
+}
 /**Listener to get video frame*/
 class AgoraVideoFrameObserver : public agora::media::IVideoFrameObserver
 {
@@ -429,6 +492,120 @@ JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_se
     }
 
     mAvailable = true;
+}
+
+namespace agora {
+    class VideoFrameObserver : public media::IVideoFrameObserver {
+
+    public:
+        bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override {
+            static bool first = true;
+            if(first) {
+                __android_log_print(ANDROID_LOG_DEBUG, "onCaptureVideoFrame", "111Peter2222");
+                first = false;
+            }
+            return true;
+        }
+
+        bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override {
+            return true;
+        }
+
+        bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame) override {
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter8888");
+            return true;
+        }
+
+        bool onMediaPlayerVideoFrame(VideoFrame &videoFrame, int mediaPlayerId) override {
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "333Peter444");
+
+            return true;
+        }
+
+        bool onTranscodedVideoFrame(VideoFrame& videoFrame) override {
+            return true;
+        }
+
+    private:
+    };
+}
+
+
+std::string g_url{"https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4"};
+
+std::string jstring2string(JNIEnv *env, jstring jStr) {
+    if (!jStr)
+        return "";
+
+    const jclass stringClass = env->GetObjectClass(jStr);
+    const jmethodID getBytes = env->GetMethodID(stringClass, "getBytes", "(Ljava/lang/String;)[B");
+    const jbyteArray stringJbytes = (jbyteArray) env->CallObjectMethod(jStr, getBytes, env->NewStringUTF("UTF-8"));
+
+    size_t length = (size_t) env->GetArrayLength(stringJbytes);
+    jbyte* pBytes = env->GetByteArrayElements(stringJbytes, NULL);
+
+    std::string ret = std::string((char *)pBytes, length);
+    env->ReleaseByteArrayElements(stringJbytes, pBytes, JNI_ABORT);
+
+    env->DeleteLocalRef(stringJbytes);
+    env->DeleteLocalRef(stringClass);
+
+    return ret;
+}
+
+agora::VideoFrameObserver *g_observer = nullptr;
+
+class TestNNObserver : public agora::media::base::IVideoFrameObserver {
+public:
+    void onFrame(const agora::media::base::VideoFrame *frame) override {
+        __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter0000");
+        //observer->onMediaPlayerVideoFrame(xxx, yyy);
+        if(g_observer) {
+            agora::media::IVideoFrameObserver::VideoFrame videoFrame;
+
+            //TODO:
+            g_observer->onMediaPlayerVideoFrame(videoFrame, 0);
+        }
+    }
+};
+
+
+
+JNIEXPORT void JNICALL
+Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_testCSD56863
+        (JNIEnv *env, jclass, jlong handler, jstring fileName) {
+    __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter1111:%lld", handler);
+
+    auto engine = (agora::rtc::IRtcEngine *) (handler);
+
+    g_observer = new agora::VideoFrameObserver();
+
+    if (engine) {
+        agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+        mediaEngine.queryInterface(engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
+        if (mediaEngine) {
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter2222");
+
+            auto ret = mediaEngine->registerVideoFrameObserver(
+                    reinterpret_cast<agora::media::IVideoFrameObserver *>(g_observer));
+
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter3333: %d", ret);
+
+            g_player = engine->createMediaPlayer().get();
+
+            g_player->registerVideoFrameObserver(new TestNNObserver());
+            g_player->registerPlayerSourceObserver(new agora::TestPlayerObserver());
+
+            auto strFileName = jstring2string(env, fileName);
+            ret = g_player->open(g_url.c_str(), 0);
+            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter4444: %d", ret);
+//            ret = player->play();
+//            __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame",
+//                                "Peter5555: %d, fileName:%s", ret, strFileName.c_str());
+        }
+    }
+
+    __android_log_print(ANDROID_LOG_DEBUG, "onMediaPlayerVideoFrame", "Peter7777");
 }
 
 JNIEXPORT void JNICALL

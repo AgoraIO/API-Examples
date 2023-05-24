@@ -16,7 +16,7 @@
 
     进入声网控制台(https://console.agora.io/)，创建一个项目，进入项目配置页，即可看到APP ID。
     -->
-    <string name="agora_app_id" translatable="false">826dd9230eac428aba2e532b5d2fbdb4</string>
+    <string name="agora_app_id" translatable="false">App ID</string>
 
 
     <!--

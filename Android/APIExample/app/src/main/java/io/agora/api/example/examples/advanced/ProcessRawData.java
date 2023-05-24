@@ -32,6 +32,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -81,7 +82,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerError error) {
-
+            if(state == io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED) {
+                int ret = mediaPlayer.play();
+                Log.i(TAG, "Peter play ret: " + ret);
+            }
         }
 
         @Override
@@ -487,8 +491,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                     join.setText(getString(R.string.leave));
 
                     String url = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
-                    mediaPlayer.open(url, 0);
-                    mediaPlayer.play();
+                    File file = new File(Objects.requireNonNull(getContext()).getExternalFilesDir("assets"), "effectA.wav");
+                    String path = file.getAbsolutePath();
+                    int ret = mediaPlayer.open(url, 0);
+                    Log.i(TAG, "Peter open ret: " + ret);
+
                 }
             });
         }

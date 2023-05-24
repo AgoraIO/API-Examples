@@ -30,6 +30,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
 import io.agora.advancedvideo.rawdata.MediaPreProcessing;
@@ -173,9 +174,9 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(iIMediaPlayerObserver);
 
-            MediaDataObserverPlugin plugin = MediaDataObserverPlugin.the();
-            MediaPreProcessing.setCallback(engine.getNativeHandle(), plugin);
-            MediaPreProcessing.setVideoCaptureByteBuffer(plugin.byteBufferCapture);
+//            MediaDataObserverPlugin plugin = MediaDataObserverPlugin.the();
+//            MediaPreProcessing.setCallback(engine.getNativeHandle(), plugin);
+//            MediaPreProcessing.setVideoCaptureByteBuffer(plugin.byteBufferCapture);
 
         }
         catch (Exception e) {
@@ -210,7 +211,7 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroy() {
-        MediaPreProcessing.releasePoint();
+        //MediaPreProcessing.releasePoint();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -376,9 +377,9 @@ public class ProcessRawDataNative extends BaseFragment implements View.OnClickLi
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
 
-                    String url = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
-                    mediaPlayer.open(url, 0);
-                    mediaPlayer.play();
+                    File file = new File(Objects.requireNonNull(getContext()).getExternalFilesDir("assets"), "effectA.wav");
+                    String path = file.getAbsolutePath();
+                    MediaPreProcessing.testCSD56863(engine.getNativeHandle(), file.getAbsolutePath());
                 }
             });
         }
