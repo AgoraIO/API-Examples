@@ -23,8 +23,14 @@
 "j6s-Pm-fSS.text" = "您还没有开启相芯美颜功能, 请按如下步骤操作:
 1: 在FUBeautify->Manager->authpack中替换license
 2: 打开Podfile中 pod 'fuLib' 注释
-3: 在iOS->APIExample->FULib目录下添加FURenderKit.framework
-4: 在iOS->APIExample->FULib目录下添加Resources资源文件夹
-5: 在iOS->APIExample->FULib目录下添加Resource->贴纸文件夹
-6: 执行pod install
-7: 重新运行项目查看效果";
+3: 在iOS->APIExample目录下创建FULib文件夹
+4: 在iOS->APIExample->FULib目录下添加FURenderKit.framework
+5: 在iOS->APIExample->FULib目录下添加Resources资源文件夹
+6: 在iOS->APIExample->FULib目录下添加Resource->贴纸文件夹
+7: 执行pod install
+8: 重新运行项目查看效果";
+
+"QZu-iN-Fi6.normalTitle" = "美颜";
+"KHn-B1-epr.normalTitle" = "美妆";
+"aoR-43-iFs.normalTitle" = "贴纸";
+"UYi-3l-nYz.normalTitle" = "滤镜";

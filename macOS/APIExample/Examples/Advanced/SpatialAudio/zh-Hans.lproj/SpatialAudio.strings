@@ -1,0 +1,60 @@
+
+/* Class = "NSTextFieldCell"; title = "请移动红色图标体验3D音频效果"; ObjectID = "0XP-YK-KuI"; */
+"0XP-YK-KuI.title" = "请移动红色图标体验3D音频效果";
+
+/* Class = "NSButtonCell"; title = "加入频道"; ObjectID = "55m-Re-Kgb"; */
+"55m-Re-Kgb.title" = "加入频道";
+
+/* Class = "NSTextFieldCell"; title = "频道号"; ObjectID = "8kK-yU-WUO"; */
+"8kK-yU-WUO.title" = "频道号";
+
+/* Class = "NSTextFieldCell"; title = "音障"; ObjectID = "DuM-M6-we2"; */
+"DuM-M6-we2.title" = "音障";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "F9J-RG-ORp"; */
+"F9J-RG-ORp.title" = "Box";
+
+/* Class = "NSTextFieldCell"; title = "Attenuatuin"; ObjectID = "Olg-lx-iDF"; */
+"Olg-lx-iDF.title" = "Attenuatuin";
+
+/* Class = "NSTextFieldCell"; title = "Attenuatuin"; ObjectID = "Rvd-Eg-yDs"; */
+"Rvd-Eg-yDs.title" = "Attenuatuin";
+
+/* Class = "NSTextFieldCell"; title = "静音"; ObjectID = "SPa-zU-xrL"; */
+"SPa-zU-xrL.title" = "静音";
+
+/* Class = "NSTextFieldCell"; placeholderString = "输入频道号"; ObjectID = "Seb-dp-fRr"; */
+"Seb-dp-fRr.placeholderString" = "输入频道号";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "UVp-jP-AeX"; */
+"UVp-jP-AeX.title" = "Box";
+
+/* Class = "NSTextFieldCell"; title = "Airborne Simulation"; ObjectID = "XQd-ik-fGe"; */
+"XQd-ik-fGe.title" = "Airborne Simulation";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "Zpd-F6-3hM"; */
+"Zpd-F6-3hM.title" = "Box";
+
+/* Class = "NSTextFieldCell"; title = "麦克风"; ObjectID = "dgP-7k-2RR"; */
+"dgP-7k-2RR.title" = "麦克风";
+
+/* Class = "NSTextFieldCell"; title = "Voice Blur"; ObjectID = "dps-1x-WRS"; */
+"dps-1x-WRS.title" = "Voice Blur";
+
+/* Class = "NSTextFieldCell"; title = "静音"; ObjectID = "e6q-8k-QYN"; */
+"e6q-8k-QYN.title" = "静音";
+
+/* Class = "NSTextFieldCell"; title = "Voice Blur"; ObjectID = "i8Q-uY-ZPE"; */
+"i8Q-uY-ZPE.title" = "Voice Blur";
+
+/* Class = "NSButtonCell"; title = "123"; ObjectID = "q1C-6O-FWQ"; */
+"q1C-6O-FWQ.title" = "123";
+
+/* Class = "NSButtonCell"; title = "123"; ObjectID = "ujV-mS-k6K"; */
+"ujV-mS-k6K.title" = "123";
+
+/* Class = "NSTextFieldCell"; title = "Airborne Simulation"; ObjectID = "w1T-YB-klu"; */
+"w1T-YB-klu.title" = "Airborne Simulation";
+
+/* Class = "NSTextFieldCell"; title = "房间"; ObjectID = "wB6-0F-DcM"; */
+"wB6-0F-DcM.title" = "房间";

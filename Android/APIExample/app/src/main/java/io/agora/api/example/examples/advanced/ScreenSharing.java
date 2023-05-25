@@ -23,11 +23,13 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -66,7 +68,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         tipsId = R.string.screensharing
 )
 public class ScreenSharing extends BaseFragment implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
+        CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = ScreenSharing.class.getSimpleName();
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
@@ -81,6 +83,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
     private final ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
 
     private Intent fgServiceIntent;
+    private Spinner screenScenarioType;
 
     @Nullable
     @Override
@@ -102,7 +105,9 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         screenPreview = view.findViewById(R.id.screen_preview);
         screenAudio = view.findViewById(R.id.screen_audio);
         screenAudioVolume = view.findViewById(R.id.screen_audio_volume);
+        screenScenarioType = view.findViewById(R.id.spinner_screen_scenario_type);
 
+        screenScenarioType.setOnItemSelectedListener(this);
         screenPreview.setOnCheckedChangeListener(this);
         screenAudio.setOnCheckedChangeListener(this);
         screenAudioVolume.setOnSeekBarChangeListener(this);
@@ -244,20 +249,17 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT,
-                Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_SCREEN_PRIMARY,
-                0));
+        VideoCanvas local = new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT, 0);
+        local.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED;
+        local.sourceType = Constants.VIDEO_SOURCE_SCREEN_PRIMARY;
+        engine.setupLocalVideo(local);
 
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
     }
 
     private void stopScreenSharePreview() {
         fl_local.removeAllViews();
-        engine.setupLocalVideo(new VideoCanvas(null, Constants.RENDER_MODE_FIT,
-                Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_SCREEN_PRIMARY,
-                0));
+        engine.setupLocalVideo(new VideoCanvas(null));
         engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
     }
 
@@ -509,6 +511,18 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == screenScenarioType) {
+            engine.setScreenCaptureScenario(Constants.ScreenScenarioType.valueOf(screenScenarioType.getSelectedItem().toString()));
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 

@@ -37,8 +37,10 @@ wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
+wchar_t advancedMediaRecorder[INFO_LEN]			= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
 wchar_t advancedMultiVideoSource[INFO_LEN]		= { 0 };
+wchar_t advancedMultiVideoSourceTracks[INFO_LEN]		= { 0 };
 wchar_t advancedAudioEffect[INFO_LEN] = { 0 };
 wchar_t advancedPerCallTest[INFO_LEN] = { 0 };
 wchar_t advancedAudioVolume[INFO_LEN] = { 0 };
@@ -140,7 +142,11 @@ wchar_t screenShareCtrlStopShare[INFO_LEN]				= { 0 };
 wchar_t screenShareCtrlGeneralSettings[INFO_LEN]		= { 0 };
 wchar_t screenShareCtrlFPS[INFO_LEN]					= { 0 };
 wchar_t screenShareCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlScale[INFO_LEN]			= { 0 };
 wchar_t screenShareCtrlShareCursor[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlHighLight[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlInclude[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlExeclude[INFO_LEN]			= { 0 };
 wchar_t screenShareCtrlUpdateCaptureParam[INFO_LEN]		= { 0 };
 
 wchar_t screenCtrlRectInfo[INFO_LEN]					= { 0 };
@@ -297,6 +303,12 @@ wchar_t SpatialAudio[INFO_LEN] = { 0 };
 wchar_t SpatialAudioInitInfo[INFO_LEN] = { 0 };
 wchar_t SpatialAudioMoveInfo[INFO_LEN] = { 0 };
 wchar_t SpatialAudioPrepareInfo[INFO_LEN] = { 0 };
+
+wchar_t mediaRecorderStartRecording[INFO_LEN] = { 0 };
+wchar_t mediaRecorderStopRecording[INFO_LEN] = { 0 };
+
+wchar_t localVideoTranscodingVirtualBg[INFO_LEN] = { 0 };
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -445,8 +457,10 @@ void InitKeyInfomation()
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
+	_tcscpy_s(advancedMediaRecorder, INFO_LEN, Str(_T("Advanced.MediaRecorder")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
 	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
+	_tcscpy_s(advancedMultiVideoSourceTracks, INFO_LEN, Str(_T("Advanced.MultiVideoSourceTracks")));
 	
 	_tcscpy_s(advancedAudioEffect, INFO_LEN, Str(_T("Advanced.AudioEffect")));
 	_tcscpy_s(advancedPerCallTest, INFO_LEN, Str(_T("Advanced.PerCallTest")));
@@ -518,7 +532,11 @@ void InitKeyInfomation()
 	_tcscpy_s(screenShareCtrlGeneralSettings, INFO_LEN, Str(_T("ScreenShare.Ctrl.GeneralSettings")));
 	_tcscpy_s(screenShareCtrlFPS, INFO_LEN, Str(_T("ScreenShare.Ctrl.FPS")));
 	_tcscpy_s(screenShareCtrlBitrate, INFO_LEN, Str(_T("ScreenShare.Ctrl.Bitrate")));
+	_tcscpy_s(screenShareCtrlScale, INFO_LEN, Str(_T("ScreenShare.Ctrl.Scale")));
 	_tcscpy_s(screenShareCtrlShareCursor, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareCursor")));
+	_tcscpy_s(screenShareCtrlHighLight, INFO_LEN, Str(_T("ScreenShare.Ctrl.HighLight")));
+	_tcscpy_s(screenShareCtrlInclude, INFO_LEN, Str(_T("ScreenShare.Ctrl.Include")));
+	_tcscpy_s(screenShareCtrlExeclude, INFO_LEN, Str(_T("ScreenShare.Ctrl.Execlude")));
 	_tcscpy_s(screenShareCtrlUpdateCaptureParam, INFO_LEN, Str(_T("ScreenShare.Ctrl.UpdateCaptureParam")));
 
 
@@ -725,6 +743,12 @@ void InitKeyInfomation()
 	_tcscpy_s(SpatialAudioInitInfo, INFO_LEN, Str(_T("SpatialAudio.Init.Info")));
 	_tcscpy_s(SpatialAudioMoveInfo, INFO_LEN, Str(_T("SpatialAudio.Move.Info")));
 	_tcscpy_s(SpatialAudioPrepareInfo, INFO_LEN, Str(_T("SpatialAudio.Prepare.Info")));
+
+
+	_tcscpy_s(mediaRecorderStartRecording, INFO_LEN, Str(_T("MediaRecoder.StartRecording")));
+	_tcscpy_s(mediaRecorderStopRecording, INFO_LEN, Str(_T("MediaRecoder.StopRecording")));
+
+	_tcscpy_s(localVideoTranscodingVirtualBg, INFO_LEN, Str(_T("LocalVideoTranscoding.VirtualBg")));
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

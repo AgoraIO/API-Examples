@@ -66,18 +66,6 @@ static FUManager *shareManager = NULL;
             NSString *bodyAIPath = [bundle pathForResource:@"model/ai_human_processor" ofType:@"bundle"];//[[NSBundle mainBundle] pathForResource:@"ai_human_processor" ofType:@"bundle"];
             [FUAIKit loadAIModeWithAIType:FUAITYPE_HUMAN_PROCESSOR dataPath:bodyAIPath];
             
-            // 加载默认美颜效果
-            NSString *beautyPath = [bundle pathForResource:@"graphics/face_beautification" ofType:@"bundle"];//[[NSBundle mainBundle] pathForResource:@"face_beautification" ofType:@"bundle"];
-            FUBeauty *beauty = [[FUBeauty alloc] initWithPath:beautyPath name:@"FUBeauty"];
-            // 默认均匀磨皮
-            beauty.heavyBlur = 0;
-            beauty.blurType = 3;
-            // 默认自定义脸型
-            beauty.faceShape = 4;
-            beauty.colorLevel = 0.8;
-            beauty.redLevel = 0.8;
-            [FURenderKit shareRenderKit].beauty = beauty;
-            
             CFAbsoluteTime endTime = (CFAbsoluteTimeGetCurrent() - startTime);
             NSString *path = [bundle pathForResource:@"graphics/tongue" ofType:@"bundle"];//[[NSBundle mainBundle] pathForResource:@"tongue" ofType:@"bundle"];
             [FUAIKit loadTongueMode:path];
@@ -108,13 +96,75 @@ static FUManager *shareManager = NULL;
 #endif
 }
 
+- (void)setBuauty: (BOOL)isSelected {
+#if __has_include(<FURenderKit/FURenderKit.h>)
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+        NSString *beautyPath = [bundle pathForResource:@"graphics/face_beautification" ofType:@"bundle"];
+        FUBeauty *beauty = [[FUBeauty alloc] initWithPath:beautyPath name:@"FUBeauty"];
+        // 默认均匀磨皮
+        beauty.heavyBlur = 0;
+        beauty.blurType = 3;
+        [FURenderKit shareRenderKit].beauty = beauty;
+    } else {
+        [FURenderKit shareRenderKit].beauty = nil;
+    }
+#endif
+}
+- (void)setMakeup: (BOOL)isSelected {
+#if __has_include(<FURenderKit/FURenderKit.h>)
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+        NSString *beautyPath = [bundle pathForResource:@"graphics/face_makeup" ofType:@"bundle"];
+        FUMakeup *makeup = [[FUMakeup alloc] initWithPath:beautyPath name:@"face_makeup"];
+        makeup.isMakeupOn = YES;
+        [FURenderKit setLogLevel:FU_LOG_LEVEL_DEBUG];
+        
+        [FURenderKit shareRenderKit].makeup = makeup;
+        [FURenderKit shareRenderKit].makeup.enable = isSelected;
+        
+        NSString *makeupPath = [bundle pathForResource:@"美妆/ziyun" ofType:@"bundle"];
+        FUItem *makeupItem = [[FUItem alloc] initWithPath:makeupPath name:@"ziyun"];
+        [makeup updateMakeupPackage:makeupItem needCleanSubItem:NO];
+        makeup.intensity = 0.9;
+    } else {
+        [FURenderKit shareRenderKit].makeup.enable = NO;
+        [FURenderKit shareRenderKit].makeup = nil;
+    }
+#endif
+}
+- (void)setSticker: (BOOL)isSelected {
+#if __has_include(<FURenderKit/FURenderKit.h>)
+    if (isSelected) {
+        [self setStickerPath:@"DaisyPig"];
+    } else {
+        [[FURenderKit shareRenderKit].stickerContainer removeAllSticks];
+    }
+#endif
+}
+- (void)setFilter: (BOOL)isSelected {
+#if __has_include(<FURenderKit/FURenderKit.h>)
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+        NSString *beautyPath = [bundle pathForResource:@"graphics/face_beautification" ofType:@"bundle"];
+        FUBeauty *beauty = [[FUBeauty alloc] initWithPath:beautyPath name:@"FUBeauty"];
+        beauty.filterName = FUFilterMiTao1;
+        beauty.filterLevel = 0.8;
+        [FURenderKit shareRenderKit].beauty = beauty;
+    } else {
+        [FURenderKit shareRenderKit].beauty = nil;
+    }
+#endif
+}
+
+
 - (void)onCameraChange {
 #if __has_include(<FURenderKit/FURenderKit.h>)
     [FUAIKit resetTrackedResult];
 #endif
 }
 
-- (void)setSticker: (NSString *)stickerName {
+- (void)setStickerPath: (NSString *)stickerName {
     NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
     NSString *path = [bundle pathForResource:[NSString stringWithFormat:@"贴纸/%@", stickerName] ofType:@"bundle"];
     if (!path) {

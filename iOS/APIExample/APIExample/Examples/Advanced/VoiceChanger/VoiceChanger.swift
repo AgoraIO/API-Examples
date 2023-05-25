@@ -368,6 +368,10 @@ class VoiceChangerMain: BaseViewController {
         agoraKit.setLocalVoiceReverbOf(reverbType, withValue: value)
     }
     
+    @IBAction func onVoiceFormantChange(_ sender: UISlider) {
+        agoraKit.setLocalVoiceFormant(Double(sender.value))
+    }
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         

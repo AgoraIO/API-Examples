@@ -7,7 +7,7 @@
 
 ## 1 证书激活
 
-请联系 sales@agora.io 获取证书文件替换本项目中的 **src/main/java/io/agora/rtcwithfu/authpack.java**。
+请联系 sales@agora.io 获取证书文件替换本项目中的 **beauty/faceunity/src/main/java/com/faceunity/nama/authpack.java**。
 
 
 ## 2 配置编译

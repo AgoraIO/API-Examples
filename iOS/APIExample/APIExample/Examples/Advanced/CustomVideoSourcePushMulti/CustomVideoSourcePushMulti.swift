@@ -185,7 +185,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
                     }
                 })
                 let connection = AgoraRtcConnection()
-                connection.localUid = 0
+                connection.localUid = 999
                 connection.channelId = channelName
                 agoraKit.leaveChannelEx(connection) { state in
                     LogUtils.log(message: "warning: \(state.description)", level: .info)

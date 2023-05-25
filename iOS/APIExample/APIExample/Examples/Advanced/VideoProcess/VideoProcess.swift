@@ -78,6 +78,8 @@ class VideoProcessMain : BaseViewController
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // enable filters
+        agoraKit.enableExtension(withVendor: "agora_video_filters_clear_vision", extension: "clear_vision", enabled: true, sourceType: .primaryCamera)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         // make myself a broadcaster
@@ -112,8 +114,8 @@ class VideoProcessMain : BaseViewController
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
+        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -249,11 +251,18 @@ class VideoProcessMain : BaseViewController
             break
         case 2:
             source.backgroundSourceType = .blur
-            source.blurDegree = .high;
+            source.blurDegree = .high
             break
+            
+        case 3:
+            let videoPath = Bundle.main.path(forResource: "sample", ofType: "mov")
+            source.backgroundSourceType = .video
+            source.source = videoPath
+            
         default:
             break
         }
+        source.backgroundSourceType = virtualBgSwitch.isOn ? source.backgroundSourceType : .none
         let result = agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())
         print("result == \(result)")
     }
@@ -304,6 +313,7 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
+        videoCanvas.enableAlphaMask = true
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     

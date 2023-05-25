@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -93,8 +93,8 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nK0-iB-vMh">
-                                                    <rect key="frame" x="18" y="72" width="44" height="16"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="频道号" id="8kK-yU-WUO">
+                                                    <rect key="frame" x="18" y="72" width="54" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Channel" id="8kK-yU-WUO">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -102,7 +102,7 @@
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pXc-he-PX6">
                                                     <rect key="frame" x="20" y="43" width="165" height="21"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="输入频道号" drawsBackground="YES" id="Seb-dp-fRr">
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Please Input Channel" drawsBackground="YES" id="Seb-dp-fRr">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -110,7 +110,7 @@
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CLf-AJ-PHw">
                                                     <rect key="frame" x="13" y="8" width="179" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="加入频道" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="55m-Re-Kgb">
+                                                    <buttonCell key="cell" type="push" title="Join Channel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="55m-Re-Kgb">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -119,28 +119,28 @@
                                                     </connections>
                                                 </button>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z7z-IF-MFP">
-                                                    <rect key="frame" x="20" y="621" width="31" height="16"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="音障" id="DuM-M6-we2">
+                                                    <rect key="frame" x="20" y="621" width="45" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="barrier" id="DuM-M6-we2">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="upw-R7-FbG">
-                                                    <rect key="frame" x="68" y="616" width="42" height="25"/>
+                                                    <rect key="frame" x="82" y="616" width="42" height="25"/>
                                                     <connections>
                                                         <action selector="onTapAudioAttenuationSwitch:" target="bU7-R8-ocO" id="epl-vL-PhN"/>
                                                     </connections>
                                                 </switch>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="wWJ-1q-wtE">
-                                                    <rect key="frame" x="68" y="583" width="42" height="25"/>
+                                                    <rect key="frame" x="50" y="583" width="42" height="25"/>
                                                     <connections>
                                                         <action selector="onTapMicSwitch:" target="bU7-R8-ocO" id="WYm-CA-Fiq"/>
                                                     </connections>
                                                 </switch>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="egT-xS-Dv3">
-                                                    <rect key="frame" x="20" y="588" width="44" height="16"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="麦克风" id="dgP-7k-2RR">
+                                                    <rect key="frame" x="20" y="588" width="26" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Mic" id="dgP-7k-2RR">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -156,8 +156,8 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r6b-pf-l1X">
-                                                                        <rect key="frame" x="18" y="125" width="31" height="16"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="静音" id="SPa-zU-xrL">
+                                                                        <rect key="frame" x="18" y="125" width="35" height="16"/>
+                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Mute" id="SPa-zU-xrL">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -249,8 +249,8 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2DT-n7-c9b">
-                                                                        <rect key="frame" x="18" y="125" width="31" height="16"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="静音" id="e6q-8k-QYN">
+                                                                        <rect key="frame" x="18" y="125" width="35" height="16"/>
+                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Mute" id="e6q-8k-QYN">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

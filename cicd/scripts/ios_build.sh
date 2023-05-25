@@ -54,17 +54,25 @@ echo PBXPROJ_PATH: $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
 
+#修改build number
+# Debug
+/usr/libexec/PlistBuddy -c "Set :objects:03D13BF72448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+# Release
+/usr/libexec/PlistBuddy -c "Set :objects:03D13BF82448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+
+
+
 
 TARGET_FILE=""
 if [ ! -f "Podfile" ];then
 TARGET_FILE="${APP_Project}.xcodeproj"
 xcodebuild clean -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
-xcodebuild -project ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} archive
+xcodebuild CODE_SIGN_STYLE="Manual" -project ${TARGET_FILE} -scheme "${APP_TARGET}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration ${MODE} -archivePath ${ArchivePath} archive
 else
 pod install
 TARGET_FILE="${APP_Project}.xcworkspace"
 xcodebuild clean -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE}
-xcodebuild archive -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MODE} -archivePath ${ArchivePath} -destination 'generic/platform=iOS'
+xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration ${MODE} -archivePath ${ArchivePath} -destination 'generic/platform=iOS'
 fi
 
 xcodebuild -exportArchive -exportOptionsPlist ${Export_Plist_File} -archivePath ${ArchivePath} -exportPath .

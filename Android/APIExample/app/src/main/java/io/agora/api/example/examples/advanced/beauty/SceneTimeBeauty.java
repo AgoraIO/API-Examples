@@ -1,5 +1,7 @@
 package io.agora.api.example.examples.advanced.beauty;
 
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.graphics.Matrix;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Random;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
@@ -24,14 +28,18 @@ import io.agora.api.example.databinding.FragmentBeautyScenetimeBinding;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.RendererCommon;
 import io.agora.base.internal.video.YuvHelper;
 import io.agora.beauty.base.IBeautySenseTime;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.gl.EglBaseProvider;
+import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class SceneTimeBeauty extends BaseFragment {
     private static final String TAG = "SceneTimeBeauty";
@@ -40,13 +48,8 @@ public class SceneTimeBeauty extends BaseFragment {
     private FragmentBeautyScenetimeBinding mBinding;
     private RtcEngine rtcEngine;
     private String channelId;
-    private ByteBuffer nv21ByteBuffer;
-    private byte[] nv21ByteArray;
-    private boolean isFrontCamera = true;
 
-    private TextureBufferHelper mDoubleTextureBufferHelper;
-    private TextureBufferHelper mSingleTextureBufferHelper;
-    private boolean isSingleInput = true;
+    private boolean isFrontCamera = true;
 
     private VideoReportLayout mLocalVideoLayout;
     private VideoReportLayout mRemoteVideoLayout;
@@ -54,8 +57,11 @@ public class SceneTimeBeauty extends BaseFragment {
     private IVideoFrameObserver mVideoFrameObserver;
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
+    // Beauty process require parameters
+    private TextureBufferHelper mTextureBufferHelper;
+    private ByteBuffer nv21ByteBuffer;
+    private byte[] nv21ByteArray;
     private volatile boolean isDestroyed = false;
-    private int mFrameRotation;
 
     @Nullable
     @Override
@@ -67,43 +73,41 @@ public class SceneTimeBeauty extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isDestroyed = false;
         if (!IBeautySenseTime.hasIntegrated()) {
             mBinding.tvIntegrateTip.setVisibility(View.VISIBLE);
             return;
         }
-
         channelId = getArguments().getString(getString(R.string.key_channel_name));
         initVideoView();
         initRtcEngine();
         joinChannel();
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
+        {
+            ColorEnhanceOptions options = new ColorEnhanceOptions();
+            options.strengthLevel = (float) 0.5f;
+            options.skinProtectLevel = (float) 0.5f;
+            rtcEngine.setColorEnhanceOptions(isChecked, options);
+        });
     }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        isDestroyed = true;
-        if (mSingleTextureBufferHelper != null) {
-            mSingleTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime.release();
-                iBeautySenseTime = null;
-                return null;
-            });
-            mSingleTextureBufferHelper.dispose();
-            mSingleTextureBufferHelper = null;
-        }
-        if (mDoubleTextureBufferHelper != null) {
-            mDoubleTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime.release();
-                iBeautySenseTime = null;
-                return null;
-            });
-            mDoubleTextureBufferHelper.dispose();
-            mDoubleTextureBufferHelper = null;
-        }
         if (rtcEngine != null) {
             rtcEngine.leaveChannel();
         }
+        unInitBeauty();
         RtcEngine.destroy();
+    }
+
+    @Override
+    protected void onBackPressed() {
+        isDestroyed = true;
+        mBinding.fullVideoContainer.removeAllViews();
+        mBinding.smallVideoContainer.removeAllViews();
+        super.onBackPressed();
     }
 
     private void initVideoView() {
@@ -134,11 +138,6 @@ public class SceneTimeBeauty extends BaseFragment {
         mBinding.ivCamera.setOnClickListener(v -> {
             rtcEngine.switchCamera();
             isFrontCamera = !isFrontCamera;
-        });
-        mBinding.tvBeautyInput.setText(isSingleInput ? R.string.beauty_input_single : R.string.beauty_input_double);
-        mBinding.tvBeautyInput.setOnClickListener(v -> {
-            isSingleInput = !isSingleInput;
-            mBinding.tvBeautyInput.setText(isSingleInput ? R.string.beauty_input_single : R.string.beauty_input_double);
         });
         mBinding.smallVideoContainer.setOnClickListener(v -> updateVideoLayouts(!SceneTimeBeauty.this.isLocalFull));
     }
@@ -177,7 +176,7 @@ public class SceneTimeBeauty extends BaseFragment {
                 public void onUserOffline(int uid, int reason) {
                     super.onUserOffline(uid, reason);
                     runOnUIThread(() -> {
-                        if(mRemoteVideoLayout != null && mRemoteVideoLayout.getReportUid() == uid){
+                        if (mRemoteVideoLayout != null && mRemoteVideoLayout.getReportUid() == uid) {
                             mRemoteVideoLayout.removeAllViews();
                             mRemoteVideoLayout = null;
                             updateVideoLayouts(isLocalFull);
@@ -219,35 +218,17 @@ public class SceneTimeBeauty extends BaseFragment {
                 return;
             }
 
+            rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
+
 
             mVideoFrameObserver = new IVideoFrameObserver() {
                 @Override
-                public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
-                    if (isDestroyed) {
-                        return true;
-                    }
-                    if (isSingleInput) {
-                        return processSingleInput(videoFrame);
-                    } else {
-                        if (!processDoubleInput(videoFrame)) {
-                            return processSingleInput(videoFrame);
-                        }
-                        return true;
-                    }
+                public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
+                    return processBeauty(videoFrame);
                 }
 
                 @Override
-                public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
+                public boolean onPreEncodeVideoFrame(int sourceType, VideoFrame videoFrame) {
                     return false;
                 }
 
@@ -278,7 +259,7 @@ public class SceneTimeBeauty extends BaseFragment {
 
                 @Override
                 public boolean getMirrorApplied() {
-                    return false;
+                    return true;
                 }
 
                 @Override
@@ -287,6 +268,13 @@ public class SceneTimeBeauty extends BaseFragment {
                 }
             };
             rtcEngine.registerVideoFrameObserver(mVideoFrameObserver);
+            // Setup video encoding configs
+            rtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                    ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                    STANDARD_BITRATE,
+                    VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+            ));
             rtcEngine.enableVideo();
             rtcEngine.disableAudio();
 
@@ -295,104 +283,29 @@ public class SceneTimeBeauty extends BaseFragment {
         }
     }
 
-    private boolean processSingleInput(VideoFrame videoFrame) {
-        VideoFrame.Buffer buffer = videoFrame.getBuffer();
-
-        if (mDoubleTextureBufferHelper != null) {
-            doOnBeautyReleasingBegin();
-            mDoubleTextureBufferHelper.invoke(() -> {
+    private void unInitBeauty() {
+        if (mTextureBufferHelper != null) {
+            mTextureBufferHelper.invoke(() -> {
                 iBeautySenseTime.release();
+                iBeautySenseTime = null;
                 return null;
             });
-            mDoubleTextureBufferHelper.dispose();
-            mDoubleTextureBufferHelper = null;
-            doOnBeautyReleasingEnd();
+            mTextureBufferHelper.dispose();
+            mTextureBufferHelper = null;
         }
-        if (mSingleTextureBufferHelper == null) {
-            doOnBeautyCreatingBegin();
-            mSingleTextureBufferHelper = TextureBufferHelper.create("STRender", null);
-            mSingleTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime = IBeautySenseTime.create(getContext());
-                return null;
-            });
-            doOnBeautyCreatingEnd();
-        }
-
-        int width = buffer.getWidth();
-        int height = buffer.getHeight();
-
-        int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
-        if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
-            if (nv21ByteBuffer != null) {
-                nv21ByteBuffer.clear();
-            }
-            nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
-            nv21ByteArray = new byte[nv21Size];
-        }
-
-
-        VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-        YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
-                i420Buffer.getDataV(), i420Buffer.getStrideV(),
-                i420Buffer.getDataU(), i420Buffer.getStrideU(),
-                nv21ByteBuffer, width, height);
-        nv21ByteBuffer.position(0);
-        nv21ByteBuffer.get(nv21ByteArray);
-        i420Buffer.release();
-
-        Integer processTexId = mSingleTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
-                nv21ByteArray,
-                width, height, mFrameRotation
-        ));
-
-        // drag one frame to avoid reframe when switching camera.
-        if(mFrameRotation != videoFrame.getRotation()){
-            mFrameRotation = videoFrame.getRotation();
-            return false;
-        }
-
-        VideoFrame.TextureBuffer processBuffer = mSingleTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
-                buffer instanceof VideoFrame.TextureBuffer ? ((VideoFrame.TextureBuffer) buffer).getTransformMatrix(): new Matrix());
-        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
-        buffer.release();
-
-        return true;
     }
 
-    private boolean processDoubleInput(VideoFrame videoFrame) {
-        VideoFrame.Buffer buffer = videoFrame.getBuffer();
-        if (!(buffer instanceof VideoFrame.TextureBuffer)) {
+    private boolean processBeauty(VideoFrame videoFrame) {
+        if (isDestroyed) {
             return false;
         }
-        VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
+        VideoFrame.Buffer buffer = videoFrame.getBuffer();
 
-        if (mSingleTextureBufferHelper != null) {
-            doOnBeautyReleasingBegin();
-            mSingleTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime.release();
-                return null;
-            });
-            mSingleTextureBufferHelper.dispose();
-            mSingleTextureBufferHelper = null;
-            doOnBeautyReleasingEnd();
-        }
-
-        if (mDoubleTextureBufferHelper == null) {
-            doOnBeautyCreatingBegin();
-            mDoubleTextureBufferHelper = TextureBufferHelper.create("STRender", texBuffer.getEglBaseContext());
-            mDoubleTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime = IBeautySenseTime.create(getContext());
-                return null;
-            });
-            doOnBeautyCreatingEnd();
-        }
-
-        int textureId = texBuffer.getTextureId();
-        int textureFormat = texBuffer.getType() == VideoFrame.TextureBuffer.Type.OES ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES : GLES20.GL_TEXTURE_2D;
         int width = buffer.getWidth();
         int height = buffer.getHeight();
 
+
+        // Obtain nv21 pixel data
         int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
         if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
             if (nv21ByteBuffer != null) {
@@ -400,9 +313,8 @@ public class SceneTimeBeauty extends BaseFragment {
             }
             nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
             nv21ByteArray = new byte[nv21Size];
+            return false;
         }
-
-
         VideoFrame.I420Buffer i420Buffer = buffer.toI420();
         YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
                 i420Buffer.getDataV(), i420Buffer.getStrideV(),
@@ -412,22 +324,52 @@ public class SceneTimeBeauty extends BaseFragment {
         nv21ByteBuffer.get(nv21ByteArray);
         i420Buffer.release();
 
-        Integer processTexId = mDoubleTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
-                nv21ByteArray,
-                textureId, textureFormat,
-                width, height, mFrameRotation
-        ));
-
-        // drag one frame to avoid reframe when switching camera.
-        if(mFrameRotation != videoFrame.getRotation()){
-            mFrameRotation = videoFrame.getRotation();
-            return false;
+        if (mTextureBufferHelper == null) {
+            Log.d(TAG, "doOnBeautyCreatingBegin...");
+            mTextureBufferHelper = TextureBufferHelper.create("STRender", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
+            mTextureBufferHelper.invoke(() -> {
+                iBeautySenseTime = IBeautySenseTime.create(getContext());
+                return null;
+            });
+            Log.d(TAG, "doOnBeautyCreatingEnd.");
+            runOnUIThread(() -> {
+                mBinding.cbFilter.setChecked(false);
+                mBinding.cbFaceBeautify.setChecked(false);
+                mBinding.cbSticker.setChecked(false);
+                mBinding.cbMakeup.setChecked(false);
+            });
         }
 
-        VideoFrame.TextureBuffer processBuffer = mDoubleTextureBufferHelper.wrapTextureBuffer(
-                width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, texBuffer.getTransformMatrix());
-        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
-        buffer.release();
+        int processTexId = -1;
+        if (buffer instanceof VideoFrame.TextureBuffer) {
+            VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
+            int textureFormat = texBuffer.getType() == VideoFrame.TextureBuffer.Type.OES ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES : GLES20.GL_TEXTURE_2D;
+            float[] transformMatrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(texBuffer.getTransformMatrix());
+
+            if(mTextureBufferHelper != null){
+                processTexId = mTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
+                        nv21ByteArray,
+                        texBuffer.getTextureId(), textureFormat,
+                        width, height, videoFrame.getRotation(), transformMatrix
+                ));
+            }
+
+        } else {
+            if(mTextureBufferHelper != null){
+                processTexId = mTextureBufferHelper.invoke(() ->iBeautySenseTime.process(
+                        nv21ByteArray,
+                        width, height, videoFrame.getRotation()
+                ));
+            }
+        }
+        if (processTexId < 0) {
+            return false;
+        }
+        if(mTextureBufferHelper != null){
+            VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
+                    width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, new Matrix());
+            videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+        }
 
         return true;
     }
@@ -446,56 +388,59 @@ public class SceneTimeBeauty extends BaseFragment {
 
         mLocalVideoLayout = new VideoReportLayout(requireContext());
         TextureView videoView = new TextureView(requireContext());
-        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN));
+        VideoCanvas local = new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN, 0);
+        local.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED;
+        rtcEngine.setupLocalVideo(local);
         mLocalVideoLayout.addView(videoView);
-        rtcEngine.startPreview();
 
         updateVideoLayouts(isLocalFull);
     }
 
     private void updateVideoLayouts(boolean isLocalFull) {
         this.isLocalFull = isLocalFull;
-        mBinding.fullVideoContainer.removeAllViews();
-        mBinding.smallVideoContainer.removeAllViews();
         if (isLocalFull) {
             if (mLocalVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                } else if (parent == null) {
+                    mBinding.fullVideoContainer.addView(mLocalVideoLayout);
+                }
             }
 
             if (mRemoteVideoLayout != null) {
                 mRemoteVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!SceneTimeBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                } else if(parent == null){
+                    mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         } else {
             if (mLocalVideoLayout != null) {
                 mLocalVideoLayout.getChildAt(0).setOnClickListener(v -> updateVideoLayouts(!SceneTimeBeauty.this.isLocalFull));
-                mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                ViewParent parent = mLocalVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
+                    ((ViewGroup) parent).removeView(mLocalVideoLayout);
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                } else if(parent == null){
+                    mBinding.smallVideoContainer.addView(mLocalVideoLayout);
+                }
             }
+
             if (mRemoteVideoLayout != null) {
-                mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                ViewParent parent = mRemoteVideoLayout.getParent();
+                if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
+                    ((ViewGroup) parent).removeView(mRemoteVideoLayout);
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                } else if(parent == null) {
+                    mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
+                }
             }
         }
     }
 
-    private void doOnBeautyCreatingBegin() {
-        Log.d(TAG, "doOnBeautyCreatingBegin...");
-    }
-
-    private void doOnBeautyCreatingEnd() {
-        Log.d(TAG, "doOnBeautyCreatingEnd.");
-        runOnUIThread(() -> {
-            mBinding.cbFilter.setChecked(false);
-            mBinding.cbFaceBeautify.setChecked(false);
-            mBinding.cbSticker.setChecked(false);
-            mBinding.cbMakeup.setChecked(false);
-        });
-    }
-
-    private void doOnBeautyReleasingBegin() {
-        Log.d(TAG, "doOnBeautyReleasingBegin...");
-    }
-
-    private void doOnBeautyReleasingEnd() {
-        Log.d(TAG, "doOnBeautyReleasingEnd.");
-    }
 }

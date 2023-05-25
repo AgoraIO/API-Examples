@@ -12,7 +12,7 @@
 		<string>apiexamplemac</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>Developer ID Application</string>
+	<string>35CC30DFC3AA90845718DE3E28DFD32DB1A672BF</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>teamID</key>

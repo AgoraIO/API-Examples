@@ -6,7 +6,6 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -132,7 +131,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             SegmentationProperty segproperty = new SegmentationProperty();
             if (checkedId == R.id.virtual_bg_image) {
                 backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_IMG;
-                String imagePath = Environment.getExternalStorageDirectory().getPath();
+                String imagePath = requireContext().getExternalCacheDir().getPath();
                 String imageName = "agora-logo.png";
                 FileUtils.copyFilesFromAssets(getContext(), imageName, imagePath);
                 backgroundSource.source = imagePath + FileUtils.SEPARATOR + imageName;
@@ -142,6 +141,9 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             } else if (checkedId == R.id.virtual_bg_blur) {
                 backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_BLUR;
                 backgroundSource.blurDegree = VirtualBackgroundSource.BLUR_DEGREE_MEDIUM;
+            } else if (checkedId == R.id.virtual_bg_video) {
+                backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_VIDEO;
+                backgroundSource.source = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
             }
             engine.enableVirtualBackground(true, backgroundSource, segproperty);
         }else{
@@ -200,6 +202,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
+            engine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
         }
         catch (Exception e)
         {

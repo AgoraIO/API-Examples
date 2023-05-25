@@ -75,6 +75,9 @@
             android:id="@+id/action_mainFragment_to_ScreenSharing"
             app:destination="@id/ScreenSharing" />
         <action
+            android:id="@+id/action_mainFragment_to_LocalVideoTranscoding"
+            app:destination="@id/LocalVideoTranscoding" />
+        <action
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
         <action
@@ -83,6 +86,9 @@
         <action
             android:id="@+id/action_mainFragment_to_MediaPlayer"
             app:destination="@id/MediaPlayer" />
+        <action
+            android:id="@+id/action_mainFragment_to_MediaRecorder"
+            app:destination="@id/MediaRecorder" />
         <action
             android:id="@+id/action_mainFragment_to_InCallReport"
             app:destination="@id/InCallReport" />
@@ -273,6 +279,11 @@
         android:label="@string/item_screensharing"
         tools:layout="@layout/fragment_screen_sharing" />
     <fragment
+        android:id="@+id/LocalVideoTranscoding"
+        android:name="io.agora.api.example.examples.advanced.LocalVideoTranscoding"
+        android:label="@string/item_localvideotranscoding"
+        tools:layout="@layout/fragment_localvideotranscoding" />
+    <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
         android:label="@string/item_joinmultichannel"
@@ -292,6 +303,11 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"
         android:label="@string/item_mediaplayer"
         tools:layout="@layout/fragment_media_player" />
+    <fragment
+        android:id="@+id/MediaRecorder"
+        android:name="io.agora.api.example.examples.advanced.MediaRecorder"
+        android:label="@string/item_media_recorder"
+        tools:layout="@layout/fragment_media_recorder" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"

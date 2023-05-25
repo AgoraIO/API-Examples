@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -41,23 +41,28 @@
                                                     <rect key="frame" x="27" y="379" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
-                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="y51-1T-fyV">
-                                                    <rect key="frame" x="247" y="328" width="42" height="25"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="y51-1T-fyV">
+                                                    <rect key="frame" x="247" y="327" width="42" height="26"/>
                                                     <connections>
                                                         <action selector="pushPcmSwitchChanged:" target="8Q5-xy-D8A" id="slN-kB-5jh"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4aU-XV-qtP">
-                                                    <rect key="frame" x="25" y="333" width="90" height="16"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="播放本地PCM" id="UzT-xh-vr5">
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4aU-XV-qtP">
+                                                    <rect key="frame" x="25" y="333" width="117" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Play the local PCM" id="UzT-xh-vr5">
+                                                        <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="4aU-XV-qtP" firstAttribute="baseline" secondItem="y51-1T-fyV" secondAttribute="firstBaseline" id="94E-ug-mwP"/>
+                                                <constraint firstItem="4aU-XV-qtP" firstAttribute="baseline" secondItem="y51-1T-fyV" secondAttribute="baseline" id="FTQ-sL-1eL"/>
+                                                <constraint firstItem="4aU-XV-qtP" firstAttribute="top" secondItem="4nj-dO-E82" secondAttribute="bottom" constant="30" id="UcB-Gy-BTV"/>
+                                                <constraint firstItem="4aU-XV-qtP" firstAttribute="leading" secondItem="4nj-dO-E82" secondAttribute="leading" id="mK9-4s-xLS"/>
+                                                <constraint firstItem="y51-1T-fyV" firstAttribute="leading" secondItem="4aU-XV-qtP" secondAttribute="trailing" constant="109" id="ubl-Mf-adX"/>
+                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>

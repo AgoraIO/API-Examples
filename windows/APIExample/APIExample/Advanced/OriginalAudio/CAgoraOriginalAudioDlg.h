@@ -11,7 +11,7 @@ public:
 	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
 
 	*/
-	virtual void OnRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
+	virtual void onRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
 
 	/**
 	* Occurs each time the SDK receives an encoded playback audio frame.
@@ -20,7 +20,7 @@ public:
 	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
 
 	*/
-	virtual void OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)override;
+	virtual void onPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
 
 	/**
 	* Occurs each time the SDK receives an encoded mixed audio frame.
@@ -29,7 +29,7 @@ public:
 	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
 
 	*/
-	virtual void OnMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
+	virtual void onMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
 
 };
 class COriginalAudioProcFrameObserver :

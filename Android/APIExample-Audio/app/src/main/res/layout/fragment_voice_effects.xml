@@ -439,6 +439,33 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Voice Formant"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/audio_voice_formant_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:progress="50"
+                    android:max="100"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

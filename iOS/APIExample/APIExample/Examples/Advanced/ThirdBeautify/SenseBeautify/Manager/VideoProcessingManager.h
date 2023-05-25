@@ -13,6 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VideoProcessingManager : NSObject
 
+- (void)setBuauty: (BOOL)isSelected;
+- (void)setMakeup: (BOOL)isSelected;
+- (void)setSticker: (BOOL)isSelected;
+- (void)setFilter: (BOOL)isSelected;
+
 - (CVPixelBufferRef)videoProcessHandler:(CVPixelBufferRef)pixelBuffer;
 
 @end

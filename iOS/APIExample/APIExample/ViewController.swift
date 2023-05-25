@@ -27,7 +27,8 @@ class ViewController: AGViewController {
         MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Token)".localized, storyboard: "JoinChannelVideoToken", controller: ""),
             MenuItem(name: "Join a channel (Video)".localized, storyboard: "JoinChannelVideo", controller: ""),
-            MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
+            MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: ""),
+            MenuItem(name: "Local or remote recording".localized, storyboard: "JoinChannelVideoRecorder", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [
 //            MenuItem(name: "Group Video Chat".localized, storyboard: "VideoChat", controller: "VideoChat"),

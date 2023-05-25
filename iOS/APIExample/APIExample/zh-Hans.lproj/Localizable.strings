@@ -9,6 +9,7 @@
 "Join a channel (Token)" = "实时视频通话/直播(Token验证)";
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
+"Local or remote recording" = "本地/远端录制";
 "Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
 "Media Injection" = "流媒体注入";
@@ -153,3 +154,6 @@
 "This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR功能仅在内置A9处理器后的iOS机型支持";
 "Move Camera to find a planar\n(Shown as Red Rectangle)" = "移动相机以找到一个平面\n(以红色方块显示)";
 "Tap to place remote video canvas" = "点击屏幕以放置视频画布";
+"Recording" = "开始录制";
+"Stop Recording" = "停止录制";
+"PIP Support iOS 15+" = "画中画只支持iOS15及以上版本";

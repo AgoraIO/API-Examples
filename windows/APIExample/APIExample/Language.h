@@ -36,8 +36,10 @@ extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
+extern wchar_t advancedMediaRecorder[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
 extern wchar_t advancedMultiVideoSource[INFO_LEN];
+extern wchar_t advancedMultiVideoSourceTracks[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
 extern wchar_t advancedPerCallTest[INFO_LEN];
 extern wchar_t advancedAudioVolume[INFO_LEN];
@@ -122,7 +124,11 @@ extern wchar_t  screenShareCtrlStopShare[INFO_LEN];
 extern wchar_t  screenShareCtrlGeneralSettings[INFO_LEN];
 extern wchar_t  screenShareCtrlFPS[INFO_LEN];
 extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
+extern wchar_t  screenShareCtrlScale[INFO_LEN];
 extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
+extern wchar_t  screenShareCtrlHighLight[INFO_LEN];
+extern wchar_t  screenShareCtrlInclude[INFO_LEN];
+extern wchar_t  screenShareCtrlExeclude[INFO_LEN];
 extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
 
 
@@ -331,3 +337,8 @@ extern wchar_t SpatialAudioMoveInfo[INFO_LEN];
 extern wchar_t SpatialAudioPrepareInfo[INFO_LEN];
 // beauty
 extern wchar_t beautyFace[INFO_LEN];
+
+extern wchar_t mediaRecorderStartRecording[INFO_LEN];
+extern wchar_t mediaRecorderStopRecording[INFO_LEN];
+
+extern wchar_t localVideoTranscodingVirtualBg[INFO_LEN];

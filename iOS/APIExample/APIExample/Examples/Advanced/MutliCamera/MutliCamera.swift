@@ -109,8 +109,8 @@ class MutliCameraMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
+        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, uid: uid, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: self.uid, mediaOptions: option)
@@ -123,7 +123,7 @@ class MutliCameraMain: BaseViewController {
             }
         })
     }
-
+    
     private var isOpenCamera: Bool = false
     @IBAction func onTapBackCameraButton(_ sender: UIButton) {
         guard let channelName = configs["channelName"] as? String else {return}
@@ -134,36 +134,40 @@ class MutliCameraMain: BaseViewController {
         connection.channelId = channelName
         connection.localUid = mutliCameraUid
         if isOpenCamera {
-          let videoCanvas = AgoraRtcVideoCanvas()
-          videoCanvas.uid = mutliCameraUid
-          videoCanvas.view = localVideo_2.videoView
-          videoCanvas.renderMode = .hidden
-          videoCanvas.sourceType = .cameraSecondary
-          videoCanvas.mirrorMode = .disabled
-          agoraKit.setupLocalVideo(videoCanvas)
-
-          agoraKit.startSecondaryCameraCapture()
-          let option = AgoraRtcChannelMediaOptions()
-          option.publishSecondaryCameraTrack = true
-          option.publishMicrophoneTrack = true
-          option.clientRoleType = .broadcaster
-          option.autoSubscribeAudio = false
-          option.autoSubscribeVideo = false
-          NetworkManager.shared.generateToken(channelName: channelName, uid: mutliCameraUid) { token in
-            self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
-            self.agoraKit.muteRemoteAudioStream(self.mutliCameraUid, mute: true)
-            self.agoraKit.muteRemoteVideoStream(self.mutliCameraUid, mute: true)
-          }
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = mutliCameraUid
+            videoCanvas.view = localVideo_2.videoView
+            videoCanvas.renderMode = .hidden
+            videoCanvas.sourceType = .cameraSecondary
+            videoCanvas.mirrorMode = .disabled
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            let cameraConfig = AgoraCameraCapturerConfiguration()
+            cameraConfig.cameraDirection = .rear
+            cameraConfig.dimensions = localVideo_2.videoView.frame.size
+            agoraKit.enableMultiCamera(true, config: cameraConfig)
+            agoraKit.startCameraCapture(.cameraSecondary, config: cameraConfig)
+            
+            let option = AgoraRtcChannelMediaOptions()
+            option.publishSecondaryCameraTrack = true
+            option.publishMicrophoneTrack = true
+            option.clientRoleType = .broadcaster
+            option.autoSubscribeAudio = false
+            option.autoSubscribeVideo = false
+            NetworkManager.shared.generateToken(channelName: channelName, uid: mutliCameraUid) { token in
+                self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
+                self.agoraKit.muteRemoteAudioStream(self.mutliCameraUid, mute: true)
+                self.agoraKit.muteRemoteVideoStream(self.mutliCameraUid, mute: true)
+            }
         } else {
-          let videoCanvas = AgoraRtcVideoCanvas()
-          videoCanvas.uid = mutliCameraUid
-          videoCanvas.view = nil
-          videoCanvas.renderMode = .hidden
-          videoCanvas.sourceType = .cameraSecondary
-          agoraKit.setupLocalVideo(videoCanvas)
-          
-          agoraKit.stopSecondaryCameraCapture()
-          agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = mutliCameraUid
+            videoCanvas.view = nil
+            videoCanvas.renderMode = .hidden
+            videoCanvas.sourceType = .cameraSecondary
+            agoraKit.setupLocalVideo(videoCanvas)
+            agoraKit.stopCameraCapture(.cameraSecondary)
+            agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
         }
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -180,7 +184,7 @@ class MutliCameraMain: BaseViewController {
                 let connection = AgoraRtcConnection()
                 connection.channelId = channelName
                 connection.localUid = mutliCameraUid
-                agoraKit.stopSecondaryCameraCapture()
+                agoraKit.stopCameraCapture(.cameraSecondary)
                 agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
             }
             AgoraRtcEngineKit.destroy()
