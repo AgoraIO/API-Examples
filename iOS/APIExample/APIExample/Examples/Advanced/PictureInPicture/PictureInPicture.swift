@@ -42,7 +42,6 @@ class PictureInPictureMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var pipController: AgoraPictureInPictureController?
     var remoteUid: UInt?
-    
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
@@ -54,6 +53,9 @@ class PictureInPictureMain: BaseViewController {
         container.layoutStream(views: [localVideo, remoteVideo])
         
         pipController = AgoraPictureInPictureController(displayView: remoteVideo.videoView)
+        if #available(iOS 14.2, *) {
+            pipController?.pipController.canStartPictureInPictureAutomaticallyFromInline = true
+        }
         pipController?.pipController.delegate = self
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
@@ -79,7 +81,7 @@ class PictureInPictureMain: BaseViewController {
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         
         // enable video module and set up video encoding configs
@@ -121,15 +123,31 @@ class PictureInPictureMain: BaseViewController {
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
+        
+//        rtcEngine(agoraKit, didVideoMuted: true, byUid: 0)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didEnterBackgroundNotification),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
     }
-        
+    
+    deinit {
+        pipController?.releasePIP()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc
+    private func didEnterBackgroundNotification() {
+        onPIP(_btn: UIButton())
+    }
+    
     @IBAction func onPIP(_btn: UIButton) {
-        guard let currentPipController = pipController else {return}
-        
-        if currentPipController.pipController.isPictureInPicturePossible {
+        if let currentPipController = pipController {
             currentPipController.pipController.startPictureInPicture()
+        } else {
+            showAlert(message: "PIP Support iOS 15+".localized)
         }
-
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -198,23 +216,35 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
-        remoteVideo.videoView.reset()
+//        remoteVideo.videoView.reset()
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
+        guard muted else { return }
+        let pixelBuffer = MediaUtils.cvPixelBufferRef(from: UIImage(named: "agora-logo") ?? UIImage()).takeRetainedValue()
+        let videoFrame = AgoraOutputVideoFrame()
+        videoFrame.pixelBuffer = pixelBuffer
+        videoFrame.width = Int32(remoteVideo.videoView.frame.width)
+        videoFrame.height = Int32(remoteVideo.videoView.frame.height)
+        remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
     }
 }
 
 // MARK: - AgoraVideoDataFrameProtocol
 extension PictureInPictureMain: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         true
     }
     
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
-        remoteVideo.videoView.renderVideoData(videoFrame)
+        remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
         return true
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        .I420
+        .cvPixelBGRA
+    }
+    func getRotationApplied() -> Bool {
+        true
     }
 }
 

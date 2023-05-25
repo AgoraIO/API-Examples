@@ -41,7 +41,8 @@ class Configs {
     static var defaultFpsIdx: Int = 0
     static var Fps:[Int] = [
         15,
-        30
+        30,
+        60
     ]
     static var Proxy:[Bool] = [
         true,

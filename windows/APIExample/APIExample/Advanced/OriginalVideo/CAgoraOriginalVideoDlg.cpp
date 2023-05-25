@@ -274,7 +274,7 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 
 
 //see the header file for details
-bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame & videoFrame)
 {
 	int nSize = videoFrame.height * videoFrame.width;
 	//set UV to 128 to mask color information
@@ -289,43 +289,12 @@ bool CGrayVideoProcFrameObserver::onRenderVideoFrame(const char* channelId, rtc:
 }
 
 
-bool CGrayVideoProcFrameObserver::onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
 
 
-bool CGrayVideoProcFrameObserver::onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
 
-
-bool CGrayVideoProcFrameObserver::onScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CGrayVideoProcFrameObserver::onPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CGrayVideoProcFrameObserver::onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CGrayVideoProcFrameObserver::onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
 
 //see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame & videoFrame)
 {
 	static int step = 1;
 	static bool flag = true;
@@ -483,40 +452,6 @@ void CAverageFilterVideoProcFrameObserver::AverageFiltering(unsigned char * data
 }
 
 
-bool CAverageFilterVideoProcFrameObserver::onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CAverageFilterVideoProcFrameObserver::onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CAverageFilterVideoProcFrameObserver::onScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CAverageFilterVideoProcFrameObserver::onPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CAverageFilterVideoProcFrameObserver::onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
-
-
-bool CAverageFilterVideoProcFrameObserver::onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
-{
-	return FALSE;
-}
 
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)

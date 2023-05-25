@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -107,19 +107,19 @@
                                                                     </connections>
                                                                 </switch>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlg-QO-ZFt">
-                                                                    <rect key="frame" x="4" y="15" width="38" height="14"/>
+                                                                    <rect key="frame" x="4" y="15" width="57" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="大小流" id="XH3-Ib-cXr">
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="S or l flow" id="XH3-Ib-cXr">
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oWl-wl-X6G">
-                                                                    <rect key="frame" x="3" y="3" width="54" height="11"/>
+                                                                    <rect key="frame" x="3" y="3" width="61" height="10"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="(默认: 大流)" id="d9V-RQ-OX6">
-                                                                        <font key="font" metaFont="miniSystem"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="(Default: flow)" id="d9V-RQ-OX6">
+                                                                        <font key="font" metaFont="system" size="8"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
@@ -147,14 +147,14 @@
                                                     <rect key="frame" x="27" y="78" width="84" height="50"/>
                                                     <subviews>
                                                         <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="buV-LU-tnP">
-                                                            <rect key="frame" x="33" y="12" width="42" height="25"/>
+                                                            <rect key="frame" x="27" y="12" width="42" height="25"/>
                                                             <connections>
                                                                 <action selector="bFrameSwitch:" target="YjT-yy-DnJ" id="nI9-q7-UHt"/>
                                                             </connections>
                                                         </switch>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dbb-jt-Cz9">
-                                                            <rect key="frame" x="5" y="18" width="24" height="14"/>
-                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="B帧" id="gt3-r0-jqt">
+                                                            <rect key="frame" x="5" y="18" width="18" height="14"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="BF" id="gt3-r0-jqt">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -174,8 +174,8 @@
                                                         <font key="font" metaFont="system"/>
                                                         <segments>
                                                             <segment label="Auto" width="56" selected="YES"/>
-                                                            <segment label="软编" width="56" tag="1"/>
-                                                            <segment label="硬编" width="55"/>
+                                                            <segment label="Soft knitting" width="56" tag="1"/>
+                                                            <segment label="Hard knitting" width="55"/>
                                                         </segments>
                                                     </segmentedCell>
                                                     <connections>
@@ -183,9 +183,9 @@
                                                     </connections>
                                                 </segmentedControl>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fh5-ag-luK">
-                                                    <rect key="frame" x="30" y="54" width="58" height="16"/>
+                                                    <rect key="frame" x="30" y="54" width="124" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="首帧出图" id="PDX-e5-ZpY">
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="First frame is drawn" id="PDX-e5-ZpY">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

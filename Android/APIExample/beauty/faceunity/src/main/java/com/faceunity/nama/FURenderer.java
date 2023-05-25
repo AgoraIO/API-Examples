@@ -123,11 +123,11 @@ public class FURenderer extends IFURenderer {
      * @return
      */
     @Override
-    public int onDrawFrameDualInput(byte[] img, int texId, int width, int height) {
+    public int onDrawFrameDualInput(int texId, int width, int height) {
         prepareDrawFrame();
         FURenderInputData inputData = new FURenderInputData(width, height);
         /*注释掉Buffer配置，启用单纹理模式，防止Buffer跟纹理存在不对齐造成，美妆偏移*/
-        inputData.setImageBuffer(new FURenderInputData.FUImageBuffer(inputBufferType, img));//设置为单Buffer输入
+        // inputData.setImageBuffer(new FURenderInputData.FUImageBuffer(inputBufferType, img));//设置为单Buffer输入
         inputData.setTexture(new FURenderInputData.FUTexture(inputTextureType, texId));
         FURenderInputData.FURenderConfig config = inputData.getRenderConfig();
         config.setExternalInputType(externalInputType);
@@ -148,12 +148,11 @@ public class FURenderer extends IFURenderer {
     }
 
     @Override
-    public int onDrawFrameInput(int texId, int width, int height) {
+    public int onDrawFrameInput(byte[] img, int width, int height) {
         prepareDrawFrame();
         FURenderInputData inputData = new FURenderInputData(width, height);
         /*注释掉Buffer配置，启用单纹理模式，防止Buffer跟纹理存在不对齐造成，美妆偏移*/
-//        inputData.setImageBuffer(new FURenderInputData.FUImageBuffer(inputBufferType, img));//设置为单Buffer输入
-        inputData.setTexture(new FURenderInputData.FUTexture(inputTextureType, texId));
+        inputData.setImageBuffer(new FURenderInputData.FUImageBuffer(inputBufferType, img));//设置为单Buffer输入
         FURenderInputData.FURenderConfig config = inputData.getRenderConfig();
         config.setExternalInputType(externalInputType);
         config.setInputOrientation(inputOrientation);
@@ -168,7 +167,7 @@ public class FURenderer extends IFURenderer {
         if (outputData.getTexture() != null && outputData.getTexture().getTexId() > 0) {
             return outputData.getTexture().getTexId();
         }
-        return texId;
+        return -1;
     }
 
     /**

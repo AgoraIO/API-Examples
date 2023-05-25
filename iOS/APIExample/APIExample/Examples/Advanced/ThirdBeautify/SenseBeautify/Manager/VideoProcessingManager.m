@@ -26,6 +26,7 @@
 @property (nonatomic) dispatch_queue_t renderQueue;
 ///贴纸id
 @property (nonatomic, assign) int stickerId;
+@property (nonatomic, assign) int filterId;
 
 @end
 
@@ -43,16 +44,76 @@
             [self.effectsProcess setModelPath:[bundle pathForResource:@"model" ofType:@"bundle"]];
             [EAGLContext setCurrentContext:self.glContext];
             self.effectsProcess.detectConfig = ST_MOBILE_FACE_DETECT;
-            [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0.7];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0.8];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0.6];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:1.0];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:1.0];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0.7];
+
 #endif
         });
     }
     return self;
+}
+
+- (void)setBuauty: (BOOL)isSelected {
+#if __has_include("st_mobile_common.h")
+    if (isSelected) {
+        [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0.7];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0.8];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0.6];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:1.0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:1.0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0.7];
+    } else {
+        [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:0];
+        [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0];
+    }
+#endif
+}
+- (void)setMakeup: (BOOL)isSelected {
+#if __has_include("st_mobile_common.h")
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
+        __weak VideoProcessingManager *weakself = self;
+        [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
+            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_MAKEUP strength:0.5];
+            weakself.stickerId = sticker;
+        }];
+    } else {
+        [self.effectsProcess removeSticker:self.stickerId];
+        self.stickerId = 0;
+    }
+#endif
+}
+- (void)setSticker: (BOOL)isSelected {
+#if __has_include("st_mobile_common.h")
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"lianxingface.zip" ofType:nil];
+        [self.effectsProcess setStickerWithPath:path callBack:^(st_result_t state, int stickerId, uint64_t action) {
+                 
+        }];
+    } else {
+        [self.effectsProcess cleareStickers];
+    }
+#endif
+}
+- (void)setFilter: (BOOL)isSelected {
+#if __has_include("st_mobile_common.h")
+    if (isSelected) {
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
+        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
+        __weak VideoProcessingManager *weakself = self;
+        [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
+            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_FILTER strength:0.5];
+            weakself.filterId = sticker;
+        }];
+    } else {
+        [self.effectsProcess removeSticker:self.filterId];
+        self.filterId = 0;
+    }
+#endif
 }
 
 - (CVPixelBufferRef)videoProcessHandler:(CVPixelBufferRef)pixelBuffer {
@@ -69,6 +130,19 @@
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     int width = (int)CVPixelBufferGetWidth(pixelBuffer);
     int heigh = (int)CVPixelBufferGetHeight(pixelBuffer);
+    if (_outTexture) {
+        int _cacheW = (int)CVPixelBufferGetWidth(_outputPixelBuffer);
+        int _cacheH = (int)CVPixelBufferGetHeight(_outputPixelBuffer);
+        if (_cacheH != heigh || _cacheW != width) {
+            GLuint testTexture = 0;
+#if __has_include("st_mobile_common.h")
+            [self.effectsProcess deleteTexture:&testTexture pixelBuffer:&_outputPixelBuffer cvTexture:&_outputCVTexture];
+#endif
+            _outTexture = 0;
+            _outputPixelBuffer = NULL;
+            _outputCVTexture = NULL;
+        }
+    }
     if(!_outTexture){
 #if __has_include("st_mobile_common.h")
         [self.effectsProcess createGLObjectWith:width

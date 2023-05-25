@@ -125,6 +125,8 @@
     <string name="item_picture_in_picture">Picture In Picture</string>
     <string name="item_third_party_beauty">Third-party beauty</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
+    <string name="item_media_recorder">Local/Remote MediaRecorder</string>
+    <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -145,12 +147,14 @@
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="screensharing">This example demonstrates how to use screen sharing during an audio-video call.</string>
+    <string name="localvideotranscoding">This example demonstrates how to use local video transcoding during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
     <string name="mediaplayer">This example demonstrates how to use MediaPlayer. It is one of components for Agora SDK.</string>
+    <string name="media_recorder">This example demonstrates how to use MediaRecorder to recorde local or remote video.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
@@ -254,6 +258,7 @@
     <string name="virtual_background_image">Image</string>
     <string name="virtual_background_color">Color</string>
     <string name="virtual_background_blur">Blur</string>
+    <string name="virtual_background_video">Video</string>
     <string name="area">Area</string>
     <string name="watermark">Watermark</string>
     <string name="low_stream">Low Stream</string>
@@ -314,4 +319,8 @@
     <string name="reopen_url_again">Reopen url again?</string>
     <string name="first_frame_optimization">First Frame Optimization</string>
     <string name="first_frame_optimization_tip">It cannot be turned off after it is turned on, and it will take effect only when both the main and auxiliary ends are turned on</string>
+    <string name="start_recording">Start Recording</string>
+    <string name="stop_recording">Stop Recording</string>
+    <string name="recording_tag" translatable="false">RecordingTag</string>
+    <string name="transparent_background">TransparentBackground</string>
 </resources>

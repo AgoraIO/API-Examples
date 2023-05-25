@@ -126,8 +126,8 @@ class RTMPStreamingMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
+        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
@@ -298,7 +298,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
         } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errCode.rawValue)")
+//            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errCode.rawValue)")
         } else if(state == .idle) {
             self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
             isPublished = false

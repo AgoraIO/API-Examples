@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ScreenShare" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>
@@ -70,7 +70,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9hg-d6-5Js">
-                                <rect key="frame" x="0.0" y="297" width="60" height="60"/>
+                                <rect key="frame" x="0.0" y="301" width="60" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="36p-dx-oFV"/>
@@ -84,7 +84,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="233"/>
                                 <color key="backgroundColor" systemColor="systemBrownColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="sSr-Z8-XSr" secondAttribute="height" multiplier="16:9" id="8Wr-HN-KP2"/>
@@ -123,32 +123,32 @@
                                     <constraint firstItem="QUG-ji-HaF" firstAttribute="centerX" secondItem="36k-cG-J7Y" secondAttribute="centerX" id="jxz-5r-7JK"/>
                                 </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="tkf-cU-kbf">
-                                <rect key="frame" x="0.0" y="397" width="414" height="321"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tkf-cU-kbf">
+                                <rect key="frame" x="0.0" y="401" width="414" height="317"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cU2-BZ-LPT">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="71.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="captureAudio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EeY-25-Tss">
-                                                <rect key="frame" x="8" y="30" width="101.5" height="20.5"/>
+                                                <rect key="frame" x="8" y="25.5" width="101.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZKm-ON-RY6">
-                                                <rect key="frame" x="124.5" y="24.5" width="51" height="31"/>
+                                                <rect key="frame" x="124.5" y="20.5" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="clickCaptureAudio:" destination="jxp-ZN-2yG" eventType="valueChanged" id="i97-GT-1vo"/>
                                                 </connections>
                                             </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="captureVideo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hr8-te-ztM">
-                                                <rect key="frame" x="240.5" y="30" width="101.5" height="20.5"/>
+                                                <rect key="frame" x="240.5" y="25.5" width="101.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R0j-jh-ox6">
-                                                <rect key="frame" x="357" y="24.5" width="51" height="31"/>
+                                                <rect key="frame" x="357" y="20.5" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="clickCaptureVideo:" destination="jxp-ZN-2yG" eventType="valueChanged" id="ixI-4x-Zbi"/>
                                                 </connections>
@@ -167,16 +167,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIs-s0-sRw">
-                                        <rect key="frame" x="0.0" y="80" width="414" height="80.5"/>
+                                        <rect key="frame" x="0.0" y="81.5" width="414" height="72"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="captureSignalVolume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d7R-BO-VFF">
-                                                <rect key="frame" x="8" y="30" width="161.5" height="20.5"/>
+                                                <rect key="frame" x="8" y="26" width="161.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="0Nj-9c-kaf">
-                                                <rect key="frame" x="177.5" y="25.5" width="230.5" height="31"/>
+                                                <rect key="frame" x="177.5" y="21" width="230.5" height="31"/>
                                                 <connections>
                                                     <action selector="captureSignalVolumeSlider:" destination="jxp-ZN-2yG" eventType="valueChanged" id="Mhd-Mr-pya"/>
                                                 </connections>
@@ -192,11 +192,37 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="msA-FB-9FR">
-                                        <rect key="frame" x="0.0" y="160.5" width="414" height="80"/>
+                                        <rect key="frame" x="0.0" y="163.5" width="414" height="71.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="captureFrameRate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yy3-y8-YOa">
+                                                <rect key="frame" x="13" y="25.5" width="141" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="doI-u6-5jw">
+                                                <rect key="frame" x="247" y="18.5" width="151" height="34.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="151" id="ROQ-Nz-v2k"/>
+                                                    <constraint firstAttribute="height" constant="34.5" id="cVM-A6-JKu"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="15fps"/>
+                                                <connections>
+                                                    <action selector="clickFpsButton:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="CA8-4J-t6M"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="doI-u6-5jw" secondAttribute="trailing" constant="16" id="I3x-Xk-9pi"/>
+                                            <constraint firstItem="doI-u6-5jw" firstAttribute="centerY" secondItem="msA-FB-9FR" secondAttribute="centerY" id="NnC-u6-KmK"/>
+                                            <constraint firstItem="yy3-y8-YOa" firstAttribute="centerY" secondItem="msA-FB-9FR" secondAttribute="centerY" id="a67-yc-W5x"/>
+                                            <constraint firstItem="yy3-y8-YOa" firstAttribute="leading" secondItem="msA-FB-9FR" secondAttribute="leading" constant="13" id="xF8-no-kWc"/>
+                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y0b-l0-Tfi">
-                                        <rect key="frame" x="0.0" y="240.5" width="414" height="80.5"/>
+                                        <rect key="frame" x="0.0" y="245" width="414" height="72"/>
                                     </view>
                                 </subviews>
                             </stackView>
@@ -221,6 +247,7 @@
                     <connections>
                         <outlet property="broadcasterPickerContainer" destination="9hg-d6-5Js" id="j9r-cA-t7f"/>
                         <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
+                        <outlet property="fpsButton" destination="doI-u6-5jw" id="3HE-RA-vDv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

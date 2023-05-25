@@ -128,6 +128,10 @@ void CAgoraBeautyAudio::ResumeStatus()
 	m_joinChannel = false;
 	m_initialize = false;
 	m_beautyAudio = false;
+
+	m_slcVoiceFormant.SetRange(0, 100);
+	m_slcVoiceFormant.SetPos(50);
+	m_staVoiceFormantVlaue.SetWindowText(_T("0"));
 }
 
 void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
@@ -148,6 +152,8 @@ void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_PARAM2, m_staParam2);
 	DDX_Control(pDX, IDC_EDIT_PARAM1, m_edtParam1);
 	DDX_Control(pDX, IDC_EDIT_PARAM2, m_edtParam2);
+	DDX_Control(pDX, IDC_SLIDER_VOICE_FORMANT, m_slcVoiceFormant);
+	DDX_Control(pDX, IDC_STATIC_VOICE_FORMAT_VALUE, m_staVoiceFormantVlaue);
 }
 
 
@@ -163,6 +169,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_VOICE_FORMANT, &CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant)
 END_MESSAGE_MAP()
 
 
@@ -200,6 +207,27 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 				_T("STYLE_TRANSFORMATION_RNB"), 
 				_T("STYLE_TRANSFORMATION_POPULAR"),
 				_T("PITCH_CORRECTION"), })));
+
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("VoiceConversion")),
+			std::vector<CString>({
+				_T("VOICE_CONVERSION_OFF"),
+				_T("VOICE_CHANGER_NEUTRAL"),
+				_T("VOICE_CHANGER_SWEET"),
+				_T("VOICE_CHANGER_SOLID"),
+				_T("VOICE_CHANGER_BASS"),
+				_T("VOICE_CHANGER_CARTOON"),
+				_T("VOICE_CHANGER_CHILDLIKE"),
+				_T("VOICE_CHANGER_PHONE_OPERATOR"),
+				_T("VOICE_CHANGER_MONSTER"),
+				_T("VOICE_CHANGER_TRANSFORMERS"),
+				_T("VOICE_CHANGER_GROOT"),
+				_T("VOICE_CHANGER_DARTH_VADER"),
+				_T("VOICE_CHANGER_IRON_LADY"),
+				_T("VOICE_CHANGER_SHIN_CHAN"),
+				_T("VOICE_CHANGER_GIRLISH_MAN"),
+				_T("VOICE_CHANGER_CHIPMUNK"),
+				})));
 	
 	m_mapBeauty.insert(
 		std::make_pair(CString(_T("VoiceBeautifier")),
@@ -218,6 +246,7 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 				})));
 
 	m_cmbAudioChange.InsertString(nIndex++, _T("AudioEffect"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("VoiceConversion"));
 	m_cmbAudioChange.InsertString(nIndex++, _T("VoiceBeautifier"));
 	
 
@@ -253,6 +282,23 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_CLEAR"), TIMBRE_TRANSFORMATION_CLEAR));
 	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_RESOUNDING"), TIMBRE_TRANSFORMATION_RESOUNDING));
 	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_RINGING"), TIMBRE_TRANSFORMATION_RINGING));
+
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CONVERSION_OFF"), VOICE_CONVERSION_OFF));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_NEUTRAL"), VOICE_CHANGER_NEUTRAL));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_SWEET"), VOICE_CHANGER_SWEET));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_SOLID"), VOICE_CHANGER_SOLID));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_BASS"), VOICE_CHANGER_BASS));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_CARTOON"), VOICE_CHANGER_CARTOON));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_CHILDLIKE"), VOICE_CHANGER_CHILDLIKE));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_PHONE_OPERATOR"), VOICE_CHANGER_PHONE_OPERATOR));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_MONSTER"), VOICE_CHANGER_MONSTER));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_TRANSFORMERS"), VOICE_CHANGER_TRANSFORMERS));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_GROOT"), VOICE_CHANGER_GROOT));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_DARTH_VADER"), VOICE_CHANGER_DARTH_VADER));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_IRON_LADY"), VOICE_CHANGER_IRON_LADY));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_SHIN_CHAN"), VOICE_CHANGER_SHIN_CHAN));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_GIRLISH_MAN"), VOICE_CHANGER_GIRLISH_MAN));
+	m_setVoiceConversion.insert(std::make_pair(_T("VOICE_CHANGER_CHIPMUNK"), VOICE_CHANGER_CHIPMUNK));
 
 	ResumeStatus();
 	return TRUE;  
@@ -339,11 +385,21 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 	CString str;
 	m_cmbPerverbPreset.GetWindowText(str);
 	if (!m_beautyAudio) {
+		CString infoStr;
 		if (m_cmbAudioChange.GetCurSel() == 0) {
 			m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+			infoStr.Format(_T("setAudioEffectPreset %d"), m_setChanger[str]);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+		}
+		else if (m_cmbAudioChange.GetCurSel() == 1) {
+			m_rtcEngine->setVoiceConversionPreset(m_setVoiceConversion[str]);
+			infoStr.Format(_T("setVoiceConversionPreset %d"), m_setVoiceConversion[str]);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		}
 		else {
 			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
+			infoStr.Format(_T("setVoiceBeautifierPreset %d"), m_setReverbPreSet[str]);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		}
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
@@ -352,6 +408,9 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 		
 		if (m_cmbAudioChange.GetCurSel() == 0) {
 			m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
+		}
+		else if (m_cmbAudioChange.GetCurSel() == 1) {
+			m_rtcEngine->setVoiceConversionPreset(VOICE_CONVERSION_OFF);
 		}
 		else {
 			m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
@@ -592,5 +651,18 @@ void CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset()
 	m_btnSetBeautyAudio.GetWindowText(str);
 	if (str.Compare(beautyAudioCtrlUnSetAudioChange) == 0) {
 		SetVoiceChange();
+	}
+}
+
+
+void CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	int pos = m_slcVoiceFormant.GetPos();
+	double value = (pos - 50) * 1.0f / 50;
+	CString strValue;
+	strValue.Format(_T("%.2f"), value);
+	m_staVoiceFormantVlaue.SetWindowText(strValue);
+	if (m_rtcEngine) {
+		m_rtcEngine->setLocalVoiceFormant(value);
 	}
 }

@@ -574,17 +574,17 @@ void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 }
 
 
-void CAudioEncodedFrameObserver::OnRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+void CAudioEncodedFrameObserver::onRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
 {
 	//to do...
 }
 
-void CAudioEncodedFrameObserver::OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+void CAudioEncodedFrameObserver::onPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
 {
 	//to do...
 }
 
-void CAudioEncodedFrameObserver::OnMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+void CAudioEncodedFrameObserver::onMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
 {
 	//to do...
 }

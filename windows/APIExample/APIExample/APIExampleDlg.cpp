@@ -221,6 +221,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
    m_vecAdvanced.push_back(advancedMediaPlayer);
+   m_vecAdvanced.push_back(advancedMediaRecorder);
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
@@ -232,6 +233,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
+   m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
    m_vecAdvanced.push_back(advancedPerCallTest);
    m_vecAdvanced.push_back(advancedAudioVolume);
    //m_vecAdvanced.push_back(advancedReportInCall);
@@ -276,9 +278,9 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pAudioMixingDlg->MoveWindow(&rcWnd);
 
    //custom video capture
-   m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
-   m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
-   m_pCaputreVideoDlg->MoveWindow(&rcWnd);
+//    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
+//    m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
+//    m_pCaputreVideoDlg->MoveWindow(&rcWnd);
    
    //original video process
    m_pOriginalVideoDlg = new CAgoraOriginalVideoDlg(&m_staMainArea);
@@ -310,6 +312,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pmediaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
    m_pmediaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
    m_pmediaPlayerDlg->MoveWindow(&rcWnd);
+
+   //media recorder
+   m_pmediaRecorderDlg = new CAgoraMediaRecorder(&m_staMainArea);
+   m_pmediaRecorderDlg->Create(CAgoraMediaRecorder::IDD);
+   m_pmediaRecorderDlg->MoveWindow(&rcWnd);
 
    //per call test
    m_pPerCallTestDlg = new CAgoraPreCallTestDlg(&m_staMainArea);
@@ -355,6 +362,14 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
    m_pSpatialAudioDlg->Create(CAgoraSpatialAudioDlg::IDD);
    m_pSpatialAudioDlg->MoveWindow(&rcWnd);
+
+   m_pPushExternalVideoYUV = new PushExternalVideoYUV(&m_staMainArea);
+   m_pPushExternalVideoYUV->Create(PushExternalVideoYUV::IDD);
+   m_pPushExternalVideoYUV->MoveWindow(&rcWnd);
+
+   m_pMultiVideoSourceTracks = new MultiVideoSourceTracks(&m_staMainArea);
+   m_pMultiVideoSourceTracks->Create(MultiVideoSourceTracks::IDD);
+   m_pMultiVideoSourceTracks->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -447,18 +462,17 @@ void CAPIExampleDlg::OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
     HTREEITEM hAdvancedItem = m_lstAdvanced.GetSelectedItem();
+	HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
 
-    if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hOldItem)) == 0) {
-        ReleaseScene(m_lstBasicScene, hOldItem);
-    }
-    else  if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hAdvancedItem)) == 0) {
-       // m_lstAdvanced.SetItemState(hAdvancedItem, 0, TVIS_SELECTED);
-        m_lstAdvanced.SelectItem(NULL);
-        ReleaseScene(m_lstAdvanced, hAdvancedItem);
-    }
+	if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hOldItem)) == 0) {
+		ReleaseScene(m_lstBasicScene, hOldItem);
+	}
+	else  if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hAdvancedItem)) == 0) {
+		// m_lstAdvanced.SetItemState(hAdvancedItem, 0, TVIS_SELECTED);
+		m_lstAdvanced.SelectItem(NULL);
+	}
 
-    HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
-    *pResult = 0;
+	*pResult = 0;
 }
 
 void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
@@ -466,13 +480,14 @@ void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
     HTREEITEM hBasicItem = m_lstBasicScene.GetSelectedItem();
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
-    if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
-        m_lstBasicScene.SelectItem(NULL);
-        ReleaseScene(m_lstBasicScene, hBasicItem);
-    }
-    else if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hOldItem)) == 0) {
-        ReleaseScene(m_lstAdvanced, hOldItem);
-    }
+	HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
+
+	if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
+		m_lstBasicScene.SelectItem(NULL);
+	}
+	else if (m_preSelectedItemText.Compare(m_lstAdvanced.GetItemText(hOldItem)) == 0) {
+		ReleaseScene(m_lstAdvanced, hOldItem);
+	}
     
     *pResult = 0;
 }
@@ -497,11 +512,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
         m_pScreenCap->InitAgora();
         m_pScreenCap->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
-        m_pCaputreVideoDlg->InitAgora();
-        m_pCaputreVideoDlg->ShowWindow(SW_SHOW);
+        m_pPushExternalVideoYUV->InitAgora();
+		m_pPushExternalVideoYUV->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
         m_pCaptureAudioDlg->InitAgora();
-        m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
+		m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->InitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
@@ -546,6 +561,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pMultiVideoSourceDlg->InitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->InitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_SHOW);
+	}
 	else if (selectedText.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->InitAgora();
 		m_pDlgBeautyAudio->ShowWindow(SW_SHOW);
@@ -563,8 +582,12 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pSpatialAudioDlg->InitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedMediaRecorder) == 0) {
+		m_pmediaRecorderDlg->InitAgora();
+		m_pmediaRecorderDlg->ShowWindow(SW_SHOW);
+	}
 	
-	Sleep(500);
+	//Sleep(500);
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -588,11 +611,11 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         m_pScreenCap->UnInitAgora();
         m_pScreenCap->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedCustomVideoCapture) == 0) {
-        m_pCaputreVideoDlg->UnInitAgora();
-        m_pCaputreVideoDlg->ShowWindow(SW_HIDE);
+        m_pPushExternalVideoYUV->UnInitAgora();
+		m_pPushExternalVideoYUV->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedCustomAudioCapture) == 0) {
         m_pCaptureAudioDlg->UnInitAgora();
-        m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
+		m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->UnInitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
@@ -634,6 +657,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pMultiVideoSourceDlg->UnInitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
 	}
+	else if (str.Compare(advancedMultiVideoSourceTracks) == 0) {
+		m_pMultiVideoSourceTracks->UnInitAgora();
+		m_pMultiVideoSourceTracks->ShowWindow(SW_HIDE);
+	}
 	else if (str.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->UnInitAgora();
 		m_pDlgBeautyAudio->ShowWindow(SW_HIDE);
@@ -654,7 +681,11 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pSpatialAudioDlg->UnInitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_HIDE);
 	}
-	Sleep(500);
+	else if (str.Compare(advancedMediaRecorder) == 0) {
+		m_pmediaRecorderDlg->UnInitAgora();
+		m_pmediaRecorderDlg->ShowWindow(SW_HIDE);
+	}
+	//Sleep(500);
 }
 
 LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)

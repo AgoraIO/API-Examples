@@ -655,7 +655,7 @@ void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
 	int fps = m_audioFrame.samplesPerSec / m_audioFrame.samplesPerChannel;
 	memcpy(m_audioFrame.buffer,pBuffer , size);
 	SIZE_T nSize = m_audioFrame.samplesPerChannel *  m_audioFrame.channels *  m_audioFrame.bytesPerSample;
-	mediaEngine->pushAudioFrame(agora::media::AUDIO_RECORDING_SOURCE, &m_audioFrame);
+	mediaEngine->pushAudioFrame(&m_audioFrame);
 
     //CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
 }

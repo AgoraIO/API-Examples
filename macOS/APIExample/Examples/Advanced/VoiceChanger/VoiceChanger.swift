@@ -616,8 +616,10 @@ class VoiceChanger: BaseViewController {
             $0 != sender
         }.forEach {
             $0?.selectItem(at: 0)
+            
         }
-        
+        agoraKit.setVoiceBeautifierPreset(.presetOff)
+        agoraKit.setAudioEffectPreset(.off)
         if let beautifierPreset = option.beautifierPreset {
             LogUtils.log(message: "setVoiceBeautifierPreset: \(beautifierPreset.description())", level: .info)
             agoraKit.setVoiceBeautifierPreset(beautifierPreset)

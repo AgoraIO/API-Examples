@@ -17,7 +17,7 @@ TARGET_NAME=${PROJECT_PATH##*/}
 KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
 
 # 打包环境
-CONFIGURATION=developer-id 
+CONFIGURATION=Release
 
 #工程文件路径
 APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
@@ -69,11 +69,8 @@ xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -sch
 CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 
 # 归档路径
-ARCHIVE_PATH="${PROJECT_PATH}/${TARGET_NAME} ${CURRENT_TIME}/${TARGET_NAME}.xcarchive"
+ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # 编译环境
-
-# 导出路径
-EXPORT_PATH="${PROJECT_PATH}/${TARGET_NAME} ${CURRENT_TIME}"
 
 # plist路径
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
@@ -83,20 +80,20 @@ echo PLIST_PATH: $PLIST_PATH
 # archive 这边使用的工作区间 也可以使用project
 xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}"
 
-# 导出ipa
-xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
+cd ${WORKSPACE}
 
-# 删除archive文件
-rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
-rm -rf "${EXPORT_PATH}/Packaging.log"
-rm -rf "${EXPORT_PATH}/ExportOptions.plist"
-rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
+# 压缩archive
+7za a -slp "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+
+# 签名
+sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}"
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
 
-# 删除IPA文件夹
-rm -rf "${EXPORT_PATH}"
+# 删除archive文件
+rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
+rm -rf *.zip
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1

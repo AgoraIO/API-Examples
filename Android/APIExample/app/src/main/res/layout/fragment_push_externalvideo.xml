@@ -10,7 +10,7 @@
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_above="@+id/ll_buffer_type" />
 
     <FrameLayout
         android:id="@+id/fl_remote"
@@ -18,6 +18,31 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+    <LinearLayout
+        android:id="@+id/ll_buffer_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_join"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="Push Video Frame Type"/>
+
+        <Spinner
+            android:id="@+id/sp_buffer_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/push_buffer_type" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_join"

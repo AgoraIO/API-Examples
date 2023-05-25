@@ -64,6 +64,8 @@ class VideoProcess: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // enable filters
+        agoraKit.enableExtension(withVendor: "agora_video_filters_clear_vision", extension: "clear_vision", enabled: true, sourceType: .primaryCamera)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -156,6 +158,7 @@ class VideoProcess: BaseViewController {
             })
             
         } else {
+            agoraKit.stopPreview()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.videos[0].uid = nil
@@ -249,10 +252,17 @@ class VideoProcess: BaseViewController {
         case .blur:
             backgroundSource.blurDegree = .high
             break
+            
+        case .video:
+            let videoPath = Bundle.main.path(forResource: "sample", ofType: "mov")
+            backgroundSource.backgroundSourceType = .video
+            backgroundSource.source = videoPath
+            
         default:
             break
         }
-        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state.rawValue != 0,
+        backgroundSource.backgroundSourceType = virtualBackgroundSwitch.state == .on ? backgroundSource.backgroundSourceType : .none
+        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state == .on,
                                          backData: backgroundSource,
                                          segData: AgoraSegmentationProperty())
     }
@@ -437,6 +447,7 @@ extension VideoProcess: AgoraRtcEngineDelegate {
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
             videoCanvas.renderMode = .hidden
+            videoCanvas.enableAlphaMask = true
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {

@@ -9,6 +9,7 @@
 "Join a channel (Token)" = "实时视频通话/直播(Token验证)";
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
+"Local or remote recording" = "本地/远端录制";
 "Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
 "Media Injection" = "流媒体注入";
@@ -18,6 +19,9 @@
 "Custom Audio Render" = "音频自渲染";
 "Custom Video Source(MediaIO)" = "视频自采集(MediaIO)";
 "Custom Video Source(Push)" = "视频自采集(Push)";
+"Custom Video Source(Multi)" = "多路视频自采集";
+"Create Video Track" = "创建采集Track";
+"Destory Video Track" = "销毁采集Track";
 "Custom Video Render" = "视频自渲染(Metal)";
 "Quick Switch Channel" = "快速切换频道";
 "Switch Channel" = "切换频道";
@@ -178,6 +182,7 @@
 "Image Background" = "图片背景";
 "Virtual Background" = "虚拟背景";
 "Blur Background" = "背景虚化";
+"Video Background" = "视频";
 "Spatial Audio" = "空间音效";
 "Start" = "点击开始";
 "Please move the red icon to experience the 3D audio effect" = "请移动红色图标体验3D音频效果";
@@ -191,3 +196,9 @@
 "Please the input AppId" = "请输入AppID";
 "Please the input token" = "请输入Token";
 "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "开启后无法关闭，并且需要主辅两端都开启时才生效";
+"Recording" = "开始录制";
+"Stop Recording" = "停止录制";
+"Local composite graph" = "本地合图";
+"Exclude Window" = "屏蔽窗口";
+"Opening" = "已开启";
+"(Default: flow)" = "(默认: 大流)";
