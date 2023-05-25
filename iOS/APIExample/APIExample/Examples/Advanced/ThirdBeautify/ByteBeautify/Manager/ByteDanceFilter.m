@@ -39,17 +39,51 @@ static ByteDanceFilter *shareManager = NULL;
         
         [_processor setEffectOn:YES];
 //        [_processor setFilterPath:@"Filter_32_Po10"];
-        [_processor setStickerPath:@"test_sticker"];
+//        [_processor setStickerPath:@"test_sticker"];
         [_processor updateComposerNodes:@[@"/beauty_IOS_lite"]];
-        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"smooth" intensity:0.8];
-        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"whiten" intensity:0.9];
-        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"sharp" intensity:0.96];
-        [_processor updateComposerNodeIntensity:@"/reshape_lite" key:@"Internal_Deform_Overall" intensity:0.95];
-        [_processor updateComposerNodeIntensity:@"/reshape_lite" key:@"Internal_Deform_Eye" intensity:0.95];
-        [_processor updateComposerNodeIntensity:@"/reshape_lite" key:@"Internal_Deform_MovNose" intensity:0.0];
     }
     
     return self;
+}
+
+- (void)setBuauty: (BOOL)isSelected {
+#if __has_include("bef_effect_ai_api.h")
+    if (isSelected) {
+        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"whiten" intensity:0.6];
+        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"smooth" intensity:0.6];
+    } else {
+        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"whiten" intensity:0];
+        [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"smooth" intensity:0];
+    }
+#endif
+}
+- (void)setMakeup: (BOOL)isSelected {
+#if __has_include("bef_effect_ai_api.h")
+    if (isSelected) {
+        [_processor updateComposerNodeIntensity:@"/style_makeup/tianmei" key:@"Makeup_ALL" intensity:0.6];
+    } else {
+        [_processor updateComposerNodeIntensity:@"/style_makeup/tianmei" key:@"Makeup_ALL" intensity:0];
+    }
+#endif
+}
+- (void)setSticker: (BOOL)isSelected {
+#if __has_include("bef_effect_ai_api.h")
+    if (isSelected) {
+        [_processor setStickerPath:@"wochaotian"];
+    } else {
+        [_processor setStickerPath:@""];
+    }
+#endif
+}
+- (void)setFilter: (BOOL)isSelected {
+#if __has_include("bef_effect_ai_api.h")
+    if (isSelected) {
+        [_processor setFilterPath:@"Filter_02_14"];
+        [_processor setFilterIntensity:0.4];
+    } else {
+        [_processor setFilterIntensity:0];
+    }
+#endif
 }
 
 

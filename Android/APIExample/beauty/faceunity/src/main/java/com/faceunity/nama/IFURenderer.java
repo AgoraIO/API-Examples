@@ -47,9 +47,9 @@ abstract class IFURenderer {
      * @param height 高
      * @return
      */
-    public abstract int onDrawFrameDualInput(byte[] img, int texId, int width, int height);
+    public abstract int onDrawFrameDualInput(int texId, int width, int height);
 
-    public abstract int onDrawFrameInput(int texId, int width, int height);
+    public abstract int onDrawFrameInput(byte[] img, int width, int height);
 
     /**
      * 设置检测类型

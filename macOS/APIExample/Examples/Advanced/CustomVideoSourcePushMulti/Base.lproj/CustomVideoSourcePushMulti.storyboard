@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Video Source(Push)-->
+        <scene sceneID="lAY-XF-tLd">
+            <objects>
+                <viewController title="Custom Video Source (Push)" storyboardIdentifier="CustomVideoSourcePushMulti" id="sXF-vm-Rrb" userLabel="Custom Video Source(Push)" customClass="CustomVideoSourcePushMulti" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="LC5-eJ-VQW">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gna-F2-URe">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="baa-8c-YXx">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="8c2-gC-fdY">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view id="AUr-Gk-n7l" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="Ihr-RI-I6j" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="379" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B6v-5F-0mt">
+                                                    <rect key="frame" x="-1" y="232" width="152" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Create VideoTrack" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tbi-87-lo2">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onClickCreateTrack:" target="sXF-vm-Rrb" id="Tfj-aG-hqw"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cJB-Ul-7E2">
+                                                    <rect key="frame" x="160" y="232" width="158" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Destory VideoTrack" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fY0-1R-m7R">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onClickDestoryTrack:" target="sXF-vm-Rrb" id="iPM-9C-fRn"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="wMV-x3-oq6">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Zz0-rz-hX9">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="feb-C2-lJ8" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="1" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="001-WK-CKN"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="6uj-9P-naK">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Oiu-jF-2jj">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="emr-Lf-gSw">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="uIf-r8-8RT" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bha-cC-IuH">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bCD-1H-KfP">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onJoinPressed:" target="sXF-vm-Rrb" id="wRn-Ea-3o2"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="bha-cC-IuH" firstAttribute="top" secondItem="uIf-r8-8RT" secondAttribute="bottom" constant="9" id="9zD-lq-aUz"/>
+                                        <constraint firstItem="bha-cC-IuH" firstAttribute="leading" secondItem="emr-Lf-gSw" secondAttribute="leading" constant="33" id="Ccl-59-nK3"/>
+                                        <constraint firstAttribute="bottom" secondItem="bha-cC-IuH" secondAttribute="bottom" constant="14" id="Qkn-uo-DKx"/>
+                                        <constraint firstItem="bha-cC-IuH" firstAttribute="centerX" secondItem="uIf-r8-8RT" secondAttribute="centerX" id="cOA-pZ-5xN"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="ML3-HR-gHJ"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="gna-F2-URe" firstAttribute="top" secondItem="6uj-9P-naK" secondAttribute="top" id="60e-BZ-2O2"/>
+                            <constraint firstItem="Oiu-jF-2jj" firstAttribute="trailing" secondItem="gna-F2-URe" secondAttribute="trailing" id="B9w-4b-lWi"/>
+                            <constraint firstAttribute="bottom" secondItem="feb-C2-lJ8" secondAttribute="bottom" constant="1" id="G35-g8-GSV"/>
+                            <constraint firstItem="Oiu-jF-2jj" firstAttribute="leading" secondItem="feb-C2-lJ8" secondAttribute="trailing" id="PIj-Z5-J95"/>
+                            <constraint firstAttribute="trailing" secondItem="feb-C2-lJ8" secondAttribute="trailing" constant="314" id="Pck-0k-XM6"/>
+                            <constraint firstItem="feb-C2-lJ8" firstAttribute="trailing" secondItem="6uj-9P-naK" secondAttribute="trailing" id="Q7O-hS-WXL"/>
+                            <constraint firstAttribute="bottom" secondItem="gna-F2-URe" secondAttribute="bottom" constant="102" id="RAN-OI-l04"/>
+                            <constraint firstAttribute="bottom" secondItem="Oiu-jF-2jj" secondAttribute="bottom" id="Thl-nJ-Q6j"/>
+                            <constraint firstItem="Oiu-jF-2jj" firstAttribute="leading" secondItem="gna-F2-URe" secondAttribute="leading" id="ad5-zj-IXd"/>
+                            <constraint firstItem="Oiu-jF-2jj" firstAttribute="bottom" secondItem="6uj-9P-naK" secondAttribute="bottom" id="iDi-iN-5WB"/>
+                            <constraint firstItem="feb-C2-lJ8" firstAttribute="leading" secondItem="LC5-eJ-VQW" secondAttribute="leading" id="qpS-FQ-4cy"/>
+                            <constraint firstItem="feb-C2-lJ8" firstAttribute="top" secondItem="LC5-eJ-VQW" secondAttribute="top" constant="-1" id="r6q-sc-0NI"/>
+                            <constraint firstItem="gna-F2-URe" firstAttribute="top" secondItem="LC5-eJ-VQW" secondAttribute="top" id="rEk-uk-UDN"/>
+                            <constraint firstAttribute="trailing" secondItem="Oiu-jF-2jj" secondAttribute="trailing" id="roJ-iV-YkL"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="Container" destination="feb-C2-lJ8" id="fvt-NI-d66"/>
+                        <outlet property="channelField" destination="uIf-r8-8RT" id="D7m-aH-g2k"/>
+                        <outlet property="createVideoTrackButton" destination="B6v-5F-0mt" id="W2o-AL-R5V"/>
+                        <outlet property="destoryVideoTrackButton" destination="cJB-Ul-7E2" id="jQ7-uL-C0l"/>
+                        <outlet property="joinChannelButton" destination="bha-cC-IuH" id="LKZ-PG-1ky"/>
+                        <outlet property="selectFpsPicker" destination="Ihr-RI-I6j" id="TNr-rU-wsy"/>
+                        <outlet property="selectResolutionPicker" destination="AUr-Gk-n7l" id="Rd1-TD-tqk"/>
+                    </connections>
+                </viewController>
+                <customObject id="w1V-aB-BoV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3899" y="36"/>
+        </scene>
+    </scenes>
+</document>

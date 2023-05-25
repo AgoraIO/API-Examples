@@ -119,6 +119,22 @@
     return finalImage;
 }
 
++ (NSImage *)pixelBufferToImage: (CVPixelBufferRef)pixelBuffer {
+    size_t width = CVPixelBufferGetHeight(pixelBuffer);
+    size_t height = CVPixelBufferGetWidth(pixelBuffer);
+    
+    CIImage *coreImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef videoImage = [temporaryContext createCGImage:coreImage
+                                                   fromRect:CGRectMake(0, 0, height, width)];
+    
+    NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size: CGSizeMake(width, height)];
+
+    //    CVPixelBufferRelease(pixelBuffer);
+    CGImageRelease(videoImage);
+    return finalImage;
+}
+
 + (void)yuv420p_to_nv12:(unsigned char*)yuv420p nv12:(unsigned char*)nv12 width:(int)width height:(int)height {
     int i, j;
     int y_size = width * height;

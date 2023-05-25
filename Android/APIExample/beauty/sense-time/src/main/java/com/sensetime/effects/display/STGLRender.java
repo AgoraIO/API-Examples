@@ -14,14 +14,19 @@ public class STGLRender {
 
 
     private RenderProgram mRenderProgram;
+    private int mRotation;
+    private boolean mFlipH, mFlipV;
 
     public STGLRender(int textureType) {
         mRenderProgram = new RenderProgram(textureType);
     }
 
     public void adjustRenderSize(int width, int height, int rotation, boolean flipH, boolean flipV) {
-        boolean resize = mRenderProgram.resize(width, height);
-        if (resize) {
+        boolean change = mRenderProgram.resize(width, height) || mRotation != rotation || mFlipH != flipH || mFlipV != flipV;
+        if (change) {
+            mRotation = rotation;
+            mFlipH = flipH;
+            mFlipV = flipV;
             float[] tmp = new float[16];
             Matrix.setIdentityM(tmp, 0);
 

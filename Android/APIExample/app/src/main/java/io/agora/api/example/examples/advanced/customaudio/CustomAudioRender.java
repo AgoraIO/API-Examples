@@ -236,6 +236,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                 engine.leaveChannel();
                 pulling = false;
                 join.setText(getString(R.string.join));
+                audioSeatManager.downAllSeats();
                 if(pullingTask != null){
                     try {
                         pullingTask.join();
@@ -268,7 +269,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
+        // engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
 
 
 

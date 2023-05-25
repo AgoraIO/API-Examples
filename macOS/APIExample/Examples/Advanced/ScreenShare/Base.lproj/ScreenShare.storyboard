@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -80,7 +80,7 @@
                                                 </button>
                                                 <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M4d-F9-fzD">
                                                     <rect key="frame" x="163" y="181" width="138" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="生成缩略图" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G2K-yC-ti4">
+                                                    <buttonCell key="cell" type="push" title="Generate thumbnail" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G2K-yC-ti4">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -90,7 +90,7 @@
                                                 </button>
                                                 <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UwN-vm-34e">
                                                     <rect key="frame" x="162" y="42" width="139" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="生成缩略图" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ghC-jR-1O0">
+                                                    <buttonCell key="cell" type="push" title="Generate thumbnail" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ghC-jR-1O0">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
@@ -196,7 +196,7 @@
                         <outlet property="joinChannelButton" destination="m5Y-g9-nbd" id="IWF-DR-p6U"/>
                         <outlet property="screenShareButton" destination="r9I-9E-LeA" id="LCe-S0-Dqk"/>
                         <outlet property="screenThumbnailButton" destination="M4d-F9-fzD" id="COa-4u-Xjs"/>
-                        <outlet property="selectDisplayHintPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
+                        <outlet property="selectExcludeWindowPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
                         <outlet property="selectFpsPicker" destination="UdM-Ys-Izc" id="TMO-Lz-aO4"/>
                         <outlet property="selectLayoutPicker" destination="DnN-dH-8wx" id="WtR-QX-e1M"/>
                         <outlet property="selectResolutionPicker" destination="wRZ-XO-4yb" id="6ZL-0l-P82"/>

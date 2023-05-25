@@ -1,7 +1,7 @@
 # 配置指南
 *[English](README.md) | 中文*
 
-此示例提供了两种商汤美颜接入方式，单输入（仅NV21）和双输入（NV21和纹理）。双输入比单输入少了 NV21转纹理的这步操作，转换性能比较高，但是在低端机上可能出现贴纸不跟脸等情况，建议根据面向的客户来选择合适的接入方式。
+此示例提供了商汤美颜的最佳接入方式。
 
 > 声网插件云市场上提供了更便捷的集成方式，可以登录声网[控制台](https://console.agora.io/)查看[集成教程](https://console.agora.io/marketplace/license/introduce?serviceName=sensetime-ar)
 

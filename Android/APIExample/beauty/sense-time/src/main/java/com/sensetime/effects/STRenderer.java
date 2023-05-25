@@ -65,7 +65,9 @@ public class STRenderer {
     private boolean mIsCreateHumanActionHandleSucceeded = false;
     private long mDetectConfig = -1;
 
-    private STGLRender mGLRenderBefore;
+    private STGLRender mGLRenderOESBefore;
+    private STGLRender mGLRender2DBefore;
+    private STGLRender mGLRenderAfter;
     private int[] mTextureOutId;
     private byte[] mImageDataBuffer = null;
     protected STHumanAction[] mSTHumanAction = new STHumanAction[2];
@@ -79,6 +81,8 @@ public class STRenderer {
     private final STEffectParameters mEffectParams = new STEffectParameters();
 
     private STFaceMeshList faceMeshList;
+    private int mImageWidth;
+    private int mImageHeight;
 
     public STRenderer(Context context) {
         mContext = context;
@@ -181,7 +185,9 @@ public class STRenderer {
 
 
     private void initGLRender() {
-        mGLRenderBefore = new STGLRender(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        mGLRenderOESBefore = new STGLRender(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        mGLRender2DBefore = new STGLRender(GLES20.GL_TEXTURE_2D);
+        mGLRenderAfter = new STGLRender(GLES20.GL_TEXTURE_2D);
     }
 
 
@@ -262,7 +268,7 @@ public class STRenderer {
     }
 
     public int preProcess(
-            int width, int height, int orientation,
+            int width, int height, int rotation,
             byte[] cameraPixel, int pixelFormat
     ) {
 
@@ -270,14 +276,20 @@ public class STRenderer {
             return -1;
         }
 
-        int imageWidth = width;
-        int imageHeight = height;
-//        if (orientation == 90 || orientation == 270) {
-//            imageWidth = height;
-//            imageHeight = width;
-//        }
+        boolean sizeChange = mImageWidth != width || mImageHeight != height;
+        mImageWidth = width;
+        mImageHeight = height;
 
-        if (mImageDataBuffer == null || mImageDataBuffer.length != cameraPixel.length) {
+        if (mTextureOutId == null) {
+            mTextureOutId = new int[2];
+            GlUtil.initEffectTexture(mImageWidth, mImageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
+        } else if (sizeChange || mTextureOutId.length != 2) {
+            GLES20.glDeleteTextures(mTextureOutId.length, mTextureOutId, 0);
+            mTextureOutId = null;
+            return -1;
+        }
+
+        if (sizeChange || mImageDataBuffer == null) {
             mImageDataBuffer = new byte[cameraPixel.length];
         }
         System.arraycopy(cameraPixel, 0, mImageDataBuffer, 0, cameraPixel.length);
@@ -287,30 +299,27 @@ public class STRenderer {
 
         // prepare params
         updateHumanActionDetectConfig();
-        //mSTHumanActionNative.nativeHumanActionPtrCopy();
 
         int ret = mSTHumanActionNative.nativeHumanActionDetectPtr(
                 mImageDataBuffer,
                 pixelFormat,
                 mDetectConfig,
-                getCurrentOrientation(orientation),
+                getCurrentOrientation(rotation),
                 width,
                 height);
+        mSTHumanActionNative.nativeHumanActionPtrCopy();
         if (ret == 0) {
             if (mNeedAnimalDetect) {
-                animalDetect(mImageDataBuffer, pixelFormat, getCurrentOrientation(orientation), width, height, 0);
+                animalDetect(mImageDataBuffer, pixelFormat, getCurrentOrientation(rotation), width, height, 0);
             } else {
                 mAnimalFaceInfo[0] = new STAnimalFaceInfo(null, 0);
             }
         }
 
         // >>>>>> 2. upload nv21 to texture
-        if (mTextureOutId == null) {
-            mTextureOutId = new int[2];
-            GlUtil.initEffectTexture(imageWidth, imageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
-        }
 
-        mSTMobileColorConvertNative.setTextureSize(imageWidth, imageHeight);
+
+        mSTMobileColorConvertNative.setTextureSize(mImageWidth, mImageHeight);
         mSTMobileColorConvertNative.nv21BufferToRgbaTexture(width, height,
                 STRotateType.ST_CLOCKWISE_ROTATE_0,
                 false,
@@ -321,16 +330,16 @@ public class STRenderer {
         // >>>>>> 3. render texture
 
         //输入纹理，纹理只支持2D
-        STEffectTexture stEffectTexture = new STEffectTexture(textureId, imageWidth, imageHeight, 0);
+        STEffectTexture stEffectTexture = new STEffectTexture(textureId, mImageWidth, mImageHeight, 0);
         //输出纹理，需要在上层初始化
-        STEffectTexture stEffectTextureOut = new STEffectTexture(mTextureOutId[1], imageWidth, imageHeight, 0);
+        STEffectTexture stEffectTextureOut = new STEffectTexture(mTextureOutId[1], mImageWidth, mImageHeight, 0);
 
         //渲染接口输入参数
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
-                mSTHumanActionNative.getNativeHumanActionResultPtr(),
+                mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
-                0,
-                0,
+                getCurrentOrientation(rotation),
+                getCurrentOrientation(rotation),
                 false,
                 null,
                 stEffectTexture,
@@ -347,6 +356,10 @@ public class STRenderer {
             textureId = stEffectRenderOutParam.getTexture().getId();
         }
 
+        boolean isFront = rotation == 270;
+        mGLRenderAfter.adjustRenderSize(mImageWidth, mImageHeight, 0, false, isFront);
+        textureId = mGLRenderAfter.process(textureId, STGLRender.IDENTITY_MATRIX);
+
         GLES20.glFinish();
 
         return textureId;
@@ -356,7 +369,7 @@ public class STRenderer {
     /**
      * @param width           camera preview width
      * @param height          camera preview height
-     * @param orientation     camera preview orientation
+     * @param rotation     camera preview orientation
      * @param cameraPixel     camera preview pixel data
      * @param pixelFormat     {@link STCommonNative#ST_PIX_FMT_NV21} and etc.
      * @param cameraTextureId camera preview texture id
@@ -364,32 +377,42 @@ public class STRenderer {
      * @return new Texture ID to render
      */
     public int preProcess(
-            int width, int height, int orientation,
+            int width, int height, int rotation,
             byte[] cameraPixel, int pixelFormat,
-            int cameraTextureId, int texFormat) {
+            int cameraTextureId, int texFormat, float[] transformMatrix) {
 
         if (!mAuthorized) {
             return -1;
         }
 
-        int imageWidth = width;
-        int imageHeight = height;
+
+        boolean sizeChange = mImageWidth != width || mImageHeight != height;
+        mImageWidth = width;
+        mImageHeight = height;
+
 
         // >>>>>> 1. translate oes texture to 2d
         if (mTextureOutId == null) {
             mTextureOutId = new int[1];
-            GlUtil.initEffectTexture(imageWidth, imageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
+            GlUtil.initEffectTexture(mImageWidth, mImageHeight, mTextureOutId, GLES20.GL_TEXTURE_2D);
+        } else if (sizeChange || mTextureOutId.length != 1) {
+            GLES20.glDeleteTextures(mTextureOutId.length, mTextureOutId, 0);
+            mTextureOutId = null;
+            return -1;
         }
 
         int textureId = cameraTextureId;
         if (texFormat == GLES11Ext.GL_TEXTURE_EXTERNAL_OES) {
-            mGLRenderBefore.adjustRenderSize(imageWidth, imageHeight, 0, false, false);
-            textureId = mGLRenderBefore.process(cameraTextureId, STGLRender.IDENTITY_MATRIX);
+            mGLRenderOESBefore.adjustRenderSize(mImageWidth, mImageHeight, 0, false, true);
+            textureId = mGLRenderOESBefore.process(cameraTextureId, transformMatrix);
+        } else {
+            mGLRender2DBefore.adjustRenderSize(mImageWidth, mImageHeight, 0, false, true);
+            textureId = mGLRender2DBefore.process(cameraTextureId, transformMatrix);
         }
 
         // >>>>>> 2. detect human point info using cameraData
         if (mIsCreateHumanActionHandleSucceeded) {
-            if (mImageDataBuffer == null || mImageDataBuffer.length != cameraPixel.length) {
+            if (sizeChange || mImageDataBuffer == null) {
                 mImageDataBuffer = new byte[cameraPixel.length];
             }
             System.arraycopy(cameraPixel, 0, mImageDataBuffer, 0, cameraPixel.length);
@@ -401,14 +424,15 @@ public class STRenderer {
             int ret = mSTHumanActionNative.nativeHumanActionDetectPtr(mImageDataBuffer,
                     pixelFormat,
                     mDetectConfig,
-                    getCurrentOrientation(orientation),
+                    getCurrentOrientation(rotation),
                     width,
                     height);
+            mSTHumanActionNative.nativeHumanActionPtrCopy();
             //STHumanAction nativeHumanAction = mSTHumanActionNative.getNativeHumanAction();
             //LogUtils.i(TAG, "human action detect cost time: %d, ret: %d", System.currentTimeMillis() - startHumanAction, ret);
             if (ret == 0) {
                 if (mNeedAnimalDetect) {
-                    animalDetect(mImageDataBuffer, pixelFormat, getCurrentOrientation(orientation), width, height, 0);
+                    animalDetect(mImageDataBuffer, pixelFormat, getCurrentOrientation(rotation), width, height, 0);
                 } else {
                     mAnimalFaceInfo[0] = new STAnimalFaceInfo(null, 0);
                 }
@@ -419,16 +443,16 @@ public class STRenderer {
         // >>>>>> 3. render texture
 
         //输入纹理，纹理只支持2D
-        STEffectTexture stEffectTexture = new STEffectTexture(textureId, imageWidth, imageHeight, 0);
+        STEffectTexture stEffectTexture = new STEffectTexture(textureId, mImageWidth, mImageHeight, 0);
         //输出纹理，需要在上层初始化
-        STEffectTexture stEffectTextureOut = new STEffectTexture(mTextureOutId[0], imageWidth, imageHeight, 0);
+        STEffectTexture stEffectTextureOut = new STEffectTexture(mTextureOutId[0], mImageWidth, mImageHeight, 0);
 
         //渲染接口输入参数
         STEffectRenderInParam sTEffectRenderInParam = new STEffectRenderInParam(
-                mSTHumanActionNative.getNativeHumanActionResultPtr(),
+                mSTHumanActionNative.getNativeHumanActionPtrCopy(),
                 mAnimalFaceInfo[0],
-                0,
-                0,
+                getCurrentOrientation(rotation),
+                getCurrentOrientation(rotation),
                 false,
                 null,
                 stEffectTexture,
@@ -440,6 +464,10 @@ public class STRenderer {
         if (ret == 0 && stEffectRenderOutParam.getTexture() != null) {
             textureId = stEffectRenderOutParam.getTexture().getId();
         }
+
+        boolean isFront = rotation == 270;
+        mGLRenderAfter.adjustRenderSize(mImageWidth, mImageHeight, 0, false, isFront);
+        textureId = mGLRenderAfter.process(textureId, STGLRender.IDENTITY_MATRIX);
 
         GLES20.glFinish();
 
@@ -584,7 +612,10 @@ public class STRenderer {
         mChangeStickerManagerThread.quit();
         mChangeStickerManagerThread = null;
         deleteTextures();
-        mGLRenderBefore.destroyPrograms();
+        mGLRenderOESBefore.destroyPrograms();
+        mGLRender2DBefore.destroyPrograms();
+        mImageWidth = mImageHeight = 0;
+        mGLRenderAfter.destroyPrograms();
     }
 
     private void deleteTextures() {

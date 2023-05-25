@@ -229,7 +229,8 @@ class LiveStreamingMain: BaseViewController {
     }
     @IBOutlet weak var snapShot: NSButton!
     @IBAction func onTakeSnapshot(_ sender: Any) {
-        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
         let path = "/Users/\(programPath)/Downloads/1.png"
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
     }
@@ -254,7 +255,7 @@ class LiveStreamingMain: BaseViewController {
     
     @IBOutlet weak var dualStreamTips: NSTextField!
     @IBAction func onDualStreaming(_ sender: NSSwitch) {
-        dualStreamTips.stringValue = sender.state == .on ? "已开启" : "(默认: 大流)"
+        dualStreamTips.stringValue = sender.state == .on ? "Opening".localized : "(Default: flow)".localized
         agoraKit.enableDualStreamMode(sender.state == .on)
     }
     
@@ -436,8 +437,8 @@ class LiveStreamingMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = true
-            option.clientRoleType = .broadcaster
+            option.publishCameraTrack = role == .broadcaster
+            option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {

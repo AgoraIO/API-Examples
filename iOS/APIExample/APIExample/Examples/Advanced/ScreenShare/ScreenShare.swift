@@ -40,7 +40,14 @@ class ScreenShareMain: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var broadcasterPickerContainer: UIView!
+    @IBOutlet weak var fpsButton: UIButton!
+    
     var agoraKit: AgoraRtcEngineKit!
+    private lazy var pickerView: PickerView = {
+        let pickerView = PickerView()
+        pickerView.dataArray = fpsDataSources.map({ "\($0)" })
+        return pickerView
+    }()
     private lazy var screenParams: AgoraScreenCaptureParameters2 = {
         let params = AgoraScreenCaptureParameters2()
         params.captureVideo = true
@@ -50,7 +57,7 @@ class ScreenShareMain: BaseViewController {
         params.audioParams = audioParams
         let videoParams = AgoraScreenVideoParameters()
         videoParams.dimensions = screenShareVideoDimension()
-        videoParams.frameRate = .fps30
+        videoParams.frameRate = .fps15
         videoParams.bitrate = AgoraVideoBitrateStandard
         params.videoParams = videoParams
         return params
@@ -65,6 +72,7 @@ class ScreenShareMain: BaseViewController {
     }()
     
     private var systemBroadcastPicker: RPSystemBroadcastPickerView?
+    private var fpsDataSources: [Int] = [15, 30, 60]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -177,6 +185,14 @@ class ScreenShareMain: BaseViewController {
     }
     @IBAction func captureSignalVolumeSlider(_ sender: UISlider) {
         screenParams.audioParams.captureSignalVolume = Int(sender.value * 100)
+    }
+    @IBAction func clickFpsButton(_ sender: UIButton) {
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            self.fpsButton.setTitle("\(value)fps", for: .normal)
+            self.screenParams.videoParams.frameRate = AgoraVideoFrameRate(rawValue: Int(value) ?? 15) ?? .fps15
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
     }
     
     func isScreenShareUid(uid: UInt) -> Bool {
@@ -320,5 +336,43 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+}
+
+
+extension ScreenShareMain: UIPickerViewDataSource, UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 60.0
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("我选择了第"+"\(row)"+"行")
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        "\(fpsDataSources[row])fps"
+    }
+
+//    // TODO: 可以设置哪一行显示特定的样式
+//    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+//        // 创建一个对象
+//        let specificView = UIView.init()
+//        specificView.frame = CGRect.init(x: 10, y: 5, width: 100, height: 60)
+//        specificView.backgroundColor = UIColor.magenta
+//        /**
+//         创建一个标题
+//         */
+//        let specificLable = UILabel.init(frame: CGRect.init(x: 5, y: 0, width: 90, height: 60))
+//        specificLable.text = (SourceData[row] as! String)
+//        specificLable.textColor = UIColor.white
+//        specificView.addSubview(specificLable)
+//        return specificView
+//    }
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        fpsDataSources.count
     }
 }

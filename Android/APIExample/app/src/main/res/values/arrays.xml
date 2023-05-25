@@ -70,6 +70,17 @@
         <item>VOICE_CHANGER_SWEET</item>
         <item>VOICE_CHANGER_SOLID</item>
         <item>VOICE_CHANGER_BASS</item>
+        <item>VOICE_CHANGER_CARTOON</item>
+        <item>VOICE_CHANGER_CHILDLIKE</item>
+        <item>VOICE_CHANGER_PHONE_OPERATOR</item>
+        <item>VOICE_CHANGER_MONSTER</item>
+        <item>VOICE_CHANGER_TRANSFORMERS</item>
+        <item>VOICE_CHANGER_GROOT</item>
+        <item>VOICE_CHANGER_DARTH_VADER</item>
+        <item>VOICE_CHANGER_IRON_LADY</item>
+        <item>VOICE_CHANGER_SHIN_CHAN</item>
+        <item>VOICE_CHANGER_GIRLISH_MAN</item>
+        <item>VOICE_CHANGER_CHIPMUNK</item>
     </string-array>
     <string-array name="audioBandFreq">
         <item>AUDIO_EQUALIZATION_BAND_31</item>
@@ -215,6 +226,17 @@
         <item>Auto</item>
         <item>Hardware</item>
         <item>Software</item>
+    </string-array>
+    <string-array name="screen_scenario_type" >
+        <item>SCREEN_SCENARIO_DOCUMENT</item>
+        <item>SCREEN_SCENARIO_GAMING</item>
+        <item>SCREEN_SCENARIO_VIDEO</item>
+    </string-array>
+    <string-array name="push_buffer_type" >
+        <item>I420</item>
+        <item>NV21</item>
+        <item>NV12</item>
+        <item>Texture2D</item>
     </string-array>
 
 </resources>

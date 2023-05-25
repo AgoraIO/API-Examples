@@ -114,6 +114,9 @@ using namespace agora::media;
 #define EID_SNAPSHOT_TAKEN	0x00000032
 
 #define EID_VIDEO_RENDERING_TRACING_RESULT	0x00000033
+#define EID_RECORDER_STATE_CHANGE	0x00000034
+#define EID_RECORDER_INFO_UPDATE	0x00000035
+
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;

@@ -16,7 +16,7 @@
 @interface SenseBeautifyVC () <AgoraRtcEngineDelegate, AgoraVideoFrameDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
-@property (weak, nonatomic) IBOutlet UIStackView *container;
+@property (weak, nonatomic) IBOutlet UIView *container;
 @property (weak, nonatomic) IBOutlet UIView *localVideo;
 @property (weak, nonatomic) IBOutlet UIView *remoteVideo;
 
@@ -95,6 +95,26 @@
             NSLog(@"join channel success uid: %lu", uid);
         }];
     }];
+}
+
+- (IBAction)onTapSwitchCameraButton:(id)sender {
+    [self.rtcEngineKit switchCamera];
+}
+- (IBAction)onTapBeautyButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoProcessing setBuauty:sender.isSelected];
+}
+- (IBAction)onTapMakeupButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoProcessing setMakeup:sender.isSelected];
+}
+- (IBAction)onTapStickerButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoProcessing setSticker:sender.isSelected];
+}
+- (IBAction)onTapFilterButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoProcessing setFilter:sender.isSelected];
 }
 
 #pragma mark - VideoFrameDelegate

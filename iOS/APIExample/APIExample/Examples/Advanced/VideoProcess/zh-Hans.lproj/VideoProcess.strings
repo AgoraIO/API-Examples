@@ -32,6 +32,8 @@
 /* Class = "UISegmentedControl"; Qhf-Ob-NYA.segmentTitles[2] = "Blur"; ObjectID = "Qhf-Ob-NYA"; */
 "Qhf-Ob-NYA.segmentTitles[2]" = "毛玻璃";
 
+"Qhf-Ob-NYA.segmentTitles[3]" = "视频";
+
 /* Class = "UILabel"; text = "Low light Enhancement"; ObjectID = "RiO-Eg-x0D"; */
 "RiO-Eg-x0D.text" = "暗光增强";
 

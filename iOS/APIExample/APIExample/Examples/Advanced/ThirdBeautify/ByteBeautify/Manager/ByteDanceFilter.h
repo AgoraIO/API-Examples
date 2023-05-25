@@ -21,6 +21,11 @@
 
 @property (nonatomic, assign) BOOL enabled;
 
-
 + (ByteDanceFilter *)shareManager;
+
+- (void)setBuauty: (BOOL)isSelected;
+- (void)setMakeup: (BOOL)isSelected;
+- (void)setSticker: (BOOL)isSelected;
+- (void)setFilter: (BOOL)isSelected;
+
 @end

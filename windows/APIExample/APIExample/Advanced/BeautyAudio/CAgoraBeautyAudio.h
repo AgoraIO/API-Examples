@@ -115,6 +115,7 @@ private:
 	std::map<CString, std::vector<CString>> m_mapBeauty;
 	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
 	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
+	std::map<CString, VOICE_CONVERSION_PRESET>m_setVoiceConversion;
 	void SetVoiceChange();
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
@@ -132,6 +133,8 @@ public:
 	CButton m_btnJoinChannel;
 	CStatic m_staAudioChange;
 	CComboBox m_cmbAudioChange;
+	CSliderCtrl m_slcVoiceFormant;
+	CStatic m_staVoiceFormantVlaue;
 
 	
 	virtual BOOL OnInitDialog();
@@ -151,4 +154,5 @@ public:
 	CEdit m_edtParam1;
 	CEdit m_edtParam2;
 	afx_msg void OnSelchangeComboAudioPerverbPreset();
+	afx_msg void OnNMCustomdrawSliderVoiceFormant(NMHDR* pNMHDR, LRESULT* pResult);
 };

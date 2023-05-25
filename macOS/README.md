@@ -61,6 +61,10 @@ To build and run the sample application, get an App Id:
         
     ```
 
+
+Then you can compile and run the project using `APIExample.xcworkspace`.
+
+
 ## Contact Us
 
 - For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first

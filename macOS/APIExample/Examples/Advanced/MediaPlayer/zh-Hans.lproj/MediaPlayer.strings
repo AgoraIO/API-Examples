@@ -1,0 +1,24 @@
+
+/* Class = "NSButtonCell"; title = "Stop"; ObjectID = "5JL-UH-JLr"; */
+"5JL-UH-JLr.title" = "停止";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
+
+/* Class = "NSButtonCell"; title = "Pause"; ObjectID = "D7O-6d-Yj4"; */
+"D7O-6d-Yj4.title" = "暂停";
+
+/* Class = "NSButtonCell"; title = "Stp Pushing"; ObjectID = "F6H-KV-6va"; */
+"F6H-KV-6va.title" = "停止推流";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入频道";
+
+/* Class = "NSButtonCell"; title = "Start Pushing"; ObjectID = "TUJ-eJ-Vx7"; */
+"TUJ-eJ-Vx7.title" = "开始推流";
+
+/* Class = "NSViewController"; title = "Media Player"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "Media Player";
+
+/* Class = "NSButtonCell"; title = "Play"; ObjectID = "a6R-z9-GrM"; */
+"a6R-z9-GrM.title" = "播放";

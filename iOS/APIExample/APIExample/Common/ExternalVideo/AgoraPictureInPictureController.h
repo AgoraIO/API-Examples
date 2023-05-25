@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) AgoraSampleBufferRender *displayView;
 
 - (instancetype)initWithDisplayView:(AgoraSampleBufferRender *)displayView;
+
+- (void)releasePIP;
     
 @end
 

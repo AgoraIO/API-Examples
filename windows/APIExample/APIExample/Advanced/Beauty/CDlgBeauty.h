@@ -109,6 +109,12 @@ public:
 	CSliderCtrl m_sldSmoothness;
 	CListBox m_lstInfo;
 	CStatic m_staVideoArea;
+	CButton m_radioVirtualBgBlur;
+	CButton m_radioVirtualBgColor;
+	CButton m_radioVirtualBgImage;
+	CButton m_radioVirtualBgVideo;
+	std::string m_imgPath;
+	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedCheckBeautyEnable();
 	CComboBox m_cmbContrast;
@@ -122,4 +128,6 @@ public:
 	afx_msg void OnBnClickedCheckVideoDenoise();
 	afx_msg void OnBnClickedCheckVideoDenoise2();
 	afx_msg void OnBnClickedCheckLowlight();
+
+	afx_msg void OnBnClickedStaticVirtualBgChoose(UINT idCtl);
 };

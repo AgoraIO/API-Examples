@@ -15,7 +15,7 @@
 @interface BytedEffectVC () <AgoraRtcEngineDelegate, AgoraVideoFrameDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
-@property (weak, nonatomic) IBOutlet UIStackView *container;
+@property (weak, nonatomic) IBOutlet UIView *container;
 @property (weak, nonatomic) IBOutlet UIView *localVideo;
 @property (weak, nonatomic) IBOutlet UIView *remoteVideo;
 
@@ -43,6 +43,9 @@
 #endif
     
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:KeyCenter.AppId delegate:self];
+    
+    AgoraVideoEncoderConfiguration *encoderConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(375, 667) frameRate:(AgoraVideoFrameRateFps15) bitrate:15 orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait) mirrorMode:(AgoraVideoMirrorModeEnabled)];
+    [self.rtcEngineKit setVideoEncoderConfiguration:encoderConfig];
     
     // setup videoFrameDelegate
     [self.rtcEngineKit setVideoFrameDelegate:self];
@@ -79,6 +82,26 @@
             NSLog(@"join channel success uid: %lu", uid);
         }];
     }];
+}
+
+- (IBAction)onTapSwitchCameraButton:(id)sender {
+    [self.rtcEngineKit switchCamera];
+}
+- (IBAction)onTapBeautyButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setBuauty:sender.isSelected];
+}
+- (IBAction)onTapMakeupButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setMakeup:sender.isSelected];
+}
+- (IBAction)onTapStickerButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setSticker:sender.isSelected];
+}
+- (IBAction)onTapFilterButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setFilter:sender.isSelected];
 }
 
 #pragma mark - VideoFrameDelegate

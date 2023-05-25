@@ -103,7 +103,7 @@ class ARKitMain: BaseViewController {
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
     
         // set AR video source as custom video source
         renderer = ARVideoRenderer()

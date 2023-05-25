@@ -113,10 +113,14 @@ class RawVideoData: BaseViewController {
 
 // MARK: - AgoraVideoFrameDelegate
 extension RawVideoData: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-        if isSnapShoting {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        true
+    }
+    
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
+        if isSnapShoting, let pixelBuffer = videoFrame.pixelBuffer {
             isSnapShoting = false
-            let image = MediaUtils.i420(toImage: videoFrame.yBuffer, srcU: videoFrame.uBuffer, srcV: videoFrame.vBuffer, width: videoFrame.width, height: videoFrame.height)
+            let image = MediaUtils.pixelBuffer(toImage: pixelBuffer)
             
             DispatchQueue.main.async {
                 self.imageView.image = image
@@ -124,9 +128,8 @@ extension RawVideoData: AgoraVideoFrameDelegate {
         }
         return true
     }
-    
-    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
-        return true
+    func getVideoFormatPreference() -> AgoraVideoFormat {
+        .cvPixelNV12
     }
 }
 

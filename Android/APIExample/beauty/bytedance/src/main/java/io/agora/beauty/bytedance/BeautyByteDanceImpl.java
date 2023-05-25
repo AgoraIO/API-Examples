@@ -1,6 +1,7 @@
 package io.agora.beauty.bytedance;
 
 import android.content.Context;
+import android.opengl.GLES11Ext;
 
 import com.bytedance.labcv.core.Config;
 import com.bytedance.labcv.core.effect.EffectManager;
@@ -9,6 +10,7 @@ import com.bytedance.labcv.core.util.ImageUtil;
 import com.bytedance.labcv.effectsdk.BytedEffectConstants;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 import io.agora.beauty.base.IBeautyByteDance;
 
@@ -30,6 +32,9 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
     private volatile boolean sdkIsInit = false;
 
     private final AssetsCopyHelper assetsCopyHelper;
+
+    private ByteBuffer yByteBuffer;
+    private ByteBuffer vuByteBuffer;
 
     public BeautyByteDanceImpl(Context context) {
         mContext = context;
@@ -58,25 +63,84 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         sdkIsInit = true;
     }
 
-
     @Override
-    public int process(int oesTexId, int width, int height, int rotation) {
+    public int process(byte[] nv21, int width, int height, int rotation) {
         if (isReleased) {
             return -1;
         }
         if (!resourceReady) {
             return -1;
         }
+        boolean isFront = rotation == 270;
         configSdkDefault();
         // 是否为前置摄像头
-        mEffectManager.setCameraPosition(true);
+        mEffectManager.setCameraPosition(isFront);
+        // 生成目标承载纹理
+        int dstTexture = mImageUtil.prepareTexture(width, height);
+        // NV21转2D纹理
+        ImageUtil.Transition transition = new ImageUtil.Transition();
+        if(rotation == 270){
+             transition.scale(1.f, -1.0f);
+        }
+
+        int yLength = width * height;
+        if (yByteBuffer == null || yByteBuffer.capacity() != yLength) {
+            if (yByteBuffer != null) {
+                yByteBuffer.clear();
+            }
+            yByteBuffer = ByteBuffer.allocateDirect(yLength);
+        }
+        int vuLength = width * height / 2;
+        if(vuByteBuffer == null || vuByteBuffer.capacity() != vuLength){
+            if (vuByteBuffer != null) {
+                vuByteBuffer.clear();
+            }
+            vuByteBuffer = ByteBuffer.allocateDirect(vuLength);
+        }
+        yByteBuffer.position(0);
+        yByteBuffer.put(nv21, 0, yLength);
+        yByteBuffer.position(0);
+        vuByteBuffer.put(nv21, yLength, vuLength);
+        vuByteBuffer.position(0);
+        int texture2d = mImageUtil.transferYUVToTexture(yByteBuffer, vuByteBuffer, width, height, transition);
+
+        // CV SDK 特效处理
+        boolean process = mEffectManager.process(texture2d, dstTexture, width, height,
+                BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
+                System.nanoTime());
+        if (!process) {
+            return -1;
+        }
+        if(rotation == 90){
+            transition.scale(1.f, -1.0f);
+        }
+        return mImageUtil.transferTextureToTexture(dstTexture, BytedEffectConstants.TextureFormat.Texure2D, BytedEffectConstants.TextureFormat.Texure2D,
+                width, height, transition);
+    }
+
+    @Override
+    public int process(int texId, int texType,  int width, int height, int rotation) {
+        if (isReleased) {
+            return -1;
+        }
+        if (!resourceReady) {
+            return -1;
+        }
+        boolean isFront = rotation == 270;
+        configSdkDefault();
+        // 是否为前置摄像头
+        // mEffectManager.setCameraPosition(isFront);
         // 生成目标承载纹理
         int dstTexture = mImageUtil.prepareTexture(width, height);
         // OES 纹理转2D纹理
-        int texture2d = mImageUtil.transferTextureToTexture(oesTexId,
-                BytedEffectConstants.TextureFormat.Texture_Oes,
+        ImageUtil.Transition transition = new ImageUtil.Transition();
+        if(isFront){
+            transition.scale(1.f, -1.0f);
+        }
+        int texture2d = mImageUtil.transferTextureToTexture(texId,
+                texType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES ? BytedEffectConstants.TextureFormat.Texture_Oes : BytedEffectConstants.TextureFormat.Texure2D,
                 BytedEffectConstants.TextureFormat.Texure2D,
-                width, height, new ImageUtil.Transition());
+                width, height, transition);
         // CV SDK 特效处理
         boolean process = mEffectManager.process(texture2d, dstTexture, width, height,
                 BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
@@ -94,6 +158,14 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         sdkIsInit = false;
         mImageUtil.release();
         assetsCopyHelper.stop();
+        if(yByteBuffer != null){
+            yByteBuffer.clear();
+            yByteBuffer = null;
+        }
+        if(vuByteBuffer != null){
+            vuByteBuffer.clear();
+            vuByteBuffer = null;
+        }
     }
 
     @Override
@@ -132,7 +204,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
             return;
         }
         if (enable) {
-            String stickerPath = new EffectResourceHelper(mContext).getStickerPath("/stickers/zhaocaimao");
+            String stickerPath = new EffectResourceHelper(mContext).getStickerPath("/stickers/wochaotian");
             mEffectManager.setStickerAbs(stickerPath);
         } else {
             mEffectManager.setStickerAbs(null);

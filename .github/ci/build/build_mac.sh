@@ -71,7 +71,7 @@ else
     echo "failed"
     exit 1
 fi
-cp -rf ./macOS/** ./$unzip_name/samples/APIExample
+cp -a ./macOS/** ./$unzip_name/samples/APIExample 
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
 

@@ -61,8 +61,8 @@ class RawVideoDataViewController: BaseViewController {
         agoraKit.startPreview()
         
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
+        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
@@ -97,7 +97,11 @@ class RawVideoDataViewController: BaseViewController {
 
 // MARK: - AgoraVideoFrameDelegate
 extension RawVideoDataViewController: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        true
+    }
+    
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if isSnapShoting {
             isSnapShoting = false
             let image = MediaUtils.pixelBuffer(toImage: videoFrame.pixelBuffer!)
@@ -105,10 +109,6 @@ extension RawVideoDataViewController: AgoraVideoFrameDelegate {
                 self.imageView.image = image
             }
         }
-        return true
-    }
-    
-    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         return true
     }
 }
