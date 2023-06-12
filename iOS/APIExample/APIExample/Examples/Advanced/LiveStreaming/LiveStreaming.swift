@@ -12,6 +12,7 @@ import AgoraRtcKit
 class LiveStreamingEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var preloadTextField: UITextField!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "LiveStreaming"
     var role:AgoraClientRole = .broadcaster
@@ -68,7 +69,10 @@ class LiveStreamingEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "role":self.role, "isFirstFrame": isFirstFrame]
+        newViewController.configs = ["channelName":channelName,
+                                     "role":self.role,
+                                     "isFirstFrame": isFirstFrame,
+                                     "preloadUid": preloadTextField.text ?? ""]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -136,7 +140,7 @@ class LiveStreamingMain: BaseViewController {
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-
+        
         if let isFirstFrame = configs["isFirstFrame"] as? Bool, isFirstFrame == true {
             agoraKit.enableInstantMediaRendering()
             agoraKit.startMediaRenderingTracing()
@@ -144,6 +148,15 @@ class LiveStreamingMain: BaseViewController {
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String, let clientRole = configs["role"] as? AgoraClientRole else {return}
+        
+        if let preloadUid = UInt(configs["preloadUid"] as? String ?? ""),
+            role == .audience {
+            NetworkManager.shared.generateToken(channelName: channelName, uid: preloadUid, success: { token in
+                self.agoraKit.preloadChannel(byToken: token,
+                                             channelId: channelName,
+                                             uid: preloadUid)
+            })
+        }
         
         role = clientRole
         // for audience put local video in foreground
@@ -374,6 +387,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
+        backgroundVideo.statsInfo?.updateUid(uid: uid)
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -381,6 +395,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        foregroundVideo.statsInfo?.updateRemoteUid(remoteUid: uid)
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         //record remote uid
@@ -403,7 +418,6 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
         //clear remote uid
         if(remoteUid == uid){
             remoteUid = nil
@@ -443,7 +457,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         backgroundVideo.statsInfo?.updateAudioStats(stats)
     }
-
+    
     func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
         backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
