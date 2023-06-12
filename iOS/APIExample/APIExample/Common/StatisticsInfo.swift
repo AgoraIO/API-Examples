@@ -35,6 +35,9 @@ struct StatisticsInfo {
     var dimension = CGSize.zero
     var fps:UInt = 0
     var firstFrameElapsedTime: Double = 0
+    var preloadElapsedTime: Double = 0
+    var uid: UInt = 0
+    var remoteUid: UInt = 0
     
     var type: StatisticsType
     
@@ -109,8 +112,16 @@ struct StatisticsInfo {
             break
         }
     }
+    mutating func updateUid(uid: UInt) {
+        self.uid = uid
+        
+    }
+    mutating func updateRemoteUid(remoteUid: UInt) {
+        self.remoteUid = remoteUid
+    }
     mutating func updateFirstFrameInfo(_ info: AgoraVideoRenderingTracingInfo) {
         firstFrameElapsedTime = Double(info.elapsedTime)
+        preloadElapsedTime = Double(info.join2JoinSuccess)
     }
     
     func description(audioOnly:Bool) -> String {
@@ -124,6 +135,7 @@ struct StatisticsInfo {
     
     func localDescription(info: LocalInfo, audioOnly: Bool) -> String {
         
+        let localUid = "uid: \(uid)"
         let dimensionFps = "\(Int(dimension.width))×\(Int(dimension.height)),\(fps)fps"
         
         let lastmile = "LM Delay: \(info.channelStats.lastmileDelay)ms"
@@ -142,7 +154,7 @@ struct StatisticsInfo {
             let array = firstFrameElapsedTime > 0 ? [firstFrame, lastmile,audioSend,cpu,aSendLoss] : [lastmile,audioSend,cpu,aSendLoss]
             return array.joined(separator: "\n")
         }
-        let array = firstFrameElapsedTime > 0 ? [firstFrame, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss] : [dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss]
+        var array = firstFrameElapsedTime > 0 ? [localUid, firstFrame, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss] : [localUid, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss]
         return array.joined(separator: "\n")
     }
     
@@ -155,7 +167,7 @@ struct StatisticsInfo {
         } else {
             audioQuality = AgoraNetworkQuality.unknown
         }
-        
+        let uid = "uid: \(remoteUid)"
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
         let videoRecv = "VRecv: \(info.videoStats.receivedBitrate)kbps"
         let audioRecv = "ARecv: \(info.audioStats.receivedBitrate)kbps"
@@ -163,11 +175,15 @@ struct StatisticsInfo {
         let videoLoss = "VLoss: \(info.videoStats.packetLossRate)%"
         let audioLoss = "ALoss: \(info.audioStats.audioLossRate)%"
         let aquality = "AQuality: \(audioQuality.description())"
+        let preloadTime = "join2Success: \(preloadElapsedTime)"
         if(audioOnly) {
             let array = firstFrameElapsedTime > 0 ? [firstFrame, audioRecv,audioLoss,aquality] : [audioRecv,audioLoss,aquality]
             return array.joined(separator: "\n")
         }
-        let array = firstFrameElapsedTime > 0 ? [firstFrame, dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality] : [dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality]
+        var array = firstFrameElapsedTime > 0 ? [uid,firstFrame, dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality, preloadTime] : [uid, dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality, preloadTime]
+        if preloadElapsedTime <= 0 {
+            array.removeLast()
+        }
         return array.joined(separator: "\n")
     }
 }
