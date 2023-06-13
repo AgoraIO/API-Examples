@@ -11,6 +11,7 @@ import AGEVideoLayout
 
 class LiveStreamingMain: BaseViewController {
     
+    @IBOutlet weak var remoteTextField: NSTextField!
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt = 0 {
         didSet {
@@ -136,6 +137,24 @@ class LiveStreamingMain: BaseViewController {
         }
     }
     
+    @IBOutlet weak var selectCanvasColor: Picker!
+    private var remoteCanvasColor: UInt32 = 0xff006a10
+    func initSelectCanvasColor() {
+        selectCanvasColor.label.stringValue = "默认背景色"
+        let colors: [String: UInt32] = ["Red".localized: 0xff0d0010,
+                                        "Blue".localized: 0x0400ff10,
+                                        "Pink".localized: 0xff006a10,
+                                        "Purple".localized: 0xff00d910,
+                                        "Yellow".localized: 0xeaff0010]
+        let sortColors = colors.map({ $0.key }).sorted()
+        selectCanvasColor.picker.addItems(withTitles: sortColors)
+        selectCanvasColor.onSelectChanged { [weak self] in
+            guard let self = self else { return }
+            let index = self.selectCanvasColor.indexOfSelectedItem
+            let colorTitle = sortColors[index]
+            self.remoteCanvasColor = colors[colorTitle] ?? 0xff006a10
+        }
+    }
     /**
      --- Microphones Picker ---
      */
@@ -363,6 +382,7 @@ class LiveStreamingMain: BaseViewController {
         initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
+        initSelectCanvasColor()
         remoteUid = 0
     }
 
@@ -428,6 +448,13 @@ class LiveStreamingMain: BaseViewController {
             agoraKit.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
             agoraKit.startPreview()
+            
+            if !remoteTextField.stringValue.isEmpty && role == .audience {
+                let preloadUid = UInt(remoteTextField.stringValue) ?? 0
+                NetworkManager.shared.generateToken(channelName: channel, uid: preloadUid , success: { token in
+                    self.agoraKit.preloadChannel(byToken: token, channelId: channel, uid: preloadUid)
+                })
+            }
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -532,7 +559,8 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
+            videoCanvas.backgroundColor = remoteCanvasColor
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
             remoteUid = uid

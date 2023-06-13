@@ -36,6 +36,8 @@ struct StatisticsInfo {
     
     var type: StatisticsType
     var firstFrameElapsedTime: Double = 0
+    var localUid: UInt = 0
+    var remoteUid: UInt = 0
     
     init(type: StatisticsType) {
         self.type = type
@@ -124,6 +126,14 @@ struct StatisticsInfo {
         firstFrameElapsedTime = Double(info.elapsedTime)
     }
     
+    mutating func updateRemoteUid(_ uid: UInt) {
+        remoteUid = uid
+    }
+    
+    mutating func updateLocalUid(_ uid: UInt) {
+        localUid = uid
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -137,6 +147,7 @@ struct StatisticsInfo {
         var results:[String] = []
         
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
+        let uid = "uid: \(localUid)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -165,6 +176,9 @@ struct StatisticsInfo {
         if firstFrameElapsedTime > 0 {
             results.append(firstFrame)
         }
+        if localUid > 0 {
+            results.insert(uid, at: 0)
+        }
         return results.joined(separator: "\n")
     }
     
@@ -172,6 +186,7 @@ struct StatisticsInfo {
         var results:[String] = []
         
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
+        let uid = "uid: \(remoteUid)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -200,6 +215,9 @@ struct StatisticsInfo {
         }
         if firstFrameElapsedTime > 0 {
             results.append(firstFrame)
+        }
+        if remoteUid > 0 {
+            results.insert(uid, at: 0)
         }
         return results.joined(separator: "\n")
     }
