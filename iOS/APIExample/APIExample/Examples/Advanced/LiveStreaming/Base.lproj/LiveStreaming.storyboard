@@ -22,7 +22,7 @@
                                 <rect key="frame" x="20" y="128" width="374" height="288"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
-                                        <rect key="frame" x="37.5" y="56" width="299" height="44"/>
+                                        <rect key="frame" x="37.5" y="80" width="299" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="35y-W8-dsg"/>
                                         </constraints>
@@ -30,44 +30,62 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Frame Optimization" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ohV-am-Acd">
-                                        <rect key="frame" x="37" y="140" width="158.5" height="17"/>
+                                        <rect key="frame" x="37" y="197" width="158.5" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1k3-bd-l8R">
-                                        <rect key="frame" x="203" y="133" width="51" height="31"/>
+                                        <rect key="frame" x="203" y="190" width="51" height="31"/>
                                         <connections>
                                             <action selector="doOptimizeFirstFrameSwitch:" destination="O0d-ef-mTa" eventType="valueChanged" id="ULE-eo-ces"/>
                                         </connections>
                                     </switch>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
-                                        <rect key="frame" x="279" y="133" width="30" height="30"/>
+                                        <rect key="frame" x="279" y="190" width="30" height="30"/>
                                         <state key="normal" title="Join"/>
                                         <connections>
                                             <action selector="doJoinPressedWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="pdy-Tj-ycl"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="preload remote uid" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KaL-W1-pfm">
-                                        <rect key="frame" x="37" y="6" width="203" height="34"/>
+                                        <rect key="frame" x="37" y="30" width="203" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0N-nV-bez">
+                                        <rect key="frame" x="28" y="142" width="119.5" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="default color"/>
+                                        <connections>
+                                            <action selector="doChoseBackgroundColor:" destination="O0d-ef-mTa" eventType="touchUpInside" id="kas-nl-lc9"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audience role added, preloaded channel stream" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAU-sM-2GN">
+                                        <rect key="frame" x="37" y="8" width="308.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" name="btnPanelBackground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="1k3-bd-l8R" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="33" id="13Z-tP-Rgb"/>
+                                    <constraint firstItem="1k3-bd-l8R" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="66" id="13Z-tP-Rgb"/>
                                     <constraint firstItem="KaL-W1-pfm" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="5eO-54-GY0"/>
-                                    <constraint firstItem="ohV-am-Acd" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="40" id="6R3-Em-K11"/>
+                                    <constraint firstItem="ohV-am-Acd" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="73" id="6R3-Em-K11"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="leading" secondItem="1k3-bd-l8R" secondAttribute="trailing" constant="27" id="7OA-ok-wZu"/>
                                     <constraint firstItem="1k3-bd-l8R" firstAttribute="leading" secondItem="ohV-am-Acd" secondAttribute="trailing" constant="7.5" id="AD9-TB-zbF"/>
+                                    <constraint firstItem="AAU-sM-2GN" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="8" id="C7z-Rg-EWA"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37.5" id="Fzh-Ry-Cyf"/>
+                                    <constraint firstItem="Q0N-nV-bez" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="18" id="LHA-IH-a4H"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="U0S-YA-fEo"/>
-                                    <constraint firstItem="KaL-W1-pfm" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="6" id="Vmf-b6-ur3"/>
+                                    <constraint firstItem="KaL-W1-pfm" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="30" id="Vmf-b6-ur3"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="top" secondItem="KaL-W1-pfm" secondAttribute="bottom" constant="16" id="ZfA-04-6xo"/>
                                     <constraint firstAttribute="trailing" secondItem="KaL-W1-pfm" secondAttribute="trailing" constant="134" id="Zzb-8O-e9W"/>
                                     <constraint firstAttribute="height" constant="288" id="c9y-rL-vhW"/>
-                                    <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="33" id="m85-6c-puk"/>
+                                    <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="66" id="m85-6c-puk"/>
+                                    <constraint firstItem="AAU-sM-2GN" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="txY-vA-g0e"/>
+                                    <constraint firstItem="Q0N-nV-bez" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="28" id="ysb-57-hko"/>
                                     <constraint firstAttribute="trailing" secondItem="GWc-L5-fZV" secondAttribute="trailing" constant="37.5" id="ze4-ah-O7j"/>
                                 </constraints>
                             </view>
