@@ -17,6 +17,7 @@ class LiveStreamingEntry : UIViewController
     let identifier = "LiveStreaming"
     var role:AgoraClientRole = .broadcaster
     private var isFirstFrame: Bool = false
+    private var backgroundColor: UInt32 = 0x000000
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +51,21 @@ class LiveStreamingEntry : UIViewController
         }
     }
     
+    @IBAction func doChoseBackgroundColor(_ sender: UIButton) {
+        let pickerView = PickerView()
+        let colors = ["Red".localized: 0xff0d0010,
+                      "Blue".localized: 0x0400ff10,
+                      "Pink".localized: 0xff006a10,
+                      "Purple".localized: 0xff00d910,
+                      "Yellow".localized: 0xeaff0010]
+        pickerView.dataArray = colors.map({ $0.key })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            self?.backgroundColor = UInt32(colors[value] ?? 0x000000)
+            sender.setTitle(value, for: .normal)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+    }
+    
     @IBAction func doJoinPressed(sender: UIButton) {
         guard let _ = channelTextField.text else {return}
         //resign channel text field
@@ -72,7 +88,8 @@ class LiveStreamingEntry : UIViewController
         newViewController.configs = ["channelName":channelName,
                                      "role":self.role,
                                      "isFirstFrame": isFirstFrame,
-                                     "preloadUid": preloadTextField.text ?? ""]
+                                     "preloadUid": preloadTextField.text ?? "",
+                                     "backgroundColor": backgroundColor]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -301,7 +318,6 @@ class LiveStreamingMain: BaseViewController {
     }
     @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
-        
         let localVideoCanvas = AgoraRtcVideoCanvas()
         localVideoCanvas.uid = 0
         localVideoCanvas.renderMode = .hidden
@@ -387,7 +403,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
-        backgroundVideo.statsInfo?.updateUid(uid: uid)
+        foregroundVideo.statsInfo?.updateUid(uid: uid)
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -395,20 +411,24 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        foregroundVideo.statsInfo?.updateRemoteUid(remoteUid: uid)
+        backgroundVideo.statsInfo?.updateRemoteUid(remoteUid: uid)
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         //record remote uid
         remoteUid = uid
-        
+        // Only one remote video view is available for this
+        // tutorial. Here we check if there exists a surface
+        // view tagged as this uid.
+        let backgroundColor = (configs["backgroundColor"] as? UInt32) ?? 0x000000
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
         // the view to be binded
+        videoCanvas.uid = uid
         videoCanvas.view = remoteVideoCanvas()
-        videoCanvas.renderMode = .hidden
+        videoCanvas.backgroundColor = backgroundColor
+        videoCanvas.renderMode = .fit
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
