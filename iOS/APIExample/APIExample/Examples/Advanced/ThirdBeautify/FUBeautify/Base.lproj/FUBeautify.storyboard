@@ -112,15 +112,15 @@
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
                                 <rect key="frame" x="10" y="112" width="394" height="750"/>
-                                <string key="text">You haven't turned on the phase core beauty function, please follow the following steps:
+                                <mutableString key="text">You haven't turned on the phase core beauty function, please follow the following steps:
 1: replace license in FUBeautify- &gt; Manager- &gt; authpack.
 2: open the pod 'fuLib' comment in Podfile.
 3: Create FUlib folder under iOS -&gt;APIExample directory
 4: add FURenderKit.framework under the iOS- &gt; APIExample- &gt; FULib directory.
 5: add the Resources resource folder under the iOS- &gt; APIExample- &gt; FULib directory
-6: Add Resource -&gt;Sticker Folder under iOS -&gt;APIExample -&gt;FULib 
+6: Add Resources -&gt;Sticker Folder under iOS -&gt;APIExample -&gt;FULib 
 7: execute pod install.
-8: rerun the project to see the effect</string>
+8: rerun the project to see the effect</mutableString>
                                 <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
                                 <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
