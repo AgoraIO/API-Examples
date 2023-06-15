@@ -99,6 +99,9 @@
 		E72055EE28FE7FC70030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055ED28FE7FC70030E6D1 /* Util.swift */; };
 		E7218BA628BF5E65005A01D5 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E7218BA528BF5E65005A01D5 /* agora-logo.png */; };
 		E728955128E5B8600013E7E6 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
+		E732E92A2A3960A2004403AF /* MultiCameraSourece.strings in Resources */ = {isa = PBXBuildFile; fileRef = E732E9252A3960A2004403AF /* MultiCameraSourece.strings */; };
+		E732E92B2A3960A2004403AF /* MultiCameraSourece.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E9272A3960A2004403AF /* MultiCameraSourece.swift */; };
+		E732E92C2A3960A2004403AF /* MultiCameraSourece.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E732E9282A3960A2004403AF /* MultiCameraSourece.storyboard */; };
 		E74877D728A261D700CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877D428A261D700CA2F58 /* NetworkManager.swift */; };
 		E74877D828A261D700CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877D528A261D700CA2F58 /* JSONObject.swift */; };
 		E75279B529F6651800358F18 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E75279B729F6651800358F18 /* Localizable.strings */; };
@@ -272,6 +275,9 @@
 		E72055ED28FE7FC70030E6D1 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E7218BA528BF5E65005A01D5 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		E728955328E5B9420013E7E6 /* AGEVideoLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AGEVideoLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E732E9262A3960A2004403AF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MultiCameraSourece.strings"; sourceTree = "<group>"; };
+		E732E9272A3960A2004403AF /* MultiCameraSourece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiCameraSourece.swift; sourceTree = "<group>"; };
+		E732E9292A3960A2004403AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MultiCameraSourece.storyboard; sourceTree = "<group>"; };
 		E74877D428A261D700CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877D528A261D700CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E75279B629F6651800358F18 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -523,6 +529,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E732E9242A3960A2004403AF /* MultiCameraSourece */,
 				E7AD0DFA29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti */,
 				E7AD0DEF29CAF78C00C9A4B0 /* LocalCompositeGraph */,
 				E702C1E028B4DB4800D7C7ED /* LiveStreaming */,
@@ -806,6 +813,16 @@
 			path = QuickSwitchChannel;
 			sourceTree = "<group>";
 		};
+		E732E9242A3960A2004403AF /* MultiCameraSourece */ = {
+			isa = PBXGroup;
+			children = (
+				E732E9252A3960A2004403AF /* MultiCameraSourece.strings */,
+				E732E9272A3960A2004403AF /* MultiCameraSourece.swift */,
+				E732E9282A3960A2004403AF /* MultiCameraSourece.storyboard */,
+			);
+			path = MultiCameraSourece;
+			sourceTree = "<group>";
+		};
 		E74877D228A261D700CA2F58 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -976,6 +993,7 @@
 				E7AD0E0029CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings in Resources */,
 				E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
+				E732E92A2A3960A2004403AF /* MultiCameraSourece.strings in Resources */,
 				E77D54BE28F553DA00D51C1E /* JoinChannelVideoToken.strings in Resources */,
 				57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */,
 				5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */,
@@ -985,6 +1003,7 @@
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				67517BFD282E52B9006E41D4 /* ContentInspect.storyboard in Resources */,
+				E732E92C2A3960A2004403AF /* MultiCameraSourece.storyboard in Resources */,
 				57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */,
 				8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */,
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
@@ -1101,6 +1120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */,
+				E732E92B2A3960A2004403AF /* MultiCameraSourece.swift in Sources */,
 				0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */,
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
 				57887A83258886E1006E962A /* SettingCells.swift in Sources */,
@@ -1360,6 +1380,22 @@
 				E71E7B13289B9C2C00B846C7 /* zh-Hans */,
 			);
 			name = VideoProcess.storyboard;
+			sourceTree = "<group>";
+		};
+		E732E9252A3960A2004403AF /* MultiCameraSourece.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E732E9262A3960A2004403AF /* zh-Hans */,
+			);
+			name = MultiCameraSourece.strings;
+			sourceTree = "<group>";
+		};
+		E732E9282A3960A2004403AF /* MultiCameraSourece.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E732E9292A3960A2004403AF /* Base */,
+			);
+			name = MultiCameraSourece.storyboard;
 			sourceTree = "<group>";
 		};
 		E75279B729F6651800358F18 /* Localizable.strings */ = {
