@@ -292,7 +292,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         TokenUtils.gen(requireContext(), rtcConnection2.channelId, rtcConnection2.localUid, new TokenUtils.OnTokenGenCallback<String>() {
             @Override
             public void onTokenGen(String token) {
-                int res = engine.joinChannelEx(null, rtcConnection2, mediaOptions, iRtcEngineEventHandler2);
+                int res = engine.joinChannelEx(token, rtcConnection2, mediaOptions, iRtcEngineEventHandler2);
                 if (res != Constants.ERR_OK) {
                     showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 }
