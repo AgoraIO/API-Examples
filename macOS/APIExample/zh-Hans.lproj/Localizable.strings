@@ -207,3 +207,8 @@
 "Pink" = "粉色";
 "Purple" = "紫色";
 "Yellow" = "黄色";
+"Multi Camera Sourece" = "多路摄像头采集";
+"Start Capture" = "开始采集";
+"Start Publish" = "开始推流";
+"Stop Capture" = "停止采集";
+"Stop Publish" = "停止推流";

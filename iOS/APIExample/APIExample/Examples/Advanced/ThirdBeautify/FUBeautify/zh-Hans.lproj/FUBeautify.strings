@@ -26,7 +26,7 @@
 3: 在iOS->APIExample目录下创建FULib文件夹
 4: 在iOS->APIExample->FULib目录下添加FURenderKit.framework
 5: 在iOS->APIExample->FULib目录下添加Resources资源文件夹
-6: 在iOS->APIExample->FULib目录下添加Resource->贴纸文件夹
+6: 在iOS->APIExample->FULib目录下添加Resources->贴纸文件夹
 7: 执行pod install
 8: 重新运行项目查看效果";
 
