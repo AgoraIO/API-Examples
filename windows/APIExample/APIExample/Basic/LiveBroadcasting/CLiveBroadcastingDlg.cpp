@@ -106,6 +106,7 @@ IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
 
 CLiveBroadcastingDlg::CLiveBroadcastingDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_LIVEBROADCASTING, pParent)
+	, m_canvasRenderModeValue(0)
 {
 
 }
@@ -138,6 +139,9 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_ENCODE_GROUP, m_staEncode);
 	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
 
+	DDX_Radio(pDX, IDC_RADIO_CANVAS_HIDDEN, m_canvasRenderModeValue);
+	DDX_Control(pDX, IDC_STATIC_CANVAS_COLOR, m_staCavasColor);
+	DDX_Control(pDX, IDC_SLIDER_CANVAS_COLOR, m_sldCanvasColor);
 }
 
 
@@ -173,6 +177,11 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_ENCODE_AUTO, IDC_RADIO_ENCODE_SOFT, &CLiveBroadcastingDlg::OnBnClickedRadioEncoder)
 	ON_BN_CLICKED(IDC_CHECK_B_FRAME, &CLiveBroadcastingDlg::OnBnClickedCheckBFrame)
 	ON_BN_CLICKED(IDC_CHECK_FIRST_FRAME_OPT, &CLiveBroadcastingDlg::OnBnClickedCheckFirstFrameOpt)
+	ON_BN_CLICKED(IDC_BUTTON_PRELOAD, &CLiveBroadcastingDlg::OnBnClickedButtonPreload)
+	ON_BN_CLICKED(IDC_RADIO_CANVAS_HIDDEN, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
+	ON_BN_CLICKED(IDC_RADIO_CANVAS_FIT, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
+	ON_BN_CLICKED(IDC_RADIO_CANVAS_ADAPTIVE, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_CANVAS_COLOR, &CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor)
 END_MESSAGE_MAP()
 
 
@@ -391,9 +400,10 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
 		m_rtcEngine->enableLocalVideo(true);
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
-        canvas.renderMode = media::base::RENDER_MODE_FIT;
+        canvas.renderMode = m_canvasRenderMode;
         canvas.uid = 0;
         canvas.view = m_videoWnds[0].GetSafeHwnd();
+		canvas.backgroundColor = m_canvasColor;
         //setup local video in the engine to the canvas. 
         m_rtcEngine->setupLocalVideo(canvas);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
@@ -414,6 +424,32 @@ void CLiveBroadcastingDlg::StopLocalVideo()
 	}
 }
 
+
+void CLiveBroadcastingDlg::ResetVideoView()
+{
+	VideoCanvas canvas;
+	canvas.uid = 0;
+	canvas.renderMode = m_canvasRenderMode;
+	m_rtcEngine->setupLocalVideo(canvas);
+	canvas.view = m_videoWnds[0].GetSafeHwnd();
+	canvas.backgroundColor = m_canvasColor;
+	m_rtcEngine->setupLocalVideo(canvas);
+
+	for (int i = 1; i < m_maxVideoCount; i++) {
+		int uid = m_videoWnds[i].GetUID();
+		if (uid != 0) {
+			VideoCanvas canvas;
+			canvas.uid = uid;
+			canvas.renderMode = m_canvasRenderMode;
+			m_rtcEngine->setupRemoteVideo(canvas);
+			canvas.view = m_videoWnds[i].GetSafeHwnd();
+			canvas.backgroundColor = m_canvasColor;
+			//setup remote video in engine to the canvas.
+			m_rtcEngine->setupRemoteVideo(canvas);
+			break;
+		}
+	}
+}
 
 void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 {
@@ -469,7 +505,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 		options.autoSubscribeAudio = true;
 		options.autoSubscribeVideo = true;
         //join channel in the engine.
-        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), m_uid, options)) {
             strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
         }
@@ -502,6 +538,7 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
+	m_edtChannelName.EnableWindow(TRUE);
 	
 	m_joinChannel = true;
     m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -550,7 +587,8 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
             VideoCanvas canvas;
             canvas.uid  = wParam;
             canvas.view = m_videoWnds[i].GetSafeHwnd();
-            canvas.renderMode = media::base::RENDER_MODE_FIT;
+            canvas.renderMode = m_canvasRenderMode;
+			canvas.backgroundColor = m_canvasColor;
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
 			m_videoWnds[i].SetUID(wParam);
@@ -1089,4 +1127,60 @@ void CLiveBroadcastingDlg::OnBnClickedCheckFirstFrameOpt()
 			m_chkFirstFrameOpt.SetCheck(FALSE);
 		}
 	}
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedButtonPreload()
+{
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	CString strInfo;
+	CString strChannelName;
+	m_edtChannelName.GetWindowText(strChannelName);
+	if (strChannelName.IsEmpty()) {
+		AfxMessageBox(_T("Fill channel name first"));
+		return;
+	}
+	std::string szChannelId = cs2utf8(strChannelName);
+
+	m_uid = generateUid();
+	//join channel in the engine.
+	if (0 == m_rtcEngine->preloadChannel(APP_TOKEN, szChannelId.c_str(), m_uid)) {
+		strInfo.Format(_T("preloadChannel %s, uid=%d"), strChannelName, m_uid);
+		m_edtChannelName.EnableWindow(FALSE);
+	}
+
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode()
+{
+	UpdateData(TRUE);
+	switch (m_canvasRenderModeValue)
+	{
+	case 0:
+		m_canvasRenderMode = media::base::RENDER_MODE_HIDDEN;
+		break;
+	case 1:
+		m_canvasRenderMode = media::base::RENDER_MODE_FIT;
+		break;
+	default:
+		m_canvasRenderMode = media::base::RENDER_MODE_ADAPTIVE;
+		break;
+	}
+	ResetVideoView();
+}
+
+
+void CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	*pResult = 0;
+	int color = m_sldCanvasColor.GetPos() * 1.0f / 100 * 255;
+	m_canvasColor = color << 24 | color << 16 | color << 8 | 255;
+	CString colorStr;
+	colorStr.Format(_T("0x%08x"), m_canvasColor);
+	m_staCavasColor.SetWindowTextW(colorStr);
+	ResetVideoView();
 }
