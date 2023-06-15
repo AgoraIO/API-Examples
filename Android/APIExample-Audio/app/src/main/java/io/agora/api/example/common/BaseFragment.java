@@ -54,6 +54,17 @@ public class BaseFragment extends Fragment
         });
     }
 
+    protected final void showShortToast(final String msg)
+    {
+        runOnUIThread(() -> {
+            Context context = getContext();
+            if(context == null){
+                return;
+            }
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+
     protected final void runOnUIThread(Runnable runnable){
         this.runOnUIThread(runnable, 0);
     }
