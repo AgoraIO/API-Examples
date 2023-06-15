@@ -76,6 +76,7 @@
     <string name="play_locally">本地播放</string>
     <string name="local_video">本地视图</string>
     <string name="streaming_mode">超低延迟直播</string>
+    <string name="preload">预加载</string>
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
@@ -311,5 +312,16 @@
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
     <string name="transparent_background">透明背景</string>
-
+    <string name="user_id">用户ID</string>
+    <string name="view_bg_color">View背景色(只在居中渲染模式下有效果)</string>
+    <string name="render_mode">渲染模式</string>
+    <string name="render_mode_hidden">平铺</string>
+    <string name="render_mode_fit">居中</string>
+    <string name="render_mode_adaptive">拉伸</string>
+    <string name="audio_route_default">默认</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="audio_route_headset">耳机(非TypeC)</string>
+    <string name="audio_route_headset_typec">耳机(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
 </resources>
