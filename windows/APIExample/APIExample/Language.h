@@ -290,6 +290,8 @@ extern wchar_t MultiCamearaStopPublish[INFO_LEN];
 
 extern wchar_t MultiVideoSourceCamera1[INFO_LEN];
 extern wchar_t MultiVideoSourceCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera3[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera4[INFO_LEN];
 extern wchar_t MultiVideoSourceScreen[INFO_LEN];
 
 extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];
