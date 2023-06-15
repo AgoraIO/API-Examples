@@ -74,26 +74,39 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_speaker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/microphone"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:enabled="false"
-        android:text="@string/speaker" />
-
-    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/microphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
-        android:layout_above="@id/volbar4"
+        android:layout_above="@id/audio_route_layout"
         android:enabled="false"
         android:layout_marginBottom="16dp"
         android:text="@string/closemicrophone" />
+
+    <LinearLayout
+        android:id="@+id/audio_route_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/volbar4">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Audio Route"/>
+
+        <Spinner
+            android:id="@+id/audio_route_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:entries="@array/audio_route"
+            android:hint="Select an Audio Scenario"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/volbar4"
@@ -176,7 +189,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_above="@id/audio_profile_layout"
+        android:layout_above="@id/audio_scenario_layout"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -198,36 +211,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/audio_profile_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_above="@id/audio_scenario_layout"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Profile"/>
-
-        <Spinner
-            android:id="@+id/audio_profile_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/audioProfile"
-            android:layout_marginHorizontal="16dp"
-            android:hint="Select an Audio Profile"
-            android:spinnerMode="dropdown" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/audio_scenario_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_above="@id/ll_join">
+        android:layout_above="@id/audio_profile_layout">
 
         <TextView
             android:layout_width="120dp"
@@ -242,6 +230,57 @@
             android:layout_marginHorizontal="16dp"
 
             android:entries="@array/audioScenario"
+            android:hint="Select an Audio Scenario"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/audio_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/channel_profile_layout"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Audio Profile"/>
+
+        <Spinner
+            android:id="@+id/audio_profile_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/audioProfile"
+            android:layout_marginHorizontal="16dp"
+            android:hint="Select an Audio Profile"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/channel_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/ll_join">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Channel Profile"/>
+
+        <Spinner
+            android:id="@+id/channel_profile_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:entries="@array/channel_profile"
             android:hint="Select an Audio Scenario"
             android:spinnerMode="dropdown" />
 
