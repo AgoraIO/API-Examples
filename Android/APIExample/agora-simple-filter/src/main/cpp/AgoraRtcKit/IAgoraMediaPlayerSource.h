@@ -52,7 +52,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int openWithCustomSource(int64_t startPos, media::base::IMediaPlayerCustomDataProvider* provider) = 0;
+  virtual int openWithCustomSource(int64_t startPos, media::base::IMediaPlayerCustomDataProvider* provider) __deprecated = 0;
 
   /**
    * Opens a media file with a media file source.
@@ -247,21 +247,21 @@ public:
   /**
    * Registers the audio frame observer.
    *
-   * @param observer The pointer to the {@link media::base::IAudioFrameObserver IAudioFrameObserver} object.
+   * @param observer The pointer to the {@link media::IAudioPcmFrameSink observer} object.
    * @return
    * - 0: Success.
    * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
    */
-  virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+  virtual int registerAudioFrameObserver(media::IAudioPcmFrameSink* observer) = 0;
 
   /**
    * Releases the audio frame observer.
-   * @param observer The pointer to the {@link media::base::IAudioFrameObserver IAudioFrameObserver} object.
+   * @param observer The pointer to the {@link media::IAudioPcmFrameSink observer} object.
    * @return
    * - 0: Success.
    * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
    */
-  virtual int unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+  virtual int unregisterAudioFrameObserver(media::IAudioPcmFrameSink* observer) = 0;
 
   /**
    * Open the Agora CDN media source.
