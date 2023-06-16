@@ -11,11 +11,15 @@ import AGEVideoLayout
 
 class LiveStreamingMain: BaseViewController {
     
-    @IBOutlet weak var remoteTextField: NSTextField!
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt = 0 {
         didSet {
             snapShot.isEnabled = remoteUid != 0
+        }
+    }
+    var isPreloadChannel: Bool = false {
+        didSet {
+            preloadButton.title =  isPreloadChannel ? "cancel preload".localized : "preload Channel".localized
         }
     }
     
@@ -405,6 +409,11 @@ class LiveStreamingMain: BaseViewController {
         Container.layoutStream(views: videos)
     }
     
+    @IBOutlet weak var preloadButton: NSButton!
+    @IBAction func onPreloadButton(_ sender: NSButton) {
+        isPreloadChannel = !isPreloadChannel
+    }
+    
     @IBAction func onVideoCallButtonPressed(_ sender: NSButton) {
         if !isJoined {
             // check configuration
@@ -449,13 +458,6 @@ class LiveStreamingMain: BaseViewController {
             // you have to call startPreview to see local video
             agoraKit.startPreview()
             
-            if !remoteTextField.stringValue.isEmpty && role == .audience {
-                let preloadUid = UInt(remoteTextField.stringValue) ?? 0
-                NetworkManager.shared.generateToken(channelName: channel, uid: preloadUid , success: { token in
-                    self.agoraKit.preloadChannel(byToken: token, channelId: channel, uid: preloadUid)
-                })
-            }
-            
             // start joining channel
             // 1. Users can only see each other after they join the
             // same channel successfully using the same app id.
@@ -467,6 +469,9 @@ class LiveStreamingMain: BaseViewController {
             option.publishCameraTrack = role == .broadcaster
             option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                if self.isPreloadChannel {
+                    self.agoraKit.preloadChannel(byToken: token, channelId: channel, uid: 0)
+                }
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     self.isProcessing = false
