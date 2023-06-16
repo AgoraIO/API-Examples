@@ -55,7 +55,7 @@ static FUManager *shareManager = NULL;
         // 初始化 FURenderKit
         [FURenderKit setupWithSetupConfig:setupConfig];
         
-        [FURenderKit setLogLevel:FU_LOG_LEVEL_TRACE];
+        [FURenderKit setLogLevel:FU_LOG_LEVEL_ERROR];
         
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 加载人脸 AI 模型
