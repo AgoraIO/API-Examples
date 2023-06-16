@@ -242,6 +242,7 @@ private:
     void RenderLocalVideo();
 	//stop local video capture from SDK
 	void StopLocalVideo();
+	void ResetVideoView();
 
 
     IRtcEngine* m_rtcEngine = nullptr;
@@ -254,6 +255,9 @@ private:
     CAGVideoWnd m_videoWnds[VIDEO_COUNT];
     int m_maxVideoCount = 4;
     std::list<uid_t> m_lstUids;
+	int m_uid = 0;
+	int m_canvasColor = 0x000000ff;// rgba
+	media::base::RENDER_MODE_TYPE m_canvasRenderMode = media::base::RENDER_MODE_HIDDEN;
 
 public:
 	virtual BOOL OnInitDialog();
@@ -288,4 +292,10 @@ public:
 	afx_msg void OnBnClickedRadioEncoder(UINT idCtl);
 	afx_msg void OnBnClickedCheckBFrame();
 	afx_msg void OnBnClickedCheckFirstFrameOpt();
+	afx_msg void OnBnClickedButtonPreload();
+	int m_canvasRenderModeValue;
+	afx_msg void OnBnClickedRadioCanvasRenderMode();
+	afx_msg void OnNMCustomdrawSliderCanvasColor(NMHDR* pNMHDR, LRESULT* pResult);
+	CStatic m_staCavasColor;
+	CSliderCtrl m_sldCanvasColor;
 };

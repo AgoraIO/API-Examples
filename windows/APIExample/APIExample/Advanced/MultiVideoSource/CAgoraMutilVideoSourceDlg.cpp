@@ -31,16 +31,20 @@ void CAgoraMutilVideoSourceDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_COMBO_CAMERAS2, m_cmbCamera2);
-	DDX_Control(pDX, IDC_BUTTON_PUBLISH2, m_btnPublish2);
+	DDX_Control(pDX, IDC_COMBO_CAMERAS3, m_cmbCamera3);
+	DDX_Control(pDX, IDC_COMBO_CAMERAS4, m_cmbCamera4);
 	DDX_Control(pDX, IDC_STATIC_Cameras, m_staCamera1);
 	DDX_Control(pDX, IDC_STATIC_Cameras2, m_staCamera2);
+	DDX_Control(pDX, IDC_STATIC_Camera3, m_staCamera3);
+	DDX_Control(pDX, IDC_STATIC_Camera4, m_staCamera4);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_BUTTON_CAMERA1, m_btnCapture1);
 	DDX_Control(pDX, IDC_BUTTON_CAMERA2, m_btnCapture2);
+	DDX_Control(pDX, IDC_BUTTON_CAMERA3, m_btnCapture3);
+	DDX_Control(pDX, IDC_BUTTON_CAMERA4, m_btnCapture4);
 
 	DDX_Control(pDX, IDC_STATIC_SCREEN, m_staScreen);
 	DDX_Control(pDX, IDC_BUTTON_CAPTURE_SCREEN, m_btnScreenCapture);
-	DDX_Control(pDX, IDC_BUTTON_PUBLISH_SCREEN, m_btnScreenPublish);
 }
 
 
@@ -55,11 +59,11 @@ BEGIN_MESSAGE_MAP(CAgoraMutilVideoSourceDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CAgoraMutilVideoSourceDlg::OnEIDLocalVideoStats)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CAgoraMutilVideoSourceDlg::OnEIDRemoteAudioStats)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CAgoraMutilVideoSourceDlg::OnEIDRemoteVideoStats)
-	ON_BN_CLICKED(IDC_BUTTON_PUBLISH2, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish2)
 	ON_BN_CLICKED(IDC_BUTTON_CAMERA1, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1)
 	ON_BN_CLICKED(IDC_BUTTON_CAMERA2, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2)
+	ON_BN_CLICKED(IDC_BUTTON_CAMERA3, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3)
+	ON_BN_CLICKED(IDC_BUTTON_CAMERA4, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4)
 	ON_BN_CLICKED(IDC_BUTTON_CAPTURE_SCREEN, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen)
-	ON_BN_CLICKED(IDC_BUTTON_PUBLISH_SCREEN, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublishScreen)
 END_MESSAGE_MAP()
 
 
@@ -77,7 +81,7 @@ BOOL CAgoraMutilVideoSourceDlg::OnInitDialog()
 		m_videoWnds[i].SetFaceColor(RGB(0x58, 0x58, 0x58));
 		m_videoWnds[i].ShowWindow(SW_HIDE);
 	}
-	m_maxVideoCount = 4;
+	m_maxVideoCount = 6;
 	ShowVideoWnds();
 	return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -95,12 +99,16 @@ void CAgoraMutilVideoSourceDlg::InitCtrlText()
 	// Camera 2
 	m_staCamera2.SetWindowText(MultiVideoSourceCamera2);
 	m_btnCapture2.SetWindowText(MultiVideoSourceStartCapture);
-	m_btnPublish2.SetWindowText(MultiVideoSourcePublish);//MultiVideoSourceCtrlUnPublish
+
+	m_staCamera3.SetWindowText(MultiVideoSourceCamera3);
+	m_btnCapture3.SetWindowText(MultiVideoSourceStartCapture);
+
+	m_staCamera4.SetWindowText(MultiVideoSourceCamera4);
+	m_btnCapture4.SetWindowText(MultiVideoSourceStartCapture);
 
 	// Screen Sharing
 	m_staScreen.SetWindowText(MultiVideoSourceScreen);
 	m_btnScreenCapture.SetWindowText(MultiVideoSourceStartCapture);
-	m_btnScreenPublish.SetWindowTextW(MultiVideoSourcePublish);
 }
 
 
@@ -114,12 +122,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
-		//If more than one camera are available,primary camera and secondary camera must be different
-		if (m_vecCameraInfos.size() > 1 &&
-			m_cmbCameras.GetCurSel() == m_cmbCamera2.GetCurSel()) {
-			AfxMessageBox(_T("Camera2 need select a different camera"));
-			return;
-		}
+		
 		if (!m_bStartCapture1)
 			OnBnClickedButtonCamera1();
 		//joinchannelex option
@@ -139,8 +142,22 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 	}
 	else {
 		//leaveChannel primary camera
-		if (m_bStartCapture1)
+		if (m_bStartCapture1) {
 			OnBnClickedButtonCamera1();
+		}
+		if (m_bStartCapture2) {
+			OnBnClickedButtonCamera2();
+		}
+		if (m_bStartCapture3) {
+			OnBnClickedButtonCamera3();
+		}
+		if (m_bStartCapture4) {
+			OnBnClickedButtonCamera4();
+		}
+		if (m_bStartScreenSharing) {
+			OnBnClickedButtonCaptureScreen();
+		}
+			
 		m_rtcEngine->leaveChannel();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel primary camera"));
 
@@ -150,51 +167,6 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 	m_joinChannel = !m_joinChannel;
 }
 
-void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish2()
-{
-	CString strChannelName;
-	m_edtChannelName.GetWindowText(strChannelName);
-	std::string szChannelId = cs2utf8(strChannelName);
-	if (!m_bScecondJoin) {
-
-		if (m_vecCameraInfos.size() > 0) {
-			connection.localUid = generateUid();
-			m_camera2EventHandler.SetId(connection.localUid);
-			m_camera2EventHandler.SetMsgReceiver(m_hWnd);
-
-			if (!m_bStartCapture2)
-				OnBnClickedButtonCamera2();
-			//joinchannelex option
-			agora::rtc::ChannelMediaOptions options2;
-			options2.autoSubscribeAudio = false;
-			options2.autoSubscribeVideo = false;
-			options2.publishMicrophoneTrack = false;
-			options2.publishCameraTrack = false;
-			options2.publishSecondaryCameraTrack = true;
-			options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
-			// joinChannelEx secondary camera capture(broadcaster)
-			connection.channelId = szChannelId.data();
-			int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection, options2, &m_camera2EventHandler);
-			CString str;
-			str.Format(_T("joinChannelEx: %d"), ret);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
-
-		}
-		m_btnPublish2.SetWindowText(MultiCamearaStopPublish);
-	}
-	else {
-		if (m_bStartCapture2)
-			OnBnClickedButtonCamera2();
-		//leaveChannel secondary camera
-		connection.channelId = szChannelId.data();
-		m_rtcEngine->leaveChannelEx(connection);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel secondary camera"));
-
-		m_btnPublish2.SetWindowText(MultiVideoSourcePublish);
-	}
-
-	m_bScecondJoin = !m_bScecondJoin;
-}
 
 void CAgoraMutilVideoSourceDlg::ShowVideoWnds()
 {
@@ -270,15 +242,13 @@ void CAgoraMutilVideoSourceDlg::ResumeStatus()
 
 	m_joinChannel = false;
 	m_initialize = false;
-	m_bScecondJoin = false;
-	m_bScreenJoin = false;
 	m_bStartCapture1 = false;
 	m_bStartCapture2 = false;
 	m_bStartScreenSharing = false;
 
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnScreenPublish.EnableWindow(FALSE);
-	m_btnPublish2.EnableWindow(FALSE);
+	m_lstInfo.ResetContent();
+	m_edtChannelName.SetWindowTextW(_T(""));
 }
 
 //Initialize the Agora SDK
@@ -336,6 +306,11 @@ bool CAgoraMutilVideoSourceDlg::InitAgora()
 	CString strCameras;
 	strCameras.Format(_T("Get cameras inforamation, count:%d"), count);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strCameras);
+	m_cmbCameras.ResetContent();
+	m_cmbCamera2.ResetContent();
+	m_cmbCamera3.ResetContent();
+	m_cmbCamera4.ResetContent();
+	m_vecCameraInfos.clear();
 	for (int i = 0; i < count; ++i) {
 		char deviceId[512] = { 0 };
 		char deviceName[512] = { 0 };
@@ -348,12 +323,19 @@ bool CAgoraMutilVideoSourceDlg::InitAgora()
 		m_vecCameraInfos.push_back(cameraInfo);
 		m_cmbCameras.InsertString(i, utf82cs(deviceName));
 		m_cmbCamera2.InsertString(i, utf82cs(deviceName));
+		m_cmbCamera3.InsertString(i, utf82cs(deviceName));
+		m_cmbCamera4.InsertString(i, utf82cs(deviceName));
 	}
-	m_maxVideoCount = 4;
 
 	m_cmbCameras.SetCurSel(0);
 	if (m_vecCameraInfos.size() > 1) {
 		m_cmbCamera2.SetCurSel(1);
+	}
+	if (m_vecCameraInfos.size() > 2) {
+		m_cmbCamera3.SetCurSel(2);
+	}
+	if (m_vecCameraInfos.size() > 3) {
+		m_cmbCamera4.SetCurSel(3);
 	}
 	return true;
 }
@@ -362,29 +344,27 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel) {
-			//leave channel primary camera
-			m_joinChannel = !m_rtcEngine->leaveChannel();
-			//stop primary camera capture
-			m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
-			m_conn_camera = 0;
-			m_joinChannel = false;
+			OnBnClickedButtonJoinchannel();
 		}
 
-
-		if (m_bScecondJoin) {
-			//leaveChannel secondary camera
-			m_rtcEngine->leaveChannelEx(connection);
-			m_bScecondJoin = false;
+		if (m_bStartCapture1) {
+			OnBnClickedButtonCamera1();
 		}
+
 		if (m_bStartCapture2) {
-			m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY);
-			m_bStartCapture2 = false;
+			OnBnClickedButtonCamera2();
 		}
 
-		if (m_bScreenJoin) {
-			m_rtcEngine->stopScreenCapture();
-			m_rtcEngine->leaveChannelEx(screenConnection);
-			m_bScreenJoin = false;
+		if (m_bStartCapture3) {
+			OnBnClickedButtonCamera3();
+		}
+
+		if (m_bStartCapture4) {
+			OnBnClickedButtonCamera4();
+		}
+
+		if (m_bStartScreenSharing) {
+			OnBnClickedButtonCaptureScreen();
 		}
 
 		m_rtcEngine->stopPreview();
@@ -408,22 +388,13 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM
 	unsigned int uid = (unsigned int)wParam;
 	CString strChannelName = utf82cs(m_cameraEventHandler.GetChannelName());
 
-	if (lParam == 10086) {//second
-		m_btnPublish2.EnableWindow(TRUE);
-		// primary mute second
-	}
-	else {//primary
-		m_btnJoinChannel.EnableWindow(TRUE);
-	}
+	m_btnJoinChannel.EnableWindow(TRUE);
 
 	CString strInfo;
 	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), strChannelName, wParam, uid);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true);
 	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true);
-
-	m_btnPublish2.EnableWindow(TRUE);
-	m_btnScreenPublish.EnableWindow(TRUE);
 	return 0;
 }
 
@@ -431,58 +402,25 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 
-	CString strChannelName = utf82cs(m_cameraEventHandler.GetChannelName());
-	unsigned int uid = (unsigned int)lParam;
-	if (uid == connection.localUid) {
-		CString strInfo;
-		strInfo.Format(_T("leaveChannelEx:%s "), strChannelName);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	}
-	else if(uid == screenConnection.localUid){
-		CString strInfo;
-		strInfo.Format(_T("leave screen channel:%s "), strChannelName);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	}
-	else {
-		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-		CString strInfo;
-		strInfo.Format(_T("leave channel:%s "), strChannelName);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
-
-		m_btnPublish2.EnableWindow(FALSE);
-		m_btnScreenPublish.EnableWindow(FALSE);
-		if (m_bScecondJoin) {
-			OnBnClickedButtonPublish2();
-		}
-		else if (m_bStartCapture2) {
-			OnBnClickedButtonCamera2();
-		}
-		if (m_bScreenJoin) {
-			OnBnClickedButtonPublishScreen();
-		}
-		else if (m_bStartScreenSharing) {
-			OnBnClickedButtonCaptureScreen();
-		}
-
-		m_videoWnds[3].Reset();
-	}
+	m_videoWnds[5].Reset();
+	m_videoWnds[5].SetUID(0);
 
 	return 0;
 }
 
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
-	int uid = wParam;
-	m_videoWnds[3].Reset();
-	m_videoWnds[3].SetUID(uid);
+	if (m_videoWnds[5].GetUID() == 0) {
+		int uid = wParam;
+		m_videoWnds[5].Reset();
+		m_videoWnds[5].SetUID(uid);
 
-	VideoCanvas canvas;
-	canvas.uid = uid;
-	canvas.view = m_videoWnds[3].GetSafeHwnd();
-	canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
-	m_rtcEngine->setupRemoteVideo(canvas);
-
+		VideoCanvas canvas;
+		canvas.uid = uid;
+		canvas.view = m_videoWnds[5].GetSafeHwnd();
+		canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
+		m_rtcEngine->setupRemoteVideo(canvas);
+	}
 	return 0;
 }
 
@@ -490,12 +428,12 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	int uid = wParam;
-	if (m_videoWnds[3].GetUID() == uid) {
-		m_videoWnds[3].SetUID(0);
+	if (m_videoWnds[5].GetUID() == uid) {
+		m_videoWnds[5].SetUID(0);
 		VideoCanvas canvas;
 		canvas.uid = uid;
 		m_rtcEngine->setupRemoteVideo(canvas);
-		m_videoWnds[3].Reset();
+		m_videoWnds[5].Reset();
 	}
 	return 0;
 }
@@ -516,9 +454,19 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLocalVideoStats(WPARAM wParam, LPARAM lP
 		m_videoWnds[1].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
 			stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
 	}
-	else if (sourceType == VIDEO_SOURCE_SCREEN)
+	else if (sourceType == VIDEO_SOURCE_CAMERA_THIRD)
 	{
 		m_videoWnds[2].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
+			stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+	}
+	else if (sourceType == VIDEO_SOURCE_CAMERA_FOURTH)
+	{
+		m_videoWnds[3].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
+			stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+	}
+	else if (sourceType == VIDEO_SOURCE_SCREEN)
+	{
+		m_videoWnds[4].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
 			stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
 	}
 	delete stats;
@@ -537,11 +485,19 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lP
 	}
 	else if (sourceType == VIDEO_SOURCE_CAMERA_SECONDARY)
 	{
-		m_videoWnds[0].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+		m_videoWnds[1].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+	}
+	else if (sourceType == VIDEO_SOURCE_CAMERA_THIRD)
+	{
+		m_videoWnds[2].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+	}
+	else if (sourceType == VIDEO_SOURCE_CAMERA_FOURTH)
+	{
+		m_videoWnds[3].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
 	}
 	else if (sourceType == VIDEO_SOURCE_SCREEN)
 	{
-		m_videoWnds[0].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+		m_videoWnds[4].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
 	}
 	delete stats;
 	return 0;
@@ -552,8 +508,8 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDRemoteVideoStats(WPARAM wParam, LPARAM l
 {
 	RemoteVideoStats* stats = reinterpret_cast<RemoteVideoStats*>(wParam);
 
-	if (stats->uid == m_videoWnds[3].GetUID()) {
-		m_videoWnds[3].SetVideoStatsInfo(stats->width, stats->height,
+	if (stats->uid == m_videoWnds[5].GetUID()) {
+		m_videoWnds[5].SetVideoStatsInfo(stats->width, stats->height,
 			stats->decoderOutputFrameRate, stats->receivedBitrate, stats->packetLossRate, stats->delay);
 	}
 	return 0;
@@ -564,8 +520,8 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDRemoteAudioStats(WPARAM wParam, LPARAM l
 {
 	RemoteAudioStats* stats = reinterpret_cast<RemoteAudioStats*>(wParam);
 
-	if (stats->uid == m_videoWnds[3].GetUID()) {
-		m_videoWnds[3].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+	if (stats->uid == m_videoWnds[5].GetUID()) {
+		m_videoWnds[5].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
 	}
 	return 0;
 }
@@ -700,17 +656,27 @@ void CMultiVideoSourceEventHandler::onRemoteVideoStats(const RemoteVideoStats& s
 void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 {
 	if (!m_bStartCapture1) {
+		for (int i = 0; i < m_capturingCameraIndex.size(); i++)
+		{
+			if (m_capturingCameraIndex[i] == m_cmbCameras.GetCurSel()) {
+				AfxMessageBox(_T("The selected camera is occupied"));
+				return;
+			}
+		}
+		m_capturingCameraIndex.push_back(m_cmbCameras.GetCurSel());
+		m_cmbCameras.EnableWindow(FALSE);
+
 		//primary camera configuration
 		CameraCapturerConfiguration config;
 		config.format.width = 640;
 		config.format.height = 360;
 		config.format.fps = 15;
 		//get selected camera device id
+		CString strName;
+		m_cmbCameras.GetWindowText(strName);
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
-			CString strName;
-			m_cmbCameras.GetWindowText(strName);
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
 				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
 				break;
@@ -734,6 +700,16 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 		m_btnCapture1.SetWindowText(MultiVideoSourceStopCapture);
 	}
 	else {
+		std::vector<int>::iterator it;
+		for (it = m_capturingCameraIndex.begin(); it != m_capturingCameraIndex.end(); ++it)
+		{
+			if (*it == m_cmbCameras.GetCurSel()) {
+				it = m_capturingCameraIndex.erase(it);
+				break;
+			}
+		}
+		m_cmbCameras.EnableWindow(TRUE);
+
 		//stop primary camera capture
 		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop primary camera capture"));
@@ -745,24 +721,38 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 
 void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 {
-	//If more than one camera are available,primary camera and secondary camera must be different
-	if (m_vecCameraInfos.size() > 1 &&
-		m_cmbCameras.GetCurSel() == m_cmbCamera2.GetCurSel()) {
-		AfxMessageBox(_T("Camera2 need select a different camera"));
+	if (!m_joinChannel) {
+		AfxMessageBox(_T("Please join channel firstly"));
 		return;
 	}
+	
 	if (!m_bStartCapture2) {
+		//If more than one camera are available,primary camera and secondary camera must be different
+		for (int i = 0; i < m_capturingCameraIndex.size(); i++)
+		{
+			if (m_capturingCameraIndex[i] == m_cmbCamera2.GetCurSel()) {
+				AfxMessageBox(_T("The selected camera is occupied"));
+				return;
+			}
+		}
+		m_capturingCameraIndex.push_back(m_cmbCamera2.GetCurSel());
+		m_cmbCamera2.EnableWindow(FALSE);
+		
+		CString strChannelName;
+		m_edtChannelName.GetWindowText(strChannelName);
+		std::string szChannelId = cs2utf8(strChannelName);
+
 		//camera2 configuration
 		CameraCapturerConfiguration config2;
 		config2.format.width = 640;
 		config2.format.height = 360;
 		config2.format.fps = 15;
 		//set camera2 deviceId
+		CString strName;
+		m_cmbCamera2.GetWindowText(strName);
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
-			CString strName;
-			m_cmbCamera2.GetWindowText(strName);
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
 				strcpy_s(config2.deviceId, 512, info.deviceId.c_str());
 				break;
@@ -774,7 +764,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start secondary camera capture"));
 		m_btnCapture2.SetWindowText(MultiVideoSourceStopCapture);
 		VideoCanvas canvas;
-		canvas.uid = connection.localUid;
+		canvas.uid = connection2.localUid;
 		canvas.sourceType = VIDEO_SOURCE_CAMERA_SECONDARY;
 		canvas.view = m_videoWnds[1].GetSafeHwnd();
 		//setuplocalVideo canvas
@@ -782,10 +772,38 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo primary camera"));
 		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_SECONDARY);
 
+		connection2.localUid = generateUid();
+		m_camera2EventHandler.SetId(connection2.localUid);
+		m_camera2EventHandler.SetMsgReceiver(m_hWnd);
+
+		//joinchannelex option
+		agora::rtc::ChannelMediaOptions options2;
+		options2.autoSubscribeAudio = false;
+		options2.autoSubscribeVideo = false;
+		options2.publishMicrophoneTrack = false;
+		options2.publishCameraTrack = false;
+		options2.publishSecondaryCameraTrack = true;
+		options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		// joinChannelEx secondary camera capture(broadcaster)
+		connection2.channelId = szChannelId.data();
+		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection2, options2, &m_camera2EventHandler);
+		CString str;
+		str.Format(_T("joinChannelEx: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
 	}
 	else {
+		std::vector<int>::iterator it;
+		for (it = m_capturingCameraIndex.begin(); it != m_capturingCameraIndex.end(); ++it)
+		{
+			if (*it == m_cmbCamera2.GetCurSel()) {
+				it = m_capturingCameraIndex.erase(it);
+				break;
+			}
+		}
+		m_cmbCamera2.EnableWindow(TRUE);
+
 		VideoCanvas canvas;
-		canvas.uid = connection.localUid;
+		canvas.uid = connection2.localUid;
 		canvas.sourceType = VIDEO_SOURCE_CAMERA_SECONDARY;
 		canvas.view = nullptr;
 		//setuplocalVideo canvas
@@ -798,12 +816,233 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		m_btnCapture2.SetWindowText(MultiVideoSourceStartCapture);
 
 		m_videoWnds[1].Reset();
+
+		//leaveChannel secondary camera
+		m_rtcEngine->leaveChannelEx(connection2);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel secondary camera"));
 	}
 	m_bStartCapture2 = !m_bStartCapture2;
 }
 
+void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
+{
+	if (!m_joinChannel) {
+		AfxMessageBox(_T("Please join channel firstly"));
+		return;
+	}
+
+	if (!m_bStartCapture3) {
+		//If more than one camera are available,primary camera and secondary camera must be different
+		for (int i = 0; i < m_capturingCameraIndex.size(); i++)
+		{
+			if (m_capturingCameraIndex[i] == m_cmbCamera3.GetCurSel()) {
+				AfxMessageBox(_T("The selected camera is occupied"));
+				return;
+			}
+		}
+		m_capturingCameraIndex.push_back(m_cmbCamera3.GetCurSel());
+		m_cmbCamera3.EnableWindow(FALSE);
+
+		CString strChannelName;
+		m_edtChannelName.GetWindowText(strChannelName);
+		std::string szChannelId = cs2utf8(strChannelName);
+
+		//camera2 configuration
+		CameraCapturerConfiguration config;
+		config.format.width = 640;
+		config.format.height = 360;
+		config.format.fps = 15;
+		//set camera2 deviceId
+		CString strName;
+		m_cmbCamera3.GetWindowText(strName);
+		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
+		{
+			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
+			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
+				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				break;
+			}
+		}
+		
+
+		//start secondary camera capture
+		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_THIRD, config);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start third camera capture"));
+		m_btnCapture3.SetWindowText(MultiVideoSourceStopCapture);
+		VideoCanvas canvas;
+		canvas.uid = connection3.localUid;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_THIRD;
+		canvas.view = m_videoWnds[2].GetSafeHwnd();
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo third camera"));
+		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_THIRD);
+
+		
+		connection3.localUid = generateUid();
+		m_camera3EventHandler.SetId(connection2.localUid);
+		m_camera3EventHandler.SetMsgReceiver(m_hWnd);
+
+		//joinchannelex option
+		agora::rtc::ChannelMediaOptions options3;
+		options3.autoSubscribeAudio = false;
+		options3.autoSubscribeVideo = false;
+		options3.publishMicrophoneTrack = false;
+		options3.publishCameraTrack = false;
+		options3.publishThirdCameraTrack = true;
+		options3.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		// joinChannelEx secondary camera capture(broadcaster)
+		connection3.channelId = szChannelId.data();
+		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection3, options3, &m_camera3EventHandler);
+		CString str;
+		str.Format(_T("joinChannelEx: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
+	}
+	else {
+		std::vector<int>::iterator it;
+		for (it = m_capturingCameraIndex.begin(); it != m_capturingCameraIndex.end(); ++it)
+		{
+			if (*it == m_cmbCamera3.GetCurSel()) {
+				it = m_capturingCameraIndex.erase(it);
+				break;
+			}
+		}
+		m_cmbCamera3.EnableWindow(TRUE);
+
+		VideoCanvas canvas;
+		canvas.uid = connection3.localUid;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_THIRD;
+		canvas.view = nullptr;
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_THIRD);
+		//stop secondary camera capture
+		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_THIRD);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop third camera capture"));
+		m_btnCapture3.SetWindowText(MultiVideoSourceStartCapture);
+
+		m_videoWnds[2].Reset();
+
+		//leaveChannel secondary camera
+		m_rtcEngine->leaveChannelEx(connection3);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel third camera"));
+	}
+	m_bStartCapture3 = !m_bStartCapture3;
+}
+
+void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
+{
+	if (!m_joinChannel) {
+		AfxMessageBox(_T("Please join channel firstly"));
+		return;
+	}
+
+	if (!m_bStartCapture4) {
+		//If more than one camera are available,primary camera and secondary camera must be different
+		for (int i = 0; i < m_capturingCameraIndex.size(); i++)
+		{
+			if (m_capturingCameraIndex[i] == m_cmbCamera4.GetCurSel()) {
+				AfxMessageBox(_T("The selected camera is occupied"));
+				return;
+			}
+		}
+		m_capturingCameraIndex.push_back(m_cmbCamera4.GetCurSel());
+		m_cmbCamera4.EnableWindow(FALSE);
+
+		CString strChannelName;
+		m_edtChannelName.GetWindowText(strChannelName);
+		std::string szChannelId = cs2utf8(strChannelName);
+
+		//camera2 configuration
+		CameraCapturerConfiguration config;
+		config.format.width = 640;
+		config.format.height = 360;
+		config.format.fps = 15;
+		//set camera2 deviceId
+		CString strName;
+		m_cmbCamera4.GetWindowText(strName);
+		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
+		{
+			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
+			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
+				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				break;
+			}
+		}
+		connection4.localUid = generateUid();
+		m_camera4EventHandler.SetId(connection4.localUid);
+		m_camera4EventHandler.SetMsgReceiver(m_hWnd);
+
+		//start secondary camera capture
+		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_FOURTH, config);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start fourth camera capture"));
+		m_btnCapture4.SetWindowText(MultiVideoSourceStopCapture);
+		VideoCanvas canvas;
+		canvas.uid = connection4.localUid;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_FOURTH;
+		canvas.view = m_videoWnds[3].GetSafeHwnd();
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo fourth camera"));
+		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_FOURTH);
+
+
+
+		//joinchannelex option
+		agora::rtc::ChannelMediaOptions options4;
+		options4.autoSubscribeAudio = false;
+		options4.autoSubscribeVideo = false;
+		options4.publishMicrophoneTrack = false;
+		options4.publishCameraTrack = false;
+		options4.publishFourthCameraTrack = true;
+		options4.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		// joinChannelEx secondary camera capture(broadcaster)
+		connection4.channelId = szChannelId.data();
+		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection4, options4, &m_camera4EventHandler);
+		CString str;
+		str.Format(_T("joinChannelEx: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
+	}
+	else {
+		std::vector<int>::iterator it;
+		for (it = m_capturingCameraIndex.begin(); it != m_capturingCameraIndex.end(); ++it)
+		{
+			if (*it == m_cmbCamera4.GetCurSel()) {
+				it = m_capturingCameraIndex.erase(it);
+				break;
+			}
+		}
+		m_cmbCamera4.EnableWindow(TRUE);
+
+		VideoCanvas canvas;
+		canvas.uid = connection4.localUid;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_FOURTH;
+		canvas.view = nullptr;
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_FOURTH);
+		//stop secondary camera capture
+		m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_FOURTH);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop fourth camera capture"));
+		m_btnCapture4.SetWindowText(MultiVideoSourceStartCapture);
+
+		m_videoWnds[3].Reset();
+
+		//leaveChannel secondary camera
+		m_rtcEngine->leaveChannelEx(connection4);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel fourth camera"));
+	}
+	m_bStartCapture4 = !m_bStartCapture4;
+}
+
 void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen()
 {
+	CString strChannelName;
+	m_edtChannelName.GetWindowText(strChannelName);
+	std::string szChannelId = cs2utf8(strChannelName);
+
 	if (!m_bStartScreenSharing) {
 
 		agora::rtc::Rectangle rc;
@@ -817,50 +1056,21 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen()
 		scp.dimensions.height = destop_rc.bottom - destop_rc.top;
 		m_rtcEngine->startScreenCaptureByScreenRect(rc, rc, scp);
 
+		screenConnection.localUid = generateUid();
+		m_screenEventHandler.SetId(screenConnection.localUid);
+		m_screenEventHandler.SetMsgReceiver(m_hWnd);
+
 		VideoCanvas canvas;
-		canvas.uid = connection.localUid;
+		canvas.uid = screenConnection.localUid;
 		canvas.sourceType = VIDEO_SOURCE_SCREEN;
-		canvas.view = m_videoWnds[2].GetSafeHwnd();
+		canvas.view = m_videoWnds[4].GetSafeHwnd();
 		//setuplocalVideo canvas
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo screen"));
 		m_btnScreenCapture.SetWindowText(MultiVideoSourceStopCapture);
 		m_rtcEngine->startPreview(VIDEO_SOURCE_SCREEN);
-	}
-	else {
-		VideoCanvas canvas;
-		canvas.uid = connection.localUid;
-		canvas.sourceType = VIDEO_SOURCE_SCREEN;
-		canvas.view = nullptr;
-		//setuplocalVideo canvas
-		m_rtcEngine->setupLocalVideo(canvas);
-
-		m_rtcEngine->stopScreenCapture();
-		m_rtcEngine->stopPreview(VIDEO_SOURCE_SCREEN);
-
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop screen capture"));
-		m_btnScreenCapture.SetWindowText(MultiVideoSourceStartCapture);
-
-		m_videoWnds[2].Reset();
-	}
-
-	m_bStartScreenSharing = !m_bStartScreenSharing;
-}
-
-
-void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublishScreen()
-{
-	CString strChannelName;
-	m_edtChannelName.GetWindowText(strChannelName);
-	std::string szChannelId = cs2utf8(strChannelName);
-	if (!m_bScreenJoin) {
-
-		screenConnection.localUid = generateUid();
-		m_screenEventHandler.SetId(screenConnection.localUid);
-		m_screenEventHandler.SetMsgReceiver(m_hWnd);
-
-		if (!m_bStartScreenSharing)
-			OnBnClickedButtonCaptureScreen();
+		
+		
 
 		//joinchannelex option
 		agora::rtc::ChannelMediaOptions options2;
@@ -876,18 +1086,30 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublishScreen()
 		CString str;
 		str.Format(_T("joinChannelEx: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
-		m_btnScreenPublish.SetWindowText(MultiCamearaStopPublish);
 	}
 	else {
-		if (m_bStartScreenSharing)
-			OnBnClickedButtonCaptureScreen();
+		VideoCanvas canvas;
+		canvas.uid = screenConnection.localUid;
+		canvas.sourceType = VIDEO_SOURCE_SCREEN;
+		canvas.view = nullptr;
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+
+		m_rtcEngine->stopScreenCapture();
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_SCREEN);
+
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop screen capture"));
+		m_btnScreenCapture.SetWindowText(MultiVideoSourceStartCapture);
+
+		m_videoWnds[4].Reset();
+
 		//leaveChannel secondary camera
 		screenConnection.channelId = szChannelId.data();
 		m_rtcEngine->leaveChannelEx(screenConnection);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel screen"));
-
-		m_btnScreenPublish.SetWindowText(MultiVideoSourcePublish);
 	}
 
-	m_bScreenJoin = !m_bScreenJoin;
+	m_bStartScreenSharing = !m_bStartScreenSharing;
+
 }
+
