@@ -48,7 +48,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IMediaRecorderCallback;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RecorderInfo;
-import io.agora.rtc2.RecorderStreamInfo;
+//import io.agora.rtc2.RecorderStreamInfo;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
@@ -314,6 +314,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
     }
 
     private void startRemoteMediaRecorder(String channelId, int uid) {
+        /*
         // Start Local Recording
         AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_" + uid + ".mp4";
@@ -341,6 +342,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
         ));
         Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+         */
     }
 
     private void stopLocalMediaRecorder() {
@@ -356,6 +358,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
     }
 
     private void startLocalMediaRecorder(String channelId) {
+        /*
         // Start Local Recording
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4";
 
@@ -382,6 +385,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
         ));
         Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+         */
     }
 
     private void setupLayoutRecording(@NonNull ViewGroup reportLayout, @NonNull Runnable onStart, @NonNull Runnable onStop) {
