@@ -212,3 +212,5 @@
 "Start Publish" = "开始推流";
 "Stop Capture" = "停止采集";
 "Stop Publish" = "停止推流";
+"preload Channel" = "预加载";
+"cancel preload" = "取消预加载";
