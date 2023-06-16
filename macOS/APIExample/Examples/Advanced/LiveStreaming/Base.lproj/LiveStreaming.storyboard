@@ -248,24 +248,17 @@
                                                 <action selector="onVideoCallButtonPressed:" target="YjT-yy-DnJ" id="0oH-L6-nRD"/>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWB-Jh-KbP">
-                                            <rect key="frame" x="30" y="118" width="277" height="16"/>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zqc-v1-3T9">
+                                            <rect key="frame" x="11" y="100" width="134" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Audience role added, preloaded channel stream" id="tTd-mV-uwM">
-                                                <font key="font" size="12" name=".PingFangSC-Regular"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bxc-bh-SPH">
-                                            <rect key="frame" x="30" y="92" width="131" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="preload remote uid" drawsBackground="YES" id="EwF-sr-UzF">
+                                            <buttonCell key="cell" type="push" title="preload Channel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gCs-hv-sr4">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onPreloadButton:" target="YjT-yy-DnJ" id="ino-68-wWI"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Wck-kx-dah" firstAttribute="leading" secondItem="wnS-VB-gLe" secondAttribute="leading" constant="33" id="4qV-4m-nOw"/>
@@ -306,7 +299,7 @@
                         <outlet property="encoderSegment" destination="z1l-XW-dGp" id="TVg-8x-TOa"/>
                         <outlet property="firstFrameSwitch" destination="Zjt-Mf-ijU" id="CrC-HY-wQ3"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
-                        <outlet property="remoteTextField" destination="Bxc-bh-SPH" id="KOH-VJ-2tY"/>
+                        <outlet property="preloadButton" destination="Zqc-v1-3T9" id="j0a-5e-sJA"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
                         <outlet property="selectCanvasColor" destination="LM8-L0-iXP" id="E77-cK-9da"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>
