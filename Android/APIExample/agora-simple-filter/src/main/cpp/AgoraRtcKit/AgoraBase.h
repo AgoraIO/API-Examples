@@ -83,25 +83,6 @@
 #define INVALID_DISPLAY_ID 0xffff
 
 namespace agora {
-namespace commons {
-namespace cjson {
-class JsonWrapper;
-}  // namespace cjson
-}  // namespace commons
-
-typedef commons::cjson::JsonWrapper any_document_t;
-
-namespace base {
-class IEngineBase;
-
-class IParameterEngine {
- public:
-  virtual int setParameters(const char* parameters) = 0;
-  virtual int getParameters(const char* key, any_document_t& result) = 0;
-  virtual ~IParameterEngine() {}
-};
-}  // namespace base
-
 namespace util {
 
 template <class T>
@@ -166,7 +147,7 @@ class CopyableAutoPtr : public AutoPtr<T> {
 
  public:
   explicit CopyableAutoPtr(pointer_type p = 0) : AutoPtr<T>(p) {}
-  explicit CopyableAutoPtr(const CopyableAutoPtr& rhs) { this->reset(rhs.clone()); }
+  CopyableAutoPtr(const CopyableAutoPtr& rhs) { this->reset(rhs.clone()); }
   CopyableAutoPtr& operator=(const CopyableAutoPtr& rhs) {
     if (this != &rhs) this->reset(rhs.clone());
     return *this;
@@ -871,10 +852,10 @@ enum INTERFACE_ID_TYPE {
   AGORA_IID_MEDIA_ENGINE_REGULATOR = 9,
   AGORA_IID_CLOUD_SPATIAL_AUDIO = 10,
   AGORA_IID_LOCAL_SPATIAL_AUDIO = 11,
-  AGORA_IID_MEDIA_RECORDER = 12,
   AGORA_IID_STATE_SYNC = 13,
   AGORA_IID_METACHAT_SERVICE = 14,
   AGORA_IID_MUSIC_CONTENT_CENTER = 15,
+  AGORA_IID_H265_TRANSCODER = 16,
 };
 
 /**
@@ -996,11 +977,11 @@ enum FRAME_RATE {
 };
 
 enum FRAME_WIDTH {
-  FRAME_WIDTH_640 = 640,
+  FRAME_WIDTH_960 = 960,
 };
 
 enum FRAME_HEIGHT {
-  FRAME_HEIGHT_360 = 360,
+  FRAME_HEIGHT_540 = 540,
 };
 
 
@@ -1029,7 +1010,7 @@ enum ORIENTATION_MODE {
   /**
    * 0: The output video always follows the orientation of the captured video. The receiver takes
    * the rotational information passed on from the video encoder. This mode applies to scenarios
-   * where video orientation can be adjusted on the receiver：
+   * where video orientation can be adjusted on the receiver:
    * - If the captured video is in landscape mode, the output video is in landscape mode.
    * - If the captured video is in portrait mode, the output video is in portrait mode.
    */
@@ -1129,6 +1110,15 @@ const int DEFAULT_MIN_BITRATE = -1;
  * -2: (For future use) Set minimum bitrate the same as target bitrate.
  */
 const int DEFAULT_MIN_BITRATE_EQUAL_TO_TARGET_BITRATE = -2;
+
+/**
+ * screen sharing supported capability level.
+ */
+enum SCREEN_CAPTURE_FRAMERATE_CAPABILITY {
+  SCREEN_CAPTURE_FRAMERATE_CAPABILITY_15_FPS = 0,
+  SCREEN_CAPTURE_FRAMERATE_CAPABILITY_30_FPS = 1,
+  SCREEN_CAPTURE_FRAMERATE_CAPABILITY_60_FPS = 2,
+};
 
 /**
  * The video codec types.
@@ -1627,7 +1617,7 @@ struct EncodedVideoFrameInfo {
 
 };
 /**
-* Video Compression Preference.
+* Video compression preference.
 */
 enum COMPRESSION_PREFERENCE {
   /**
@@ -1662,15 +1652,30 @@ enum ENCODING_PREFERENCE {
  * The definition of the AdvanceOptions struct.
  */
 struct AdvanceOptions {
+
   /**
    * The video encoder type preference..
    */
   ENCODING_PREFERENCE encodingPreference;
-  AdvanceOptions() : encodingPreference(PREFER_AUTO) {}
-  AdvanceOptions(ENCODING_PREFERENCE encoding_preference) : encodingPreference(encoding_preference) {}
+
+  /**
+  * Video compression preference.
+  */
+  COMPRESSION_PREFERENCE compressionPreference;
+
+  AdvanceOptions() : encodingPreference(PREFER_AUTO), 
+                     compressionPreference(PREFER_LOW_LATENCY) {}
+
+  AdvanceOptions(ENCODING_PREFERENCE encoding_preference, 
+                 COMPRESSION_PREFERENCE compression_preference) : 
+                 encodingPreference(encoding_preference),
+                 compressionPreference(compression_preference) {}
+
   bool operator==(const AdvanceOptions& rhs) const {
-    return encodingPreference == rhs.encodingPreference;
+    return encodingPreference == rhs.encodingPreference && 
+           compressionPreference == rhs.compressionPreference;
   }
+
 };
 
 /**
@@ -1678,7 +1683,7 @@ struct AdvanceOptions {
  */
 enum VIDEO_MIRROR_MODE_TYPE {
   /**
-   * (Default) 0: The mirror mode determined by the SDK.
+   * 0: The mirror mode determined by the SDK.
    */
   VIDEO_MIRROR_MODE_AUTO = 0,
   /**
@@ -1689,6 +1694,33 @@ enum VIDEO_MIRROR_MODE_TYPE {
    * 2: Disable the mirror mode.
    */
   VIDEO_MIRROR_MODE_DISABLED = 2,
+};
+
+
+/** Supported codec type bit mask. */
+enum CODEC_CAP_MASK {
+  /** 0: No codec support. */
+  CODEC_CAP_MASK_NONE = 0,
+
+  /** bit 1: Hardware decoder support flag. */
+  CODEC_CAP_MASK_HW_DEC = 1 << 0,
+
+  /** bit 2: Hardware encoder support flag. */
+  CODEC_CAP_MASK_HW_ENC = 1 << 1,
+
+  /** bit 3: Software decoder support flag. */
+  CODEC_CAP_MASK_SW_DEC = 1 << 2,
+
+  /** bit 4: Software encoder support flag. */
+  CODEC_CAP_MASK_SW_ENC = 1 << 3,
+};
+
+/** The codec support information. */
+struct CodecCapInfo {
+  /** The codec type: #VIDEO_CODEC_TYPE. */
+  VIDEO_CODEC_TYPE codecType;
+  /** The codec support flag. */
+  int codecCapMask;
 };
 
 /**
@@ -1728,38 +1760,40 @@ struct VideoEncoderConfiguration {
    *
    * | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps) | Live Bitrate (Kbps)|
    * |------------------------|------------------|---------------------|--------------------|
-   * | 160 * 120              | 15               | 65                  | 130                |
-   * | 120 * 120              | 15               | 50                  | 100                |
-   * | 320 * 180              | 15               | 140                 | 280                |
-   * | 180 * 180              | 15               | 100                 | 200                |
-   * | 240 * 180              | 15               | 120                 | 240                |
-   * | 320 * 240              | 15               | 200                 | 400                |
-   * | 240 * 240              | 15               | 140                 | 280                |
-   * | 424 * 240              | 15               | 220                 | 440                |
-   * | 640 * 360              | 15               | 400                 | 800                |
-   * | 360 * 360              | 15               | 260                 | 520                |
-   * | 640 * 360              | 30               | 600                 | 1200               |
-   * | 360 * 360              | 30               | 400                 | 800                |
-   * | 480 * 360              | 15               | 320                 | 640                |
-   * | 480 * 360              | 30               | 490                 | 980                |
-   * | 640 * 480              | 15               | 500                 | 1000               |
-   * | 480 * 480              | 15               | 400                 | 800                |
-   * | 640 * 480              | 30               | 750                 | 1500               |
-   * | 480 * 480              | 30               | 600                 | 1200               |
-   * | 848 * 480              | 15               | 610                 | 1220               |
-   * | 848 * 480              | 30               | 930                 | 1860               |
-   * | 640 * 480              | 10               | 400                 | 800                |
-   * | 1280 * 720             | 15               | 1130                | 2260               |
-   * | 1280 * 720             | 30               | 1710                | 3420               |
-   * | 960 * 720              | 15               | 910                 | 1820               |
-   * | 960 * 720              | 30               | 1380                | 2760               |
-   * | 1920 * 1080            | 15               | 2080                | 4160               |
-   * | 1920 * 1080            | 30               | 3150                | 6300               |
-   * | 1920 * 1080            | 60               | 4780                | 6500               |
-   * | 2560 * 1440            | 30               | 4850                | 6500               |
-   * | 2560 * 1440            | 60               | 6500                | 6500               |
-   * | 3840 * 2160            | 30               | 6500                | 6500               |
-   * | 3840 * 2160            | 60               | 6500                | 6500               |
+   * | 160 * 120              | 15               | 65                  | 110                |
+   * | 120 * 120              | 15               | 50                  | 90                 |
+   * | 320 * 180              | 15               | 140                 | 240                |
+   * | 180 * 180              | 15               | 100                 | 160                |
+   * | 240 * 180              | 15               | 120                 | 200                |
+   * | 320 * 240              | 15               | 200                 | 300                |
+   * | 240 * 240              | 15               | 140                 | 240                |
+   * | 424 * 240              | 15               | 220                 | 370                |
+   * | 640 * 360              | 15               | 400                 | 680                |
+   * | 360 * 360              | 15               | 260                 | 440                |
+   * | 640 * 360              | 30               | 600                 | 1030               |
+   * | 360 * 360              | 30               | 400                 | 670                |
+   * | 480 * 360              | 15               | 320                 | 550                |
+   * | 480 * 360              | 30               | 490                 | 830                |
+   * | 640 * 480              | 15               | 500                 | 750                |
+   * | 480 * 480              | 15               | 400                 | 680                |
+   * | 640 * 480              | 30               | 750                 | 1130               |
+   * | 480 * 480              | 30               | 600                 | 1030               |
+   * | 848 * 480              | 15               | 610                 | 920                |
+   * | 848 * 480              | 30               | 930                 | 1400               |
+   * | 640 * 480              | 10               | 400                 | 600                |
+   * | 960 * 540              | 15               | 750                 | 1100               |
+   * | 960 * 540              | 30               | 1110                | 1670               |
+   * | 1280 * 720             | 15               | 1130                | 1600               |
+   * | 1280 * 720             | 30               | 1710                | 2400               |
+   * | 960 * 720              | 15               | 910                 | 1280               |
+   * | 960 * 720              | 30               | 1380                | 2000               |
+   * | 1920 * 1080            | 15               | 2080                | 2500               |
+   * | 1920 * 1080            | 30               | 3150                | 3780               |
+   * | 1920 * 1080            | 60               | 4780                | 5730               |
+   * | 2560 * 1440            | 30               | 4850                | 4850               |
+   * | 2560 * 1440            | 60               | 7350                | 7350               |
+   * | 3840 * 2160            | 30               | 8910                | 8910               |
+   * | 3840 * 2160            | 60               | 13500               | 13500              |
    */
   int bitrate;
 
@@ -1789,20 +1823,17 @@ struct VideoEncoderConfiguration {
   DEGRADATION_PREFERENCE degradationPreference;
 
   /**
+   * The mirror mode is disabled by default
    * If mirror_type is set to VIDEO_MIRROR_MODE_ENABLED, then the video frame would be mirrored before encoding.
    */
   VIDEO_MIRROR_MODE_TYPE mirrorMode;
-  /**
-   * The video compressionPreference: #compressionPreference.
-   */
-  COMPRESSION_PREFERENCE compressionPreference;
 
   /**
-   * The video encoder hw: #.hardwareEncoding
+   * The advanced options for the video encoder configuration. See AdvanceOptions.
    */
   AdvanceOptions advanceOptions;
 
-  VideoEncoderConfiguration(const VideoDimensions& d, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED, COMPRESSION_PREFERENCE compressionPreference = PREFER_LOW_LATENCY)
+  VideoEncoderConfiguration(const VideoDimensions& d, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
     : codecType(VIDEO_CODEC_H264),
       dimensions(d),
       frameRate(f),
@@ -1811,9 +1842,8 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      compressionPreference(compressionPreference),
-      advanceOptions(PREFER_AUTO) {}
-  VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED, COMPRESSION_PREFERENCE compressionPreference = PREFER_LOW_LATENCY)
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+  VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
     : codecType(VIDEO_CODEC_H264),
       dimensions(width, height),
       frameRate(f),
@@ -1822,8 +1852,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      compressionPreference(compressionPreference),
-      advanceOptions(PREFER_AUTO) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
   VideoEncoderConfiguration(const VideoEncoderConfiguration& config)
     : codecType(config.codecType),
       dimensions(config.dimensions),
@@ -1833,19 +1862,17 @@ struct VideoEncoderConfiguration {
       orientationMode(config.orientationMode),
       degradationPreference(config.degradationPreference),
       mirrorMode(config.mirrorMode),
-      compressionPreference(config.compressionPreference),
       advanceOptions(config.advanceOptions) {}
   VideoEncoderConfiguration()
     : codecType(VIDEO_CODEC_H264),
-      dimensions(FRAME_WIDTH_640, FRAME_HEIGHT_360),
+      dimensions(FRAME_WIDTH_960, FRAME_HEIGHT_540),
       frameRate(FRAME_RATE_FPS_15),
       bitrate(STANDARD_BITRATE),
       minBitrate(DEFAULT_MIN_BITRATE),
       orientationMode(ORIENTATION_MODE_ADAPTIVE),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(VIDEO_MIRROR_MODE_DISABLED),
-      compressionPreference(PREFER_LOW_LATENCY),
-      advanceOptions(PREFER_AUTO) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
 
   VideoEncoderConfiguration& operator=(const VideoEncoderConfiguration& rhs) {
     if (this == &rhs) return *this;
@@ -1857,7 +1884,6 @@ struct VideoEncoderConfiguration {
     orientationMode = rhs.orientationMode;
     degradationPreference = rhs.degradationPreference;
     mirrorMode = rhs.mirrorMode;
-    compressionPreference = rhs.compressionPreference;
     advanceOptions = rhs.advanceOptions;
     return *this;
   }
@@ -2221,68 +2247,6 @@ struct RtcStats {
 };
 
 /**
- * The capture type of the custom video source.
- */
-enum VIDEO_SOURCE_TYPE {
-  /**
-   * 0: The primary camera.
-   */
-  VIDEO_SOURCE_CAMERA_PRIMARY = 0,
-  /**
-   * The camera.
-   */
-  VIDEO_SOURCE_CAMERA = VIDEO_SOURCE_CAMERA_PRIMARY,
-  /**
-   * 1: The secondary camera.
-   */
-  VIDEO_SOURCE_CAMERA_SECONDARY = 1,
-  /**
-   * 2: The primary screen.
-   */
-  VIDEO_SOURCE_SCREEN_PRIMARY = 2,
-  /**
-   * The screen.
-   */
-  VIDEO_SOURCE_SCREEN = VIDEO_SOURCE_SCREEN_PRIMARY,
-  /**
-   * 3: The secondary screen.
-   */
-  VIDEO_SOURCE_SCREEN_SECONDARY = 3,
-  /**
-   * 4: The custom video source.
-   */
-  VIDEO_SOURCE_CUSTOM = 4,
-  /**
-   * 5: The video source from the media player.
-   */
-  VIDEO_SOURCE_MEDIA_PLAYER = 5,
-  /**
-   * 6: The video source is a PNG image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_PNG = 6,
-  /**
-   * 7: The video source is a JPEG image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_JPEG = 7,
-  /**
-   * 8: The video source is a GIF image.
-   */
-  VIDEO_SOURCE_RTC_IMAGE_GIF = 8,
-  /**
-   * 9: The video source is remote video acquired by the network.
-   */
-  VIDEO_SOURCE_REMOTE = 9,
-  /**
-   * 10: A transcoded video source.
-   */
-  VIDEO_SOURCE_TRANSCODED = 10,
-  /**
-   * 100: An unknown video source.
-   */
-  VIDEO_SOURCE_UNKNOWN = 100
-};
-
-/**
  * User role types.
  */
 enum CLIENT_ROLE_TYPE {
@@ -2382,108 +2346,21 @@ enum EXPERIENCE_POOR_REASON {
 };
 
 /**
- * Audio statistics of the remote user.
+ * Audio AINS mode
  */
-struct RemoteAudioStats
-{
-  /**
-   * User ID of the remote user sending the audio stream.
-   */
-  uid_t uid;
-  /**
-   * The quality of the remote audio: #QUALITY_TYPE.
-   */
-  int quality;
-  /**
-   * The network delay (ms) from the sender to the receiver.
-   */
-  int networkTransportDelay;
-  /**
-   * The network delay (ms) from the receiver to the jitter buffer.
-   * @note When the receiving end is an audience member and `audienceLatencyLevel` of `ClientRoleOptions`
-   * is 1, this parameter does not take effect.
-   */
-  int jitterBufferDelay;
-  /**
-   * The audio frame loss rate in the reported interval.
-   */
-  int audioLossRate;
-  /**
-   * The number of channels.
-   */
-  int numChannels;
-  /**
-   * The sample rate (Hz) of the remote audio stream in the reported interval.
-   */
-  int receivedSampleRate;
-  /**
-   * The average bitrate (Kbps) of the remote audio stream in the reported
-   * interval.
-   */
-  int receivedBitrate;
-  /**
-   * The total freeze time (ms) of the remote audio stream after the remote
-   * user joins the channel.
-   *
-   * In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
-   */
-  int totalFrozenTime;
-  /**
-   * The total audio freeze time as a percentage (%) of the total time when the
-   * audio is available.
-   */
-  int frozenRate;
-  /**
-   * The quality of the remote audio stream as determined by the Agora
-   * real-time audio MOS (Mean Opinion Score) measurement method in the
-   * reported interval. The return value ranges from 0 to 500. Dividing the
-   * return value by 100 gets the MOS score, which ranges from 0 to 5. The
-   * higher the score, the better the audio quality.
-   *
-   * | MOS score       | Perception of audio quality                                                                                                                                 |
-   * |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-   * | Greater than 4  | Excellent. The audio sounds clear and smooth.                                                                                                               |
-   * | From 3.5 to 4   | Good. The audio has some perceptible impairment, but still sounds clear.                                                                                    |
-   * | From 3 to 3.5   | Fair. The audio freezes occasionally and requires attentive listening.                                                                                      |
-   * | From 2.5 to 3   | Poor. The audio sounds choppy and requires considerable effort to understand.                                                                               |
-   * | From 2 to 2.5   | Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.  |
-   * | Less than 2     | Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible. |
-   */
-  int mosValue;
-  /**
-   * The total time (ms) when the remote user neither stops sending the audio
-   * stream nor disables the audio module after joining the channel.
-   */
-  int totalActiveTime;
-  /**
-   * The total publish duration (ms) of the remote audio stream.
-   */
-  int publishDuration;
-  /**
-   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See #EXPERIENCE_QUALITY_TYPE.
-   */
-  int qoeQuality;
-  /**
-   * The reason for poor QoE of the local user when receiving a remote audio stream. See #EXPERIENCE_POOR_REASON.
-   */
-  int qualityChangedReason;
-
-  RemoteAudioStats() :
-    uid(0),
-    quality(0),
-    networkTransportDelay(0),
-    jitterBufferDelay(0),
-    audioLossRate(0),
-    numChannels(0),
-    receivedSampleRate(0),
-    receivedBitrate(0),
-    totalFrozenTime(0),
-    frozenRate(0),
-    mosValue(0),
-    totalActiveTime(0),
-    publishDuration(0),
-    qoeQuality(0),
-    qualityChangedReason(0) {}
+enum AUDIO_AINS_MODE {
+    /**
+     * AINS mode with soft suppression level.
+     */
+    AINS_MODE_BALANCED = 0,
+    /**
+     * AINS mode with high suppression level.
+     */
+    AINS_MODE_AGGRESSIVE = 1,
+    /**
+     * AINS mode with high suppression level and ultra-low-latency
+     */
+    AINS_MODE_ULTRALOWLATENCY = 2
 };
 
 /**
@@ -2592,7 +2469,7 @@ struct VideoFormat {
    * The video frame rate (fps).
    */
   int fps;
-  VideoFormat() : width(FRAME_WIDTH_640), height(FRAME_HEIGHT_360), fps(FRAME_RATE_FPS_15) {}
+  VideoFormat() : width(FRAME_WIDTH_960), height(FRAME_HEIGHT_540), fps(FRAME_RATE_FPS_15) {}
   VideoFormat(int w, int h, int f) : width(w), height(h), fps(f) {}
 
   bool operator<(const VideoFormat& fmt) const {
@@ -2660,6 +2537,21 @@ enum SCREEN_SCENARIO_TYPE {
    * remotely controlled, you can set this scenario.
    */
   SCREEN_SCENARIO_RDC = 4,
+};
+
+
+/**
+ * The video application scenario type.
+ */
+enum VIDEO_APPLICATION_SCENARIO_TYPE {
+  /**
+   * 0: Default Scenario.
+   */
+  APPLICATION_SCENARIO_GENERAL = 0,
+  /**
+   * 1: Meeting Scenario. This scenario is the best QoE practice of meeting application.
+   */
+  APPLICATION_SCENARIO_MEETING = 1,
 };
 
 /**
@@ -2803,7 +2695,7 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE = 4,
   /**
-   * 5: The local video encoding fails.
+   * 5: The local video encoder is not supported.
    */
   LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE = 5,
   /**
@@ -3027,6 +2919,10 @@ enum REMOTE_VIDEO_STATE_REASON {
     /** (iOS only) 12: The app of the remote user is in background.
    */
   REMOTE_VIDEO_STATE_REASON_SDK_IN_BACKGROUND = 12,
+
+  /** 13: The remote video stream is not supported by the decoder
+   */
+  REMOTE_VIDEO_STATE_REASON_CODEC_NOT_SUPPORT = 13,
 
 };
 
@@ -3761,7 +3657,7 @@ struct TranscodingVideoStream {
   /**
    * The source type of video for the video mixing on the local client. See #VIDEO_SOURCE_TYPE.
    */
-  agora::media::MEDIA_SOURCE_TYPE sourceType;
+  VIDEO_SOURCE_TYPE sourceType;
   /**
    * The ID of the remote user.
    * @note Use this parameter only when the source type of the video for the video mixing on the local client is `VIDEO_SOURCE_REMOTE`.
@@ -3772,6 +3668,10 @@ struct TranscodingVideoStream {
    * @note Use this parameter only when the source type of the video for the video mixing on the local client is `RTC_IMAGE`.
    */
   const char* imageUrl;
+  /**
+   * MediaPlayer id if sourceType is MEDIA_PLAYER_SOURCE.
+   */
+  int mediaPlayerId;
   /**
    * The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
    */
@@ -3807,7 +3707,7 @@ struct TranscodingVideoStream {
   bool mirror;
 
   TranscodingVideoStream()
-    : sourceType(agora::media::PRIMARY_CAMERA_SOURCE),
+    : sourceType(VIDEO_SOURCE_CAMERA_PRIMARY),
       remoteUserUid(0),
       imageUrl(NULL),
       x(0),
@@ -3831,7 +3731,7 @@ struct LocalTranscoderConfiguration {
   /**
    * The video streams for the video mixing on the local client. See TranscodingVideoStream.
    */
-  TranscodingVideoStream* VideoInputStreams;
+  TranscodingVideoStream* videoInputStreams;
   /**
    * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration.
    */
@@ -3845,9 +3745,40 @@ struct LocalTranscoderConfiguration {
 
   LocalTranscoderConfiguration()
     : streamCount(0),
-      VideoInputStreams(NULL),
+      videoInputStreams(NULL),
       videoOutputConfiguration(),
       syncWithPrimaryCamera(true) {}
+};
+
+enum VIDEO_TRANSCODER_ERROR {
+  /**
+   * No error
+   */
+  VT_ERR_OK = 0,
+  /**
+   * The video track of the video source is not started.
+   */
+  VT_ERR_VIDEO_SOURCE_NOT_READY = 1,
+  /**
+   * The video source type is not supported.
+   */
+  VT_ERR_INVALID_VIDEO_SOURCE_TYPE = 2,
+  /**
+   * The image url is not correctly of image source.
+   */
+  VT_ERR_INVALID_IMAGE_PATH = 3,
+  /**
+   * The image format not the type png/jpeg/gif of image source.
+   */
+  VT_ERR_UNSUPPORT_IMAGE_FORMAT = 4,
+  /**
+   * The layout is invalid such as width is zero.
+   */
+  VT_ERR_INVALID_LAYOUT = 5,
+  /**
+   * Internal error.
+   */
+  VT_ERR_INTERNAL = 20
 };
 
 /**
@@ -4039,9 +3970,9 @@ enum CONNECTION_CHANGED_REASON_TYPE
   CONNECTION_CHANGED_TOO_MANY_BROADCASTERS = 20,
 
   /**
-   * 21: The connection is failed due to license verify failed.
+   * 21: The connection is failed due to license validation failure.
    */
-  CONNECTION_CHANGED_LICENSE_VERIFY_FAILED = 21,
+  CONNECTION_CHANGED_LICENSE_VALIDATION_FAILURE = 21,
 };
 
 /**
@@ -4222,17 +4153,24 @@ struct VideoCanvas {
    */
   Rectangle cropArea;
 
+  /**
+  * Whether to apply alpha mask to the video frame if exsit:
+  * true: Apply alpha mask to video frame.
+  * false: (Default) Do not apply alpha mask to video frame.
+  */
+  bool enableAlphaMask;
+  
   VideoCanvas()
     : view(NULL), uid(0), renderMode(media::base::RENDER_MODE_HIDDEN), mirrorMode(VIDEO_MIRROR_MODE_AUTO),
-      setupMode(VIDEO_VIEW_SETUP_REPLACE), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0) {}
+      setupMode(VIDEO_VIEW_SETUP_REPLACE), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
   
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u)
     : view(v), uid(u), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
-      sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0) {}
+      sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
   
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, user_id_t)
     : view(v), uid(0), renderMode(m), mirrorMode(mt), setupMode(VIDEO_VIEW_SETUP_REPLACE),
-      sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0) {}
+      sourceType(VIDEO_SOURCE_CAMERA_PRIMARY), mediaPlayerId(-ERR_NOT_READY), cropArea(0, 0, 0, 0), enableAlphaMask(false) {}
 };
 
 /** Image enhancement options.
@@ -4381,22 +4319,32 @@ struct ColorEnhanceOptions {
  * The custom background image.
  */
 struct VirtualBackgroundSource {
-  /** The type of the custom background image.
+  /** The type of the custom background source.
    */
   enum BACKGROUND_SOURCE_TYPE {
     /**
-     * 1: (Default) The background image is a solid color.
+     * 0: Enable segementation with the captured video frame without replacing the background.
+     */
+    BACKGROUND_NONE = 0,
+    /**
+     * 1: (Default) The background source is a solid color.
      */
     BACKGROUND_COLOR = 1,
     /**
-     * The background image is a file in PNG or JPG format.
+     * The background source is a file in PNG or JPG format.
      */
     BACKGROUND_IMG = 2,
-    /** The background image is the blurred background. */
+    /** 
+     * The background source is the blurred original video frame.
+     * */
     BACKGROUND_BLUR = 3,
+    /** 
+     * The background source is a file in MP4, AVI, MKV, FLV format. 
+     * */
+    BACKGROUND_VIDEO = 4,
   };
 
-  /** The degree of blurring applied to the custom background image..
+  /** The degree of blurring applied to the background source.
    */
   enum BACKGROUND_BLUR_DEGREE {
     /** 1: The degree of blurring applied to the custom background image is low. The user can almost see the background clearly. */
@@ -4451,6 +4399,42 @@ struct SegmentationProperty {
 
 
   SegmentationProperty() : modelType(SEG_MODEL_AI), greenCapacity(0.5){}
+};
+
+/** The type of custom audio track
+*/
+enum AUDIO_TRACK_TYPE {
+  /** 
+   * -1: Invalid audio track
+   */
+  AUDIO_TRACK_INVALID = -1,
+  /** 
+   * 0: Mixable audio track
+   * You can push more than one mixable Audio tracks into one RTC connection(channel id + uid), 
+   * and SDK will mix these tracks into one audio track automatically.
+   * However, compare to direct audio track, mixable track might cause extra 30ms+ delay.
+   */
+  AUDIO_TRACK_MIXABLE = 0,
+  /**
+   * 1: Direct audio track
+   * You can only push one direct (non-mixable) audio track into one RTC connection(channel id + uid). 
+   * Compare to mixable stream, you can have lower lantency using direct audio track.
+   */
+  AUDIO_TRACK_DIRECT = 1,
+};
+
+/** The configuration of custom audio track
+*/
+struct AudioTrackConfig {
+  /**
+   * Enable local playback, enabled by default
+   * true: (Default) Enable local playback
+   * false: Do not enable local playback
+   */
+  bool enableLocalPlayback;
+
+  AudioTrackConfig()
+    : enableLocalPlayback(true) {}
 };
 
 /**
@@ -4692,7 +4676,41 @@ enum VOICE_CONVERSION_PRESET {
   VOICE_CHANGER_SOLID = 0x03010300,
   /** A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
-  VOICE_CHANGER_BASS = 0x03010400
+  VOICE_CHANGER_BASS = 0x03010400,
+  /** A voice like a cartoon character.
+   */
+  VOICE_CHANGER_CARTOON = 0x03010500,
+  /** A voice like a child.
+   */
+  VOICE_CHANGER_CHILDLIKE = 0x03010600,
+  /** A voice like a phone operator.
+   */
+  VOICE_CHANGER_PHONE_OPERATOR = 0x03010700,
+  /** A monster voice.
+   */
+  VOICE_CHANGER_MONSTER = 0x03010800,
+  /** A voice like Transformers.
+   */
+  VOICE_CHANGER_TRANSFORMERS = 0x03010900,
+  /** A voice like Groot.
+   */
+  VOICE_CHANGER_GROOT = 0x03010A00,
+  /** A voice like Darth Vader.
+   */
+  VOICE_CHANGER_DARTH_VADER = 0x03010B00,
+  /** A rough female voice.
+   */
+  VOICE_CHANGER_IRON_LADY = 0x03010C00,
+  /** A voice like Crayon Shin-chan.
+   */
+  VOICE_CHANGER_SHIN_CHAN = 0x03010D00,
+  /** A voice like a castrato.
+   */
+  VOICE_CHANGER_GIRLISH_MAN = 0x03010E00,
+  /** A voice like chipmunk.
+   */
+  VOICE_CHANGER_CHIPMUNK = 0x03010F00,
+
 };
 
 /** The options for SDK preset headphone equalizer.
@@ -4959,7 +4977,7 @@ public:
 * @param length The data length (byte) of the audio frame.
 * @param audioEncodedFrameInfo Audio information after encoding. For details, see `EncodedAudioFrameInfo`.
 */
-virtual void OnRecordAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
+virtual void onRecordAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
 
 /**
 * Gets the encoded audio data of all remote users.
@@ -4971,7 +4989,7 @@ virtual void OnRecordAudioEncodedFrame(const uint8_t* frameBuffer,  int length, 
 * @param length The data length (byte) of the audio frame.
 * @param audioEncodedFrameInfo Audio information after encoding. For details, see `EncodedAudioFrameInfo`.
 */
-virtual void OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
+virtual void onPlaybackAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
 
 /**
 * Gets the mixed and encoded audio data of the local and all remote users.
@@ -4983,7 +5001,7 @@ virtual void OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer,  int length
 * @param length The data length (byte) of the audio frame.
 * @param audioEncodedFrameInfo Audio information after encoding. For details, see `EncodedAudioFrameInfo`.
 */
-virtual void OnMixedAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
+virtual void onMixedAudioEncodedFrame(const uint8_t* frameBuffer,  int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) = 0;
 
 virtual ~IAudioEncodedFrameObserver () {}
 };
@@ -5559,12 +5577,13 @@ struct EchoTestConfiguration {
   bool enableVideo;
   const char* token;
   const char* channelId;
+  int intervalInSeconds;
 
-  EchoTestConfiguration(view_t v, bool ea, bool ev, const char* t, const char* c)
-   : view(v), enableAudio(ea), enableVideo(ev), token(t), channelId(c) {}
+  EchoTestConfiguration(view_t v, bool ea, bool ev, const char* t, const char* c, const int is)
+   : view(v), enableAudio(ea), enableVideo(ev), token(t), channelId(c), intervalInSeconds(is) {}
 
   EchoTestConfiguration()
-   : view(OPTIONAL_NULLPTR), enableAudio(true), enableVideo(true), token(OPTIONAL_NULLPTR), channelId(OPTIONAL_NULLPTR) {}
+   : view(OPTIONAL_NULLPTR), enableAudio(true), enableVideo(true), token(OPTIONAL_NULLPTR), channelId(OPTIONAL_NULLPTR), intervalInSeconds(2) {}
 };
 
 /**
@@ -5739,6 +5758,101 @@ struct ScreenCaptureParameters2 {
   ScreenVideoParameters videoParams;
 };
 #endif
+
+/**
+ * The tracing event of media rendering.
+ */
+enum MEDIA_TRACE_EVENT {
+  /**
+   * 0: The media frame has been rendered.
+   */
+  MEDIA_TRACE_EVENT_VIDEO_RENDERED = 0,
+  /**
+   * 1: The media frame has been decoded.
+   */
+  MEDIA_TRACE_EVENT_VIDEO_DECODED,
+};
+
+/**
+ * The video rendering tracing result
+ */
+struct VideoRenderingTracingInfo {
+  /**
+   * Elapsed time from the start tracing time to the time when the tracing event occurred.
+   */
+  int elapsedTime;
+  /**
+   * Elapsed time from the start tracing time to the time when join channel.
+   * 
+   * **Note**
+   * If the start tracing time is behind the time when join channel, this value will be negative.
+   */
+  int start2JoinChannel;
+  /**
+   * Elapsed time from joining channel to finishing joining channel.
+   */
+  int join2JoinSuccess;
+  /**
+   * Elapsed time from finishing joining channel to remote user joined.
+   * 
+   * **Note**
+   * If the start tracing time is after the time finishing join channel, this value will be
+   * the elapsed time from the start tracing time to remote user joined. The minimum value is 0.
+   */
+  int joinSuccess2RemoteJoined;
+  /**
+   * Elapsed time from remote user joined to set the view.
+   * 
+   * **Note**
+   * If the start tracing time is after the time when remote user joined, this value will be
+   * the elapsed time from the start tracing time to set the view. The minimum value is 0.
+   */
+  int remoteJoined2SetView;
+  /**
+   * Elapsed time from remote user joined to the time subscribing remote video stream.
+   * 
+   * **Note**
+   * If the start tracing time is after the time when remote user joined, this value will be
+   * the elapsed time from the start tracing time to the time subscribing remote video stream.
+   * The minimum value is 0.
+   */
+  int remoteJoined2UnmuteVideo;
+  /**
+   * Elapsed time from remote user joined to the remote video packet received.
+   * 
+   * **Note**
+   * If the start tracing time is after the time when remote user joined, this value will be
+   * the elapsed time from the start tracing time to the time subscribing remote video stream.
+   * The minimum value is 0.
+   */
+  int remoteJoined2PacketReceived;
+};
+
+enum CONFIG_FETCH_TYPE {
+  /**
+   * 1: Fetch config when initializing RtcEngine, without channel info.
+   */
+  CONFIG_FETCH_TYPE_INITIALIZE = 1,
+  /**
+   * 2: Fetch config when joining channel with channel info, such as channel name and uid.
+   */
+  CONFIG_FETCH_TYPE_JOIN_CHANNEL = 2,
+};
+
+/**
+ * media recorder source stream information
+ */
+struct RecorderStreamInfo {
+    /**
+     * The channel ID of the video track.
+     */
+    const char* channelId;
+    /**
+     * The user ID.
+     */
+    uid_t uid;
+    RecorderStreamInfo() : channelId(NULL), uid(0) {}
+};
 
 }  // namespace rtc
 
