@@ -81,6 +81,7 @@
     <string name="play_locally">Play Locally</string>
     <string name="local_video">Local Video</string>
     <string name="streaming_mode">Enhanced Low Latency</string>
+    <string name="preload">Preload</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
@@ -323,4 +324,21 @@
     <string name="stop_recording">Stop Recording</string>
     <string name="recording_tag" translatable="false">RecordingTag</string>
     <string name="transparent_background">TransparentBackground</string>
+    <string name="user_id">User ID</string>
+    <string name="view_bg_color">View background color</string>
+    <string name="render_mode">RenderMode</string>
+    <string name="render_mode_hidden">Hidden</string>
+    <string name="render_mode_fit">Fit</string>
+    <string name="render_mode_adaptive">Adaptive</string>
+    <string name="channel_profile_communication" translatable="false">COMMUNICATION</string>
+    <string name="channel_profile_live_broadcasting" translatable="false">LIVE_BROADCASTING</string>
+    <string name="channel_profile_game" translatable="false">GAME</string>
+    <string name="channel_profile_cloud_gaming" translatable="false">CLOUD_GAMING</string>
+    <string name="channel_profile_communication_1v1" translatable="false">COMMUNICATION_1v1</string>
+    <string name="audio_route_default">default</string>
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="audio_route_headset">headset(Not TypeC)</string>
+    <string name="audio_route_headset_typec">headset(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">bluetooth headset</string>
 </resources>
