@@ -162,3 +162,5 @@
 "Pink" = "粉色";
 "Purple" = "紫色";
 "Yellow" = "黄色";
+"preload Channel" = "预加载";
+"cancel preload" = "取消预加载";

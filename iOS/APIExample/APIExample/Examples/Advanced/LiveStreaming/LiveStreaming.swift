@@ -12,7 +12,7 @@ import AgoraRtcKit
 class LiveStreamingEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var preloadTextField: UITextField!
+    @IBOutlet weak var preloadButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "LiveStreaming"
     var role:AgoraClientRole = .broadcaster
@@ -21,6 +21,8 @@ class LiveStreamingEntry : UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadButton.setTitle("preload Channel".localized, for: .normal)
+        preloadButton.setTitle("cancel preload".localized, for: .selected)
     }
     
     func getRoleAction(_ role: AgoraClientRole) -> UIAlertAction{
@@ -28,6 +30,14 @@ class LiveStreamingEntry : UIViewController
             self.role = role
             self.doJoin()
         })
+    }
+    
+    @IBAction func onClickPreloadButton(_ sender: UIButton) {
+        if channelTextField.text?.isEmpty == true {
+            ToastView.show(text: "please input channel name!".localized)
+            return
+        }
+        sender.isSelected = !sender.isSelected
     }
     
     @IBAction func doOptimizeFirstFrameSwitch(_ sender: UISwitch) {
@@ -88,7 +98,7 @@ class LiveStreamingEntry : UIViewController
         newViewController.configs = ["channelName":channelName,
                                      "role":self.role,
                                      "isFirstFrame": isFirstFrame,
-                                     "preloadUid": preloadTextField.text ?? "",
+                                     "isPreloadChannel": preloadButton.isSelected,
                                      "backgroundColor": backgroundColor]
         navigationController?.pushViewController(newViewController, animated: true)
     }
@@ -166,15 +176,6 @@ class LiveStreamingMain: BaseViewController {
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String, let clientRole = configs["role"] as? AgoraClientRole else {return}
         
-        if let preloadUid = UInt(configs["preloadUid"] as? String ?? ""),
-            role == .audience {
-            NetworkManager.shared.generateToken(channelName: channelName, uid: preloadUid, success: { token in
-                self.agoraKit.preloadChannel(byToken: token,
-                                             channelId: channelName,
-                                             uid: preloadUid)
-            })
-        }
-        
         role = clientRole
         // for audience put local video in foreground
         isLocalVideoForeground = role == .audience
@@ -202,6 +203,12 @@ class LiveStreamingMain: BaseViewController {
         option.publishMicrophoneTrack = role == .broadcaster
         option.clientRoleType = role
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let preloadChannel = self.configs["isPreloadChannel"] as? Bool
+            if preloadChannel == true {
+                self.agoraKit.preloadChannel(byToken: token,
+                                             channelId: channelName,
+                                             uid: 0)
+            }
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
                 // Usually happens with invalid parameters
