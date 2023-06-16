@@ -158,13 +158,18 @@ private:
 	conn_id_t m_conn_camera2;
 	conn_id_t m_conn_camera;
 	std::vector<MULTIVIDEOSOURCE_CAMERAINFO> m_vecCameraInfos;
+	std::vector<int> m_capturingCameraIndex;
 
 	AVideoDeviceManager* videoDeviceManager = nullptr;
 	CMultiVideoSourceEventHandler m_camera2EventHandler;
+	CMultiVideoSourceEventHandler m_camera3EventHandler;
+	CMultiVideoSourceEventHandler m_camera4EventHandler;
 	CMultiVideoSourceEventHandler m_screenEventHandler;
 	CMultiVideoSourceEventHandler m_cameraEventHandler;
 
-	agora::rtc::RtcConnection connection;
+	agora::rtc::RtcConnection connection2;
+	agora::rtc::RtcConnection connection3;
+	agora::rtc::RtcConnection connection4;
 	agora::rtc::RtcConnection screenConnection;
 
 
@@ -175,10 +180,10 @@ private:
 
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_bScecondJoin = false;
-	bool m_bScreenJoin = false;
 	bool m_bStartCapture1 = false;
 	bool m_bStartCapture2 = false;
+	bool m_bStartCapture3 = false;
+	bool m_bStartCapture4 = false;
 	bool m_bStartScreenSharing = false;
 	std::string m_strChannel;
 
@@ -189,23 +194,27 @@ private:
 	CButton m_btnJoinChannel;
 	CListBox m_lstInfo;
 	CComboBox m_cmbCamera2;
-	CButton m_btnPublish2;
+	CComboBox m_cmbCamera3;
+	CComboBox m_cmbCamera4;
 	CStatic m_staCamera1;
 	CStatic m_staCamera2;
+	CStatic m_staCamera3;
+	CStatic m_staCamera4;
 	CStatic m_staScreen;
 	CStatic m_staChannel;
 
 	CButton m_btnCapture1;
 	CButton m_btnCapture2;
+	CButton m_btnCapture3;
+	CButton m_btnCapture4;
 	CButton m_btnScreen;
-	CButton m_btnScreenPublish;
 	CButton m_btnScreenCapture;
 
 public:
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonPublish2();
 	afx_msg void OnBnClickedButtonCamera1();
 	afx_msg void OnBnClickedButtonCamera2();
+	afx_msg void OnBnClickedButtonCamera3();
+	afx_msg void OnBnClickedButtonCamera4();
 	afx_msg void OnBnClickedButtonCaptureScreen();
-	afx_msg void OnBnClickedButtonPublishScreen();
 };
