@@ -108,13 +108,21 @@ struct RtmpStreamingVideoConfiguration {
   int encoderHwSwMode;
 
   /**
+   *  Whether the encoder enables CBR coding or VBR coding.
+   *  The default value is 0.
+   *  0: CBR
+   *  1: VBR
+   */
+  int encoderBitrateControlMode;
+
+  /**
    * The orientation mode.
    * See {@link ORIENTATION_MODE ORIENTATION_MODE}.
    */
   ORIENTATION_MODE orientationMode;
 
   RtmpStreamingVideoConfiguration(): width(640), height(360), framerate(15),
-      bitrate(800), maxBitrate(960), minBitrate(600), gopInMs(2000), encoderHwSwMode(0),
+      bitrate(800), maxBitrate(960), minBitrate(600), gopInMs(2000), encoderHwSwMode(0),encoderBitrateControlMode(0),
       orientationMode(ORIENTATION_MODE_ADAPTIVE) {}
 };
 
@@ -223,7 +231,9 @@ struct RtmpConnectionConfiguration {
   RtmpStreamingAudioConfiguration audioConfig;
   RtmpStreamingVideoConfiguration videoConfig;
   bool enableWriteFlvFile;
-  RtmpConnectionConfiguration() : enableWriteFlvFile(false) {}
+  bool audioOnly;
+  RtmpConnectionConfiguration() : enableWriteFlvFile(false), 
+                                  audioOnly(false) {}
 };
 
 /**

@@ -75,13 +75,16 @@ class ICameraCapturer : public RefCountInterface {
      * @param deviceUniqueIdLength The length of the device ID.
      * @param productUniqueIdUTF8 The unique ID of the product.
      * @param productUniqueIdLength The length of the product ID.
+     * @param deviceTypeUTF8 The camera type of the device.
+     * @param deviceTypeLength The length of the camera type.
      * @return
      * The name of the device in the UTF8 format: Success.
      */
     virtual int32_t GetDeviceName(uint32_t deviceNumber, char* deviceNameUTF8,
                                   uint32_t deviceNameLength, char* deviceUniqueIdUTF8,
                                   uint32_t deviceUniqueIdLength, char* productUniqueIdUTF8 = 0,
-                                  uint32_t productUniqueIdLength = 0) = 0;
+                                  uint32_t productUniqueIdLength = 0,
+                                  char* deviceTypeUTF8 = 0, uint32_t deviceTypeLength = 0) = 0;
 
     /**
      * Sets the capability number for a specified device.
@@ -302,6 +305,29 @@ class ICameraCapturer : public RefCountInterface {
    */
   virtual int setCameraExposurePosition(float positionXinView, float positionYinView) = 0;
   
+ /** Checks whether camera supports to set exposure value.
+  * 
+  * @since v4.2.1.
+  * @return
+  * <ul>
+  *     <li>true: The device supports the camera exposure function.</li>
+  *     <li>false: The device does not support the camera exposure function.</li>
+  * </ul>
+  */
+  virtual bool isCameraExposureSupported() = 0;
+
+  /**
+   * Sets the camera exposure ratio.
+   *
+   * @since v4.2.1.
+   * @param value Absolute EV bias will set to camera.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraExposureFactor(float value) = 0;
+
 #if (defined(__APPLE__) && TARGET_OS_IOS)
   /**
    * Enables or disables the AVCaptureMultiCamSession.
@@ -339,6 +365,31 @@ class ICameraCapturer : public RefCountInterface {
    * </ul>
    */
   virtual int setCameraAutoExposureFaceModeEnabled(bool enabled) = 0;
+
+  /**
+   * Returns whether exposure value adjusting is supported by the current device.
+   * @note
+   * This method applies to iOS only.
+   * This interface returns valid values only after the device is initialized.
+   *
+   * @return
+   * - true: exposure value adjusting is supported.
+   * - false: exposure value adjusting is not supported or device is not initialized.
+   */
+  virtual bool isExposureBiasSupported() = 0;
+  /**
+   * Sets the exposure factor of the device.
+   *
+   * @note
+   * This method applies to iOS only.
+   *
+   * @param exposureValue The exposure value bias factor of the device.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int32_t setCameraExposure(float exposureValue) = 0;
 #endif
   
 #elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
@@ -457,14 +508,14 @@ class ICameraCaptureObserver {
    *
    * @param imageWidth The width (px) of the local video.
    * @param imageHeight The height (px) of the local video.
-   * @param vecRectangle The position and size of the human face on the local video:
+   * @param vecRectangle A Rectangle array of length 'numFaces', which represents the position and size of the human face on the local video：
    * - `x`: The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
    * the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
    * - `y`: The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
    * the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
    * - `width`: The width (px) of the human face in the captured video.
    * - `height`: The height (px) of the human face in the captured video.
-   * @param vecDistance The distance (cm) between the human face and the screen.
+   * @param vecDistance An int array of length 'numFaces', which represents distance (cm) between the human face and the screen.
    * @param numFaces The number of faces detected. If the value is 0, it means that no human face is detected.
    */
   virtual void onFacePositionChanged(

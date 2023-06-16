@@ -462,7 +462,7 @@ class IAudioPcmDataSender : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int sendAudioPcmData(
-      const void* audio_data, uint32_t capture_timestamp,
+      const void* audio_data, uint32_t capture_timestamp, int64_t presentation_ms,
       const size_t samples_per_channel,  // for 10ms Data, number_of_samples * 100 = sample_rate
       const agora::rtc::BYTES_PER_SAMPLE bytes_per_sample,     // 2
       const size_t number_of_channels,
