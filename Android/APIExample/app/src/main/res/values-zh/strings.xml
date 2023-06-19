@@ -97,7 +97,6 @@
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_multiVideoSourceTracks">多路视频采集</string>
-    <string name="item_multiEncodedVideoSourceTracks">多路编码视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
     <string name="item_cameraorscreen">多视频源</string>
     <string name="item_screensharing">屏幕共享</string>
@@ -135,7 +134,6 @@
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
     <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
     <string name="multivideosourcetracks">此示例演示了在音视频通话过程中如何使用CreateVideoTrack的方式进行视频自采集的功能。</string>
-    <string name="multiencodedvideosourcetracks">此示例演示了在音视频通话过程中如何使用createCustomEncodedVideoTrack的方式进行编码视频自采集的功能。</string>
     <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
     <string name="joinmultichannel">此示例演示了在音视频通话过程中如何加入多个频道功能。</string>
     <string name="rtmpinjection">此示例演示了在音视频通话过程中如何输入在线媒体流并渲染的功能。</string>
@@ -256,7 +254,8 @@
     <string name="watermark">水印</string>
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
-    <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="create_encoded_capture_track">创建采集Track(编码)</string>
+    <string name="destroy_capture_track">销毁Track</string>
     <string name="spatial_audio_zone">音障</string>
     <string name="spatial_audio_room">房间</string>
     <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
