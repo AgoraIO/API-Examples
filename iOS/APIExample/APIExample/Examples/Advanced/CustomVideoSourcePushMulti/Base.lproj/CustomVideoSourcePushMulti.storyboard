@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>
@@ -70,14 +70,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dhe-dP-S21" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="514"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="514"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Dhe-dP-S21" secondAttribute="height" constant="-100" id="zvH-0k-xq5"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi9-eb-Hiz">
-                                <rect key="frame" x="277" y="745" width="117" height="42"/>
+                                <rect key="frame" x="267.5" y="667" width="135.5" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="42" id="Q6U-lb-DQi"/>
                                 </constraints>
@@ -88,9 +88,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Her-yf-kmE">
-                                <rect key="frame" x="277" y="800" width="117" height="42"/>
+                                <rect key="frame" x="267.5" y="722" width="135.5" height="42"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="cJG-7U-FKh"/>
+                                    <constraint firstAttribute="height" constant="42" id="jSK-b7-x2V"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="创建采集Track"/>
@@ -98,16 +98,29 @@
                                     <action selector="onCreateVideoTrack:" destination="pjq-Wh-4Ys" eventType="touchUpInside" id="kz0-OU-7YK"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zBJ-mw-TwL">
+                                <rect key="frame" x="35.5" y="722" width="222" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="dPs-m2-VAc"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="创建自定义编码采集Track"/>
+                                <connections>
+                                    <action selector="onCreateCustomEncodeVideoTrack:" destination="pjq-Wh-4Ys" eventType="touchUpInside" id="G6Q-DR-XaJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="sNP-3V-smz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="Her-yf-kmE" secondAttribute="trailing" constant="20" id="43T-xo-XgA"/>
+                            <constraint firstItem="Her-yf-kmE" firstAttribute="top" secondItem="xi9-eb-Hiz" secondAttribute="bottom" constant="13" id="0vj-WB-jDf"/>
+                            <constraint firstItem="Her-yf-kmE" firstAttribute="leading" secondItem="zBJ-mw-TwL" secondAttribute="trailing" constant="10" id="BXf-5d-2tZ"/>
+                            <constraint firstItem="Her-yf-kmE" firstAttribute="centerY" secondItem="zBJ-mw-TwL" secondAttribute="centerY" id="EL2-rg-O0L"/>
                             <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="Dhe-dP-S21" secondAttribute="trailing" id="JFK-11-DEk"/>
-                            <constraint firstItem="Her-yf-kmE" firstAttribute="top" secondItem="xi9-eb-Hiz" secondAttribute="bottom" constant="13" id="aeS-ao-YHN"/>
+                            <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="Her-yf-kmE" secondAttribute="trailing" constant="11" id="KVf-l6-XbD"/>
+                            <constraint firstItem="sNP-3V-smz" firstAttribute="bottom" secondItem="Her-yf-kmE" secondAttribute="bottom" constant="98" id="TzD-jw-K2r"/>
                             <constraint firstItem="Dhe-dP-S21" firstAttribute="top" secondItem="sNP-3V-smz" secondAttribute="top" id="cXZ-dI-sqt"/>
-                            <constraint firstItem="sNP-3V-smz" firstAttribute="bottom" secondItem="Her-yf-kmE" secondAttribute="bottom" constant="20" id="eHa-AE-TG7"/>
-                            <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="xi9-eb-Hiz" secondAttribute="trailing" constant="20" id="fFw-Q6-ZcG"/>
+                            <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="xi9-eb-Hiz" secondAttribute="trailing" constant="11" id="fFw-Q6-ZcG"/>
                             <constraint firstItem="Dhe-dP-S21" firstAttribute="leading" secondItem="sNP-3V-smz" secondAttribute="leading" id="mnA-US-hxx"/>
                         </constraints>
                     </view>
