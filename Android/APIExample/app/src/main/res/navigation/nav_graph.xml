@@ -63,9 +63,6 @@
             android:id="@+id/action_mainFragment_to_MultiVideoSourceTracks"
             app:destination="@id/MultiVideoSourceTracks" />
         <action
-            android:id="@+id/action_mainFragment_to_MultiEncodedVideoSourceTracks"
-            app:destination="@id/MultiEncodedVideoSourceTracks" />
-        <action
             android:id="@+id/action_mainFragment_to_CustomRemoteRender"
             app:destination="@id/CustomRemoteRender" />
         <action
@@ -260,11 +257,6 @@
         android:label="@string/item_multiVideoSourceTracks"
         tools:layout="@layout/fragment_multi_video_source_tracks" />
 
-    <fragment
-        android:id="@+id/MultiEncodedVideoSourceTracks"
-        android:name="io.agora.api.example.examples.advanced.MultiEncodedVideoSourceTracks"
-        android:label="@string/item_multiEncodedVideoSourceTracks"
-        tools:layout="@layout/fragment_multi_encoded_video_source_tracks" />
 
     <fragment
         android:id="@+id/CustomRemoteRender"
