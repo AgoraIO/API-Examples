@@ -50,7 +50,6 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         model.uid = UInt(Int.random(in: 10000...99999))
         model.canvasView = Bundle.loadView(fromNib: "VideoViewSampleBufferDisplayView",
                                            withType: SampleBufferDisplayView.self)
-        model.trackId = agoraKit.createCustomVideoTrack()
         return model
     })
     var customCamera:AgoraYUVImageSourcePush?
@@ -142,8 +141,23 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         }
     }
     
+    @IBAction func onCreateCustomEncodeVideoTrack(_ sender: Any) {
+        guard let userModel = remoteVideos.first(where: { $0.isJoin == false }) else { return }
+        if userModel.trackId == 0 {
+            let encodeVideoTrack = AgoraEncodedVideoTrackOptions()
+            userModel.trackId = agoraKit.createCustomEncodedVideoTrack(encodeVideoTrack)
+        }
+        createVideoTrack(userModel: userModel)
+    }
     @IBAction func onCreateVideoTrack(_ sender: Any) {
         guard let userModel = remoteVideos.first(where: { $0.isJoin == false }) else { return }
+        if userModel.trackId == 0 {
+            userModel.trackId = agoraKit.createCustomVideoTrack()
+        }
+        createVideoTrack(userModel: userModel)
+    }
+    
+    private func createVideoTrack(userModel: UserModel) {
         let customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
                                                fileName: "sample" ,
                                                frameRate: 15)
@@ -154,6 +168,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         customCamera.startSource()
         joinChannel(uid: userModel.uid, trackId: userModel.trackId)
     }
+    
     @IBAction func onDestoryVideoTrack(_ sender: Any) {
         guard let channelName = configs["channelName"] as? String else {return}
         let userModel = remoteVideos.filter({ $0.isJoin == true }).last
