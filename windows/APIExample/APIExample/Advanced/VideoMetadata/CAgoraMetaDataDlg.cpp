@@ -457,7 +457,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
 {
     IMetadataObserver::Metadata* metaData = (IMetadataObserver::Metadata*)wParam;
     CString strInfo;
-    strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size, metaData->buffer);
+    strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size);
     
     if (metaData->size > 0) {
         CString str;
