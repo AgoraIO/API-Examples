@@ -49,7 +49,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开启采集" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UNg-f5-Jxh">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onCaptureButton1:" target="YjT-yy-DnJ" id="o4x-zA-464"/>
@@ -60,7 +60,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始推流" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0fK-HU-248">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onPublishStreamButton1:" target="YjT-yy-DnJ" id="gF7-fp-yQt"/>
@@ -71,7 +71,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始采集" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wsu-5T-ZW5">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onCaptureButton2:" target="YjT-yy-DnJ" id="DTa-AB-8fJ"/>
@@ -82,7 +82,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始推流" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u8r-u9-ylV">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onPublishStreamButton2:" target="YjT-yy-DnJ" id="OWp-1j-E4u"/>
@@ -93,7 +93,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始采集" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="irM-5L-9uT">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onCaptureButton3:" target="YjT-yy-DnJ" id="yxA-zm-lEI"/>
@@ -104,7 +104,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始推流" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NaG-XB-zRS">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onPublishStreamButton3:" target="YjT-yy-DnJ" id="Fbb-xs-TwY"/>
@@ -115,7 +115,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始采集" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="n4E-Pl-sJq">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onCaptureButton4:" target="YjT-yy-DnJ" id="usO-QF-8Ib"/>
@@ -126,7 +126,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="开始推流" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JuU-kX-SM0">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                                        <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                     <connections>
                                                         <action selector="onPublishStreamButton4:" target="YjT-yy-DnJ" id="Tgv-8A-YlR"/>
