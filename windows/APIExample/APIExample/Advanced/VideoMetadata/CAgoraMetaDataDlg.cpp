@@ -57,7 +57,7 @@ void CAgoraMetaDataObserver::onMetadataReceived(const Metadata &metadata)
         recvMetaData->uid = metadata.uid;
         recvMetaData->timeStampMs = metadata.timeStampMs;
         if (metadata.size > 0) {
-            recvMetaData->buffer = new unsigned char[metadata.size];
+            recvMetaData->buffer = new unsigned char[metadata.size + 1];
             memcpy_s(recvMetaData->buffer, metadata.size, metadata.buffer, metadata.size);
             recvMetaData->buffer[metadata.size] = 0;
         }
@@ -456,17 +456,17 @@ LRESULT CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lP
 LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
 {
     IMetadataObserver::Metadata* metaData = (IMetadataObserver::Metadata*)wParam;
-    CString strInfo;
-    strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size);
+     CString strInfo;
+     strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size);
     
-    if (metaData->size > 0) {
-        CString str;
-		TCHAR szBuf[2 * MAX_PATH] = { 0 };
-		MultiByteToWideChar(CP_UTF8, MB_USEGLYPHCHARS, std::string((char*)metaData->buffer).c_str(), 2 * MAX_PATH, szBuf, 2 * MAX_PATH);
-        str.Format(_T("Info: %s"), CString(szBuf));
-        strInfo += str;
-    }
+     if (metaData->size > 0) {
+         CString str;
+         str.Format(_T("Info: %s"), utf82cs((char *)metaData->buffer));
+         strInfo += str;
+     }
     m_edtRecvSEI.SetWindowText(strInfo);
+    delete metaData->buffer;
+    delete metaData;
     return 0;
 }
 
