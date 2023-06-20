@@ -58,6 +58,7 @@
 
 -(void)startSource
 {
+    [self stopSource];
     if(self.timer == nil) {
         [self initTimer];
     }
