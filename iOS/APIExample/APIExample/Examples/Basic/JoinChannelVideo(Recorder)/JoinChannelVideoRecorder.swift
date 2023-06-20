@@ -246,6 +246,8 @@ class JoinChannelVideoRecorder: BaseViewController {
         agoraKit.disableAudio()
         agoraKit.disableVideo()
         if isJoined {
+            localRecord.stopRecording()
+            remoteRecord.stopRecording()
             agoraKit.destroy(localRecord)
             agoraKit.destroy(remoteRecord)
             agoraKit.stopPreview()
@@ -284,6 +286,10 @@ class JoinChannelVideoRecorder: BaseViewController {
             remoteRecord.stopRecording()
             ToastView.show(text: path)
         }
+    }
+    
+    deinit {
+        AgoraRtcEngineKit.destroy()
     }
 }
 
