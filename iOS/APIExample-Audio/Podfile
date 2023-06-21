@@ -7,7 +7,7 @@ target 'APIExample-Audio' do
   
   pod 'Floaty', '~> 4.2.0'
   pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'AgoraAudio_iOS', '4.2.0'
+  pod 'AgoraAudio_iOS', '4.2.1'
     # pod 'sdk', :path => 'sdk.podspec'
 end
 
