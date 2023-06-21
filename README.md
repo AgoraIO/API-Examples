@@ -1,6 +1,6 @@
 # Sample projects for the Agora RTC Native SDK
 
-_English | [中文](README.zh.md)_
+_English | [中文](README.zh.md) | [한글](README.kr.md)_
 
 ## Overview
 
