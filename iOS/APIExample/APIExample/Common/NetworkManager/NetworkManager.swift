@@ -67,6 +67,27 @@ class NetworkManager: NSObject {
             self.request(urlString: urlString, params: nil, method: .GET, success: success, failure: failure)
         }
     }
+    
+    func download(urlString: String, success: SuccessClosure?, failure: FailClosure?) {
+        let session = URLSession(configuration: sessionConfig)
+        let request = URLRequest(url: URL(string: urlString) ?? URL(fileURLWithPath: urlString))
+        let fileName = urlString.components(separatedBy: "/").last ?? ""
+        let documnets = NSTemporaryDirectory() + fileName
+        if FileManager.default.fileExists(atPath: documnets) {
+            success?(["fileName": fileName, "path": documnets])
+            return
+        }
+        DispatchQueue.global().async {
+            let downloadTask = session.downloadTask(with: request) { location, response, error in
+                let locationPath = location!.path
+                let fileManager = FileManager.default
+                try? fileManager.moveItem(atPath: locationPath, toPath: documnets)
+                success?(["fileName": fileName, "path": documnets])
+            }
+            downloadTask.resume()
+        }
+    }
+    
     func postRequest(urlString: String, params: [String: Any]?, success: SuccessClosure?, failure: FailClosure?) {
         DispatchQueue.global().async {
             self.request(urlString: urlString, params: params, method: .POST, success: success, failure: failure)
