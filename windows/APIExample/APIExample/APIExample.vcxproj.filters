@@ -249,6 +249,9 @@
     <ClInclude Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.h">
       <Filter>Advanced\MultiVideoSourceTracks</Filter>
     </ClInclude>
+    <ClInclude Include="VideoExtractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -379,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.cpp">
       <Filter>Advanced\MultiVideoSourceTracks</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoExtractor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
