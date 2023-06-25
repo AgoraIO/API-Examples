@@ -54,6 +54,7 @@ struct RawPixelBuffer {
     kI422,
     kNV21,
     kNV12,
+    kI010,
     kRGBA,
     kARGB,
     kBGRA
@@ -184,6 +185,7 @@ OPTIONAL_ENUM_CLASS VideoFrameMetaDataType {
   kAlphaChannel,
   kScreenMetaInfo,
   kVideoSourceType,
+  kFaceInfo,
   // Add other types afterwards
 };
 
