@@ -359,11 +359,15 @@ class ILocalAudioTrack : public IAudioTrack {
    * @param enable Whether to enable local playback:
    * - `true`: Enable local playback.
    * - `false`: Disable local playback.
+   * @param sync Whether to destroy local playback synchronously:
+   * - `true`: Destroy local playback synchronously.
+   * - `false`: Destroy local playback asynchronously.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableLocalPlayback(bool enable) = 0;
+  virtual int enableLocalPlayback(bool enable, bool sync = true) = 0;
+  
   /**
    * Enables in-ear monitoring (for Android and iOS only).
    *
@@ -538,6 +542,19 @@ struct RemoteAudioTrackStats {
    */
   uint32_t mos_value;
   /**
+   * If the packet loss concealment (PLC) occurs for N consecutive times, freeze is considered as PLC occurring for M consecutive times.
+   * freeze cnt = (n_plc - n) / m
+   */
+  uint32_t frozen_rate_by_custom_plc_count;
+  /**
+   * The number of audio packet loss concealment
+   */
+  uint32_t plc_count;
+  /**
+   *  Duration of inbandfec
+   */
+  int32_t fec_decode_ms;
+  /**
    * The total time (ms) when the remote user neither stops sending the audio
    * stream nor disables the audio module after joining the channel.
    */
@@ -596,6 +613,9 @@ struct RemoteAudioTrackStats {
     frozen_time_200_ms(0),
     delay_estimate_ms(0),
     mos_value(0),
+    frozen_rate_by_custom_plc_count(0),
+    plc_count(0),
+    fec_decode_ms(-1),
     total_active_time(0),
     publish_duration(0),
     e2e_delay_ms(0),
@@ -683,6 +703,36 @@ class IRemoteAudioTrack : public IAudioTrack {
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(float pan, float gain) = 0;
+
+  /** set percentage of audio acceleration during poor network
+   
+   @note
+   - The relationship between this percentage and the degree of audio acceleration is non-linear and varies with different audio material.
+
+   @param percentage The percentage of audio acceleration. The value ranges from 0 to 100. The higher the
+   * percentage, the faster the acceleration. The default value is 100 (no change to the acceleration):
+   - 0: disable audio acceleration.
+   - > 0: enable audio acceleration.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int adjustAudioAcceleration(int percentage) = 0;
+
+  /** set percentage of audio deceleration during poor network
+   
+   @note
+   - The relationship between this percentage and the degree of audio deceleration is non-linear and varies with different audio material.
+
+   @param percentage The percentage of audio deceleration. The value ranges from 0 to 100. The higher the
+   * percentage, the faster the deceleration. The default value is 100 (no change to the deceleration):
+   - 0: disable audio deceleration.
+   - > 0: enable audio deceleration.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int adjustAudioDeceleration(int percentage) = 0;  
 
   /** enable spatial audio
    

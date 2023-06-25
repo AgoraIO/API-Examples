@@ -105,8 +105,9 @@ class IRtmpStreamingService : public RefCountInterface {
     * @return
     * - 0: Success.
     * - < 0: Failure.
-    * - #ERR_INVALID_ARGUMENT (2): The RTMP URL address is NULL or has a string length of 0.
-    * - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the stream.
+    *   - #ERR_INVALID_ARGUMENT (2): The RTMP URL address is NULL or has a string length of 0.
+    *   - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the stream.
+    *   - #ERR_ALREADY_IN_USE (19): This streaming URL is already in use. Use a new streaming URL for CDN streaming.
     */
   virtual int startRtmpStreamWithoutTranscoding(const char* url) = 0;
 
@@ -129,6 +130,7 @@ class IRtmpStreamingService : public RefCountInterface {
     * - < 0: Failure.
     *   - #ERR_INVALID_ARGUMENT (2): The RTMP URL address is NULL or has a string length of 0.
     *   - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the stream.
+    *   - #ERR_ALREADY_IN_USE (19): This streaming URL is already in use. Use a new streaming URL for CDN streaming.
     */
   virtual int startRtmpStreamWithTranscoding(const char* url, const LiveTranscoding& transcoding) = 0;
 
