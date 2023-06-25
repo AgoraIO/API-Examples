@@ -9,3 +9,4 @@
 #import <AgoraReplayKitExtension/AgoraReplayKitExtension.h>
 #import "MediaUtils.h"
 #import "AgoraPictureInPictureController.h"
+#import "KFMP4Demuxer.h"
