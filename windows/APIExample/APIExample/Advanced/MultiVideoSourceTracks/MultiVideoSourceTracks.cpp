@@ -3,6 +3,11 @@
 #include "MultiVideoSourceTracks.h"
 #include "afxdialogex.h"
 
+extern "C" {
+#include <libavformat/avformat.h>
+}
+
+
 
 IMPLEMENT_DYNAMIC(MultiVideoSourceTracks, CDialogEx)
 
@@ -13,6 +18,7 @@ BEGIN_MESSAGE_MAP(MultiVideoSourceTracks, CDialogEx)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &MultiVideoSourceTracks::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_CREATE_TRACK, &MultiVideoSourceTracks::OnBnClickedButtonCreateTrack)
+	ON_BN_CLICKED(IDC_BUTTON_CREATE_TRACK_ENCODED, &MultiVideoSourceTracks::OnBnClickedButtonCreateEncodeTrack)
 	ON_BN_CLICKED(IDC_BUTTON_DESTROY_TRACK, &MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack)
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &MultiVideoSourceTracks::OnEIDJoinChannelSuccess)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &MultiVideoSourceTracks::OnEIDLeaveChannel)
@@ -61,6 +67,10 @@ BOOL MultiVideoSourceTracks::OnInitDialog()
 		m_videoWnds[i].ShowWindow(SW_HIDE);
 	}
 	ShowVideoWnds();
+	
+	int version = avformat_version();
+	avformat_network_init();
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -106,13 +116,7 @@ void MultiVideoSourceTracks::OnBnClickedButtonJoinchannel()
 		// Reset video tracks
 		for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
 		{
-			if(m_trackUids[i] != 0){
-				m_rtcEngine->leaveChannelEx(m_trackConnections[i]);
-				m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[i]);
-			}
-			m_trackUids[i] = 0;
-			m_yuvReaders[i].stop();
-			m_yuvReaderHandlers[i].Release();
+			m_videoFramePushers[i].EndPushVideoFrame();
 		}
 
 		// Reset windows
@@ -135,7 +139,7 @@ void MultiVideoSourceTracks::OnBnClickedButtonCreateTrack() {
 	int trackIndex = -1;
 	for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
 	{
-		if (m_trackUids[i] == 0) {
+		if (!m_videoFramePushers[i].IsPusing()) {
 			trackIndex = i;
 			break;
 		}
@@ -145,29 +149,28 @@ void MultiVideoSourceTracks::OnBnClickedButtonCreateTrack() {
 	}
 
 	int uid = 10001 + trackIndex;
-	m_trackUids[trackIndex] = uid;
-	m_trackConnections[trackIndex].channelId = m_strChannel.c_str();
-	m_trackConnections[trackIndex].localUid = uid;
-	m_trackEventHandlers[trackIndex].SetId(trackIndex + 1);
-	m_trackEventHandlers[trackIndex].SetMsgReceiver(m_hWnd);
+	m_videoFramePushers[trackIndex].BeginPushVideoFrame(m_rtcEngine, m_strChannel.c_str(), uid, false);
+}
 
-	int videoTrackId = m_rtcEngine->createCustomVideoTrack();
-	m_trackVideoTrackIds[trackIndex] = videoTrackId;
+void MultiVideoSourceTracks::OnBnClickedButtonCreateEncodeTrack()
+{
+	if (!m_joinChannel) {
+		return;
+	}
+	int trackIndex = -1;
+	for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
+	{
+		if (!m_videoFramePushers[i].IsPusing()) {
+			trackIndex = i;
+			break;
+		}
+	}
+	if (trackIndex == -1) {
+		return;
+	}
 
-
-	ChannelMediaOptions mediaOptions;
-	mediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
-	mediaOptions.publishCustomVideoTrack = true;
-	mediaOptions.autoSubscribeVideo = false;
-	mediaOptions.autoSubscribeAudio = false;
-	mediaOptions.customVideoTrackId = videoTrackId;
-	int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, m_trackConnections[trackIndex], mediaOptions, &m_trackEventHandlers[trackIndex]);
-
-	
-
-	// Push video frame
-	m_yuvReaderHandlers[trackIndex].Setup(m_rtcEngine, m_mediaEngine.get(), videoTrackId);
-	m_yuvReaders[trackIndex].start(std::bind(&MultiVideoSourceTracksYUVReaderHander::OnYUVRead, m_yuvReaderHandlers[trackIndex], std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+	int uid = 10001 + trackIndex;
+	m_videoFramePushers[trackIndex].BeginPushVideoFrame(m_rtcEngine, m_strChannel.c_str(), uid, true);
 }
 
 void MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack() {
@@ -178,7 +181,7 @@ void MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack() {
 	int trackIndex = -1;
 	for (int i = VIDEO_TRACK_SIZE - 1; i >= 0 ; i--)
 	{
-		if (m_trackUids[i] != 0) {
+		if (m_videoFramePushers[i].IsPusing()) {
 			trackIndex = i;
 			break;
 		}
@@ -186,16 +189,7 @@ void MultiVideoSourceTracks::OnBnClickedButtonDestroyTrack() {
 	if (trackIndex == -1) {
 		return;
 	}
-	int uid = m_trackUids[trackIndex];
-	m_trackUids[trackIndex] = 0;
-
-
-	m_yuvReaders[trackIndex].stop();
-	m_yuvReaderHandlers[trackIndex].Release();
-
-
-	m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[trackIndex]);
-	m_rtcEngine->leaveChannelEx(m_trackConnections[trackIndex]);
+	m_videoFramePushers[trackIndex].EndPushVideoFrame();
 }
 
 void MultiVideoSourceTracks::ShowVideoWnds()
@@ -308,8 +302,6 @@ bool MultiVideoSourceTracks::InitAgora()
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 
-	m_mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
-
 	return true;
 }
 //UnInitialize the Agora SDK
@@ -319,13 +311,7 @@ void MultiVideoSourceTracks::UnInitAgora()
 		// Reset video tracks
 		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
 		{
-			if (m_trackUids[i] != 0) {
-				m_rtcEngine->leaveChannelEx(m_trackConnections[i]);
-				m_rtcEngine->destroyCustomVideoTrack(m_trackVideoTrackIds[i]);
-			}
-			m_trackUids[i] = 0;
-			m_yuvReaders[i].stop();
-			m_yuvReaderHandlers[i].Release();
+			m_videoFramePushers[i].EndPushVideoFrame();
 		}
 
 		if (m_joinChannel) {
@@ -406,14 +392,7 @@ LRESULT MultiVideoSourceTracks::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-	bool isTrackUser = false;
-	for (int i = 0; i < VIDEO_TRACK_SIZE ; i++)
-	{
-		if (m_trackUids[i] == uid) {
-			isTrackUser = true;
-			break;
-		}
-	}
+
 
 	m_videoWnds[idleWndIndex].SetUID(uid);
 	VideoCanvas canvas;
@@ -421,7 +400,7 @@ LRESULT MultiVideoSourceTracks::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	canvas.view = m_videoWnds[idleWndIndex].GetSafeHwnd();
 	canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
 	m_rtcEngine->setupRemoteVideo(canvas);
-	m_videoWnds[idleWndIndex].ShowStatsInfo(TRUE, !isTrackUser);
+	m_videoWnds[idleWndIndex].ShowStatsInfo(TRUE);
 
 	return 0;
 }
@@ -459,18 +438,6 @@ LRESULT MultiVideoSourceTracks::OnEIDLocalVideoStats(WPARAM wParam, LPARAM lPara
 	int cId = wParam;
 	LocalVideoStats* stats = reinterpret_cast<LocalVideoStats*>(lParam);
 
-	if (cId > 0)
-	{
-		int uid = m_trackUids[cId - 1];
-		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
-		{
-			if (m_videoWnds[i].GetUID() == uid) {
-				m_videoWnds[i].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
-					stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
-				break;
-			}
-		}
-	}
 	
 	delete stats;
 	return 0;
@@ -481,19 +448,6 @@ LRESULT MultiVideoSourceTracks::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lPara
 {
 	int cId = wParam;
 	LocalAudioStats* stats = reinterpret_cast<LocalAudioStats*>(lParam);
-
-
-	if (cId > 0)
-	{
-		int uid = m_trackUids[cId - 1];
-		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
-		{
-			if (m_videoWnds[i].GetUID() == uid) {
-				m_videoWnds[i].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
-				break;
-			}
-		}
-	}
 
 	delete stats;
 	return 0;
@@ -509,29 +463,12 @@ LRESULT MultiVideoSourceTracks::OnEIDRemoteVideoStats(WPARAM wParam, LPARAM lPar
 	}
 	int uid = stats->uid;
 
-	
-
-	if (cId == 0)
+	for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
 	{
-		bool isTrackUser = false;
-		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
-		{
-			if (m_trackUids[i] == uid) {
-				isTrackUser = true;
-				break;
-			}
-		}
-		if (isTrackUser) {
-			return 0;
-		}
-
-		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
-		{
-			if (m_videoWnds[i].GetUID() == uid) {
-				m_videoWnds[i].SetVideoStatsInfo(stats->width, stats->height,
-					stats->decoderOutputFrameRate, stats->receivedBitrate, stats->packetLossRate, stats->delay);
-				break;
-			}
+		if (m_videoWnds[i].GetUID() == uid) {
+			m_videoWnds[i].SetVideoStatsInfo(stats->width, stats->height,
+				stats->decoderOutputFrameRate, stats->receivedBitrate, stats->packetLossRate, stats->delay);
+			break;
 		}
 	}
 	delete stats;
@@ -545,26 +482,11 @@ LRESULT MultiVideoSourceTracks::OnEIDRemoteAudioStats(WPARAM wParam, LPARAM lPar
 	RemoteAudioStats* stats = reinterpret_cast<RemoteAudioStats*>(lParam);
 	int uid = stats->uid;
 
-	if (cId > 0)
+	for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
 	{
-		bool isTrackUser = false;
-		for (int i = 0; i < VIDEO_TRACK_SIZE; i++)
-		{
-			if (m_trackUids[i] == uid) {
-				isTrackUser = true;
-				break;
-			}
-		}
-		if (isTrackUser) {
-			return 0;
-		}
-
-		for (int i = 0; i < sizeof(VIDEO_WINDOWS_SIZE); i++)
-		{
-			if (m_videoWnds[i].GetUID() == uid) {
-				m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
-				break;
-			}
+		if (m_videoWnds[i].GetUID() == uid) {
+			m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+			break;
 		}
 	}
 
@@ -701,13 +623,73 @@ void MultiVideoSourceTracksEventHandler::onRemoteVideoStats(const RemoteVideoSta
 	}
 }
 
-// MultiVideoSourceTracksYUVReaderHander implements
+// MultiVideoSourceTracksVideoFramePusher implements
 
-void MultiVideoSourceTracksYUVReaderHander::OnYUVRead(int width, int height, unsigned char* buffer, int size)
+
+void MultiVideoSourceTracksVideoFramePusher::BeginPushVideoFrame(agora::rtc::IRtcEngineEx* rtcEngine, const char* channelId, uid_t uid, bool isEncoded)
 {
-	if (m_mediaEngine == nullptr || m_rtcEngine == nullptr) {
+	if (IsPusing()) {
 		return;
 	}
+	m_isEncoded = isEncoded;
+	m_rtcEngine = rtcEngine;
+	if (isEncoded) {
+		BeginPushEncodedVideoFrame(channelId, uid);
+	}
+	else {
+		BeginPushRawVideoFrame(channelId, uid);
+	}
+}
+
+
+void MultiVideoSourceTracksVideoFramePusher::EndPushVideoFrame()
+{
+	if (!IsPusing()) {
+		return;
+	}
+	if (m_isEncoded) {
+		EndPushEncodedVideoFrame();
+	}
+	else {
+		EndPushRawVideoFrame();
+	}
+	m_rtcEngine = nullptr;
+	m_mediaEngine.reset();
+}
+
+bool MultiVideoSourceTracksVideoFramePusher::IsPusing()
+{
+	return m_yuvReader != nullptr || m_mediaEngine.get() != nullptr || m_rtcEngine != nullptr;
+}
+
+void MultiVideoSourceTracksVideoFramePusher::BeginPushRawVideoFrame(const char* channelId, uid_t uid)
+{
+	// Create Raw Video Track
+	m_videoTrackId = m_rtcEngine->createCustomVideoTrack();
+
+	// Query Media Engine Interface to push video frame
+	m_mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
+
+	// Join external rtc channel
+	m_rtcConnection.channelId = channelId;
+	m_rtcConnection.localUid = uid;
+
+	ChannelMediaOptions option;
+	option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+	option.autoSubscribeAudio = false;
+	option.autoSubscribeVideo = false;
+	option.publishCameraTrack = false;
+	option.publishCustomVideoTrack = true;
+	option.customVideoTrackId = m_videoTrackId;
+	m_rtcEngine->joinChannelEx(APP_TOKEN, m_rtcConnection, option, &m_eventHandler);
+
+	// Start yuv reader
+	m_yuvReader = new YUVReader();
+	m_yuvReader->start(std::bind(&MultiVideoSourceTracksVideoFramePusher::OnPushRawVideoFrame, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+}
+
+void MultiVideoSourceTracksVideoFramePusher::OnPushRawVideoFrame(int width, int height, unsigned char* buffer, int size)
+{
 	m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
 	m_videoFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
 	m_videoFrame.height = height;
@@ -715,4 +697,58 @@ void MultiVideoSourceTracksYUVReaderHander::OnYUVRead(int width, int height, uns
 	m_videoFrame.buffer = buffer;
 	m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
 	m_mediaEngine->pushVideoFrame(&m_videoFrame, m_videoTrackId);
+}
+
+void MultiVideoSourceTracksVideoFramePusher::EndPushRawVideoFrame() {
+	m_yuvReader->stop();
+	delete m_yuvReader;
+	m_yuvReader = nullptr;
+
+	m_rtcEngine->destroyCustomVideoTrack(m_videoTrackId);
+	m_rtcEngine->leaveChannelEx(m_rtcConnection);
+}
+
+
+void MultiVideoSourceTracksVideoFramePusher::BeginPushEncodedVideoFrame(const char* channelId, uid_t uid) {
+	// Create Encoded Video Track
+	SenderOptions senderOptions;
+	m_videoTrackId = m_rtcEngine->createCustomEncodedVideoTrack(senderOptions);
+
+	// Query Media Engine Interface to push video frame
+	m_mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
+
+	// Join external rtc channel
+	m_rtcConnection.channelId = channelId;
+	m_rtcConnection.localUid = uid;
+
+	ChannelMediaOptions option;
+	option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+	option.autoSubscribeAudio = false;
+	option.autoSubscribeVideo = false;
+	option.publishCameraTrack = false;
+	option.publishEncodedVideoTrack = true;
+	option.customVideoTrackId = m_videoTrackId;
+	m_rtcEngine->joinChannelEx(APP_TOKEN, m_rtcConnection, option, &m_eventHandler);
+
+	// Start yuv reader
+	m_videoExtractor = new VideoExtractor();
+	m_videoExtractor->Start(std::bind(&MultiVideoSourceTracksVideoFramePusher::OnPushEncodedVideoFrame, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+}
+
+void MultiVideoSourceTracksVideoFramePusher::OnPushEncodedVideoFrame(unsigned char* buffer, int size, bool isKeyFrame, int fps) {
+	EncodedVideoFrameInfo info;
+	info.framesPerSecond = fps;
+	info.codecType = VIDEO_CODEC_H264;
+	info.frameType = isKeyFrame ? VIDEO_FRAME_TYPE_KEY_FRAME : VIDEO_FRAME_TYPE_DELTA_FRAME;
+	int ret = m_mediaEngine->pushEncodedVideoImage(buffer, size, info, m_videoTrackId);
+
+}
+
+void MultiVideoSourceTracksVideoFramePusher::EndPushEncodedVideoFrame() {
+	m_videoExtractor->Stop();
+	delete m_videoExtractor;
+	m_videoExtractor = nullptr;
+
+	m_rtcEngine->destroyCustomEncodedVideoTrack(m_videoTrackId);
+	m_rtcEngine->leaveChannelEx(m_rtcConnection);
 }
