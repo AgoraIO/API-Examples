@@ -346,6 +346,10 @@ class LiveStreamingMain: BaseViewController {
         } else {
             becomeAudience()
         }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = role == .broadcaster
+        option.publishMicrophoneTrack = role == .broadcaster
+        agoraKit.updateChannel(with: option)
     }
     
     @IBAction func onToggleUltraLowLatency(_ sender:UISwitch) {
