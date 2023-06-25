@@ -254,7 +254,8 @@
     <string name="watermark">水印</string>
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
-    <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="create_encoded_capture_track">创建采集Track(编码)</string>
+    <string name="destroy_capture_track">销毁Track</string>
     <string name="spatial_audio_zone">音障</string>
     <string name="spatial_audio_room">房间</string>
     <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
