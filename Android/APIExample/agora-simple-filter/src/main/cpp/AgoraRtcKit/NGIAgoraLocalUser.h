@@ -8,7 +8,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include <cstring>
-
+#include <vector>
 #include "AgoraBase.h"
 #include "AgoraOptional.h"
 
@@ -16,6 +16,9 @@ namespace agora {
 namespace media {
 class IAudioFrameObserver;
 }
+
+class ILocalDataChannel;
+class IDataChannelObserver;
 
 namespace rtc {
 class IAudioEngineWrapper;
@@ -164,7 +167,7 @@ class ILocalUser {
      */
     agora::Optional<int32_t> delay_ms;
   };
-
+    
   /**
    * The detailed statistics of the local audio.
    */
@@ -241,6 +244,21 @@ class ILocalUser {
       memset(codec_name, 0, sizeof(codec_name));
     }
   };
+    
+  enum NS_MODE {
+      ElderNsStatistical = 0,    /* Elder Statistical Noise Suppression.*/
+      NsNGStatistical = 1,  /* Next Generation Statistical Noise Suppression.*/
+      NsNG = 2 /* Next Generation Noise Suppression.*/
+  };
+  enum NS_LEVEL {
+      Soft = 0,/* Soft Noise Suppression.*/
+      Aggressive = 1 /* Aggressiveness Noise Suppression.*/
+  };
+  enum NS_DELAY {
+      HighQuality = 0,/* High Audio Quality with High Delay.*/
+      Balance = 1,/* Balanced Audio Quality and Delay.*/
+      LowDelay = 2/* Slight Low Audio Quality with Low Delay.*/
+  };
 
  public:
   virtual ~ILocalUser() {}
@@ -297,6 +315,18 @@ class ILocalUser {
    * - < 0: Failure.
    */
   virtual int setAudioScenario(AUDIO_SCENARIO_TYPE scenario) = 0;
+
+  /**
+   *  You can call this method to set the expected video scenario.
+   * The SDK will optimize the video experience for each scenario you set.
+   *
+   * @param  scenarioType The video application scenario. 
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setVideoScenario(VIDEO_APPLICATION_SCENARIO_TYPE scenarioType) = 0;
 
   /**
    * Gets the detailed statistics of the local audio.
@@ -754,6 +784,10 @@ class ILocalUser {
 
   virtual int setVideoSubscriptionOptions(user_id_t userId,
                                           const VideoSubscriptionOptions& options) = 0;
+  
+  virtual int setHighPriorityUserList(uid_t* vipList, int uidNum, int option) = 0;
+
+  virtual int getHighPriorityUserList(std::vector<uid_t>& vipList, int& option) = 0;
 
   /**
     * Sets the blocklist of subscribe remote stream audio.
@@ -1011,6 +1045,78 @@ class ILocalUser {
   * - <0: failure
   */
  virtual int getRemoteAudioTrackFilterProperty(user_id_t userId, const char* id, const char* key, char* jsonValue, size_t bufSize) = 0;
+  /**
+   * Publishes a local data channel to the channel.
+   *  
+   * @param channel The data stream to be published.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int publishDataChannel(agora_refptr<ILocalDataChannel> channel) = 0;
+  /**
+   * Stops publishing the data channel to the channel.
+   *
+   * @param channel The data channel that you want to stop publishing.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unpublishDataChannel(agora_refptr<ILocalDataChannel> channel) = 0;
+  /**
+   * Subscribes to a specified data channel of a specified remote user in channel.
+   *
+   * @param userId The ID of the remote user whose data channel you want to subscribe to.
+   * @param channelId The ID of the data channel that you want to subscribe to.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int subscribeDataChannel(user_id_t userId, int channelId) = 0;
+  /**
+   * Stops subscribing to the data channel of a specified remote user in the channel.
+   *
+   * @param userId The ID of the remote user whose data channel you want to stop subscribing to.
+   * @param channelId The ID of the data channel that you want to stop subscribing to.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - -2(ERR_INVALID_ARGUMENT), if no such user exists or `userId` is invalid.
+   */
+
+  virtual int unsubscribeDataChannel(user_id_t userId, int channelId) = 0;
+  /**
+   * Registers an data channel observer.
+   *
+   * You need to implement the `IDataChannelObserver` class in this method
+   *
+   * @param observer A pointer to the data channel observer:
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerDataChannelObserver(IDataChannelObserver * observer) = 0;
+  /**
+   * Releases the data channel observer.
+   *
+   * @param observer The pointer to the data channel observer
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterDataChannelObserver(IDataChannelObserver * observer) = 0;
+  /**
+   * set the profile of audio noise suppression module
+   *
+   * @param NsEnable enable ns or not
+   * @param NsMode type of ns
+   * @param NsLevel level of the suppression
+   * @param NsDelay algorithm delay
+   * @return
+   * - 0: success
+   * - <0: failure
+  */
+  virtual int SetAudioNsMode(bool NsEnable, NS_MODE NsMode, NS_LEVEL NsLevel, NS_DELAY NsDelay) = 0;
 };
 
 /**
@@ -1402,6 +1508,8 @@ class ILocalUserObserver {
    * @param state The remote user state.Just & #REMOTE_USER_STATE
    */
   virtual void onUserStateChanged(user_id_t userId, uint32_t state){}
+
+  virtual void onVideoRenderingTracingResult(user_id_t user_id, MEDIA_TRACE_EVENT currentState, VideoRenderingTracingInfo tracingInfo) {}
 };
 
 class IVideoFrameObserver2 {

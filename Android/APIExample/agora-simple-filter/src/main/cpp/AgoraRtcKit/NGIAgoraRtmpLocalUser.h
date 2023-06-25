@@ -60,7 +60,15 @@ class IRtmpLocalUserObserver {
    * @param audioTrack The pointer to ILocalAudioTrack.
    */
   virtual void onAudioTrackPublishSuccess(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
+
+  /**
+   * @deprecated This method will not be called back
+   */
   virtual void onAudioTrackPublishStart(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
+
+  /**
+   * @deprecated This method will not be called back
+   */
   virtual void onAudioTrackUnpublished(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
 
   /**
@@ -78,7 +86,15 @@ class IRtmpLocalUserObserver {
    * @param videoTrack The pointer to ILocalVideoTrack.
    */
   virtual void onVideoTrackPublishSuccess(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
+
+  /**
+   * @deprecated This method will not be called back
+   */
   virtual void onVideoTrackPublishStart(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
+
+  /**
+   * @deprecated This method will not be called back
+   */
   virtual void onVideoTrackUnpublished(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
 
   /**
@@ -109,18 +125,88 @@ class IRtmpLocalUser {
 
   virtual ~IRtmpLocalUser() {}
 
+  /**
+   * Set the parameters of the audio encoder when pushing the stream
+   * 
+   * @param config Audio encoder parameters
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setAudioStreamConfiguration(const RtmpStreamingAudioConfiguration& config) = 0;
 
+  /**
+   * Set the parameters of the video encoder when pushing the stream
+   * 
+   * @param config Video encoder parameters
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setVideoStreamConfiguration(const RtmpStreamingVideoConfiguration& config) = 0;
 
+  /**
+   * Adjusts the audio volume for publishing.
+   *
+   * @param volume The volume for publishing. The value ranges between 0 and 100 (default).
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int adjustRecordingSignalVolume(int volume) = 0;
 
+  /**
+   * Gets the current volume for publishing.
+   * @param volume A pointer to the publishing volume.
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int getRecordingSignalVolume(int32_t* volume) = 0;
 
+  /**
+   * Set whether to enable local audio
+   * @param enabled Whether to enable local audio:
+   * - `true`: Enable local audio.
+   * - `false`: Disable local audio.
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setAudioEnabled(bool enabled) = 0;
 
+  /**
+   * Dynamically adjust the bit rate parameters of the video encoder in the push stream
+   * 
+   * @note: When increasing the bit rate, each call increases by 50kbps; 
+   *        When you lower the bit rate, you reduce it by 100kbps per call
+   * 
+   * @param type The type of adjustment mode for the bit-rate parameter of the video encoder in the push stream:
+   * - `Increasing`: Increase the video encoding bitrate.
+   * - `Decreasing`: Reduce video encoding bitrate
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual void adjustVideoBitrate(VideoBitrateAdjustType type) = 0;
 
+  /**
+   * Set whether to enable local video
+   * 
+   * @param enabled Whether to enable local video:
+   * - `true`: Enable local video.
+   * - `false`: Disable local video.
+   * 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setVideoEnabled(bool enabled) = 0;
 
   /**
@@ -215,14 +301,14 @@ class IRtmpLocalUser {
      * - 0: Success.
      * - < 0: Failure.
      */
-    virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+    virtual int registerAudioFrameObserver(media::IAudioPcmFrameSink* observer) = 0;
 
     /**
      * Unregisters an audio frame observer object.
      *
      * @param observer A pointer to the audio frame observer object: IAudioFrameObserver.
      */
-    virtual void unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+    virtual void unregisterAudioFrameObserver(media::IAudioPcmFrameSink* observer) = 0;
 
     /**
      * Registers a video frame observer object.

@@ -490,19 +490,6 @@ class IRtcConnection : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int getUserInfoByUid(uid_t uid, rtc::UserInfo* userInfo) = 0;
-  /** Gets the NTP time.
-   *
-   * @note
-   * - Returns the wallclock time which is represented using the timestamp format of the Network Time Protocol (NTP), which is in milliseconds relative to 0h UTC on 1 January 1900.
-   *
-   * - The returned value may not be accurate, depending on whether the connection is normal to the NTP server.
-   *
-   * - The returned value can be validated by base::NtpTime::Valid().
-   *
-   * @return
-   * - A NtpTime object.
-   */
-  virtual base::NtpTime getNtpTime() = 0;
 };
 
 /**
@@ -682,21 +669,6 @@ class IRtcConnectionObserver {
    */
   virtual void onNetworkTypeChanged(NETWORK_TYPE type) {
     (void)type;
-  }
-
-  /**
-   * Occurs when an API method is executed.
-   * @deprecated This callback is deprecated. Use other specific event callbacks instead.
-   *
-   * @param err The error code that the SDK reports when the method call fails. If the SDK reports 0,
-   * the method call succeeds.
-   * @param api The API method that is executed.
-   * @param result The result of the method call.
-   */
-  virtual void onApiCallExecuted(int err, const char* api, const char* result) __deprecated {
-    (void)err;
-    (void)api;
-    (void)result;
   }
 
      /** Reports result of Content Inspect*/

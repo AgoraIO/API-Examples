@@ -427,6 +427,11 @@ struct MediaSource {
   /**
    * Determines whether to enable cache streaming to local files. If enable cached, the media player will
    * use the url or uri as the cache index.
+   *
+   * @note
+   * The local cache function only supports on-demand video/audio streams and does not support live streams.
+   * Caching video and audio files based on the HLS protocol (m3u8) to your local device is not supported.
+   *
    * - true: Enable cache.
    * - false: (Default) Disable cache.
    */
