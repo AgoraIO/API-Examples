@@ -17,6 +17,7 @@ android {
         manifestPlaceholders = [
                AppId: "${applicationId}"
         ]
+        ndk.abiFilters 'armeabi-v7a'// 'arm64-v8a', 'x86', 'x86-64'
     }
 
     buildTypes {
@@ -61,7 +62,7 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.2.0"
+        def agora_sdk_version = "4.2.1"
         // case 1: full libs
         implementation "io.agora.rtc:full-sdk:${agora_sdk_version}"
         implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"

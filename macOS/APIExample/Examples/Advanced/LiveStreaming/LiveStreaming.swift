@@ -239,7 +239,13 @@ class LiveStreamingMain: BaseViewController {
         selectRolePicker.onSelectChanged {
             guard let selected = self.selectedRole else { return }
             if self.isJoined {
+                let mediaOption = AgoraRtcChannelMediaOptions()
+                mediaOption.publishCameraTrack = selected == .broadcaster
+                mediaOption.publishMicrophoneTrack = selected == .broadcaster
+                mediaOption.clientRoleType = selected
+                self.agoraKit.updateChannel(with: mediaOption)
                 self.agoraKit.setClientRole(selected)
+                _ = selected == .broadcaster ? self.agoraKit.startPreview() : self.agoraKit.stopPreview()
             }
             self.waterMarkContainer.isHidden = selected == .audience
             self.bFrameContainer.isHidden = selected == .audience
@@ -447,7 +453,9 @@ class LiveStreamingMain: BaseViewController {
             videoCanvas.renderMode = .hidden
             agoraKit.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
-            agoraKit.startPreview()
+            if role == .broadcaster {
+                agoraKit.startPreview()
+            }
             
             if !remoteTextField.stringValue.isEmpty && role == .audience {
                 let preloadUid = UInt(remoteTextField.stringValue) ?? 0
@@ -465,6 +473,7 @@ class LiveStreamingMain: BaseViewController {
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = role == .broadcaster
+            option.publishMicrophoneTrack = role == .broadcaster
             option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
