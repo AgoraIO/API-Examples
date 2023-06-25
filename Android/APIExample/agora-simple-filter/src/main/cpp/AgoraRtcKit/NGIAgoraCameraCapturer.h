@@ -457,14 +457,14 @@ class ICameraCaptureObserver {
    *
    * @param imageWidth The width (px) of the local video.
    * @param imageHeight The height (px) of the local video.
-   * @param vecRectangle The position and size of the human face on the local video:
+   * @param vecRectangle A Rectangle array of length 'numFaces', which represents the position and size of the human face on the local video：
    * - `x`: The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
    * the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
    * - `y`: The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
    * the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
    * - `width`: The width (px) of the human face in the captured video.
    * - `height`: The height (px) of the human face in the captured video.
-   * @param vecDistance The distance (cm) between the human face and the screen.
+   * @param vecDistance An int array of length 'numFaces', which represents distance (cm) between the human face and the screen.
    * @param numFaces The number of faces detected. If the value is 0, it means that no human face is detected.
    */
   virtual void onFacePositionChanged(
