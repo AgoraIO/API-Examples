@@ -1,0 +1,30 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "Enter channel name";
+
+/* Class = "UIButton"; configuration.title = "Create VideoTrack"; ObjectID = "Her-yf-kmE"; */
+"Her-yf-kmE.configuration.title" = "Create VideoTrack";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Her-yf-kmE"; */
+"Her-yf-kmE.normalTitle" = "Button";
+
+/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "a4k-1t-KLv"; */
+"a4k-1t-KLv.title" = "Join Channel";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "Join";
+
+/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "pjq-Wh-4Ys"; */
+"pjq-Wh-4Ys.title" = "Join Channel Video";
+
+/* Class = "UIButton"; configuration.title = "Destory Track"; ObjectID = "xi9-eb-Hiz"; */
+"xi9-eb-Hiz.configuration.title" = "Destory Track";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "xi9-eb-Hiz"; */
+"xi9-eb-Hiz.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Create Video Track(Encode)"; ObjectID = "zBJ-mw-TwL"; */
+"zBJ-mw-TwL.configuration.title" = "Create Video Track(Encode)";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "zBJ-mw-TwL"; */
+"zBJ-mw-TwL.normalTitle" = "Button";

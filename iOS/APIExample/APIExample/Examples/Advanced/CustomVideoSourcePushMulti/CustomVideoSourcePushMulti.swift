@@ -17,6 +17,7 @@ class UserModel {
     var isJoin: Bool = false
     var customSource: AgoraYUVImageSourcePush?
     var isEncode: Bool = false
+    var customEncodeSource: KFMP4Demuxer?
 }
 
 class CustomVideoSourcePushMultiEntry : UIViewController
@@ -148,11 +149,37 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
     @IBAction func onCreateCustomEncodeVideoTrack(_ sender: Any) {
         guard let userModel = remoteVideos.first(where: { $0.isJoin == false }) else { return }
         if userModel.trackId == 0 {
-            let encodeVideoTrack = AgoraEncodedVideoTrackOptions()
-            userModel.trackId = agoraKit.createCustomEncodedVideoTrack(encodeVideoTrack)
+            let encodeVideoOptions = AgoraEncodedVideoTrackOptions()
+            // - VIDEO_CODEC_H264 = 2: (Default) H.264.
+            encodeVideoOptions.codecType = 2
+            userModel.trackId = agoraKit.createCustomEncodedVideoTrack(encodeVideoOptions)
             userModel.isEncode = true
+            userModel.isJoin = true
         }
-        createVideoTrack(userModel: userModel)
+        NetworkManager.shared.download(urlString: "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4") { response in
+            let path = response["path"] as? String
+            let config = KFDemuxerConfig()
+            config.demuxerType = .video
+            let asset = AVAsset(url: URL(fileURLWithPath: path ?? ""))
+            config.asset = asset
+            let demuxer = KFMP4Demuxer(config: config)
+            userModel.customEncodeSource = demuxer
+            demuxer?.startReading()
+            demuxer?.dataCallBack = { [weak self] data, sampleBuffer in
+                guard let self = self, let data = data, let sampleBuffer = sampleBuffer else { return }
+                let info = AgoraEncodedVideoFrameInfo()
+                info.frameType = .keyFrame
+                info.framesPerSecond = 30
+                info.codecType = .H264
+                self.agoraKit.pushExternalEncodedVideoFrameEx(data,
+                                                              info: info,
+                                                              videoTrackId: UInt(userModel.trackId))
+                userModel.canvasView?.videoView.renderVideoSampleBuffer(sampleBuffer, size: demuxer?.videoSize ?? .zero)
+            }
+        } failure: { error in
+            LogUtils.log(message: "download video error == \(error)", level: .error)
+        }
+        joinChannel(uid: userModel.uid, trackId: userModel.trackId, publishEncodedVideoTrack: true)
     }
     @IBAction func onCreateVideoTrack(_ sender: Any) {
         guard let userModel = remoteVideos.first(where: { $0.isJoin == false }) else { return }
@@ -182,11 +209,15 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         let userModel = remoteVideos.filter({ $0.isJoin == true }).last
         userModel?.isJoin = false
         userModel?.customSource?.stopSource()
+        userModel?.customEncodeSource?.cancelReading()
+        userModel?.customEncodeSource = nil
         userModel?.canvasView?.videoView.reset()
         userModel?.customSource = nil
         let connection = AgoraRtcConnection()
         connection.localUid = userModel?.uid ?? 0
         connection.channelId = channelName
+        agoraKit.destroyCustomVideoTrack(UInt(userModel?.trackId ?? 0))
+        agoraKit.destroyCustomEncodedVideoTrack(UInt(userModel?.trackId ?? 0))
         userModel?.trackId = 0
         userModel?.isEncode = false
         userModel?.uid = UInt(Int.random(in: 10000...99999))
@@ -268,11 +299,11 @@ extension CustomVideoSourcePushMultiMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        let userModel = remoteVideos.first(where: { $0.isJoin == false })
-        videoCanvas.view = userModel?.canvasView?.videoView
+        guard let userModel = remoteVideos.first(where: { $0.isJoin == false }) else { return }
+        videoCanvas.view = userModel.canvasView?.videoView
         videoCanvas.renderMode = .hidden
-        userModel?.uid = uid
-        userModel?.isJoin = true
+        userModel.uid = uid
+        userModel.isJoin = true
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -321,18 +352,6 @@ extension CustomVideoSourcePushMultiMain: AgoraYUVImageSourcePushDelegate {
         } else {
             let userModel = remoteVideos.first(where: { $0.trackId == trackId })
             userModel?.canvasView?.videoView.renderVideoPixelBuffer(outputVideoFrame)
-            
-            if userModel?.isEncode == true {
-                let data = MediaUtils.data(from: buffer)
-                let info = AgoraEncodedVideoFrameInfo()
-                info.frameType = .keyFrame
-                info.framesPerSecond = 30
-                info.codecType = .H264
-                agoraKit.pushExternalEncodedVideoFrameEx(data,
-                                                         info: info,
-                                                         videoTrackId: trackId)
-                return
-            }
         }
         //once we have the video frame, we can push to agora sdk
         agoraKit?.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)

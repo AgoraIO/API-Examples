@@ -124,6 +124,7 @@
 		E763A839288AA99B00FE99FA /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */; };
 		E763A83A288AA99B00FE99FA /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A82B288AA99B00FE99FA /* AudioProcessor.mm */; };
 		E763A83B288AA99B00FE99FA /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */; };
+		E779025B2A482CFC008791AD /* KFMP4Demuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = E779025A2A482CFC008791AD /* KFMP4Demuxer.m */; };
 		E77D54BE28F553DA00D51C1E /* JoinChannelVideoToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E77D54B928F553DA00D51C1E /* JoinChannelVideoToken.strings */; };
 		E77D54BF28F553DA00D51C1E /* JoinChannelVideoToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E77D54BB28F553DA00D51C1E /* JoinChannelVideoToken.storyboard */; };
 		E77D54C028F553DA00D51C1E /* JoinChannelVideoToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77D54BD28F553DA00D51C1E /* JoinChannelVideoToken.swift */; };
@@ -309,6 +310,8 @@
 		E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
 		E763A82B288AA99B00FE99FA /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
 		E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
+		E77902592A482CFC008791AD /* KFMP4Demuxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KFMP4Demuxer.h; sourceTree = "<group>"; };
+		E779025A2A482CFC008791AD /* KFMP4Demuxer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KFMP4Demuxer.m; sourceTree = "<group>"; };
 		E77D54BA28F553DA00D51C1E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoToken.strings"; sourceTree = "<group>"; };
 		E77D54BC28F553DA00D51C1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoToken.storyboard; sourceTree = "<group>"; };
 		E77D54BD28F553DA00D51C1E /* JoinChannelVideoToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoToken.swift; sourceTree = "<group>"; };
@@ -739,6 +742,8 @@
 				67E23C7B2805995200FAB905 /* MediaUtils.h */,
 				67E23C7C2805995200FAB905 /* MediaUtils.m */,
 				E72055ED28FE7FC70030E6D1 /* Util.swift */,
+				E77902592A482CFC008791AD /* KFMP4Demuxer.h */,
+				E779025A2A482CFC008791AD /* KFMP4Demuxer.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1167,6 +1172,7 @@
 				8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */,
 				E77D54C028F553DA00D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
+				E779025B2A482CFC008791AD /* KFMP4Demuxer.m in Sources */,
 				033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */,
 				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
 				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,

@@ -189,6 +189,32 @@
     }
 }
 
+- (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBufferRef size:(CGSize)size {
+    if (!sampleBufferRef) {
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->_videoWidth = size.width;
+        self->_videoHeight = size.height;
+        
+        [self layoutDisplayLayer];
+    });
+    @autoreleasepool {
+        CMSampleTimingInfo timingInfo;
+        timingInfo.duration = kCMTimeZero;
+        timingInfo.decodeTimeStamp = kCMTimeInvalid;
+        timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
+        
+        if (sampleBufferRef) {
+            [self.displayLayer enqueueSampleBuffer:sampleBufferRef];
+            [self.displayLayer setNeedsDisplay];
+            [_displayLayer display];
+            [self.layer display];
+        }
+    }
+}
+
 - (void)renderVideoPixelBuffer:(AgoraOutputVideoFrame *_Nonnull)videoData {
     if (!videoData) {
         return;

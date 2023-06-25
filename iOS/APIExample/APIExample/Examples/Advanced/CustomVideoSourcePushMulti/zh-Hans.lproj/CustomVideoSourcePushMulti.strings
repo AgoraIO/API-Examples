@@ -1,12 +1,16 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "a4k-1t-KLv"; */
 "a4k-1t-KLv.title" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join";
 
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "pjq-Wh-4Ys"; */
-"pjq-Wh-4Ys.title" = "视频自采集(Push)";
+"pjq-Wh-4Ys.title" = "Join Channel Video";
+
+"xi9-eb-Hiz.normalTitle" = "销毁Track";
+"zBJ-mw-TwL.normalTitle" = "创建采集Track(编码)";
+"Her-yf-kmE.normalTitle" = "创建采集Track";
