@@ -151,6 +151,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 else if(getString(R.string.render_mode_adaptive).equals(parent.getSelectedItem())){
                     canvasRenderMode = Constants.RENDER_MODE_ADAPTIVE;
                 }
+                updateVideoView();
             }
 
             @Override
@@ -173,11 +174,42 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                updateVideoView();
             }
         });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
+    }
+
+    private void updateVideoView() {
+
+        if(backGroundVideo.getChildCount() > 0 && backGroundVideo.getReportUid() != -1){
+            int reportUid = backGroundVideo.getReportUid();
+            SurfaceView videoView = new SurfaceView(requireContext());
+            backGroundVideo.removeAllViews();
+            backGroundVideo.addView(videoView);
+            VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
+            local.backgroundColor = canvasBgColor;
+            if(reportUid == myUid){
+                engine.setupLocalVideo(local);
+            }else{
+                engine.setupRemoteVideo(local);
+            }
+        }
+        if(foreGroundVideo.getChildCount() > 0 && foreGroundVideo.getReportUid() != -1){
+            int reportUid = foreGroundVideo.getReportUid();
+            SurfaceView videoView = new SurfaceView(requireContext());
+            videoView.setZOrderMediaOverlay(true);
+            foreGroundVideo.removeAllViews();
+            foreGroundVideo.addView(videoView);
+            VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
+            local.backgroundColor = canvasBgColor;
+            if(reportUid == myUid){
+                engine.setupLocalVideo(local);
+            }else{
+                engine.setupRemoteVideo(local);
+            }
+        }
     }
 
     @Override
@@ -396,8 +428,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         VideoCanvas local = new VideoCanvas(surfaceView, canvasRenderMode, 0);
         local.backgroundColor = canvasBgColor;
         engine.setupLocalVideo(local);
-        // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.startPreview();
 
         // Enable video module
@@ -643,7 +674,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 }
                 // Create render view by RtcEngine
                 surfaceView = new SurfaceView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                surfaceView.setZOrderMediaOverlay(!isLocalVideoForeground);
                 // Add to the remote container
                 videoContainer.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -680,6 +711,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                         VideoCanvas remote = new VideoCanvas(null, canvasRenderMode, uid);
                         remote.backgroundColor = canvasBgColor;
                         engine.setupRemoteVideo(remote);
+
+                        VideoReportLayout videoContainer = isLocalVideoForeground ? backGroundVideo : foreGroundVideo;
+                        videoContainer.setReportUid(-1);
+                        videoContainer.removeAllViews();
                     }
                 });
             }
