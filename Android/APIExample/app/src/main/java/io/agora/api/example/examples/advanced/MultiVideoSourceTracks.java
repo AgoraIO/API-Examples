@@ -206,6 +206,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 joined = false;
                 join.setText(getString(R.string.join));
                 resetAllVideoLayout();
+                destroyAllPushingVideoTrack();
                 engine.leaveChannel();
                 engine.stopPreview();
                 myUid = 0;
