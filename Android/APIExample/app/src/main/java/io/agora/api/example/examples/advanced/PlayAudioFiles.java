@@ -235,7 +235,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent == audioScenario) {
-            engine.setAudioScenario(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal());
+            engine.setAudioScenario(Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString())));
         }
     }
 
@@ -356,8 +356,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         engine.setAudioProfile(
-                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString()).ordinal(),
-                Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal()
+                Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
+                Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
         );
 
         /**Please configure accessToken in the string_config file.

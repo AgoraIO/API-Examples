@@ -384,8 +384,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // audio config
         engine.setAudioProfile(
-                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString()).ordinal(),
-                Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal()
+                Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
+                Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
         );
 
         /**Please configure accessToken in the string_config file.
@@ -566,7 +566,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         }
 
         if (parent == audioScenario) {
-            engine.setAudioScenario(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal());
+            engine.setAudioScenario(Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString())));
             return;
         }
 
