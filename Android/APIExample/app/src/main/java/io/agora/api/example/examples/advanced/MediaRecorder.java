@@ -326,6 +326,16 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     Log.d(TAG, "RemoteMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
                     if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
                         showRecordMediaPathDialog(storagePath);
+                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_ERROR_CONFIG_CHANGED) {
+                        // switch camera while recording
+                        runOnUIThread(() -> {
+                            VideoReportLayout userView = getUserView(uid);
+                            if(userView != null){
+                                Button btnRecording = ((ViewGroup)userView.getParent()).findViewWithTag(getString(R.string.recording_tag));
+                                btnRecording.setText(R.string.start_recording);
+                            }
+                            stopRemoteMediaRecorder(uid);
+                        });
                     }
                 }
 
@@ -368,6 +378,16 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     Log.d(TAG, "LocalMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
                     if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
                         showRecordMediaPathDialog(storagePath);
+                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_ERROR_CONFIG_CHANGED) {
+                        // switch camera while recording
+                        runOnUIThread(() -> {
+                            VideoReportLayout userView = fl_local;
+                            if(userView != null){
+                                Button btnRecording = ((ViewGroup)userView.getParent()).findViewWithTag(getString(R.string.recording_tag));
+                                btnRecording.setText(R.string.start_recording);
+                            }
+                            stopLocalMediaRecorder();
+                        });
                     }
                 }
 
@@ -669,6 +689,16 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         } else {
             return fl_remote;
         }
+    }
+
+    private VideoReportLayout getUserView(int uid){
+        VideoReportLayout[] layouts = new VideoReportLayout[]{fl_remote, fl_remote_2, fl_remote_3};
+        for (VideoReportLayout layout : layouts) {
+            if (layout.getReportUid() == uid) {
+                return layout;
+            }
+        }
+        return null;
     }
 
 }
