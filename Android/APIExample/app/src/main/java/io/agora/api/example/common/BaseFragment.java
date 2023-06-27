@@ -69,6 +69,10 @@ public class BaseFragment extends Fragment {
         });
     }
 
+    protected void resetAlert(){
+        runOnUIThread(() -> mAlertMessage = "");
+    }
+
     protected final void showLongToast(final String msg) {
         runOnUIThread(() -> {
             Context context = getContext();
