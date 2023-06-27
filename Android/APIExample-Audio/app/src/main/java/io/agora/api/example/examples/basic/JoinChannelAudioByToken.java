@@ -120,7 +120,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(joined){
-                    int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+                    int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
                     engine.setAudioScenario(scenario);
                 }
             }
@@ -189,7 +189,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
@@ -305,10 +305,10 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
 
-        int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
+        int profile = Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()));
         engine.setAudioProfile(profile);
 
-        int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+        int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
         engine.setAudioScenario(scenario);
 
         engine.setDefaultAudioRoutetoSpeakerphone(true);
