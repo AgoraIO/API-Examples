@@ -259,7 +259,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/ll_join"
         android:singleLine="true"
-        android:digits="@string/chanel_support_char"
         android:hint="@string/token"/>
 
     <LinearLayout
