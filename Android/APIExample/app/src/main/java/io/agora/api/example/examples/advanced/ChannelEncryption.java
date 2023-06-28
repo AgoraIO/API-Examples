@@ -307,6 +307,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            resetAlert();
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -426,6 +427,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
+            resetAlert();
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
@@ -467,6 +469,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            resetAlert();
             handler.post(new Runnable() {
                 @Override
                 public void run() {

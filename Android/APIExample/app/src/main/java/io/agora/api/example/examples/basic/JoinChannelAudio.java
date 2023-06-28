@@ -119,7 +119,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (joined) {
-                    int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+                    int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
                     engine.setAudioScenario(scenario);
                 }
             }
@@ -226,7 +226,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
@@ -347,10 +347,10 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         engine.setChannelProfile(channelProfile);
 
 
-        int audioProfile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
+        int audioProfile = Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()));
         engine.setAudioProfile(audioProfile);
 
-        int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+        int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
         engine.setAudioScenario(scenario);
 
         engine.setDefaultAudioRoutetoSpeakerphone(true);
