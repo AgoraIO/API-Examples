@@ -63,11 +63,11 @@ class LiveStreamingEntry : UIViewController
     
     @IBAction func doChoseBackgroundColor(_ sender: UIButton) {
         let pickerView = PickerView()
-        let colors = ["Red".localized: 0xff0d0010,
-                      "Blue".localized: 0x0400ff10,
-                      "Pink".localized: 0xff006a10,
-                      "Purple".localized: 0xff00d910,
-                      "Yellow".localized: 0xeaff0010]
+        let colors = ["Red".localized: 0xff0d00ff,
+                      "Blue".localized: 0x0400ffff,
+                      "Pink".localized: 0xff006aff,
+                      "Purple".localized: 0xff00d9ff,
+                      "Yellow".localized: 0xeaff00ff]
         pickerView.dataArray = colors.map({ $0.key })
         pickerView.pickerViewSelectedValueClosure = { [weak self] value in
             self?.backgroundColor = UInt32(colors[value] ?? 0x000000)

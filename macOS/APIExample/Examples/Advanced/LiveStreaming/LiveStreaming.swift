@@ -142,21 +142,21 @@ class LiveStreamingMain: BaseViewController {
     }
     
     @IBOutlet weak var selectCanvasColor: Picker!
-    private var remoteCanvasColor: UInt32 = 0xff006a10
+    private var remoteCanvasColor: UInt32 = 0xff006aff
     func initSelectCanvasColor() {
         selectCanvasColor.label.stringValue = "默认背景色"
-        let colors: [String: UInt32] = ["Red".localized: 0xff0d0010,
-                                        "Blue".localized: 0x0400ff10,
-                                        "Pink".localized: 0xff006a10,
-                                        "Purple".localized: 0xff00d910,
-                                        "Yellow".localized: 0xeaff0010]
+        let colors: [String: UInt32] = ["Red".localized: 0xff0d00ff,
+                                        "Blue".localized: 0x0400ffff,
+                                        "Pink".localized: 0xff006aff,
+                                        "Purple".localized: 0xff00d9ff,
+                                        "Yellow".localized: 0xeaff00ff]
         let sortColors = colors.map({ $0.key }).sorted()
         selectCanvasColor.picker.addItems(withTitles: sortColors)
         selectCanvasColor.onSelectChanged { [weak self] in
             guard let self = self else { return }
             let index = self.selectCanvasColor.indexOfSelectedItem
             let colorTitle = sortColors[index]
-            self.remoteCanvasColor = colors[colorTitle] ?? 0xff006a10
+            self.remoteCanvasColor = colors[colorTitle] ?? 0xff006aff
         }
     }
     /**
