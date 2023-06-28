@@ -52,10 +52,29 @@ class MultiCameraSoureceMain: BaseViewController {
             publishStreamButton4.isEnabled = isSelectedCaptureButton4
         }
     }
-    var isSelectedPublishButton1: Bool = false
-    var isSelectedPublishButton2: Bool = false
-    var isSelectedPublishButton3: Bool = false
-    var isSelectedPublishButton4: Bool = false
+    var isSelectedPublishButton1: Bool = false {
+        didSet {
+            selectCameraPicker1.isEnabled = !isSelectedPublishButton1
+        }
+    }
+    var isSelectedPublishButton2: Bool = false{
+        didSet {
+            selectCameraPicker2.isEnabled = !isSelectedPublishButton2
+        }
+    }
+    var isSelectedPublishButton3: Bool = false{
+        didSet {
+            selectCameraPicker3.isEnabled = !isSelectedPublishButton3
+        }
+    }
+    var isSelectedPublishButton4: Bool = false{
+        didSet {
+            selectCameraPicker4.isEnabled = !isSelectedPublishButton4
+        }
+    }
+    lazy var secondUid: UInt = UInt.random(in: 1...999999)
+    lazy var thirdUid: UInt = UInt.random(in: 1...999999)
+    lazy var fouthUid: UInt = UInt.random(in: 1...999999)
     
     var cameras: [AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -117,7 +136,8 @@ class MultiCameraSoureceMain: BaseViewController {
             guard let cameraId = self.selectedCamera1?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            self.agoraKit.stopCameraCapture(.camera)
+            self.startCaptureConfig(deviceId: cameraId, sourceType: .camera, uid: 0, canvasView: self.videos[0].videocanvas)
         }
         selectCameraPicker2.onSelectChanged {
             if !self.isJoined {
@@ -127,7 +147,8 @@ class MultiCameraSoureceMain: BaseViewController {
             guard let cameraId = self.selectedCamera2?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            self.agoraKit.stopCameraCapture(.cameraSecondary)
+            self.startCaptureConfig(deviceId: cameraId, sourceType: .cameraSecondary, uid: self.secondUid, canvasView: self.videos[1].videocanvas)
         }
         selectCameraPicker3.onSelectChanged {
             if !self.isJoined {
@@ -137,7 +158,8 @@ class MultiCameraSoureceMain: BaseViewController {
             guard let cameraId = self.selectedCamera3?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            self.agoraKit.stopCameraCapture(.cameraThird)
+            self.startCaptureConfig(deviceId: cameraId, sourceType: .cameraThird, uid: self.thirdUid, canvasView: self.videos[2].videocanvas)
         }
         selectCameraPicker4.onSelectChanged {
             if !self.isJoined {
@@ -147,8 +169,24 @@ class MultiCameraSoureceMain: BaseViewController {
             guard let cameraId = self.selectedCamera4?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            self.agoraKit.stopCameraCapture(.cameraFourth)
+            self.startCaptureConfig(deviceId: cameraId, sourceType: .cameraFourth, uid: self.fouthUid, canvasView: self.videos[3].videocanvas)
         }
+    }
+    
+    private func startCaptureConfig(deviceId: String?, sourceType: AgoraVideoSourceType, uid: UInt, canvasView: NSView) {
+        let captureConfig = AgoraCameraCapturerConfiguration()
+        captureConfig.deviceId = deviceId
+        captureConfig.dimensions = CGSize(width: 640, height: 360)
+        captureConfig.frameRate = 15
+        agoraKit.startCameraCapture(sourceType, config: captureConfig)
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.renderMode = .hidden
+        videoCanvas.sourceType = sourceType
+        videoCanvas.uid = uid
+        videoCanvas.view = canvasView
+        agoraKit.setupLocalVideo(videoCanvas)
+        agoraKit.startPreview(sourceType)
     }
     
     @IBAction func onCaptureButton1(_ sender: NSButton) {
@@ -157,25 +195,17 @@ class MultiCameraSoureceMain: BaseViewController {
         }
         isSelectedCaptureButton1 = !isSelectedCaptureButton1
         sender.title = isSelectedCaptureButton1 ? "Stop Capture".localized : "Start Capture".localized
-        agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        agoraKit.setClientRole(.broadcaster)
         let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.renderMode = .hidden
-        videoCanvas.uid = 0
         if isSelectedCaptureButton1 {
-            videoCanvas.view = localVideo.videocanvas
-            agoraKit.startPreview()
+            startCaptureConfig(deviceId: cameraId, sourceType: .camera, uid: 0, canvasView: localVideo.videocanvas)
         } else {
-            videoCanvas.view = nil
-            agoraKit.stopPreview()
+            agoraKit.stopPreview(.camera)
             let mediaOption = AgoraRtcChannelMediaOptions()
             mediaOption.publishCameraTrack = false
             mediaOption.publishMicrophoneTrack = false
             agoraKit.updateChannel(with: mediaOption)
             publishStreamButton1.title = "Start Publish".localized
         }
-        agoraKit.setupLocalVideo(videoCanvas)
     }
     @IBAction func onPublishStreamButton1(_ sender: NSButton) {
         isSelectedPublishButton1 = !isSelectedPublishButton1
@@ -183,9 +213,6 @@ class MultiCameraSoureceMain: BaseViewController {
         let mediaOption = AgoraRtcChannelMediaOptions()
         mediaOption.publishCameraTrack = isSelectedPublishButton1
         mediaOption.publishMicrophoneTrack = isSelectedPublishButton1
-        mediaOption.publishSecondaryCameraTrack = false
-        mediaOption.publishThirdCameraTrack = false
-        mediaOption.publishFourthCameraTrack = false
         agoraKit.updateChannel(with: mediaOption)
     }
     @IBAction func onCaptureButton2(_ sender: NSButton) {
@@ -194,36 +221,26 @@ class MultiCameraSoureceMain: BaseViewController {
         }
         isSelectedCaptureButton2 = !isSelectedCaptureButton2
         sender.title = isSelectedCaptureButton2 ? "Stop Capture".localized : "Start Capture".localized
-        agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        agoraKit.setClientRole(.broadcaster)
         let localVideo = videos[1]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.renderMode = .hidden
-        videoCanvas.uid = 0
         if isSelectedCaptureButton2 {
-            videoCanvas.view = localVideo.videocanvas
-            agoraKit.startPreview()
+            self.startCaptureConfig(deviceId: cameraId, sourceType: .cameraSecondary, uid: secondUid, canvasView: localVideo.videocanvas)
         } else {
-            videoCanvas.view = nil
-            agoraKit.stopPreview()
-            let mediaOption = AgoraRtcChannelMediaOptions()
-            mediaOption.publishCameraTrack = false
-            mediaOption.publishMicrophoneTrack = false
-            agoraKit.updateChannel(with: mediaOption)
+            agoraKit.stopPreview(.cameraSecondary)
             publishStreamButton2.title = "Start Publish".localized
+            leaveChannel(uid: secondUid)
         }
-        agoraKit.setupLocalVideo(videoCanvas)
     }
     @IBAction func onPublishStreamButton2(_ sender: NSButton) {
         isSelectedPublishButton2 = !isSelectedPublishButton2
         sender.title = isSelectedPublishButton2 ? "Stop Publish".localized : "Start Publish".localized
-        let mediaOption = AgoraRtcChannelMediaOptions()
-        mediaOption.publishCameraTrack = false
-        mediaOption.publishMicrophoneTrack = isSelectedPublishButton2
-        mediaOption.publishSecondaryCameraTrack = isSelectedPublishButton2
-        mediaOption.publishThirdCameraTrack = false
-        mediaOption.publishFourthCameraTrack = false
-        agoraKit.updateChannel(with: mediaOption)
+        if isSelectedPublishButton2 {
+            let mediaOption = AgoraRtcChannelMediaOptions()
+            mediaOption.publishSecondaryCameraTrack = isSelectedPublishButton2
+            mediaOption.clientRoleType = .broadcaster
+            joinChannel(mediaOption: mediaOption, uid: secondUid)
+        } else {
+            leaveChannel(uid: secondUid)
+        }
     }
     @IBAction func onCaptureButton3(_ sender: NSButton) {
         guard let cameraId = selectedCamera3?.deviceId  else {
@@ -231,36 +248,26 @@ class MultiCameraSoureceMain: BaseViewController {
         }
         isSelectedCaptureButton3 = !isSelectedCaptureButton3
         sender.title = isSelectedCaptureButton3 ? "Stop Capture".localized : "Start Capture".localized
-        agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        agoraKit.setClientRole(.broadcaster)
         let localVideo = videos[2]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.renderMode = .hidden
-        videoCanvas.uid = 0
         if isSelectedCaptureButton3 {
-            videoCanvas.view = localVideo.videocanvas
-            agoraKit.startPreview()
+            startCaptureConfig(deviceId: cameraId, sourceType: .cameraThird, uid: thirdUid, canvasView: localVideo.videocanvas)
         } else {
-            videoCanvas.view = nil
-            agoraKit.stopPreview()
-            let mediaOption = AgoraRtcChannelMediaOptions()
-            mediaOption.publishCameraTrack = false
-            mediaOption.publishMicrophoneTrack = false
-            agoraKit.updateChannel(with: mediaOption)
+            agoraKit.stopPreview(.cameraThird)
+            leaveChannel(uid: thirdUid)
             publishStreamButton3.title = "Start Publish".localized
         }
-        agoraKit.setupLocalVideo(videoCanvas)
     }
     @IBAction func onPublishStreamButton3(_ sender: NSButton) {
         isSelectedPublishButton3 = !isSelectedPublishButton3
         sender.title = isSelectedPublishButton3 ? "Stop Publish".localized : "Start Publish".localized
-        let mediaOption = AgoraRtcChannelMediaOptions()
-        mediaOption.publishCameraTrack = false
-        mediaOption.publishMicrophoneTrack = isSelectedPublishButton3
-        mediaOption.publishSecondaryCameraTrack = false
-        mediaOption.publishThirdCameraTrack = isSelectedPublishButton3
-        mediaOption.publishFourthCameraTrack = false
-        agoraKit.updateChannel(with: mediaOption)
+        if isSelectedPublishButton3 {
+            let mediaOption = AgoraRtcChannelMediaOptions()
+            mediaOption.publishThirdCameraTrack = isSelectedPublishButton3
+            mediaOption.clientRoleType = .broadcaster
+            joinChannel(mediaOption: mediaOption, uid: thirdUid)
+        } else {
+            leaveChannel(uid: thirdUid)
+        }
     }
     @IBAction func onCaptureButton4(_ sender: NSButton) {
         guard let cameraId = selectedCamera4?.deviceId  else {
@@ -268,36 +275,26 @@ class MultiCameraSoureceMain: BaseViewController {
         }
         isSelectedCaptureButton4 = !isSelectedCaptureButton4
         sender.title = isSelectedCaptureButton4 ? "Stop Capture".localized : "Start Capture".localized
-        agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        agoraKit.setClientRole(.broadcaster)
         let localVideo = videos[3]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.renderMode = .hidden
-        videoCanvas.uid = 0
         if isSelectedCaptureButton4 {
-            videoCanvas.view = localVideo.videocanvas
-            agoraKit.startPreview()
+            startCaptureConfig(deviceId: cameraId, sourceType: .cameraFourth, uid: fouthUid, canvasView: localVideo.videocanvas)
         } else {
-            videoCanvas.view = nil
-            agoraKit.stopPreview()
-            let mediaOption = AgoraRtcChannelMediaOptions()
-            mediaOption.publishCameraTrack = false
-            mediaOption.publishMicrophoneTrack = false
-            agoraKit.updateChannel(with: mediaOption)
+            agoraKit.stopPreview(.cameraFourth)
+            leaveChannel(uid: fouthUid)
             publishStreamButton4.title = "Start Publish".localized
         }
-        agoraKit.setupLocalVideo(videoCanvas)
     }
     @IBAction func onPublishStreamButton4(_ sender: NSButton) {
         isSelectedPublishButton4 = !isSelectedPublishButton4
         sender.title = isSelectedPublishButton4 ? "Stop Publish".localized : "Start Publish".localized
-        let mediaOption = AgoraRtcChannelMediaOptions()
-        mediaOption.publishCameraTrack = false
-        mediaOption.publishMicrophoneTrack = isSelectedPublishButton4
-        mediaOption.publishSecondaryCameraTrack = false
-        mediaOption.publishThirdCameraTrack = false
-        mediaOption.publishFourthCameraTrack = isSelectedPublishButton4
-        agoraKit.updateChannel(with: mediaOption)
+        if isSelectedPublishButton4 {
+            let mediaOption = AgoraRtcChannelMediaOptions()
+            mediaOption.publishFourthCameraTrack = isSelectedPublishButton4
+            mediaOption.clientRoleType = .broadcaster
+            joinChannel(mediaOption: mediaOption, uid: fouthUid)
+        } else {
+            leaveChannel(uid: fouthUid)
+        }
     }
     
     /**
@@ -319,6 +316,10 @@ class MultiCameraSoureceMain: BaseViewController {
         captureButton2.isEnabled = isJoined
         captureButton3.isEnabled = isJoined
         captureButton4.isEnabled = isJoined
+        publishStreamButton1.isEnabled = isJoined ? publishStreamButton1.isEnabled : isJoined
+        publishStreamButton2.isEnabled = isJoined ? publishStreamButton2.isEnabled : isJoined
+        publishStreamButton3.isEnabled = isJoined ? publishStreamButton3.isEnabled : isJoined
+        publishStreamButton4.isEnabled = isJoined ? publishStreamButton4.isEnabled : isJoined
         selectCameraPicker1.isEnabled = isJoined
         selectCameraPicker2.isEnabled = isJoined
         selectCameraPicker3.isEnabled = isJoined
@@ -368,6 +369,7 @@ class MultiCameraSoureceMain: BaseViewController {
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
+        agoraKit.setClientRole(.broadcaster)
         
         initSelectCameraPicker()
         initChannelField()
@@ -440,15 +442,17 @@ class MultiCameraSoureceMain: BaseViewController {
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
+                self.isJoined = true
             })
         } else {
             isProcessing = true
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = 0
-            // the view to be binded
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
+            agoraKit.stopCameraCapture(.camera)
+            agoraKit.stopCameraCapture(.cameraSecondary)
+            agoraKit.stopCameraCapture(.cameraThird)
+            agoraKit.stopCameraCapture(.cameraFourth)
+            leaveChannel(uid: secondUid)
+            leaveChannel(uid: thirdUid)
+            leaveChannel(uid: fouthUid)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
@@ -462,9 +466,39 @@ class MultiCameraSoureceMain: BaseViewController {
         }
     }
     
+    private func joinChannel(mediaOption: AgoraRtcChannelMediaOptions, uid: UInt) {
+        let connection = AgoraRtcConnection()
+        connection.localUid = uid
+        connection.channelId = channelField.stringValue
+        NetworkManager.shared.generateToken(channelName: channelField.stringValue, uid: uid, success: { token in
+            let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: mediaOption)
+            if result != 0 {
+                self.isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        })
+    }
+    
+    private func leaveChannel(uid: UInt) {
+        let connection = AgoraRtcConnection()
+        connection.localUid = uid
+        connection.channelId = channelField.stringValue
+        agoraKit.leaveChannelEx(connection)
+    }
+    
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
-            agoraKit.disableVideo()
+            agoraKit.stopCameraCapture(.camera)
+            agoraKit.stopCameraCapture(.cameraSecondary)
+            agoraKit.stopCameraCapture(.cameraThird)
+            agoraKit.stopCameraCapture(.cameraFourth)
+            leaveChannel(uid: secondUid)
+            leaveChannel(uid: thirdUid)
+            leaveChannel(uid: fouthUid)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -505,9 +539,6 @@ extension MultiCameraSoureceMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isProcessing = false
-        isJoined = true
-        let localVideo = videos[0]
-        localVideo.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
