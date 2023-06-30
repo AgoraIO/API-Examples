@@ -304,6 +304,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 mRootBinding.etChannel.setEnabled(true);
                 mRootBinding.btnPublish.setText(getString(R.string.enable_publish));
                 mRootBinding.videoTrackingLayout.getRoot().setVisibility(View.GONE);
+                mSettingBinding.switchWatermark.setChecked(false);
                 remoteUid = 0;
                 foreGroundVideo.removeAllViews();
                 backGroundVideo.removeAllViews();
