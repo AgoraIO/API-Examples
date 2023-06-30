@@ -46,50 +46,12 @@ import io.agora.rtc2.RtcEngineConfig;
 public class JoinChannelAudioByToken extends BaseFragment implements View.OnClickListener
 {
     private static final String TAG = JoinChannelAudioByToken.class.getSimpleName();
-    private Spinner audioProfileInput;
-    private Spinner audioScenarioInput;
     private EditText et_app_id, et_channel, et_token;
-    private Button mute, join, speaker;
-    private SeekBar record, playout, inear;
-    private Switch inEarSwitch;
+    private Button join;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private AudioSeatManager audioSeatManager;
-
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(engine == null){
-                return;
-            }
-            if(seekBar.getId() == record.getId()){
-                engine.adjustRecordingSignalVolume(progress);
-            }
-            else if(seekBar.getId() == playout.getId()){
-                engine.adjustPlaybackSignalVolume(progress);
-            }
-            else if(seekBar.getId() == inear.getId()){
-                if(progress == 0){
-                    engine.enableInEarMonitoring(false);
-                }
-                else {
-                    engine.enableInEarMonitoring(true);
-                    engine.setInEarMonitoringVolume(progress);
-                }
-            }
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -114,47 +76,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         et_app_id = view.findViewById(R.id.et_app_id);
         et_channel = view.findViewById(R.id.et_channel);
         et_token = view.findViewById(R.id.et_token);
-        audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
-        audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
-        audioScenarioInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(joined){
-                    int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
-                    engine.setAudioScenario(scenario);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.microphone);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        speaker.setActivated(true);
-        record = view.findViewById(R.id.recordingVol);
-        playout = view.findViewById(R.id.playoutVol);
-        inear = view.findViewById(R.id.inEarMonitorVol);
-        record.setOnSeekBarChangeListener(seekBarChangeListener);
-        playout.setOnSeekBarChangeListener(seekBarChangeListener);
-        inear.setOnSeekBarChangeListener(seekBarChangeListener);
-        inEarSwitch = view.findViewById(R.id.inEarMonitorSwitch);
-        inEarSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(engine == null){
-                return;
-            }
-            engine.enableInEarMonitoring(isChecked);
-            inear.setEnabled(isChecked);
-        });
-        record.setEnabled(false);
-        playout.setEnabled(false);
-        inear.setEnabled(false);
-        inEarSwitch.setEnabled(false);
-
         audioSeatManager = new AudioSeatManager(
                 view.findViewById(R.id.audio_place_01),
                 view.findViewById(R.id.audio_place_02),
@@ -189,7 +111,6 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
@@ -254,46 +175,15 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
 
                 if (createRtcEngine(appId)) {
                     joinChannel(channelId, token);
-                    audioProfileInput.setEnabled(false);
                 }
             }
             else
             {
                 joined = false;
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                audioProfileInput.setEnabled(true);
-                record.setEnabled(false);
-                playout.setEnabled(false);
-                inear.setEnabled(false);
-                inEarSwitch.setEnabled(false);
-                inEarSwitch.setChecked(false);
                 audioSeatManager.downAllSeats();
                 destroyRtcEngine();
             }
-        }
-        else if (v.getId() == R.id.microphone)
-        {
-            if(engine == null){
-                return;
-            }
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
-        }
-        else if (v.getId() == R.id.btn_speaker)
-        {
-            if(engine == null){
-                return;
-            }
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -304,12 +194,6 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
     {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-
-        int profile = Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()));
-        engine.setAudioProfile(profile);
-
-        int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
-        engine.setAudioScenario(scenario);
 
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
@@ -387,14 +271,8 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
                 @Override
                 public void run()
                 {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    record.setEnabled(true);
-                    playout.setEnabled(true);
-                    inear.setEnabled(inEarSwitch.isChecked());
-                    inEarSwitch.setEnabled(true);
                     audioSeatManager.upLocalSeat(uid);
                 }
             });

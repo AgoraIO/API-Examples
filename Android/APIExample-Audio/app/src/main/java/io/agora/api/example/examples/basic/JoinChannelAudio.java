@@ -132,8 +132,10 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         audioRouteInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(!joined){
+                    return;
+                }
                 boolean isChatRoomMode = "CHATROOM".equals(audioScenarioInput.getSelectedItem());
-
                 if (isChatRoomMode) {
                     int route = Constants.AUDIO_ROUTE_EARPIECE;
                     if (getString(R.string.audio_route_earpiece).equals(parent.getSelectedItem())) {
@@ -353,8 +355,6 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         int scenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
         engine.setAudioScenario(scenario);
 
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
-
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
@@ -537,6 +537,30 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         public void onAudioRouteChanged(int routing) {
             super.onAudioRouteChanged(routing);
             showShortToast("onAudioRouteChanged : " + routing);
+            runOnUIThread(() -> {
+                String selectedRouteStr = getString(R.string.audio_route_speakerphone);
+                if(routing == Constants.AUDIO_ROUTE_EARPIECE){
+                    selectedRouteStr = getString(R.string.audio_route_earpiece);
+                }else if(routing == Constants.AUDIO_ROUTE_SPEAKERPHONE){
+                    selectedRouteStr = getString(R.string.audio_route_speakerphone);
+                }else if(routing == Constants.AUDIO_ROUTE_HEADSET){
+                    selectedRouteStr = getString(R.string.audio_route_headset);
+                }else if(routing == Constants.AUDIO_ROUTE_HEADSETBLUETOOTH){
+                    selectedRouteStr = getString(R.string.audio_route_headset_bluetooth);
+                }else if(routing == Constants.AUDIO_ROUTE_USBDEVICE){
+                    selectedRouteStr = getString(R.string.audio_route_headset_typec);
+                }
+
+                int selection = 0;
+                for (int i = 0; i < audioRouteInput.getAdapter().getCount(); i++) {
+                    String routeStr = (String) audioRouteInput.getItemAtPosition(i);
+                    if(routeStr.equals(selectedRouteStr)){
+                        selection = i;
+                        break;
+                    }
+                }
+                audioRouteInput.setSelection(selection);
+            });
         }
     };
 }
