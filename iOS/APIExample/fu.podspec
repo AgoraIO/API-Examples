@@ -12,4 +12,5 @@ Pod::Spec.new do |spec|
    spec.resource_bundles    = {"FURenderKit" => "FULib/Resources/*"}
    spec.requires_arc  = true
    spec.ios.deployment_target  = '9.0'
+   spec.dependency 'FURenderKit'
  end
