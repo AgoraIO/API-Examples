@@ -27,13 +27,3 @@ include ':app'
 if (simpleFilter.toBoolean()) {
     include ':agora-simple-filter'
 }
-include ':beauty:base'
-if(beauty_sensetime.toBoolean()){
-    include ':beauty:sense-time'
-}
-if(beauty_faceunity.toBoolean()){
-    include ':beauty:faceunity'
-}
-if(beauty_bytedance.toBoolean()){
-    include ':beauty:bytedance'
-}
