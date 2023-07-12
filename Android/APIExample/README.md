@@ -35,13 +35,52 @@ To build and run the sample application, get an App Id:
 You are all set. Now connect your Android device and run the project.
 
 ### Beauty Configuration
-This project contains third-party beauty integration examples, which are disabled by default. If you need to enable compilation and use, please refer to the corresponding configuration guide.
 
-| Beauty module |          Configuration Guide          |
-|:-------------:|:-------------------------------------:|
-|   SenseTime   | [README](beauty/sense-time/README.md) |
-|   FaceUnity   | [README](beauty/faceunity/README.md)  |
-|   ByteDance   | [README](beauty/bytedance/README.md)  |
+> Third Part Beauty case use
+> the [Agora Beauty API Library](https://github.com/AgoraIO-Community/BeautyAPI)
+
+This project contains third-party beauty integration examples, which cannot be enabled by default
+without configuring resources and certificates. The resource certificate configuration method is as
+follows:
+
+#### SenseTime
+
+1. Contact SenseTime customer service to obtain the download link and certificate of the beauty sdk
+2. Unzip the beauty sdk, and copy the following resources to the corresponding path
+
+| SenseTime Beauty SDK Path                                            | Location                                                 |
+|----------------------------------------------------------------------|----------------------------------------------------------|
+| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
+| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
+
+#### FaceUnity
+
+1. Contact FaceUnity customer service to obtain beauty resources and certificates
+2. Put the beauty resource and certificate in the corresponding path
+
+| FaceUnity Beauty Resources          | Location                                                                       |
+|-------------------------------------|--------------------------------------------------------------------------------|
+| makeup resource(e.g. naicha.bundle) | app/src/main/assets/beauty_faceunity/makeup                                    |
+| sticker resource(e.g. fashi.bundle) | app/src/main/assets/beauty_faceunity/sticker                                   |
+| authpack.java                       | app/src/main/java/io/agora/api/example/examples/advanced/beauty/authpack.java  |
+
+#### ByteDance
+
+1. Contact ByteDance customer service to obtain the download link and certificate of the beauty sdk
+2. Unzip the ByteDance beauty resource and copy the following files/directories to the corresponding path
+
+| ByteDance Beauty Resources      | Location                             |
+|---------------------------------|--------------------------------------|
+| resource/LicenseBag.bundle      | app/src/main/assets/beauty_bytedance |
+| resource/ModelResource.bundle   | app/src/main/assets/beauty_bytedance |
+| resource/ComposeMakeup.bundle   | app/src/main/assets/beauty_bytedance |
+| resource/StickerResource.bundle | app/src/main/assets/beauty_bytedance |
+| resource/StickerResource.bundle | app/src/main/assets/beauty_bytedance |
+
+3. Modify the LICENSE_NAME in the app/src/main/java/io/agora/api/example/examples/advanced/beauty/ByteDanceBeauty.java file to the name of the applied certificate file.
 
 
 ### For Agora Extension Developers
