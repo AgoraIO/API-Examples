@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.agora.api.example">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,6 +18,8 @@
 
 <!--    <permission-group android:name="io.agora.api.example.andpermission"/>-->
     <permission-group android:name="${AppId}.andpermission"/>
+
+    <uses-sdk tools:overrideLibrary="com.sensetime.hardwarebuffer" />
 
     <application
         android:name=".MainApplication"
