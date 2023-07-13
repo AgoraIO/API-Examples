@@ -130,6 +130,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             }
         });
+        mSettingBinding.switchH265.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // {"engine.video.enable_hw_encoder":"true"}  ——true 采用硬编； false 采用软编
+            engine.setParameters("{\"engine.video.enable_hw_encoder\":\"true\"}");
+            // {"engine.video.codec_type":"3"}    —— 2 表示采用H264编码; 3表示H265编码
+            engine.setParameters("{\"engine.video.codec_type\":\"" + (isChecked ? "3" : "2") + "\"}");
+        });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
     }
@@ -484,7 +490,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
-                    foreGroundVideo.setReportUid(uid);
+                    if(isLocalVideoForeground){
+                        foreGroundVideo.setReportUid(uid);
+                    }else{
+                        backGroundVideo.setReportUid(uid);
+                    }
+
                 }
             });
         }

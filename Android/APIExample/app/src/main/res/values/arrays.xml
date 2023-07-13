@@ -202,6 +202,10 @@
         <item>VD_960x540</item>
         <item>VD_960x720</item>
         <item>VD_1280x720</item>
+        <item>VD_1920x1080</item>
+        <item>VD_1920x1080</item>
+        <item>VD_2540x1440</item>
+        <item>VD_3840x2160</item>
     </string-array>
     <string-array name="orientations">
         <item>ORIENTATION_MODE_ADAPTIVE</item>
@@ -215,6 +219,7 @@
         <item>FRAME_RATE_FPS_15</item>
         <item>FRAME_RATE_FPS_24</item>
         <item>FRAME_RATE_FPS_30</item>
+        <item>FRAME_RATE_FPS_60</item>
     </string-array>
 
     <string-array name="beauty">
