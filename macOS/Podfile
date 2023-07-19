@@ -4,12 +4,21 @@ target 'APIExample' do
   use_frameworks!
 
   pod 'AGEVideoLayout', '1.0.2'
- pod 'AgoraRtcEngine_macOS', '4.2.1'
-   # pod 'sdk', :path => 'sdk.podspec'
+# pod 'AgoraRtcEngine_macOS', '4.2.1'
+    pod 'sdk', :path => 'sdk.podspec'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-   # pod 'sdk', :path => 'sdk.podspec'
- pod 'AgoraRtcEngine_macOS', '4.2.1'
+    pod 'sdk', :path => 'sdk.podspec'
+# pod 'AgoraRtcEngine_macOS', '4.2.1'
+end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.13'
+    end
+  end
 end
