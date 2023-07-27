@@ -8,7 +8,7 @@
 			<key>LibraryIdentifier</key>
 			<string>macos-arm64_x86_64</string>
 			<key>LibraryPath</key>
-			<string>av1.framework</string>
+			<string>AgoraVideoDecoderExtension.framework</string>
 			<key>SupportedArchitectures</key>
 			<array>
 				<string>arm64</string>
