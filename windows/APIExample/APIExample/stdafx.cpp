@@ -269,6 +269,8 @@ wchar_t MultiVideoSourcePublish[INFO_LEN] = { 0 };
 wchar_t MultiCamearaStopPublish[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceCamera1[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceCamera2[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera3[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera4[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceScreen[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceStartCapture[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceStopCapture[INFO_LEN] = { 0 };
@@ -692,6 +694,8 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiCamearaStopPublish, INFO_LEN, Str(_T("MultiVideoSource.StopPublish")));
 	_tcscpy_s(MultiVideoSourceCamera1, INFO_LEN, Str(_T("MultiVideoSource.Camera1")));
 	_tcscpy_s(MultiVideoSourceCamera2, INFO_LEN, Str(_T("MultiVideoSource.Camera2")));
+	_tcscpy_s(MultiVideoSourceCamera3, INFO_LEN, Str(_T("MultiVideoSource.Camera3")));
+	_tcscpy_s(MultiVideoSourceCamera4, INFO_LEN, Str(_T("MultiVideoSource.Camera4")));
 	_tcscpy_s(MultiVideoSourceScreen, INFO_LEN, Str(_T("MultiVideoSource.Screen")));
 	_tcscpy_s(MultiVideoSourceStartCapture, INFO_LEN, Str(_T("MultiVideoSource.StartCapture")));
 	_tcscpy_s(MultiVideoSourceStopCapture, INFO_LEN, Str(_T("MultiVideoSource.StopCapture")));

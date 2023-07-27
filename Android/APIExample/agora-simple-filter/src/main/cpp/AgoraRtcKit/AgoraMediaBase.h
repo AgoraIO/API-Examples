@@ -916,6 +916,14 @@ class IAudioFrameObserverBase {
      * A reserved parameter.
      */
     int avsync_type;
+    /**
+     * A reserved parameter.
+     * 
+     * You can use this presentationMs parameter to indicate the presenation milisecond timestamp,
+     * this will then filled into audio4 extension part, the remote side could use this pts in av
+     * sync process with video frame.
+     */
+    int64_t presentationMs;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
                    samplesPerChannel(0),
@@ -924,7 +932,8 @@ class IAudioFrameObserverBase {
                    samplesPerSec(0),
                    buffer(NULL),
                    renderTimeMs(0),
-                   avsync_type(0) {}
+                   avsync_type(0),
+                   presentationMs(0) {}
   };
 
   enum AUDIO_FRAME_POSITION {

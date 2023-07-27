@@ -41,7 +41,6 @@ static FUManager *shareManager = NULL;
     if (self = [super init]) {
         
 #if __has_include(<FURenderKit/FURenderKit.h>)
-        CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
         NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
 //        [[NSBundle mainBundle] pathForResource:@"controller_cpp" ofType:@"bundle" inDirectory:@"Frameworks"]
         NSString *controllerPath = [bundle pathForResource:@"graphics/controller_cpp" ofType:@"bundle"];
@@ -55,7 +54,7 @@ static FUManager *shareManager = NULL;
         // 初始化 FURenderKit
         [FURenderKit setupWithSetupConfig:setupConfig];
         
-        [FURenderKit setLogLevel:FU_LOG_LEVEL_TRACE];
+        [FURenderKit setLogLevel:FU_LOG_LEVEL_ERROR];
         
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 加载人脸 AI 模型
@@ -66,15 +65,12 @@ static FUManager *shareManager = NULL;
             NSString *bodyAIPath = [bundle pathForResource:@"model/ai_human_processor" ofType:@"bundle"];//[[NSBundle mainBundle] pathForResource:@"ai_human_processor" ofType:@"bundle"];
             [FUAIKit loadAIModeWithAIType:FUAITYPE_HUMAN_PROCESSOR dataPath:bodyAIPath];
             
-            CFAbsoluteTime endTime = (CFAbsoluteTimeGetCurrent() - startTime);
             NSString *path = [bundle pathForResource:@"graphics/tongue" ofType:@"bundle"];//[[NSBundle mainBundle] pathForResource:@"tongue" ofType:@"bundle"];
             [FUAIKit loadTongueMode:path];
             
-            //TODO: todo 是否需要用？？？？？
             /* 设置嘴巴灵活度 默认= 0*/ //
             float flexible = 0.5;
             [FUAIKit setFaceTrackParam:@"mouth_expression_more_flexible" value:flexible];
-            NSLog(@"---%lf",endTime);
             
             // 设置人脸算法质量
             [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = [FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
@@ -157,12 +153,6 @@ static FUManager *shareManager = NULL;
 #endif
 }
 
-
-- (void)onCameraChange {
-#if __has_include(<FURenderKit/FURenderKit.h>)
-    [FUAIKit resetTrackedResult];
-#endif
-}
 
 - (void)setStickerPath: (NSString *)stickerName {
     NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];

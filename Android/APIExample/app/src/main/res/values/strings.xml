@@ -81,6 +81,7 @@
     <string name="play_locally">Play Locally</string>
     <string name="local_video">Local Video</string>
     <string name="streaming_mode">Enhanced Low Latency</string>
+    <string name="preload">Preload</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
@@ -263,7 +264,8 @@
     <string name="watermark">Watermark</string>
     <string name="low_stream">Low Stream</string>
     <string name="create_capture_track">Create Capture Track</string>
-    <string name="destroy_capture_track">Destroy Capture Track</string>
+    <string name="create_encoded_capture_track">Create Capture Track(Encoded)</string>
+    <string name="destroy_capture_track">Destroy Track</string>
     <string name="spatial_audio_zone">Audio Zone</string>
     <string name="spatial_audio_room">Room</string>
     <string name="float_window_confirm_dialog_msg">Your mobile phone does not grant the permission of the floating window, please turn it on and try again</string>
@@ -273,7 +275,7 @@
     <string name="token_invalid">The token is invalid.</string>
     <string name="token_expired">The token is expired.</string>
     <string name="scenetime_beauty">SceneTimeBeauty</string>
-    <string name="scenetime_integrate_tip">SenseTime library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_sensetime=true in gradle.properties\n2. Download the SenseTime SDK, and put the decompressed aar library in the corresponding directory in beauty/sense-time. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
+    <string name="scenetime_integrate_tip">SenseTime library is not integrated! Please read README before compiling</string>
     <string name="face_beauty" translatable="false">Face Beauty</string>
     <string name="makeup" translatable="false">Makeup</string>
     <string name="sticker" translatable="false">Sticker</string>
@@ -282,9 +284,9 @@
     <string name="beauty_input_double">Double Input(NV21 and Texture)</string>
     <string name="faceunity_beauty">FaceUnityBeauty</string>
     <string name="body_beauty">Body Beauty</string>
-    <string name="faceunity_integrate_tip">FaceUnity library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_faceunity=true in gradle.properties\n2. Run after configuring licenses</string>
+    <string name="faceunity_integrate_tip">FaceUnity library is not integrated! Please read README before compiling</string>
     <string name="bytedance_beauty">ByteDance Beauty</string>
-    <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_bytedance=true in gradle.properties\n2. Download the ByteDance SDK, and put the decompressed aar library in the corresponding directory in beauty/bytedance. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
+    <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please read README before compiling</string>
 
     <string name="private_clound">Private Cloud</string>
     <string name="ip_address">IP Address</string>
@@ -323,4 +325,21 @@
     <string name="stop_recording">Stop Recording</string>
     <string name="recording_tag" translatable="false">RecordingTag</string>
     <string name="transparent_background">TransparentBackground</string>
+    <string name="user_id">User ID</string>
+    <string name="view_bg_color">View background color</string>
+    <string name="render_mode">RenderMode</string>
+    <string name="render_mode_hidden">Hidden</string>
+    <string name="render_mode_fit">Fit</string>
+    <string name="render_mode_adaptive">Adaptive</string>
+    <string name="channel_profile_communication" translatable="false">COMMUNICATION</string>
+    <string name="channel_profile_live_broadcasting" translatable="false">LIVE_BROADCASTING</string>
+    <string name="channel_profile_game" translatable="false">GAME</string>
+    <string name="channel_profile_cloud_gaming" translatable="false">CLOUD_GAMING</string>
+    <string name="channel_profile_communication_1v1" translatable="false">COMMUNICATION_1v1</string>
+    <string name="audio_route_default">default</string>
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="audio_route_headset">headset(Not TypeC)</string>
+    <string name="audio_route_headset_typec">headset(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">bluetooth headset</string>
 </resources>

@@ -2,11 +2,7 @@ package io.agora.api.example.examples.advanced.beauty;
 
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
-import android.graphics.Matrix;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -16,7 +12,10 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.nio.ByteBuffer;
+import com.sensetime.stmobile.model.STMobileMakeupType;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Random;
 
@@ -26,25 +25,24 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.databinding.FragmentBeautyScenetimeBinding;
 import io.agora.api.example.utils.TokenUtils;
-import io.agora.base.TextureBufferHelper;
-import io.agora.base.VideoFrame;
-import io.agora.base.internal.video.RendererCommon;
-import io.agora.base.internal.video.YuvHelper;
-import io.agora.beauty.base.IBeautySenseTime;
+import io.agora.beautyapi.sensetime.BeautyPreset;
+import io.agora.beautyapi.sensetime.CaptureMode;
+import io.agora.beautyapi.sensetime.Config;
+import io.agora.beautyapi.sensetime.SenseTimeBeautyAPI;
+import io.agora.beautyapi.sensetime.SenseTimeBeautyAPIKt;
+import io.agora.beautyapi.sensetime.utils.STRenderKit;
+import io.agora.beautyapi.sensetime.utils.utils.FileUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.gl.EglBaseProvider;
 import io.agora.rtc2.video.ColorEnhanceOptions;
-import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class SceneTimeBeauty extends BaseFragment {
     private static final String TAG = "SceneTimeBeauty";
 
-    private IBeautySenseTime iBeautySenseTime;
     private FragmentBeautyScenetimeBinding mBinding;
     private RtcEngine rtcEngine;
     private String channelId;
@@ -54,14 +52,11 @@ public class SceneTimeBeauty extends BaseFragment {
     private VideoReportLayout mLocalVideoLayout;
     private VideoReportLayout mRemoteVideoLayout;
     private boolean isLocalFull = true;
-    private IVideoFrameObserver mVideoFrameObserver;
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
-    // Beauty process require parameters
-    private TextureBufferHelper mTextureBufferHelper;
-    private ByteBuffer nv21ByteBuffer;
-    private byte[] nv21ByteArray;
-    private volatile boolean isDestroyed = false;
+    private final SenseTimeBeautyAPI senseTimeBeautyAPI = SenseTimeBeautyAPIKt.createSenseTimeBeautyAPI();
+
+    private STRenderKit stRenderKit;
 
     @Nullable
     @Override
@@ -73,11 +68,17 @@ public class SceneTimeBeauty extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        isDestroyed = false;
-        if (!IBeautySenseTime.hasIntegrated()) {
+        boolean hasResource = false;
+        try {
+            hasResource = requireActivity().getAssets().list("beauty_sensetime").length > 1;
+        } catch (IOException e) {
+            // do nothing
+        }
+        if (!hasResource) {
             mBinding.tvIntegrateTip.setVisibility(View.VISIBLE);
             return;
         }
+
         channelId = getArguments().getString(getString(R.string.key_channel_name));
         initVideoView();
         initRtcEngine();
@@ -89,6 +90,17 @@ public class SceneTimeBeauty extends BaseFragment {
             options.skinProtectLevel = (float) 0.5f;
             rtcEngine.setColorEnhanceOptions(isChecked, options);
         });
+
+        stRenderKit = new STRenderKit(requireContext(), "beauty_sensetime");
+        senseTimeBeautyAPI.initialize(new Config(
+                rtcEngine,
+                stRenderKit,
+                null,
+                CaptureMode.Agora,
+                0,
+                false
+        ));
+        senseTimeBeautyAPI.enable(true);
     }
 
 
@@ -98,13 +110,15 @@ public class SceneTimeBeauty extends BaseFragment {
         if (rtcEngine != null) {
             rtcEngine.leaveChannel();
         }
-        unInitBeauty();
+        senseTimeBeautyAPI.release();
+        if (stRenderKit != null) {
+            stRenderKit.release();
+        }
         RtcEngine.destroy();
     }
 
     @Override
     protected void onBackPressed() {
-        isDestroyed = true;
         mBinding.fullVideoContainer.removeAllViews();
         mBinding.smallVideoContainer.removeAllViews();
         super.onBackPressed();
@@ -112,28 +126,33 @@ public class SceneTimeBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (iBeautySenseTime == null) {
-                return;
-            }
-            iBeautySenseTime.setFaceBeautifyEnable(isChecked);
+            senseTimeBeautyAPI.setBeautyPreset(isChecked? BeautyPreset.DEFAULT: BeautyPreset.CUSTOM);
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (iBeautySenseTime == null) {
-                return;
+            int type = STMobileMakeupType.ST_MAKEUP_TYPE_LIP;
+            if(isChecked){
+                String className = "makeup_lip";
+                String fileName = "12自然.zip";
+                String path = FileUtils.getFilePath(requireContext(), stRenderKit.getResourcePath(className) + File.separator + fileName);
+                FileUtils.copyFileIfNeed(requireContext(), fileName, stRenderKit.getResourcePath(className));
+                float strength = 1.0f;
+                stRenderKit.setMakeupForType(type, path);
+                stRenderKit.setMakeupStrength(type, strength);
+            }else{
+                stRenderKit.removeMakeupByType(type);
             }
-            iBeautySenseTime.setMakeUpEnable(isChecked);
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (iBeautySenseTime == null) {
-                return;
+            String className = "sticker_face_shape";
+            String fileName = "ShangBanLe.zip";
+            String path = FileUtils.getFilePath(requireContext(), stRenderKit.getResourcePath(className) + File.separator + fileName);
+            FileUtils.copyFileIfNeed(requireContext(), fileName, stRenderKit.getResourcePath(className));
+            if(isChecked){
+                stRenderKit.changeSticker(path);
+            }else{
+                stRenderKit.removeSticker(path);
             }
-            iBeautySenseTime.setStickerEnable(isChecked);
-        });
-        mBinding.cbFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (iBeautySenseTime == null) {
-                return;
-            }
-            iBeautySenseTime.setFilterEnable(isChecked);
+
         });
         mBinding.ivCamera.setOnClickListener(v -> {
             rtcEngine.switchCamera();
@@ -221,53 +240,6 @@ public class SceneTimeBeauty extends BaseFragment {
             rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 
 
-            mVideoFrameObserver = new IVideoFrameObserver() {
-                @Override
-                public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
-                    return processBeauty(videoFrame);
-                }
-
-                @Override
-                public boolean onPreEncodeVideoFrame(int sourceType, VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onMediaPlayerVideoFrame(VideoFrame videoFrame, int mediaPlayerId) {
-                    return false;
-                }
-
-                @Override
-                public boolean onRenderVideoFrame(String channelId, int uid, VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public int getVideoFrameProcessMode() {
-                    return IVideoFrameObserver.PROCESS_MODE_READ_WRITE;
-                }
-
-                @Override
-                public int getVideoFormatPreference() {
-                    return IVideoFrameObserver.VIDEO_PIXEL_DEFAULT;
-                }
-
-                @Override
-                public boolean getRotationApplied() {
-                    return false;
-                }
-
-                @Override
-                public boolean getMirrorApplied() {
-                    return true;
-                }
-
-                @Override
-                public int getObservedFramePosition() {
-                    return IVideoFrameObserver.POSITION_POST_CAPTURER;
-                }
-            };
-            rtcEngine.registerVideoFrameObserver(mVideoFrameObserver);
             // Setup video encoding configs
             rtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                     ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
@@ -283,96 +255,7 @@ public class SceneTimeBeauty extends BaseFragment {
         }
     }
 
-    private void unInitBeauty() {
-        if (mTextureBufferHelper != null) {
-            mTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime.release();
-                iBeautySenseTime = null;
-                return null;
-            });
-            mTextureBufferHelper.dispose();
-            mTextureBufferHelper = null;
-        }
-    }
 
-    private boolean processBeauty(VideoFrame videoFrame) {
-        if (isDestroyed) {
-            return false;
-        }
-        VideoFrame.Buffer buffer = videoFrame.getBuffer();
-
-        int width = buffer.getWidth();
-        int height = buffer.getHeight();
-
-
-        // Obtain nv21 pixel data
-        int nv21Size = (int) (width * height * 3.0f / 2.0f + 0.5f);
-        if (nv21ByteBuffer == null || nv21ByteBuffer.capacity() != nv21Size) {
-            if (nv21ByteBuffer != null) {
-                nv21ByteBuffer.clear();
-            }
-            nv21ByteBuffer = ByteBuffer.allocateDirect(nv21Size);
-            nv21ByteArray = new byte[nv21Size];
-            return false;
-        }
-        VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-        YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
-                i420Buffer.getDataV(), i420Buffer.getStrideV(),
-                i420Buffer.getDataU(), i420Buffer.getStrideU(),
-                nv21ByteBuffer, width, height);
-        nv21ByteBuffer.position(0);
-        nv21ByteBuffer.get(nv21ByteArray);
-        i420Buffer.release();
-
-        if (mTextureBufferHelper == null) {
-            Log.d(TAG, "doOnBeautyCreatingBegin...");
-            mTextureBufferHelper = TextureBufferHelper.create("STRender", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
-            mTextureBufferHelper.invoke(() -> {
-                iBeautySenseTime = IBeautySenseTime.create(getContext());
-                return null;
-            });
-            Log.d(TAG, "doOnBeautyCreatingEnd.");
-            runOnUIThread(() -> {
-                mBinding.cbFilter.setChecked(false);
-                mBinding.cbFaceBeautify.setChecked(false);
-                mBinding.cbSticker.setChecked(false);
-                mBinding.cbMakeup.setChecked(false);
-            });
-        }
-
-        int processTexId = -1;
-        if (buffer instanceof VideoFrame.TextureBuffer) {
-            VideoFrame.TextureBuffer texBuffer = (VideoFrame.TextureBuffer) buffer;
-            int textureFormat = texBuffer.getType() == VideoFrame.TextureBuffer.Type.OES ? GLES11Ext.GL_TEXTURE_EXTERNAL_OES : GLES20.GL_TEXTURE_2D;
-            float[] transformMatrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(texBuffer.getTransformMatrix());
-
-            if(mTextureBufferHelper != null){
-                processTexId = mTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
-                        nv21ByteArray,
-                        texBuffer.getTextureId(), textureFormat,
-                        width, height, videoFrame.getRotation(), transformMatrix
-                ));
-            }
-
-        } else {
-            if(mTextureBufferHelper != null){
-                processTexId = mTextureBufferHelper.invoke(() ->iBeautySenseTime.process(
-                        nv21ByteArray,
-                        width, height, videoFrame.getRotation()
-                ));
-            }
-        }
-        if (processTexId < 0) {
-            return false;
-        }
-        if(mTextureBufferHelper != null){
-            VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
-                    width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, new Matrix());
-            videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
-        }
-
-        return true;
-    }
 
     private void joinChannel() {
         int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
@@ -442,5 +325,7 @@ public class SceneTimeBeauty extends BaseFragment {
             }
         }
     }
+
+
 
 }

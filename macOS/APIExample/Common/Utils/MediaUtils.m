@@ -43,7 +43,7 @@
         free(NV12buf);
         return  nil;
     }
-
+    
     CVPixelBufferLockBaseAddress(pixelBuffer,0);
     void *yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
     
@@ -52,13 +52,34 @@
     unsigned char *y_ch1 = NV12buf + w * h;
     memcpy(yDestPlane, y_ch0, w * h);
     void *uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-
+    
     // Here y_ch1 is UV-Plane of YUV(NV12) data.
     memcpy(uvDestPlane, y_ch1, w * h * 0.5);
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     
     free(NV12buf);
     return pixelBuffer;
+}
+
+
++ (NSData *)dataFromPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    NSMutableData* YUVMutData;
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    unsigned char* yBaseAddress = (unsigned char*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    int32_t yBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+    int32_t width __unused = (int32_t)CVPixelBufferGetWidth(pixelBuffer);
+    int32_t height = (int32_t)CVPixelBufferGetHeight(pixelBuffer);
+    int32_t yLength = yBytesPerRow*height;
+    YUVMutData = [NSMutableData dataWithBytes: yBaseAddress length: yLength];
+    
+    unsigned char* uvBaseAddress = (unsigned char*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+    int32_t uvBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+    int32_t uvLength = uvBytesPerRow*height/2;
+    NSMutableData* UVData = [NSMutableData dataWithBytes: uvBaseAddress length: uvLength];
+    [YUVMutData appendData:UVData];
+    NSData* YUVData = [NSData dataWithData:YUVMutData];
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    return YUVData;
 }
 
 + (NSImage *)i420ToImage:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height {
@@ -91,7 +112,7 @@
         free(NV12buf);
         return  nil;
     }
-
+    
     CVPixelBufferLockBaseAddress(pixelBuffer,0);
     void *yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
     
@@ -100,7 +121,7 @@
     unsigned char *y_ch1 = NV12buf + w * h;
     memcpy(yDestPlane, y_ch0, w * h);
     void *uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-
+    
     // Here y_ch1 is UV-Plane of YUV(NV12) data.
     memcpy(uvDestPlane, y_ch1, w * h * 0.5);
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
@@ -109,8 +130,8 @@
     CIImage *coreImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
     CIContext *temporaryContext = [CIContext contextWithOptions:nil];
     CGImageRef videoImage = [temporaryContext createCGImage:coreImage
-                                                       fromRect:CGRectMake(0, 0, w, h)];
-
+                                                   fromRect:CGRectMake(0, 0, w, h)];
+    
     NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size:NSMakeSize(width, height)];
     CVPixelBufferRelease(pixelBuffer);
     CGImageRelease(videoImage);
@@ -129,7 +150,7 @@
                                                    fromRect:CGRectMake(0, 0, height, width)];
     
     NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size: CGSizeMake(width, height)];
-
+    
     //    CVPixelBufferRelease(pixelBuffer);
     CGImageRelease(videoImage);
     return finalImage;

@@ -1,6 +1,6 @@
-$ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
+$ThirdPartysrc = 'https://download.agora.io/staging/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.2.1_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.2.2_FULL.zip'
 $agora_des = 'AgoraSdk.zip'
 $agora_local_sdk = '../../sdk'
 

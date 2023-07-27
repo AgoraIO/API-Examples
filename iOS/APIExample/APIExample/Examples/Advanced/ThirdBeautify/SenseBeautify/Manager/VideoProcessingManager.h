@@ -13,12 +13,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VideoProcessingManager : NSObject
 
-- (void)setBuauty: (BOOL)isSelected;
-- (void)setMakeup: (BOOL)isSelected;
-- (void)setSticker: (BOOL)isSelected;
-- (void)setFilter: (BOOL)isSelected;
+@property (nonatomic, strong) EffectsProcess *effectsProcess;
+
+- (void)setEffectType: (uint32_t)type value:(float)value;
 
 - (CVPixelBufferRef)videoProcessHandler:(CVPixelBufferRef)pixelBuffer;
+
+- (void)setStickerWithPath: (NSString *)stickerPath callBack:(void (^)(int))callback;
+
+- (void)addStylePath: (NSString *)stylePath groupId: (int)groudId strength: (CGFloat)strength callBack:(void (^)(int))callback;
+
+- (void)removeStickerId: (int)stickerId;
+
+- (void)cleareStickers;
 
 @end
 

@@ -12,13 +12,17 @@ import AgoraRtcKit
 class LiveStreamingEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var preloadButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "LiveStreaming"
     var role:AgoraClientRole = .broadcaster
     private var isFirstFrame: Bool = false
+    private var backgroundColor: UInt32 = 0x000000
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadButton.setTitle("preload Channel".localized, for: .normal)
+        preloadButton.setTitle("cancel preload".localized, for: .selected)
     }
     
     func getRoleAction(_ role: AgoraClientRole) -> UIAlertAction{
@@ -26,6 +30,14 @@ class LiveStreamingEntry : UIViewController
             self.role = role
             self.doJoin()
         })
+    }
+    
+    @IBAction func onClickPreloadButton(_ sender: UIButton) {
+        if channelTextField.text?.isEmpty == true {
+            ToastView.show(text: "please input channel name!".localized)
+            return
+        }
+        sender.isSelected = !sender.isSelected
     }
     
     @IBAction func doOptimizeFirstFrameSwitch(_ sender: UISwitch) {
@@ -49,6 +61,21 @@ class LiveStreamingEntry : UIViewController
         }
     }
     
+    @IBAction func doChoseBackgroundColor(_ sender: UIButton) {
+        let pickerView = PickerView()
+        let colors = ["Red".localized: 0xff0d00ff,
+                      "Blue".localized: 0x0400ffff,
+                      "Pink".localized: 0xff006aff,
+                      "Purple".localized: 0xff00d9ff,
+                      "Yellow".localized: 0xeaff00ff]
+        pickerView.dataArray = colors.map({ $0.key })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            self?.backgroundColor = UInt32(colors[value] ?? 0x000000)
+            sender.setTitle(value, for: .normal)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+    }
+    
     @IBAction func doJoinPressed(sender: UIButton) {
         guard let _ = channelTextField.text else {return}
         //resign channel text field
@@ -68,7 +95,11 @@ class LiveStreamingEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "role":self.role, "isFirstFrame": isFirstFrame]
+        newViewController.configs = ["channelName":channelName,
+                                     "role":self.role,
+                                     "isFirstFrame": isFirstFrame,
+                                     "isPreloadChannel": preloadButton.isSelected,
+                                     "backgroundColor": backgroundColor]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -136,7 +167,7 @@ class LiveStreamingMain: BaseViewController {
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-
+        
         if let isFirstFrame = configs["isFirstFrame"] as? Bool, isFirstFrame == true {
             agoraKit.enableInstantMediaRendering()
             agoraKit.startMediaRenderingTracing()
@@ -172,6 +203,12 @@ class LiveStreamingMain: BaseViewController {
         option.publishMicrophoneTrack = role == .broadcaster
         option.clientRoleType = role
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let preloadChannel = self.configs["isPreloadChannel"] as? Bool
+            if preloadChannel == true {
+                self.agoraKit.preloadChannel(byToken: token,
+                                             channelId: channelName,
+                                             uid: 0)
+            }
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
                 // Usually happens with invalid parameters
@@ -288,7 +325,6 @@ class LiveStreamingMain: BaseViewController {
     }
     @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
-        
         let localVideoCanvas = AgoraRtcVideoCanvas()
         localVideoCanvas.uid = 0
         localVideoCanvas.renderMode = .hidden
@@ -378,6 +414,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
+        foregroundVideo.statsInfo?.updateUid(uid: uid)
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -385,19 +422,24 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        backgroundVideo.statsInfo?.updateRemoteUid(remoteUid: uid)
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         //record remote uid
         remoteUid = uid
-        
+        // Only one remote video view is available for this
+        // tutorial. Here we check if there exists a surface
+        // view tagged as this uid.
+        let backgroundColor = (configs["backgroundColor"] as? UInt32) ?? 0x000000
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
         // the view to be binded
+        videoCanvas.uid = uid
         videoCanvas.view = remoteVideoCanvas()
-        videoCanvas.renderMode = .hidden
+        videoCanvas.backgroundColor = backgroundColor
+        videoCanvas.renderMode = .fit
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -407,7 +449,6 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
         //clear remote uid
         if(remoteUid == uid){
             remoteUid = nil
@@ -447,7 +488,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         backgroundVideo.statsInfo?.updateAudioStats(stats)
     }
-
+    
     func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
         backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }

@@ -76,6 +76,7 @@
     <string name="play_locally">本地播放</string>
     <string name="local_video">本地视图</string>
     <string name="streaming_mode">超低延迟直播</string>
+    <string name="preload">预加载</string>
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
@@ -253,7 +254,8 @@
     <string name="watermark">水印</string>
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
-    <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="create_encoded_capture_track">创建采集Track(编码)</string>
+    <string name="destroy_capture_track">销毁Track</string>
     <string name="spatial_audio_zone">音障</string>
     <string name="spatial_audio_room">房间</string>
     <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
@@ -263,7 +265,7 @@
     <string name="token_invalid">Token不存在</string>
     <string name="token_expired">Token已过期</string>
     <string name="scenetime_beauty">商汤美颜</string>
-    <string name="scenetime_integrate_tip">商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="scenetime_integrate_tip">商汤库没有集成！请按README集成后再编译</string>
     <string name="makeup" translatable="false">美妆</string>
     <string name="sticker" translatable="false">贴纸</string>
     <string name="filter" translatable="false">滤镜</string>
@@ -271,9 +273,9 @@
     <string name="beauty_input_double">双输入(NV21和纹理)</string>
     <string name="faceunity_beauty">相芯美颜</string>
     <string name="body_beauty">美体</string>
-    <string name="faceunity_integrate_tip">相芯库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_faceunity=true\n2. 配置licsence后运行</string>
+    <string name="faceunity_integrate_tip">相芯库没有集成！请按README集成后再编译运行</string>
     <string name="bytedance_beauty">字节美颜</string>
-    <string name="bytedance_integrate_tip">字节库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_bytedance=true\n2. 下载字节SDK，将解压后的aar库放在beauty/bytedance里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="bytedance_integrate_tip">字节库没有集成！请按README集成后再编译运行</string>
 
     <string name="private_clound">私有云</string>
     <string name="ip_address">IP地址</string>
@@ -311,5 +313,16 @@
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
     <string name="transparent_background">透明背景</string>
-
+    <string name="user_id">用户ID</string>
+    <string name="view_bg_color">View背景色(只在居中渲染模式下有效果)</string>
+    <string name="render_mode">渲染模式</string>
+    <string name="render_mode_hidden">平铺</string>
+    <string name="render_mode_fit">居中</string>
+    <string name="render_mode_adaptive">拉伸</string>
+    <string name="audio_route_default">默认</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="audio_route_headset">耳机(非TypeC)</string>
+    <string name="audio_route_headset_typec">耳机(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
 </resources>

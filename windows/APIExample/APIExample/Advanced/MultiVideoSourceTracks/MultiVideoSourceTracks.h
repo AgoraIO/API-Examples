@@ -6,6 +6,7 @@
 #include <IAgoraRtcEngineEx.h>
 #include "stdafx.h"
 #include "YUVReader.h"
+#include "VideoExtractor.h"
 #include <algorithm>
 
 #define VIDEO_TRACK_SIZE 4
@@ -110,35 +111,43 @@ private:
 };
 
 
-class MultiVideoSourceTracksYUVReaderHander {
+class MultiVideoSourceTracksVideoFramePusher {
 
 public:
 
-	int GetVideoTrackId() {
-		return m_videoTrackId;
-	}
+	void BeginPushVideoFrame(agora::rtc::IRtcEngineEx* rtcEngine, const char* channelId, uid_t uid, bool isEncoded);
 
-	void Setup(agora::rtc::IRtcEngineEx* rtcEngine, agora::media::IMediaEngine* mediaEngine, int videoTrackId) {
-		m_rtcEngine = rtcEngine;
-		m_mediaEngine = mediaEngine;
-		m_videoTrackId = videoTrackId;
-	}
+	void EndPushVideoFrame();
 
-	void Release() {
-		m_mediaEngine = nullptr;
-		m_rtcEngine = nullptr;
-		m_videoTrackId = 0;
-	}
-
-
-	void OnYUVRead(int width, int height, unsigned char* buffer, int size);
+	bool IsPusing();
 
 private:
 	agora::media::base::ExternalVideoFrame m_videoFrame;
-	agora::media::IMediaEngine* m_mediaEngine = nullptr;
+	agora::util::AutoPtr<agora::media::IMediaEngine> m_mediaEngine;
+	agora::rtc::RtcConnection m_rtcConnection;
+	MultiVideoSourceTracksEventHandler m_eventHandler;
+
 	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
+	YUVReader *m_yuvReader = nullptr;
+	VideoExtractor* m_videoExtractor = nullptr;
+
 	int m_videoTrackId = 0;
+	bool m_isEncoded = false;
+
+	void BeginPushRawVideoFrame(const char* channelId, uid_t uid);
+
+	void OnPushRawVideoFrame(int width, int height, unsigned char* buffer, int size);
+
+	void EndPushRawVideoFrame();
+
+	void BeginPushEncodedVideoFrame(const char* channelId, uid_t uid);
+
+	void OnPushEncodedVideoFrame(unsigned char* buffer, int size, bool isKeyFrame, int fps);
+
+	void EndPushEncodedVideoFrame();
+
 };
+
 
 class MultiVideoSourceTracks : public CDialogEx
 {
@@ -160,6 +169,7 @@ public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedButtonJoinchannel();
 	afx_msg void OnBnClickedButtonCreateTrack();
+	afx_msg void OnBnClickedButtonCreateEncodeTrack();
 	afx_msg void OnBnClickedButtonDestroyTrack();
 
 protected:
@@ -184,16 +194,11 @@ private:
 	bool m_initialize;
 
 	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
-	agora::util::AutoPtr<agora::media::IMediaEngine> m_mediaEngine;
+	
 	MultiVideoSourceTracksEventHandler m_eventHandler;
 	CAGVideoWnd m_videoWnds[VIDEO_WINDOWS_SIZE];
 
-	agora::rtc::RtcConnection m_trackConnections[VIDEO_TRACK_SIZE];
-	MultiVideoSourceTracksEventHandler m_trackEventHandlers[VIDEO_TRACK_SIZE];
-	int m_trackUids[VIDEO_TRACK_SIZE]{ 0 };
-	int m_trackVideoTrackIds[VIDEO_TRACK_SIZE]{ 0 };
-	YUVReader m_yuvReaders[VIDEO_TRACK_SIZE];
-	MultiVideoSourceTracksYUVReaderHander m_yuvReaderHandlers[VIDEO_TRACK_SIZE];
+	MultiVideoSourceTracksVideoFramePusher m_videoFramePushers[VIDEO_TRACK_SIZE];
 	
 	
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
