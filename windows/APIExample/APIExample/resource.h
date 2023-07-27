@@ -234,21 +234,28 @@
 #define IDC_SPIN_AGIN                   1094
 #define IDC_STATIC_SKIN_PROTECT         1094
 #define IDC_BUTTON_EFFECT_START         1094
+#define IDC_COMBO_CAMERAS3              1094
 #define IDC_STATIC_AUDIO_PITCH          1095
 #define IDC_SLIDER_SKIN_PROTECT         1095
 #define IDC_BUTTON_EFFECT_RESUME        1095
+#define IDC_STATIC_Cameras3             1095
+#define IDC_STATIC_Camera3              1095
 #define IDC_SPIN2                       1096
 #define IDC_SPIN_PITCH                  1096
 #define IDC_CHECK_VIDEO_DENOISE         1096
 #define IDC_BUTTON_EFFECT_PAUSE         1096
 #define IDC_STATIC_AUDIO_PAN            1097
 #define IDC_SLIDER_REDNESS              1097
+#define IDC_BUTTON_CAMERA3              1097
 #define IDC_COMBO_PAN                   1098
 #define IDC_SLIDER_LIGHTENING           1098
+#define IDC_COMBO_CAMERAS4              1098
 #define IDC_CHK_PUBLISH                 1099
 #define IDC_STATIC_STRENTH2             1099
+#define IDC_STATIC_Camera4              1099
 #define IDC_BUTTON_ADD_EFFECT           1100
 #define IDC_CHECK_VIDEO_DENOISE2        1100
+#define IDC_BUTTON_CAMERA4              1100
 #define IDC_STATIC_AUDIO_EFFECT         1101
 #define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
@@ -342,13 +349,19 @@
 #define IDC_BUTTON_DESTROY_TRACK        1138
 #define IDC_STATIC_VEDIO_NETWORK_DELAY_VAL 1139
 #define IDC_SLIDER_FPS                  1139
+#define IDC_BUTTON_CREATE_TRACK_ENCODED 1139
 #define IDC_STATIC_VEDIO_RECIVED_BITRATE 1140
 #define IDC_SLIDER_BITRATE              1140
+#define IDC_RADIO_CANVAS_HIDDEN         1140
 #define IDC_STATIC_VEDIO_RECVIED_BITRATE_VAL2 1141
 #define IDC_SLIDER_SCALE                1141
+#define IDC_RADIO_CANVAS_FIT            1141
 #define IDC_STATIC_LOCAL_VIDEO_WIDTH_HEIGHT 1142
+#define IDC_RADIO_CANVAS_ADAPTIVE       1142
 #define IDC_STATIC_LOCAL_VIDEO_WITH_HEIGHT_VAL 1143
+#define IDC_SLIDER_CANVAS_COLOR         1143
 #define IDC_STATIC_LOCAL_VIDEO_FPS      1144
+#define IDC_STATIC_CANVAS_COLOR         1144
 #define IDC_STATIC_VIDEO_REMOTE         1145
 #define IDC_STATIC_AUDIO_REMOTE         1146
 #define IDC_STATIC_AREA_CODE            1146
@@ -382,7 +395,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1140
+#define _APS_NEXT_CONTROL_VALUE         1146
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

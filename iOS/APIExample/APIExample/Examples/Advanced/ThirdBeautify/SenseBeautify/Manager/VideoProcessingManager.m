@@ -20,7 +20,6 @@
     BOOL _isFirstLaunch;
 }
 
-@property (nonatomic, strong) EffectsProcess *effectsProcess;
 @property (nonatomic, strong) EAGLContext *glContext;
 @property (nonatomic) UIDeviceOrientation deviceOrientation;
 @property (nonatomic) dispatch_queue_t renderQueue;
@@ -51,68 +50,49 @@
     return self;
 }
 
-- (void)setBuauty: (BOOL)isSelected {
+- (void)setEffectType: (uint32_t)type value:(float)value {
 #if __has_include("st_mobile_common.h")
-    if (isSelected) {
-        [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0.7];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0.8];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0.6];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:1.0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:1.0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0.7];
-    } else {
-        [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:0];
-        [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0];
-    }
+    [self.effectsProcess setEffectType:type value:value];
 #endif
 }
-- (void)setMakeup: (BOOL)isSelected {
+
+- (void)setStickerWithPath: (NSString *)stickerPath callBack:(void (^)(int))callback {
+    NSString *path = [[NSBundle mainBundle] pathForResource:stickerPath ofType:nil];
 #if __has_include("st_mobile_common.h")
-    if (isSelected) {
-        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
-        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
-        __weak VideoProcessingManager *weakself = self;
-        [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
-            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_MAKEUP strength:0.5];
-            weakself.stickerId = sticker;
-        }];
-    } else {
-        [self.effectsProcess removeSticker:self.stickerId];
-        self.stickerId = 0;
-    }
+    [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
+        if (callback) {
+            callback(sticker);
+        }
+    }];
 #endif
 }
-- (void)setSticker: (BOOL)isSelected {
+
+- (void)addStylePath: (NSString *)stylePath groupId: (int)groudId strength: (CGFloat)strength callBack:(void (^)(int))callback {
+    NSString *path = [[NSBundle mainBundle] pathForResource:stylePath ofType:nil];
 #if __has_include("st_mobile_common.h")
-    if (isSelected) {
-        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
-        NSString *path = [bundle pathForResource:@"lianxingface.zip" ofType:nil];
-        [self.effectsProcess setStickerWithPath:path callBack:^(st_result_t state, int stickerId, uint64_t action) {
-                 
-        }];
-    } else {
-        [self.effectsProcess cleareStickers];
-    }
+    __weak VideoProcessingManager *weakself = self;
+    [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
+        if (groudId == 0) {
+            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_MAKEUP strength:strength];
+        } else {
+            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_FILTER strength:strength];
+        }
+        if (callback) {
+            callback(sticker);
+        }
+    }];
 #endif
 }
-- (void)setFilter: (BOOL)isSelected {
+
+- (void)removeStickerId:(int)stickerId {
 #if __has_include("st_mobile_common.h")
-    if (isSelected) {
-        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
-        NSString *path = [bundle pathForResource:@"qise.zip" ofType:nil];
-        __weak VideoProcessingManager *weakself = self;
-        [self.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
-            [weakself.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_FILTER strength:0.5];
-            weakself.filterId = sticker;
-        }];
-    } else {
-        [self.effectsProcess removeSticker:self.filterId];
-        self.filterId = 0;
-    }
+    [self.effectsProcess removeSticker:stickerId];
+#endif
+}
+
+- (void)cleareStickers {
+#if __has_include("st_mobile_common.h")
+    [self.effectsProcess cleareStickers];
 #endif
 }
 

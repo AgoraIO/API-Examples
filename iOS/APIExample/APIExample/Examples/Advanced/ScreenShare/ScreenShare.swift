@@ -48,6 +48,11 @@ class ScreenShareMain: BaseViewController {
         pickerView.dataArray = fpsDataSources.map({ "\($0)" })
         return pickerView
     }()
+    private lazy var scenarioPickerView: PickerView = {
+        let pickerView = PickerView()
+        pickerView.dataArray = scenarioTypeDataSources.map({ "\($0.key)" })
+        return pickerView
+    }()
     private lazy var screenParams: AgoraScreenCaptureParameters2 = {
         let params = AgoraScreenCaptureParameters2()
         params.captureVideo = true
@@ -73,6 +78,7 @@ class ScreenShareMain: BaseViewController {
     
     private var systemBroadcastPicker: RPSystemBroadcastPickerView?
     private var fpsDataSources: [Int] = [15, 30, 60]
+    private var scenarioTypeDataSources: [String: Int] = ["document": 1, "gaming": 2, "video": 3, "RDC": 4]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -195,6 +201,16 @@ class ScreenShareMain: BaseViewController {
         AlertManager.show(view: pickerView, alertPostion: .bottom)
     }
     
+    @IBAction func clickScreenScenarioType(_ sender: UIButton) {
+        scenarioPickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            sender.setTitle("\(value)", for: .normal)
+            let key = self.scenarioTypeDataSources[value] ?? 3
+            let scenarioType = AgoraScreenScenarioType(rawValue: key) ?? .video
+            self.agoraKit.setScreenCaptureScenario(scenarioType)
+        }
+        AlertManager.show(view: scenarioPickerView, alertPostion: .bottom)
+    }
     func isScreenShareUid(uid: UInt) -> Bool {
         return uid >= SCREEN_SHARE_UID_MIN && uid <= SCREEN_SHARE_UID_MAX
     }

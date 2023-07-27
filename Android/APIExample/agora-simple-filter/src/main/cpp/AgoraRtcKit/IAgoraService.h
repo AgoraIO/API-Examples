@@ -49,6 +49,7 @@ class IAudioDeviceManagerObserver;
 class IMediaExtensionObserver;
 class IExtensionProvider;
 class IFileUploaderService;
+class IConfigCenter;
 /**
  * The audio encoder configuration.
  */
@@ -939,6 +940,15 @@ class IAgoraService {
   virtual int disableExtension(
       const char* provider_name, const char* extension_name, const char* track_id = NULL) = 0;
 
+  /**
+   * Get the \ref agora::rtc::IConfigCenter "IConfigCenter" object and return the pointer.
+   *
+   * @return
+   * - The pointer to \ref rtc::IConfigCenter "IConfigCenter": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::IConfigCenter> getConfigCenter() = 0;
+      
  protected:
   virtual ~IAgoraService() {}
 };

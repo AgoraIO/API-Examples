@@ -372,7 +372,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                     if (error == Constants.ERR_OK) {
                         showLongToast("Screen sharing start successfully.");
                     }
-                } else if (state == Constants.LOCAL_AUDIO_STREAM_STATE_FAILED) {
+                } else if (state == Constants.LOCAL_VIDEO_STREAM_STATE_FAILED) {
                     if (error == Constants.ERR_SCREEN_CAPTURE_SYSTEM_NOT_SUPPORTED) {
                         showLongToast("Screen sharing has been cancelled");
                     } else {

@@ -137,7 +137,7 @@ public:
     {
         @synchronized(threadLockPlay) {
             
-            if (NULL == data || bytesLength < 1 || availableBytes_play < bytesLength) {
+            if (NULL == data || bytesLength < 1) {
                 return 0;
             }
             

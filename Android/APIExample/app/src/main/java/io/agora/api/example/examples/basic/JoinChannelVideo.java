@@ -27,6 +27,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.api.example.MainApplication;
@@ -262,7 +263,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
                 VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
         ));
 
         ChannelMediaOptions option = new ChannelMediaOptions();
@@ -276,11 +277,12 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+        int uid = new Random().nextInt(1000) + 100000;
+        TokenUtils.gen(requireContext(), channelId, uid, ret -> {
 
             /** Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
-            int res = engine.joinChannel(ret, channelId, 0, option);
+            int res = engine.joinChannel(ret, channelId, uid, option);
             if (res != 0)
             {
                 // Usually happens with invalid parameters

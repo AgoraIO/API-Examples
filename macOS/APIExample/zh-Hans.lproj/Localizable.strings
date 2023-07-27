@@ -21,7 +21,7 @@
 "Custom Video Source(Push)" = "视频自采集(Push)";
 "Custom Video Source(Multi)" = "多路视频自采集";
 "Create Video Track" = "创建采集Track";
-"Destory Video Track" = "销毁采集Track";
+"Destory Track" = "销毁Track";
 "Custom Video Render" = "视频自渲染(Metal)";
 "Quick Switch Channel" = "快速切换频道";
 "Switch Channel" = "切换频道";
@@ -202,3 +202,15 @@
 "Exclude Window" = "屏蔽窗口";
 "Opening" = "已开启";
 "(Default: flow)" = "(默认: 大流)";
+"Red" = "红色";
+"Blue" = "蓝色";
+"Pink" = "粉色";
+"Purple" = "紫色";
+"Yellow" = "黄色";
+"Multi Camera Sourece" = "多路摄像头采集";
+"Start Capture" = "开始采集";
+"Start Publish" = "开始推流";
+"Stop Capture" = "停止采集";
+"Stop Publish" = "停止推流";
+"preload Channel" = "预加载";
+"cancel preload" = "取消预加载";
