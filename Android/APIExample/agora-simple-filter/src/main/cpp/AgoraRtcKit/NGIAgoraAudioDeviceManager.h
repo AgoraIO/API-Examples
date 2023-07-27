@@ -10,7 +10,6 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
-
 namespace agora {
 namespace media {
 namespace base {
@@ -323,6 +322,18 @@ public:
    */
   virtual int changeAudioRouting(AudioRoute route) = 0;
   /**
+   * Changes the speaker status on/off.
+   *
+   * @note
+   * This method applies to Android and iOS only.
+   *
+   * @param enable on/off
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setAudioRoutingSpeakerOn(bool enable) = 0;
+  /**
    * Gets the current audio routing.
    *
    * @note
@@ -541,6 +552,8 @@ public:
    * - < 0: Failure.
    */
   virtual int unregisterObserver(IAudioDeviceManagerObserver* observer) = 0;
+
+  virtual int setupAudioAttributeContext(void* audioAttr) = 0;
 
 protected:
   ~INGAudioDeviceManager() {}

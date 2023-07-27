@@ -113,4 +113,67 @@
         android:paddingHorizontal="16dp"
         android:text="@string/first_frame_optimization" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <LinearLayout
+        android:id="@+id/fl_render_mode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingHorizontal="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/render_mode"/>
+
+        <Spinner
+            android:id="@+id/sp_render_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:entries="@array/render_mode" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="#eeeeee"/>
+
+    <TextView
+        android:id="@+id/switch_custom_view_default_color"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:textColor="@android:color/black"
+        android:text="@string/view_bg_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:gravity="center">
+
+        <SeekBar
+            android:id="@+id/sb_color"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="255"
+            android:layout_height="30dp"/>
+
+        <View
+            android:id="@+id/v_color"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@android:color/black"/>
+    </LinearLayout>
 </LinearLayout>

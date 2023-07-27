@@ -80,4 +80,15 @@
     <string name="save">Save</string>
     <string name="app_id" translatable="false">App ID</string>
     <string name="app_id_empty">The App ID is empty!</string>
+    <string name="channel_profile_communication" translatable="false">COMMUNICATION</string>
+    <string name="channel_profile_live_broadcasting" translatable="false">LIVE_BROADCASTING</string>
+    <string name="channel_profile_game" translatable="false">GAME</string>
+    <string name="channel_profile_cloud_gaming" translatable="false">CLOUD_GAMING</string>
+    <string name="channel_profile_communication_1v1" translatable="false">COMMUNICATION_1v1</string>
+    <string name="audio_route_default">default</string>
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="audio_route_headset">headset(Not TypeC)</string>
+    <string name="audio_route_headset_typec">headset(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">bluetooth headset</string>
 </resources>

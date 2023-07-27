@@ -6,7 +6,7 @@
 *.a
 *.xcworkspacedata
 xcshareddata
-
+*/libs
 *.zip
 agora_sdk
 *.xcarchive

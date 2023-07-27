@@ -6,7 +6,6 @@
 //  Copyright © 2017年 刘洋. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
@@ -32,9 +31,6 @@
 
 /// 销毁全部道具
 - (void)destoryItems;
-
-/// 切换前后摄像头
-- (void)onCameraChange;
 
 /// 更新美颜磨皮效果（根据人脸检测置信度设置不同磨皮效果）
 - (void)updateBeautyBlurEffect;

@@ -62,6 +62,26 @@
 }
 
 
++ (NSData *)dataFromPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    NSMutableData* YUVMutData;
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    unsigned char* yBaseAddress = (unsigned char*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    int32_t yBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+    int32_t width __unused = (int32_t)CVPixelBufferGetWidth(pixelBuffer);
+    int32_t height = (int32_t)CVPixelBufferGetHeight(pixelBuffer);
+    int32_t yLength = yBytesPerRow*height;
+    YUVMutData = [NSMutableData dataWithBytes: yBaseAddress length: yLength];
+    
+    unsigned char* uvBaseAddress = (unsigned char*)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+    int32_t uvBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+    int32_t uvLength = uvBytesPerRow*height/2;
+    NSMutableData* UVData = [NSMutableData dataWithBytes: uvBaseAddress length: uvLength];
+    [YUVMutData appendData:UVData];
+    NSData* YUVData = [NSData dataWithData:YUVMutData];
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    return YUVData;
+}
+
 + (UIImage *)i420ToImage:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height {
     int size = width * height * 3 / 2;
     int yLength = width * height;

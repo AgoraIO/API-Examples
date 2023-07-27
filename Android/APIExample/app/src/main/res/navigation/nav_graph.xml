@@ -257,6 +257,7 @@
         android:label="@string/item_multiVideoSourceTracks"
         tools:layout="@layout/fragment_multi_video_source_tracks" />
 
+
     <fragment
         android:id="@+id/CustomRemoteRender"
         android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"

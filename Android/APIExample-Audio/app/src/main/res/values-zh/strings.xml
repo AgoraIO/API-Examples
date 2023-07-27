@@ -77,4 +77,10 @@
     <string name="mute_auido">静音</string>
     <string name="save">保存</string>
     <string name="app_id_empty">AppID为空！</string>
+    <string name="audio_route_default">默认</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="audio_route_headset">耳机(非TypeC)</string>
+    <string name="audio_route_headset_typec">耳机(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
 </resources>
