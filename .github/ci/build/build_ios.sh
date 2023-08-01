@@ -78,8 +78,9 @@ cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 result=$(echo $sdk_url | grep "VOICE")
 if [ ! -z "$result" ]
 then
-    	echo "包含"
+    echo "包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
+	rm -rf ./$unzip_name/samples/API-Example/APIExample-OC
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
 	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
 	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample-Audio/Podfile
@@ -94,11 +95,20 @@ then
 	fi
 
 else
-    	echo "不包含"
+    echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
-	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
-	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+	if [ $is_objective_c = true ]; then
+		rm -rf ./$unzip_name/samples/API-Example/APIExample
+		mv ./$unzip_name/samples/API-Example/APIExample-OC ./$unzip_name/samples/APIExample-OC
+		mv ./$unzip_name/samples/APIExample-OC/sdk.podspec ./$unzip_name/
+		python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample-OC/Podfile
+	else
+		rm -rf ./$unzip_name/samples/API-Example/APIExample-OC
+		mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+		mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
+		python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+	fi
+	
 	if [ $? -eq 0 ]; then
 	    echo "success"
 	else
@@ -106,7 +116,11 @@ else
 	    exit 1
 	fi
 	if [ $is_generate_validate_app = true ]; then
-	    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
+		if [ $is_objective_c = true ]; then
+			./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-OC
+		else
+			./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
+		fi
 	fi
 fi
 
