@@ -1,0 +1,1807 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 53;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A800DCBE9DC13D06C07AA4C /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F86C6C60F7635F5433A9E570 /* Pods_APIExample.framework */; };
+		38FA990554B721DB226604E7 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
+		961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */; };
+		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
+		E70ADDF42A5D004F009947CF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF32A5D004F009947CF /* SceneDelegate.m */; };
+		E70ADDF72A5D004F009947CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF62A5D004F009947CF /* ViewController.m */; };
+		E70ADDFA2A5D004F009947CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDF82A5D004F009947CF /* Main.storyboard */; };
+		E70ADDFC2A5D0050009947CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDFB2A5D0050009947CF /* Assets.xcassets */; };
+		E70ADDFF2A5D0050009947CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDFD2A5D0050009947CF /* LaunchScreen.storyboard */; };
+		E70ADE022A5D0050009947CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE012A5D0050009947CF /* main.m */; };
+		E70ADE142A5D026E009947CF /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE0D2A5D026C009947CF /* audioeffect.mp3 */; };
+		E70ADE152A5D026E009947CF /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE0E2A5D026D009947CF /* agora-logo.png */; };
+		E70ADE162A5D026E009947CF /* sample.yuv in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE0F2A5D026D009947CF /* sample.yuv */; };
+		E70ADE172A5D026E009947CF /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE102A5D026D009947CF /* audiomixing.mp3 */; };
+		E70ADE182A5D026E009947CF /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE112A5D026D009947CF /* output.raw */; };
+		E70ADE192A5D026E009947CF /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE122A5D026D009947CF /* sample.mov */; };
+		E70ADE1A2A5D026E009947CF /* frames0.yuv in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE132A5D026D009947CF /* frames0.yuv */; };
+		E70ADE1F2A5D0368009947CF /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE1C2A5D0368009947CF /* MediaUtils.m */; };
+		E70ADE202A5D0368009947CF /* BundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE1E2A5D0368009947CF /* BundleUtil.m */; };
+		E70ADE252A5D069A009947CF /* JoinChannelVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE232A5D069A009947CF /* JoinChannelVideo.m */; };
+		E70ADE292A5D0A15009947CF /* KeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE282A5D0A15009947CF /* KeyCenter.m */; };
+		E70ADE312A5D35BA009947CF /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE302A5D35BA009947CF /* BaseViewController.m */; };
+		E70ADE342A5D41BF009947CF /* VideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE332A5D41BF009947CF /* VideoView.m */; };
+		E70ADE362A5D41C9009947CF /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE352A5D41C9009947CF /* VideoView.xib */; };
+		E70ADE3E2A5D4D05009947CF /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE3B2A5D4D05009947CF /* ToastView.swift */; };
+		E70ADE3F2A5D4D05009947CF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE3C2A5D4D05009947CF /* NetworkManager.swift */; };
+		E70ADE402A5D4D05009947CF /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE3D2A5D4D05009947CF /* JSONObject.swift */; };
+		E70ADE432A5E56C4009947CF /* JoinChannelVideo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE2D2A5D3316009947CF /* JoinChannelVideo.storyboard */; };
+		E70ADE4E2A5E57FF009947CF /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE4B2A5E57FF009947CF /* JoinChannelAudio.storyboard */; };
+		E70ADE4F2A5E57FF009947CF /* JoinChannelAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE4D2A5E57FF009947CF /* JoinChannelAudio.m */; };
+		E70ADE542A5F9F83009947CF /* JoinChannelVideoToken.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE522A5F9F83009947CF /* JoinChannelVideoToken.m */; };
+		E70ADE552A5F9F83009947CF /* JoinChannelVideoToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE532A5F9F83009947CF /* JoinChannelVideoToken.storyboard */; };
+		E70ADE682A5FAAEB009947CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE6A2A5FAAEB009947CF /* Localizable.strings */; };
+		E70ADE6F2A5FDC45009947CF /* JoinChannelVideoRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE6C2A5FDC45009947CF /* JoinChannelVideoRecorder.m */; };
+		E70ADE702A5FDC45009947CF /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE6D2A5FDC45009947CF /* JoinChannelVideoRecorder.storyboard */; };
+		E70ADE742A60EC9A009947CF /* LiveStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE732A60EC9A009947CF /* LiveStreaming.m */; };
+		E70ADE7A2A60F214009947CF /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE782A60F214009947CF /* AlertManager.swift */; };
+		E70ADE7B2A60F214009947CF /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70ADE792A60F214009947CF /* PickerView.swift */; };
+		E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE7E2A612683009947CF /* LiveStreaming.storyboard */; };
+		E70ADEA72A64E230009947CF /* RTMPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEA52A64E230009947CF /* RTMPStreaming.m */; };
+		E70ADEA82A64EA5C009947CF /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEAA2A64EA5C009947CF /* RTMPStreaming.storyboard */; };
+		E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEB82A64ED3A009947CF /* FusionCDN.strings */; };
+		E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEBB2A64ED3A009947CF /* FusionCDN.m */; };
+		E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */; };
+		E70ADEC62A66306F009947CF /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */; };
+		E70ADEC72A66306F009947CF /* VideoMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEC52A66306F009947CF /* VideoMetadata.m */; };
+		E70ADECC2A663A06009947CF /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC92A663A06009947CF /* VoiceChanger.storyboard */; };
+		E70ADECD2A663A06009947CF /* VoiceChanger.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADECA2A663A06009947CF /* VoiceChanger.m */; };
+		E70ADED82A6A2BE6009947CF /* CustomPcmAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADED52A6A2BE6009947CF /* CustomPcmAudioSource.m */; };
+		E70ADED92A6A2BE6009947CF /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADED62A6A2BE6009947CF /* CustomPcmAudioSource.storyboard */; };
+		E70ADEDD2A6A2D7D009947CF /* AgoraPCMSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEDC2A6A2D7D009947CF /* AgoraPCMSourcePush.m */; };
+		E70ADEE22A6A7177009947CF /* CustomAudioRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEDF2A6A7177009947CF /* CustomAudioRender.m */; };
+		E70ADEE32A6A7177009947CF /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEE02A6A7177009947CF /* CustomAudioRender.storyboard */; };
+		E70ADEE62A6A71FE009947CF /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEE42A6A71FE009947CF /* ExternalAudio.mm */; };
+		E70ADEEB2A6A727E009947CF /* UIColor+CSRGB.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEEA2A6A727E009947CF /* UIColor+CSRGB.m */; };
+		E70ADEEE2A6A728E009947CF /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEEC2A6A728E009947CF /* UIView+CSshortFrame.m */; };
+		E70ADEF12A6A72AD009947CF /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEF02A6A72AD009947CF /* AudioController.m */; };
+		E70ADEF42A6A72C6009947CF /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEF22A6A72C5009947CF /* AudioWriteToFile.m */; };
+		E72F61822A70C71200C963D2 /* JoinMultiChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F617F2A70C71200C963D2 /* JoinMultiChannel.m */; };
+		E72F61832A70C71200C963D2 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61802A70C71200C963D2 /* JoinMultiChannel.storyboard */; };
+		E72F61882A70F16500C963D2 /* StreamEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61862A70F16500C963D2 /* StreamEncryption.m */; };
+		E72F618D2A70F8AF00C963D2 /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = E72F618B2A70F8AF00C963D2 /* AgoraCustomEncryption.mm */; };
+		E72F618E2A70F9B700C963D2 /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61902A70F9B700C963D2 /* StreamEncryption.storyboard */; };
+		E72F61972A70FAFE00C963D2 /* AudioMixing.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61942A70FAFE00C963D2 /* AudioMixing.m */; };
+		E72F619B2A7106F800C963D2 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F619D2A7106F800C963D2 /* AudioMixing.storyboard */; };
+		E72F61A52A710AB200C963D2 /* MediaPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61A32A710AB200C963D2 /* MediaPlayer.m */; };
+		E72F61A72A710B1500C963D2 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61A62A710B1500C963D2 /* MediaPlayer.storyboard */; };
+		E72F61AC2A72175400C963D2 /* ScreenShare.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61A92A72175400C963D2 /* ScreenShare.m */; };
+		E72F61AF2A72179700C963D2 /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61AE2A72179700C963D2 /* ScreenShare.storyboard */; };
+		E72F61CA2A7256D500C963D2 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72F61B52A72417C00C963D2 /* ReplayKit.framework */; };
+		E72F61CE2A7256D500C963D2 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61CD2A7256D500C963D2 /* SampleHandler.m */; };
+		E72F61D22A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E72F61DB2A7258F800C963D2 /* VideoProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61D92A7258F800C963D2 /* VideoProcess.m */; };
+		E72F61DD2A72593900C963D2 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61DC2A72593900C963D2 /* VideoProcess.storyboard */; };
+		E72F61E32A739F8700C963D2 /* RhythmPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61E02A739F8700C963D2 /* RhythmPlayer.m */; };
+		E72F61E52A739FBB00C963D2 /* RhythmPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61E42A739FBB00C963D2 /* RhythmPlayer.storyboard */; };
+		E72F61EA2A73A25F00C963D2 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61E72A73A25F00C963D2 /* CreateDataStream.storyboard */; };
+		E72F61EB2A73A25F00C963D2 /* CreateDataStream.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61E82A73A25F00C963D2 /* CreateDataStream.m */; };
+		E72F61F12A73B44A00C963D2 /* MediaChannelRelay.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61EF2A73B44A00C963D2 /* MediaChannelRelay.m */; };
+		E72F61F22A73B93200C963D2 /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61F42A73B93200C963D2 /* MediaChannelRelay.storyboard */; };
+		E72F61FC2A778ADC00C963D2 /* SpatialAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61FA2A778ADC00C963D2 /* SpatialAudio.m */; };
+		E72F61FE2A778B1400C963D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61FD2A778B1400C963D2 /* SpatialAudio.storyboard */; };
+		E72F62002A7796A200C963D2 /* SpatialAudioActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72F61FF2A7796A200C963D2 /* SpatialAudioActionSheet.swift */; };
+		E72F62042A77A63D00C963D2 /* ContentInspect.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F62022A77A63D00C963D2 /* ContentInspect.m */; };
+		E72F62062A77A65300C963D2 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F62052A77A65300C963D2 /* ContentInspect.storyboard */; };
+		E72F620B2A78B31B00C963D2 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */; };
+		E72F620C2A78B31B00C963D2 /* MutliCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F62092A78B31B00C963D2 /* MutliCamera.m */; };
+		E7361F322A6E4C8A00925BD6 /* CustomVideoSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F2F2A6E4C8A00925BD6 /* CustomVideoSourcePush.m */; };
+		E7361F332A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F302A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard */; };
+		E7361F422A6E4CF500925BD6 /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F352A6E4CF500925BD6 /* AgoraPictureInPictureController.m */; };
+		E7361F432A6E4CF500925BD6 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7361F362A6E4CF500925BD6 /* AgoraCameraSourcePush.swift */; };
+		E7361F442A6E4CF500925BD6 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7361F372A6E4CF500925BD6 /* AgoraMetalRender.swift */; };
+		E7361F452A6E4CF500925BD6 /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F382A6E4CF500925BD6 /* AgoraSampleBufferRender.m */; };
+		E7361F472A6E4CF500925BD6 /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = E7361F3F2A6E4CF500925BD6 /* AgoraMetalShader.metal */; };
+		E7361F482A6E4CF500925BD6 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = E7361F402A6E4CF500925BD6 /* CircularBuffer.c */; };
+		E7361F492A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F412A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m */; };
+		E7361F4B2A6E55EA00925BD6 /* VideoViewSampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7361F4A2A6E55EA00925BD6 /* VideoViewSampleBufferDisplayView.xib */; };
+		E7361F502A6E5B3700925BD6 /* CustomVideoRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F4E2A6E5B3700925BD6 /* CustomVideoRender.m */; };
+		E7361F512A6E5B3700925BD6 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F4F2A6E5B3700925BD6 /* CustomVideoRender.storyboard */; };
+		E7361F532A6E5C2100925BD6 /* VideoViewMetal.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7361F522A6E5C2100925BD6 /* VideoViewMetal.xib */; };
+		E7361F582A6E5E9300925BD6 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F552A6E5E9300925BD6 /* RawAudioData.storyboard */; };
+		E7361F592A6E5E9300925BD6 /* RawAudioData.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F572A6E5E9300925BD6 /* RawAudioData.m */; };
+		E7361F5E2A6E60B100925BD6 /* RawVideoData.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F5C2A6E60B100925BD6 /* RawVideoData.m */; };
+		E7361F5F2A6E60B100925BD6 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F5D2A6E60B100925BD6 /* RawVideoData.storyboard */; };
+		E7361F642A6E64FB00925BD6 /* PictureInPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F612A6E64FB00925BD6 /* PictureInPicture.m */; };
+		E7361F652A6E64FB00925BD6 /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F622A6E64FB00925BD6 /* PictureInPicture.storyboard */; };
+		E7361F6A2A6E6B9F00925BD6 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F672A6E6B9F00925BD6 /* SimpleFilter.storyboard */; };
+		E7361F6B2A6E6B9F00925BD6 /* SimpleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F682A6E6B9F00925BD6 /* SimpleFilter.m */; };
+		E7361F902A6E6E7100925BD6 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7361F8A2A6E6E7100925BD6 /* SimpleFilter.framework */; };
+		E7361FC72A6E6EE500925BD6 /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FB72A6E6EE500925BD6 /* ExtensionProvider.hpp */; };
+		E7361FC82A6E6EE500925BD6 /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7361FB82A6E6EE500925BD6 /* AudioProcessor.mm */; };
+		E7361FC92A6E6EE500925BD6 /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FB92A6E6EE500925BD6 /* VideoProcessor.hpp */; };
+		E7361FCA2A6E6EE500925BD6 /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FBA2A6E6EE500925BD6 /* AudioProcessor.hpp */; };
+		E7361FCB2A6E6EE500925BD6 /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FBB2A6E6EE500925BD6 /* external_thread_pool.cpp */; };
+		E7361FCC2A6E6EE500925BD6 /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FBC2A6E6EE500925BD6 /* ExtensionAudioFilter.hpp */; };
+		E7361FCE2A6E6EE500925BD6 /* SimpleFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7361FBE2A6E6EE500925BD6 /* SimpleFilterManager.mm */; };
+		E7361FCF2A6E6EE500925BD6 /* VideoProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FBF2A6E6EE500925BD6 /* VideoProcessor.cpp */; };
+		E7361FD02A6E6EE500925BD6 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E7361FC02A6E6EE500925BD6 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E7361FD12A6E6EE500925BD6 /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FC12A6E6EE500925BD6 /* ExtensionAudioFilter.cpp */; };
+		E7361FD22A6E6EE500925BD6 /* ExtensionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FC22A6E6EE500925BD6 /* ExtensionProvider.cpp */; };
+		E7361FD32A6E6EE500925BD6 /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E7361FC32A6E6EE500925BD6 /* SimpleFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E7361FD42A6E6EE500925BD6 /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = E7361FC42A6E6EE500925BD6 /* external_thread_pool.h */; };
+		E7361FD52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FC52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp */; };
+		E7361FD62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FC62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E72F61D02A7256D500C963D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E70ADDE42A5D004F009947CF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E72F61C82A7256D500C963D2;
+			remoteInfo = "Agora-ScreenShare-Extension-OC";
+		};
+		E7361F8E2A6E6E7100925BD6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E70ADDE42A5D004F009947CF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7361F892A6E6E7100925BD6;
+			remoteInfo = SimpleFilter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E72F61C22A72417D00C963D2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E72F61D22A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0777F7A18C2C6AB34D85584A /* Pods-SimpleFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		22FD71DD1D4B470ACAC859A5 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_OC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D09EED2D8833D60C484A96 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		5C186904C3CD93D15C07F383 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0C8D95022D679A807C9CA1F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; sourceTree = "<group>"; };
+		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
+		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
+		D5882D286343E06CF635A5E6 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		E70ADDEC2A5D004F009947CF /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E70ADDEF2A5D004F009947CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E70ADDF02A5D004F009947CF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E70ADDF22A5D004F009947CF /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		E70ADDF32A5D004F009947CF /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		E70ADDF52A5D004F009947CF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E70ADDF62A5D004F009947CF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E70ADDFB2A5D0050009947CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E70ADE002A5D0050009947CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E70ADE012A5D0050009947CF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E70ADE0D2A5D026C009947CF /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
+		E70ADE0E2A5D026D009947CF /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
+		E70ADE0F2A5D026D009947CF /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
+		E70ADE102A5D026D009947CF /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
+		E70ADE112A5D026D009947CF /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
+		E70ADE122A5D026D009947CF /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
+		E70ADE132A5D026D009947CF /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
+		E70ADE1B2A5D0368009947CF /* BundleUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundleUtil.h; sourceTree = "<group>"; };
+		E70ADE1C2A5D0368009947CF /* MediaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
+		E70ADE1D2A5D0368009947CF /* MediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
+		E70ADE1E2A5D0368009947CF /* BundleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundleUtil.m; sourceTree = "<group>"; };
+		E70ADE222A5D069A009947CF /* JoinChannelVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JoinChannelVideo.h; sourceTree = "<group>"; };
+		E70ADE232A5D069A009947CF /* JoinChannelVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JoinChannelVideo.m; sourceTree = "<group>"; };
+		E70ADE272A5D0A15009947CF /* KeyCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyCenter.h; sourceTree = "<group>"; };
+		E70ADE282A5D0A15009947CF /* KeyCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyCenter.m; sourceTree = "<group>"; };
+		E70ADE2D2A5D3316009947CF /* JoinChannelVideo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelVideo.storyboard; sourceTree = "<group>"; };
+		E70ADE2F2A5D35BA009947CF /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		E70ADE302A5D35BA009947CF /* BaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		E70ADE322A5D41BF009947CF /* VideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoView.h; sourceTree = "<group>"; };
+		E70ADE332A5D41BF009947CF /* VideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoView.m; sourceTree = "<group>"; };
+		E70ADE352A5D41C9009947CF /* VideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		E70ADE372A5D4CF2009947CF /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		E70ADE3B2A5D4D05009947CF /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E70ADE3C2A5D4D05009947CF /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		E70ADE3D2A5D4D05009947CF /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		E70ADE4B2A5E57FF009947CF /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		E70ADE4C2A5E57FF009947CF /* JoinChannelAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinChannelAudio.h; sourceTree = "<group>"; };
+		E70ADE4D2A5E57FF009947CF /* JoinChannelAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinChannelAudio.m; sourceTree = "<group>"; };
+		E70ADE512A5F9F83009947CF /* JoinChannelVideoToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinChannelVideoToken.h; sourceTree = "<group>"; };
+		E70ADE522A5F9F83009947CF /* JoinChannelVideoToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinChannelVideoToken.m; sourceTree = "<group>"; };
+		E70ADE532A5F9F83009947CF /* JoinChannelVideoToken.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = JoinChannelVideoToken.storyboard; sourceTree = "<group>"; };
+		E70ADE622A5FAA01009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		E70ADE632A5FAA02009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
+		E70ADE692A5FAAEB009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E70ADE6C2A5FDC45009947CF /* JoinChannelVideoRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinChannelVideoRecorder.m; sourceTree = "<group>"; };
+		E70ADE6D2A5FDC45009947CF /* JoinChannelVideoRecorder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
+		E70ADE6E2A5FDC45009947CF /* JoinChannelVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinChannelVideoRecorder.h; sourceTree = "<group>"; };
+		E70ADE722A60EC9A009947CF /* LiveStreaming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveStreaming.h; sourceTree = "<group>"; };
+		E70ADE732A60EC9A009947CF /* LiveStreaming.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveStreaming.m; sourceTree = "<group>"; };
+		E70ADE782A60F214009947CF /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		E70ADE792A60F214009947CF /* PickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
+		E70ADE802A61284A009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
+		E70ADE812A612853009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveStreaming.strings"; sourceTree = "<group>"; };
+		E70ADEA32A64E230009947CF /* RTMPStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTMPStreaming.h; sourceTree = "<group>"; };
+		E70ADEA52A64E230009947CF /* RTMPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTMPStreaming.m; sourceTree = "<group>"; };
+		E70ADEAB2A64EA69009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
+		E70ADEAC2A64EA75009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
+		E70ADEB92A64ED3A009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
+		E70ADEBA2A64ED3A009947CF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
+		E70ADEBB2A64ED3A009947CF /* FusionCDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FusionCDN.m; sourceTree = "<group>"; };
+		E70ADEBD2A64ED3A009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
+		E70ADEBE2A64ED3A009947CF /* FusionCDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FusionCDN.h; sourceTree = "<group>"; };
+		E70ADEC32A66306F009947CF /* VideoMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMetadata.h; sourceTree = "<group>"; };
+		E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoMetadata.storyboard; sourceTree = "<group>"; };
+		E70ADEC52A66306F009947CF /* VideoMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMetadata.m; sourceTree = "<group>"; };
+		E70ADEC92A663A06009947CF /* VoiceChanger.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VoiceChanger.storyboard; sourceTree = "<group>"; };
+		E70ADECA2A663A06009947CF /* VoiceChanger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoiceChanger.m; sourceTree = "<group>"; };
+		E70ADECB2A663A06009947CF /* VoiceChanger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoiceChanger.h; sourceTree = "<group>"; };
+		E70ADED52A6A2BE6009947CF /* CustomPcmAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPcmAudioSource.m; sourceTree = "<group>"; };
+		E70ADED62A6A2BE6009947CF /* CustomPcmAudioSource.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CustomPcmAudioSource.storyboard; sourceTree = "<group>"; };
+		E70ADED72A6A2BE6009947CF /* CustomPcmAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPcmAudioSource.h; sourceTree = "<group>"; };
+		E70ADEDB2A6A2D7D009947CF /* AgoraPCMSourcePush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraPCMSourcePush.h; sourceTree = "<group>"; };
+		E70ADEDC2A6A2D7D009947CF /* AgoraPCMSourcePush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraPCMSourcePush.m; sourceTree = "<group>"; };
+		E70ADEDF2A6A7177009947CF /* CustomAudioRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAudioRender.m; sourceTree = "<group>"; };
+		E70ADEE02A6A7177009947CF /* CustomAudioRender.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CustomAudioRender.storyboard; sourceTree = "<group>"; };
+		E70ADEE12A6A7177009947CF /* CustomAudioRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAudioRender.h; sourceTree = "<group>"; };
+		E70ADEE42A6A71FE009947CF /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		E70ADEE52A6A71FE009947CF /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		E70ADEE72A6A7217009947CF /* AudioOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		E70ADEE92A6A727E009947CF /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
+		E70ADEEA2A6A727E009947CF /* UIColor+CSRGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CSRGB.m"; sourceTree = "<group>"; };
+		E70ADEEC2A6A728E009947CF /* UIView+CSshortFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CSshortFrame.m"; sourceTree = "<group>"; };
+		E70ADEED2A6A728E009947CF /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
+		E70ADEEF2A6A72AD009947CF /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		E70ADEF02A6A72AD009947CF /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		E70ADEF22A6A72C5009947CF /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		E70ADEF32A6A72C6009947CF /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		E72F617C2A6E866E00C963D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E72F617F2A70C71200C963D2 /* JoinMultiChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinMultiChannel.m; sourceTree = "<group>"; };
+		E72F61802A70C71200C963D2 /* JoinMultiChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = JoinMultiChannel.storyboard; sourceTree = "<group>"; };
+		E72F61812A70C71200C963D2 /* JoinMultiChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinMultiChannel.h; sourceTree = "<group>"; };
+		E72F61852A70F16500C963D2 /* StreamEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamEncryption.h; sourceTree = "<group>"; };
+		E72F61862A70F16500C963D2 /* StreamEncryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamEncryption.m; sourceTree = "<group>"; };
+		E72F618B2A70F8AF00C963D2 /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		E72F618C2A70F8AF00C963D2 /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
+		E72F61912A70F9D700C963D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/StreamEncryption.storyboard; sourceTree = "<group>"; };
+		E72F61922A70F9DE00C963D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
+		E72F61942A70FAFE00C963D2 /* AudioMixing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioMixing.m; sourceTree = "<group>"; };
+		E72F61962A70FAFE00C963D2 /* AudioMixing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioMixing.h; sourceTree = "<group>"; };
+		E72F619C2A7106F800C963D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioMixing.storyboard; sourceTree = "<group>"; };
+		E72F619F2A7106FC00C963D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioMixing.strings"; sourceTree = "<group>"; };
+		E72F61A12A710AB200C963D2 /* MediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaPlayer.h; sourceTree = "<group>"; };
+		E72F61A32A710AB200C963D2 /* MediaPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaPlayer.m; sourceTree = "<group>"; };
+		E72F61A62A710B1500C963D2 /* MediaPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaPlayer.storyboard; sourceTree = "<group>"; };
+		E72F61A92A72175400C963D2 /* ScreenShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenShare.m; sourceTree = "<group>"; };
+		E72F61AA2A72175400C963D2 /* ScreenShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenShare.h; sourceTree = "<group>"; };
+		E72F61AE2A72179700C963D2 /* ScreenShare.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScreenShare.storyboard; sourceTree = "<group>"; };
+		E72F61B52A72417C00C963D2 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		E72F61C32A72439F00C963D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Agora-ScreenShare-Extension-OC.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E72F61CC2A7256D500C963D2 /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		E72F61CD2A7256D500C963D2 /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
+		E72F61CF2A7256D500C963D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E72F61D72A7258F800C963D2 /* VideoProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoProcess.h; sourceTree = "<group>"; };
+		E72F61D92A7258F800C963D2 /* VideoProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProcess.m; sourceTree = "<group>"; };
+		E72F61DC2A72593900C963D2 /* VideoProcess.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoProcess.storyboard; sourceTree = "<group>"; };
+		E72F61E02A739F8700C963D2 /* RhythmPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RhythmPlayer.m; sourceTree = "<group>"; };
+		E72F61E12A739F8700C963D2 /* RhythmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RhythmPlayer.h; sourceTree = "<group>"; };
+		E72F61E42A739FBB00C963D2 /* RhythmPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RhythmPlayer.storyboard; sourceTree = "<group>"; };
+		E72F61E72A73A25F00C963D2 /* CreateDataStream.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CreateDataStream.storyboard; sourceTree = "<group>"; };
+		E72F61E82A73A25F00C963D2 /* CreateDataStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateDataStream.m; sourceTree = "<group>"; };
+		E72F61E92A73A25F00C963D2 /* CreateDataStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateDataStream.h; sourceTree = "<group>"; };
+		E72F61EE2A73B44A00C963D2 /* MediaChannelRelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaChannelRelay.h; sourceTree = "<group>"; };
+		E72F61EF2A73B44A00C963D2 /* MediaChannelRelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaChannelRelay.m; sourceTree = "<group>"; };
+		E72F61F32A73B93200C963D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaChannelRelay.storyboard; sourceTree = "<group>"; };
+		E72F61F62A73B93500C963D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaChannelRelay.strings"; sourceTree = "<group>"; };
+		E72F61F82A778ADC00C963D2 /* SpatialAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialAudio.h; sourceTree = "<group>"; };
+		E72F61FA2A778ADC00C963D2 /* SpatialAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialAudio.m; sourceTree = "<group>"; };
+		E72F61FD2A778B1400C963D2 /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
+		E72F61FF2A7796A200C963D2 /* SpatialAudioActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialAudioActionSheet.swift; sourceTree = "<group>"; };
+		E72F62022A77A63D00C963D2 /* ContentInspect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentInspect.m; sourceTree = "<group>"; };
+		E72F62032A77A63D00C963D2 /* ContentInspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentInspect.h; sourceTree = "<group>"; };
+		E72F62052A77A65300C963D2 /* ContentInspect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ContentInspect.storyboard; sourceTree = "<group>"; };
+		E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MutliCamera.storyboard; sourceTree = "<group>"; };
+		E72F62092A78B31B00C963D2 /* MutliCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MutliCamera.m; sourceTree = "<group>"; };
+		E72F620A2A78B31B00C963D2 /* MutliCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MutliCamera.h; sourceTree = "<group>"; };
+		E7361F2F2A6E4C8A00925BD6 /* CustomVideoSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomVideoSourcePush.m; sourceTree = "<group>"; };
+		E7361F302A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
+		E7361F312A6E4C8A00925BD6 /* CustomVideoSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomVideoSourcePush.h; sourceTree = "<group>"; };
+		E7361F352A6E4CF500925BD6 /* AgoraPictureInPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraPictureInPictureController.m; sourceTree = "<group>"; };
+		E7361F362A6E4CF500925BD6 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		E7361F372A6E4CF500925BD6 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		E7361F382A6E4CF500925BD6 /* AgoraSampleBufferRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraSampleBufferRender.m; sourceTree = "<group>"; };
+		E7361F3A2A6E4CF500925BD6 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
+		E7361F3B2A6E4CF500925BD6 /* AgoraYUVImageSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraYUVImageSourcePush.h; sourceTree = "<group>"; };
+		E7361F3C2A6E4CF500925BD6 /* AgoraPictureInPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraPictureInPictureController.h; sourceTree = "<group>"; };
+		E7361F3E2A6E4CF500925BD6 /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
+		E7361F3F2A6E4CF500925BD6 /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
+		E7361F402A6E4CF500925BD6 /* CircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CircularBuffer.c; sourceTree = "<group>"; };
+		E7361F412A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraYUVImageSourcePush.m; sourceTree = "<group>"; };
+		E7361F4A2A6E55EA00925BD6 /* VideoViewSampleBufferDisplayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoViewSampleBufferDisplayView.xib; sourceTree = "<group>"; };
+		E7361F4D2A6E5B3700925BD6 /* CustomVideoRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomVideoRender.h; sourceTree = "<group>"; };
+		E7361F4E2A6E5B3700925BD6 /* CustomVideoRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomVideoRender.m; sourceTree = "<group>"; };
+		E7361F4F2A6E5B3700925BD6 /* CustomVideoRender.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CustomVideoRender.storyboard; sourceTree = "<group>"; };
+		E7361F522A6E5C2100925BD6 /* VideoViewMetal.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoViewMetal.xib; sourceTree = "<group>"; };
+		E7361F552A6E5E9300925BD6 /* RawAudioData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
+		E7361F562A6E5E9300925BD6 /* RawAudioData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawAudioData.h; sourceTree = "<group>"; };
+		E7361F572A6E5E9300925BD6 /* RawAudioData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RawAudioData.m; sourceTree = "<group>"; };
+		E7361F5B2A6E60B100925BD6 /* RawVideoData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RawVideoData.h; sourceTree = "<group>"; };
+		E7361F5C2A6E60B100925BD6 /* RawVideoData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RawVideoData.m; sourceTree = "<group>"; };
+		E7361F5D2A6E60B100925BD6 /* RawVideoData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RawVideoData.storyboard; sourceTree = "<group>"; };
+		E7361F612A6E64FB00925BD6 /* PictureInPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureInPicture.m; sourceTree = "<group>"; };
+		E7361F622A6E64FB00925BD6 /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
+		E7361F632A6E64FB00925BD6 /* PictureInPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureInPicture.h; sourceTree = "<group>"; };
+		E7361F672A6E6B9F00925BD6 /* SimpleFilter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SimpleFilter.storyboard; sourceTree = "<group>"; };
+		E7361F682A6E6B9F00925BD6 /* SimpleFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleFilter.m; sourceTree = "<group>"; };
+		E7361F692A6E6B9F00925BD6 /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
+		E7361F8A2A6E6E7100925BD6 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7361FB72A6E6EE500925BD6 /* ExtensionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionProvider.hpp; sourceTree = "<group>"; };
+		E7361FB82A6E6EE500925BD6 /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
+		E7361FB92A6E6EE500925BD6 /* VideoProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VideoProcessor.hpp; sourceTree = "<group>"; };
+		E7361FBA2A6E6EE500925BD6 /* AudioProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioProcessor.hpp; sourceTree = "<group>"; };
+		E7361FBB2A6E6EE500925BD6 /* external_thread_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = external_thread_pool.cpp; sourceTree = "<group>"; };
+		E7361FBC2A6E6EE500925BD6 /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
+		E7361FBE2A6E6EE500925BD6 /* SimpleFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleFilterManager.mm; sourceTree = "<group>"; };
+		E7361FBF2A6E6EE500925BD6 /* VideoProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoProcessor.cpp; sourceTree = "<group>"; };
+		E7361FC02A6E6EE500925BD6 /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
+		E7361FC12A6E6EE500925BD6 /* ExtensionAudioFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionAudioFilter.cpp; sourceTree = "<group>"; };
+		E7361FC22A6E6EE500925BD6 /* ExtensionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionProvider.cpp; sourceTree = "<group>"; };
+		E7361FC32A6E6EE500925BD6 /* SimpleFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilterManager.h; sourceTree = "<group>"; };
+		E7361FC42A6E6EE500925BD6 /* external_thread_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_thread_pool.h; sourceTree = "<group>"; };
+		E7361FC52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
+		E7361FC62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
+		E7361FE02A6E7AE200925BD6 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		E7361FE12A6E7AF300925BD6 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
+		E7361FE22A6E7AFE00925BD6 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		F86C6C60F7635F5433A9E570 /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E70ADDE92A5D004F009947CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7361F902A6E6E7100925BD6 /* SimpleFilter.framework in Frameworks */,
+				1A800DCBE9DC13D06C07AA4C /* Pods_APIExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E72F61C62A7256D500C963D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E72F61CA2A7256D500C963D2 /* ReplayKit.framework in Frameworks */,
+				38FA990554B721DB226604E7 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7361F872A6E6E7100925BD6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E70ADDE32A5D004F009947CF = {
+			isa = PBXGroup;
+			children = (
+				E70ADE6A2A5FAAEB009947CF /* Localizable.strings */,
+				E70ADDEE2A5D004F009947CF /* APIExample */,
+				E7361F8B2A6E6E7100925BD6 /* SimpleFilter */,
+				E72F61CB2A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */,
+				E70ADDED2A5D004F009947CF /* Products */,
+				F43E85C6301E8638165CABEB /* Pods */,
+				FB95B04C515AA8E46D5A7E6A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E70ADDED2A5D004F009947CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADDEC2A5D004F009947CF /* APIExample.app */,
+				E7361F8A2A6E6E7100925BD6 /* SimpleFilter.framework */,
+				E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E70ADDEE2A5D004F009947CF /* APIExample */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE082A5D0068009947CF /* Examples */,
+				E70ADE0B2A5D00B1009947CF /* Common */,
+				E70ADE0C2A5D00C0009947CF /* Resources */,
+				E70ADDEF2A5D004F009947CF /* AppDelegate.h */,
+				E70ADDF02A5D004F009947CF /* AppDelegate.m */,
+				E70ADDF22A5D004F009947CF /* SceneDelegate.h */,
+				E70ADDF32A5D004F009947CF /* SceneDelegate.m */,
+				E70ADDF52A5D004F009947CF /* ViewController.h */,
+				E70ADDF62A5D004F009947CF /* ViewController.m */,
+				E70ADDF82A5D004F009947CF /* Main.storyboard */,
+				E70ADDFB2A5D0050009947CF /* Assets.xcassets */,
+				E70ADDFD2A5D0050009947CF /* LaunchScreen.storyboard */,
+				E70ADE002A5D0050009947CF /* Info.plist */,
+				E70ADE012A5D0050009947CF /* main.m */,
+				E70ADE372A5D4CF2009947CF /* APIExample-Bridging-Header.h */,
+			);
+			path = APIExample;
+			sourceTree = "<group>";
+		};
+		E70ADE082A5D0068009947CF /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE092A5D0096009947CF /* Basic */,
+				E70ADE0A2A5D009D009947CF /* Advanced */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		E70ADE092A5D0096009947CF /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE6B2A5FDC45009947CF /* JoinChannelVideo(Recorder) */,
+				E70ADE502A5F9F83009947CF /* JoinChannelVideo(Token) */,
+				E70ADE4A2A5E57FF009947CF /* JoinChannelAudio */,
+				E70ADE212A5D066D009947CF /* JoinChannelVideo */,
+			);
+			path = Basic;
+			sourceTree = "<group>";
+		};
+		E70ADE0A2A5D009D009947CF /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				E72F62072A78B31B00C963D2 /* MutliCamera */,
+				E72F62012A77A63D00C963D2 /* ContentInspect */,
+				E72F61F72A778ADC00C963D2 /* SpatialAudio */,
+				E72F61EC2A73B44A00C963D2 /* MediaChannelRelay */,
+				E72F61E62A73A25F00C963D2 /* CreateDataStream */,
+				E72F61DE2A739F8700C963D2 /* RhythmPlayer */,
+				E72F61D62A7258F800C963D2 /* VideoProcess */,
+				E72F61A82A72175400C963D2 /* ScreenShare */,
+				E72F61A02A710AB200C963D2 /* MediaPlayer */,
+				E72F61932A70FAFE00C963D2 /* AudioMixing */,
+				E72F61842A70F16500C963D2 /* StreamEncryption */,
+				E72F617E2A70C71200C963D2 /* JoinMultiChannel */,
+				E7361F662A6E6B9F00925BD6 /* SimpleFilter */,
+				E7361F602A6E64FB00925BD6 /* PictureInPicture */,
+				E7361F5A2A6E60B100925BD6 /* RawVideoData */,
+				E7361F542A6E5E9300925BD6 /* RawAudioData */,
+				E7361F4C2A6E5B3700925BD6 /* CustomVideoRender */,
+				E7361F2E2A6E4C8A00925BD6 /* CustomVideoSourcePush */,
+				E70ADEDE2A6A7177009947CF /* CustomAudioRender */,
+				E70ADED42A6A2BE6009947CF /* CustomPcmAudioSource */,
+				E70ADEC82A663A06009947CF /* VoiceChanger */,
+				E70ADEC22A66306F009947CF /* VideoMetadata */,
+				E70ADEB72A64ED3A009947CF /* FusionCDN */,
+				E70ADEA22A64E230009947CF /* RTMPStreaming */,
+				E70ADE712A60EC74009947CF /* LiveStreaming */,
+			);
+			path = Advanced;
+			sourceTree = "<group>";
+		};
+		E70ADE0B2A5D00B1009947CF /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E72F618A2A70F8AE00C963D2 /* CustomEncryption */,
+				E7361F342A6E4CF500925BD6 /* ExternalVideo */,
+				E70ADEDA2A6A2D5D009947CF /* ExternalAudio */,
+				E70ADE772A60F1FD009947CF /* Views */,
+				E70ADE3A2A5D4D05009947CF /* NetworkManager */,
+				E70ADE2A2A5D0A1F009947CF /* Utils */,
+				E70ADE272A5D0A15009947CF /* KeyCenter.h */,
+				E70ADE282A5D0A15009947CF /* KeyCenter.m */,
+				E70ADE2F2A5D35BA009947CF /* BaseViewController.h */,
+				E70ADE302A5D35BA009947CF /* BaseViewController.m */,
+				E70ADE322A5D41BF009947CF /* VideoView.h */,
+				E70ADE332A5D41BF009947CF /* VideoView.m */,
+				E70ADE352A5D41C9009947CF /* VideoView.xib */,
+				E7361F522A6E5C2100925BD6 /* VideoViewMetal.xib */,
+				E7361F4A2A6E55EA00925BD6 /* VideoViewSampleBufferDisplayView.xib */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		E70ADE0C2A5D00C0009947CF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE0E2A5D026D009947CF /* agora-logo.png */,
+				E70ADE0D2A5D026C009947CF /* audioeffect.mp3 */,
+				E70ADE102A5D026D009947CF /* audiomixing.mp3 */,
+				E70ADE132A5D026D009947CF /* frames0.yuv */,
+				E70ADE112A5D026D009947CF /* output.raw */,
+				E70ADE122A5D026D009947CF /* sample.mov */,
+				E70ADE0F2A5D026D009947CF /* sample.yuv */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E70ADE212A5D066D009947CF /* JoinChannelVideo */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE222A5D069A009947CF /* JoinChannelVideo.h */,
+				E70ADE232A5D069A009947CF /* JoinChannelVideo.m */,
+				E70ADE2D2A5D3316009947CF /* JoinChannelVideo.storyboard */,
+			);
+			path = JoinChannelVideo;
+			sourceTree = "<group>";
+		};
+		E70ADE2A2A5D0A1F009947CF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE1B2A5D0368009947CF /* BundleUtil.h */,
+				E70ADE1E2A5D0368009947CF /* BundleUtil.m */,
+				E70ADE1D2A5D0368009947CF /* MediaUtils.h */,
+				E70ADE1C2A5D0368009947CF /* MediaUtils.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		E70ADE3A2A5D4D05009947CF /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE3C2A5D4D05009947CF /* NetworkManager.swift */,
+				E70ADE3D2A5D4D05009947CF /* JSONObject.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		E70ADE4A2A5E57FF009947CF /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE4B2A5E57FF009947CF /* JoinChannelAudio.storyboard */,
+				E70ADE4C2A5E57FF009947CF /* JoinChannelAudio.h */,
+				E70ADE4D2A5E57FF009947CF /* JoinChannelAudio.m */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
+		E70ADE502A5F9F83009947CF /* JoinChannelVideo(Token) */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE512A5F9F83009947CF /* JoinChannelVideoToken.h */,
+				E70ADE522A5F9F83009947CF /* JoinChannelVideoToken.m */,
+				E70ADE532A5F9F83009947CF /* JoinChannelVideoToken.storyboard */,
+			);
+			path = "JoinChannelVideo(Token)";
+			sourceTree = "<group>";
+		};
+		E70ADE6B2A5FDC45009947CF /* JoinChannelVideo(Recorder) */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE6E2A5FDC45009947CF /* JoinChannelVideoRecorder.h */,
+				E70ADE6C2A5FDC45009947CF /* JoinChannelVideoRecorder.m */,
+				E70ADE6D2A5FDC45009947CF /* JoinChannelVideoRecorder.storyboard */,
+			);
+			path = "JoinChannelVideo(Recorder)";
+			sourceTree = "<group>";
+		};
+		E70ADE712A60EC74009947CF /* LiveStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE722A60EC9A009947CF /* LiveStreaming.h */,
+				E70ADE732A60EC9A009947CF /* LiveStreaming.m */,
+				E70ADE7E2A612683009947CF /* LiveStreaming.storyboard */,
+			);
+			path = LiveStreaming;
+			sourceTree = "<group>";
+		};
+		E70ADE772A60F1FD009947CF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADE3B2A5D4D05009947CF /* ToastView.swift */,
+				E70ADE782A60F214009947CF /* AlertManager.swift */,
+				E70ADE792A60F214009947CF /* PickerView.swift */,
+				E72F61FF2A7796A200C963D2 /* SpatialAudioActionSheet.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E70ADEA22A64E230009947CF /* RTMPStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEAA2A64EA5C009947CF /* RTMPStreaming.storyboard */,
+				E70ADEA32A64E230009947CF /* RTMPStreaming.h */,
+				E70ADEA52A64E230009947CF /* RTMPStreaming.m */,
+			);
+			path = RTMPStreaming;
+			sourceTree = "<group>";
+		};
+		E70ADEB72A64ED3A009947CF /* FusionCDN */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */,
+				E70ADEB82A64ED3A009947CF /* FusionCDN.strings */,
+				E70ADEBE2A64ED3A009947CF /* FusionCDN.h */,
+				E70ADEBB2A64ED3A009947CF /* FusionCDN.m */,
+			);
+			path = FusionCDN;
+			sourceTree = "<group>";
+		};
+		E70ADEC22A66306F009947CF /* VideoMetadata */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEC32A66306F009947CF /* VideoMetadata.h */,
+				E70ADEC52A66306F009947CF /* VideoMetadata.m */,
+				E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */,
+			);
+			path = VideoMetadata;
+			sourceTree = "<group>";
+		};
+		E70ADEC82A663A06009947CF /* VoiceChanger */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEC92A663A06009947CF /* VoiceChanger.storyboard */,
+				E70ADECA2A663A06009947CF /* VoiceChanger.m */,
+				E70ADECB2A663A06009947CF /* VoiceChanger.h */,
+			);
+			path = VoiceChanger;
+			sourceTree = "<group>";
+		};
+		E70ADED42A6A2BE6009947CF /* CustomPcmAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADED62A6A2BE6009947CF /* CustomPcmAudioSource.storyboard */,
+				E70ADED72A6A2BE6009947CF /* CustomPcmAudioSource.h */,
+				E70ADED52A6A2BE6009947CF /* CustomPcmAudioSource.m */,
+			);
+			path = CustomPcmAudioSource;
+			sourceTree = "<group>";
+		};
+		E70ADEDA2A6A2D5D009947CF /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEE72A6A7217009947CF /* AudioOptions.h */,
+				E70ADEE92A6A727E009947CF /* UIColor+CSRGB.h */,
+				E70ADEEA2A6A727E009947CF /* UIColor+CSRGB.m */,
+				E70ADEF32A6A72C6009947CF /* AudioWriteToFile.h */,
+				E70ADEF22A6A72C5009947CF /* AudioWriteToFile.m */,
+				E70ADEED2A6A728E009947CF /* UIView+CSshortFrame.h */,
+				E70ADEEC2A6A728E009947CF /* UIView+CSshortFrame.m */,
+				E70ADEEF2A6A72AD009947CF /* AudioController.h */,
+				E70ADEF02A6A72AD009947CF /* AudioController.m */,
+				E70ADEE52A6A71FE009947CF /* ExternalAudio.h */,
+				E70ADEE42A6A71FE009947CF /* ExternalAudio.mm */,
+				E70ADEDB2A6A2D7D009947CF /* AgoraPCMSourcePush.h */,
+				E70ADEDC2A6A2D7D009947CF /* AgoraPCMSourcePush.m */,
+			);
+			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
+		E70ADEDE2A6A7177009947CF /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				E70ADEE12A6A7177009947CF /* CustomAudioRender.h */,
+				E70ADEDF2A6A7177009947CF /* CustomAudioRender.m */,
+				E70ADEE02A6A7177009947CF /* CustomAudioRender.storyboard */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
+		E72F617E2A70C71200C963D2 /* JoinMultiChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61812A70C71200C963D2 /* JoinMultiChannel.h */,
+				E72F617F2A70C71200C963D2 /* JoinMultiChannel.m */,
+				E72F61802A70C71200C963D2 /* JoinMultiChannel.storyboard */,
+			);
+			path = JoinMultiChannel;
+			sourceTree = "<group>";
+		};
+		E72F61842A70F16500C963D2 /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61852A70F16500C963D2 /* StreamEncryption.h */,
+				E72F61862A70F16500C963D2 /* StreamEncryption.m */,
+				E72F61902A70F9B700C963D2 /* StreamEncryption.storyboard */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		E72F618A2A70F8AE00C963D2 /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				E72F618C2A70F8AF00C963D2 /* AgoraCustomEncryption.h */,
+				E72F618B2A70F8AF00C963D2 /* AgoraCustomEncryption.mm */,
+			);
+			path = CustomEncryption;
+			sourceTree = "<group>";
+		};
+		E72F61932A70FAFE00C963D2 /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61962A70FAFE00C963D2 /* AudioMixing.h */,
+				E72F61942A70FAFE00C963D2 /* AudioMixing.m */,
+				E72F619D2A7106F800C963D2 /* AudioMixing.storyboard */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		E72F61A02A710AB200C963D2 /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61A12A710AB200C963D2 /* MediaPlayer.h */,
+				E72F61A32A710AB200C963D2 /* MediaPlayer.m */,
+				E72F61A62A710B1500C963D2 /* MediaPlayer.storyboard */,
+			);
+			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		E72F61A82A72175400C963D2 /* ScreenShare */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61AA2A72175400C963D2 /* ScreenShare.h */,
+				E72F61A92A72175400C963D2 /* ScreenShare.m */,
+				E72F61AE2A72179700C963D2 /* ScreenShare.storyboard */,
+			);
+			path = ScreenShare;
+			sourceTree = "<group>";
+		};
+		E72F61CB2A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61CC2A7256D500C963D2 /* SampleHandler.h */,
+				E72F61CD2A7256D500C963D2 /* SampleHandler.m */,
+				E72F61CF2A7256D500C963D2 /* Info.plist */,
+			);
+			path = "Agora-ScreenShare-Extension-OC";
+			sourceTree = "<group>";
+		};
+		E72F61D62A7258F800C963D2 /* VideoProcess */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61D72A7258F800C963D2 /* VideoProcess.h */,
+				E72F61D92A7258F800C963D2 /* VideoProcess.m */,
+				E72F61DC2A72593900C963D2 /* VideoProcess.storyboard */,
+			);
+			path = VideoProcess;
+			sourceTree = "<group>";
+		};
+		E72F61DE2A739F8700C963D2 /* RhythmPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61E02A739F8700C963D2 /* RhythmPlayer.m */,
+				E72F61E12A739F8700C963D2 /* RhythmPlayer.h */,
+				E72F61E42A739FBB00C963D2 /* RhythmPlayer.storyboard */,
+			);
+			path = RhythmPlayer;
+			sourceTree = "<group>";
+		};
+		E72F61E62A73A25F00C963D2 /* CreateDataStream */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61E72A73A25F00C963D2 /* CreateDataStream.storyboard */,
+				E72F61E92A73A25F00C963D2 /* CreateDataStream.h */,
+				E72F61E82A73A25F00C963D2 /* CreateDataStream.m */,
+			);
+			path = CreateDataStream;
+			sourceTree = "<group>";
+		};
+		E72F61EC2A73B44A00C963D2 /* MediaChannelRelay */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61F42A73B93200C963D2 /* MediaChannelRelay.storyboard */,
+				E72F61EE2A73B44A00C963D2 /* MediaChannelRelay.h */,
+				E72F61EF2A73B44A00C963D2 /* MediaChannelRelay.m */,
+			);
+			path = MediaChannelRelay;
+			sourceTree = "<group>";
+		};
+		E72F61F72A778ADC00C963D2 /* SpatialAudio */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61F82A778ADC00C963D2 /* SpatialAudio.h */,
+				E72F61FA2A778ADC00C963D2 /* SpatialAudio.m */,
+				E72F61FD2A778B1400C963D2 /* SpatialAudio.storyboard */,
+			);
+			path = SpatialAudio;
+			sourceTree = "<group>";
+		};
+		E72F62012A77A63D00C963D2 /* ContentInspect */ = {
+			isa = PBXGroup;
+			children = (
+				E72F62032A77A63D00C963D2 /* ContentInspect.h */,
+				E72F62022A77A63D00C963D2 /* ContentInspect.m */,
+				E72F62052A77A65300C963D2 /* ContentInspect.storyboard */,
+			);
+			path = ContentInspect;
+			sourceTree = "<group>";
+		};
+		E72F62072A78B31B00C963D2 /* MutliCamera */ = {
+			isa = PBXGroup;
+			children = (
+				E72F620A2A78B31B00C963D2 /* MutliCamera.h */,
+				E72F62092A78B31B00C963D2 /* MutliCamera.m */,
+				E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */,
+			);
+			path = MutliCamera;
+			sourceTree = "<group>";
+		};
+		E7361F2E2A6E4C8A00925BD6 /* CustomVideoSourcePush */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F312A6E4C8A00925BD6 /* CustomVideoSourcePush.h */,
+				E7361F2F2A6E4C8A00925BD6 /* CustomVideoSourcePush.m */,
+				E7361F302A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard */,
+			);
+			path = CustomVideoSourcePush;
+			sourceTree = "<group>";
+		};
+		E7361F342A6E4CF500925BD6 /* ExternalVideo */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F3C2A6E4CF500925BD6 /* AgoraPictureInPictureController.h */,
+				E7361F352A6E4CF500925BD6 /* AgoraPictureInPictureController.m */,
+				E7361F362A6E4CF500925BD6 /* AgoraCameraSourcePush.swift */,
+				E7361F372A6E4CF500925BD6 /* AgoraMetalRender.swift */,
+				E7361F3E2A6E4CF500925BD6 /* AgoraSampleBufferRender.h */,
+				E7361F382A6E4CF500925BD6 /* AgoraSampleBufferRender.m */,
+				E7361F3B2A6E4CF500925BD6 /* AgoraYUVImageSourcePush.h */,
+				E7361F412A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m */,
+				E7361F3F2A6E4CF500925BD6 /* AgoraMetalShader.metal */,
+				E7361F3A2A6E4CF500925BD6 /* CircularBuffer.h */,
+				E7361F402A6E4CF500925BD6 /* CircularBuffer.c */,
+			);
+			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		E7361F4C2A6E5B3700925BD6 /* CustomVideoRender */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F4D2A6E5B3700925BD6 /* CustomVideoRender.h */,
+				E7361F4E2A6E5B3700925BD6 /* CustomVideoRender.m */,
+				E7361F4F2A6E5B3700925BD6 /* CustomVideoRender.storyboard */,
+			);
+			path = CustomVideoRender;
+			sourceTree = "<group>";
+		};
+		E7361F542A6E5E9300925BD6 /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F552A6E5E9300925BD6 /* RawAudioData.storyboard */,
+				E7361F562A6E5E9300925BD6 /* RawAudioData.h */,
+				E7361F572A6E5E9300925BD6 /* RawAudioData.m */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
+		E7361F5A2A6E60B100925BD6 /* RawVideoData */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F5B2A6E60B100925BD6 /* RawVideoData.h */,
+				E7361F5C2A6E60B100925BD6 /* RawVideoData.m */,
+				E7361F5D2A6E60B100925BD6 /* RawVideoData.storyboard */,
+			);
+			path = RawVideoData;
+			sourceTree = "<group>";
+		};
+		E7361F602A6E64FB00925BD6 /* PictureInPicture */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F632A6E64FB00925BD6 /* PictureInPicture.h */,
+				E7361F612A6E64FB00925BD6 /* PictureInPicture.m */,
+				E7361F622A6E64FB00925BD6 /* PictureInPicture.storyboard */,
+			);
+			path = PictureInPicture;
+			sourceTree = "<group>";
+		};
+		E7361F662A6E6B9F00925BD6 /* SimpleFilter */ = {
+			isa = PBXGroup;
+			children = (
+				E7361F672A6E6B9F00925BD6 /* SimpleFilter.storyboard */,
+				E7361F692A6E6B9F00925BD6 /* SimpleFilter.h */,
+				E7361F682A6E6B9F00925BD6 /* SimpleFilter.m */,
+			);
+			path = SimpleFilter;
+			sourceTree = "<group>";
+		};
+		E7361F8B2A6E6E7100925BD6 /* SimpleFilter */ = {
+			isa = PBXGroup;
+			children = (
+				E72F617C2A6E866E00C963D2 /* Info.plist */,
+				E7361FBA2A6E6EE500925BD6 /* AudioProcessor.hpp */,
+				E7361FB82A6E6EE500925BD6 /* AudioProcessor.mm */,
+				E7361FC12A6E6EE500925BD6 /* ExtensionAudioFilter.cpp */,
+				E7361FBC2A6E6EE500925BD6 /* ExtensionAudioFilter.hpp */,
+				E7361FC22A6E6EE500925BD6 /* ExtensionProvider.cpp */,
+				E7361FB72A6E6EE500925BD6 /* ExtensionProvider.hpp */,
+				E7361FC62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp */,
+				E7361FC52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp */,
+				E7361FBB2A6E6EE500925BD6 /* external_thread_pool.cpp */,
+				E7361FC42A6E6EE500925BD6 /* external_thread_pool.h */,
+				E7361FC02A6E6EE500925BD6 /* SimpleFilter.h */,
+				E7361FC32A6E6EE500925BD6 /* SimpleFilterManager.h */,
+				E7361FBE2A6E6EE500925BD6 /* SimpleFilterManager.mm */,
+				E7361FBF2A6E6EE500925BD6 /* VideoProcessor.cpp */,
+				E7361FB92A6E6EE500925BD6 /* VideoProcessor.hpp */,
+			);
+			path = SimpleFilter;
+			sourceTree = "<group>";
+		};
+		F43E85C6301E8638165CABEB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A0C8D95022D679A807C9CA1F /* Pods-APIExample.debug.xcconfig */,
+				5C186904C3CD93D15C07F383 /* Pods-APIExample.release.xcconfig */,
+				0777F7A18C2C6AB34D85584A /* Pods-SimpleFilter.debug.xcconfig */,
+				BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */,
+				D5882D286343E06CF635A5E6 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
+				34D09EED2D8833D60C484A96 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
+				B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */,
+				C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		FB95B04C515AA8E46D5A7E6A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E72F61C32A72439F00C963D2 /* Accelerate.framework */,
+				E7361FE22A6E7AFE00925BD6 /* libresolv.tbd */,
+				E7361FE12A6E7AF300925BD6 /* libz.1.1.3.tbd */,
+				E7361FE02A6E7AE200925BD6 /* libc++.tbd */,
+				F86C6C60F7635F5433A9E570 /* Pods_APIExample.framework */,
+				6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */,
+				E72F61B52A72417C00C963D2 /* ReplayKit.framework */,
+				22FD71DD1D4B470ACAC859A5 /* Pods_Agora_ScreenShare_Extension.framework */,
+				27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E7361F852A6E6E7100925BD6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7361FD02A6E6EE500925BD6 /* SimpleFilter.h in Headers */,
+				E7361FD52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp in Headers */,
+				E7361FCA2A6E6EE500925BD6 /* AudioProcessor.hpp in Headers */,
+				E7361FC72A6E6EE500925BD6 /* ExtensionProvider.hpp in Headers */,
+				E7361FD32A6E6EE500925BD6 /* SimpleFilterManager.h in Headers */,
+				E7361FC92A6E6EE500925BD6 /* VideoProcessor.hpp in Headers */,
+				E7361FCC2A6E6EE500925BD6 /* ExtensionAudioFilter.hpp in Headers */,
+				E7361FD42A6E6EE500925BD6 /* external_thread_pool.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E70ADDEB2A5D004F009947CF /* APIExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E70ADE052A5D0050009947CF /* Build configuration list for PBXNativeTarget "APIExample" */;
+			buildPhases = (
+				ACF2E9F4BE31FD8B8D2FA5BF /* [CP] Check Pods Manifest.lock */,
+				E70ADDE82A5D004F009947CF /* Sources */,
+				E70ADDE92A5D004F009947CF /* Frameworks */,
+				E70ADDEA2A5D004F009947CF /* Resources */,
+				E72F61C22A72417D00C963D2 /* Embed Foundation Extensions */,
+				9281E73D547CF2795651BE1A /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E7361F8F2A6E6E7100925BD6 /* PBXTargetDependency */,
+				E72F61D12A7256D500C963D2 /* PBXTargetDependency */,
+			);
+			name = APIExample;
+			productName = APIExample;
+			productReference = E70ADDEC2A5D004F009947CF /* APIExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E72F61D32A7256D500C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */;
+			buildPhases = (
+				CA9B52EBC19EFA78A1038D2A /* [CP] Check Pods Manifest.lock */,
+				E72F61C52A7256D500C963D2 /* Sources */,
+				E72F61C62A7256D500C963D2 /* Frameworks */,
+				E72F61C72A7256D500C963D2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Agora-ScreenShare-Extension-OC";
+			productName = "Agora-ScreenShare-Extension-OC";
+			productReference = E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		E7361F892A6E6E7100925BD6 /* SimpleFilter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7361F922A6E6E7100925BD6 /* Build configuration list for PBXNativeTarget "SimpleFilter" */;
+			buildPhases = (
+				5B4A56EDE81EBDF666FBF37B /* [CP] Check Pods Manifest.lock */,
+				E7361F852A6E6E7100925BD6 /* Headers */,
+				E7361F862A6E6E7100925BD6 /* Sources */,
+				E7361F872A6E6E7100925BD6 /* Frameworks */,
+				E7361F882A6E6E7100925BD6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleFilter;
+			productName = SimpleFilter;
+			productReference = E7361F8A2A6E6E7100925BD6 /* SimpleFilter.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E70ADDE42A5D004F009947CF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1430;
+				ORGANIZATIONNAME = "";
+				TargetAttributes = {
+					E70ADDEB2A5D004F009947CF = {
+						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1430;
+					};
+					E72F61C82A7256D500C963D2 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					E7361F892A6E6E7100925BD6 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = E70ADDE72A5D004F009947CF /* Build configuration list for PBXProject "APIExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				"zh-Hans",
+				Base,
+				en,
+			);
+			mainGroup = E70ADDE32A5D004F009947CF;
+			productRefGroup = E70ADDED2A5D004F009947CF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E70ADDEB2A5D004F009947CF /* APIExample */,
+				E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */,
+				E7361F892A6E6E7100925BD6 /* SimpleFilter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E70ADDEA2A5D004F009947CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E70ADEE32A6A7177009947CF /* CustomAudioRender.storyboard in Resources */,
+				E70ADE702A5FDC45009947CF /* JoinChannelVideoRecorder.storyboard in Resources */,
+				E70ADE552A5F9F83009947CF /* JoinChannelVideoToken.storyboard in Resources */,
+				E7361F582A6E5E9300925BD6 /* RawAudioData.storyboard in Resources */,
+				E70ADEA82A64EA5C009947CF /* RTMPStreaming.storyboard in Resources */,
+				E7361F5F2A6E60B100925BD6 /* RawVideoData.storyboard in Resources */,
+				E72F61F22A73B93200C963D2 /* MediaChannelRelay.storyboard in Resources */,
+				E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */,
+				E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */,
+				E72F620B2A78B31B00C963D2 /* MutliCamera.storyboard in Resources */,
+				E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */,
+				E70ADE162A5D026E009947CF /* sample.yuv in Resources */,
+				E70ADE152A5D026E009947CF /* agora-logo.png in Resources */,
+				E72F61832A70C71200C963D2 /* JoinMultiChannel.storyboard in Resources */,
+				E70ADE4E2A5E57FF009947CF /* JoinChannelAudio.storyboard in Resources */,
+				E70ADE142A5D026E009947CF /* audioeffect.mp3 in Resources */,
+				E72F62062A77A65300C963D2 /* ContentInspect.storyboard in Resources */,
+				E72F61A72A710B1500C963D2 /* MediaPlayer.storyboard in Resources */,
+				E7361F332A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard in Resources */,
+				E70ADECC2A663A06009947CF /* VoiceChanger.storyboard in Resources */,
+				E72F619B2A7106F800C963D2 /* AudioMixing.storyboard in Resources */,
+				E70ADE192A5D026E009947CF /* sample.mov in Resources */,
+				E7361F4B2A6E55EA00925BD6 /* VideoViewSampleBufferDisplayView.xib in Resources */,
+				E72F61DD2A72593900C963D2 /* VideoProcess.storyboard in Resources */,
+				E70ADED92A6A2BE6009947CF /* CustomPcmAudioSource.storyboard in Resources */,
+				E70ADE182A5D026E009947CF /* output.raw in Resources */,
+				E72F61E52A739FBB00C963D2 /* RhythmPlayer.storyboard in Resources */,
+				E70ADE1A2A5D026E009947CF /* frames0.yuv in Resources */,
+				E70ADDFF2A5D0050009947CF /* LaunchScreen.storyboard in Resources */,
+				E70ADEC62A66306F009947CF /* VideoMetadata.storyboard in Resources */,
+				E72F61AF2A72179700C963D2 /* ScreenShare.storyboard in Resources */,
+				E7361F512A6E5B3700925BD6 /* CustomVideoRender.storyboard in Resources */,
+				E70ADDFC2A5D0050009947CF /* Assets.xcassets in Resources */,
+				E70ADE682A5FAAEB009947CF /* Localizable.strings in Resources */,
+				E72F61FE2A778B1400C963D2 /* SpatialAudio.storyboard in Resources */,
+				E70ADE362A5D41C9009947CF /* VideoView.xib in Resources */,
+				E7361F532A6E5C2100925BD6 /* VideoViewMetal.xib in Resources */,
+				E7361F652A6E64FB00925BD6 /* PictureInPicture.storyboard in Resources */,
+				E72F618E2A70F9B700C963D2 /* StreamEncryption.storyboard in Resources */,
+				E70ADE172A5D026E009947CF /* audiomixing.mp3 in Resources */,
+				E72F61EA2A73A25F00C963D2 /* CreateDataStream.storyboard in Resources */,
+				E70ADDFA2A5D004F009947CF /* Main.storyboard in Resources */,
+				E7361F6A2A6E6B9F00925BD6 /* SimpleFilter.storyboard in Resources */,
+				E70ADE432A5E56C4009947CF /* JoinChannelVideo.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E72F61C72A7256D500C963D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7361F882A6E6E7100925BD6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5B4A56EDE81EBDF666FBF37B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SimpleFilter-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9281E73D547CF2795651BE1A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ACF2E9F4BE31FD8B8D2FA5BF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CA9B52EBC19EFA78A1038D2A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Agora-ScreenShare-Extension-OC-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E70ADDE82A5D004F009947CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E72F61F12A73B44A00C963D2 /* MediaChannelRelay.m in Sources */,
+				E7361F502A6E5B3700925BD6 /* CustomVideoRender.m in Sources */,
+				E70ADEF12A6A72AD009947CF /* AudioController.m in Sources */,
+				E7361F472A6E4CF500925BD6 /* AgoraMetalShader.metal in Sources */,
+				E70ADE3F2A5D4D05009947CF /* NetworkManager.swift in Sources */,
+				E7361F452A6E4CF500925BD6 /* AgoraSampleBufferRender.m in Sources */,
+				E70ADE292A5D0A15009947CF /* KeyCenter.m in Sources */,
+				E70ADE312A5D35BA009947CF /* BaseViewController.m in Sources */,
+				E70ADEE22A6A7177009947CF /* CustomAudioRender.m in Sources */,
+				E7361F482A6E4CF500925BD6 /* CircularBuffer.c in Sources */,
+				E72F61DB2A7258F800C963D2 /* VideoProcess.m in Sources */,
+				E70ADE1F2A5D0368009947CF /* MediaUtils.m in Sources */,
+				E70ADEDD2A6A2D7D009947CF /* AgoraPCMSourcePush.m in Sources */,
+				E70ADE202A5D0368009947CF /* BundleUtil.m in Sources */,
+				E72F620C2A78B31B00C963D2 /* MutliCamera.m in Sources */,
+				E70ADE742A60EC9A009947CF /* LiveStreaming.m in Sources */,
+				E70ADEE62A6A71FE009947CF /* ExternalAudio.mm in Sources */,
+				E70ADDF72A5D004F009947CF /* ViewController.m in Sources */,
+				E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */,
+				E70ADEEB2A6A727E009947CF /* UIColor+CSRGB.m in Sources */,
+				E70ADE7A2A60F214009947CF /* AlertManager.swift in Sources */,
+				E70ADE402A5D4D05009947CF /* JSONObject.swift in Sources */,
+				E70ADEEE2A6A728E009947CF /* UIView+CSshortFrame.m in Sources */,
+				E7361F5E2A6E60B100925BD6 /* RawVideoData.m in Sources */,
+				E70ADE4F2A5E57FF009947CF /* JoinChannelAudio.m in Sources */,
+				E7361F422A6E4CF500925BD6 /* AgoraPictureInPictureController.m in Sources */,
+				E70ADE7B2A60F214009947CF /* PickerView.swift in Sources */,
+				E7361F492A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m in Sources */,
+				E70ADE3E2A5D4D05009947CF /* ToastView.swift in Sources */,
+				E7361F592A6E5E9300925BD6 /* RawAudioData.m in Sources */,
+				E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */,
+				E70ADEF42A6A72C6009947CF /* AudioWriteToFile.m in Sources */,
+				E72F62002A7796A200C963D2 /* SpatialAudioActionSheet.swift in Sources */,
+				E72F61A52A710AB200C963D2 /* MediaPlayer.m in Sources */,
+				E7361F6B2A6E6B9F00925BD6 /* SimpleFilter.m in Sources */,
+				E72F618D2A70F8AF00C963D2 /* AgoraCustomEncryption.mm in Sources */,
+				E72F62042A77A63D00C963D2 /* ContentInspect.m in Sources */,
+				E7361F322A6E4C8A00925BD6 /* CustomVideoSourcePush.m in Sources */,
+				E70ADE342A5D41BF009947CF /* VideoView.m in Sources */,
+				E70ADE6F2A5FDC45009947CF /* JoinChannelVideoRecorder.m in Sources */,
+				E70ADE022A5D0050009947CF /* main.m in Sources */,
+				E7361F432A6E4CF500925BD6 /* AgoraCameraSourcePush.swift in Sources */,
+				E70ADE542A5F9F83009947CF /* JoinChannelVideoToken.m in Sources */,
+				E70ADECD2A663A06009947CF /* VoiceChanger.m in Sources */,
+				E72F61972A70FAFE00C963D2 /* AudioMixing.m in Sources */,
+				E72F61FC2A778ADC00C963D2 /* SpatialAudio.m in Sources */,
+				E7361F642A6E64FB00925BD6 /* PictureInPicture.m in Sources */,
+				E7361F442A6E4CF500925BD6 /* AgoraMetalRender.swift in Sources */,
+				E70ADE252A5D069A009947CF /* JoinChannelVideo.m in Sources */,
+				E70ADDF42A5D004F009947CF /* SceneDelegate.m in Sources */,
+				E70ADEC72A66306F009947CF /* VideoMetadata.m in Sources */,
+				E72F61882A70F16500C963D2 /* StreamEncryption.m in Sources */,
+				E70ADEA72A64E230009947CF /* RTMPStreaming.m in Sources */,
+				E72F61AC2A72175400C963D2 /* ScreenShare.m in Sources */,
+				E72F61822A70C71200C963D2 /* JoinMultiChannel.m in Sources */,
+				E72F61E32A739F8700C963D2 /* RhythmPlayer.m in Sources */,
+				E72F61EB2A73A25F00C963D2 /* CreateDataStream.m in Sources */,
+				E70ADED82A6A2BE6009947CF /* CustomPcmAudioSource.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E72F61C52A7256D500C963D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E72F61CE2A7256D500C963D2 /* SampleHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7361F862A6E6E7100925BD6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7361FD62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp in Sources */,
+				E7361FCB2A6E6EE500925BD6 /* external_thread_pool.cpp in Sources */,
+				E7361FCE2A6E6EE500925BD6 /* SimpleFilterManager.mm in Sources */,
+				E7361FD12A6E6EE500925BD6 /* ExtensionAudioFilter.cpp in Sources */,
+				E7361FCF2A6E6EE500925BD6 /* VideoProcessor.cpp in Sources */,
+				E7361FD22A6E6EE500925BD6 /* ExtensionProvider.cpp in Sources */,
+				E7361FC82A6E6EE500925BD6 /* AudioProcessor.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E72F61D12A7256D500C963D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */;
+			targetProxy = E72F61D02A7256D500C963D2 /* PBXContainerItemProxy */;
+		};
+		E7361F8F2A6E6E7100925BD6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7361F892A6E6E7100925BD6 /* SimpleFilter */;
+			targetProxy = E7361F8E2A6E6E7100925BD6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E70ADDF82A5D004F009947CF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADE622A5FAA01009947CF /* zh-Hans */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E70ADDFD2A5D0050009947CF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADE632A5FAA02009947CF /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E70ADE6A2A5FAAEB009947CF /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADE692A5FAAEB009947CF /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E70ADE7E2A612683009947CF /* LiveStreaming.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADE802A61284A009947CF /* Base */,
+				E70ADE812A612853009947CF /* zh-Hans */,
+			);
+			name = LiveStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		E70ADEAA2A64EA5C009947CF /* RTMPStreaming.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADEAB2A64EA69009947CF /* Base */,
+				E70ADEAC2A64EA75009947CF /* zh-Hans */,
+			);
+			name = RTMPStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		E70ADEB82A64ED3A009947CF /* FusionCDN.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADEB92A64ED3A009947CF /* zh-Hans */,
+				E70ADEBA2A64ED3A009947CF /* en */,
+			);
+			name = FusionCDN.strings;
+			sourceTree = "<group>";
+		};
+		E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E70ADEBD2A64ED3A009947CF /* Base */,
+			);
+			name = FusionCDN.storyboard;
+			sourceTree = "<group>";
+		};
+		E72F61902A70F9B700C963D2 /* StreamEncryption.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E72F61912A70F9D700C963D2 /* Base */,
+				E72F61922A70F9DE00C963D2 /* zh-Hans */,
+			);
+			name = StreamEncryption.storyboard;
+			sourceTree = "<group>";
+		};
+		E72F619D2A7106F800C963D2 /* AudioMixing.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E72F619C2A7106F800C963D2 /* Base */,
+				E72F619F2A7106FC00C963D2 /* zh-Hans */,
+			);
+			name = AudioMixing.storyboard;
+			sourceTree = "<group>";
+		};
+		E72F61F42A73B93200C963D2 /* MediaChannelRelay.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E72F61F32A73B93200C963D2 /* Base */,
+				E72F61F62A73B93500C963D2 /* zh-Hans */,
+			);
+			name = MediaChannelRelay.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E70ADE032A5D0050009947CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E70ADE042A5D0050009947CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E70ADE062A5D0050009947CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A0C8D95022D679A807C9CA1F /* Pods-APIExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = APIExample/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E70ADE072A5D0050009947CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C186904C3CD93D15C07F383 /* Pods-APIExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = APIExample/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E72F61D42A7256D500C963D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension-OC";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E72F61D52A7256D500C963D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension-OC";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E7361F932A6E6E7100925BD6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0777F7A18C2C6AB34D85584A /* Pods-SimpleFilter.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MARKETING_VERSION = "";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.simpleFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E7361F942A6E6E7100925BD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MARKETING_VERSION = "";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.simpleFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E70ADDE72A5D004F009947CF /* Build configuration list for PBXProject "APIExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E70ADE032A5D0050009947CF /* Debug */,
+				E70ADE042A5D0050009947CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E70ADE052A5D0050009947CF /* Build configuration list for PBXNativeTarget "APIExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E70ADE062A5D0050009947CF /* Debug */,
+				E70ADE072A5D0050009947CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E72F61D32A7256D500C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E72F61D42A7256D500C963D2 /* Debug */,
+				E72F61D52A7256D500C963D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7361F922A6E6E7100925BD6 /* Build configuration list for PBXNativeTarget "SimpleFilter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7361F932A6E6E7100925BD6 /* Debug */,
+				E7361F942A6E6E7100925BD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E70ADDE42A5D004F009947CF /* Project object */;
+}
