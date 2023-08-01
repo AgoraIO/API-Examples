@@ -20,7 +20,7 @@ def modfiy(path, isReset):
                 if isReset:
                     line = "static NSString * const APPID = <#YOUR APPID#>"
                 else:
-                    line = f'static NSString * const APPID = "{appId}";'
+                    line = f'static NSString * const APPID = @"{appId}";'
             elif "static NSString * const Certificate" in line:
                 if isReset:
                     line = "static NSString * const Certificate = <#YOUR Certificate#>"
