@@ -16,6 +16,16 @@ def modfiy(path, isReset):
                     line = "static let Certificate: String? = <#YOUR Certificate#>"
                 else:
                     line = 'static let Certificate: String? = nil'
+            elif "static NSString * const APPID" in line:
+                if isReset:
+                    line = "static NSString * const APPID = <#YOUR APPID#>"
+                else:
+                    line = f'static NSString * const APPID = "{appId}";'
+            elif "static NSString * const Certificate" in line:
+                if isReset:
+                    line = "static NSString * const Certificate = <#YOUR Certificate#>"
+                else:
+                    line = 'static NSString * const Certificate = nil;'
             contents.append(line)
         file.close()
         
