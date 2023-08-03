@@ -71,7 +71,8 @@
         [view removeFromSuperview];
     }
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
-    flowLayout.itemSize = CGSizeMake(self.bounds.size.width * 0.5, self.bounds.size.height);
+    NSInteger count = views.count > 2 ? 2 : views.count;
+    flowLayout.itemSize = CGSizeMake(self.bounds.size.width / count, self.bounds.size.height);
     flowLayout.estimatedItemSize = CGSizeZero;
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
@@ -108,7 +109,8 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.bounds.size.width * 0.5, self.bounds.size.height);
+    NSInteger count = self.views.count > 2 ? 2 : self.views.count;
+    return CGSizeMake(self.bounds.size.width / count, self.bounds.size.height);
 }
 
 @end

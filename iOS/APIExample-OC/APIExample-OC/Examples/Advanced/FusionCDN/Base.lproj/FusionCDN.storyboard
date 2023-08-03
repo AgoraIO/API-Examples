@@ -181,7 +181,6 @@
                                 <rect key="frame" x="357" y="764" width="51" height="31"/>
                                 <connections>
                                     <action selector="setRtcStreaming:" destination="62w-Zf-AWr" eventType="valueChanged" id="aac-BK-hUG"/>
-                                    <action selector="setRtcStreamingWithSender:" destination="62w-Zf-AWr" eventType="valueChanged" id="ZLR-2F-BGi"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RTC Streaming" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3rU-yw-DFb">

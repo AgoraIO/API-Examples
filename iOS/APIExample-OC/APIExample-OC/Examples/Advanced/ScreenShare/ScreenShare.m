@@ -245,6 +245,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.agoraKit stopScreenCapture];
     [self.agoraKit disableAudio];
     [self.agoraKit disableVideo];
     [self.agoraKit stopPreview];

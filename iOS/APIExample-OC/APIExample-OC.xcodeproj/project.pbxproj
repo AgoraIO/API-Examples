@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38FA990554B721DB226604E7 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
 		749177BD2429C778B3C6D520 /* Pods_APIExample_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D931C433C0CD269F3C3323D /* Pods_APIExample_OC.framework */; };
 		961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */; };
+		C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
 		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
 		E70ADDF42A5D004F009947CF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF32A5D004F009947CF /* SceneDelegate.m */; };
 		E70ADDF72A5D004F009947CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF62A5D004F009947CF /* ViewController.m */; };
@@ -76,9 +76,6 @@
 		E72F61A72A710B1500C963D2 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61A62A710B1500C963D2 /* MediaPlayer.storyboard */; };
 		E72F61AC2A72175400C963D2 /* ScreenShare.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61A92A72175400C963D2 /* ScreenShare.m */; };
 		E72F61AF2A72179700C963D2 /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61AE2A72179700C963D2 /* ScreenShare.storyboard */; };
-		E72F61CA2A7256D500C963D2 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72F61B52A72417C00C963D2 /* ReplayKit.framework */; };
-		E72F61CE2A7256D500C963D2 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61CD2A7256D500C963D2 /* SampleHandler.m */; };
-		E72F61D22A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E72F61DB2A7258F800C963D2 /* VideoProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61D92A7258F800C963D2 /* VideoProcess.m */; };
 		E72F61DD2A72593900C963D2 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F61DC2A72593900C963D2 /* VideoProcess.storyboard */; };
 		E72F61E32A739F8700C963D2 /* RhythmPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F61E02A739F8700C963D2 /* RhythmPlayer.m */; };
@@ -94,6 +91,9 @@
 		E72F62062A77A65300C963D2 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F62052A77A65300C963D2 /* ContentInspect.storyboard */; };
 		E72F620B2A78B31B00C963D2 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */; };
 		E72F620C2A78B31B00C963D2 /* MutliCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F62092A78B31B00C963D2 /* MutliCamera.m */; };
+		E72F62342A7B8AFA00C963D2 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72F61B52A72417C00C963D2 /* ReplayKit.framework */; };
+		E72F62382A7B8AFB00C963D2 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = E72F62372A7B8AFB00C963D2 /* SampleHandler.m */; };
+		E72F623C2A7B8AFB00C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E72F62332A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E7361F322A6E4C8A00925BD6 /* CustomVideoSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F2F2A6E4C8A00925BD6 /* CustomVideoSourcePush.m */; };
 		E7361F332A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7361F302A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard */; };
 		E7361F422A6E4CF500925BD6 /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7361F352A6E4CF500925BD6 /* AgoraPictureInPictureController.m */; };
@@ -134,11 +134,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E72F61D02A7256D500C963D2 /* PBXContainerItemProxy */ = {
+		E72F623A2A7B8AFB00C963D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E70ADDE42A5D004F009947CF /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = E72F61C82A7256D500C963D2;
+			remoteGlobalIDString = E72F62322A7B8AFA00C963D2;
 			remoteInfo = "Agora-ScreenShare-Extension-OC";
 		};
 		E7361F8E2A6E6E7100925BD6 /* PBXContainerItemProxy */ = {
@@ -157,7 +157,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E72F61D22A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */,
+				E72F623C2A7B8AFB00C963D2 /* Agora-ScreenShare-Extension-OC.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +169,7 @@
 		1D931C433C0CD269F3C3323D /* Pods_APIExample_OC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_OC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22FD71DD1D4B470ACAC859A5 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_OC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		317CCFA634C02C6002F78D7F /* Pods-Agora-ScrrenShare-Extension-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScrrenShare-Extension-OC.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScrrenShare-Extension-OC/Pods-Agora-ScrrenShare-Extension-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		34D09EED2D8833D60C484A96 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		4AFBD168F7226ED022677FB4 /* Pods-APIExample-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-OC.release.xcconfig"; path = "Target Support Files/Pods-APIExample-OC/Pods-APIExample-OC.release.xcconfig"; sourceTree = "<group>"; };
 		5C186904C3CD93D15C07F383 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -179,6 +180,7 @@
 		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
 		D5882D286343E06CF635A5E6 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		E22416FC36DE1212EE1E1760 /* Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScrrenShare-Extension-OC/Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
 		E70ADDEC2A5D004F009947CF /* APIExample-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70ADDEF2A5D004F009947CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E70ADDF02A5D004F009947CF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -288,10 +290,6 @@
 		E72F61AE2A72179700C963D2 /* ScreenShare.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScreenShare.storyboard; sourceTree = "<group>"; };
 		E72F61B52A72417C00C963D2 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		E72F61C32A72439F00C963D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Agora-ScreenShare-Extension-OC.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E72F61CC2A7256D500C963D2 /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
-		E72F61CD2A7256D500C963D2 /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
-		E72F61CF2A7256D500C963D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E72F61D72A7258F800C963D2 /* VideoProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoProcess.h; sourceTree = "<group>"; };
 		E72F61D92A7258F800C963D2 /* VideoProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProcess.m; sourceTree = "<group>"; };
 		E72F61DC2A72593900C963D2 /* VideoProcess.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoProcess.storyboard; sourceTree = "<group>"; };
@@ -315,6 +313,10 @@
 		E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MutliCamera.storyboard; sourceTree = "<group>"; };
 		E72F62092A78B31B00C963D2 /* MutliCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MutliCamera.m; sourceTree = "<group>"; };
 		E72F620A2A78B31B00C963D2 /* MutliCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MutliCamera.h; sourceTree = "<group>"; };
+		E72F62332A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Agora-ScreenShare-Extension-OC.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E72F62362A7B8AFB00C963D2 /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		E72F62372A7B8AFB00C963D2 /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
+		E72F62392A7B8AFB00C963D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7361F2F2A6E4C8A00925BD6 /* CustomVideoSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomVideoSourcePush.m; sourceTree = "<group>"; };
 		E7361F302A6E4C8A00925BD6 /* CustomVideoSourcePush.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
 		E7361F312A6E4C8A00925BD6 /* CustomVideoSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomVideoSourcePush.h; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 		E7361FE02A6E7AE200925BD6 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		E7361FE12A6E7AF300925BD6 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		E7361FE22A6E7AFE00925BD6 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		EE1DD4153A945ADCE1953823 /* Pods_Agora_ScrrenShare_Extension_OC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScrrenShare_Extension_OC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -377,12 +380,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E72F61C62A7256D500C963D2 /* Frameworks */ = {
+		E72F62302A7B8AFA00C963D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E72F61CA2A7256D500C963D2 /* ReplayKit.framework in Frameworks */,
-				38FA990554B721DB226604E7 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */,
+				E72F62342A7B8AFA00C963D2 /* ReplayKit.framework in Frameworks */,
+				C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +406,7 @@
 				E70ADE6A2A5FAAEB009947CF /* Localizable.strings */,
 				E70ADDEE2A5D004F009947CF /* APIExample-OC */,
 				E7361F8B2A6E6E7100925BD6 /* SimpleFilter */,
-				E72F61CB2A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */,
+				E72F62352A7B8AFB00C963D2 /* Agora-ScreenShare-Extension-OC */,
 				E70ADDED2A5D004F009947CF /* Products */,
 				F43E85C6301E8638165CABEB /* Pods */,
 				FB95B04C515AA8E46D5A7E6A /* Frameworks */,
@@ -415,7 +418,7 @@
 			children = (
 				E70ADDEC2A5D004F009947CF /* APIExample-OC.app */,
 				E7361F8A2A6E6E7100925BD6 /* SimpleFilter.framework */,
-				E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */,
+				E72F62332A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -751,16 +754,6 @@
 			path = ScreenShare;
 			sourceTree = "<group>";
 		};
-		E72F61CB2A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */ = {
-			isa = PBXGroup;
-			children = (
-				E72F61CC2A7256D500C963D2 /* SampleHandler.h */,
-				E72F61CD2A7256D500C963D2 /* SampleHandler.m */,
-				E72F61CF2A7256D500C963D2 /* Info.plist */,
-			);
-			path = "Agora-ScreenShare-Extension-OC";
-			sourceTree = "<group>";
-		};
 		E72F61D62A7258F800C963D2 /* VideoProcess */ = {
 			isa = PBXGroup;
 			children = (
@@ -829,6 +822,16 @@
 				E72F62082A78B31B00C963D2 /* MutliCamera.storyboard */,
 			);
 			path = MutliCamera;
+			sourceTree = "<group>";
+		};
+		E72F62352A7B8AFB00C963D2 /* Agora-ScreenShare-Extension-OC */ = {
+			isa = PBXGroup;
+			children = (
+				E72F62362A7B8AFB00C963D2 /* SampleHandler.h */,
+				E72F62372A7B8AFB00C963D2 /* SampleHandler.m */,
+				E72F62392A7B8AFB00C963D2 /* Info.plist */,
+			);
+			path = "Agora-ScreenShare-Extension-OC";
 			sourceTree = "<group>";
 		};
 		E7361F2E2A6E4C8A00925BD6 /* CustomVideoSourcePush */ = {
@@ -945,6 +948,8 @@
 				C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */,
 				6E437BC9AAAA1A6431B353C9 /* Pods-APIExample-OC.debug.xcconfig */,
 				4AFBD168F7226ED022677FB4 /* Pods-APIExample-OC.release.xcconfig */,
+				317CCFA634C02C6002F78D7F /* Pods-Agora-ScrrenShare-Extension-OC.debug.xcconfig */,
+				E22416FC36DE1212EE1E1760 /* Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -961,6 +966,7 @@
 				22FD71DD1D4B470ACAC859A5 /* Pods_Agora_ScreenShare_Extension.framework */,
 				27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */,
 				1D931C433C0CD269F3C3323D /* Pods_APIExample_OC.framework */,
+				EE1DD4153A945ADCE1953823 /* Pods_Agora_ScrrenShare_Extension_OC.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1001,21 +1007,21 @@
 			);
 			dependencies = (
 				E7361F8F2A6E6E7100925BD6 /* PBXTargetDependency */,
-				E72F61D12A7256D500C963D2 /* PBXTargetDependency */,
+				E72F623B2A7B8AFB00C963D2 /* PBXTargetDependency */,
 			);
 			name = "APIExample-OC";
 			productName = APIExample;
 			productReference = E70ADDEC2A5D004F009947CF /* APIExample-OC.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */ = {
+		E72F62322A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E72F61D32A7256D500C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */;
+			buildConfigurationList = E72F623D2A7B8AFB00C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */;
 			buildPhases = (
-				CA9B52EBC19EFA78A1038D2A /* [CP] Check Pods Manifest.lock */,
-				E72F61C52A7256D500C963D2 /* Sources */,
-				E72F61C62A7256D500C963D2 /* Frameworks */,
-				E72F61C72A7256D500C963D2 /* Resources */,
+				9C37394FF17BD3370C4DD5B3 /* [CP] Check Pods Manifest.lock */,
+				E72F622F2A7B8AFA00C963D2 /* Sources */,
+				E72F62302A7B8AFA00C963D2 /* Frameworks */,
+				E72F62312A7B8AFA00C963D2 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1023,7 +1029,7 @@
 			);
 			name = "Agora-ScreenShare-Extension-OC";
 			productName = "Agora-ScreenShare-Extension-OC";
-			productReference = E72F61C92A7256D500C963D2 /* Agora-ScreenShare-Extension-OC.appex */;
+			productReference = E72F62332A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		E7361F892A6E6E7100925BD6 /* SimpleFilter */ = {
@@ -1059,7 +1065,7 @@
 						CreatedOnToolsVersion = 14.3;
 						LastSwiftMigration = 1430;
 					};
-					E72F61C82A7256D500C963D2 = {
+					E72F62322A7B8AFA00C963D2 = {
 						CreatedOnToolsVersion = 14.3;
 					};
 					E7361F892A6E6E7100925BD6 = {
@@ -1082,8 +1088,8 @@
 			projectRoot = "";
 			targets = (
 				E70ADDEB2A5D004F009947CF /* APIExample-OC */,
-				E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */,
 				E7361F892A6E6E7100925BD6 /* SimpleFilter */,
+				E72F62322A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC */,
 			);
 		};
 /* End PBXProject section */
@@ -1140,7 +1146,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E72F61C72A7256D500C963D2 /* Resources */ = {
+		E72F62312A7B8AFA00C963D2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1196,6 +1202,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-OC/Pods-APIExample-OC-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9C37394FF17BD3370C4DD5B3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Agora-ScreenShare-Extension-OC-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		ACF2E9F4BE31FD8B8D2FA5BF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1212,28 +1240,6 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-APIExample-OC-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CA9B52EBC19EFA78A1038D2A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Agora-ScreenShare-Extension-OC-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1308,11 +1314,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E72F61C52A7256D500C963D2 /* Sources */ = {
+		E72F622F2A7B8AFA00C963D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E72F61CE2A7256D500C963D2 /* SampleHandler.m in Sources */,
+				E72F62382A7B8AFB00C963D2 /* SampleHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1333,10 +1339,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E72F61D12A7256D500C963D2 /* PBXTargetDependency */ = {
+		E72F623B2A7B8AFB00C963D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E72F61C82A7256D500C963D2 /* Agora-ScreenShare-Extension-OC */;
-			targetProxy = E72F61D02A7256D500C963D2 /* PBXContainerItemProxy */;
+			target = E72F62322A7B8AFA00C963D2 /* Agora-ScreenShare-Extension-OC */;
+			targetProxy = E72F623A2A7B8AFB00C963D2 /* PBXContainerItemProxy */;
 		};
 		E7361F8F2A6E6E7100925BD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1560,6 +1566,7 @@
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "APIExample-OC/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "APIExample-OC";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1600,6 +1607,7 @@
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "APIExample-OC/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "APIExample-OC";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1626,7 +1634,7 @@
 			};
 			name = Release;
 		};
-		E72F61D42A7256D500C963D2 /* Debug */ = {
+		E72F623E2A7B8AFB00C963D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */;
 			buildSettings = {
@@ -1637,6 +1645,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension-OC";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1652,7 +1661,7 @@
 			};
 			name = Debug;
 		};
-		E72F61D52A7256D500C963D2 /* Release */ = {
+		E72F623F2A7B8AFB00C963D2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */;
 			buildSettings = {
@@ -1663,6 +1672,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension-OC";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1787,11 +1797,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E72F61D32A7256D500C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */ = {
+		E72F623D2A7B8AFB00C963D2 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension-OC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E72F61D42A7256D500C963D2 /* Debug */,
-				E72F61D52A7256D500C963D2 /* Release */,
+				E72F623E2A7B8AFB00C963D2 /* Debug */,
+				E72F623F2A7B8AFB00C963D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

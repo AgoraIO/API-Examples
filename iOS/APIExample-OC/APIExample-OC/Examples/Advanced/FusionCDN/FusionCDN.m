@@ -91,6 +91,7 @@ CGFloat HEIGHT = 640;
 @property (nonatomic, assign) BOOL isRtcStreaming;
 @property (nonatomic, strong) AgoraLiveTranscoding *transcoding;
 @property (nonatomic, assign) NSUInteger localUid;
+@property (nonatomic, strong) AgoraVideoEncoderConfiguration *videoConfig;
 
 @end
 
@@ -139,6 +140,7 @@ CGFloat HEIGHT = 640;
                                                                                                  bitrate:15
                                                                                          orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
                                                                                               mirrorMode:(AgoraVideoMirrorModeAuto)];
+    self.videoConfig = encoderConfig;
     [self.agoraKit setVideoEncoderConfiguration:encoderConfig];
     [self.agoraKit setDirectCdnStreamingVideoConfiguration:encoderConfig];
     [self.agoraKit setDirectCdnStreamingAudioConfiguration:(AgoraAudioProfileDefault)];
@@ -220,6 +222,8 @@ CGFloat HEIGHT = 640;
 }
 
 - (void)switchToRskStreaming {
+    [self.agoraKit setDirectCdnStreamingVideoConfiguration:self.videoConfig];
+    [self.agoraKit setDirectCdnStreamingAudioConfiguration:(AgoraAudioProfileDefault)];
     AgoraDirectCdnStreamingMediaOptions *options = [[AgoraDirectCdnStreamingMediaOptions alloc] init];
     options.publishCameraTrack = YES;
     options.publishMicrophoneTrack = YES;
