@@ -81,7 +81,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="YJ8-M4-hac">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="90" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="YJ8-M4-hac">
                                 <rect key="frame" x="167" y="690" width="227" height="31"/>
                                 <connections>
                                     <action selector="onChangeRecordingVolume:" destination="p70-sh-D1h" eventType="valueChanged" id="PNF-M7-Lxq"/>

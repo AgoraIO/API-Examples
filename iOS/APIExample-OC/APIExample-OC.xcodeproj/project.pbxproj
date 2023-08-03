@@ -11,7 +11,6 @@
 		961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */; };
 		C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
 		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
-		E70ADDF42A5D004F009947CF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF32A5D004F009947CF /* SceneDelegate.m */; };
 		E70ADDF72A5D004F009947CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF62A5D004F009947CF /* ViewController.m */; };
 		E70ADDFA2A5D004F009947CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDF82A5D004F009947CF /* Main.storyboard */; };
 		E70ADDFC2A5D0050009947CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDFB2A5D0050009947CF /* Assets.xcassets */; };
@@ -184,8 +183,6 @@
 		E70ADDEC2A5D004F009947CF /* APIExample-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70ADDEF2A5D004F009947CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E70ADDF02A5D004F009947CF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E70ADDF22A5D004F009947CF /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		E70ADDF32A5D004F009947CF /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		E70ADDF52A5D004F009947CF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		E70ADDF62A5D004F009947CF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E70ADDFB2A5D0050009947CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -431,8 +428,6 @@
 				E70ADE0C2A5D00C0009947CF /* Resources */,
 				E70ADDEF2A5D004F009947CF /* AppDelegate.h */,
 				E70ADDF02A5D004F009947CF /* AppDelegate.m */,
-				E70ADDF22A5D004F009947CF /* SceneDelegate.h */,
-				E70ADDF32A5D004F009947CF /* SceneDelegate.m */,
 				E70ADDF52A5D004F009947CF /* ViewController.h */,
 				E70ADDF62A5D004F009947CF /* ViewController.m */,
 				E70ADDF82A5D004F009947CF /* Main.storyboard */,
@@ -1302,7 +1297,6 @@
 				E7361F642A6E64FB00925BD6 /* PictureInPicture.m in Sources */,
 				E7361F442A6E4CF500925BD6 /* AgoraMetalRender.swift in Sources */,
 				E70ADE252A5D069A009947CF /* JoinChannelVideo.m in Sources */,
-				E70ADDF42A5D004F009947CF /* SceneDelegate.m in Sources */,
 				E70ADEC72A66306F009947CF /* VideoMetadata.m in Sources */,
 				E72F61882A70F16500C963D2 /* StreamEncryption.m in Sources */,
 				E70ADEA72A64E230009947CF /* RTMPStreaming.m in Sources */,

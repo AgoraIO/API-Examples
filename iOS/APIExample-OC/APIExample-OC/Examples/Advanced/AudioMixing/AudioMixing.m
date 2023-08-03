@@ -217,6 +217,15 @@
         [self updateTotalDuration: YES];
     }
 }
+- (IBAction)onStopAudioMixing:(UIButton *)sender {
+    int result = [self.agoraKit stopAudioMixing];
+    if (result != 0) {
+        [self showAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"stopAudioMixing call failed: %d, please check your params",result]];
+    } else {
+        [self stopProgressTimer];
+        [self updateTotalDuration:YES];
+    }
+}
 - (IBAction)onPauseAudioMixing:(UIButton *)sender {
     int result = [self.agoraKit pauseAudioMixing];
     if (result != 0) {
