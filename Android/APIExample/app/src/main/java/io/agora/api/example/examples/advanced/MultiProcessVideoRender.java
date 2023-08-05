@@ -2,7 +2,6 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-import static io.agora.rtc2.Constants.RENDER_MODE_FIT;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 
 import android.Manifest;
@@ -202,7 +201,7 @@ public class MultiProcessVideoRender extends BaseFragment implements View.OnClic
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
                 try {
-                    mService.setupLocalVideo(holder.getSurface(), width, height, Constants.VIDEO_MIRROR_MODE_AUTO, RENDER_MODE_FIT);
+                    mService.setupLocalVideo(holder.getSurface(), width, height, Constants.VIDEO_MIRROR_MODE_AUTO, RENDER_MODE_HIDDEN);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -293,7 +292,7 @@ public class MultiProcessVideoRender extends BaseFragment implements View.OnClic
                     @Override
                     public void surfaceCreated(@NonNull SurfaceHolder holder) {
                         try {
-                            mService.setupRemoteVideo(holder.getSurface(), 0, 0, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_FIT);
+                            mService.setupRemoteVideo(holder.getSurface(), 0, 0, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_HIDDEN);
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
@@ -302,7 +301,7 @@ public class MultiProcessVideoRender extends BaseFragment implements View.OnClic
                     @Override
                     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
                         try {
-                            mService.setupRemoteVideo(holder.getSurface(), width, height, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_FIT);
+                            mService.setupRemoteVideo(holder.getSurface(), width, height, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_HIDDEN);
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
@@ -311,7 +310,7 @@ public class MultiProcessVideoRender extends BaseFragment implements View.OnClic
                     @Override
                     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
                         try {
-                            mService.setupRemoteVideo(null, 0, 0, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_FIT);
+                            mService.setupRemoteVideo(null, 0, 0, uid, Constants.VIDEO_MIRROR_MODE_AUTO, Constants.RENDER_MODE_HIDDEN);
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }

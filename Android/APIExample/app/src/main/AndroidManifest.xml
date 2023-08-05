@@ -62,7 +62,7 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".examples.advanced.MultiProcessVideoRender$MultiProcessVideoRenderService"
-            android:process="io.agora.apiexample.multiprocessvideorender"/>
+            android:process="io.agora.api.example.multiprocessvideorender"/>
 
     </application>
 
