@@ -128,6 +128,7 @@
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
     <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
+    <string name="item_multi_process_video_render">MultiProcessVideoRender</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>

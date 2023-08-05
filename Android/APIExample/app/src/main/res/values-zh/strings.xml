@@ -122,6 +122,8 @@
     <string name="item_ktv_copyright_music">KTV版权音乐</string>
     <string name="item_media_recorder">本地/远端录制</string>
     <string name="item_localvideotranscoding">本地合图</string>
+    <string name="item_multi_process_video_render">多进程视频渲染</string>
+
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>

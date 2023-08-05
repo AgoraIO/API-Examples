@@ -66,6 +66,9 @@
             android:id="@+id/action_mainFragment_to_CustomRemoteRender"
             app:destination="@id/CustomRemoteRender" />
         <action
+            android:id="@+id/action_mainFragment_to_MutliProcessVideoRender"
+            app:destination="@id/MutliProcessVideoRender" />
+        <action
             android:id="@+id/action_mainFragment_to_ProcessRawData"
             app:destination="@id/ProcessRawData" />
         <action
@@ -263,6 +266,12 @@
         android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"
         android:label="@string/item_customremoterender"
         tools:layout="@layout/fragment_custom_remoterender" />
+
+    <fragment
+        android:id="@+id/MutliProcessVideoRender"
+        android:name="io.agora.api.example.examples.advanced.MultiProcessVideoRender"
+        android:label="@string/item_multi_process_video_render"
+        tools:layout="@layout/fragment_mutli_process_video_render" />
     <fragment
         android:id="@+id/ProcessRawData"
         android:name="io.agora.api.example.examples.advanced.ProcessRawData"
