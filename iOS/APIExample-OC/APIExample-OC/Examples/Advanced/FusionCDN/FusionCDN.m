@@ -192,6 +192,7 @@ CGFloat HEIGHT = 640;
 - (void)stopRtcStreaming {
     self.isRtcStreaming = NO;
     [self.rtcSwitcher setOn:NO];
+    [self resetUI];
     AgoraLeaveChannelOptions *options = [[AgoraLeaveChannelOptions alloc] init];
     options.stopMicrophoneRecording = NO;
     [self.agoraKit leaveChannel:options leaveChannelBlock:nil];
