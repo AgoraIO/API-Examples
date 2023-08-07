@@ -83,7 +83,6 @@ CGFloat HEIGHT = 640;
 @property (weak, nonatomic) IBOutlet UISwitch *rtcSwitcher;
 @property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
 @property (nonatomic, strong)VideoView *localView;
-@property (nonatomic, strong)VideoView *remoteView;
 @property (nonatomic, strong)AgoraRtcEngineKit *agoraKit;
 
 @property (nonatomic, copy) NSString *streamingUrl;
@@ -103,12 +102,6 @@ CGFloat HEIGHT = 640;
     }
     return _localView;
 }
-- (VideoView *)remoteView {
-    if (_remoteView == nil) {
-        _remoteView = (VideoView *)[NSBundle loadVideoViewFormType:StreamTypeRemote audioOnly:NO];
-    }
-    return _remoteView;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -118,8 +111,7 @@ CGFloat HEIGHT = 640;
     
     // layout render view
     [self.localView setPlaceholder:@"Local Host".localized];
-    [self.remoteView setPlaceholder:@"Remote Host".localized];
-    [self.containerView layoutStream:@[self.localView, self.remoteView]];
+    [self.containerView layoutStream:@[self.localView]];
     
     // set up agora instance when view loaded
     AgoraRtcEngineConfig *config = [[AgoraRtcEngineConfig alloc] init];
@@ -334,16 +326,6 @@ CGFloat HEIGHT = 640;
 /// @param elapsed time elapse since current sdk instance join the channel in ms
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
     [LogUtil log:[NSString stringWithFormat:@"remote user join: %lu %ldms", uid, elapsed] level:(LogLevelDebug)];
-    // Only one remote video view is available for this
-    // tutorial. Here we check if there exists a surface
-    // view tagged as this uid.
-    AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
-    videoCanvas.uid = uid;
-    // the view to be binded
-    videoCanvas.view = self.remoteView.videoView;
-    videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-    [self.agoraKit setupRemoteVideo:videoCanvas];
-    self.remoteView.uid = uid;
 }
 
 /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -351,15 +333,6 @@ CGFloat HEIGHT = 640;
 /// @param reason reason why this user left, note this event may be triggered when the remote user
 /// become an audience in live broadcasting profile
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
-    // to unlink your view from sdk, so that your view reference will be released
-    // note the video will stay at its last frame, to completely remove it
-    // you will need to remove the EAGL sublayer from your binded view
-    AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
-    videoCanvas.uid = uid;
-    // the view to be binded
-    videoCanvas.view = nil;
-    [self.agoraKit setupRemoteVideo:videoCanvas];
-    self.remoteView.uid = 0;
     [LogUtil log:[NSString stringWithFormat:@"remote user left: %lu", uid] level:(LogLevelDebug)];
 }
 
