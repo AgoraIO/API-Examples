@@ -83,6 +83,7 @@ CGFloat HEIGHT = 640;
 @property (weak, nonatomic) IBOutlet UISwitch *rtcSwitcher;
 @property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
 @property (nonatomic, strong)VideoView *localView;
+@property (nonatomic, strong)VideoView *remoteView;
 @property (nonatomic, strong)AgoraRtcEngineKit *agoraKit;
 
 @property (nonatomic, copy) NSString *streamingUrl;
@@ -102,6 +103,12 @@ CGFloat HEIGHT = 640;
     }
     return _localView;
 }
+- (VideoView *)remoteView {
+    if (_remoteView == nil) {
+        _remoteView = (VideoView *)[NSBundle loadVideoViewFormType:StreamTypeRemote audioOnly:NO];
+    }
+    return _remoteView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -111,6 +118,7 @@ CGFloat HEIGHT = 640;
     
     // layout render view
     [self.localView setPlaceholder:@"Local Host".localized];
+    [self.remoteView setPlaceholder:@"Remote Host".localized];
     [self.containerView layoutStream:@[self.localView]];
     
     // set up agora instance when view loaded
@@ -197,6 +205,7 @@ CGFloat HEIGHT = 640;
     options.stopMicrophoneRecording = NO;
     [self.agoraKit leaveChannel:options leaveChannelBlock:nil];
     [self.agoraKit stopRtmpStream:self.streamingUrl];
+    [self.containerView layoutStream:@[self.localView]];
 }
 
 - (void)stopRskStreaming {
@@ -314,8 +323,9 @@ CGFloat HEIGHT = 640;
     }
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine streamPublishedWithUrl:(NSString *)url errorCode:(AgoraErrorCode)errorCode {
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine streamUnpublishedWithUrl:(NSString *)url {
     [self switchToRtcStreaming];
+    [self.containerView layoutStream:@[self.localView]];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state errCode:(AgoraRtmpStreamingErrorCode)errCode {
@@ -327,6 +337,17 @@ CGFloat HEIGHT = 640;
 /// @param elapsed time elapse since current sdk instance join the channel in ms
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
     [LogUtil log:[NSString stringWithFormat:@"remote user join: %lu %ldms", uid, elapsed] level:(LogLevelDebug)];
+    // Only one remote video view is available for this
+    // tutorial. Here we check if there exists a surface
+    // view tagged as this uid.
+    AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
+    videoCanvas.uid = uid;
+    // the view to be binded
+    videoCanvas.view = self.remoteView.videoView;
+    videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+    [self.agoraKit setupRemoteVideo:videoCanvas];
+    [self.containerView layoutStream:@[self.localView, self.remoteView]];
+    self.remoteView.uid = uid;
 }
 
 /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -334,7 +355,17 @@ CGFloat HEIGHT = 640;
 /// @param reason reason why this user left, note this event may be triggered when the remote user
 /// become an audience in live broadcasting profile
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
+    // to unlink your view from sdk, so that your view reference will be released
+    // note the video will stay at its last frame, to completely remove it
+    // you will need to remove the EAGL sublayer from your binded view
+    AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
+    videoCanvas.uid = uid;
+    // the view to be binded
+    videoCanvas.view = nil;
+    [self.agoraKit setupRemoteVideo:videoCanvas];
+    self.remoteView.uid = 0;
     [LogUtil log:[NSString stringWithFormat:@"remote user left: %lu", uid] level:(LogLevelDebug)];
+    [self.containerView layoutStream:@[self.localView]];
 }
 
 @end
@@ -478,10 +509,9 @@ CGFloat HEIGHT = 640;
                 videoCanvas.uid = 0;
                 // the view to be binded
                 videoCanvas.view = self.localView.videoView;
-                videoCanvas.sourceType = AgoraVideoSourceTypeMediaPlayer;
-                videoCanvas.mediaPlayerId = [self.medoaPlayerKit getMediaPlayerId];
                 videoCanvas.renderMode = AgoraVideoRenderModeHidden;
                 [self.agoraKit setupLocalVideo:videoCanvas];
+                [self.agoraKit startPreview];
                 [self.cdnSelector setEnabled:NO];
                 [self.volumeSlider setHidden:NO];
                 [self.volumeSliderLabel setHidden:NO];
@@ -494,6 +524,15 @@ CGFloat HEIGHT = 640;
         [self.cdnSelector setEnabled:YES];
         [self.volumeSlider setHidden:YES];
         [self.volumeSliderLabel setHidden:YES];
+        AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
+        videoCanvas.uid = 0;
+        // the view to be binded
+        videoCanvas.view = self.localView.videoView;
+        videoCanvas.sourceType = AgoraVideoSourceTypeMediaPlayer;
+        videoCanvas.mediaPlayerId = [self.medoaPlayerKit getMediaPlayerId];
+        videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+        [self.agoraKit setupLocalVideo:videoCanvas];
+        [self.containerView layoutStream:@[self.localView]];
     }
 }
 - (IBAction)onChangeRecordingVolume:(UISlider *)sender {
@@ -538,6 +577,7 @@ CGFloat HEIGHT = 640;
     videoCanvas.view = self.remoteView.videoView;
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
     [self.agoraKit setupRemoteVideo:videoCanvas];
+    
     [self.containerView layoutStream:@[self.localView, self.remoteView]];
     self.remoteView.uid = uid;
 }
@@ -557,6 +597,7 @@ CGFloat HEIGHT = 640;
     [self.agoraKit setupRemoteVideo:videoCanvas];
     [self.containerView layoutStream:@[self.localView]];
     self.remoteView.uid = 0;
+
     [LogUtil log:[NSString stringWithFormat:@"remote user left: %lu", uid] level:(LogLevelDebug)];
 }
 
