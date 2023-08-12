@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MetalVideoView">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNO-yh-cWz" userLabel="Placeholder">
+                    <rect key="frame" x="207" y="455" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" name="videoPlaceholder"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6G-aL-Ut4" customClass="AgoraMetalRender" customModule="APIExample" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2sO-zb-ccE" userLabel="Info">
+                    <rect key="frame" x="394" y="58" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jiD-Jh-Q7t">
+                    <rect key="frame" x="20" y="852" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="videoBackground"/>
+            <constraints>
+                <constraint firstItem="z6G-aL-Ut4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="65z-Qr-jbs"/>
+                <constraint firstItem="2sO-zb-ccE" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Idv-HE-LBC"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="z6G-aL-Ut4" secondAttribute="bottom" id="Kq0-Vn-UTZ"/>
+                <constraint firstItem="z6G-aL-Ut4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="R1u-w9-cbP"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2sO-zb-ccE" secondAttribute="trailing" constant="20" id="cLx-LC-AQf"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="jiD-Jh-Q7t" secondAttribute="bottom" constant="10" id="kJF-Ve-uPb"/>
+                <constraint firstItem="jNO-yh-cWz" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="qPg-FY-TVT"/>
+                <constraint firstItem="jiD-Jh-Q7t" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="qWI-Jh-5i4"/>
+                <constraint firstItem="jNO-yh-cWz" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="tnR-4i-aTA"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="z6G-aL-Ut4" secondAttribute="trailing" id="vMm-b5-ZoF"/>
+            </constraints>
+            <connections>
+                <outlet property="infoLabel" destination="2sO-zb-ccE" id="jfZ-rO-7K6"/>
+                <outlet property="placeholderLabel" destination="jNO-yh-cWz" id="OVz-Ck-Wuz"/>
+                <outlet property="videoView" destination="z6G-aL-Ut4" id="Jfc-RP-ol4"/>
+            </connections>
+            <point key="canvasLocation" x="261" y="208"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="videoBackground">
+            <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="videoPlaceholder">
+            <color red="0.47600001096725464" green="0.47600001096725464" blue="0.47600001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

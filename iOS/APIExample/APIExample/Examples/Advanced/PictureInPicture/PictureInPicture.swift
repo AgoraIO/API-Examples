@@ -218,14 +218,15 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
         // you will need to remove the EAGL sublayer from your binded view
 //        remoteVideo.videoView.reset()
     }
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
-        guard muted else { return }
-        let pixelBuffer = MediaUtils.cvPixelBufferRef(from: UIImage(named: "agora-logo") ?? UIImage()).takeRetainedValue()
-        let videoFrame = AgoraOutputVideoFrame()
-        videoFrame.pixelBuffer = pixelBuffer
-        videoFrame.width = Int32(remoteVideo.videoView.frame.width)
-        videoFrame.height = Int32(remoteVideo.videoView.frame.height)
-        remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
+        if reason == .remoteMuted {
+            let pixelBuffer = MediaUtils.cvPixelBufferRef(from: UIImage(named: "agora-logo") ?? UIImage()).takeRetainedValue()
+            let videoFrame = AgoraOutputVideoFrame()
+            videoFrame.pixelBuffer = pixelBuffer
+            videoFrame.width = Int32(remoteVideo.videoView.frame.width)
+            videoFrame.height = Int32(remoteVideo.videoView.frame.height)
+            remoteVideo.videoView.renderVideoPixelBuffer(videoFrame)
+        }
     }
 }
 
