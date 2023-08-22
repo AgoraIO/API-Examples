@@ -142,6 +142,9 @@
 		E72055EA28F943520030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055E928F943520030E6D1 /* Util.swift */; };
 		E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */; };
 		E721600F28D3314B006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721600E28D3314B006431BD /* AlertManager.swift */; };
+		E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */; };
+		E726BFFB2A949F70006870E2 /* AuidoRouterPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */; };
+		E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */; };
 		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
 		E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */; };
@@ -445,6 +448,9 @@
 		E72055E928F943520030E6D1 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KtvCopyrightMusic.swift; sourceTree = "<group>"; };
 		E721600E28D3314B006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		E726BFF62A949F70006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AuidoRouterPlayer.strings"; sourceTree = "<group>"; };
+		E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuidoRouterPlayer.swift; sourceTree = "<group>"; };
+		E726BFF92A949F70006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AuidoRouterPlayer.storyboard; sourceTree = "<group>"; };
 		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
 		E728B84628B5FFCB00674A4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PictureInPicture.storyboard; sourceTree = "<group>"; };
@@ -1082,6 +1088,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E726BFF42A949F70006870E2 /* AuidoRouterPlayer */,
 				E7163F7B2964149800EBBD55 /* ARKit */,
 				E7A49CE829029E0000F06DD4 /* ThirdBeautify */,
 				E7A49CB229011E7500F06DD4 /* MutliCamera */,
@@ -1157,6 +1164,16 @@
 				E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */,
 			);
 			path = KtvCopyrightMusic;
+			sourceTree = "<group>";
+		};
+		E726BFF42A949F70006870E2 /* AuidoRouterPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */,
+				E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */,
+				E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */,
+			);
+			path = AuidoRouterPlayer;
 			sourceTree = "<group>";
 		};
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
@@ -1459,7 +1476,6 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
-				02C1795721BD6EDB238A9DC7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1562,6 +1578,7 @@
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
+				E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
@@ -1614,6 +1631,7 @@
 				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
+				E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
@@ -1632,23 +1650,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02C1795721BD6EDB238A9DC7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1752,6 +1753,7 @@
 			files = (
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
+				E726BFFB2A949F70006870E2 /* AuidoRouterPlayer.swift in Sources */,
 				E77903302A5BA74F008791AD /* SenseBeautyRender.m in Sources */,
 				E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */,
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
@@ -2212,6 +2214,22 @@
 				E7163F802964149800EBBD55 /* Base */,
 			);
 			name = ARKit.storyboard;
+			sourceTree = "<group>";
+		};
+		E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E726BFF62A949F70006870E2 /* zh-Hans */,
+			);
+			name = AuidoRouterPlayer.strings;
+			sourceTree = "<group>";
+		};
+		E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E726BFF92A949F70006870E2 /* Base */,
+			);
+			name = AuidoRouterPlayer.storyboard;
 			sourceTree = "<group>";
 		};
 		E728B84228B5FFCB00674A4A /* PictureInPicture.strings */ = {

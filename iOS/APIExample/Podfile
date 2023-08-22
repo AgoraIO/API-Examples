@@ -8,6 +8,7 @@ target 'APIExample' do
   pod 'Floaty', '~> 4.2.0'
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'CocoaAsyncSocket', '7.6.5'
+  pod 'ijkplayer', '~> 1.1.3'
  pod 'AgoraRtcEngine_iOS', '4.2.2'
 #      pod 'sdk', :path => 'sdk.podspec'
 #    pod 'senseLib', :path => 'sense.podspec'
