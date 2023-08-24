@@ -166,3 +166,4 @@
 "cancel preload" = "取消预加载";
 "Audio Router(Third Party Player)" = "音频路由（第三方播放器)";
 "Player Type(ijkplayer/avplayer)" = "播放器选择(ijkplayer/原生)";
+"Audio Waveform" = "音频频谱";

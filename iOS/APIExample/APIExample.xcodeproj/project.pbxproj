@@ -145,6 +145,10 @@
 		E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */; };
 		E726BFFB2A949F70006870E2 /* AuidoRouterPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */; };
 		E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */; };
+		E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFFE2A96FD3A006870E2 /* AudioWaveform.strings */; };
+		E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */; };
+		E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726C0022A96FD3A006870E2 /* AudioWaveform.swift */; };
+		E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */ = {isa = PBXBuildFile; fileRef = E726C0062A96FF15006870E2 /* ZSNBoxingView.m */; };
 		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
 		E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */; };
@@ -451,6 +455,11 @@
 		E726BFF62A949F70006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AuidoRouterPlayer.strings"; sourceTree = "<group>"; };
 		E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuidoRouterPlayer.swift; sourceTree = "<group>"; };
 		E726BFF92A949F70006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AuidoRouterPlayer.storyboard; sourceTree = "<group>"; };
+		E726BFFF2A96FD3A006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioWaveform.strings"; sourceTree = "<group>"; };
+		E726C0012A96FD3A006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioWaveform.storyboard; sourceTree = "<group>"; };
+		E726C0022A96FD3A006870E2 /* AudioWaveform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveform.swift; sourceTree = "<group>"; };
+		E726C0062A96FF15006870E2 /* ZSNBoxingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSNBoxingView.m; sourceTree = "<group>"; };
+		E726C0072A96FF15006870E2 /* ZSNBoxingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSNBoxingView.h; sourceTree = "<group>"; };
 		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
 		E728B84628B5FFCB00674A4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PictureInPicture.storyboard; sourceTree = "<group>"; };
@@ -908,6 +917,8 @@
 		03DF1D8424CFC29700DF7151 /* ExternalAudio */ = {
 			isa = PBXGroup;
 			children = (
+				E726C0072A96FF15006870E2 /* ZSNBoxingView.h */,
+				E726C0062A96FF15006870E2 /* ZSNBoxingView.m */,
 				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
 				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
 				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
@@ -1088,6 +1099,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
 				E726BFF42A949F70006870E2 /* AuidoRouterPlayer */,
 				E7163F7B2964149800EBBD55 /* ARKit */,
 				E7A49CE829029E0000F06DD4 /* ThirdBeautify */,
@@ -1174,6 +1186,16 @@
 				E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */,
 			);
 			path = AuidoRouterPlayer;
+			sourceTree = "<group>";
+		};
+		E726BFFD2A96FD3A006870E2 /* AudioWaveform */ = {
+			isa = PBXGroup;
+			children = (
+				E726BFFE2A96FD3A006870E2 /* AudioWaveform.strings */,
+				E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */,
+				E726C0022A96FD3A006870E2 /* AudioWaveform.swift */,
+			);
+			path = AudioWaveform;
 			sourceTree = "<group>";
 		};
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
@@ -1577,6 +1599,7 @@
 				5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */,
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
+				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
 				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
@@ -1626,6 +1649,7 @@
 				8B5E5B5B274CEFE20040E97D /* RhythmPlayer.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */,
+				E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
@@ -1775,6 +1799,7 @@
 				E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */,
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */,
 				E779032D2A5BA74F008791AD /* BeautyConfig.m in Sources */,
 				E7A49D4529090F3C00F06DD4 /* ByteDanceFilter.m in Sources */,
 				E77903312A5BA74F008791AD /* BytesBeautyRender.m in Sources */,
@@ -1821,6 +1846,7 @@
 				67B8C7B028056B7600195106 /* RawVideoData.swift in Sources */,
 				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
+				E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */,
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
 				E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */,
@@ -2230,6 +2256,22 @@
 				E726BFF92A949F70006870E2 /* Base */,
 			);
 			name = AuidoRouterPlayer.storyboard;
+			sourceTree = "<group>";
+		};
+		E726BFFE2A96FD3A006870E2 /* AudioWaveform.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E726BFFF2A96FD3A006870E2 /* zh-Hans */,
+			);
+			name = AudioWaveform.strings;
+			sourceTree = "<group>";
+		};
+		E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E726C0012A96FD3A006870E2 /* Base */,
+			);
+			name = AudioWaveform.storyboard;
 			sourceTree = "<group>";
 		};
 		E728B84228B5FFCB00674A4A /* PictureInPicture.strings */ = {
