@@ -89,7 +89,9 @@
         <action
             android:id="@+id/action_mainFragment_to_AudioRouterPlayer"
             app:destination="@id/AudioRouterPlayer" />
-
+        <action
+            android:id="@+id/action_mainFragment_to_AudioWaveform"
+            app:destination="@id/AudioWaveform" />
         <action
             android:id="@+id/action_mainFragment_to_MediaRecorder"
             app:destination="@id/MediaRecorder" />
@@ -308,6 +310,11 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"
         android:label="@string/item_mediaplayer"
         tools:layout="@layout/fragment_media_player" />
+    <fragment
+        android:id="@+id/AudioWaveform"
+        android:name="io.agora.api.example.examples.audio.AudioWaveform"
+        android:label="@string/item_audiowaveform"
+        tools:layout="@layout/fragment_audio_waveform" />
     <fragment
         android:id="@+id/AudioRouterPlayer"
         android:name="io.agora.api.example.examples.audio.AudioRouterPlayer"

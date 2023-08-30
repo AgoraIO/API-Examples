@@ -97,6 +97,7 @@
 
     <string name="item_mediaplayer">MediaPlayer</string>
     <string name="item_audiorouter_player">AudioRouter(Third Party Player)</string>
+    <string name="item_audiowaveform">Audio Waveform</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtctortmp">Streaming from RTC to CDN</string>
@@ -157,6 +158,7 @@
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
     <string name="mediaplayer">This example demonstrates how to use MediaPlayer. It is one of components for Agora SDK.</string>
     <string name="audiorouter_palyer">This example shows the behavior of audio router while communicating with rtc.</string>
+    <string name="audio_waveform">This example demonstrates how to display waveform by rtc engine.</string>
     <string name="media_recorder">This example demonstrates how to use MediaRecorder to recorde local or remote video.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>

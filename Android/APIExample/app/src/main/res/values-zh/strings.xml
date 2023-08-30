@@ -91,6 +91,7 @@
     <string name="item_voiceeffects">美声与音效</string>
     <string name="item_mediaplayer">媒体播放器</string>
     <string name="item_audiorouter_player">音频路由（第三方播放器）</string>
+    <string name="item_audiowaveform">音频频谱</string>
     <string name="item_geofencing">区域访问限制</string>
     <string name="item_joinmultichannel">加入多频道</string>
     <string name="item_rtmpstreaming">推流到CDN</string>
@@ -151,6 +152,7 @@
     <string name="voiceeffects">此示例演示了在音视频通话过程中如何使用API提供的一些人声效果，或使用API自行组合出想要的人声效果。</string>
     <string name="mediaplayer">此示例演示了在音视频通话过程中如何集成和使用Agora SDK的媒体播放器。</string>
     <string name="audiorouter_palyer">此示例演示在使用RTC通话中音频路由对第三方播放器的影响。</string>
+    <string name="audio_waveform">此示例演示了在音视频通话过程中如何实现波形图</string>
     <string name="media_recorder">此示例演示了在音视频通话过程中如何使用Agora SDK的媒体录制器录制本地或远端的视频。</string>
     <string name="incallstats">此示例演示了在音视频通话过程中如何通过回调获取当前通话质量。</string>>
     <string name="hostacrosschannel">此示例演示了在音视频通话过程中如何将A频道的主播流转发到B频道，实现主播PK。</string>
