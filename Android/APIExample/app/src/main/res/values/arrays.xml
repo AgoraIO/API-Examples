@@ -260,4 +260,10 @@
         <item>@string/audio_route_headset_bluetooth</item>
     </string-array>
 
+    <string-array name="third_party_players">
+        <item>@string/third_party_player_ijk</item>
+        <item>@string/third_party_player_exo</item>
+        <item>@string/third_party_player_native</item>
+    </string-array>
+
 </resources>
