@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WaveView">
+        <attr name="waveColor" format="color"/>
+        <attr name="baselineColor" format="color"/>
+        <attr name="maxValue" format="integer"/>
+        <attr name="waveStokeWidth" format="dimension"/>
+        <attr name="invalidateTime" format="integer"/>
+        <attr name="space" format="dimension"/>
+    </declare-styleable>
+</resources>
