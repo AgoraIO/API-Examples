@@ -133,7 +133,7 @@ class AuidoRouterPlayerMain: BaseViewController {
         player?.scalingMode = .aspectFit
         player?.shouldAutoplay = true
         player?.prepareToPlay()
-        player?.playbackVolume = 50
+        player?.playbackVolume = 30
         player?.allowsMediaAirPlay = true
         player?.isDanmakuMediaAirPlay = true
         return player
@@ -141,7 +141,7 @@ class AuidoRouterPlayerMain: BaseViewController {
     private lazy var avPlayer: AVPlayerViewController? = {
         guard let url = URL(string: videoString) else { return nil }
         let player = AVPlayer(url: url)
-        player.volume = 50
+        player.volume = 30
         let playerVC = AVPlayerViewController()
         playerVC.player = player
         playerVC.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -159,6 +159,8 @@ class AuidoRouterPlayerMain: BaseViewController {
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
+        
+        setupAudioSession()
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -223,6 +225,15 @@ class AuidoRouterPlayerMain: BaseViewController {
         
     }
     
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers])
+        } catch let error as NSError {
+            print("Failed to set the audio session category and mode: \(error.localizedDescription)")
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
@@ -230,6 +241,18 @@ class AuidoRouterPlayerMain: BaseViewController {
             setupIJKPlayer()
         } else {
             setupAVPlayer()
+        }
+    }
+    
+    private func play() {
+        setupAudioSession()
+        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if playerType == .ijk {
+                self.ijkPlayer?.play()
+            } else {
+                self.avPlayer?.player?.play()
+            }
         }
     }
     
@@ -258,6 +281,11 @@ class AuidoRouterPlayerMain: BaseViewController {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
+        }
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch let error as NSError {
+            print("Failed to set the audio session category and mode: \(error.localizedDescription)")
         }
         AgoraRtcEngineKit.destroy()
     }
@@ -306,6 +334,7 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        play()
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -324,6 +353,7 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        play()
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
