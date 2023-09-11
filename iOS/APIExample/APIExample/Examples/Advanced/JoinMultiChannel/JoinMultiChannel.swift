@@ -164,6 +164,13 @@ class JoinMultiChannelMain: BaseViewController {
             }
         }
     }
+    
+    @IBAction func onTapTakeSnapshotEx(_ sender: Any) {
+        let path = NSTemporaryDirectory().appending("1.png")
+        let connection = AgoraRtcConnection(channelId: channelName2, localUid: Int(CONNECTION_2_UID))
+        agoraKit.takeSnapshotEx(connection, uid: Int(CONNECTION_1_UID), filePath: path)
+        showAlert(title: "Screenshot successful".localized, message: path)
+    }
     @IBAction func onTapLeaveChannelEx(_ sender: Any) {
         let connection2 = AgoraRtcConnection()
         connection2.channelId = channelName2
