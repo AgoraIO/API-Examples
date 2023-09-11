@@ -203,6 +203,7 @@ wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlStopMic[INFO_LEN] = { 0 };
+wchar_t MultiChannelCtrlTakeSnapshotEx[INFO_LEN] = { 0 };
 
 
 //audio effect
@@ -658,6 +659,7 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiChannelCtrlJoinExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.JoinExChannel")));
 	_tcscpy_s(MultiChannelCtrlLeaveExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.LeaveExChannel")));
 	_tcscpy_s(MultiChannelCtrlStopMic, INFO_LEN, Str(_T("MultiChannel.Ctrl.StopMic")));
+	_tcscpy_s(MultiChannelCtrlTakeSnapshotEx, INFO_LEN, Str(_T("MultiChannel.Ctrl.TakeSnapshotEx")));
 
 
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));

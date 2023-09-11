@@ -10,6 +10,7 @@ public:
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
 	int GetChannelId() { return m_channelId; };
+	int GetRemoteUid() { return m_remoteUid; };
 	void SetChannelId(int id) { m_channelId = id; };
 
 	std::string GetChannelName() { return m_strChannel; }
@@ -90,11 +91,14 @@ public:
 
 	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
 
+
+	void onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode) override;
+
 private:
 	HWND m_hMsgHanlder;
 	std::string m_strChannel;
 	int m_channelId = -1;
-
+	uid_t m_remoteUid = -1;
 };
 
 
@@ -142,20 +146,25 @@ protected:
 	LRESULT OnEIDLocalAudioStats(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLocalAudioStateChange(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLocalVideoStats(WPARAM wParam, LPARAM lParam);
+	LRESULT onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staChannel;
+	CStatic m_staDetailInfo;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
 	CButton m_btnExChannel;
+	CButton m_btnExSnapshot;
 	CButton m_chkStopMic;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
 	afx_msg void OnBnClickedButtonExChannel();
+	afx_msg void OnBnClickedButtonExSnapshot();
+	afx_msg void OnSelchangeListInfoBroadcasting();
 
 	void joinSecondChannel(CString strChannelName);
 
