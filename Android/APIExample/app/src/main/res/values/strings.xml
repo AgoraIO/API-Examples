@@ -351,4 +351,5 @@
     <string name="third_party_player_ijk" translatable="false">IjkPlayer</string>
     <string name="third_party_player_exo" translatable="false">ExoPlayer</string>
     <string name="third_party_player_native" translatable="false">NativePlayer</string>
+    <string name="feature_unavailable">The feature is unavailable in the device!</string>
 </resources>
