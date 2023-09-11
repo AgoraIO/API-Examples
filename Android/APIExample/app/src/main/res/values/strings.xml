@@ -176,6 +176,7 @@
     <string name="writeback">Write Back Audio</string>
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
+    <string name="snapshot_ex">SnapshotEx</string>
     <string name="screen_share">Screen Share</string>
     <string name="screen_share_preview">Screen Preview</string>
     <string name="screen_share_audio">Screen Audio</string>
