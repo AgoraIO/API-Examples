@@ -194,7 +194,7 @@
 
     <fragment
         android:id="@+id/SceneTimeBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.SceneTimeBeauty"
+        android:name="io.agora.api.example.examples.advanced.beauty.SenseTimeBeauty"
         android:label="@string/scenetime_beauty"
         tools:layout="@layout/fragment_beauty_scenetime" />
 

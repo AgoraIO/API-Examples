@@ -19,7 +19,7 @@
 <!--    <permission-group android:name="io.agora.api.example.andpermission"/>-->
     <permission-group android:name="${AppId}.andpermission"/>
 
-    <uses-sdk tools:overrideLibrary="com.sensetime.hardwarebuffer" />
+    <uses-sdk tools:overrideLibrary="com.softsugar.hardwarebuffer" />
 
     <application
         android:name=".MainApplication"

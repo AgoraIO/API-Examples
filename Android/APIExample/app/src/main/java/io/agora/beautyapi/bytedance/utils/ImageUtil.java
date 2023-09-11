@@ -44,7 +44,7 @@ import io.agora.beautyapi.bytedance.utils.opengl.ProgramTextureYUV;
  * Created on 5/8/21 11:58 AM
  */
 public class ImageUtil {
-
+    private static final String TAG = "ImageUtil";
 
     protected int[] mFrameBuffers;
     protected int[] mFrameBufferTextures;
@@ -370,7 +370,6 @@ public class ImageUtil {
      * @brief 纹理转纹理
      */
     /** {en} 
-     * @param InputTexture         input texture
      * @param inputTextureFormat   input texture format, 2D/OES
      * @param outputTextureFormat  output texture format, 2D/OES
      * @param width                input texture width
@@ -384,7 +383,7 @@ public class ImageUtil {
                                  BytedEffectConstants.TextureFormat outputTextureFormat,
                                  int width, int height, Transition transition) {
             if (outputTextureFormat != BytedEffectConstants.TextureFormat.Texure2D){
-                LogUtils.e("the inputTexture is not supported,please use Texure2D as output texture format");
+                LogUtils.e(TAG, "the inputTexture is not supported,please use Texure2D as output texture format");
                 return  GlUtil.NO_TEXTURE;
             }
         if (null == mProgramManager) {
@@ -420,7 +419,6 @@ public class ImageUtil {
      * @brief 纹理转 buffer
      */
     /** {en} 
-     * @param Texture        texture
      * @param inputTextureFormat  texture format, 2D/OES
      * @param outputFormat   output buffer format
      * @param width          width
@@ -432,7 +430,7 @@ public class ImageUtil {
     public ByteBuffer transferTextureToBuffer(int texture, BytedEffectConstants.TextureFormat inputTextureFormat,
                                        BytedEffectConstants.PixlFormat outputFormat, int width, int height, float ratio){
         if (outputFormat != BytedEffectConstants.PixlFormat.RGBA8888){
-            LogUtils.e("the outputFormat is not supported,please use RGBA8888 as output texture format");
+            LogUtils.e(TAG, "the outputFormat is not supported,please use RGBA8888 as output texture format");
             return  null;
         }
         if (null == mProgramManager) {
@@ -466,7 +464,6 @@ public class ImageUtil {
      * @brief buffer 转纹理
      */
     /** {en} 
-     * @param Buffer        input buffer
      * @param inputFormat  buffer format
      * @param outputFormat  output texture format
      * @param width         width
@@ -479,12 +476,12 @@ public class ImageUtil {
                                 BytedEffectConstants.TextureFormat outputFormat, int width, int height){
 
         if (inputFormat != BytedEffectConstants.PixlFormat.RGBA8888){
-            LogUtils.e("inputFormat support RGBA8888 only");
+            LogUtils.e(TAG, "inputFormat support RGBA8888 only");
             return GlUtil.NO_TEXTURE;
         }
 
         if (outputFormat != BytedEffectConstants.TextureFormat.Texure2D){
-            LogUtils.e("outputFormat support Texure2D only");
+            LogUtils.e(TAG, "outputFormat support Texure2D only");
             return GlUtil.NO_TEXTURE;
         }
 
@@ -534,7 +531,6 @@ public class ImageUtil {
      * @brief buffer 转 buffer
      */
     /** {en} 
-     * @param Buffer        input buffer
      * @param inputFormat   input buffer format
      * @param outputFormat  output buffer format
      * @param width         width
@@ -558,7 +554,6 @@ public class ImageUtil {
      * @brief buffer 转 bitmap
      */
     /** {en} 
-     * @param Buffer  input buffer
      * @param format  input buffer format
      * @param width   width
      * @param height  height
@@ -649,7 +644,6 @@ public class ImageUtil {
          * @brief 旋转
          */
         /** {en} 
-         * @param Angle  rotation angle, only support 0/90/180/270
          * @brief  rotation
          */
 
