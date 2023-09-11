@@ -45,7 +45,7 @@ class ContentInspectViewController: BaseViewController {
         
         // Enable content inspect with local video view
         let moderateModule = AgoraContentInspectModule()
-        moderateModule.type = .moderation
+        moderateModule.type = .imageModeration
         moderateModule.interval = 1
         
         let inspectConfig = AgoraContentInspectConfig()
@@ -90,27 +90,6 @@ class ContentInspectViewController: BaseViewController {
 
 // MARK: - AgoraRtcEngineDelegate
 extension ContentInspectViewController: AgoraRtcEngineDelegate {
-    func rtcEngine(_ engine: AgoraRtcEngineKit, contentInspectResult result: AgoraContentInspectResult) {
-        var resultText = "Video Neutral".localized
-        switch result {
-        case .neutral:
-            resultText = "Video Neutral".localized
-        case .sexy:
-            resultText = "Video Sexy".localized
-        case .porn:
-            resultText = "Video Porn".localized
-        default:
-            break
-        }
-        
-        // For animation effects
-        if resultText == inspectResultLabel.text && resultText == "Video Neutral".localized {
-            inspectResultLabel.text = ""
-        } else {
-            inspectResultLabel.text = resultText
-        }
-    }
-
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         // Usually happens with invalid parameters
         // Error code description can be found at:
