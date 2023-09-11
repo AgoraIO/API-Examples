@@ -46,7 +46,7 @@
     return params;
 }
 
-#if __has_include(Sensetime)
+#if __has_include("VideoProcessingManager.h")
 - (VideoProcessingManager *)videoProcessing {
     if (_videoProcessing == nil) {
         _videoProcessing = [VideoProcessingManager new];
@@ -66,12 +66,15 @@
             [weakSelf.timer invalidate];
             weakSelf.timer = nil;
         }
+        if (weakSelf.licenseEventCallback) {
+            weakSelf.licenseEventCallback(weakSelf.isSuccessLicense);
+        }
     }];
     [[NSRunLoop mainRunLoop]addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 #endif
 
-- (void)destory { 
+- (void)destroy { 
 #if __has_include(Sensetime)
     [self reset];
     _videoProcessing = nil;
@@ -104,6 +107,21 @@
 }
 
 - (void)setBeautyPreset { 
+    if (self.isSuccessLicense == NO) {
+        __weak SenseBeautyRender *weakSelf = self;
+        self.licenseEventCallback = ^(BOOL isSuccess) {
+            if (isSuccess) {
+                [weakSelf setBeautyDefault];
+            }
+        };
+        return;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self setBeautyDefault];
+    });
+}
+
+- (void)setBeautyDefault {
 #if __has_include(Sensetime)
     for (NSString *key in [self sensetimeDefault].allKeys) {
         int type = key.intValue;

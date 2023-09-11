@@ -15,7 +15,7 @@
 
 @implementation BytesBeautyRender
 
-#if __has_include(BytesMoudle)
+#if __has_include("BEImageUtils.h") && __has_include("BEFrameProcessor.h")
 - (BEFrameProcessor *)frameProcessor {
     if (_frameProcessor == nil) {
         EAGLContext *context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -42,7 +42,7 @@
     return _bytesNodes;
 }
 
-- (void)destory { 
+- (void)destroy { 
 #if __has_include(BytesMoudle)
     _frameProcessor = nil;
     _imageUtils = nil;

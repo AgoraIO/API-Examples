@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-#if __has_include(BytesMoudle) && __has_include("BEImageUtils.h") && __has_include("BEFrameProcessor.h")
+#if __has_include("BEImageUtils.h") && __has_include("BEFrameProcessor.h")
 #import "BEImageUtils.h"
 #import "BEFrameProcessor.h"
 #endif
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BytesBeautyRender : NSObject<BeautyRenderDelegate>
 
-#if __has_include(BytesMoudle)
+#if __has_include("BEImageUtils.h") && __has_include("BEFrameProcessor.h")
 @property (nonatomic, strong) BEFrameProcessor *frameProcessor;
 @property (nonatomic, strong) BEImageUtils *imageUtils;
 #endif
