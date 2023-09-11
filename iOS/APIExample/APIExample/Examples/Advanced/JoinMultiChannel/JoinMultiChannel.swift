@@ -166,9 +166,10 @@ class JoinMultiChannelMain: BaseViewController {
     }
     
     @IBAction func onTapTakeSnapshotEx(_ sender: Any) {
+        guard channel2.remoteUid != 0 else { return }
         let path = NSTemporaryDirectory().appending("1.png")
         let connection = AgoraRtcConnection(channelId: channelName2, localUid: Int(CONNECTION_2_UID))
-        agoraKit.takeSnapshotEx(connection, uid: Int(CONNECTION_1_UID), filePath: path)
+        agoraKit.takeSnapshotEx(connection, uid: Int(channel2.remoteUid), filePath: path)
         showAlert(title: "Screenshot successful".localized, message: path)
     }
     @IBAction func onTapLeaveChannelEx(_ sender: Any) {
@@ -269,6 +270,7 @@ class Channel1Delegate: NSObject, AgoraRtcEngineDelegate {
 class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
     var channelId:String?
     var view:VideoView?
+    var remoteUid: UInt = 0
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
@@ -300,6 +302,7 @@ class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
         connection.channelId = channelId
         connection.localUid = CONNECTION_2_UID
         engine.setupRemoteVideoEx(videoCanvas, connection: connection)
+        remoteUid = uid
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -320,6 +323,7 @@ class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
         connection.channelId = channelId
         connection.localUid = CONNECTION_2_UID
         engine.setupRemoteVideoEx(videoCanvas, connection: connection)
+        remoteUid = 0
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
