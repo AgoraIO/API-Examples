@@ -152,7 +152,7 @@ public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staChannel;
-	CStatic m_staDetailInfo;
+	CEdit m_edtDetailInfo;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
 	CButton m_btnExChannel;

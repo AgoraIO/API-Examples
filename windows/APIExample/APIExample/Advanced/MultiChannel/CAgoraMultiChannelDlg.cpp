@@ -29,7 +29,7 @@ void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnExChannel);
 	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT_EX, m_btnExSnapshot);
 	DDX_Control(pDX, IDC_BUTTON_STOP_MIC, m_chkStopMic);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetailInfo);
+	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
 }
 
 
@@ -292,7 +292,7 @@ void CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting()
 	if (sel < 0)return;
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
-	m_staDetailInfo.SetWindowText(strDetail);
+	m_edtDetailInfo.SetWindowText(strDetail);
 }
 
 
@@ -477,7 +477,7 @@ LRESULT CAgoraMultiChannelDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) 
 	strInfo.Format(_T("snapshot taken err:%d"), errCode);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	if (errCode == 0) {
-		strInfo.Format(_T("path: %ss"), *filePath);
+		strInfo.Format(_T("path: %s"), *filePath);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 
