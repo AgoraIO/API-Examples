@@ -226,7 +226,7 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
 
         // Setup content inspect options
         ContentInspectConfig.ContentInspectModule contentInspectModule = new ContentInspectConfig.ContentInspectModule();
-        contentInspectModule.type = ContentInspectConfig.CONTENT_INSPECT_TYPE_MODERATION;
+        contentInspectModule.type = ContentInspectConfig.CONTENT_INSPECT_TYPE_IMAGE_MODERATION;
         contentInspectModule.interval = 1;
         ContentInspectConfig contentInspectConfig = new ContentInspectConfig();
         contentInspectConfig.modules[0] = contentInspectModule;
@@ -421,40 +421,7 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
-
-        @Override
-        public void onContentInspectResult(int result) {
-            super.onContentInspectResult(result);
-            Log.i(TAG, String.format("onContentInspectResult result:%d", result));
-            int retStringRes = R.string.video_neutral;
-            if(result == AgoraContentInspectResult.Sexy.getValue()){
-                retStringRes = R.string.video_sexy;
-            }
-            else if(result == AgoraContentInspectResult.Porn.getValue()){
-                retStringRes = R.string.video_porn;
-            }
-            final int _ret = retStringRes;
-            handler.post(() -> {
-                contentInspectRetTv.setText("");
-                contentInspectRetTv.postDelayed(() -> contentInspectRetTv.setText(_ret), 500);
-            });
-        }
     };
 
-    public enum AgoraContentInspectResult {
-        Neutral(1),
-        Sexy(2),
-        Porn(3);
-
-        private int value;
-
-        AgoraContentInspectResult(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 
 }

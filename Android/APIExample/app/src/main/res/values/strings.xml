@@ -253,6 +253,7 @@
     <string name="video_neutral">Video Neutral</string>
     <string name="video_sexy">Video Sexy</string>
     <string name="video_porn">Video Porn</string>
+    <string name="content_inspect_result_tip">Please obtain the pornographic identification results through the console webhook.</string>
     <string name="switch_camera">Switch Camera</string>
     <string name="content_inspect_tip">You can use the camera to point the picture to check the yellowing effect</string>
 

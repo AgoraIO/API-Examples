@@ -244,6 +244,7 @@
     <string name="video_neutral">视频正常</string>
     <string name="video_sexy">视频性感</string>
     <string name="video_porn">视频色情</string>
+    <string name="content_inspect_result_tip">请通过控制台webhook获取鉴黄结果</string>
     <string name="switch_camera">切换摄像头</string>
     <string name="content_inspect_tip">你可以用摄像头对准图片检验鉴黄效果</string>
 
