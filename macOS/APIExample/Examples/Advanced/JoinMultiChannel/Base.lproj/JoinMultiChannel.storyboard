@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -88,6 +88,17 @@
                                                     <rect key="frame" x="244" y="236" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </switch>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vlc-Ff-Zmf">
+                                                    <rect key="frame" x="23" y="155" width="138" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="take snapshot ex" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wzZ-2k-bnO">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onTakSnapshotEx:" target="IBJ-wZ-9Xx" id="dmp-8l-l4h"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="aRb-i6-n2P" firstAttribute="top" secondItem="WnI-ws-5Ma" secondAttribute="bottom" constant="20" symbolic="YES" id="12W-AK-CF4"/>
@@ -140,6 +151,7 @@
                         <outlet property="joinChannel1Button" destination="WnI-ws-5Ma" id="AlJ-B7-8Ul"/>
                         <outlet property="joinChannel2Button" destination="OwT-ZJ-qpk" id="58G-Rx-aKY"/>
                         <outlet property="stopMicrophoneRecordingSwitch" destination="qwz-nb-RRb" id="tS2-rL-3tV"/>
+                        <outlet property="takeSnapShotEx" destination="vlc-Ff-Zmf" id="Gf7-ZR-yQg"/>
                     </connections>
                 </viewController>
                 <customObject id="aBc-Gk-7Lw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
