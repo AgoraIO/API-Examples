@@ -592,13 +592,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
-
                     if (isLocalVideoForeground) {
                         foreGroundVideo.setReportUid(uid);
                     } else {
                         backGroundVideo.setReportUid(uid);
                     }
-
                 }
             });
         }
