@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSImage *)pixelBufferToImage: (CVPixelBufferRef)pixelBuffer;
 
++ (NSData *)dataFromPixelBuffer:(CVPixelBufferRef)pixelBuffer;
+
 + (nullable NSImage *)i420ToImage:(nullable void *)srcY srcU:(nullable void *)srcU srcV:(nullable void *)srcV width:(int)width height:(int)height;
 
 @end

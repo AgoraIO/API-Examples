@@ -17,6 +17,11 @@ class LiveStreamingMain: BaseViewController {
             snapShot.isEnabled = remoteUid != 0
         }
     }
+    var isPreloadChannel: Bool = false {
+        didSet {
+            preloadButton.title =  isPreloadChannel ? "cancel preload".localized : "preload Channel".localized
+        }
+    }
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
@@ -136,6 +141,24 @@ class LiveStreamingMain: BaseViewController {
         }
     }
     
+    @IBOutlet weak var selectCanvasColor: Picker!
+    private var remoteCanvasColor: UInt32 = 0xff006aff
+    func initSelectCanvasColor() {
+        selectCanvasColor.label.stringValue = "默认背景色"
+        let colors: [String: UInt32] = ["Red".localized: 0xff0d00ff,
+                                        "Blue".localized: 0x0400ffff,
+                                        "Pink".localized: 0xff006aff,
+                                        "Purple".localized: 0xff00d9ff,
+                                        "Yellow".localized: 0xeaff00ff]
+        let sortColors = colors.map({ $0.key }).sorted()
+        selectCanvasColor.picker.addItems(withTitles: sortColors)
+        selectCanvasColor.onSelectChanged { [weak self] in
+            guard let self = self else { return }
+            let index = self.selectCanvasColor.indexOfSelectedItem
+            let colorTitle = sortColors[index]
+            self.remoteCanvasColor = colors[colorTitle] ?? 0xff006aff
+        }
+    }
     /**
      --- Microphones Picker ---
      */
@@ -369,6 +392,7 @@ class LiveStreamingMain: BaseViewController {
         initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
+        initSelectCanvasColor()
         remoteUid = 0
     }
 
@@ -389,6 +413,11 @@ class LiveStreamingMain: BaseViewController {
         }
         // layout render view
         Container.layoutStream(views: videos)
+    }
+    
+    @IBOutlet weak var preloadButton: NSButton!
+    @IBAction func onPreloadButton(_ sender: NSButton) {
+        isPreloadChannel = !isPreloadChannel
     }
     
     @IBAction func onVideoCallButtonPressed(_ sender: NSButton) {
@@ -449,6 +478,9 @@ class LiveStreamingMain: BaseViewController {
             option.publishMicrophoneTrack = role == .broadcaster
             option.clientRoleType = role
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                if self.isPreloadChannel {
+                    self.agoraKit.preloadChannel(byToken: token, channelId: channel, uid: 0)
+                }
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     self.isProcessing = false
@@ -541,7 +573,8 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
+            videoCanvas.backgroundColor = remoteCanvasColor
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
             remoteUid = uid

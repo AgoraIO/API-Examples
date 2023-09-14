@@ -19,10 +19,20 @@ public class VideoFileReader {
     private final Context context;
     private final OnVideoReadListener videoReadListener;
     private InnerThread thread;
+    private final int trackId;
 
     public VideoFileReader(Context context, OnVideoReadListener listener){
+        this(context, 0, listener);
+    }
+
+    public VideoFileReader(Context context, int trackId, OnVideoReadListener listener){
+        this.trackId = trackId;
         this.context = context.getApplicationContext();
         this.videoReadListener = listener;
+    }
+
+    public int getTrackId() {
+        return trackId;
     }
 
     public final void start(){

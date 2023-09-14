@@ -36,6 +36,9 @@ struct StatisticsInfo {
     
     var type: StatisticsType
     var firstFrameElapsedTime: Double = 0
+    var preloadElapsedTime: Double = 0
+    var localUid: UInt = 0
+    var remoteUid: UInt = 0
     
     init(type: StatisticsType) {
         self.type = type
@@ -122,6 +125,15 @@ struct StatisticsInfo {
     
     mutating func updateFirstFrameInfo(_ info: AgoraVideoRenderingTracingInfo) {
         firstFrameElapsedTime = Double(info.elapsedTime)
+        preloadElapsedTime = Double(info.join2JoinSuccess)
+    }
+    
+    mutating func updateRemoteUid(_ uid: UInt) {
+        remoteUid = uid
+    }
+    
+    mutating func updateLocalUid(_ uid: UInt) {
+        localUid = uid
     }
     
     func description(audioOnly:Bool) -> String {
@@ -137,6 +149,7 @@ struct StatisticsInfo {
         var results:[String] = []
         
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
+        let uid = "uid: \(localUid)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -165,6 +178,9 @@ struct StatisticsInfo {
         if firstFrameElapsedTime > 0 {
             results.append(firstFrame)
         }
+        if localUid > 0 {
+            results.insert(uid, at: 0)
+        }
         return results.joined(separator: "\n")
     }
     
@@ -172,6 +188,8 @@ struct StatisticsInfo {
         var results:[String] = []
         
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
+        let preloadTime = "join2Success: \(preloadElapsedTime)"
+        let uid = "uid: \(remoteUid)"
         if(!audioOnly) {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
@@ -185,6 +203,7 @@ struct StatisticsInfo {
                 results.append("VLoss: \(videoStats.packetLossRate)%")
                 results.append("ALoss: \(audioStats.audioLossRate)%")
                 results.append("AQuality: \(audioQuality.description())")
+                
             }
         } else {
             if let volume = info.audioVolume {
@@ -200,6 +219,12 @@ struct StatisticsInfo {
         }
         if firstFrameElapsedTime > 0 {
             results.append(firstFrame)
+        }
+        if remoteUid > 0 {
+            results.insert(uid, at: 0)
+        }
+        if preloadElapsedTime > 0 {
+            results.append(preloadTime)
         }
         return results.joined(separator: "\n")
     }

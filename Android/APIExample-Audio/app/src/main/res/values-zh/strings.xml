@@ -33,6 +33,7 @@
     <string name="item_raw_audio">原始音频数据</string>
     <string name="item_spatial_sound">空间音效</string>
 
+    <string name="audiorouter_palyer">此示例演示在使用RTC通话中音频路由对第三方播放器的影响。</string>
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelaudioByToken">此示例演示了如何使用SDK加入带Token的频道进行纯语音通话的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
@@ -69,6 +70,7 @@
     <string name="log_server_path">日志服务路径</string>
     <string name="log_server_path_input_hint">请输入日志服务路径</string>
     <string name="use_https">使用Https</string>
+    <string name="item_audiowaveform">音频频谱</string>
 
     <string name="area">区域</string>
 
@@ -77,4 +79,10 @@
     <string name="mute_auido">静音</string>
     <string name="save">保存</string>
     <string name="app_id_empty">AppID为空！</string>
+    <string name="audio_route_default">默认</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="audio_route_headset">耳机(非TypeC)</string>
+    <string name="audio_route_headset_typec">耳机(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
 </resources>

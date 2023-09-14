@@ -7,26 +7,39 @@
 //
 
 #import "SenseBeautifyVC.h"
-#import "EFMotionManager.h"
-#import "VideoProcessingManager.h"
-#import "EffectsProcess.h"
 #import <AgoraRtcKit/AgoraRtcEngineKitEx.h>
 #import "APIExample-Swift.h"
+#import "BeautyAPI.h"
+#import "SenseBeautyRender.h"
 
-@interface SenseBeautifyVC () <AgoraRtcEngineDelegate, AgoraVideoFrameDelegate>
+@interface SenseBeautifyVC () <AgoraRtcEngineDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
 @property (weak, nonatomic) IBOutlet UIView *container;
 @property (weak, nonatomic) IBOutlet UIView *localVideo;
 @property (weak, nonatomic) IBOutlet UIView *remoteVideo;
 
-
-@property (nonatomic, strong) VideoProcessingManager *videoProcessing;
 @property (nonatomic, strong) AgoraRtcEngineKit *rtcEngineKit;
+@property (nonatomic, strong) BeautyAPI *beautyAPI;
+@property (nonatomic, strong) SenseBeautyRender *senseRender;
 
 @end
 
 @implementation SenseBeautifyVC
+- (BeautyAPI *)beautyAPI {
+    if (_beautyAPI == nil) {
+        _beautyAPI = [[BeautyAPI alloc] init];
+        [_beautyAPI enable:YES];
+    }
+    return _beautyAPI;
+}
+
+- (SenseBeautyRender *)senseRender {
+    if (_senseRender == nil) {
+        _senseRender = [[SenseBeautyRender alloc] init];
+    }
+    return _senseRender;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,17 +51,14 @@
 #endif
 }
 
-
 - (void)setupSenseArService {
-    NSString *licensePath = [[NSBundle mainBundle] pathForResource:@"SENSEME" ofType:@"lic"];
-    BOOL isSuccess = [EffectsProcess authorizeWithLicensePath:licensePath];
-    NSLog(@"isSuccess == %d", isSuccess);
-    if (isSuccess) {
+    if (self.senseRender.isSuccessLicense) {
         [self initSDK];
     } else {
         [self.tipsLabel setHidden:NO];
         [self.container setHidden:YES];
         [self.tipsLabel setText:NSLocalizedString(@"license authorization failed, please check whether the license file is correct", nil)];
+        [self performSelector:@selector(setupSenseArService) withObject:self afterDelay:1];
     }
 }
 
@@ -62,23 +72,24 @@
 #endif
     
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:KeyCenter.AppId delegate:self];
-    // setup videoFrameDelegate
-    [self.rtcEngineKit setVideoFrameDelegate:self];
     
     [self.rtcEngineKit enableVideo];
     [self.rtcEngineKit enableAudio];
     
-    // add FaceUnity filter and add to process manager
-    self.videoProcessing = [VideoProcessingManager new];
+    AgoraVideoEncoderConfiguration *encodeConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(480, 640)
+                                                                                              frameRate:(AgoraVideoFrameRateFps15)
+                                                                                                bitrate:15
+                                                                                        orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
+                                                                                             mirrorMode:(AgoraVideoMirrorModeDisabled)];
+    [self.rtcEngineKit setVideoEncoderConfiguration:encodeConfig];
     
-    // set up local video to render your local camera preview
-    AgoraRtcVideoCanvas *videoCanvas = [AgoraRtcVideoCanvas new];
-    videoCanvas.uid = 0;
-    // the view to be binded
-    videoCanvas.view = self.localVideo;
-    videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-    videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
-    [self.rtcEngineKit setupLocalVideo:videoCanvas];
+    BeautyConfig *config = [[BeautyConfig alloc] init];
+    config.rtcEngine = self.rtcEngineKit;
+    config.captureMode = CaptureModeAgora;
+    config.beautyRender = self.senseRender;
+    [self.beautyAPI initialize:config];
+    
+    [self.beautyAPI setupLocalVideo:self.localVideo renderMode:AgoraVideoRenderModeHidden];
     [self.rtcEngineKit startPreview];
 
     // set custom capturer as video source
@@ -86,6 +97,8 @@
     option.clientRoleType = AgoraClientRoleBroadcaster;
     option.publishMicrophoneTrack = YES;
     option.publishCameraTrack = YES;
+    option.autoSubscribeAudio = YES;
+    option.autoSubscribeVideo = YES;
     [[NetworkManager shared] generateTokenWithChannelName:self.title uid:0 success:^(NSString * _Nullable token) {
         [self.rtcEngineKit joinChannelByToken:token
                                     channelId:self.title
@@ -98,46 +111,25 @@
 }
 
 - (IBAction)onTapSwitchCameraButton:(id)sender {
-    [self.rtcEngineKit switchCamera];
+    [self.beautyAPI switchCamera];
 }
 - (IBAction)onTapBeautyButton:(UIButton *)sender {
     [sender setSelected:!sender.isSelected];
-    [self.videoProcessing setBuauty:sender.isSelected];
+    if (sender.isSelected) {
+        [self.beautyAPI setBeautyPreset:(BeautyPresetModeDefault)];
+    } else {
+        [self.beautyAPI.beautyRender reset];
+    }
 }
 - (IBAction)onTapMakeupButton:(UIButton *)sender {
     [sender setSelected:!sender.isSelected];
-    [self.videoProcessing setMakeup:sender.isSelected];
+    [self.beautyAPI.beautyRender setMakeup:sender.isSelected];
 }
 - (IBAction)onTapStickerButton:(UIButton *)sender {
     [sender setSelected:!sender.isSelected];
-    [self.videoProcessing setSticker:sender.isSelected];
-}
-- (IBAction)onTapFilterButton:(UIButton *)sender {
-    [sender setSelected:!sender.isSelected];
-    [self.videoProcessing setFilter:sender.isSelected];
+    [self.beautyAPI.beautyRender setSticker:sender.isSelected];
 }
 
-#pragma mark - VideoFrameDelegate
-- (BOOL)onCaptureVideoFrame:(AgoraOutputVideoFrame *)videoFrame {
-    CVPixelBufferRef pixelBuffer = [self.videoProcessing videoProcessHandler:videoFrame.pixelBuffer];
-    videoFrame.pixelBuffer = pixelBuffer;
-    return YES;
-}
-
-- (AgoraVideoFormat)getVideoFormatPreference{
-    return AgoraVideoFormatCVPixelNV12;
-}
-- (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
-    return AgoraVideoFrameProcessModeReadWrite;
-}
-
-- (BOOL)getMirrorApplied{
-    return YES;
-}
-
-- (BOOL)getRotationApplied {
-    return NO;
-}
 
 #pragma mark - RtcEngineDelegate
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
@@ -148,6 +140,7 @@
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
     videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
     [self.rtcEngineKit setupRemoteVideo:videoCanvas];
+    [self.remoteVideo setHidden:NO];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
@@ -156,12 +149,14 @@
     // the view to be binded
     videoCanvas.view = nil;
     [self.rtcEngineKit setupRemoteVideo:videoCanvas];
+    [self.remoteVideo setHidden:YES];
 }
 
 - (void)dealloc {
     [self.rtcEngineKit leaveChannel:nil];
     [self.rtcEngineKit stopPreview];
     [AgoraRtcEngineKit destroy];
+    [self.beautyAPI destroy];
 }
 
 

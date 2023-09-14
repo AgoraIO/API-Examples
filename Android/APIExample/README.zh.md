@@ -23,7 +23,7 @@
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
 4. 复制后台的 **App 证书** 并备注，稍后启动应用时会用到它
 
-5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书 分别替换到 `Your App Id` 和 `YOUR APP CERTIFICATE`
+5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-configs.xml`，将你的 AppID 、App主证书 分别替换到 `Your App Id` 和 `YOUR APP CERTIFICATE`
 
     ```
     // 声网APP ID。
@@ -36,15 +36,49 @@
 
 ### 美颜配置
 
-本项目包含第三方美颜集成示例，默认是禁用状态，如果需要开启编译和使用请参考对应的配置指南。
+> 第三方美颜集成使用了[美颜场景化API库](https://github.com/AgoraIO-Community/BeautyAPI)
 
-| 美颜模块 |                   配置指南                   |
-|:----:|:----------------------------------------:|
-|  商汤  | [README](beauty/sense-time/README.zh.md) |
-|  相芯  | [README](beauty/faceunity/README.zh.md)  |
-|  字节  | [README](beauty/bytedance/README.zh.md)  |
+本项目包含第三方美颜集成示例，在没有配置资源和证书的情况下，默认是无法启用的。资源证书配置方法如下：
 
+#### 商汤美颜
 
+1. 联系商汤客服获取美颜sdk下载链接以及证书
+2. 解压美颜sdk，并将以下资源复制到对应路径
+
+| 商汤SDK文件/目录                                                           | 项目路径                                                     |
+|----------------------------------------------------------------------|----------------------------------------------------------|
+| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
+| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
+
+#### 相芯美颜
+
+1. 联系相芯客服获取美颜资源以及证书
+2. 将美颜资源及证书放到对应路径下
+
+| 美颜资源                 | 项目路径                                                                           |
+|----------------------|--------------------------------------------------------------------------------|
+| 美妆资源(如naicha.bundle) | app/src/main/assets/beauty_faceunity/makeup                                    |
+| 贴纸资源(如fashi.bundle)  | app/src/main/assets/beauty_faceunity/sticker                                   |
+| 证书authpack.java      | app/src/main/java/io/agora/api/example/examples/advanced/beauty/authpack.java  |
+
+#### 字节美颜
+
+1. 联系字节客服获取美颜sdk下载链接以及证书
+2. 解压字节/火山美颜资源并复制以下文件/目录到对应路径下
+
+| 字节SDK文件/目录                                       | 项目路径                                                  |
+|--------------------------------------------------|-------------------------------------------------------|
+| resource/LicenseBag.bundle                       | app/src/main/assets/beauty_bytedance           |
+| resource/ModelResource.bundle                    | app/src/main/assets/beauty_bytedance           |
+| resource/ComposeMakeup.bundle                    | app/src/main/assets/beauty_bytedance           |
+| resource/StickerResource.bundle                  | app/src/main/assets/beauty_bytedance           |
+| resource/StickerResource.bundle                  | app/src/main/assets/beauty_bytedance           |
+
+3.
+修改app/src/main/java/io/agora/api/example/examples/advanced/beauty/ByteDanceBeauty.java文件里LICENSE_NAME为申请到的证书文件名
 
 ### 对于Agora Extension开发者
 

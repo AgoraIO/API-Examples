@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)renderVideoPixelBuffer:(AgoraOutputVideoFrame *_Nonnull)videoData;
 
+- (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBufferRef size:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -6,6 +6,8 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
 import android.graphics.Matrix;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +25,10 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -33,6 +37,7 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.gles.GLThread;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.examples.advanced.videoRender.YuvFboProgram;
 import io.agora.api.example.utils.CommonUtil;
@@ -41,17 +46,20 @@ import io.agora.api.example.utils.VideoFileReader;
 import io.agora.base.JavaI420Buffer;
 import io.agora.base.NV12Buffer;
 import io.agora.base.NV21Buffer;
+import io.agora.base.TextureBuffer;
 import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.YuvHelper;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.EncodedVideoTrackOptions;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.gl.EglBaseProvider;
+import io.agora.rtc2.video.EncodedVideoFrameInfo;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -64,6 +72,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 )
 public class MultiVideoSourceTracks extends BaseFragment implements View.OnClickListener {
     private static final String TAG = MultiVideoSourceTracks.class.getSimpleName();
+    private static final String ENCODED_VIDEO_PATH = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
 
 
     private VideoReportLayout[] flVideoContainer;
@@ -76,6 +85,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
 
     private final List<Integer> videoTrackIds = new ArrayList<>();
     private final List<VideoFileReader> videoFileReaders = new ArrayList<>();
+    private final List<MediaExtractorThread> videoExtractorThreads = new ArrayList<>();
     private final List<RtcConnection> connections = new ArrayList<>();
     private YuvFboProgram yuvFboProgram;
     private TextureBufferHelper textureBufferHelper;
@@ -101,6 +111,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 view.findViewById(R.id.fl_video_container_04),
         };
         view.findViewById(R.id.btn_track_create).setOnClickListener(v -> createPushingVideoTrack());
+        view.findViewById(R.id.btn_encoded_track_create).setOnClickListener(v -> createPushingEncodedVidTrack());
         view.findViewById(R.id.btn_track_destroy).setOnClickListener(v -> destroyLastPushingVideoTrack());
         sp_push_buffer_type = view.findViewById(R.id.sp_buffer_type);
     }
@@ -166,6 +177,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             engine.leaveChannel();
             engine.stopPreview();
         }
+        releaseTextureBuffer();
         engine = null;
         super.onDestroy();
         handler.post(RtcEngine::destroy);
@@ -197,8 +209,10 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 joined = false;
                 join.setText(getString(R.string.join));
                 resetAllVideoLayout();
+                destroyAllPushingVideoTrack();
                 engine.leaveChannel();
                 engine.stopPreview();
+                releaseTextureBuffer();
                 myUid = 0;
             }
         }
@@ -253,6 +267,148 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         });
     }
 
+    /**
+     * Push video frame by i420.
+     *
+     * @param trackId video track id.
+     * @param yuv i420 data
+     * @param width width
+     * @param height height
+     */
+    private void pushVideoFrameByI420(int trackId, byte[] yuv, int width, int height){
+        JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
+        i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
+        i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+        i420Buffer.getDataV().put(yuv, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+
+        /*
+         * Get monotonic time in ms which can be used by capture time,
+         * typical scenario is as follows:
+         */
+        long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
+        /*
+         * Create a video frame to push.
+         */
+        VideoFrame videoFrame = new VideoFrame(i420Buffer, 0, currentMonotonicTimeInMs * 1000000);
+
+        /*
+         * Pushes the external video frame to the app.
+         */
+        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+
+        i420Buffer.release();
+
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrame error");
+        }
+    }
+
+    /**
+     * Push video frame by nv21.
+     *
+     * @param trackId video track id.
+     * @param nv21 nv21
+     * @param width width
+     * @param height height
+     */
+    private void pushVideoFrameByNV21(int trackId, byte[] nv21, int width, int height){
+
+        VideoFrame.Buffer frameBuffer = new NV21Buffer(nv21, width, height, null);
+
+        /*
+         * Get monotonic time in ms which can be used by capture time,
+         * typical scenario is as follows:
+         */
+        long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
+        /*
+         * Create a video frame to push.
+         */
+        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
+
+        /*
+         * Pushes the external video frame to the app.
+         */
+        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrame error");
+        }
+    }
+
+    /**
+     * Push video frame by nv12.
+     *
+     * @param trackId video track id.
+     * @param nv12 nv12 buffer.
+     * @param width width.
+     * @param height height.
+     */
+    private void pushVideoFrameByNV12(int trackId, ByteBuffer nv12, int width, int height){
+        VideoFrame.Buffer frameBuffer = new NV12Buffer(width, height, width, height, nv12, null);
+
+        /*
+         * Get monotonic time in ms which can be used by capture time,
+         * typical scenario is as follows:
+         */
+        long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
+        /*
+         * Create a video frame to push.
+         */
+        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
+
+        /*
+         * Pushes the external video frame to the app.
+         */
+        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrame error");
+        }
+    }
+
+    /**
+     * Push video frame by texture id.
+     *
+     * @param trackId video track id.
+     * @param textureId texture id.
+     * @param textureType texture type. rgb or oes.
+     * @param width width.
+     * @param height height.
+     */
+    @GLThread
+    private void pushVideoFrameByTexture(int trackId, int textureId, VideoFrame.TextureBuffer.Type textureType, int width, int height){
+        VideoFrame.Buffer frameBuffer = new TextureBuffer(
+                EglBaseProvider.getCurrentEglContext(),
+                width,
+                height,
+                textureType,
+                textureId,
+                new Matrix(),
+                null,
+                null,
+                null
+        );
+
+        /*
+         * Get monotonic time in ms which can be used by capture time,
+         * typical scenario is as follows:
+         */
+        long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
+        /*
+         * Create a video frame to push.
+         */
+        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
+
+        /*
+         * Pushes the external video frame to the app.
+         */
+        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrame error");
+        }
+    }
+
     private void createPushingVideoTrack() {
         if (!joined || videoTrackIds.size() >= 4) {
             return;
@@ -280,9 +436,10 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
-            option.autoSubscribeAudio = true;
-            option.autoSubscribeVideo = true;
+            option.autoSubscribeAudio = false;
+            option.autoSubscribeVideo = false;
             option.publishCustomVideoTrack = true;
+            option.publishCameraTrack = false;
             /*
             specify custom video track id to publish in this channel.
              */
@@ -327,109 +484,30 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 /*
                  * VideoFileReader can get nv21 buffer data of sample.yuv file in assets cyclically.
                  */
-                VideoFileReader videoFileReader = new VideoFileReader(requireContext(), (yuv, width, height) -> {
+                VideoFileReader videoFileReader = new VideoFileReader(requireContext(), videoTrack, (yuv, width, height) -> {
                     if (joined && engine != null) {
                         String selectedItem = (String) sp_push_buffer_type.getSelectedItem();
 
                         /*
                          * Below show how to create different type buffers.
                          */
-                        VideoFrame.Buffer frameBuffer;
                         if ("NV21".equals(selectedItem)) {
-                            int srcStrideY = width;
-                            int srcHeightY = height;
-                            int srcSizeY = srcStrideY * srcHeightY;
-                            ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
-                            srcY.put(yuv, 0, srcSizeY);
-
-                            int srcStrideU = width / 2;
-                            int srcHeightU = height / 2;
-                            int srcSizeU = srcStrideU * srcHeightU;
-                            ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
-                            srcU.put(yuv, srcSizeY, srcSizeU);
-
-                            int srcStrideV = width / 2;
-                            int srcHeightV = height / 2;
-                            int srcSizeV = srcStrideV * srcHeightV;
-                            ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
-                            srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
-
-                            int desSize = srcSizeY + srcSizeU + srcSizeV;
-                            ByteBuffer des = ByteBuffer.allocateDirect(desSize);
-                            YuvHelper.I420ToNV12(srcY, srcStrideY, srcV, srcStrideV, srcU, srcStrideU, des, width, height);
-
-                            byte[] nv21 = new byte[desSize];
-                            des.position(0);
-                            des.get(nv21);
-
-                            frameBuffer = new NV21Buffer(nv21, width, height, null);
+                            byte[] nv21 = yuv2nv21(yuv, width, height);
+                            pushVideoFrameByNV21(videoTrack, nv21, width, height);
                         } else if ("NV12".equals(selectedItem)) {
-                            int srcStrideY = width;
-                            int srcHeightY = height;
-                            int srcSizeY = srcStrideY * srcHeightY;
-                            ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
-                            srcY.put(yuv, 0, srcSizeY);
-
-                            int srcStrideU = width / 2;
-                            int srcHeightU = height / 2;
-                            int srcSizeU = srcStrideU * srcHeightU;
-                            ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
-                            srcU.put(yuv, srcSizeY, srcSizeU);
-
-                            int srcStrideV = width / 2;
-                            int srcHeightV = height / 2;
-                            int srcSizeV = srcStrideV * srcHeightV;
-                            ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
-                            srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
-
-                            int desSize = srcSizeY + srcSizeU + srcSizeV;
-                            ByteBuffer des = ByteBuffer.allocateDirect(desSize);
-                            YuvHelper.I420ToNV12(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, des, width, height);
-
-                            frameBuffer = new NV12Buffer(width, height, width, height, des, null);
+                            ByteBuffer nv12 = yuv2nv12(yuv, width, height);
+                            pushVideoFrameByNV12(videoTrack, nv12, width, height);
                         } else if ("Texture2D".equals(selectedItem)) {
                             if (textureBufferHelper == null) {
                                 textureBufferHelper = TextureBufferHelper.create("PushExternalVideoYUV", EglBaseProvider.instance().getRootEglBase().getEglBaseContext());
                             }
-                            if (yuvFboProgram == null) {
-                                textureBufferHelper.invoke((Callable<Void>) () -> {
-                                    yuvFboProgram = new YuvFboProgram();
-                                    return null;
-                                });
-                            }
-                            Integer textureId = textureBufferHelper.invoke(() -> yuvFboProgram.drawYuv(yuv, width, height));
-                            frameBuffer = textureBufferHelper.wrapTextureBuffer(width, height, VideoFrame.TextureBuffer.Type.RGB, textureId, new Matrix());
+                            textureBufferHelper.invoke((Callable<Void>) () -> {
+                                int textureId = yuv2texture(yuv, width, height);
+                                pushVideoFrameByTexture(videoTrack, textureId, VideoFrame.TextureBuffer.Type.RGB, width, height);
+                                return null;
+                            });
                         } else {
-                            // I420 type default
-                            JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
-                            i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
-                            i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
-                            i420Buffer.getDataV().put(yuv, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
-                            frameBuffer = i420Buffer;
-                        }
-
-
-                        /*
-                         * Get monotonic time in ms which can be used by capture time,
-                         * typical scenario is as follows:
-                         */
-                        long currentMonotonicTimeInMs = engine.getCurrentMonotonicTimeInMs();
-                        /*
-                         * Create a video frame to push.
-                         */
-                        VideoFrame videoFrame = new VideoFrame(frameBuffer, 0, currentMonotonicTimeInMs * 1000000);
-
-                        /*
-                         * Pushes the external video frame to the app.
-                         *
-                         * @param frame The external video frame: ExternalVideoFrame.
-                         * @param videoTrackId The id of the video track.
-                         * - 0: Success.
-                         * - < 0: Failure.
-                         */
-                        int ret = engine.pushExternalVideoFrameEx(videoFrame, videoTrack);
-                        if (ret < 0) {
-                            Log.w(TAG, "pushExternalVideoFrameEx error code=" + ret);
+                            pushVideoFrameByI420(videoTrack, yuv, width, height);
                         }
                     }
                 });
@@ -445,25 +523,148 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         });
     }
 
+    private void createPushingEncodedVidTrack() {
+        if (!joined || videoTrackIds.size() >= 4) {
+            return;
+        }
+        /*
+         * Get an custom video track id created by internal,which could used to publish or preview
+         *
+         * @return
+         * - > 0: the useable video track id.
+         * - < 0: Failure.
+         */
+        int videoTrack = engine.createCustomEncodedVideoTrack(new EncodedVideoTrackOptions());
+        if (videoTrack < 0) {
+            Toast.makeText(requireContext(), "createCustomVideoTrack failed!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String channelId = et_channel.getText().toString();
+        int uid = new Random().nextInt(1000) + 20000;
+        RtcConnection connection = new RtcConnection(channelId, uid);
+
+        /*
+         Generate a token by restful api, which could be used to join channel with token.
+         */
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+            option.autoSubscribeAudio = false;
+            option.autoSubscribeVideo = false;
+            option.publishEncodedVideoTrack = true;
+            option.publishCameraTrack = false;
+            /*
+            specify custom video track id to publish in this channel.
+             */
+            option.customVideoTrackId = videoTrack;
+            /*
+             * Joins a channel.
+             *
+             * @return
+             * - 0: Success.
+             * - < 0: Failure.
+             *   - -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set
+             * to an integer, or the value of a member in the `ChannelMediaOptions` structure is invalid. You need
+             * to pass in a valid parameter and join the channel again.
+             *   - -3: Failes to initialize the `IRtcEngine` object. You need to reinitialize the IRtcEngine object.
+             *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
+             * object before calling this method.
+             *   - -8: The internal state of the IRtcEngine object is wrong. The typical cause is that you call
+             * this method to join the channel without calling `stopEchoTest` to stop the test after calling
+             * `startEchoTest` to start a call loop test. You need to call `stopEchoTest` before calling this method.
+             *   - -17: The request to join the channel is rejected. The typical cause is that the user is in the
+             * channel. Agora recommends using the `onConnectionStateChanged` callback to get whether the user is
+             * in the channel. Do not call this method to join the channel unless you receive the
+             * `CONNECTION_STATE_DISCONNECTED(1)` state.
+             *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
+             * rejoin the channel.
+             *   - -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
+             */
+            int res = engine.joinChannelEx(accessToken, connection, option, new IRtcEngineEventHandler() {
+            });
+            if (res != 0) {
+                /*
+                 * destroy a created custom video track id
+                 *
+                 * @param video_track_id The video track id which was created by createCustomVideoTrack
+                 * @return
+                 * - 0: Success.
+                 * - < 0: Failure.
+                 */
+                engine.destroyCustomEncodedVideoTrack(videoTrack);
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            } else {
+                MediaExtractorThread extractorThread = new MediaExtractorThread(videoTrack, ENCODED_VIDEO_PATH, (buffer, presentationTimeUs, size, isKeyFrame, width, height, frameRate) -> {
+                    if (engine != null) {
+                        EncodedVideoFrameInfo frameInfo = new EncodedVideoFrameInfo();
+                        frameInfo.codecType = Constants.VIDEO_CODEC_H264;
+                        frameInfo.framesPerSecond = frameRate;
+                        frameInfo.frameType = isKeyFrame ? Constants.VIDEO_FRAME_TYPE_KEY_FRAME : Constants.VIDEO_FRAME_TYPE_DELTA_FRAME;
+                        int ret = engine.pushExternalEncodedVideoFrameEx(buffer, frameInfo, videoTrack);
+                        if (ret != Constants.ERR_OK) {
+                            Log.e(TAG, "pushExternalEncodedVideoFrame error: " + ret);
+                        }
+                    }
+                });
+                extractorThread.start();
+
+                /*
+                 * cache video track ids , video file readers and rtc connection to release while fragment destroying.
+                 */
+                videoTrackIds.add(videoTrack);
+                videoExtractorThreads.add(extractorThread);
+                connections.add(connection);
+            }
+        });
+    }
+
     private int destroyLastPushingVideoTrack() {
         int lastIndex = videoTrackIds.size() - 1;
         if (lastIndex < 0) {
             return lastIndex;
         }
         int videoTrack = videoTrackIds.remove(lastIndex);
-        VideoFileReader videoFileReader = videoFileReaders.remove(lastIndex);
         RtcConnection connection = connections.remove(lastIndex);
 
-        /*
-         * destroy a created custom video track id
-         *
-         * @param video_track_id The video track id which was created by createCustomVideoTrack
-         * @return
-         * - 0: Success.
-         * - < 0: Failure.
-         */
-        engine.destroyCustomVideoTrack(videoTrack);
-        videoFileReader.stop();
+        Iterator<VideoFileReader> fileReaderIterator = videoFileReaders.iterator();
+        while (fileReaderIterator.hasNext()){
+            VideoFileReader next = fileReaderIterator.next();
+            if(next.getTrackId() == videoTrack){
+                next.stop();
+                /*
+                 * destroy a created custom video track id
+                 *
+                 * @param video_track_id The video track id which was created by createCustomVideoTrack
+                 * @return
+                 * - 0: Success.
+                 * - < 0: Failure.
+                 */
+                engine.destroyCustomVideoTrack(videoTrack);
+                fileReaderIterator.remove();
+                break;
+            }
+        }
+
+        Iterator<MediaExtractorThread> extractorIterator = videoExtractorThreads.iterator();
+        while (extractorIterator.hasNext()){
+            MediaExtractorThread next = extractorIterator.next();
+            if(next.getTrackId() == videoTrack){
+                next.stop();
+                /*
+                 * destroy a created custom video track id
+                 *
+                 * @param video_track_id The video track id which was created by createCustomVideoTrack
+                 * @return
+                 * - 0: Success.
+                 * - < 0: Failure.
+                 */
+                engine.destroyCustomEncodedVideoTrack(videoTrack);
+                extractorIterator.remove();
+                break;
+            }
+        }
+
         engine.leaveChannelEx(connection);
         return lastIndex;
     }
@@ -636,4 +837,229 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         }
     };
 
+
+    private interface MediaExtractorCallback {
+        void onExtractFrame(ByteBuffer buffer, long presentationTimeUs, int size, boolean isKeyFrame, int width, int height, int frameRate);
+    }
+
+    private static final class MediaExtractorThread {
+        private Thread thread;
+        private MediaExtractor extractor;
+        private final String path;
+        private volatile boolean isExtracting = false;
+        private MediaExtractorCallback callback;
+        private final int trackId;
+
+        private MediaExtractorThread(int trackId, String path, MediaExtractorCallback callback) {
+            this.trackId = trackId;
+            this.path = path;
+            this.callback = callback;
+        }
+
+        public int getTrackId() {
+            return trackId;
+        }
+
+        private void start() {
+            if (isExtracting) {
+                return;
+            }
+            isExtracting = true;
+            thread = new Thread(this::extract);
+            thread.start();
+        }
+
+        private void stop() {
+            if (!isExtracting) {
+                return;
+            }
+            isExtracting = false;
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        private void extract() {
+            try {
+                extractor = new MediaExtractor();
+                extractor.setDataSource(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            boolean hasVideoTrack = false;
+            int maxByteCount = 1024 * 1024 * 2;
+            int frameRate = 30;
+            int width = 640;
+            int height = 360;
+            byte[] sps = new byte[0];
+            byte[] pps = new byte[0];
+            for (int i = 0; i < extractor.getTrackCount(); i++) {
+                MediaFormat format = extractor.getTrackFormat(i);
+                String mime = format.getString(MediaFormat.KEY_MIME);
+                if (mime.startsWith("video")) {
+                    hasVideoTrack = true;
+                    extractor.selectTrack(i);
+                    maxByteCount = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
+                    frameRate = format.getInteger(MediaFormat.KEY_FRAME_RATE);
+                    width = format.getInteger(MediaFormat.KEY_WIDTH);
+                    height = format.getInteger(MediaFormat.KEY_HEIGHT);
+                    sps = format.getByteBuffer("csd-0").array();
+                    pps = format.getByteBuffer("csd-1").array();
+                    break;
+                }
+            }
+
+            int frameInterval = 1000 / frameRate;
+            ByteBuffer buffer = ByteBuffer.allocate(maxByteCount);
+            while (isExtracting && hasVideoTrack) {
+                long start = System.currentTimeMillis();
+                int sampleSize = extractor.readSampleData(buffer, 0);
+                if (sampleSize < 0) {
+                    break;
+                }
+                ByteBuffer outBuffer;
+                boolean isKeyFrame = (extractor.getSampleFlags() & MediaExtractor.SAMPLE_FLAG_SYNC) > 0;
+                byte[] bytes = new byte[sampleSize];
+                buffer.get(bytes, 0, sampleSize);
+                int outSize = sampleSize;
+                if (isKeyFrame) {
+                    outSize = sps.length + pps.length + sampleSize;
+                    outBuffer = ByteBuffer.allocateDirect(outSize);
+                    outBuffer.put(sps, 0, sps.length);
+                    outBuffer.put(pps, 0, pps.length);
+                } else {
+                    outBuffer = ByteBuffer.allocateDirect(outSize);
+                }
+                outBuffer.put(bytes, 0, sampleSize);
+
+                long timeUs = extractor.getSampleTime();
+                if (callback != null) {
+                    callback.onExtractFrame(outBuffer, timeUs, outSize, isKeyFrame, width, height, frameRate);
+                }
+                long sleep = frameInterval - (System.currentTimeMillis() - start);
+                if (sleep > 0) {
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+                if (!extractor.advance()) {
+                    // end of stream
+                    extractor.seekTo(0, MediaExtractor.SEEK_TO_NEXT_SYNC);
+                }
+            }
+
+            extractor.release();
+            extractor = null;
+
+        }
+    }
+
+    private void releaseTextureBuffer() {
+        if (textureBufferHelper != null) {
+            textureBufferHelper.invoke(() -> {
+                if (yuvFboProgram != null) {
+                    yuvFboProgram.release();
+                    yuvFboProgram = null;
+                }
+                return null;
+            });
+            textureBufferHelper.dispose();
+            textureBufferHelper = null;
+        }
+    }
+
+    /**
+     * Yuv 2 texture id.
+     * Run on gl thread.
+     *
+     * @param yuv yuv
+     * @param width width
+     * @param height heigh
+     * @return rgba texture id
+     */
+    @GLThread
+    private int yuv2texture(byte[] yuv, int width, int height) {
+        if (yuvFboProgram == null) {
+            yuvFboProgram = new YuvFboProgram();
+        }
+        return yuvFboProgram.drawYuv(yuv, width, height);
+    }
+
+    /**
+     * Transform yuv to nv12
+     *
+     * @param yuv yuv
+     * @param width width
+     * @param height height
+     * @return nv12
+     */
+    @NonNull
+    private static ByteBuffer yuv2nv12(byte[] yuv, int width, int height) {
+        int srcStrideY = width;
+        int srcHeightY = height;
+        int srcSizeY = srcStrideY * srcHeightY;
+        ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
+        srcY.put(yuv, 0, srcSizeY);
+
+        int srcStrideU = width / 2;
+        int srcHeightU = height / 2;
+        int srcSizeU = srcStrideU * srcHeightU;
+        ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
+        srcU.put(yuv, srcSizeY, srcSizeU);
+
+        int srcStrideV = width / 2;
+        int srcHeightV = height / 2;
+        int srcSizeV = srcStrideV * srcHeightV;
+        ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
+        srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
+
+        int desSize = srcSizeY + srcSizeU + srcSizeV;
+        ByteBuffer des = ByteBuffer.allocateDirect(desSize);
+        YuvHelper.I420ToNV12(srcY, srcStrideY, srcU, srcStrideU, srcV, srcStrideV, des, width, height);
+        return des;
+    }
+
+    /**
+     * Transform yuv to nv21.
+     *
+     * @param yuv yuv
+     * @param width width
+     * @param height height
+     * @return nv21
+     */
+    @NonNull
+    private static byte[] yuv2nv21(byte[] yuv, int width, int height) {
+        int srcStrideY = width;
+        int srcHeightY = height;
+        int srcSizeY = srcStrideY * srcHeightY;
+        ByteBuffer srcY = ByteBuffer.allocateDirect(srcSizeY);
+        srcY.put(yuv, 0, srcSizeY);
+
+        int srcStrideU = width / 2;
+        int srcHeightU = height / 2;
+        int srcSizeU = srcStrideU * srcHeightU;
+        ByteBuffer srcU = ByteBuffer.allocateDirect(srcSizeU);
+        srcU.put(yuv, srcSizeY, srcSizeU);
+
+        int srcStrideV = width / 2;
+        int srcHeightV = height / 2;
+        int srcSizeV = srcStrideV * srcHeightV;
+        ByteBuffer srcV = ByteBuffer.allocateDirect(srcSizeV);
+        srcV.put(yuv, srcSizeY + srcSizeU, srcSizeV);
+
+        int desSize = srcSizeY + srcSizeU + srcSizeV;
+        ByteBuffer des = ByteBuffer.allocateDirect(desSize);
+        YuvHelper.I420ToNV12(srcY, srcStrideY, srcV, srcStrideV, srcU, srcStrideU, des, width, height);
+
+        byte[] nv21 = new byte[desSize];
+        des.position(0);
+        des.get(nv21);
+        return nv21;
+    }
 }

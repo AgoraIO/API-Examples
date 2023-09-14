@@ -231,6 +231,7 @@ extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
 extern wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlStopMic[INFO_LEN];
+extern wchar_t MultiChannelCtrlTakeSnapshotEx[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
@@ -290,6 +291,8 @@ extern wchar_t MultiCamearaStopPublish[INFO_LEN];
 
 extern wchar_t MultiVideoSourceCamera1[INFO_LEN];
 extern wchar_t MultiVideoSourceCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera3[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera4[INFO_LEN];
 extern wchar_t MultiVideoSourceScreen[INFO_LEN];
 
 extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];

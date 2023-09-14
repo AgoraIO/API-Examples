@@ -1,0 +1,48 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
+"Lzz-2R-G7f.text" = "极速直播";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
+"Q0N-nV-bez.normalTitle" = "默认背景色";
+
+/* Class = "UIButton"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.configuration.title" = "预加载";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
+"XcJ-am-UAb.text" = "连麦";
+
+/* Class = "UILabel"; text = "大小流"; ObjectID = "auZ-cF-RlC"; */
+"auZ-cF-RlC.text" = "大小流";
+
+/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[0] = "自动"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[0]" = "自动";
+
+/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[1] = "软编"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[1]" = "软编";
+
+/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[2] = "硬编"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[2]" = "硬编";
+
+/* Class = "UILabel"; text = "(默认: 大流)"; ObjectID = "fim-uQ-jK3"; */
+"fim-uQ-jK3.text" = "(默认: 大流)";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "B帧"; ObjectID = "m3M-Tw-nzd"; */
+"m3M-Tw-nzd.text" = "B帧";
+
+/* Class = "UILabel"; text = "水印"; ObjectID = "nSq-Vu-o9H"; */
+"nSq-Vu-o9H.text" = "水印";
+
+/* Class = "UILabel"; text = "First Frame Optimization"; ObjectID = "ohV-am-Acd"; */
+"ohV-am-Acd.text" = "首帧出图";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
+"w4q-aT-JBc.normalTitle" = "截图";

@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; configuration.title = "Button"; ObjectID = "99i-oC-tHx"; */
+"99i-oC-tHx.configuration.title" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "99i-oC-tHx"; */
+"99i-oC-tHx.normalTitle" = "Button";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UITextField"; placeholder = "Enter encryption secret"; ObjectID = "gkN-x2-moD"; */
+"gkN-x2-moD.placeholder" = "加密密码";
+
+/* Class = "UILabel"; text = "Encryption Mode"; ObjectID = "hXZ-v4-LRg"; */
+"hXZ-v4-LRg.text" = "加密方式";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "Join";
+
+/* Class = "UIViewController"; title = "Stream Encryption"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "Stream Encryption";

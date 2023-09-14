@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
@@ -8,7 +9,6 @@ android {
 
     defaultConfig {
         applicationId "io.agora.api.example"
-        // ndk.abiFilters 'armeabi-v7a'//, 'arm64-v8a', 'x86', 'x86-64'
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -17,7 +17,7 @@ android {
         manifestPlaceholders = [
                AppId: "${applicationId}"
         ]
-        ndk.abiFilters 'armeabi-v7a'// 'arm64-v8a', 'x86', 'x86-64'
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
     }
 
     buildTypes {
@@ -62,7 +62,7 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.2.1"
+        def agora_sdk_version = "4.2.2"
         // case 1: full libs
         implementation "io.agora.rtc:full-sdk:${agora_sdk_version}"
         implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
@@ -107,14 +107,14 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
-    implementation project(path: ':beauty:base')
-    if(beauty_sensetime.toBoolean()){
-        runtimeOnly project(path: ':beauty:sense-time')
-    }
-    if(beauty_faceunity.toBoolean()){
-        runtimeOnly project(path: ':beauty:faceunity')
-    }
-    if(beauty_bytedance.toBoolean()){
-        runtimeOnly project(path: ':beauty:bytedance')
-    }
+    implementation 'com.faceunity:core:8.3.0'
+    implementation 'com.faceunity:model:8.3.0'
+
+    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
+
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.0'
 }

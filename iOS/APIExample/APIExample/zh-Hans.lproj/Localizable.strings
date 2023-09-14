@@ -157,3 +157,13 @@
 "Recording" = "开始录制";
 "Stop Recording" = "停止录制";
 "PIP Support iOS 15+" = "画中画只支持iOS15及以上版本";
+"Red" = "红色";
+"Blue" = "蓝色";
+"Pink" = "粉色";
+"Purple" = "紫色";
+"Yellow" = "黄色";
+"preload Channel" = "预加载";
+"cancel preload" = "取消预加载";
+"Audio Router(Third Party Player)" = "音频路由（第三方播放器)";
+"Player Type(ijkplayer/avplayer)" = "播放器选择(ijkplayer/原生)";
+"Audio Waveform" = "音频频谱";

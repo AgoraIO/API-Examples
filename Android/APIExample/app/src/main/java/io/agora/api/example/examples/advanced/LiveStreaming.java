@@ -2,11 +2,12 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.CLIENT_ROLE_AUDIENCE;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +28,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.Random;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -72,10 +76,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isLocalVideoForeground;
 
     private RtcEngine engine;
-    private int myUid;
+    private int myUid = 0;
+    private String myToken;
     private int remoteUid;
     private boolean joined = false;
     private boolean isHost = false;
+    private boolean isPreloaded = false;
+    private int canvasBgColor = 0x0000ffff; // RGBA
+    private int canvasRenderMode = Constants.RENDER_MODE_HIDDEN;
     private final VideoEncoderConfiguration videoEncoderConfiguration = new VideoEncoderConfiguration();
 
     @Nullable
@@ -92,6 +100,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         backGroundVideo = mRootBinding.backgroundVideo;
         mRootBinding.btnSetting.setOnClickListener(this);
         mRootBinding.btnJoin.setOnClickListener(this);
+        mRootBinding.btnPreload.setOnClickListener(this);
         mRootBinding.btnPublish.setOnClickListener(this);
         mRootBinding.btnRemoteScreenshot.setOnClickListener(this);
         foreGroundVideo.setOnClickListener(this);
@@ -130,14 +139,77 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             }
         });
-        mSettingBinding.switchH265.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // {"engine.video.enable_hw_encoder":"true"}  ——true 采用硬编； false 采用软编
-            engine.setParameters("{\"engine.video.enable_hw_encoder\":\"true\"}");
-            // {"engine.video.codec_type":"3"}    —— 2 表示采用H264编码; 3表示H265编码
-            engine.setParameters("{\"engine.video.codec_type\":\"" + (isChecked ? "3" : "2") + "\"}");
+        mSettingBinding.spRenderMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (getString(R.string.render_mode_hidden).equals(parent.getSelectedItem())) {
+                    canvasRenderMode = Constants.RENDER_MODE_HIDDEN;
+                }
+                else if(getString(R.string.render_mode_fit).equals(parent.getSelectedItem())){
+                    canvasRenderMode = Constants.RENDER_MODE_FIT;
+                }
+                else if(getString(R.string.render_mode_adaptive).equals(parent.getSelectedItem())){
+                    canvasRenderMode = Constants.RENDER_MODE_ADAPTIVE;
+                }
+                updateVideoView();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        mSettingBinding.sbColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int color = Color.argb(255, progress, progress, 255 - progress);
+                canvasBgColor = (Color.red(color) << 24) | (Color.green(color) << 16) | (Color.blue(color) << 8) | Color.alpha(color);
+                mSettingBinding.vColor.setBackgroundColor(color);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                updateVideoView();
+            }
         });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
+    }
+
+    private void updateVideoView() {
+
+        if(backGroundVideo.getChildCount() > 0 && backGroundVideo.getReportUid() != -1){
+            int reportUid = backGroundVideo.getReportUid();
+            SurfaceView videoView = new SurfaceView(requireContext());
+            backGroundVideo.removeAllViews();
+            backGroundVideo.addView(videoView);
+            VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
+            local.backgroundColor = canvasBgColor;
+            if(reportUid == myUid){
+                engine.setupLocalVideo(local);
+            }else{
+                engine.setupRemoteVideo(local);
+            }
+        }
+        if(foreGroundVideo.getChildCount() > 0 && foreGroundVideo.getReportUid() != -1){
+            int reportUid = foreGroundVideo.getReportUid();
+            SurfaceView videoView = new SurfaceView(requireContext());
+            videoView.setZOrderMediaOverlay(true);
+            foreGroundVideo.removeAllViews();
+            foreGroundVideo.addView(videoView);
+            VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
+            local.backgroundColor = canvasBgColor;
+            if(reportUid == myUid){
+                engine.setupLocalVideo(local);
+            }else{
+                engine.setupRemoteVideo(local);
+            }
+        }
     }
 
     @Override
@@ -164,7 +236,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             /* Sets the channel profile of the Agora RtcEngine. */
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            rtcEngineConfig.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
             /*
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -225,10 +297,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             } else {
                 joined = false;
                 isHost = false;
+                isPreloaded = false;
                 mRootBinding.btnJoin.setText(getString(R.string.join));
                 mRootBinding.btnPublish.setEnabled(false);
+                mRootBinding.btnPreload.setEnabled(true);
+                mRootBinding.etChannel.setEnabled(true);
                 mRootBinding.btnPublish.setText(getString(R.string.enable_publish));
                 mRootBinding.videoTrackingLayout.getRoot().setVisibility(View.GONE);
+                mSettingBinding.switchWatermark.setChecked(false);
                 remoteUid = 0;
                 foreGroundVideo.removeAllViews();
                 backGroundVideo.removeAllViews();
@@ -254,8 +330,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.leaveChannel();
 
             }
-        }
-        else if (v.getId() == R.id.btn_publish) {
+        } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
             if (isHost) {
                 engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
@@ -266,8 +341,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
             mRootBinding.btnPublish.setEnabled(false);
             mRootBinding.btnPublish.setText(isHost ? getString(R.string.disnable_publish) : getString(R.string.enable_publish));
-        }
-        else if (v.getId() == R.id.foreground_video) {
+        } else if (v.getId() == R.id.foreground_video) {
             isLocalVideoForeground = !isLocalVideoForeground;
             int foreGroundReportId = foreGroundVideo.getReportUid();
             foreGroundVideo.setReportUid(backGroundVideo.getReportUid());
@@ -282,36 +356,57 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             // Create render view by RtcEngine
             SurfaceView localView = new SurfaceView(getContext());
             SurfaceView remoteView = new SurfaceView(getContext());
-            if (isLocalVideoForeground){
+            if (isLocalVideoForeground) {
                 // Add to the local container
-                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                foreGroundVideo.addView(localView,0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Add to the remote container
-                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                backGroundVideo.addView(remoteView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                VideoCanvas remote = new VideoCanvas(remoteView, canvasRenderMode, remoteUid);
+                remote.backgroundColor = canvasBgColor;
+                engine.setupRemoteVideo(remote);
                 // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                VideoCanvas local = new VideoCanvas(localView, canvasRenderMode, 0);
+                local.backgroundColor = canvasBgColor;
+                engine.setupLocalVideo(local);
                 localView.setZOrderMediaOverlay(true);
-                localView.setZOrderOnTop(true);
-            }
-            else{
+            } else {
                 // Add to the local container
-                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                foreGroundVideo.addView(remoteView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Add to the remote container
-                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                backGroundVideo.addView(localView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                VideoCanvas local = new VideoCanvas(localView, canvasRenderMode, 0);
+                local.backgroundColor = canvasBgColor;
+                engine.setupLocalVideo(local);
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                VideoCanvas remote = new VideoCanvas(remoteView, canvasRenderMode, remoteUid);
+                remote.backgroundColor = canvasBgColor;
+                engine.setupRemoteVideo(remote);
                 remoteView.setZOrderMediaOverlay(true);
-                remoteView.setZOrderOnTop(true);
             }
-        }
-        else if(v.getId() == R.id.btn_setting){
+        } else if (v.getId() == R.id.btn_setting) {
             mSettingDialog.show();
-        }
-        else if(v.getId() == R.id.btn_remote_screenshot){
+        } else if (v.getId() == R.id.btn_remote_screenshot) {
             takeSnapshot(remoteUid);
+        } else if (v.getId() == R.id.btn_preload) {
+            String channelName = mRootBinding.etChannel.getText().toString();
+            if (TextUtils.isEmpty(channelName)) {
+                Toast.makeText(getContext(), "The channel name is empty!", Toast.LENGTH_SHORT).show();
+            } else {
+                myUid = new Random().nextInt(1000) + 10000;
+                TokenUtils.gen(getContext(), channelName, myUid, token ->
+                {
+                    myToken = token;
+                    int ret = engine.preloadChannel(token, channelName, myUid);
+                    if (ret == Constants.ERR_OK) {
+                        isPreloaded = true;
+                        mRootBinding.btnPreload.setEnabled(false);
+                        mRootBinding.etChannel.setEnabled(false);
+                        Toast.makeText(getContext(), "Preload success : uid=" + myUid, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     }
 
@@ -331,26 +426,25 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         // Add to the local container
         backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.startPreview();
-        // Set audio route to microPhone
+        VideoCanvas local = new VideoCanvas(surfaceView, canvasRenderMode, 0);
+        local.backgroundColor = canvasBgColor;
+        engine.setupLocalVideo(local);
         engine.setDefaultAudioRoutetoSpeakerphone(true);
+        engine.startPreview();
 
-        /*In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         engine.startMediaRenderingTracing();
+
+
 
         /*
          * Please configure accessToken in the string_config file.
@@ -358,14 +452,21 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+        TokenUtils.gen(requireContext(), channelId, myUid, token -> {
             /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
+            option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
-            int res = engine.joinChannel(ret, channelId, 0, option);
+            int res;
+            if (isPreloaded) {
+                res = engine.joinChannel(myToken, channelId, myUid, option);
+            } else {
+                res = engine.joinChannel(token, channelId, myUid, option);
+            }
             if (res != 0) {
                 engine.stopPreview();
                 // Usually happens with invalid parameters
@@ -377,10 +478,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
             // Prevent repeated entry
             mRootBinding.btnJoin.setEnabled(false);
+            mRootBinding.btnPreload.setEnabled(false);
         });
     }
 
-    private void enableWatermark(boolean enable){
+    private void enableWatermark(boolean enable) {
         if (enable) {
             WatermarkOptions watermarkOptions = new WatermarkOptions();
             int size = ((MainApplication) requireActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
@@ -404,7 +506,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
     }
 
-    private void setEncodingPreference(int index){
+    private void setEncodingPreference(int index) {
         VideoEncoderConfiguration.ENCODING_PREFERENCE[] preferences = new VideoEncoderConfiguration.ENCODING_PREFERENCE[]{
                 VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_AUTO,
                 VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_HARDWARE,
@@ -417,8 +519,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
     }
 
-    private void enableBFrame(boolean enable){
-        videoEncoderConfiguration.advanceOptions.compressionPreference  = enable ?
+    private void enableBFrame(boolean enable) {
+        videoEncoderConfiguration.advanceOptions.compressionPreference = enable ?
                 VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_QUALITY :
                 VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_LOW_LATENCY;
         engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
@@ -490,12 +592,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
-                    if(isLocalVideoForeground){
+                    if (isLocalVideoForeground) {
                         foreGroundVideo.setReportUid(uid);
-                    }else{
+                    } else {
                         backGroundVideo.setReportUid(uid);
                     }
-
                 }
             });
         }
@@ -557,15 +658,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             if (context == null) {
                 return;
             }
-            if(remoteUid != 0) {
+            if (remoteUid != 0) {
                 return;
-            }
-            else{
+            } else {
                 remoteUid = uid;
             }
             handler.post(() ->
             {
-                VideoReportLayout videoContainer = isLocalVideoForeground ? backGroundVideo: foreGroundVideo;
+                VideoReportLayout videoContainer = isLocalVideoForeground ? backGroundVideo : foreGroundVideo;
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (videoContainer.getChildCount() > 0) {
@@ -573,13 +673,15 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 }
                 // Create render view by RtcEngine
                 surfaceView = new SurfaceView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                surfaceView.setZOrderMediaOverlay(!isLocalVideoForeground);
                 // Add to the remote container
                 videoContainer.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                 videoContainer.setReportUid(remoteUid);
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
+                VideoCanvas remote = new VideoCanvas(surfaceView, canvasRenderMode, remoteUid);
+                remote.backgroundColor = canvasBgColor;
+                engine.setupRemoteVideo(remote);
             });
         }
 
@@ -597,7 +699,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(uid == remoteUid) {
+            if (uid == remoteUid) {
                 remoteUid = 0;
                 runOnUIThread(new Runnable() {
                     @Override
@@ -605,7 +707,13 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                         /**Clear render view
                          Note: The video will stay at its last frame, to completely remove it you will need to
                          remove the SurfaceView from its parent*/
-                        engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                        VideoCanvas remote = new VideoCanvas(null, canvasRenderMode, uid);
+                        remote.backgroundColor = canvasBgColor;
+                        engine.setupRemoteVideo(remote);
+
+                        VideoReportLayout videoContainer = isLocalVideoForeground ? backGroundVideo : foreGroundVideo;
+                        videoContainer.setReportUid(-1);
+                        videoContainer.removeAllViews();
                     }
                 });
             }
@@ -631,9 +739,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onSnapshotTaken(int uid, String filePath, int width, int height, int errCode) {
             super.onSnapshotTaken(uid, filePath, width, height, errCode);
             Log.d(TAG, String.format(Locale.US, "onSnapshotTaken uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", uid, filePath, width, height, errCode));
-            if(errCode == 0){
+            if (errCode == 0) {
                 showLongToast("SnapshotTaken path=" + filePath);
-            }else{
+            } else {
                 showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
             }
         }
@@ -641,9 +749,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
             super.onLocalVideoStats(source, stats);
-            if(isLocalVideoForeground){
+            if (isLocalVideoForeground) {
                 foreGroundVideo.setLocalVideoStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setLocalVideoStats(stats);
             }
         }
@@ -651,9 +759,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onLocalAudioStats(LocalAudioStats stats) {
             super.onLocalAudioStats(stats);
-            if(isLocalVideoForeground){
+            if (isLocalVideoForeground) {
                 foreGroundVideo.setLocalAudioStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setLocalAudioStats(stats);
             }
         }
@@ -661,9 +769,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onRemoteVideoStats(RemoteVideoStats stats) {
             super.onRemoteVideoStats(stats);
-            if(!isLocalVideoForeground){
+            if (!isLocalVideoForeground) {
                 foreGroundVideo.setRemoteVideoStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setRemoteVideoStats(stats);
             }
         }
@@ -671,9 +779,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onRemoteAudioStats(RemoteAudioStats stats) {
             super.onRemoteAudioStats(stats);
-            if(!isLocalVideoForeground){
+            if (!isLocalVideoForeground) {
                 foreGroundVideo.setRemoteAudioStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setRemoteAudioStats(stats);
             }
         }
@@ -684,7 +792,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             runOnUIThread(() -> {
                 FragmentLiveStreamingVideoTrackingBinding videoTrackingLayout = mRootBinding.videoTrackingLayout;
                 videoTrackingLayout.getRoot().setVisibility(View.VISIBLE);
-                videoTrackingLayout.tvUid.setText( String.valueOf(uid));
+                videoTrackingLayout.tvUid.setText(String.valueOf(uid));
                 videoTrackingLayout.tvEvent.setText(String.valueOf(currentEvent.getValue()));
                 videoTrackingLayout.tvElapsedTime.setText(String.format(Locale.US, "%d ms", tracingInfo.elapsedTime));
                 videoTrackingLayout.tvStart2JoinChannel.setText(String.format(Locale.US, "%d ms", tracingInfo.start2JoinChannel));

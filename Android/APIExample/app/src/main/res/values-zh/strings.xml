@@ -76,6 +76,7 @@
     <string name="play_locally">本地播放</string>
     <string name="local_video">本地视图</string>
     <string name="streaming_mode">超低延迟直播</string>
+    <string name="preload">预加载</string>
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
@@ -89,6 +90,8 @@
     <string name="item_playaudiofiles">音频文件混音</string>
     <string name="item_voiceeffects">美声与音效</string>
     <string name="item_mediaplayer">媒体播放器</string>
+    <string name="item_audiorouter_player">音频路由（第三方播放器）</string>
+    <string name="item_audiowaveform">音频频谱</string>
     <string name="item_geofencing">区域访问限制</string>
     <string name="item_joinmultichannel">加入多频道</string>
     <string name="item_rtmpstreaming">推流到CDN</string>
@@ -148,6 +151,8 @@
     <string name="playaudiofiles">此示例演示了在音视频通话过程中播放并管理audio effect和audio mixing文件。</string>
     <string name="voiceeffects">此示例演示了在音视频通话过程中如何使用API提供的一些人声效果，或使用API自行组合出想要的人声效果。</string>
     <string name="mediaplayer">此示例演示了在音视频通话过程中如何集成和使用Agora SDK的媒体播放器。</string>
+    <string name="audiorouter_palyer">此示例演示在使用RTC通话中音频路由对第三方播放器的影响。</string>
+    <string name="audio_waveform">此示例演示了在音视频通话过程中如何实现波形图</string>
     <string name="media_recorder">此示例演示了在音视频通话过程中如何使用Agora SDK的媒体录制器录制本地或远端的视频。</string>
     <string name="incallstats">此示例演示了在音视频通话过程中如何通过回调获取当前通话质量。</string>>
     <string name="hostacrosschannel">此示例演示了在音视频通话过程中如何将A频道的主播流转发到B频道，实现主播PK。</string>
@@ -164,9 +169,11 @@
     <string name="videoEnhancement">此示例演示了音频通话过程中SDK内置的各类视频增强功能。</string>
     <string name="writeback">音频回写</string>
     <string name="snapshot">截图</string>
+    <string name="snapshot_ex">Ex频道截图</string>
     <string name="screen_share">屏幕共享</string>
     <string name="screen_share_preview">屏幕共享本地预览</string>
     <string name="screen_share_audio">屏幕共享本地音频</string>
+    <string name="screen_share_video">屏幕共享本地视频</string>
     <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
@@ -239,6 +246,7 @@
     <string name="video_neutral">视频正常</string>
     <string name="video_sexy">视频性感</string>
     <string name="video_porn">视频色情</string>
+    <string name="content_inspect_result_tip">请通过控制台webhook获取鉴黄结果</string>
     <string name="switch_camera">切换摄像头</string>
     <string name="content_inspect_tip">你可以用摄像头对准图片检验鉴黄效果</string>
 
@@ -253,7 +261,8 @@
     <string name="watermark">水印</string>
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
-    <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="create_encoded_capture_track">创建采集Track(编码)</string>
+    <string name="destroy_capture_track">销毁Track</string>
     <string name="spatial_audio_zone">音障</string>
     <string name="spatial_audio_room">房间</string>
     <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
@@ -263,7 +272,7 @@
     <string name="token_invalid">Token不存在</string>
     <string name="token_expired">Token已过期</string>
     <string name="scenetime_beauty">商汤美颜</string>
-    <string name="scenetime_integrate_tip">商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="scenetime_integrate_tip">商汤库没有集成！请按README集成后再编译</string>
     <string name="makeup" translatable="false">美妆</string>
     <string name="sticker" translatable="false">贴纸</string>
     <string name="filter" translatable="false">滤镜</string>
@@ -271,9 +280,9 @@
     <string name="beauty_input_double">双输入(NV21和纹理)</string>
     <string name="faceunity_beauty">相芯美颜</string>
     <string name="body_beauty">美体</string>
-    <string name="faceunity_integrate_tip">相芯库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_faceunity=true\n2. 配置licsence后运行</string>
+    <string name="faceunity_integrate_tip">相芯库没有集成！请按README集成后再编译运行</string>
     <string name="bytedance_beauty">字节美颜</string>
-    <string name="bytedance_integrate_tip">字节库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_bytedance=true\n2. 下载字节SDK，将解压后的aar库放在beauty/bytedance里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="bytedance_integrate_tip">字节库没有集成！请按README集成后再编译运行</string>
 
     <string name="private_clound">私有云</string>
     <string name="ip_address">IP地址</string>
@@ -311,5 +320,18 @@
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
     <string name="transparent_background">透明背景</string>
-
+    <string name="user_id">用户ID</string>
+    <string name="view_bg_color">View背景色(只在居中渲染模式下有效果)</string>
+    <string name="render_mode">渲染模式</string>
+    <string name="render_mode_hidden">平铺</string>
+    <string name="render_mode_fit">居中</string>
+    <string name="render_mode_adaptive">拉伸</string>
+    <string name="audio_route_default">默认</string>
+    <string name="audio_route_speakerphone">扬声器</string>
+    <string name="audio_route_earpiece">听筒</string>
+    <string name="audio_route_headset">耳机(非TypeC)</string>
+    <string name="audio_route_headset_typec">耳机(TypeC)</string>
+    <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
+    <string name="third_party_player">第三方播放器</string>
+    <string name="feature_unavailable">当前设备不支持！</string>
 </resources>

@@ -37,7 +37,7 @@
                                             <constraint firstItem="W3L-6p-tNG" firstAttribute="centerX" secondItem="QbK-ML-UuF" secondAttribute="centerX" id="ysB-d4-n1d"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdY-rx-a2S">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdY-rx-a2S">
                                         <rect key="frame" x="254" y="30" width="160" height="300"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remote video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rE2-Un-inj">
@@ -55,11 +55,11 @@
                                             <constraint firstAttribute="width" constant="160" id="sb8-pI-DP7"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="eq2-PN-hnC">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="eq2-PN-hnC">
                                         <rect key="frame" x="0.0" y="720" width="414" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ag-bw-I0V">
-                                                <rect key="frame" x="0.0" y="0.0" width="77.5" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="138" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Beauty"/>
                                                 <connections>
@@ -67,7 +67,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dow-FW-rpo">
-                                                <rect key="frame" x="115" y="0.0" width="84.5" height="50"/>
+                                                <rect key="frame" x="138" y="0.0" width="138" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Makeup"/>
                                                 <connections>
@@ -75,19 +75,11 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSm-Zl-ccL">
-                                                <rect key="frame" x="237.5" y="0.0" width="77" height="50"/>
+                                                <rect key="frame" x="276" y="0.0" width="138" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Sticker"/>
                                                 <connections>
                                                     <action selector="onTapStickerButton:" destination="p70-sh-D1h" eventType="touchUpInside" id="IAt-VW-B6I"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qKk-jv-oyk">
-                                                <rect key="frame" x="352" y="0.0" width="62" height="50"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Filter"/>
-                                                <connections>
-                                                    <action selector="onTapFilterButton:" destination="p70-sh-D1h" eventType="touchUpInside" id="3Ll-x9-bIx"/>
                                                 </connections>
                                             </button>
                                         </subviews>

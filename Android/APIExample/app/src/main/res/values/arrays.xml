@@ -244,4 +244,31 @@
         <item>Texture2D</item>
     </string-array>
 
+    <string-array name="render_mode" >
+        <item>@string/render_mode_hidden</item>
+        <item>@string/render_mode_fit</item>
+        <item>@string/render_mode_adaptive</item>
+    </string-array>
+
+    <string-array name="channel_profile" >
+        <item>@string/channel_profile_communication</item>
+        <item>@string/channel_profile_live_broadcasting</item>
+        <item>@string/channel_profile_game</item>
+        <item>@string/channel_profile_cloud_gaming</item>
+        <item>@string/channel_profile_communication_1v1</item>
+    </string-array>
+    <string-array name="audio_route" >
+        <item>@string/audio_route_speakerphone</item>
+        <item>@string/audio_route_earpiece</item>
+        <item>@string/audio_route_headset</item>
+        <item>@string/audio_route_headset_typec</item>
+        <item>@string/audio_route_headset_bluetooth</item>
+    </string-array>
+
+    <string-array name="third_party_players">
+        <item>@string/third_party_player_ijk</item>
+        <item>@string/third_party_player_exo</item>
+        <item>@string/third_party_player_native</item>
+    </string-array>
+
 </resources>

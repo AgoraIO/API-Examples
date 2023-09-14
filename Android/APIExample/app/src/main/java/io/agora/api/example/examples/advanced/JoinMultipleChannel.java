@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.Random;
 
@@ -78,6 +79,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         joinEx = view.findViewById(R.id.btn_join_ex);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        view.findViewById(R.id.btn_take_snapshot_ex).setOnClickListener(this);
         joinEx.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
@@ -215,6 +217,21 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             } else {
                 joinSecondChannel();
             }
+        } else if (v.getId() == R.id.btn_take_snapshot_ex) {
+            takeSnapshotEx();
+        }
+    }
+
+    private void takeSnapshotEx() {
+        int remoteUid = fl_remote2.getReportUid();
+        if( remoteUid <= 0 || !joinedEx){
+            showLongToast(getString(R.string.remote_screenshot_tip));
+            return;
+        }
+        String filePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "joinmultiplechannel_snapshot_ex.png";
+        int ret = engine.takeSnapshotEx(rtcConnection2, remoteUid, filePath);
+        if (ret != Constants.ERR_OK) {
+            showLongToast("takeSnapshotEx error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
         }
     }
 
@@ -292,7 +309,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         TokenUtils.gen(requireContext(), rtcConnection2.channelId, rtcConnection2.localUid, new TokenUtils.OnTokenGenCallback<String>() {
             @Override
             public void onTokenGen(String token) {
-                int res = engine.joinChannelEx(null, rtcConnection2, mediaOptions, iRtcEngineEventHandler2);
+                int res = engine.joinChannelEx(token, rtcConnection2, mediaOptions, iRtcEngineEventHandler2);
                 if (res != Constants.ERR_OK) {
                     showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 }
@@ -331,7 +348,11 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
             joinedEx = false;
-            runOnUIThread(() -> joinEx.setText(R.string.join_ex_channel));
+            runOnUIThread(() -> {
+                joinEx.setText(R.string.join_ex_channel);
+                fl_remote2.removeAllViews();
+                fl_remote2.setReportUid(0);
+            });
         }
 
         @Override
@@ -412,6 +433,27 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             });
         }
 
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            super.onUserOffline(uid, reason);
+            runOnUIThread(() -> {
+                if (fl_remote2.getReportUid() == uid) {
+                    fl_remote2.removeAllViews();
+                    fl_remote2.setReportUid(0);
+                }
+            });
+        }
+
+        @Override
+        public void onSnapshotTaken(int uid, String filePath, int width, int height, int errCode) {
+            super.onSnapshotTaken(uid, filePath, width, height, errCode);
+            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", uid, filePath, width, height, errCode));
+            if (errCode == 0) {
+                showLongToast("SnapshotExTaken path=" + filePath);
+            } else {
+                showLongToast("SnapshotExTaken error=" + RtcEngine.getErrorDescription(errCode));
+            }
+        }
     };
 
     /**
