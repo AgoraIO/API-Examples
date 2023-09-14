@@ -23,7 +23,7 @@ To build and run the sample application, get an App Id:
 3. Save the **App Id** from the Dashboard for later use.
 4. Save the **App Certificate** from the Dashboard for later use.
 
-5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard. Note you can leave the certificate variable `null` if your project has not turned on security token.
+5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-configs.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard. Note you can leave the certificate variable `null` if your project has not turned on security token.
 
     ```
     // Agora APP ID.
