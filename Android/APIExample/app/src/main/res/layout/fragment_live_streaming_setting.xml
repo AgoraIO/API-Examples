@@ -100,13 +100,6 @@
         android:text="@string/b_frame" />
 
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_h265"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="16dp"
-        android:text="H265" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
