@@ -207,6 +207,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                fl_remote.setReportUid(-1);
                 fl_remote.removeAllViews();
             }
         } else if (v.getId() == switch_float_window.getId()) {

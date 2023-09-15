@@ -1009,7 +1009,7 @@ LRESULT CLiveBroadcastingDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
 	strInfo.Format(_T("snapshot taken err:%d"), errCode);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	if (errCode == 0) {
-		strInfo.Format(_T("path: %ss"), *filePath);
+		strInfo.Format(_T("path: %s"), *filePath);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 	

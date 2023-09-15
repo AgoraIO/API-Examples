@@ -37,6 +37,7 @@ import io.agora.base.internal.video.RendererCommon
 import io.agora.base.internal.video.YuvHelper
 import io.agora.beautyapi.bytedance.utils.AgoraImageHelper
 import io.agora.beautyapi.bytedance.utils.ImageUtil
+import io.agora.beautyapi.bytedance.utils.LogUtils
 import io.agora.beautyapi.bytedance.utils.StatsHelper
 import io.agora.rtc2.Constants
 import io.agora.rtc2.gl.EglBaseProvider
@@ -47,10 +48,11 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
+    private val TAG = "ByteDanceBeautyAPIImpl"
+    private val reportId = "scenarioAPI"
+    private val reportCategory = "beauty_android_$VERSION"
     private var beautyMode = 0 // 0: 自动根据buffer类型切换，1：固定使用OES纹理，2：固定使用i420
-    private val BEAUTY_NODE = "beauty_Android_lite"
-    private val BEAUTY_4ITEMS_NODE = "beauty_4Items"
-    private val RESHARP_LITE_NODE = "reshape_lite"
+
 
     private var textureBufferHelper: TextureBufferHelper? = null
     private var imageUtils: ImageUtil? = null
@@ -59,18 +61,23 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
     private var config: Config? = null
     private var enable: Boolean = false
     private var isReleased: Boolean = false
-    private var shouldMirror = true
+    private var captureMirror = true
+    private var renderMirror = true
     private var statsHelper: StatsHelper? = null
     private var skipFrame = 0
     private val workerThreadExecutor = Executors.newSingleThreadExecutor()
     private var currBeautyProcessType = BeautyProcessType.UNKNOWN
+    private var isFrontCamera = true
+    private var cameraConfig = CameraConfig()
+    private var localVideoRenderMode = Constants.RENDER_MODE_HIDDEN
 
     private enum class BeautyProcessType{
-        UNKNOWN, TEXTURE, I420
+        UNKNOWN, TEXTURE_OES, TEXTURE_2D, I420
     }
 
     override fun initialize(config: Config): Int {
         if (this.config != null) {
+            LogUtils.e(TAG, "initialize >> The beauty api has been initialized!")
             return ErrorCode.ERROR_HAS_INITIALIZED.value
         }
         this.config = config
@@ -80,25 +87,40 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         statsHelper = StatsHelper(config.statsDuration) {
             this.config?.eventCallback?.onBeautyStats?.invoke(it)
         }
+        LogUtils.setLogFilePath(config.context.getExternalFilesDir("")?.absolutePath ?: "")
+        LogUtils.i(TAG, "initialize >> config = $config")
+        LogUtils.i(TAG, "initialize >> beauty api version=$VERSION, beauty sdk version=${config.renderManager.sdkVersion}")
+        config.rtcEngine.sendCustomReportMessage(reportId, reportCategory, "initialize", "$config", 0)
         return ErrorCode.ERROR_OK.value
     }
 
     override fun enable(enable: Boolean): Int {
+        LogUtils.i(TAG, "enable >> enable = $enable")
         if (config == null) {
+            LogUtils.e(TAG, "enable >> The beauty api has not been initialized!")
             return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
         }
         if (isReleased) {
+            LogUtils.e(TAG, "enable >> The beauty api has been released!")
             return ErrorCode.ERROR_HAS_RELEASED.value
         }
         if (config?.captureMode == CaptureMode.Custom) {
             skipFrame = 2
+            LogUtils.i(TAG, "enable >> skipFrame = $skipFrame")
         }
         this.enable = enable
+        config?.rtcEngine?.sendCustomReportMessage(reportId, reportCategory, "enable", "$enable", 0)
         return ErrorCode.ERROR_OK.value
     }
 
     override fun setupLocalVideo(view: View, renderMode: Int): Int {
-        val rtcEngine = config?.rtcEngine ?: return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        val rtcEngine = config?.rtcEngine
+        if(rtcEngine == null){
+            LogUtils.e(TAG, "setupLocalVideo >> The beauty api has not been initialized!")
+            return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        }
+        LogUtils.i(TAG, "setupLocalVideo >> view=$view, renderMode=$renderMode")
+        rtcEngine.sendCustomReportMessage(reportId, reportCategory, "enable", "view=$view, renderMode=$renderMode", 0)
         if (view is TextureView || view is SurfaceView) {
             val canvas = VideoCanvas(view, renderMode, 0)
             canvas.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED
@@ -109,11 +131,17 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
     }
 
     override fun onFrame(videoFrame: VideoFrame): Int {
-        val conf = config ?: return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        val conf = config
+        if (conf == null) {
+            LogUtils.e(TAG, "onFrame >> The beauty api has not been initialized!")
+            return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        }
         if (isReleased) {
+            LogUtils.e(TAG, "onFrame >> The beauty api has been released!")
             return ErrorCode.ERROR_HAS_RELEASED.value
         }
         if (conf.captureMode != CaptureMode.Custom) {
+            LogUtils.e(TAG, "onFrame >> The capture mode is not Custom!")
             return ErrorCode.ERROR_PROCESS_NOT_CUSTOM.value
         }
         if (!enable) {
@@ -122,76 +150,85 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         if (processBeauty(videoFrame)) {
             return ErrorCode.ERROR_OK.value
         }
+        LogUtils.i(TAG, "onFrame >> Skip Frame.")
         return ErrorCode.ERROR_FRAME_SKIPPED.value
     }
 
-    override fun setBeautyPreset(preset: BeautyPreset): Int {
+    override fun setBeautyPreset(
+        preset: BeautyPreset,
+        beautyNodePath: String,
+        beauty4ItemNodePath: String,
+        reSharpNodePath: String
+    ): Int {
+        val conf = config
+        if(conf == null){
+            LogUtils.e(TAG, "setBeautyPreset >> The beauty api has not been initialized!")
+            return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        }
         if (isReleased) {
+            LogUtils.e(TAG, "setBeautyPreset >> The beauty api has been released!")
             return ErrorCode.ERROR_HAS_RELEASED.value
         }
-        val effectManager =
-            config?.effectManager ?: return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+
+        LogUtils.i(TAG, "setBeautyPreset >> preset = $preset")
+        conf.rtcEngine.sendCustomReportMessage(reportId, reportCategory, "enable", "preset=$preset, beautyNodePath=$beautyNodePath, beauty4ItemNodePath=$beauty4ItemNodePath, reSharpNodePath=$reSharpNodePath", 0)
+
+        val renderManager =
+            config?.renderManager ?: return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
         val enable = preset == BeautyPreset.DEFAULT
 
-        effectManager.appendComposeNodes(
-            arrayOf(
-                BEAUTY_NODE,
-                RESHARP_LITE_NODE,
-                BEAUTY_4ITEMS_NODE
-            )
-        )
-        effectManager.updateComposerNodeIntensity(
-            BEAUTY_NODE,
+        renderManager.updateComposerNodes(
+            beautyNodePath,
             "smooth",
             if (enable) 0.3f else 0f
         )// 磨皮
-        effectManager.updateComposerNodeIntensity(
-            BEAUTY_NODE,
+        renderManager.updateComposerNodes(
+            beautyNodePath,
             "whiten",
             if (enable) 0.5f else 0f
         )// 美白
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Overall",
             if (enable) 0.15f else 0f
         )//瘦脸
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Zoom_Cheekbone",
             if (enable) 0.3f else 0f
         )//瘦颧骨
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Zoom_Jawbone",
             if (enable) 0.46f else 0f
         )//下颌骨
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Eye",
             if (enable) 0.15f else 0f
         )//大眼
-        effectManager.updateComposerNodeIntensity(
-            BEAUTY_4ITEMS_NODE,
+        renderManager.updateComposerNodes(
+            beauty4ItemNodePath,
             "BEF_BEAUTY_WHITEN_TEETH",
             if (enable) 0.2f else 0f
         )//美牙
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Forehead",
             if (enable) 0.4f else 0f
         )//额头
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Nose",
             if (enable) 0.15f else 0f
         )//瘦鼻
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_ZoomMouth",
             if (enable) 0.16f else 0f
         )//嘴形
-        effectManager.updateComposerNodeIntensity(
-            RESHARP_LITE_NODE,
+        renderManager.updateComposerNodes(
+            reSharpNodePath,
             "Internal_Deform_Chin",
             if (enable) 0.46f else 0f
         )//下巴
@@ -205,13 +242,28 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         }
     }
 
+    override fun updateCameraConfig(config: CameraConfig): Int {
+        LogUtils.i(TAG, "updateCameraConfig >> oldCameraConfig=$cameraConfig, newCameraConfig=$config")
+        cameraConfig = CameraConfig(config.frontMirror, config.backMirror)
+        this.config?.rtcEngine?.sendCustomReportMessage(reportId, reportCategory, "updateCameraConfig", "config=$config", 0)
+
+        return ErrorCode.ERROR_OK.value
+    }
+
+    override fun isFrontCamera() = isFrontCamera
+
     override fun release(): Int {
+        val conf = config
+        if(conf == null){
+            LogUtils.e(TAG, "release >> The beauty api has not been initialized!")
+            return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
+        }
         if (isReleased) {
+            LogUtils.e(TAG, "setBeautyPreset >> The beauty api has been released!")
             return ErrorCode.ERROR_HAS_RELEASED.value
         }
-        val effectManager =
-            config?.effectManager ?: return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
-
+        conf.rtcEngine.sendCustomReportMessage(reportId, reportCategory, "release", "", 0)
+        LogUtils.i(TAG, "release")
         isReleased = true
         workerThreadExecutor.shutdown()
         textureBufferHelper?.let {
@@ -221,7 +273,6 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
                 agoraImageHelper?.release()
                 imageUtils = null
                 agoraImageHelper = null
-                effectManager.destroy()
                 config?.eventCallback?.onEffectDestroyed?.invoke()
                 null
             }
@@ -233,21 +284,66 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
     }
 
     private fun processBeauty(videoFrame: VideoFrame): Boolean {
-        if (!enable || isReleased) {
-            val isFront = videoFrame.sourceType == VideoFrame.SourceType.kFrontCamera
-            if (shouldMirror != isFront) {
-                shouldMirror = isFront
-                return false
+        if (isReleased) {
+            LogUtils.e(TAG, "processBeauty >> The beauty api has been released!")
+            return false
+        }
+
+        val cMirror =
+            if (isFrontCamera) {
+                when (cameraConfig.frontMirror) {
+                    MirrorMode.MIRROR_LOCAL_REMOTE -> true
+                    MirrorMode.MIRROR_LOCAL_ONLY -> false
+                    MirrorMode.MIRROR_REMOTE_ONLY -> true
+                    MirrorMode.MIRROR_NONE -> false
+                }
+            } else {
+                when (cameraConfig.backMirror) {
+                    MirrorMode.MIRROR_LOCAL_REMOTE -> true
+                    MirrorMode.MIRROR_LOCAL_ONLY -> false
+                    MirrorMode.MIRROR_REMOTE_ONLY -> true
+                    MirrorMode.MIRROR_NONE -> false
+                }
             }
+        val rMirror =
+            if (isFrontCamera) {
+                when (cameraConfig.frontMirror) {
+                    MirrorMode.MIRROR_LOCAL_REMOTE -> false
+                    MirrorMode.MIRROR_LOCAL_ONLY -> true
+                    MirrorMode.MIRROR_REMOTE_ONLY -> true
+                    MirrorMode.MIRROR_NONE -> false
+                }
+            } else {
+                when (cameraConfig.backMirror) {
+                    MirrorMode.MIRROR_LOCAL_REMOTE -> false
+                    MirrorMode.MIRROR_LOCAL_ONLY -> true
+                    MirrorMode.MIRROR_REMOTE_ONLY -> true
+                    MirrorMode.MIRROR_NONE -> false
+                }
+            }
+        if (captureMirror != cMirror || renderMirror != rMirror) {
+            LogUtils.w(TAG, "processBeauty >> enable=$enable, captureMirror=$captureMirror->$cMirror, renderMirror=$renderMirror->$rMirror")
+            captureMirror = cMirror
+            if(renderMirror != rMirror){
+                renderMirror = rMirror
+                config?.rtcEngine?.setLocalRenderMode(
+                    localVideoRenderMode,
+                    if(renderMirror) Constants.VIDEO_MIRROR_MODE_ENABLED else Constants.VIDEO_MIRROR_MODE_DISABLED
+                )
+            }
+            skipFrame = 2
+            return false
+        }
+
+        val oldIsFrontCamera = isFrontCamera
+        isFrontCamera = videoFrame.sourceType == VideoFrame.SourceType.kFrontCamera
+        if(oldIsFrontCamera != isFrontCamera){
+            LogUtils.w(TAG, "processBeauty >> oldIsFrontCamera=$oldIsFrontCamera, isFrontCamera=$isFrontCamera")
+            return false
+        }
+
+        if(!enable){
             return true
-        }
-        if (shouldMirror) {
-            shouldMirror = false
-            return false
-        }
-        if (skipFrame > 0) {
-            skipFrame--;
-            return false
         }
 
         if (textureBufferHelper == null) {
@@ -256,14 +352,12 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
                 EglBaseProvider.instance().rootEglBase.eglBaseContext
             )?.apply {
                 invoke {
-                    val effectManager = config?.effectManager ?: return@invoke
-                    effectManager.init();
-                    imageUtils =
-                        ImageUtil()
+                    imageUtils = ImageUtil()
                     agoraImageHelper = AgoraImageHelper()
                     config?.eventCallback?.onEffectInitialized?.invoke()
                 }
             }
+            LogUtils.i(TAG, "processBeauty >> create texture buffer, beautyMode=$beautyMode")
         }
         val startTime = System.currentTimeMillis()
 
@@ -277,8 +371,13 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
             statsHelper?.once(costTime)
         }
 
-
         if (processTexId < 0) {
+            LogUtils.w(TAG, "processBeauty >> processTexId < 0")
+            return false
+        }
+
+        if (skipFrame > 0) {
+            skipFrame--
             return false
         }
 
@@ -312,20 +411,35 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         val agoraImageHelper = agoraImageHelper ?: return -1
         val buffer = videoFrame.buffer as? TextureBuffer ?: return -1
         val isFront = videoFrame.sourceType == VideoFrame.SourceType.kFrontCamera
-        if (currBeautyProcessType != BeautyProcessType.TEXTURE) {
-            currBeautyProcessType = BeautyProcessType.TEXTURE
-            return -1
+
+        when(buffer.type){
+            TextureBuffer.Type.OES -> {
+                if(currBeautyProcessType != BeautyProcessType.TEXTURE_OES){
+                    LogUtils.i(TAG, "processBeauty >> process source type change old=$currBeautyProcessType, new=${BeautyProcessType.TEXTURE_OES}")
+                    currBeautyProcessType = BeautyProcessType.TEXTURE_OES
+                    return -1
+                }
+            }
+            else -> {
+                if(currBeautyProcessType != BeautyProcessType.TEXTURE_2D){
+                    LogUtils.i(TAG, "processBeauty >> process source type change old=$currBeautyProcessType, new=${BeautyProcessType.TEXTURE_2D}")
+                    currBeautyProcessType = BeautyProcessType.TEXTURE_2D
+                    return -1
+                }
+            }
         }
 
         return texBufferHelper.invoke(Callable {
-            val effectManager = config?.effectManager ?: return@Callable -1
+            val renderManager = config?.renderManager ?: return@Callable -1
+            var mirror = isFront
+            if((isFrontCamera && !captureMirror) || (!isFrontCamera && captureMirror)){
+                mirror = !mirror
+            }
 
-
-            // 根据Matrix反算纹理的真实宽高
             val renderMatrix = Matrix()
             renderMatrix.preTranslate(0.5f, 0.5f)
             renderMatrix.preRotate(videoFrame.rotation.toFloat())
-            renderMatrix.preScale(if (isFront) -1.0f else 1.0f, -1.0f)
+            renderMatrix.preScale(if (mirror) -1.0f else 1.0f, -1.0f)
             renderMatrix.preTranslate(-0.5f, -0.5f)
             val finalMatrix = Matrix(buffer.transformMatrix)
             finalMatrix.preConcat(renderMatrix)
@@ -343,8 +457,8 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
                 height,
                 transform
             )
-            effectManager.setCameraPosition(isFront)
-            val success = effectManager.process(
+            renderManager.setCameraPostion(isFront)
+            val success = renderManager.processTexture(
                 srcTexture,
                 dstTexture,
                 width,
@@ -365,13 +479,15 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         val nv21Buffer = getNV21Buffer(videoFrame) ?: return -1
         val buffer = videoFrame.buffer
         val isFront = videoFrame.sourceType == VideoFrame.SourceType.kFrontCamera
+
         if (currBeautyProcessType != BeautyProcessType.I420) {
+            LogUtils.i(TAG, "processBeauty >> process source type change old=$currBeautyProcessType, new=${BeautyProcessType.I420}")
             currBeautyProcessType = BeautyProcessType.I420
             return -1
         }
 
         return texBufferHelper.invoke(Callable {
-            val effectManager = config?.effectManager ?: return@Callable -1
+            val renderManager = config?.renderManager ?: return@Callable -1
 
             val width = buffer.height
             val height = buffer.width
@@ -379,10 +495,15 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
             val ySize = width * height
             val yBuffer = ByteBuffer.allocateDirect(ySize)
             yBuffer.put(nv21Buffer, 0, ySize)
-            yBuffer.position(0);
+            yBuffer.position(0)
             val vuBuffer = ByteBuffer.allocateDirect(ySize / 2)
             vuBuffer.put(nv21Buffer, ySize, ySize / 2)
-            vuBuffer.position(0);
+            vuBuffer.position(0)
+
+            var mirror = isFront
+            if((isFrontCamera && !captureMirror) || (!isFrontCamera && captureMirror)){
+                mirror = !mirror
+            }
 
             val dstTexture = imageUtils.prepareTexture(width, height)
             val srcTexture = imageUtils.transferYUVToTexture(
@@ -392,11 +513,11 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
                 width,
                 ImageUtil.Transition().apply {
                     rotate(videoFrame.rotation.toFloat())
-                    flip(false, isFront)
+                    flip(false, mirror)
                 }
             )
-            effectManager.setCameraPosition(isFront)
-            val success = effectManager.process(
+            renderManager.setCameraPostion(isFront)
+            val success = renderManager.processTexture(
                 srcTexture,
                 dstTexture,
                 width,
@@ -439,23 +560,6 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return nv21ByteArray
     }
 
-    private fun getI420Buffer(videoFrame: VideoFrame, rotate: Boolean = false): ByteArray? {
-        val buffer = videoFrame.buffer
-        val i420Buffer = buffer as? I420Buffer ?: buffer.toI420() ?: return null
-        val width = i420Buffer.width
-        val height = i420Buffer.height
-        val size = (width * height * 3.0f / 2.0f + 0.5f).toInt()
-
-        val byteArray = ByteArray(size)
-        i420Buffer.dataY.get(byteArray, 0, width * height)
-        i420Buffer.dataV.get(byteArray, width * height, width * height / 4)
-        i420Buffer.dataU.get(byteArray, width * height + width * height / 4, width * height / 4)
-        if (buffer !is I420Buffer) {
-            i420Buffer.release()
-        }
-        return byteArray
-    }
-
     // IVideoFrameObserver implements
 
     override fun onCaptureVideoFrame(sourceType: Int, videoFrame: VideoFrame?): Boolean {
@@ -479,7 +583,7 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
 
     override fun getRotationApplied() = false
 
-    override fun getMirrorApplied() = shouldMirror
+    override fun getMirrorApplied() = captureMirror && !enable
 
     override fun getObservedFramePosition() = IVideoFrameObserver.POSITION_POST_CAPTURER
 

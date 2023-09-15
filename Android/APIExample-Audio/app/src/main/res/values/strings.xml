@@ -28,6 +28,7 @@
     <string name="item_precalltest">Pre-call Tests</string>
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
+    <string name="item_audiowaveform">Audio Waveform</string>
 
     <string name="item_customaudiosource">Custom Audio Sources</string>
     <string name="item_customaudiorender">Custom Audio Render</string>
@@ -52,6 +53,7 @@
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
+    <string name="audiorouter_palyer">This example shows the behavior of audio router while communicating with rtc.</string>
 
 
     <string name="item_rhythmplayer">Rhythm Player</string>

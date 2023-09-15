@@ -96,6 +96,8 @@
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
 
     <string name="item_mediaplayer">MediaPlayer</string>
+    <string name="item_audiorouter_player">AudioRouter(Third Party Player)</string>
+    <string name="item_audiowaveform">Audio Waveform</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtctortmp">Streaming from RTC to CDN</string>
@@ -155,6 +157,8 @@
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
     <string name="mediaplayer">This example demonstrates how to use MediaPlayer. It is one of components for Agora SDK.</string>
+    <string name="audiorouter_palyer">This example shows the behavior of audio router while communicating with rtc.</string>
+    <string name="audio_waveform">This example demonstrates how to display waveform by rtc engine.</string>
     <string name="media_recorder">This example demonstrates how to use MediaRecorder to recorde local or remote video.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
@@ -172,6 +176,7 @@
     <string name="writeback">Write Back Audio</string>
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
+    <string name="snapshot_ex">SnapshotEx</string>
     <string name="screen_share">Screen Share</string>
     <string name="screen_share_preview">Screen Preview</string>
     <string name="screen_share_audio">Screen Audio</string>
@@ -249,6 +254,7 @@
     <string name="video_neutral">Video Neutral</string>
     <string name="video_sexy">Video Sexy</string>
     <string name="video_porn">Video Porn</string>
+    <string name="content_inspect_result_tip">Please obtain the pornographic identification results through the console webhook.</string>
     <string name="switch_camera">Switch Camera</string>
     <string name="content_inspect_tip">You can use the camera to point the picture to check the yellowing effect</string>
 
@@ -342,4 +348,9 @@
     <string name="audio_route_headset">headset(Not TypeC)</string>
     <string name="audio_route_headset_typec">headset(TypeC)</string>
     <string name="audio_route_headset_bluetooth">bluetooth headset</string>
+    <string name="third_party_player">Third Party Player</string>
+    <string name="third_party_player_ijk" translatable="false">IjkPlayer</string>
+    <string name="third_party_player_exo" translatable="false">ExoPlayer</string>
+    <string name="third_party_player_native" translatable="false">NativePlayer</string>
+    <string name="feature_unavailable">The feature is unavailable in the device!</string>
 </resources>

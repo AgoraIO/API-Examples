@@ -17,7 +17,7 @@ android {
         manifestPlaceholders = [
                AppId: "${applicationId}"
         ]
-        ndk.abiFilters 'armeabi-v7a'// 'arm64-v8a', 'x86', 'x86-64'
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
     }
 
     buildTypes {
@@ -109,4 +109,12 @@ dependencies {
 
     implementation 'com.faceunity:core:8.3.0'
     implementation 'com.faceunity:model:8.3.0'
+
+    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
+    implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
+
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.0'
 }

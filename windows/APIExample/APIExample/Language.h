@@ -231,6 +231,7 @@ extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
 extern wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlStopMic[INFO_LEN];
+extern wchar_t MultiChannelCtrlTakeSnapshotEx[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
