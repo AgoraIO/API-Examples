@@ -136,6 +136,10 @@ class AuidoRouterPlayerMain: BaseViewController {
         player?.playbackVolume = 30
         player?.allowsMediaAirPlay = true
         player?.isDanmakuMediaAirPlay = true
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(ijkPlaybackStateChanged),
+                                               name: .IJKMPMoviePlayerPlaybackStateDidChange,
+                                               object: nil)
         return player
     }()
     private lazy var avPlayer: AVPlayerViewController? = {
@@ -147,6 +151,8 @@ class AuidoRouterPlayerMain: BaseViewController {
         playerVC.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         playerVC.view.frame = playerView.bounds
         player.play()
+        player.addObserver(self, forKeyPath: "status", options: [.new, .old], context: nil)
+        player.addObserver(self, forKeyPath: "rate", options: [.new, .old], context: nil)
         return playerVC
     }()
     
@@ -159,8 +165,6 @@ class AuidoRouterPlayerMain: BaseViewController {
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
-        
-        setupAudioSession()
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -222,15 +226,57 @@ class AuidoRouterPlayerMain: BaseViewController {
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
-        
     }
-    
-    private func setupAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers])
-        } catch let error as NSError {
-            print("Failed to set the audio session category and mode: \(error.localizedDescription)")
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "status" {
+            if let status = avPlayer?.player?.status {
+                switch status {
+                case .readyToPlay:
+                    // 可以开始播放
+                    print("readyToPlay")
+                    break
+                case .failed:
+                    // 播放失败
+                    print("failed")
+                    break
+                case .unknown:
+                    // 播放状态未知
+                    print("unknown")
+                    break
+                @unknown default:
+                    print("default")
+                }
+            }
+        } else if keyPath == "rate" {
+            if let rate = avPlayer?.player?.rate {
+                if rate > 0 {
+                    // 正在播放
+                    print("playing")
+                } else {
+                    // 暂停状态或播放完成
+                    print("pause")
+                    avPlayer?.player?.play()
+                }
+            } else {
+                print("++++")
+            }
+        } else {
+            print("====")
+        }
+    }
+    @objc
+    private func ijkPlaybackStateChanged(notification: Notification) {
+        let player = notification.object as? IJKAVMoviePlayerController
+        if player?.playbackState == .stopped {
+            print("stop")
+            player?.play()
+        } else if player?.playbackState == .playing {
+            print("playing")
+        } else if player?.playbackState == .paused {
+            throttle(1.0, block: {
+                print("paused")
+                player?.play()
+            })
         }
     }
     
@@ -245,14 +291,11 @@ class AuidoRouterPlayerMain: BaseViewController {
     }
     
     private func play() {
-        setupAudioSession()
         let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if playerType == .ijk {
-                self.ijkPlayer?.play()
-            } else {
-                self.avPlayer?.player?.play()
-            }
+        if playerType == .ijk {
+            ijkPlayer?.play()
+        } else {
+            avPlayer?.player?.play()
         }
     }
     
@@ -282,12 +325,10 @@ class AuidoRouterPlayerMain: BaseViewController {
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch let error as NSError {
-            print("Failed to set the audio session category and mode: \(error.localizedDescription)")
-        }
         AgoraRtcEngineKit.destroy()
+        NotificationCenter.default.removeObserver(self)
+        avPlayer?.player?.removeObserver(self, forKeyPath: "status")
+        avPlayer?.player?.removeObserver(self, forKeyPath: "rate")
     }
 }
 
@@ -334,7 +375,7 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-        play()
+//        play()
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -353,7 +394,7 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-        play()
+//        play()
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -378,5 +419,31 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+}
+
+extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
+    // 播放结束时调用
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        if flag {
+            // 播放成功结束
+            // 执行相关操作
+        } else {
+            // 播放失败结束
+            // 执行相关操作
+        }
+        print("flag == \(flag)")
+    }
+
+    // 播放过程中被中断时调用（如来电）
+    func audioPlayerBeginInterruption(player: AVAudioPlayer) {
+        // 处理中断
+        print("处理中断")
+    }
+
+    // 播放过程中中断结束时调用（如来电结束）
+    func audioPlayerEndInterruption(player: AVAudioPlayer, withOptions flags: Int) {
+        // 处理中断结束
+        print("处理中断结束")
     }
 }
