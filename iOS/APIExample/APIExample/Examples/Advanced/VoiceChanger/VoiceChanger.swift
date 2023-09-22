@@ -53,6 +53,8 @@ class VoiceChangerMain: BaseViewController {
     @IBOutlet weak var audioEffectParam1Label: UILabel!
     @IBOutlet weak var audioEffectParam2Label: UILabel!
     @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var ainsModeButton: UIButton!
+    
     var audioViews: [UInt:VideoView] = [:]
     var equalizationFreq: AgoraAudioEqualizationBandFrequency = .band31
     var equalizationGain: Int = 0
@@ -77,6 +79,7 @@ class VoiceChangerMain: BaseViewController {
         roomAcousticsBtn.setTitle("Off", for: .normal)
         pitchCorrectionBtn.setTitle("Off", for: .normal)
         voiceConversionBtn.setTitle("Off", for: .normal)
+        ainsModeButton.setTitle(AUDIO_AINS_MODE.AINS_MODE_BALANCED.description(), for: .normal)
     }
 
     func updateAudioEffectsControls(_ effect:AgoraAudioEffectPreset) {
@@ -198,6 +201,22 @@ class VoiceChangerMain: BaseViewController {
             self.updateReverbValueRange(reverbKey: reverbType)
             self.reverbKeyBtn.setTitle("\(reverbType.description())", for: .normal)
         })
+    }
+    
+    func getAINSModeAction(_ ainsMode: AUDIO_AINS_MODE) -> UIAlertAction {
+        return UIAlertAction(title: "\(ainsMode.description())", style: .default, handler: {[unowned self] action in
+            self.agoraKit.setAINSMode(true, mode: ainsMode)
+            self.ainsModeButton.setTitle("\(ainsMode.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func onTapAINSButton(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Set AINS Mode".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        alert.addAction(getAINSModeAction(.AINS_MODE_BALANCED))
+        alert.addAction(getAINSModeAction(.AINS_MODE_AGGRESSIVE))
+        alert.addAction(getAINSModeAction(.AINS_MODE_ULTRALOWLATENCY))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
     }
     
     /// callback when voice changer button hit

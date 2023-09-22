@@ -167,3 +167,9 @@
 "Audio Router(Third Party Player)" = "音频路由（第三方播放器)";
 "Player Type(ijkplayer/avplayer)" = "播放器选择(ijkplayer/原生)";
 "Audio Waveform" = "音频频谱";
+
+"Set AINS Mode" = "设置是否开启 AI 降噪功能并设置降噪模式。";
+
+"AGGRESSIVE" = "强降噪模式";
+"BALANCED" = "(默认)均衡降噪模式";
+"ULTRALOWLATENCY" = "低延时强降噪模式";
