@@ -305,6 +305,30 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="AINS Mode"
+                    android:textColor="@android:color/black" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/audio_ains_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:entries="@array/auido_ains_mode"
+                    android:hint="Select a voice conversion"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
