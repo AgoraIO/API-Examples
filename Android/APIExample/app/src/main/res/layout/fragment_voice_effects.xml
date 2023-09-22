@@ -323,7 +323,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:entries="@array/auido_ains_mode"
+                    android:entries="@array/audio_ains_mode"
                     android:hint="Select a voice conversion"
                     android:spinnerMode="dropdown" />
 
