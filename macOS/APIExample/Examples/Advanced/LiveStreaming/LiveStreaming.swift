@@ -254,6 +254,7 @@ class LiveStreamingMain: BaseViewController {
             self.waterMarkContainer.isHidden = selected == .audience
             self.bFrameContainer.isHidden = selected == .audience
             self.encoderSegment.isHidden = selected == .audience
+            self.videoImageContainerView.isHidden = selected == .audience
         }
     }
     @IBOutlet weak var snapShot: NSButton!
@@ -306,6 +307,17 @@ class LiveStreamingMain: BaseViewController {
                 sender.state = .off
             }
         }
+    }
+    
+    @IBOutlet weak var videoImageSwitch: NSSwitch!
+    @IBOutlet weak var videoImageContainerView: NSView!
+    @IBAction func onTapVideoImageSwitch(_ sender: NSSwitch) {
+        let options = AgoraImageTrackOptions()
+        if let resourcePath = Bundle.main.resourcePath {
+            let imgPath = resourcePath + "/" + "bg.jpg"
+            options.imageUrl = imgPath
+        }
+        agoraKit.enableVideoImageSource(sender.state == .on, options: options)
     }
     
     @IBOutlet weak var bFrameContainer: NSView!
@@ -361,6 +373,7 @@ class LiveStreamingMain: BaseViewController {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
             firstFrameSwitch.isEnabled = !isJoined
+            videoImageSwitch.isEnabled = isJoined
             initJoinChannelButton()
         }
     }

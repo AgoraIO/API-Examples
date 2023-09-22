@@ -202,6 +202,28 @@
                                                     <rect key="frame" x="27" y="165" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S1z-E9-6Nh">
+                                                    <rect key="frame" x="169" y="44" width="125" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QZK-nF-XSz">
+                                                            <rect key="frame" x="7" y="9" width="78" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="video image" id="vMN-rl-SRy">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" enabled="NO" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="OXn-d0-Qmj">
+                                                            <rect key="frame" x="85" y="4" width="42" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <connections>
+                                                                <action selector="onTapVideoImageSwitch:" target="YjT-yy-DnJ" id="uiV-u7-gai"/>
+                                                            </connections>
+                                                        </switch>
+                                                    </subviews>
+                                                </customView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="z1l-XW-dGp" secondAttribute="trailing" constant="20" symbolic="YES" id="1cK-zm-mbq"/>
@@ -308,6 +330,8 @@
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                         <outlet property="selectRolePicker" destination="zNc-vL-43g" id="qWk-5W-NrG"/>
                         <outlet property="snapShot" destination="ja7-KD-Gle" id="MxP-vV-0pp"/>
+                        <outlet property="videoImageContainerView" destination="S1z-E9-6Nh" id="FMx-eL-535"/>
+                        <outlet property="videoImageSwitch" destination="OXn-d0-Qmj" id="6rZ-fY-2if"/>
                         <outlet property="waterMarkContainer" destination="Jqb-Bm-pGp" id="NJx-rb-gfc"/>
                     </connections>
                 </viewController>
