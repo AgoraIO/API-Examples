@@ -26,7 +26,6 @@ import java.util.List;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
-import io.agora.api.example.examples.advanced.LiveStreaming;
 
 /**
  * @author cjw
@@ -93,6 +92,7 @@ public class ReadyFragment extends BaseFragment {
         permissionList.add(Permission.RECORD_AUDIO);
         permissionList.add(Permission.CAMERA);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissionList.add(Permission.READ_PHONE_STATE);
             permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
         }
 

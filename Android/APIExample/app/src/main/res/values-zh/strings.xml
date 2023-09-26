@@ -334,4 +334,5 @@
     <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
     <string name="third_party_player">第三方播放器</string>
     <string name="feature_unavailable">当前设备不支持！</string>
+    <string name="video_image_source">垫片</string>
 </resources>
