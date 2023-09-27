@@ -134,6 +134,9 @@
         <action
             android:id="@+id/action_mainFragment_to_third_party_beauty"
             app:destination="@id/thirdPartyBeauty" />
+        <action
+            android:id="@+id/action_mainFragment_to_file_transfer"
+            app:destination="@id/fileTransfer" />
     </fragment>
 
     <fragment
@@ -382,4 +385,9 @@
         android:name="io.agora.api.example.examples.advanced.KtvCopyrightMusic"
         android:label="@string/item_ktv_copyright_music"
         tools:layout="@layout/fragment_base_browser" />
+    <fragment
+        android:id="@+id/fileTransfer"
+        android:name="io.agora.api.example.examples.advanced.FileTransfer"
+        android:label="@string/item_filetransfer"
+        tools:layout="@layout/fragment_file_transfer" />
 </navigation>

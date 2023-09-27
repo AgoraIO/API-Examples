@@ -6,6 +6,7 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="uid">UID</string>
     <string name="token" translatable="false">Token</string>
     <string name="app_id" translatable="false">App ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
@@ -128,6 +129,7 @@
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
     <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
+    <string name="item_filetransfer">File Transfer</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -193,6 +195,7 @@
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
+    <string name="file_transfer">This example demonstrates how to use the SDK to transfer a file.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
