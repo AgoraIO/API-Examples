@@ -136,10 +136,6 @@ class AuidoRouterPlayerMain: BaseViewController {
         player?.playbackVolume = 30
         player?.allowsMediaAirPlay = true
         player?.isDanmakuMediaAirPlay = true
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(ijkPlaybackStateChanged),
-                                               name: .IJKMPMoviePlayerPlaybackStateDidChange,
-                                               object: nil)
         return player
     }()
     private lazy var avPlayer: AVPlayerViewController? = {
@@ -151,8 +147,6 @@ class AuidoRouterPlayerMain: BaseViewController {
         playerVC.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         playerVC.view.frame = playerView.bounds
         player.play()
-        player.addObserver(self, forKeyPath: "status", options: [.new, .old], context: nil)
-        player.addObserver(self, forKeyPath: "rate", options: [.new, .old], context: nil)
         return playerVC
     }()
     
@@ -206,6 +200,9 @@ class AuidoRouterPlayerMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setEnableSpeakerphone(true)
         
+        // keep audio session
+        agoraKit.setParameters("{\"che.audio.keep.audiosession\": true}")
+        
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -227,59 +224,7 @@ class AuidoRouterPlayerMain: BaseViewController {
             }
         })
     }
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "status" {
-            if let status = avPlayer?.player?.status {
-                switch status {
-                case .readyToPlay:
-                    // 可以开始播放
-                    print("readyToPlay")
-                    break
-                case .failed:
-                    // 播放失败
-                    print("failed")
-                    break
-                case .unknown:
-                    // 播放状态未知
-                    print("unknown")
-                    break
-                @unknown default:
-                    print("default")
-                }
-            }
-        } else if keyPath == "rate" {
-            if let rate = avPlayer?.player?.rate {
-                if rate > 0 {
-                    // 正在播放
-                    print("playing")
-                } else {
-                    // 暂停状态或播放完成
-                    print("pause")
-                    avPlayer?.player?.play()
-                }
-            } else {
-                print("++++")
-            }
-        } else {
-            print("====")
-        }
-    }
-    @objc
-    private func ijkPlaybackStateChanged(notification: Notification) {
-        let player = notification.object as? IJKAVMoviePlayerController
-        if player?.playbackState == .stopped {
-            print("stop")
-            player?.play()
-        } else if player?.playbackState == .playing {
-            print("playing")
-        } else if player?.playbackState == .paused {
-            throttle(1.0, block: {
-                print("paused")
-                player?.play()
-            })
-        }
-    }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
@@ -287,15 +232,6 @@ class AuidoRouterPlayerMain: BaseViewController {
             setupIJKPlayer()
         } else {
             setupAVPlayer()
-        }
-    }
-    
-    private func play() {
-        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
-        if playerType == .ijk {
-            ijkPlayer?.play()
-        } else {
-            avPlayer?.player?.play()
         }
     }
     
@@ -317,8 +253,7 @@ class AuidoRouterPlayerMain: BaseViewController {
         super.viewDidDisappear(animated)
         agoraKit.disableAudio()
         agoraKit.disableVideo()
-        ijkPlayer?.shutdown()
-        avPlayer?.player?.pause()
+        
         if isJoined {
             agoraKit.stopPreview()
             agoraKit.leaveChannel { (stats) -> Void in
@@ -326,9 +261,12 @@ class AuidoRouterPlayerMain: BaseViewController {
             }
         }
         AgoraRtcEngineKit.destroy()
-        NotificationCenter.default.removeObserver(self)
-        avPlayer?.player?.removeObserver(self, forKeyPath: "status")
-        avPlayer?.player?.removeObserver(self, forKeyPath: "rate")
+        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
+        if playerType == .origin {
+            avPlayer?.player?.pause()
+        } else {
+            ijkPlayer?.shutdown()
+        }
     }
 }
 
@@ -352,7 +290,7 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+//        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
@@ -375,7 +313,6 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-//        play()
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -394,7 +331,6 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-//        play()
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -419,31 +355,5 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
-    }
-}
-
-extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
-    // 播放结束时调用
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
-        if flag {
-            // 播放成功结束
-            // 执行相关操作
-        } else {
-            // 播放失败结束
-            // 执行相关操作
-        }
-        print("flag == \(flag)")
-    }
-
-    // 播放过程中被中断时调用（如来电）
-    func audioPlayerBeginInterruption(player: AVAudioPlayer) {
-        // 处理中断
-        print("处理中断")
-    }
-
-    // 播放过程中中断结束时调用（如来电结束）
-    func audioPlayerEndInterruption(player: AVAudioPlayer, withOptions flags: Int) {
-        // 处理中断结束
-        print("处理中断结束")
     }
 }
