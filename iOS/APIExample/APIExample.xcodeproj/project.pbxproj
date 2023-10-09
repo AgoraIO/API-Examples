@@ -178,7 +178,6 @@
 		E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD72861673600851463 /* CreateDataStream.strings */; };
 		E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD92861673600851463 /* CreateDataStream.storyboard */; };
 		E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BDB2861673600851463 /* CreateDataStream.swift */; };
-		E78B69512ABD866F0006E31F /* pure_blue_background.png in Resources */ = {isa = PBXBuildFile; fileRef = E78B69502ABD866F0006E31F /* pure_blue_background.png */; };
 		E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */; };
 		E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB329011E7500F06DD4 /* MutliCamera.strings */; };
 		E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */; };
@@ -495,7 +494,6 @@
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
-		E78B69502ABD866F0006E31F /* pure_blue_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pure_blue_background.png; sourceTree = "<group>"; };
 		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
 		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
 		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
@@ -836,7 +834,6 @@
 		03BEED09251C4446005E78F4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E78B69502ABD866F0006E31F /* pure_blue_background.png */,
 				8B349FE22681E2CE007247F2 /* agora-logo.png */,
 				576CA80925A9CC3A0091520B /* output.raw */,
 				E7AD0DE029C85FFB00C9A4B0 /* sample.mov */,
@@ -1595,7 +1592,6 @@
 				033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */,
-				E78B69512ABD866F0006E31F /* pure_blue_background.png in Resources */,
 				E74788AD29C7FB6900CD7415 /* JoinChannelVideoRecorder.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
