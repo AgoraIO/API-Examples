@@ -270,7 +270,7 @@ class LiveStreamingMain: BaseViewController {
         
     @IBAction func onTapVideoImageSwitch(_ sender: UISwitch) {
         let options = AgoraImageTrackOptions()
-        let imgPath = Bundle.main.path(forResource: "pure_blue_background", ofType: "png")
+        let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
         options.imageUrl = imgPath
         let res = agoraKit.enableVideoImageSource(sender.isOn, options: options)
         print(res)
