@@ -146,6 +146,7 @@ class AuidoRouterPlayerMain: BaseViewController {
         playerVC.player = player
         playerVC.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         playerVC.view.frame = playerView.bounds
+        playerVC.delegate = self
         player.play()
         return playerVC
     }()
@@ -249,8 +250,7 @@ class AuidoRouterPlayerMain: BaseViewController {
         agoraKit.setEnableSpeakerphone(sender.isOn)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    deinit {
         agoraKit.disableAudio()
         agoraKit.disableVideo()
         
@@ -266,6 +266,15 @@ class AuidoRouterPlayerMain: BaseViewController {
             avPlayer?.player?.pause()
         } else {
             ijkPlayer?.shutdown()
+        }
+    }
+}
+
+extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
+    func playerViewController(_ playerViewController: AVPlayerViewController, willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        // The system pauses when returning from full screen, we need to 'resume' manually.
+        coordinator.animate(alongsideTransition: nil) { transitionContext in
+            playerViewController.player?.play()
         }
     }
 }
