@@ -24,7 +24,7 @@ public class FileReceiver {
     private String file_md5 = "";
     private int file_size = 0;
     private int file_progress = 0;
-    private int recv_file_size = 0;
+    private long recv_file_size = 0;
     private int transfer_kbps = 0;
     private int file_total_num = 0;
     private int file_fail_num = 0;
@@ -34,6 +34,7 @@ public class FileReceiver {
     Long curr_print_ts = 0L;
     Long last_recv_size = 0L;
     Long curr_recv_size = 0L;
+    int transfer_state = 0;
 
     private void closeFile() {
         if (file_size > 0) {
@@ -54,7 +55,7 @@ public class FileReceiver {
                 Log.e(TAG, String.format("MD5 cannot compare %s with %s", file_md5, result));
             }
             file_size = 0;
-            recv_file_size = 0;
+            recv_file_size = 0L;
             file_md5 = "";
             file_name = "";
         }
@@ -89,7 +90,7 @@ public class FileReceiver {
         } catch (Exception e) {
             Log.i(TAG, String.format("cannot create MD5 object."));
         }
-        recv_file_size = 0;
+        recv_file_size = 0L;
         last_recv_size = 0L;
         curr_recv_size = 0L;
         return 0;
@@ -113,7 +114,7 @@ public class FileReceiver {
 
     public void updateRecvProgress() {
         if (file_size > 0) {
-            file_progress = recv_file_size * 100 / file_size;
+            file_progress = (int) (recv_file_size * 100 / file_size);
             Long diff_time = 0L;
             Long diff_size = 0L;
 
@@ -121,7 +122,7 @@ public class FileReceiver {
             Long curr_print_ts= dt.getTime();
             diff_time = curr_print_ts - last_print_ts;
             last_print_ts = curr_print_ts;
-            curr_recv_size = (long) recv_file_size;
+            curr_recv_size = recv_file_size;
             diff_size = curr_recv_size - last_recv_size;
             last_recv_size = curr_recv_size;
             transfer_kbps = (int) (diff_size * 8.0 / diff_time);
@@ -163,6 +164,8 @@ public class FileReceiver {
         return sb.toString();
     }
 
+    public void setTransferState(int state) {transfer_state = state;}
+
     public String getFileName() { return file_name;}
 
     public int getFileProgress() { return file_progress;}
@@ -172,6 +175,23 @@ public class FileReceiver {
     public int getFileTotalNum() { return file_total_num;}
 
     public int getFileFailNum() { return file_fail_num;}
+
+    public String getState() {
+        switch (transfer_state) {
+            case 0:
+                return "RDT_STATE_CLOSED";
+            case 1:
+                return "RDT_STATE_OPENED";
+            case 2:
+                return "RDT_STATE_BLOCKED";
+            case 3:
+                return "RDT_STATE_PENDING";
+            case 4:
+                return "RDT_STATE_BROKEN";
+            default:
+                return "RDT_STATE_UNKNOWN";
+        }
+    }
 
     public void reset() {
         file_name = "";

@@ -274,7 +274,8 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
                     "File progress: " + Integer.toString(receiver.getFileProgress()) + "\n" +
                     "Transfer kbps: " + Integer.toString(receiver.getTransferKbps()) + "\n" +
                     "Transmitted file fail number: " + Integer.toString(receiver.getFileFailNum()) + "\n" +
-                    "Transmitted file total number: " + Integer.toString(receiver.getFileTotalNum()) + "\n";
+                    "Transmitted file total number: " + Integer.toString(receiver.getFileTotalNum()) + "\n" +
+                    "Transfer state: " + receiver.getState() + "\n";
             show_transfer_info += info;
         }
         getActivity().runOnUiThread(new Runnable() {
@@ -422,7 +423,6 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
         public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
-            showLongToast(String.format("user %d joined!", uid));
             if (receiverHashMap.containsKey(uid)) {
                 FileReceiver receiver = receiverHashMap.get(uid);
                 receiver.reset();
@@ -430,6 +430,7 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
                 FileReceiver receiver = new FileReceiver();
                 receiverHashMap.put(uid, receiver);
             }
+            showLongToast(String.format("user %d joined!", uid));
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -451,6 +452,15 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
         @Override
         public void onRdtStateChanged(int uid, int state) {
             Log.i(TAG, String.format("user %d RDT state chanegd to: %d", uid, state));
+            if (receiverHashMap.containsKey(uid)) {
+                FileReceiver receiver = receiverHashMap.get(uid);
+                receiver.setTransferState(state);
+            } else {
+                // event maybe before user joined, so need create new object
+                FileReceiver receiver = new FileReceiver();
+                receiver.setTransferState(state);
+                receiverHashMap.put(uid, receiver);
+            }
             showLongToast(String.format("user %d RDT state chanegd to: %d", uid, state));
         }
 
