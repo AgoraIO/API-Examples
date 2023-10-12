@@ -305,21 +305,24 @@ class ICameraCapturer : public RefCountInterface {
    */
   virtual int setCameraExposurePosition(float positionXinView, float positionYinView) = 0;
   
- /** Checks whether camera supports to set exposure value.
-  * 
-  * @since v4.2.1.
-  * @return
-  * <ul>
-  *     <li>true: The device supports the camera exposure function.</li>
-  *     <li>false: The device does not support the camera exposure function.</li>
-  * </ul>
-  */
+  /**
+   * Returns whether exposure value adjusting is supported by the current device.
+   * Exposure compensation is in auto exposure mode.
+   * @since v4.2.2.
+   * @note
+   * This method only supports Android and iOS.
+   * This interface returns valid values only after the device is initialized.
+   *
+   * @return
+   * - true: exposure value adjusting is supported.
+   * - false: exposure value adjusting is not supported or device is not initialized.
+   */
   virtual bool isCameraExposureSupported() = 0;
 
   /**
    * Sets the camera exposure ratio.
    *
-   * @since v4.2.1.
+   * @since v4.2.2.
    * @param value Absolute EV bias will set to camera.
    *
    * @return
@@ -365,31 +368,6 @@ class ICameraCapturer : public RefCountInterface {
    * </ul>
    */
   virtual int setCameraAutoExposureFaceModeEnabled(bool enabled) = 0;
-
-  /**
-   * Returns whether exposure value adjusting is supported by the current device.
-   * @note
-   * This method applies to iOS only.
-   * This interface returns valid values only after the device is initialized.
-   *
-   * @return
-   * - true: exposure value adjusting is supported.
-   * - false: exposure value adjusting is not supported or device is not initialized.
-   */
-  virtual bool isExposureBiasSupported() = 0;
-  /**
-   * Sets the exposure factor of the device.
-   *
-   * @note
-   * This method applies to iOS only.
-   *
-   * @param exposureValue The exposure value bias factor of the device.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int32_t setCameraExposure(float exposureValue) = 0;
 #endif
   
 #elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
