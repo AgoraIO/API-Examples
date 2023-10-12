@@ -2,10 +2,9 @@ package io.agora.beautyapi.sensetime.utils.processor
 
 import android.content.Context
 import android.opengl.GLES20
-import com.sensetime.stmobile.STCommonNative
-import com.sensetime.stmobile.STMobileAnimalNative
-import com.sensetime.stmobile.STMobileEffectNative
-import com.sensetime.stmobile.STMobileHumanActionNative
+import com.softsugar.stmobile.STCommonNative
+import com.softsugar.stmobile.STMobileEffectNative
+import com.softsugar.stmobile.STMobileHumanActionNative
 
 data class InputInfo(
     val bytes: ByteArray? = null,
@@ -17,10 +16,11 @@ data class InputInfo(
     val width: Int,
     val height: Int,
     val isFrontCamera: Boolean,
+    val isMirror: Boolean,
     val cameraOrientation: Int,
-    val timestamp: Long,
+    val timestamp: Long
 
-)
+    )
 
 class OutputInfo(
     val textureId: Int = 0,
@@ -29,15 +29,14 @@ class OutputInfo(
     val height: Int = 0,
     val timestamp: Long = 0,
     val errorCode: Int = 0,
-    val errorMessage: String = "",
+    val errorMessage: String = ""
 )
 
 interface IBeautyProcessor {
 
     fun initialize(
         effectNative: STMobileEffectNative, // 美颜效果处理句柄
-        humanActionNative: STMobileHumanActionNative, // 人脸检测句柄
-        animalNative: STMobileAnimalNative? = null, // 动物检测句柄
+        humanActionNative: STMobileHumanActionNative // 人脸检测句柄
     )
 
     fun process(input: InputInfo): OutputInfo?

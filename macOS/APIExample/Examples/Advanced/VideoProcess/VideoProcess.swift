@@ -209,7 +209,15 @@ class VideoProcess: BaseViewController {
     }
     
     @IBAction func onBeautySliderChange(_ sender: NSSwitch) {
-        agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
+        if sender.state == .on {
+            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
+                agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
+            } else {
+                showAlert(message: "The feature is unavailable in the device!")
+            }
+        } else {
+            agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
+        }
     }
     
     @IBAction func onWhiteningSliderChange(_ sender: NSSlider) {
@@ -233,7 +241,15 @@ class VideoProcess: BaseViewController {
     }
     
     @IBAction func onVirtualBackgroundSwitchChange(_ sender: NSSwitch) {
-        setVirtualBackground()
+        if sender.state == .on {
+            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessVirtualBackground) {
+                setVirtualBackground()
+            } else {
+                showAlert(message: "The feature is unavailable in the device!")
+            }
+        } else {
+            setVirtualBackground()
+        }
     }
     
     func setVirtualBackground(){

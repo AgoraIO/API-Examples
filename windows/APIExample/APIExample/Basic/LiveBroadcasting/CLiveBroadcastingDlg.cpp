@@ -133,6 +133,7 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT, m_chkSnapshot);
 	DDX_Control(pDX, IDC_CHECK_B_FRAME, m_chkBFrame);
 	DDX_Control(pDX, IDC_CHECK_FIRST_FRAME_OPT, m_chkFirstFrameOpt);
+	DDX_Control(pDX, IDC_CHECK_VIDEO_IMAGE, m_chkVideoImage);
 	DDX_Control(pDX, IDC_RADIO_ENCODE_AUTO, m_rdiEncodeAuto);
 	DDX_Control(pDX, IDC_RADIO_ENCODE_HARD, m_rdiEncodeHard);
 	DDX_Control(pDX, IDC_RADIO_ENCODE_SOFT, m_rdiEncodeSoft);
@@ -182,6 +183,7 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO_CANVAS_FIT, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
 	ON_BN_CLICKED(IDC_RADIO_CANVAS_ADAPTIVE, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_CANVAS_COLOR, &CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor)
+	ON_BN_CLICKED(IDC_CHECK_VIDEO_IMAGE, &CLiveBroadcastingDlg::OnBnClickedCheckVideoImage)
 END_MESSAGE_MAP()
 
 
@@ -229,6 +231,7 @@ void CLiveBroadcastingDlg::InitCtrlText()
 	m_chkBFrame.SetWindowText(liveBraodcastingBFrame);
 	m_staEncode.SetWindowText(liveBraodcastingEncode);
 	m_chkFirstFrameOpt.SetWindowText(liveBraodcastingFristFrameOpt);
+	m_chkVideoImage.SetWindowText(liveBraodcastingVideoImage);
 }
 
 //create all video window to save m_videoWnds.
@@ -1009,7 +1012,7 @@ LRESULT CLiveBroadcastingDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
 	strInfo.Format(_T("snapshot taken err:%d"), errCode);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	if (errCode == 0) {
-		strInfo.Format(_T("path: %ss"), *filePath);
+		strInfo.Format(_T("path: %s"), *filePath);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 	
@@ -1069,7 +1072,7 @@ void CLiveBroadcastingDlg::OnBnClickedModeration()
 {
 	ContentInspectConfig config;
 	ContentInspectModule module;
-	module.type = CONTENT_INSPECT_MODERATION;
+	module.type = CONTENT_INSPECT_IMAGE_MODERATION;
 	module.interval = 1;
 	config.moduleCount = 1;
 	config.modules[0] = module;
@@ -1183,4 +1186,17 @@ void CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor(NMHDR* pNMHDR, LRESUL
 	colorStr.Format(_T("0x%08x"), m_canvasColor);
 	m_staCavasColor.SetWindowTextW(colorStr);
 	ResetVideoView();
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedCheckVideoImage()
+{
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	ImageTrackOptions options;
+	CString strPath = GetExePath() + _T("\\bg_blue.png");
+	m_imgPng = cs2utf8(strPath);
+	options.imageUrl = m_imgPng.c_str();
+	options.fps = 15;
+	m_rtcEngine->enableVideoImageSource(m_chkVideoImage.GetCheck(), options);
 }

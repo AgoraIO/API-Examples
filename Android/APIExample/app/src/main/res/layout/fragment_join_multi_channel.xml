@@ -42,6 +42,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:id="@+id/btn_take_snapshot_ex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_join_ex"
+        android:layout_alignParentEnd="true"
+        android:text="@string/snapshot_ex" />
+
 
     <Button
         android:id="@+id/btn_join_ex"

@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -345,6 +346,12 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(buttonView.getId() == beauty.getId()){
+            if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
+                buttonView.setChecked(false);
+                Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
         }
         else if(buttonView.getId() == lightness2.getId()){
@@ -357,6 +364,11 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             setColorEnhance(isChecked);
         }
         else if(buttonView.getId() == virtualBackground.getId()){
+            if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_VIRTUAL_BACKGROUND)) {
+                buttonView.setChecked(false);
+                Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
+                return;
+            }
             resetVirtualBackground();
         }
         else if(buttonView.getId() == noiseReduce2.getId()){

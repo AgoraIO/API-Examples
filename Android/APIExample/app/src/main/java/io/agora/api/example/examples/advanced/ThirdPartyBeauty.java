@@ -22,6 +22,9 @@ import java.util.List;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.examples.advanced.beauty.ByteDanceBeautySDK;
+import io.agora.api.example.examples.advanced.beauty.FaceUnityBeautySDK;
+import io.agora.api.example.examples.advanced.beauty.SenseTimeBeautySDK;
 
 @Example(
         index = 24,
@@ -47,6 +50,10 @@ public class ThirdPartyBeauty extends BaseFragment {
 
         List<Integer> beautyActionIds = new ArrayList<>();
         List<String> beautyLabels = new ArrayList<>();
+
+        SenseTimeBeautySDK.INSTANCE.initBeautySDK(requireContext());
+        FaceUnityBeautySDK.INSTANCE.initBeauty(requireContext());
+        ByteDanceBeautySDK.INSTANCE.initBeautySDK(requireContext());
 
         // SceneTime Beauty
         beautyActionIds.add(R.id.action_third_party_beauty_to_scene_time);
@@ -83,5 +90,13 @@ public class ThirdPartyBeauty extends BaseFragment {
             Navigation.findNavController(view)
                     .navigate(beautyActionIds.get(index), args);
         });
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SenseTimeBeautySDK.INSTANCE.release();
+        FaceUnityBeautySDK.INSTANCE.release();
     }
 }

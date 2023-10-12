@@ -197,9 +197,9 @@
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
     options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = YES;
-    options.publishCameraTrack = NO;
-    options.publishMicrophoneTrack = NO;
-    options.clientRoleType = AgoraClientRoleAudience;
+    options.publishCameraTrack = YES;
+    options.publishMicrophoneTrack = YES;
+    options.clientRoleType = AgoraClientRoleBroadcaster;
     
     [[NetworkManager shared] generateTokenWithChannelName:channelName uid:0 success:^(NSString * _Nullable token) {
         int result = [self.agoraKit joinChannelByToken:token channelId:channelName uid:0 mediaOptions:options joinSuccess:nil];

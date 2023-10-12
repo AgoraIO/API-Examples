@@ -116,6 +116,20 @@ class VoiceChanger: BaseViewController {
         }
     }
     
+    @IBOutlet weak var selectAINSModePicker: Picker!
+    let ainsMode: [AUDIO_AINS_MODE] = [.AINS_MODE_BALANCED, .AINS_MODE_AGGRESSIVE, .AINS_MODE_ULTRALOWLATENCY]
+    func initAINSModePicker() {
+        selectAINSModePicker.isEnabled = isJoined
+        selectAINSModePicker.label.stringValue = "AINSMode"
+        selectAINSModePicker.picker.addItems(withTitles: ainsMode.map({ $0.description() }))
+        selectAINSModePicker.onSelectChanged {
+            let index = self.selectAINSModePicker.indexOfSelectedItem
+            if index < 0 || index >= self.ainsMode.count { return }
+            self.agoraKit.setAINSMode(true, mode: self.ainsMode[index])
+        }
+    }
+    
+    
     var currentAudioEffects:AgoraAudioEffectPreset = .off
 
     func updateAudioEffectsControls(_ effect: AgoraAudioEffectPreset?) {
@@ -446,6 +460,7 @@ class VoiceChanger: BaseViewController {
             equalization16khzPicker.isEnabled = isJoined
             equalizationReverbKeyPicker.isEnabled = isJoined
             equalizationReverbValueSlider.isEnabled = isJoined
+            selectAINSModePicker.isEnabled = isJoined
             if !isJoined {
                 updateAudioEffectsControls(nil)
             }
@@ -470,6 +485,7 @@ class VoiceChanger: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         initSelectMicsPicker()
         initSelectLayoutPicker()
+        initAINSModePicker()
         initSelectChatBeautifierPicker()
         initSelectTimbreTransformationPicker()
         initSelectVoiceChangerPicker()

@@ -119,6 +119,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var dualStreamTipsLabel: UILabel!
     @IBOutlet weak var bFrameContainer: UIView!
     @IBOutlet weak var codingSegment: UISegmentedControl!
+    @IBOutlet weak var videoImageContainer: UIView!
+    
     
     var remoteUid: UInt? {
         didSet {
@@ -133,6 +135,7 @@ class LiveStreamingMain: BaseViewController {
             watarMarkContainer.isHidden = role == .audience
             bFrameContainer.isHidden = role == .audience
             codingSegment.isHidden = role == .audience
+            videoImageContainer.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -265,6 +268,13 @@ class LiveStreamingMain: BaseViewController {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
         
+    @IBAction func onTapVideoImageSwitch(_ sender: UISwitch) {
+        let options = AgoraImageTrackOptions()
+        let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
+        options.imageUrl = imgPath
+        let res = agoraKit.enableVideoImageSource(sender.isOn, options: options)
+        print(res)
+    }
     @IBAction func onTapBFrameSwitch(_ sender: UISwitch) {
         let encoderConfig = AgoraVideoEncoderConfiguration()
         let videoOptions = AgoraAdvancedVideoOptions()

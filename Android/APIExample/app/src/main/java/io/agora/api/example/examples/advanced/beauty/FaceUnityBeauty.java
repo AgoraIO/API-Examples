@@ -31,11 +31,11 @@ import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.databinding.FragmentBeautyFaceunityBinding;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.beautyapi.faceunity.BeautyPreset;
+import io.agora.beautyapi.faceunity.CameraConfig;
 import io.agora.beautyapi.faceunity.CaptureMode;
 import io.agora.beautyapi.faceunity.Config;
 import io.agora.beautyapi.faceunity.FaceUnityBeautyAPI;
 import io.agora.beautyapi.faceunity.FaceUnityBeautyAPIKt;
-import io.agora.beautyapi.faceunity.utils.nama.FURenderer;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -56,7 +56,6 @@ public class FaceUnityBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private final FaceUnityBeautyAPI faceUnityBeautyAPI = FaceUnityBeautyAPIKt.createFaceUnityBeautyAPI();
-    private FURenderKit fuRenderKit;
 
     @Nullable
     @Override
@@ -76,13 +75,17 @@ public class FaceUnityBeauty extends BaseFragment {
         channelId = getArguments().getString(getString(R.string.key_channel_name));
         initVideoView();
         initRtcEngine();
+
+
         faceUnityBeautyAPI.initialize(new Config(
+                requireContext(),
                 rtcEngine,
-                fuRenderKit,
+                FaceUnityBeautySDK.INSTANCE.getFuRenderKit(),
                 null,
                 CaptureMode.Agora,
                 0,
-                false
+                false,
+                new CameraConfig()
         ));
         faceUnityBeautyAPI.enable(true);
         joinChannel();
@@ -102,9 +105,6 @@ public class FaceUnityBeauty extends BaseFragment {
             rtcEngine.leaveChannel();
         }
         faceUnityBeautyAPI.release();
-        if (fuRenderKit != null) {
-            fuRenderKit.release();
-        }
         RtcEngine.destroy();
     }
 
@@ -120,6 +120,7 @@ public class FaceUnityBeauty extends BaseFragment {
             faceUnityBeautyAPI.setBeautyPreset(isChecked? BeautyPreset.DEFAULT: BeautyPreset.CUSTOM);
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
             if (isChecked) {
                 SimpleMakeup makeup = new SimpleMakeup(new FUBundleData("graphics" + File.separator + "face_makeup.bundle"));
                 makeup.setCombinedConfig(new FUBundleData("beauty_faceunity/makeup/naicha.bundle"));
@@ -130,6 +131,7 @@ public class FaceUnityBeauty extends BaseFragment {
             }
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
             if (isChecked) {
                 Prop prop = new Sticker(new FUBundleData("beauty_faceunity/sticker/fu_zh_fenshu.bundle"));
                 fuRenderKit.getPropContainer().replaceProp(null, prop);
@@ -138,6 +140,7 @@ public class FaceUnityBeauty extends BaseFragment {
             }
         });
         mBinding.cbBodyBeauty.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
             BodyBeauty bodyBeauty = fuRenderKit.getBodyBeauty();
             if (bodyBeauty != null) {
                 bodyBeauty.setEnable(isChecked);
@@ -246,9 +249,6 @@ public class FaceUnityBeauty extends BaseFragment {
             Class<?> authpack = Class.forName("io.agora.api.example.examples.advanced.beauty.authpack");
             Method aMethod = authpack.getDeclaredMethod("A");
             aMethod.setAccessible(true);
-            byte[] auth = (byte[]) aMethod.invoke(null);
-            FURenderer.getInstance().setup(getContext(), auth);
-            fuRenderKit = FURenderKit.getInstance();
             return true;
         } catch (Exception e) {
             // do nothing

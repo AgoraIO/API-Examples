@@ -115,7 +115,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="b7R-QN-CCh">
-                                <rect key="frame" x="141" y="485" width="137" height="32"/>
+                                <rect key="frame" x="141" y="475" width="137" height="32"/>
                                 <color key="backgroundColor" name="videoPlaceholder"/>
                                 <segments>
                                     <segment title="自动"/>
@@ -128,6 +128,33 @@
                                     <action selector="onTapCodingSegment:" destination="jxp-ZN-2yG" eventType="valueChanged" id="Bbt-xf-zZg"/>
                                 </connections>
                             </segmentedControl>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGT-sd-I3g">
+                                <rect key="frame" x="141" y="512" width="183" height="36"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="video image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8kn-Rl-VMd">
+                                        <rect key="frame" x="3" y="8" width="121" height="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="btnPanelForeground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wSU-EJ-Uc9">
+                                        <rect key="frame" x="134" y="2" width="51" height="32"/>
+                                        <connections>
+                                            <action selector="onTapVideoImageSwitch:" destination="jxp-ZN-2yG" eventType="valueChanged" id="7tT-So-FKH"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" name="videoPlaceholder"/>
+                                <constraints>
+                                    <constraint firstItem="8kn-Rl-VMd" firstAttribute="leading" secondItem="eGT-sd-I3g" secondAttribute="leading" constant="3" id="5Kh-ZN-HeA"/>
+                                    <constraint firstAttribute="trailing" secondItem="wSU-EJ-Uc9" secondAttribute="trailing" id="Lqn-Sj-FJe"/>
+                                    <constraint firstItem="8kn-Rl-VMd" firstAttribute="centerY" secondItem="eGT-sd-I3g" secondAttribute="centerY" id="VLC-D8-Snx"/>
+                                    <constraint firstItem="8kn-Rl-VMd" firstAttribute="top" secondItem="eGT-sd-I3g" secondAttribute="topMargin" id="Zqt-Dx-fNk"/>
+                                    <constraint firstItem="wSU-EJ-Uc9" firstAttribute="leading" secondItem="8kn-Rl-VMd" secondAttribute="trailing" constant="10" id="eCr-Ye-MV8"/>
+                                    <constraint firstItem="wSU-EJ-Uc9" firstAttribute="top" secondItem="eGT-sd-I3g" secondAttribute="top" constant="2" id="fPE-XT-734"/>
+                                    <constraint firstItem="8kn-Rl-VMd" firstAttribute="centerY" secondItem="wSU-EJ-Uc9" secondAttribute="centerY" id="g0H-sT-MWk"/>
+                                </constraints>
+                            </view>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CN0-n0-1Gh" userLabel="B帧">
                                 <rect key="frame" x="21" y="479.5" width="108" height="35"/>
                                 <subviews>
@@ -335,7 +362,7 @@
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0za-L8-AHw"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="10" id="1HU-w7-YYi"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="7Ra-XK-uPS"/>
-                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="35" id="Fn8-02-ePb"/>
+                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="45" id="Fn8-02-ePb"/>
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="10" id="GpK-P5-Dz2"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="LsZ-af-6Wt"/>
@@ -343,6 +370,7 @@
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="150" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="top" secondItem="CN0-n0-1Gh" secondAttribute="bottom" constant="10" id="R0x-Bd-MjY"/>
+                            <constraint firstItem="eGT-sd-I3g" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="6" id="ZMj-WN-S5V"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="sOi-ZR-6Oj" secondAttribute="bottom" constant="8" symbolic="YES" id="aLT-2p-uy5"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="cYl-8X-Qgn"/>
@@ -351,9 +379,12 @@
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
                             <constraint firstItem="b7R-QN-CCh" firstAttribute="leading" secondItem="CN0-n0-1Gh" secondAttribute="trailing" constant="12" id="hJG-J9-7gq"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
+                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="eGT-sd-I3g" secondAttribute="bottom" constant="3" id="ixF-7d-I3g"/>
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="41" id="jKl-x3-P12"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="eGT-sd-I3g" secondAttribute="trailing" constant="90" id="t2I-pH-4sJ"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
+                            <constraint firstItem="eGT-sd-I3g" firstAttribute="leading" secondItem="i5U-ta-1hj" secondAttribute="trailing" constant="13" id="yoA-DT-xju"/>
                         </constraints>
                     </view>
                     <connections>
@@ -368,6 +399,7 @@
                         <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
                         <outlet property="ultraLowLatencyToggleView" destination="Wts-5Z-p7a" id="HI8-ov-5iY"/>
+                        <outlet property="videoImageContainer" destination="eGT-sd-I3g" id="ikD-U4-C0O"/>
                         <outlet property="watarMarkContainer" destination="i5U-ta-1hj" id="HDW-Vh-9ae"/>
                     </connections>
                 </viewController>

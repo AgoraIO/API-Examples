@@ -247,6 +247,18 @@ extension AgoraAudioReverbType {
     }
 }
 
+extension AUDIO_AINS_MODE {
+    func description() -> String {
+        switch self {
+        case .AINS_MODE_AGGRESSIVE:         return "AGGRESSIVE".localized
+        case .AINS_MODE_BALANCED:           return "BALANCED".localized
+        case .AINS_MODE_ULTRALOWLATENCY:    return "ULTRALOWLATENCY".localized
+        @unknown default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraVoiceConversionPreset {
     func description() -> String {
         switch self {

@@ -27,7 +27,7 @@ void CAgoraBeautyAudio::InitCtrlText()
 	m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	m_staParam1.SetWindowText(beautyAudioCtrlParam1);
 	m_staParam2.SetWindowText(beautyAudioCtrlParam2);
-
+	m_staAINSMode.SetWindowText(beautyAudioCtrlAINSMode);
 }
 
 
@@ -132,6 +132,15 @@ void CAgoraBeautyAudio::ResumeStatus()
 	m_slcVoiceFormant.SetRange(0, 100);
 	m_slcVoiceFormant.SetPos(50);
 	m_staVoiceFormantVlaue.SetWindowText(_T("0"));
+
+	m_cmbAINSMode.ResetContent();
+	int nIndex = 0;
+	for (auto& str : m_setAINSMode)
+	{
+		m_cmbAINSMode.InsertString(nIndex++, str);
+	}
+	m_cmbAINSMode.SetCurSel(0);
+
 }
 
 void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
@@ -148,6 +157,8 @@ void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_SET_BEAUTY_AUDIO, m_btnSetBeautyAudio);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_TYPE, m_staAudioType);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_PERVERB_PRESET, m_cmbPerverbPreset);
+	DDX_Control(pDX, IDC_COMBO_AUDIO_AINS_MODE, m_cmbAINSMode);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_AINS_MODE, m_staAINSMode);
 	DDX_Control(pDX, IDC_STATIC_PARAM1, m_staParam1);
 	DDX_Control(pDX, IDC_STATIC_PARAM2, m_staParam2);
 	DDX_Control(pDX, IDC_EDIT_PARAM1, m_edtParam1);
@@ -170,6 +181,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_VOICE_FORMANT, &CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_AINS_MODE, &CAgoraBeautyAudio::OnCbnSelchangeComboAudioAinsMode)
 END_MESSAGE_MAP()
 
 
@@ -248,6 +260,11 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 	m_cmbAudioChange.InsertString(nIndex++, _T("AudioEffect"));
 	m_cmbAudioChange.InsertString(nIndex++, _T("VoiceConversion"));
 	m_cmbAudioChange.InsertString(nIndex++, _T("VoiceBeautifier"));
+
+	m_setAINSMode.push_back(_T("AINS_MODE_OFF"));
+	m_setAINSMode.push_back(_T("AINS_MODE_BALANCED"));
+	m_setAINSMode.push_back(_T("AINS_MODE_AGGRESSIVE"));
+	m_setAINSMode.push_back(_T("AINS_MODE_ULTRALOWLATENCY"));
 	
 
 	m_setChanger.insert(std::make_pair(_T("AUDIO_EFFECT_OFF"), AUDIO_EFFECT_OFF));
@@ -665,4 +682,21 @@ void CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant(NMHDR* pNMHDR, LRESULT*
 	if (m_rtcEngine) {
 		m_rtcEngine->setLocalVoiceFormant(value);
 	}
+}
+
+
+void CAgoraBeautyAudio::OnCbnSelchangeComboAudioAinsMode()
+{
+	if (!m_rtcEngine) {
+		return;
+	}
+	int position = m_cmbAINSMode.GetCurSel();
+	boolean enable = position > 0;
+	AUDIO_AINS_MODE mode = AUDIO_AINS_MODE::AINS_MODE_BALANCED;
+	if (position == 1) {
+		mode = AUDIO_AINS_MODE::AINS_MODE_AGGRESSIVE;
+	}else if (position == 2) {
+		mode = AUDIO_AINS_MODE::AINS_MODE_ULTRALOWLATENCY;
+	}
+	m_rtcEngine->setAINSMode(enable, mode);
 }

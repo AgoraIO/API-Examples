@@ -236,7 +236,9 @@ class ScreenShareMain: BaseViewController {
         option.publishCameraTrack = true
         agoraKit.updateChannel(with: option)
     }
+    
     @IBAction func startScreenCapture(_ sender: Any) {
+        guard !UIScreen.main.isCaptured else { return }
         agoraKit.startScreenCapture(screenParams)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }
@@ -321,10 +323,14 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
         switch (state, sourceType) {
         case (.capturing, .screen):
-            option.publishScreenCaptureVideo = true
-            option.publishScreenCaptureAudio = true
-            option.publishCameraTrack = false
+            option.publishScreenCaptureVideo = !UIScreen.main.isCaptured
+            option.publishScreenCaptureAudio = !UIScreen.main.isCaptured
+            option.publishCameraTrack = UIScreen.main.isCaptured
             agoraKit.updateChannel(with: option)
+    
+            // 开始屏幕共享后, 如果想自动隐藏系统界面, 需要配置scheme, 使用scheme唤醒自身的方式关闭系统界面
+            // If you want to hide the system interface automatically after you start screen sharing, you need to configure scheme and use scheme to wake up the system interface
+            UIApplication.shared.open(URL(string: "APIExample://") ?? URL(fileURLWithPath: "APIExample://"))
             
         default: break
         }
