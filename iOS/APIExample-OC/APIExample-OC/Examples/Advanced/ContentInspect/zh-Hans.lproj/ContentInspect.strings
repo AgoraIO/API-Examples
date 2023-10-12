@@ -1,0 +1,9 @@
+
+/* Class = "UILabel"; text = "You can use the camera point to picture and check content inspect effect"; ObjectID = "9PU-6P-kJP"; */
+"9PU-6P-kJP.text" = "请通过控制台webhook获取鉴黄结果";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "Nsf-MZ-fEg"; */
+"Nsf-MZ-fEg.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "PmB-t9-yOK"; */
+"PmB-t9-yOK.placeholder" = "输入频道名";

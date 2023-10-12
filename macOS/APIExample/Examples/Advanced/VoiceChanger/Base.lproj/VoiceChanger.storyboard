@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -26,7 +26,7 @@
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="0.0" horizontalPageScroll="0.0" verticalLineScroll="0.0" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7N-E1-yiH">
                                 <rect key="frame" x="500" y="102" width="314" height="498"/>
                                 <clipView key="contentView" copiesOnScroll="NO" id="2jO-1s-PYQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="299" height="498"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view id="hic-wN-s1u">
@@ -38,42 +38,46 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="DVX-MF-ptg" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="585" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="589" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="hc0-KJ-N7W" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="683" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="687" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="ujY-ku-8rS" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="396" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="d4X-Gu-eyl" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="634" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="638" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="3Nm-rL-zFm" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="487" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="491" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="Jpl-uj-jwG" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="536" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="540" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="LCh-nt-554" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="389" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="351" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="Z2g-Ur-67E" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="438" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="442" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <box fixedFrame="YES" borderType="none" title="Equalization Reverb" translatesAutoresizingMaskIntoConstraints="NO" id="5z4-pq-KKl" userLabel="Equalization Reverb">
                                                     <rect key="frame" x="17" y="175" width="280" height="65"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="WMh-Tv-mOn">
-                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="49"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="52"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GQM-qb-yii">
-                                                                <rect key="frame" x="7" y="12" width="128" height="25"/>
+                                                                <rect key="frame" x="7" y="15" width="128" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="OPJ-gG-tFY">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -85,7 +89,7 @@
                                                                 </connections>
                                                             </popUpButton>
                                                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vyy-Ki-nte">
-                                                                <rect key="frame" x="137" y="11" width="134" height="28"/>
+                                                                <rect key="frame" x="137" y="14" width="134" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <sliderCell key="cell" enabled="NO" state="on" alignment="left" minValue="-20" maxValue="10" tickMarkPosition="above" sliderType="linear" id="IgV-rp-LrX"/>
                                                                 <connections>
@@ -97,11 +101,11 @@
                                                     <font key="titleFont" metaFont="cellTitle"/>
                                                 </box>
                                                 <view id="btb-lm-2YL" customClass="Input" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="291" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="310" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="gfT-NA-JXR" customClass="Input" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="340" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="270" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hql-ef-eHp">
@@ -119,11 +123,11 @@
                                                     <rect key="frame" x="17" y="16" width="280" height="90"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="fGn-0r-ukl">
-                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="74"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="77"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <stackView distribution="equalSpacing" orientation="horizontal" alignment="bottom" spacing="9" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QKh-Zg-fY1" userLabel="Equalization Band">
-                                                                <rect key="frame" x="10" y="4" width="261" height="63"/>
+                                                                <rect key="frame" x="10" y="7" width="261" height="63"/>
                                                                 <subviews>
                                                                     <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mOv-kA-FUv">
                                                                         <rect key="frame" x="0.0" y="0.0" width="17" height="63"/>
@@ -489,8 +493,8 @@
                                     <rect key="frame" x="-100" y="-100" width="299" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="lVm-iY-CEc">
-                                    <rect key="frame" x="299" y="0.0" width="15" height="498"/>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.059602649006622488" horizontal="NO" id="lVm-iY-CEc">
+                                    <rect key="frame" x="298" y="0.0" width="16" height="498"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 </scroller>
                             </scrollView>
@@ -563,6 +567,7 @@
                         <outlet property="equalizationReverbKeyPicker" destination="GQM-qb-yii" id="i6l-Mi-cpe"/>
                         <outlet property="equalizationReverbValueSlider" destination="vyy-Ki-nte" id="fZH-oo-vm2"/>
                         <outlet property="joinCHannelButton" destination="sJQ-Zx-j4W" id="bAh-Xg-Ad6"/>
+                        <outlet property="selectAINSModePicker" destination="ujY-ku-8rS" id="QbE-ai-isw"/>
                         <outlet property="selectChatBeautifierPicker" destination="d4X-Gu-eyl" id="GFb-DN-mh7"/>
                         <outlet property="selectLayoutPicker" destination="hc0-KJ-N7W" id="SID-ja-Fpl"/>
                         <outlet property="selectMicsPicker" destination="zUg-Ey-mco" id="X3R-5L-Kgn"/>

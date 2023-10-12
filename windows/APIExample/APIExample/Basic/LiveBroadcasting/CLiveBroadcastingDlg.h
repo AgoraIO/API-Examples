@@ -1,6 +1,7 @@
 #pragma once
 #include "AGVideoWnd.h"
 #include <list>
+#include <string>
 // CLiveBroadcastingDlg dialog
 
 #define VIDEO_COUNT                     36
@@ -258,6 +259,7 @@ private:
 	int m_uid = 0;
 	int m_canvasColor = 0x000000ff;// rgba
 	media::base::RENDER_MODE_TYPE m_canvasRenderMode = media::base::RENDER_MODE_HIDDEN;
+	std::string m_imgPng;
 
 public:
 	virtual BOOL OnInitDialog();
@@ -282,6 +284,7 @@ public:
 	CButton m_chkSnapshot;
 	CButton m_chkBFrame;
 	CButton m_chkFirstFrameOpt;
+	CButton m_chkVideoImage;
 	CButton m_rdiEncodeAuto;
 	CButton m_rdiEncodeSoft;
 	CButton m_rdiEncodeHard;
@@ -298,4 +301,5 @@ public:
 	afx_msg void OnNMCustomdrawSliderCanvasColor(NMHDR* pNMHDR, LRESULT* pResult);
 	CStatic m_staCavasColor;
 	CSliderCtrl m_sldCanvasColor;
+	afx_msg void OnBnClickedCheckVideoImage();
 };

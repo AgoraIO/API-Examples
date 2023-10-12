@@ -25,7 +25,7 @@
 package io.agora.beautyapi.faceunity.utils.egl
 
 import android.opengl.GLES20
-import android.util.Log
+import io.agora.beautyapi.faceunity.utils.LogUtils
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
@@ -57,15 +57,14 @@ class TextureProcessHelper(
         texId: Int, texType: Int,
         width: Int, height: Int, rotation: Int,
         transform: FloatArray,
-        isFrontCamera: Boolean
+        isFrontCamera: Boolean,
+        isMirror: Boolean
     ): Int {
         if (isReleased) {
             return -1
         }
         val currGLContext = GLUtils.getCurrGLContext() ?: return -1
 
-        val startTime = System.currentTimeMillis()
-        Log.d(TAG, "process start...")
         if (eglContextBase == null) {
             eglContextBase = currGLContext
             executeSync {
@@ -88,7 +87,9 @@ class TextureProcessHelper(
                 width,
                 height,
                 rotation,
+                true,
                 isFrontCamera,
+                isMirror,
                 transform,
                 frameIndex
             )
@@ -103,10 +104,8 @@ class TextureProcessHelper(
             if (isReleased) {
                 return@Callable -2
             }
-            val filterStartTime = System.currentTimeMillis()
 
             val frame = glTextureBufferQueueIn.dequeue() ?: return@Callable -2
-            Log.d(TAG, "process filter start ... index=${frame.tag}")
             val filterTexId =  filter?.invoke(frame) ?: -1
             if (filterTexId >= 0) {
                 glTextureBufferQueueOut.enqueue(
@@ -117,6 +116,8 @@ class TextureProcessHelper(
                         frame.height,
                         0,
                         false,
+                        false,
+                        true,
                         null,
                         frame.tag
                     )
@@ -130,34 +131,31 @@ class TextureProcessHelper(
                         frame.height,
                         0,
                         false,
+                        false,
+                        true,
                         null,
                         frame.tag
                     )
                 )
             }
-            Log.d(TAG, "process filter end cost=${System.currentTimeMillis() - filterStartTime}, index=${frame.tag}")
 
             return@Callable 0
         }))
 
         var ret = 0
-        var tag = frameIndex
         if (isBegin || futureQueue.size >= cacheCount) {
             isBegin = true
-            Log.d(TAG, "process get cost=${System.currentTimeMillis() - startTime}")
             try {
                 val get =  futureQueue.poll()?.get() ?: -1
                 if (get == 0) {
                     val dequeue = glTextureBufferQueueOut.dequeue()
                     ret = dequeue?.textureId ?: -1
-                    tag = (dequeue?.tag as? Int) ?: -1
                 }
             }catch (e: Exception){
-                Log.d(TAG, "process end with exception: $e")
+                LogUtils.e(TAG, "process end with exception: $e")
             }
         }
 
-        Log.d(TAG, "process end with $ret. cost=${System.currentTimeMillis() - startTime}, index=$tag")
         return ret
     }
 

@@ -4,26 +4,23 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.opengl.GLES20
 import android.os.Build
-import android.util.Log
-import com.sensetime.hardwarebuffer.STMobileHardwareBufferNative
-import com.sensetime.stmobile.STCommonNative
-import com.sensetime.stmobile.STMobileAnimalNative
-import com.sensetime.stmobile.STMobileColorConvertNative
-import com.sensetime.stmobile.STMobileEffectNative
-import com.sensetime.stmobile.STMobileHumanActionNative
-import com.sensetime.stmobile.model.STEffectCustomParam
-import com.sensetime.stmobile.model.STEffectRenderInParam
-import com.sensetime.stmobile.model.STEffectRenderOutParam
-import com.sensetime.stmobile.model.STEffectTexture
-import com.sensetime.stmobile.model.STQuaternion
-import com.sensetime.stmobile.params.STEffectParam
-import com.sensetime.stmobile.sticker_module_types.STCustomEvent
+import com.softsugar.hardwarebuffer.STMobileHardwareBufferNative
+import com.softsugar.stmobile.STCommonNative
+import com.softsugar.stmobile.STMobileColorConvertNative
+import com.softsugar.stmobile.STMobileEffectNative
+import com.softsugar.stmobile.STMobileHumanActionNative
+import com.softsugar.stmobile.model.STEffectCustomParam
+import com.softsugar.stmobile.model.STEffectRenderInParam
+import com.softsugar.stmobile.model.STEffectRenderOutParam
+import com.softsugar.stmobile.model.STEffectTexture
+import com.softsugar.stmobile.model.STQuaternion
+import com.softsugar.stmobile.params.STEffectParam
+import com.softsugar.stmobile.sticker_module_types.STCustomEvent
+import io.agora.beautyapi.sensetime.utils.LogUtils
 import io.agora.beautyapi.sensetime.utils.egl.GLCopyHelper
 import io.agora.beautyapi.sensetime.utils.egl.GLFrameBuffer
 import io.agora.beautyapi.sensetime.utils.egl.GLTextureBufferQueue
-import io.agora.beautyapi.sensetime.utils.utils.Accelerometer.CLOCKWISE_ANGLE
-import io.agora.beautyapi.sensetime.utils.utils.CostTimeUtils
-import io.agora.beautyapi.sensetime.utils.utils.LogUtils
+import io.agora.beautyapi.sensetime.utils.processor.Accelerometer.CLOCKWISE_ANGLE
 
 class BeautyProcessor : IBeautyProcessor {
     private val TAG = this::class.java.simpleName
@@ -53,11 +50,10 @@ class BeautyProcessor : IBeautyProcessor {
 
     override fun initialize(
         effectNative: STMobileEffectNative,
-        humanActionNative: STMobileHumanActionNative,
-        animalNative: STMobileAnimalNative?,
+        humanActionNative: STMobileHumanActionNative
     ) {
         this.mSTMobileEffectNative = effectNative
-        mFaceDetector = FaceDetector(humanActionNative, effectNative, animalNative)
+        mFaceDetector = FaceDetector(humanActionNative, effectNative)
     }
 
     override fun release() {
@@ -91,7 +87,7 @@ class BeautyProcessor : IBeautyProcessor {
     }
 
     override fun triggerScreenTap(isDouble: Boolean) {
-        Log.d(
+        LogUtils.d(
             TAG,
             "changeCustomEvent() called:" + mSTMobileEffectNative.customEventNeeded
         )
@@ -188,8 +184,9 @@ class BeautyProcessor : IBeautyProcessor {
                 width,
                 height,
                 input.isFrontCamera,
+                input.isMirror,
                 input.cameraOrientation,
-                input.timestamp,
+                input.timestamp
             )
         )
     }
@@ -238,8 +235,9 @@ class BeautyProcessor : IBeautyProcessor {
                 input.width,
                 input.height,
                 input.isFrontCamera,
+                input.isMirror,
                 input.cameraOrientation,
-                input.timestamp,
+                input.timestamp
             )
         )
     }
@@ -269,6 +267,7 @@ class BeautyProcessor : IBeautyProcessor {
                     input.height,
                     input.cameraOrientation,
                     input.isFrontCamera,
+                    input.isMirror,
                     input.textureMatrix
                 )
             )
@@ -286,6 +285,7 @@ class BeautyProcessor : IBeautyProcessor {
                     input.height,
                     input.cameraOrientation,
                     input.isFrontCamera,
+                    input.isMirror,
                     input.textureMatrix
                 )
             )
@@ -312,7 +312,7 @@ class BeautyProcessor : IBeautyProcessor {
                     System.nanoTime()
                 )
             } else {
-                Log.e(TAG, "The face detector out can not found its texture out!")
+                LogUtils.e(TAG, "The face detector out can not found its texture out!")
             }
         }
         mFaceDetector.enqueue(
@@ -322,6 +322,7 @@ class BeautyProcessor : IBeautyProcessor {
                 input.width,
                 input.height,
                 input.isFrontCamera,
+                input.isMirror,
                 input.cameraOrientation
             )
         )
@@ -396,8 +397,6 @@ class BeautyProcessor : IBeautyProcessor {
             null,
             null
         )
-        LogUtils.i("processDoubleInput render start")
-        val mStartRenderTime = System.currentTimeMillis()
         mSTMobileEffectNative.setParam(
             STEffectParam.EFFECT_PARAM_USE_INPUT_TIMESTAMP,
             1.0f
@@ -406,15 +405,6 @@ class BeautyProcessor : IBeautyProcessor {
             sTEffectRenderInParam,
             stEffectRenderOutParam,
             false
-        )
-        LogUtils.i(
-            TAG,
-            "render cost time total: %d",
-            System.currentTimeMillis() - mStartRenderTime
-        )
-        CostTimeUtils.printAverage(
-            "CostTimeUtils",
-            System.currentTimeMillis() - mStartRenderTime
         )
 
         if (event == mCustomEvent) {
@@ -436,11 +426,11 @@ class BeautyProcessor : IBeautyProcessor {
     override fun reset() {
         mFaceDetector.reset()
         glTextureBufferQueue.reset()
-        if (beautyOutTextureId == -1) {
+        if (beautyOutTextureId != -1) {
             GLES20.glDeleteTextures(1, intArrayOf(beautyOutTextureId), 0)
             beautyOutTextureId = -1
         }
-        if (finalOutTextureId == -1) {
+        if (finalOutTextureId != -1) {
             GLES20.glDeleteTextures(1, intArrayOf(finalOutTextureId), 0)
             finalOutTextureId = -1
         }

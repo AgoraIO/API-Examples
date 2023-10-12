@@ -72,21 +72,6 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 }
 
 
-//Uninitialized media player .
-void CAgoraMediaPlayer::UnInitMediaPlayerKit()
-{
-	if (m_mediaPlayer)
-	{
-		//unregister player event observer.
-		int ret = m_mediaPlayer->unregisterPlayerSourceObserver(&m_mediaPlayerEvent);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregisterPlayerSourceObserver"));
-		//call media player release function.
-		//m_mediaPlayer->release();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release mediaPlayer"));
-		m_mediaPlayer = nullptr;
-	}
-}
-
 //Initialize the Agora SDK
 bool CAgoraMediaPlayer::InitAgora()
 {
@@ -154,8 +139,6 @@ void CAgoraMediaPlayer::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
 	}
-	//release media player kit.
-	UnInitMediaPlayerKit();
 }
 
 
@@ -675,14 +658,6 @@ void CAgoraMediaPlayerHandler::onLeaveChannel(const RtcStats& stats)
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
 	}
-}
-
-
-
-void CAgoraMediaPlayer::OnDestroy()
-{
-	CDialogEx::OnDestroy();
-	UnInitMediaPlayerKit();
 }
 
 

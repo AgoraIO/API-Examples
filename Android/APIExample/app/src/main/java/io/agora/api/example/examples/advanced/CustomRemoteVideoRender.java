@@ -497,6 +497,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                     public Void call() throws Exception {
                         if (lastI420Frame.getBuffer() instanceof VideoFrame.I420Buffer) {
                             final VideoFrame.I420Buffer i420Buffer = (VideoFrame.I420Buffer) lastI420Frame.getBuffer();
+                            GLES20.glPixelStorei(GLES20.GL_UNPACK_ALIGNMENT, 1);
                             yuvUploader.uploadFromBuffer(i420Buffer);
                         }
                         return null;

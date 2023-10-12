@@ -98,6 +98,7 @@ public class ReadyFragment extends BaseFragment {
         permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Permission.RECORD_AUDIO);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
             permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
         }
 

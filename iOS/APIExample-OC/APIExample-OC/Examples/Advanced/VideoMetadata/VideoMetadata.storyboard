@@ -60,10 +60,10 @@
             </objects>
             <point key="canvasLocation" x="-694" y="931"/>
         </scene>
-        <!--Join Channel Video-->
+        <!--Video Metadata-->
         <scene sceneID="537-qh-Aaa">
             <objects>
-                <viewController storyboardIdentifier="VideoMetadata" title="Join Channel Video" id="p70-sh-D1h" customClass="VideoMetadata" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VideoMetadata" id="p70-sh-D1h" customClass="VideoMetadata" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OcG-X2-s5p">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

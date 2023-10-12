@@ -19,7 +19,7 @@
 <!--    <permission-group android:name="io.agora.api.example.andpermission"/>-->
     <permission-group android:name="${AppId}.andpermission"/>
 
-    <uses-sdk tools:overrideLibrary="com.sensetime.hardwarebuffer" />
+    <uses-sdk tools:overrideLibrary="com.softsugar.hardwarebuffer" />
 
     <application
         android:name=".MainApplication"
@@ -28,7 +28,9 @@
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:allowNativeHeapPointerTagging="false">
 
         <activity
             android:name=".MainActivity"

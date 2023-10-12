@@ -1,36 +1,11 @@
-/*
- * MIT License
- *
- * Copyright (c) 2023 Agora Community
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package io.agora.beautyapi.faceunity.utils.egl;
 
+import android.graphics.Matrix;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 
-import io.agora.beautyapi.faceunity.utils.egl.program.BaseProgram;
-import io.agora.beautyapi.faceunity.utils.egl.program.GL2DProgram;
-import io.agora.beautyapi.faceunity.utils.egl.program.OESProgram;
+import io.agora.base.internal.video.GlRectDrawer;
+import io.agora.base.internal.video.RendererCommon;
 
 public class GLFrameBuffer {
 
@@ -39,14 +14,12 @@ public class GLFrameBuffer {
     private int mWidth, mHeight, mRotation;
     private boolean isFlipV, isFlipH, isTextureInner, isTextureChanged, isSizeChanged;
 
-    private OESProgram mOESProgram;
-    private GL2DProgram mGL2DProgram;
+    private RendererCommon.GlDrawer drawer;
 
-    private float[] mMVPMatrix = new float[16];
     private float[] mTexMatrix = GLUtils.IDENTITY_MATRIX;
 
     public GLFrameBuffer() {
-        Matrix.setIdentityM(mMVPMatrix, 0);
+
     }
 
     public boolean setSize(int width, int height) {
@@ -62,21 +35,18 @@ public class GLFrameBuffer {
     public void setRotation(int rotation) {
         if (mRotation != rotation) {
             mRotation = rotation;
-            mMVPMatrix = GLUtils.createTransformMatrix(rotation, isFlipH, isFlipV);
         }
     }
 
     public void setFlipV(boolean flipV) {
         if (isFlipV != flipV) {
             isFlipV = flipV;
-            mMVPMatrix = GLUtils.createTransformMatrix(mRotation, isFlipH, flipV);
         }
     }
 
     public void setFlipH(boolean flipH) {
         if (isFlipH != flipH) {
             isFlipH = flipH;
-            mMVPMatrix = GLUtils.createTransformMatrix(mRotation, flipH, isFlipV);
         }
     }
 
@@ -104,7 +74,6 @@ public class GLFrameBuffer {
         mTexMatrix = GLUtils.IDENTITY_MATRIX;
         isFlipH = isFlipV = false;
         mRotation = 0;
-        Matrix.setIdentityM(mMVPMatrix, 0);
     }
 
     public int process(int textureId, int textureType) {
@@ -126,26 +95,30 @@ public class GLFrameBuffer {
         isTextureChanged = false;
         isSizeChanged = false;
 
+        if(drawer == null){
+            drawer = new GlRectDrawer();
+        }
+
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFramebufferId);
         GLUtils.checkGlError("glBindFramebuffer");
-        GLES20.glViewport(0, 0, mWidth, mHeight);
-        GLES20.glClearColor(1f, 0, 0, 1f);
 
-        BaseProgram drawProgram;
+        Matrix transform = RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTexMatrix);
+        transform.preTranslate(0.5f, 0.5f);
+        transform.preRotate(mRotation, 0.f, 0.f);
+        transform.preScale(
+                isFlipH ? -1.f: 1.f,
+                isFlipV ? -1.f: 1.f
+        );
+        transform.preTranslate(-0.5f, -0.5f);
+        float[] matrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(transform);
+
         if(textureType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES){
-            if(mOESProgram == null){
-                mOESProgram = new OESProgram();
-            }
-            drawProgram = mOESProgram;
+            drawer.drawOes(textureId, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
         }else{
-            if(mGL2DProgram == null){
-                mGL2DProgram = new GL2DProgram();
-            }
-            drawProgram = mGL2DProgram;
+            drawer.drawRgb(textureId, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
         }
-        drawProgram.draw(textureId, mTexMatrix, mMVPMatrix);
-
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        GLES20.glFinish();
 
         return mTextureId;
     }
@@ -153,13 +126,10 @@ public class GLFrameBuffer {
     public void release(){
         deleteTexture();
         deleteFramebuffer();
-        if(mGL2DProgram != null){
-            mGL2DProgram.release();
-            mGL2DProgram = null;
-        }
-        if(mOESProgram != null){
-            mOESProgram.release();
-            mOESProgram = null;
+
+        if(drawer != null){
+            drawer.release();
+            drawer = null;
         }
     }
 
@@ -226,6 +196,5 @@ public class GLFrameBuffer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, GLES20.GL_NONE);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_NONE);
     }
-
 
 }
