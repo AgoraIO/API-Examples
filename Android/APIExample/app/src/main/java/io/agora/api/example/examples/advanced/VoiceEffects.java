@@ -105,7 +105,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     private EditText et_channel;
     private Button join;
     private Spinner audioProfile, audioScenario,
-            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion,
+            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion, ainsMode,
             customBandFreq, customReverbKey;
     private ViewGroup _voice3DLayout, _pitchModeLayout, _pitchValueLayout;
     private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue, customVoiceFormant;
@@ -152,6 +152,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchValueLayout = view.findViewById(R.id.audio_pitch_value_layout);
         _pitchValueOption = view.findViewById(R.id.audio_pitch_value_option);
         voiceConversion = view.findViewById(R.id.audio_voice_conversion);
+        ainsMode = view.findViewById(R.id.audio_ains_mode);
 
         chatBeautifier.setOnItemSelectedListener(this);
         timbreTransformation.setOnItemSelectedListener(this);
@@ -163,6 +164,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _voice3DCircle.setOnSeekBarChangeListener(this);
         _pitchModeOption.setOnItemSelectedListener(this);
         _pitchValueOption.setOnItemSelectedListener(this);
+        ainsMode.setOnItemSelectedListener(this);
 
         // Customize Voice Effects Layout
         customPitch = view.findViewById(R.id.audio_custom_pitch); // engine.setLocalVoicePitch()
@@ -201,6 +203,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchModeLayout.setVisibility(View.GONE);
         _pitchValueLayout.setVisibility(View.GONE);
         voiceConversion.setEnabled(joined);
+        ainsMode.setEnabled(joined);
 
         customPitch.setEnabled(joined);
         customBandFreq.setEnabled(joined);
@@ -216,6 +219,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         roomAcoustics.setSelection(0);
         pitchCorrection.setSelection(0);
         voiceConversion.setSelection(0);
+        ainsMode.setSelection(0);
 
         customPitch.setProgress(0);
         customBandGain.setProgress(0);
@@ -615,10 +619,25 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
+
         if(parent == _pitchModeOption || parent == _pitchValueOption){
             int effectOption1 = getPitch1Value(_pitchModeOption.getSelectedItem().toString());
             int effectOption2 = getPitch2Value(_pitchValueOption.getSelectedItem().toString());
             engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
+        }
+
+        if(parent == ainsMode){
+            boolean enable = position > 0;
+            /*
+            The AI noise suppression modes:
+                0: (Default) Balance mode. This mode allows for a balanced performance on noice suppression and time delay.
+                1: Aggressive mode. In scenarios where high performance on noise suppression is required, such as live streaming
+                outdoor events, this mode reduces nosies more dramatically, but sometimes may affect the original character of the audio.
+                2: Aggressive mode with low latency. The noise suppression delay of this mode is about only half of that of the balance
+                and aggressive modes. It is suitable for scenarios that have high requirements on noise suppression with low latency,
+                such as sing together online in real time.
+             */
+            engine.setAINSMode(enable, position - 1);
         }
     }
 

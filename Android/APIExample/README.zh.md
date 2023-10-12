@@ -23,7 +23,7 @@
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
 4. 复制后台的 **App 证书** 并备注，稍后启动应用时会用到它
 
-5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书 分别替换到 `Your App Id` 和 `YOUR APP CERTIFICATE`
+5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-configs.xml`，将你的 AppID 、App主证书 分别替换到 `Your App Id` 和 `YOUR APP CERTIFICATE`
 
     ```
     // 声网APP ID。

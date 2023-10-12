@@ -142,7 +142,7 @@
     }
     int sendResult = [self.agoraKit sendStreamMessage:streamId data:[message dataUsingEncoding:NSUTF8StringEncoding]];
     if (sendResult != 0) {
-        [self showAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"sendStreamMessage call failed: %d, please check your params", result]];
+        [self showAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"sendStreamMessage call failed: %d, please check your params", sendResult]];
     } else {
         self.messageField.text = nil;
     }

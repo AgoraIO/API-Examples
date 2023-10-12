@@ -214,3 +214,8 @@
 "Stop Publish" = "停止推流";
 "preload Channel" = "预加载";
 "cancel preload" = "取消预加载";
+"Set AINS Mode" = "设置是否开启 AI 降噪功能并设置降噪模式。";
+
+"AGGRESSIVE" = "强降噪模式";
+"BALANCED" = "(默认)均衡降噪模式";
+"ULTRALOWLATENCY" = "低延时强降噪模式";

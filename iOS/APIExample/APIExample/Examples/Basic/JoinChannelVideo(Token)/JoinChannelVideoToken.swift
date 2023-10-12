@@ -109,9 +109,9 @@ class JoinChannelVideoToken: BaseViewController {
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String,
-              let appId = configs["appId"] as? String,
-            let token = configs["token"] as? String else {return}
+        guard let channelName = (configs["channelName"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+              let appId = (configs["appId"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+            let token = (configs["token"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()

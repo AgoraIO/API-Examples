@@ -123,39 +123,30 @@ class CreateDataStreamMain: BaseViewController {
             }
         })
     }
-    
-    // indicate if stream has created
-    var streamCreated = false
-    var streamId: Int = 0
-    
+        
     /// send message
     @IBAction func onSendPress(_ sender: UIButton) {
-        if !isSending {
-            let message = messageField.text
-            if message == nil || message!.isEmpty {
-                return
-            }
-            isSending = true
-            if !streamCreated {
-                // create the data stream
-                // Each user can create up to five data streams during the lifecycle of the agoraKit
-                let config = AgoraDataStreamConfig()
-                let result = agoraKit.createDataStream(&streamId, config: config)
-                if result != 0 {
-                    isSending = false
-                    showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
-                } else {
-                    streamCreated = true
-                }
-            }
-            
-            let result = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
-            if result != 0 {
-                showAlert(title: "Error", message: "sendStreamMessage call failed: \(result), please check your params")
-            } else {
-                messageField.text = nil
-            }
-            isSending = false
+        // indicate if stream has created
+        var streamCreated = false
+        var streamId: Int = 0
+        
+        let message = messageField.text
+        if message == nil || message!.isEmpty {
+            return
+        }
+        // create the data stream
+        // Each user can create up to five data streams during the lifecycle of the agoraKit
+        let config = AgoraDataStreamConfig()
+        let result = agoraKit.createDataStream(&streamId, config: config)
+        if result != 0 {
+            showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
+        }
+        
+        let sendResult = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
+        if sendResult != 0 {
+            showAlert(title: "Error", message: "sendStreamMessage call failed: \(sendResult), please check your params")
+        } else {
+            messageField.text = nil
         }
     }
     

@@ -143,4 +143,11 @@
         <item>@string/audio_route_headset_typec</item>
         <item>@string/audio_route_headset_bluetooth</item>
     </string-array>
+
+    <string-array name="audio_ains_mode">
+        <item>OFF</item>
+        <item>AINS_MODE_BALANCED</item>
+        <item>AINS_MODE_AGGRESSIVE</item>
+        <item>AINS_MODE_ULTRALOWLATENCY</item>
+    </string-array>
 </resources>

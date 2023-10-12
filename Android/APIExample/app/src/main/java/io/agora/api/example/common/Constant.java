@@ -27,4 +27,6 @@ public class Constant {
 
     public static final String URL_DOWNBEAT = "https://webdemo.agora.io/dang.mp3";
 
+    public static final String URL_VIDEO_SAMPLE= "http://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
+
 }
