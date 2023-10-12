@@ -16,8 +16,9 @@ class JoinMultipleChannel: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var container2: AGEVideoContainer!
     @IBOutlet weak var stopMicrophoneRecordingSwitch: NSSwitch!
+    @IBOutlet weak var takeSnapShotEx: NSButton!
     
-//    var channel1: AgoraRtcChannel?
+    //    var channel1: AgoraRtcChannel?
 //    var channel2: AgoraRtcChannel?
     var channel1: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
     var channel2: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
@@ -25,7 +26,7 @@ class JoinMultipleChannel: BaseViewController {
     var channelName2 = ""
     let channel1Uid = UInt.random(in: 1001...2000)
     let channel2Uid = UInt.random(in: 2001...3000)
-    
+    var remoteUid: UInt = 0
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel1
@@ -100,6 +101,7 @@ class JoinMultipleChannel: BaseViewController {
         didSet {
             channelField2.isEnabled = !isJoined2
             stopMicrophoneRecordingSwitch.isEnabled = isJoined2
+            takeSnapShotEx.isEnabled = isJoined2
             initJoinChannel2Button()
         }
     }
@@ -163,6 +165,16 @@ class JoinMultipleChannel: BaseViewController {
             stopMicrophoneRecordingSwitch.state = .off
             isJoined2 = false
         }
+    }
+    @IBAction func onTakSnapshotEx(_ sender: Any) {
+        guard isJoined2 else { return }
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
+        let path = "/Users/\(programPath)/Downloads/1.png"
+        let channel2 = AgoraRtcConnection()
+        channel2.channelId = channelName2
+        channel2.localUid = channel2Uid
+        agoraKit.takeSnapshotEx(channel2, uid: Int(remoteUid), filePath: path)
     }
     
     override func viewDidLoad() {
@@ -296,6 +308,7 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         connection.channelId = connectionId
         connection.localUid = connectionId == channelName2 ? channel2Uid : channel1Uid
         agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
+        remoteUid = uid
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -313,9 +326,10 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         connection.channelId = connectionId
         connection.localUid = connectionId == channelName2 ? channel2Uid : channel1Uid
         agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
+        if remoteUid == uid {
+            remoteUid = 0
+        }
     }
-    
-    
 }
 
 protocol JoinMultiChannelMainConnectionProtocol : NSObject {

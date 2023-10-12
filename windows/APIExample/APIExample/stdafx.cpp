@@ -112,6 +112,7 @@ wchar_t beautyAudioCtrlChange[INFO_LEN]				= { 0 };
 wchar_t beautyAudioCtrlPreSet[INFO_LEN] = { 0 };
 wchar_t beautyAudioCtrlParam1[INFO_LEN] = { 0 };
 wchar_t beautyAudioCtrlParam2[INFO_LEN] = { 0 };
+wchar_t beautyAudioCtrlAINSMode[INFO_LEN] = { 0 };
 
 
 //set audio profile
@@ -203,6 +204,7 @@ wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlStopMic[INFO_LEN] = { 0 };
+wchar_t MultiChannelCtrlTakeSnapshotEx[INFO_LEN] = { 0 };
 
 
 //audio effect
@@ -299,6 +301,7 @@ wchar_t liveBraodcastingBFrame[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingFristFrameOpt[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingFristFrameTip[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingFristFrameTipContent[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingVideoImage[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
@@ -658,6 +661,7 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiChannelCtrlJoinExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.JoinExChannel")));
 	_tcscpy_s(MultiChannelCtrlLeaveExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.LeaveExChannel")));
 	_tcscpy_s(MultiChannelCtrlStopMic, INFO_LEN, Str(_T("MultiChannel.Ctrl.StopMic")));
+	_tcscpy_s(MultiChannelCtrlTakeSnapshotEx, INFO_LEN, Str(_T("MultiChannel.Ctrl.TakeSnapshotEx")));
 
 
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
@@ -720,8 +724,9 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
 	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
 	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
-	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam1")));
-	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam2")));
+	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param1")));
+	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param2")));
+	_tcscpy_s(beautyAudioCtrlAINSMode, INFO_LEN, Str(_T("BeautyAudio.Ctrl.AINSMode")));
 	
  
    
@@ -736,6 +741,7 @@ void InitKeyInfomation()
 	_tcscpy_s(liveBraodcastingFristFrameOpt, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FirstFrameOpt")));
 	_tcscpy_s(liveBraodcastingFristFrameTip, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FristFrameTip")));
 	_tcscpy_s(liveBraodcastingFristFrameTipContent, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FristFrameTipContent")));
+	_tcscpy_s(liveBraodcastingVideoImage, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.VideoImage")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
 

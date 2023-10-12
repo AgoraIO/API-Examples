@@ -32,7 +32,6 @@ import android.graphics.YuvImage;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,6 +41,8 @@ import java.util.Objects;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLContext;
+
+import io.agora.beautyapi.faceunity.utils.LogUtils;
 
 public class GLUtils {
     private static final String TAG = "GLUtils";
@@ -73,7 +74,7 @@ public class GLUtils {
             GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, textureID, 0);
             GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, renderId);
             if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
-                Log.d(TAG, "Framebuffer error");
+                LogUtils.e(TAG, "Framebuffer error");
             }
 
             ByteBuffer rgbaBuf = ByteBuffer.allocateDirect(width * height * 4);
@@ -90,7 +91,7 @@ public class GLUtils {
 
             return bitmap;
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            LogUtils.e(TAG, e.toString());
         }
         return null;
     }
@@ -114,7 +115,7 @@ public class GLUtils {
             GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureID, 0);
             GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, renderId);
             if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
-                Log.d(TAG, "Framebuffer error");
+                LogUtils.e(TAG, "Framebuffer error");
             }
 
             ByteBuffer rgbaBuf = ByteBuffer.allocateDirect(width * height * 4);
@@ -131,7 +132,7 @@ public class GLUtils {
 
             return bitmap;
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            LogUtils.e(TAG, e.toString());
         }
         return null;
     }
@@ -204,7 +205,7 @@ public class GLUtils {
         int error = GLES20.glGetError();
         if (error != GLES20.GL_NO_ERROR) {
             String msg = op + ": glError 0x" + Integer.toHexString(error);
-            Log.e(TAG, msg);
+            LogUtils.e(TAG, msg);
             throw new RuntimeException(msg);
         }
     }
@@ -221,7 +222,7 @@ public class GLUtils {
         int program = GLES20.glCreateProgram();
         checkGlError("glCreateProgram");
         if (program == 0) {
-            Log.e(TAG, "Could not create program");
+            LogUtils.e(TAG, "Could not create program");
         }
         GLES20.glAttachShader(program, vertexShader);
         checkGlError("glAttachShader");
@@ -231,12 +232,11 @@ public class GLUtils {
         int[] linkStatus = new int[1];
         GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
         if (linkStatus[0] != GLES20.GL_TRUE) {
-            Log.e(TAG, "Could not link program: ");
-            Log.e(TAG, GLES20.glGetProgramInfoLog(program));
+            LogUtils.e(TAG, "Could not link program: ");
+            LogUtils.e(TAG, GLES20.glGetProgramInfoLog(program));
             GLES20.glDeleteProgram(program);
             program = 0;
         }
-        Log.i(TAG, "linkStatus:" + linkStatus[0]);
         return program;
     }
 
@@ -248,8 +248,8 @@ public class GLUtils {
         int[] compiled = new int[1];
         GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
         if (compiled[0] == 0) {
-            Log.e(TAG, "Could not compile shader " + shaderType + ":");
-            Log.e(TAG, " " + GLES20.glGetShaderInfoLog(shader));
+            LogUtils.e(TAG, "Could not compile shader " + shaderType + ":");
+            LogUtils.e(TAG, " " + GLES20.glGetShaderInfoLog(shader));
             GLES20.glDeleteShader(shader);
             shader = 0;
         }

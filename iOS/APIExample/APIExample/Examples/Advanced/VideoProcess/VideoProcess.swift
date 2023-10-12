@@ -169,7 +169,15 @@ class VideoProcessMain : BaseViewController
     }
     
     @IBAction func onChangeBeauty(_ sender:UISwitch){
-        agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
+        if sender.isOn {
+            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
+                agoraKit.setBeautyEffectOptions(true, options: beautifyOption)
+            } else {
+                ToastView.show(text: "The feature is unavailable in the device!")
+            }
+        } else {
+            agoraKit.setBeautyEffectOptions(false, options: beautifyOption)
+        }
     }
 
     @IBAction func onLightenSlider(_ sender:UISlider){
@@ -230,7 +238,15 @@ class VideoProcessMain : BaseViewController
     }
     
     @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
-        changeVirtualBackground()
+        if sender.isOn {
+            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessVirtualBackground) {
+                changeVirtualBackground()
+            } else {
+                ToastView.show(text: "The feature is unavailable in the device!")
+            }
+        } else {
+            changeVirtualBackground()
+        }
     }
     
     @IBAction func onChangeVirtualBgSegment(_ sender: UISegmentedControl) {

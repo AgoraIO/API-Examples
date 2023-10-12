@@ -85,7 +85,7 @@
     
     // Enable content inspect with local video view
     AgoraContentInspectModule *moderateModule = [[AgoraContentInspectModule alloc] init];
-    moderateModule.type = AgoraContentInspectTypeModeration;
+    moderateModule.type = AgoraContentInspectTypeImageModeration;
     moderateModule.interval = 1;
     
     AgoraContentInspectConfig *inspectConfig = [[AgoraContentInspectConfig alloc] init];
@@ -128,28 +128,6 @@
     [self.agoraKit stopPreview];
     [self.agoraKit leaveChannel:nil];
     [AgoraRtcEngineKit destroy];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine contentInspectResult:(AgoraContentInspectResult)result {
-    NSString *resultText = @"Video Neutral".localized;
-    switch (result) {
-        case AgoraContentInspectNeutral:
-            resultText = @"Video Neutral".localized;
-            break;
-        case AgoraContentInspectSexy:
-            resultText = @"Video Sexy".localized;
-            break;
-        case AgoraContentInspectPorn:
-            resultText = @"Video Porn".localized;
-            break;
-        default:
-            break;
-    }
-    if (resultText == self.inspectResultLabel.text && resultText == @"Video Neutral".localized) {
-        self.inspectResultLabel.text = @"";
-    } else {
-        self.inspectResultLabel.text = resultText;
-    }
 }
 
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand

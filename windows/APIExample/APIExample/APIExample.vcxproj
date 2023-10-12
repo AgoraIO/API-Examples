@@ -401,6 +401,9 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <CopyFileToFolders Include="res\ic_local.bmp" />
     <CopyFileToFolders Include="res\ic_remote.bmp" />
     <CopyFileToFolders Include="res\ic_speaker.bmp" />
+    <CopyFileToFolders Include="res\bg_blue.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DeploymentContent>
+    </CopyFileToFolders>
     <Image Include="res\ic_background_light_yellow.bmp" />
     <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
     <Image Include="res\local.bmp" />

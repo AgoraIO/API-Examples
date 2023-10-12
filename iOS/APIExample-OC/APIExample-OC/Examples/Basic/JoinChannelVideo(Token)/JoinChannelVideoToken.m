@@ -90,9 +90,12 @@
     [self.remoteView setPlaceholder:@"Remote Host".localized];
     [self.containerView layoutStream:@[self.localView, self.remoteView]];
     
-    NSString *channelName = [self.configs objectForKey:@"channelName"];
-    NSString *appId = [self.configs objectForKey:@"appId"];
-    NSString *token = [self.configs objectForKey:@"token"];
+    NSString *channelName = [[self.configs objectForKey:@"channelName"] stringByTrimmingCharactersInSet:
+    [NSCharacterSet whitespaceCharacterSet]];
+    NSString *appId = [[self.configs objectForKey:@"appId"] stringByTrimmingCharactersInSet:
+                       [NSCharacterSet whitespaceCharacterSet]];
+    NSString *token = [[self.configs objectForKey:@"token"] stringByTrimmingCharactersInSet:
+                       [NSCharacterSet whitespaceCharacterSet]];
     
     // set up agora instance when view loaded
     AgoraRtcEngineConfig *config = [[AgoraRtcEngineConfig alloc] init];

@@ -63,7 +63,7 @@
         <!--Media Player Main-->
         <scene sceneID="Hul-Ue-Iim">
             <objects>
-                <viewController storyboardIdentifier="MediaPlayer" title="Medoa Player" id="jxp-ZN-2yG" userLabel="Media Player Main" customClass="MediaPlayer" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MediaPlayer" id="jxp-ZN-2yG" userLabel="Media Player Main" customClass="MediaPlayer" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZdT-KJ-IC4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

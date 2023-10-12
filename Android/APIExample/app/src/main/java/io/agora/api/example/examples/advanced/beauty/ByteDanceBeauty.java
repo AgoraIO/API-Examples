@@ -11,6 +11,8 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bytedance.labcv.effectsdk.RenderManager;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Random;
@@ -23,10 +25,10 @@ import io.agora.api.example.utils.TokenUtils;
 import io.agora.beautyapi.bytedance.BeautyPreset;
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPI;
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPIKt;
+import io.agora.beautyapi.bytedance.CameraConfig;
 import io.agora.beautyapi.bytedance.CaptureMode;
 import io.agora.beautyapi.bytedance.Config;
-import io.agora.beautyapi.bytedance.utils.AssetsResourcesHelper;
-import io.agora.beautyapi.bytedance.utils.EffectManager;
+import io.agora.beautyapi.bytedance.EventCallback;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -47,8 +49,6 @@ public class ByteDanceBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private final ByteDanceBeautyAPI byteDanceBeautyAPI = ByteDanceBeautyAPIKt.createByteDanceBeautyAPI();
-
-    private EffectManager effectManager;
 
     @Nullable
     @Override
@@ -83,16 +83,23 @@ public class ByteDanceBeauty extends BaseFragment {
             rtcEngine.setColorEnhanceOptions(isChecked, options);
         });
 
-        AssetsResourcesHelper resourcesHelper = new AssetsResourcesHelper(requireContext(), "beauty_bytedance");
-        effectManager = new EffectManager(requireContext(), resourcesHelper, resourcesHelper.getLicensePath(LICENSE_NAME));
-
         byteDanceBeautyAPI.initialize(new Config(
+                requireContext(),
                 rtcEngine,
-                effectManager,
-                null,
+                ByteDanceBeautySDK.INSTANCE.getRenderManager(),
+                new EventCallback(beautyStats -> null,
+                        () -> {
+                            ByteDanceBeautySDK.INSTANCE.initEffect(requireContext());
+                            return null;
+                        },
+                        () -> {
+                            ByteDanceBeautySDK.INSTANCE.unInitEffect();
+                            return null;
+                        }),
                 CaptureMode.Agora,
                 0,
-                false
+                false,
+                new CameraConfig()
         ));
         byteDanceBeautyAPI.enable(true);
     }
@@ -104,9 +111,6 @@ public class ByteDanceBeauty extends BaseFragment {
             rtcEngine.leaveChannel();
         }
         byteDanceBeautyAPI.release();
-        if(effectManager != null){
-            effectManager.destroy();
-        }
         RtcEngine.destroy();
     }
 
@@ -115,29 +119,34 @@ public class ByteDanceBeauty extends BaseFragment {
         mBinding.fullVideoContainer.removeAllViews();
         mBinding.smallVideoContainer.removeAllViews();
         super.onBackPressed();
-
     }
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            byteDanceBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT: BeautyPreset.CUSTOM);
+            byteDanceBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM,
+                    ByteDanceBeautySDK.INSTANCE.getBeautyNodePath(), ByteDanceBeautySDK.INSTANCE.getBeauty4ItemsNodePath(),
+                    ByteDanceBeautySDK.INSTANCE.getReSharpNodePath());
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            effectManager.appendComposeNodes(new String[]{"style_makeup/tianmei"});
-            effectManager.updateComposerNodeIntensity(
-                    "style_makeup/tianmei",
+            RenderManager renderManager = ByteDanceBeautySDK.INSTANCE.getRenderManager();
+            renderManager.appendComposerNodes(
+                    new String[]{ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath()}
+            );
+            renderManager.updateComposerNodes(
+                    ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath(),
                     "Filter_ALL",
                     isChecked ? 0.5f : 0.f);
-            effectManager.updateComposerNodeIntensity(
-                    "style_makeup/tianmei",
+            renderManager.updateComposerNodes(
+                    ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath(),
                     "Makeup_ALL",
                     isChecked ? 0.5f : 0f);
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            RenderManager renderManager = ByteDanceBeautySDK.INSTANCE.getRenderManager();
             if(isChecked){
-                effectManager.setSticker("wochaotian");
+                renderManager.setSticker(ByteDanceBeautySDK.INSTANCE.getStickerPath() + "/wochaotian");
             }else {
-                effectManager.setSticker(null);
+                renderManager.setSticker(null);
             }
         });
         mBinding.ivCamera.setOnClickListener(v -> {

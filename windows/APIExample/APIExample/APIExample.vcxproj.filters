@@ -447,5 +447,8 @@
     <CopyFileToFolders Include="sample.yuv">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="res\bg_blue.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

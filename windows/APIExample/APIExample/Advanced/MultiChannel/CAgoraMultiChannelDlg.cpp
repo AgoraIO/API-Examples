@@ -27,7 +27,9 @@ void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnExChannel);
+	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT_EX, m_btnExSnapshot);
 	DDX_Control(pDX, IDC_BUTTON_STOP_MIC, m_chkStopMic);
+	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
 }
 
 
@@ -41,9 +43,12 @@ BEGIN_MESSAGE_MAP(CAgoraMultiChannelDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CAgoraMultiChannelDlg::OnEIDLocalAudioStats)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CAgoraMultiChannelDlg::OnEIDLocalAudioStateChange)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CAgoraMultiChannelDlg::OnEIDLocalVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_SNAPSHOT_TAKEN), &CAgoraMultiChannelDlg::onEIDSnapshotTaken)
 	
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVE_CHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonExChannel)
+	ON_BN_CLICKED(IDC_BUTTON_SNAPSHOT_EX, &CAgoraMultiChannelDlg::OnBnClickedButtonExSnapshot)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
@@ -54,6 +59,7 @@ void CAgoraMultiChannelDlg::InitCtrlText()
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_btnExChannel.SetWindowText(MultiChannelCtrlJoinExChannel);
 	m_chkStopMic.SetWindowTextW(MultiChannelCtrlStopMic);
+	m_btnExSnapshot.SetWindowTextW(MultiChannelCtrlTakeSnapshotEx);
 }
 
 
@@ -260,6 +266,35 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonExChannel()
 	}
 }
 
+void CAgoraMultiChannelDlg::OnBnClickedButtonExSnapshot()
+{
+	if (!m_rtcEngine || !m_initialize || !m_joinExChannel || m_secondChannelEventHandler.GetRemoteUid() <= 0) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Please join ex channel and make sure there are users in the ex channel!"));
+		return;
+	}
+
+	TCHAR szFilePath[MAX_PATH];
+	::GetModuleFileName(NULL, szFilePath, MAX_PATH);
+	LPTSTR lpLastSlash = _tcsrchr(szFilePath, _T('\\'));
+
+
+	SIZE_T nNameLen = MAX_PATH - (lpLastSlash - szFilePath + 1);
+	_tcscpy_s(lpLastSlash + 1, nNameLen, _T("snapshot_ex.jpg"));
+	char filePath[MAX_PATH];
+	wcstombs(filePath, szFilePath, wcslen(szFilePath) + 1);
+
+	m_rtcEngine->takeSnapshotEx(m_exChannelRtcConn, m_secondChannelEventHandler.GetRemoteUid(), filePath);
+}
+
+void CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_edtDetailInfo.SetWindowText(strDetail);
+}
+
 
 void CAgoraMultiChannelDlg::joinSecondChannel(CString channelName)
 {
@@ -364,7 +399,6 @@ LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	}
 	
 	
-	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
@@ -433,6 +467,24 @@ LRESULT CAgoraMultiChannelDlg::OnEIDLocalVideoStats(WPARAM wParam, LPARAM lParam
 	return 0;
 }
 
+
+LRESULT CAgoraMultiChannelDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onEIDSnapshotTaken===");
+	CString* filePath = reinterpret_cast<CString*>(wParam);
+
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	int errCode = (int)lParam;
+	strInfo.Format(_T("snapshot taken err:%d"), errCode);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (errCode == 0) {
+		strInfo.Format(_T("path: %s"), *filePath);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+
+	delete filePath;
+	return 0;
+}
+
 /*
 note:
 	Join the channel callback.This callback method indicates that the client
@@ -468,6 +520,7 @@ parameters:
 */
 void CAgoraMultiChannelEventHandler::onUserJoined(agora::rtc::uid_t uid, int elapsed)
 {
+	m_remoteUid = uid;
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)m_channelId);
 	}
@@ -490,6 +543,9 @@ parameters:
 */
 void CAgoraMultiChannelEventHandler::onUserOffline(agora::rtc::uid_t uid, agora::rtc::USER_OFFLINE_REASON_TYPE reason)
 {
+	if (m_remoteUid == uid) {
+		m_remoteUid = -1;
+	}
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)m_channelId);
 	}
@@ -540,5 +596,15 @@ void CAgoraMultiChannelEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE source,
 		LocalVideoStats* s = new LocalVideoStats;
 		*s = stats;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, source);
+	}
+}
+
+void CAgoraMultiChannelEventHandler::onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode)
+{
+	if (m_hMsgHanlder) {
+		CString* _filePath = new CString;
+		_filePath->Format(_T("%s"), utf82cs(std::string(filePath)));
+
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SNAPSHOT_TAKEN), (WPARAM)_filePath, errCode);
 	}
 }
