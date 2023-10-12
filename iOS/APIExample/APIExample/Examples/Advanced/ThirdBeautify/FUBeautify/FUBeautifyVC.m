@@ -96,8 +96,7 @@
     }];
 }
 - (IBAction)onTapCameraSwitch:(id)sender {
-    [self.rtcEngineKit switchCamera];
-    self.beautyAPI.isFrontCamera = !self.beautyAPI.isFrontCamera;
+    [self.beautyAPI switchCamera];
 }
 
 - (IBAction)onTapBeautyButton:(UIButton *)sender {
@@ -142,7 +141,7 @@
     [self.rtcEngineKit leaveChannel:nil];
     [self.rtcEngineKit stopPreview];
     [AgoraRtcEngineKit destroy];
-    [self.beautyAPI destory];
+    [self.beautyAPI destroy];
 }
 
 @end

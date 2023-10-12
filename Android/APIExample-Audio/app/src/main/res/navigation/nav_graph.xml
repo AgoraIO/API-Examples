@@ -51,8 +51,17 @@
         <action
             android:id="@+id/action_mainFragment_rhythm_player"
             app:destination="@id/RhythmPlayer" />
+        <action
+            android:id="@+id/action_mainFragment_to_AudioWaveform"
+            app:destination="@id/AudioWaveform" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/AudioWaveform"
+        android:name="io.agora.api.example.examples.audio.AudioWaveform"
+        android:label="@string/item_audiowaveform"
+        tools:layout="@layout/fragment_audio_waveform" />
 
     <fragment
         android:id="@+id/joinChannelAudio"

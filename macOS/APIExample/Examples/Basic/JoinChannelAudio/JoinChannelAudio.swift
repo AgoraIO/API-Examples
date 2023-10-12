@@ -264,6 +264,13 @@ class JoinChannelAudioMain: BaseViewController {
         }
     }
     
+    private var storagePath: String {
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
+        let path = "/Users/\(programPath)/Downloads"
+        return path
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -417,8 +424,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         let localVideo = videos[0]
         localVideo.uid = uid
         let config = AgoraAudioRecordingConfiguration()
-        let tempPath = NSTemporaryDirectory() as NSString
-        config.filePath = "\(tempPath)/audio.mp4"
+        config.filePath = "\(storagePath)/audio.wav"
         config.fileRecordOption = .mic
         config.quality = .high
         config.sampleRate = 44100

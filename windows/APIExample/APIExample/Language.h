@@ -148,6 +148,10 @@ extern wchar_t beautyCtrlEnable[INFO_LEN];
 extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlAINSMode[INFO_LEN];
+extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN] ;
@@ -231,6 +235,7 @@ extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
 extern wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN];
 extern wchar_t MultiChannelCtrlStopMic[INFO_LEN];
+extern wchar_t MultiChannelCtrlTakeSnapshotEx[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
@@ -315,11 +320,7 @@ extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
-//beauty audio
 
-extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
-extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
-extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
 
 extern wchar_t liveBraodcastingReport[INFO_LEN];
 extern wchar_t liveBraodcastingModeration[INFO_LEN];
@@ -328,6 +329,7 @@ extern wchar_t liveBraodcastingHardEncode[INFO_LEN];
 extern wchar_t liveBraodcastingAutoEncode[INFO_LEN];
 extern wchar_t liveBraodcastingSoftEncode[INFO_LEN];
 extern wchar_t liveBraodcastingBFrame[INFO_LEN];
+extern wchar_t liveBraodcastingVideoImage[INFO_LEN];
 extern wchar_t liveBraodcastingFristFrameOpt[INFO_LEN];
 extern wchar_t liveBraodcastingFristFrameTip[INFO_LEN];
 extern wchar_t liveBraodcastingFristFrameTipContent[INFO_LEN];

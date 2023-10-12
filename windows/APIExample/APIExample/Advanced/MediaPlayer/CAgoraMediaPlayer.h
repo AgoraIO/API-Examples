@@ -209,8 +209,6 @@ public:
 	void InitCtrlText();
 	//Initialize media player.
 	void InitMediaPlayerKit();
-	//Uninitialized media player .
-	void UnInitMediaPlayerKit();
 	//Initialize the Agora SDK
 	bool InitAgora();
 	//UnInitialize the Agora SDK
@@ -272,6 +270,5 @@ public:
 	afx_msg void OnBnClickedButtonPublishVideo();
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
-	afx_msg void OnDestroy();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

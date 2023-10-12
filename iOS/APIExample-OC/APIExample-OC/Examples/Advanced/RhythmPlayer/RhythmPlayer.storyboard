@@ -81,7 +81,7 @@
         <!--Rhythm Player-->
         <scene sceneID="que-Ud-pJZ">
             <objects>
-                <viewController storyboardIdentifier="RhythmPlayer" title="Simple Filter" id="ubR-Ki-mJL" userLabel="Rhythm Player" customClass="RhythmPlayer" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RhythmPlayer" id="ubR-Ki-mJL" userLabel="Rhythm Player" customClass="RhythmPlayer" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hj2-VB-5x0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

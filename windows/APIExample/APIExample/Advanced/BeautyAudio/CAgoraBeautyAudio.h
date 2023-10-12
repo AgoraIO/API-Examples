@@ -113,6 +113,7 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	CAudioChangeEventHandler m_eventHandler;
 	std::map<CString, std::vector<CString>> m_mapBeauty;
+	std::vector<CString> m_setAINSMode;
 	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
 	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
 	std::map<CString, VOICE_CONVERSION_PRESET>m_setVoiceConversion;
@@ -146,6 +147,8 @@ public:
 	afx_msg void OnSelchangeListInfoBroadcasting();
 
 	CComboBox m_cmbPerverbPreset;
+	CComboBox m_cmbAINSMode;
+	CComboBox m_staAINSMode;
 	CButton m_btnSetBeautyAudio;
 	CStatic m_staAudioType;
 	afx_msg void OnSelchangeComboAudioChanger();
@@ -155,4 +158,5 @@ public:
 	CEdit m_edtParam2;
 	afx_msg void OnSelchangeComboAudioPerverbPreset();
 	afx_msg void OnNMCustomdrawSliderVoiceFormant(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnCbnSelchangeComboAudioAinsMode();
 };

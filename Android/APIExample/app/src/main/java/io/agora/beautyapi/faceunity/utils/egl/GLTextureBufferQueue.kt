@@ -58,7 +58,8 @@ class GLTextureBufferQueue(
                     GLES20.GL_TEXTURE_2D,
                     outSize.width,
                     outSize.height,
-                    iN.isFrontCamera
+                    iN.isFrontCamera,
+                    iN.isMirror
                 )
                 cacheTextureOuts[cacheIndex] = out
             } else if (out.width != outSize.width || out.height != outSize.height) {
@@ -69,7 +70,8 @@ class GLTextureBufferQueue(
                     out.textureType,
                     outSize.width,
                     outSize.height,
-                    iN.isFrontCamera
+                    iN.isFrontCamera,
+                    iN.isMirror
                 )
                 cacheTextureOuts[cacheIndex] = out
             } else if(out.isFrontCamera != iN.isFrontCamera){
@@ -79,7 +81,8 @@ class GLTextureBufferQueue(
                     out.textureType,
                     out.width,
                     out.height,
-                    iN.isFrontCamera
+                    iN.isFrontCamera,
+                    iN.isMirror
                 )
                 cacheTextureOuts[cacheIndex] = out
             }
@@ -90,10 +93,19 @@ class GLTextureBufferQueue(
             glFrameBuffer.setRotation(iN.rotation)
             if (iN.transform != null) {
                 glFrameBuffer.setTexMatrix(iN.transform)
-                glFrameBuffer.setFlipH(!iN.isFrontCamera)
+                var flipH = iN.isFrontCamera
+                if(iN.isMirror){
+                    flipH = !flipH
+                }
+                glFrameBuffer.setFlipH(flipH)
             } else {
-                glFrameBuffer.setFlipH(iN.isFrontCamera)
+                var flipH = !iN.isFrontCamera
+                if(iN.isMirror){
+                    flipH = !flipH
+                }
+                glFrameBuffer.setFlipH(flipH)
             }
+            glFrameBuffer.setFlipV(iN.flipV)
             glFrameBuffer.process(iN.textureId, iN.textureType)
             GLES20.glFinish()
             out.index = cacheIndex
@@ -147,7 +159,9 @@ class GLTextureBufferQueue(
         val width: Int,
         val height: Int,
         val rotation: Int,
+        val flipV: Boolean,
         val isFrontCamera: Boolean,
+        val isMirror: Boolean,
         val transform: FloatArray?,
         val tag: Any? = null
     )

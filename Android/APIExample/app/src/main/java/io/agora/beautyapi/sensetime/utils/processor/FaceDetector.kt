@@ -26,17 +26,13 @@ package io.agora.beautyapi.sensetime.utils.processor
 
 import android.content.Context
 import android.hardware.Camera
-import android.util.Log
 import android.util.Size
-import com.sensetime.stmobile.STMobileAnimalNative
-import com.sensetime.stmobile.STMobileEffectNative
-import com.sensetime.stmobile.STMobileHumanActionNative
-import com.sensetime.stmobile.model.STAnimalFace
-import com.sensetime.stmobile.model.STAnimalFaceInfo
-import com.sensetime.stmobile.model.STHumanAction
-import com.sensetime.stmobile.params.STRotateType
-import io.agora.beautyapi.sensetime.utils.utils.Accelerometer
-import io.agora.beautyapi.sensetime.utils.utils.LogUtils
+import com.softsugar.stmobile.STMobileEffectNative
+import com.softsugar.stmobile.STMobileHumanActionNative
+import com.softsugar.stmobile.model.STHumanAction
+import com.softsugar.stmobile.model.STMobileAnimalResult
+import com.softsugar.stmobile.params.STRotateType
+import io.agora.beautyapi.sensetime.utils.LogUtils
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
@@ -44,8 +40,7 @@ import java.util.concurrent.Future
 
 class FaceDetector(
     private val humanActionNative: STMobileHumanActionNative,
-    private val effectNative: STMobileEffectNative,
-    private val animalNative: STMobileAnimalNative?
+    private val effectNative: STMobileEffectNative
 ) {
     private val TAG = "FaceDetector"
 
@@ -54,14 +49,16 @@ class FaceDetector(
 
     private val cacheSize = 2
     private var cacheIndex = 0
-    private var cacheAnimalFaceInfo = arrayOfNulls<STAnimalFaceInfo>(cacheSize)
     private val cacheFutureQueue = ConcurrentLinkedQueue<Future<Int>>()
     private var isDequeBegin = false
 
     fun enableSensor(context: Context, enable: Boolean) {
         if (enable) {
             if (accelerometer == null) {
-                accelerometer = Accelerometer(context)
+                accelerometer =
+                    Accelerometer(
+                        context
+                    )
                 accelerometer?.start()
             }
         } else {
@@ -80,9 +77,6 @@ class FaceDetector(
             future.cancel(true)
             future = cacheFutureQueue.poll()
         }
-        cacheAnimalFaceInfo.forEachIndexed { index, _ ->
-            cacheAnimalFaceInfo[index] = null
-        }
     }
 
     fun release(){
@@ -98,14 +92,12 @@ class FaceDetector(
             cacheFutureQueue.offer(
                 workerThread.submit(Callable {
                     detectHuman(iN, index)
-                    detectAnim(iN, index)
                     return@Callable index
                 })
             )
-            Log.d(TAG, "Detector enqueue cacheIndex: $cacheIndex, queue size: $size")
             cacheIndex = (cacheIndex + 1) % cacheSize
         } else {
-            Log.e(TAG, "Detector queue is full!!")
+            LogUtils.e(TAG, "Detector queue is full!!")
         }
         return size
     }
@@ -118,17 +110,14 @@ class FaceDetector(
             if(future != null){
                 try {
                     val ret = future.get()
-                    Log.d(TAG, "Detector dequeue cacheIndex: $ret, queue size: $size")
                     return DetectorOut(
-                        humanActionNative.getNativeHumanActionResultCache(ret),
-                        cacheAnimalFaceInfo[ret]
+                        humanActionNative.getNativeHumanActionResultCache(ret)
                     )
                 }catch (e: Exception){
-                    Log.d(TAG, "Detector dequeue timeout: $e")
+                    LogUtils.e(TAG, "Detector dequeue timeout: $e")
                 }
             }
         }
-        Log.d(TAG, "Detector dequeue null, queue size: $size")
         return null
     }
 
@@ -142,8 +131,6 @@ class FaceDetector(
             )
         val deviceOrientation: Int =
             accelerometer?.direction ?: Accelerometer.CLOCKWISE_ANGLE.Deg90.value
-        val startHumanAction = System.currentTimeMillis()
-        //Log.e(TAG, "config: "+Long.toHexString(mDetectConfig) );
         val ret: Int = humanActionNative.nativeHumanActionDetectPtr(
             iN.bytes,
             iN.bytesType,
@@ -153,48 +140,27 @@ class FaceDetector(
             iN.height
         )
 
-        LogUtils.i(
-            TAG,
-            "human action cost time: %d, ret: %d",
-            System.currentTimeMillis() - startHumanAction, ret
-        )
         //nv21数据为横向，相对于预览方向需要旋转处理，前置摄像头还需要镜像
         val rotatedSize = when (iN.orientation) {
             90, 270 -> Size(iN.height, iN.width)
             else -> Size(iN.width, iN.height)
+        }
+        var mirror = iN.isFront
+        if(iN.isMirror){
+            mirror = !mirror
         }
         STHumanAction.nativeHumanActionRotateAndMirror(
             humanActionNative,
             humanActionNative.nativeHumanActionResultPtr,
             rotatedSize.width,
             rotatedSize.height,
-            if (iN.isFront) Camera.CameraInfo.CAMERA_FACING_FRONT else Camera.CameraInfo.CAMERA_FACING_BACK,
+            if (mirror) Camera.CameraInfo.CAMERA_FACING_FRONT else Camera.CameraInfo.CAMERA_FACING_BACK,
             iN.orientation,
             deviceOrientation
         )
-        LogUtils.i("processDoubleInput index=$index nativeHumanActionDetect end")
         humanActionNative.updateNativeHumanActionCache(index)
     }
 
-    private fun detectAnim(
-        iN: DetectorIn,
-        index: Int
-    ) {
-        if (animalNative != null) {
-            animalDetect(
-                iN.bytes,
-                iN.bytesType,
-                getHumanActionOrientation(iN.isFront, iN.orientation),
-                iN.height,
-                iN.width,
-                index,
-                iN.isFront,
-                iN.orientation
-            )
-        } else {
-            cacheAnimalFaceInfo[index] = STAnimalFaceInfo(null, 0)
-        }
-    }
 
     /**
      * 用于humanActionDetect接口。根据传感器方向计算出在不同设备朝向时，人脸在buffer中的朝向
@@ -222,104 +188,6 @@ class FaceDetector(
         return orientation
     }
 
-    private fun animalDetect(
-        imageData: ByteArray?,
-        format: Int,
-        orientation: Int,
-        width: Int,
-        height: Int,
-        index: Int,
-        isFrontCamera: Boolean,
-        cameraRotation: Int
-    ) {
-        val need = animalNative != null
-        if (need) {
-            val catDetectStartTime = System.currentTimeMillis()
-            val animalDetectConfig = effectNative.animalDetectConfig.toInt()
-            Log.d(
-                TAG,
-                "test_animalDetect: $animalDetectConfig"
-            )
-            var animalFaces: Array<STAnimalFace?>? = animalNative?.animalDetect(
-                imageData,
-                format,
-                orientation,
-                animalDetectConfig,
-                width,
-                height
-            )
-            LogUtils.i(
-                TAG,
-                "animal detect cost time: %d",
-                System.currentTimeMillis() - catDetectStartTime
-            )
-            if (!animalFaces.isNullOrEmpty()) {
-                Log.d(
-                    TAG,
-                    "animalDetect: " + animalFaces.size
-                )
-                animalFaces = processAnimalFaceResult(
-                    animalFaces,
-                    width,
-                    height,
-                    isFrontCamera,
-                    cameraRotation
-                )
-            }
-            cacheAnimalFaceInfo[index] = STAnimalFaceInfo(animalFaces, animalFaces?.size ?: 0)
-        } else {
-            cacheAnimalFaceInfo[index] = STAnimalFaceInfo(null, 0)
-        }
-    }
-
-
-    private fun processAnimalFaceResult(
-        animalFaces: Array<STAnimalFace?>?,
-        width: Int,
-        height: Int,
-        isFrontCamera: Boolean,
-        cameraOrientation: Int
-    ): Array<STAnimalFace?>? {
-        var animalFacesRet = animalFaces ?: return null
-        if (isFrontCamera && cameraOrientation == 90) {
-            animalFacesRet = STMobileAnimalNative.animalRotate(
-                height,
-                width,
-                STRotateType.ST_CLOCKWISE_ROTATE_90,
-                animalFacesRet,
-                animalFacesRet.size
-            )
-            animalFacesRet =
-                STMobileAnimalNative.animalMirror(width, animalFacesRet, animalFacesRet.size)
-        } else if (isFrontCamera && cameraOrientation == 270) {
-            animalFacesRet = STMobileAnimalNative.animalRotate(
-                height,
-                width,
-                STRotateType.ST_CLOCKWISE_ROTATE_270,
-                animalFacesRet,
-                animalFacesRet.size
-            )
-            animalFacesRet =
-                STMobileAnimalNative.animalMirror(width, animalFacesRet, animalFacesRet.size)
-        } else if (!isFrontCamera && cameraOrientation == 270) {
-            animalFacesRet = STMobileAnimalNative.animalRotate(
-                height,
-                width,
-                STRotateType.ST_CLOCKWISE_ROTATE_270,
-                animalFacesRet,
-                animalFacesRet.size
-            )
-        } else if (!isFrontCamera && cameraOrientation == 90) {
-            animalFacesRet = STMobileAnimalNative.animalRotate(
-                height,
-                width,
-                STRotateType.ST_CLOCKWISE_ROTATE_90,
-                animalFacesRet,
-                animalFacesRet.size
-            )
-        }
-        return animalFacesRet
-    }
 
     data class DetectorIn(
         val bytes: ByteArray,
@@ -327,11 +195,12 @@ class FaceDetector(
         val width: Int,
         val height: Int,
         val isFront: Boolean,
-        val orientation: Int,
+        val isMirror: Boolean,
+        val orientation: Int
     )
 
     data class DetectorOut(
         val humanResult: Long,
-        val animalResult: STAnimalFaceInfo?
+        val animalResult: STMobileAnimalResult? = null
     )
 }

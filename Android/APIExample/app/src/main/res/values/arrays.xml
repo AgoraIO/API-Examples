@@ -202,6 +202,10 @@
         <item>VD_960x540</item>
         <item>VD_960x720</item>
         <item>VD_1280x720</item>
+        <item>VD_1920x1080</item>
+        <item>VD_1920x1080</item>
+        <item>VD_2540x1440</item>
+        <item>VD_3840x2160</item>
     </string-array>
     <string-array name="orientations">
         <item>ORIENTATION_MODE_ADAPTIVE</item>
@@ -215,6 +219,7 @@
         <item>FRAME_RATE_FPS_15</item>
         <item>FRAME_RATE_FPS_24</item>
         <item>FRAME_RATE_FPS_30</item>
+        <item>FRAME_RATE_FPS_60</item>
     </string-array>
 
     <string-array name="beauty">
@@ -258,6 +263,19 @@
         <item>@string/audio_route_headset</item>
         <item>@string/audio_route_headset_typec</item>
         <item>@string/audio_route_headset_bluetooth</item>
+    </string-array>
+
+    <string-array name="third_party_players">
+        <item>@string/third_party_player_ijk</item>
+        <item>@string/third_party_player_exo</item>
+        <item>@string/third_party_player_native</item>
+    </string-array>
+
+    <string-array name="audio_ains_mode">
+        <item>OFF</item>
+        <item>AINS_MODE_BALANCED</item>
+        <item>AINS_MODE_AGGRESSIVE</item>
+        <item>AINS_MODE_ULTRALOWLATENCY</item>
     </string-array>
 
 </resources>

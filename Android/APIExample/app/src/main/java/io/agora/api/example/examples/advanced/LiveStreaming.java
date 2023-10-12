@@ -40,6 +40,7 @@ import io.agora.api.example.databinding.FragmentLiveStreamingBinding;
 import io.agora.api.example.databinding.FragmentLiveStreamingSettingBinding;
 import io.agora.api.example.databinding.FragmentLiveStreamingVideoTrackingBinding;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.FileUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.ClientRoleOptions;
@@ -47,6 +48,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.ImageTrackOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import io.agora.rtc2.video.WatermarkOptions;
@@ -176,6 +178,20 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateVideoView();
             }
+        });
+        mSettingBinding.switchVideoImage.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!isHost && isChecked){
+                showShortToast("Please join channel with broadcast role firstly.");
+                buttonView.setChecked(false);
+                return;
+            }
+            String path = requireContext().getExternalCacheDir().getPath();
+            String fileName = "bg_blue.png";
+            FileUtils.copyFilesFromAssets(requireContext(), fileName, path);
+            engine.enableVideoImageSource(isChecked, new ImageTrackOptions(
+                    path + File.separator + fileName,
+                    15
+            ));
         });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
@@ -592,13 +608,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
-
                     if (isLocalVideoForeground) {
                         foreGroundVideo.setReportUid(uid);
                     } else {
                         backGroundVideo.setReportUid(uid);
                     }
-
                 }
             });
         }
