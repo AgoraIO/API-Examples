@@ -142,17 +142,18 @@ cd ${WORKSPACE}
 # sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 
+SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 # 上传IPA
-PAYLOAD_PATH="${TARGET_NAME}_${BUILD_NUMBER}_Payload"
+PAYLOAD_PATH="${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_Payload"
 mkdir "${PAYLOAD_PATH}"
 # mv "${TARGET_NAME}_${BUILD_NUMBER}_iOS.ipa" "${PAYLOAD_PATH}"
-mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
+mv "${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
-7za a "${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
-python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}_IPA.zip" --project
+7za a "${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_IPA.zip" --project
 
 # 删除IPA文件夹
-rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
+rm -rf ${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}.xcarchive
 rm -rf *.zip
 rm -rf ${PAYLOAD_PATH}
 
