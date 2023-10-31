@@ -1,0 +1,22 @@
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+detekt {
+
+    toolVersion = "1.23.1"
+
+    // Builds the AST in parallel. Rules are always executed in parallel.
+    // Can lead to speedups in larger projects. `false` by default.
+    parallel = true
+
+    // Define the detekt configuration(s) you want to use.
+    // Defaults to the default detekt configuration.
+    config.setFrom("${rootDir.absolutePath}/detekt-config.yml")
+
+    // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
+    baseline = file("${rootDir.absolutePath}/detekt-baseline.xml")
+}
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1"
+}
+
