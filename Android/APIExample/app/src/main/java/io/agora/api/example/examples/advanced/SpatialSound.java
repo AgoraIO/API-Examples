@@ -49,6 +49,9 @@ import io.agora.spatialaudio.LocalSpatialAudioConfig;
 import io.agora.spatialaudio.RemoteVoicePositionInfo;
 import io.agora.spatialaudio.SpatialAudioZone;
 
+/**
+ * The type Spatial sound.
+ */
 @Example(
         index = 22,
         group = ADVANCED,
@@ -91,7 +94,7 @@ public class SpatialSound extends BaseFragment {
             return;
         }
         try {
-            /**Creates an RtcEngine instance.
+            /*Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
              *              How to get the App ID</a>
@@ -104,7 +107,7 @@ public class SpatialSound extends BaseFragment {
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -214,7 +217,7 @@ public class SpatialSound extends BaseFragment {
 
         engine.setClientRole(io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
@@ -224,7 +227,7 @@ public class SpatialSound extends BaseFragment {
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.autoSubscribeAudio = true;
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -294,7 +297,7 @@ public class SpatialSound extends BaseFragment {
     private void showMediaPlayerSettingDialog(IMediaPlayer mediaPlayer) {
         String key = "MediaPlayer_" + mediaPlayer.getMediaPlayerId();
         BottomSheetDialog dialog = cacheDialogs.get(key);
-        if(dialog != null){
+        if (dialog != null) {
             dialog.show();
             return;
         }
@@ -341,7 +344,7 @@ public class SpatialSound extends BaseFragment {
     private void showRemoteUserSettingDialog(int uid) {
         String key = "RemoteUser_" + uid;
         BottomSheetDialog dialog = cacheDialogs.get(key);
-        if(dialog != null){
+        if (dialog != null) {
             dialog.show();
             return;
         }
@@ -401,7 +404,7 @@ public class SpatialSound extends BaseFragment {
             }
 
             @Override
-            public void onPositionChanged(long position_ms) {
+            public void onPositionChanged(long positionMs) {
 
             }
 
@@ -467,15 +470,15 @@ public class SpatialSound extends BaseFragment {
     private float[] getViewRelativeSizeInAxis(View view) {
         return new float[]{
                 AXIS_MAX_DISTANCE * view.getWidth() * 1.0f / (rootView.getWidth() / 2.0f),
-                AXIS_MAX_DISTANCE * view.getHeight() * 1.0f / (rootView.getHeight() / 2.0f) ,
+                AXIS_MAX_DISTANCE * view.getHeight() * 1.0f / (rootView.getHeight() / 2.0f),
         };
     }
 
     private BottomSheetDialog showCommonSettingDialog(boolean isMute, SpatialAudioParams params,
-                                         CompoundButton.OnCheckedChangeListener muteCheckListener,
-                                         CompoundButton.OnCheckedChangeListener blurCheckListener,
-                                         CompoundButton.OnCheckedChangeListener airborneCheckListener,
-                                         SeekBar.OnSeekBarChangeListener attenuationSeekChangeListener
+                                                      CompoundButton.OnCheckedChangeListener muteCheckListener,
+                                                      CompoundButton.OnCheckedChangeListener blurCheckListener,
+                                                      CompoundButton.OnCheckedChangeListener airborneCheckListener,
+                                                      SeekBar.OnSeekBarChangeListener attenuationSeekChangeListener
     ) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_spatial_sound, null);
@@ -566,12 +569,15 @@ public class SpatialSound extends BaseFragment {
                     v.setTranslationY(newTranY);
                     onPositionChanged();
                     break;
-                case MotionEvent.ACTION_UP:
+                default:
                     break;
             }
             return true;
         }
 
+        /**
+         * On position changed.
+         */
         protected abstract void onPositionChanged();
     }
 
@@ -579,7 +585,7 @@ public class SpatialSound extends BaseFragment {
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private class InnerRtcEngineEventHandler extends IRtcEngineEventHandler {
+    private final class InnerRtcEngineEventHandler extends IRtcEngineEventHandler {
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             super.onJoinChannelSuccess(channel, uid, elapsed);

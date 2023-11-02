@@ -13,11 +13,21 @@ import io.agora.api.example.annotation.Example;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 
+/**
+ * The type Example section.
+ */
 public class ExampleSection extends Section {
     private final String mTitle;
     private final List<Example> mValues;
     private final MainFragment.OnListFragmentInteractionListener mListener;
 
+    /**
+     * Instantiates a new Example section.
+     *
+     * @param title    the title
+     * @param items    the items
+     * @param listener the listener
+     */
     public ExampleSection(String title, List<Example> items, MainFragment.OnListFragmentInteractionListener listener) {
         super(SectionParameters.builder().headerResourceId(R.layout.layout_main_list_section).itemResourceId(R.layout.layout_main_list_item).build());
         mTitle = title;
@@ -65,11 +75,28 @@ public class ExampleSection extends Section {
         }
     }
 
+    /**
+     * The type View holder.
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * The M view.
+         */
         final View mView;
+        /**
+         * The M name view.
+         */
         final TextView mNameView;
+        /**
+         * The M item.
+         */
         Example mItem;
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param view the view
+         */
         ViewHolder(View view) {
             super(view);
             mView = view;

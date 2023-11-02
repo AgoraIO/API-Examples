@@ -47,6 +47,11 @@ import java.nio.ByteBuffer
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
+/**
+ * Byte dance beauty a p i impl
+ *
+ * @constructor Create empty Byte dance beauty a p i impl
+ */
 class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
     private val TAG = "ByteDanceBeautyAPIImpl"
     private val reportId = "scenarioAPI"
@@ -72,9 +77,41 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
     private var localVideoRenderMode = Constants.RENDER_MODE_HIDDEN
 
     private enum class BeautyProcessType{
-        UNKNOWN, TEXTURE_OES, TEXTURE_2D, I420
+        /**
+         * Unknown
+         *
+         * @constructor Create empty Unknown
+         */
+        UNKNOWN,
+
+        /**
+         * Texture Oes
+         *
+         * @constructor Create empty Texture Oes
+         */
+        TEXTURE_OES,
+
+        /**
+         * Texture 2d
+         *
+         * @constructor Create empty Texture 2d
+         */
+        TEXTURE_2D,
+
+        /**
+         * I420
+         *
+         * @constructor Create empty I420
+         */
+        I420
     }
 
+    /**
+     * Initialize
+     *
+     * @param config
+     * @return
+     */
     override fun initialize(config: Config): Int {
         if (this.config != null) {
             LogUtils.e(TAG, "initialize >> The beauty api has been initialized!")
@@ -94,6 +131,12 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
+    /**
+     * Enable
+     *
+     * @param enable
+     * @return
+     */
     override fun enable(enable: Boolean): Int {
         LogUtils.i(TAG, "enable >> enable = $enable")
         if (config == null) {
@@ -113,6 +156,13 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
+    /**
+     * Setup local video
+     *
+     * @param view
+     * @param renderMode
+     * @return
+     */
     override fun setupLocalVideo(view: View, renderMode: Int): Int {
         val rtcEngine = config?.rtcEngine
         if(rtcEngine == null){
@@ -130,6 +180,12 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_VIEW_TYPE_ERROR.value
     }
 
+    /**
+     * On frame
+     *
+     * @param videoFrame
+     * @return
+     */
     override fun onFrame(videoFrame: VideoFrame): Int {
         val conf = config
         if (conf == null) {
@@ -154,6 +210,15 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_FRAME_SKIPPED.value
     }
 
+    /**
+     * Set beauty preset
+     *
+     * @param preset
+     * @param beautyNodePath
+     * @param beauty4ItemNodePath
+     * @param reSharpNodePath
+     * @return
+     */
     override fun setBeautyPreset(
         preset: BeautyPreset,
         beautyNodePath: String,
@@ -236,12 +301,24 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
+    /**
+     * Set parameters
+     *
+     * @param key
+     * @param value
+     */
     override fun setParameters(key: String, value: String) {
         when (key) {
             "beauty_mode" -> beautyMode = value.toInt()
         }
     }
 
+    /**
+     * Update camera config
+     *
+     * @param config
+     * @return
+     */
     override fun updateCameraConfig(config: CameraConfig): Int {
         LogUtils.i(TAG, "updateCameraConfig >> oldCameraConfig=$cameraConfig, newCameraConfig=$config")
         cameraConfig = CameraConfig(config.frontMirror, config.backMirror)
@@ -250,8 +327,17 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
+    /**
+     * Is front camera
+     *
+     */
     override fun isFrontCamera() = isFrontCamera
 
+    /**
+     * Release
+     *
+     * @return
+     */
     override fun release(): Int {
         val conf = config
         if(conf == null){
@@ -533,7 +619,7 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
         })
     }
 
-    private fun getNV21Buffer(videoFrame: VideoFrame, rotate: Boolean = false): ByteArray? {
+    private fun getNV21Buffer(videoFrame: VideoFrame): ByteArray? {
         val buffer = videoFrame.buffer
         val i420Buffer = buffer as? I420Buffer ?: buffer.toI420()
         val width = i420Buffer.width
@@ -562,29 +648,75 @@ class ByteDanceBeautyAPIImpl : ByteDanceBeautyAPI, IVideoFrameObserver {
 
     // IVideoFrameObserver implements
 
+    /**
+     * On capture video frame
+     *
+     * @param sourceType
+     * @param videoFrame
+     * @return
+     */
     override fun onCaptureVideoFrame(sourceType: Int, videoFrame: VideoFrame?): Boolean {
         videoFrame ?: return false
         return processBeauty(videoFrame)
     }
 
+    /**
+     * On pre encode video frame
+     *
+     * @param sourceType
+     * @param videoFrame
+     */
     override fun onPreEncodeVideoFrame(sourceType: Int, videoFrame: VideoFrame?) = false
 
+    /**
+     * On media player video frame
+     *
+     * @param videoFrame
+     * @param mediaPlayerId
+     */
     override fun onMediaPlayerVideoFrame(videoFrame: VideoFrame?, mediaPlayerId: Int) = false
 
+    /**
+     * On render video frame
+     *
+     * @param channelId
+     * @param uid
+     * @param videoFrame
+     */
     override fun onRenderVideoFrame(
         channelId: String?,
         uid: Int,
         videoFrame: VideoFrame?
     ) = false
 
+    /**
+     * Get video frame process mode
+     *
+     */
     override fun getVideoFrameProcessMode() = IVideoFrameObserver.PROCESS_MODE_READ_WRITE
 
+    /**
+     * Get video format preference
+     *
+     */
     override fun getVideoFormatPreference() = IVideoFrameObserver.VIDEO_PIXEL_DEFAULT
 
+    /**
+     * Get rotation applied
+     *
+     */
     override fun getRotationApplied() = false
 
+    /**
+     * Get mirror applied
+     *
+     */
     override fun getMirrorApplied() = captureMirror && !enable
 
+    /**
+     * Get observed frame position
+     *
+     */
     override fun getObservedFramePosition() = IVideoFrameObserver.POSITION_POST_CAPTURER
 
 }

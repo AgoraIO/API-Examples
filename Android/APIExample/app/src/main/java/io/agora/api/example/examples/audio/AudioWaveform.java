@@ -27,6 +27,9 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 
+/**
+ * The type Audio waveform.
+ */
 @Example(
         index = 17,
         group = ADVANCED,

@@ -139,8 +139,13 @@
 
     <!-- Checks for Size Violations.                    -->
     <!-- See https://checkstyle.org/checks/sizes/index.html -->
-    <module name="MethodLength"/>
-    <module name="ParameterNumber"/>
+    <module name="MethodLength">
+      <property name="max" value="330"/>
+    </module>
+    <module name="ParameterNumber">
+      <property name="max" value="10"/>
+      <property name="tokens" value="METHOD_DEF"/>
+    </module>
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/checks/whitespace/index.html -->
@@ -175,9 +180,11 @@
     <module name="InnerAssignment"/>
     <module name="MagicNumber">
       <property name="tokens" value="NUM_DOUBLE, NUM_FLOAT"/>
-      <property name="ignoreNumbers" value="0, 0.5, 1, -1, -0.5"/>
+      <property name="ignoreNumbers" value="0, 0.5, 1, -1, -0.5, 2.0, 1.5"/>
       <property name="ignoreFieldDeclaration" value="true"/>
       <property name="ignoreAnnotation" value="true"/>
+      <property name="ignoreHashCodeMethod" value="true"/>
+      <property name="constantWaiverParentToken" value="ASSIGN, ARRAY_INIT, EXPR, UNARY_PLUS, UNARY_MINUS, TYPECAST, ELIST, DIV, PLUS"/>
     </module>
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>

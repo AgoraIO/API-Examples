@@ -32,7 +32,10 @@ import java.nio.FloatBuffer;
  * Some OpenGL utility functions.
  */
 public abstract class GlUtil {
-    //public static final String TAG = "Grafika";
+    /**
+     * The constant TAG.
+     */
+//public static final String TAG = "Grafika";
     public static final String TAG = "mqi";
     /**
      * Identity matrix for general use.  Don't modify or life will get weird.
@@ -53,6 +56,8 @@ public abstract class GlUtil {
     /**
      * Creates a new program from the supplied vertex and fragment shaders.
      *
+     * @param vertexSource   the vertex source
+     * @param fragmentSource the fragment source
      * @return A handle to the program, or 0 on failure.
      */
     public static int createProgram(String vertexSource, String fragmentSource) {
@@ -89,6 +94,8 @@ public abstract class GlUtil {
     /**
      * Compiles the provided shader source.
      *
+     * @param shaderType the shader type
+     * @param source     the source
      * @return A handle to the shader, or 0 on failure.
      */
     public static int loadShader(int shaderType, String source) {
@@ -109,6 +116,8 @@ public abstract class GlUtil {
 
     /**
      * Checks to see if a GLES error has been raised.
+     *
+     * @param op the op
      */
     public static void checkGlError(String op) {
         int error = GLES20.glGetError();
@@ -123,6 +132,9 @@ public abstract class GlUtil {
      * could not be found, but does not set the GL error.
      * <p>
      * Throws a RuntimeException if the location is invalid.
+     *
+     * @param location the location
+     * @param label    the label
      */
     public static void checkLocation(int location, String label) {
         if (location < 0) {
@@ -200,6 +212,9 @@ public abstract class GlUtil {
 
     /**
      * Allocates a direct float buffer, and populates it with the float array data.
+     *
+     * @param coords the coords
+     * @return the float buffer
      */
     public static FloatBuffer createFloatBuffer(float[] coords) {
         // Allocate a direct ByteBuffer, using 4 bytes per float, and copy coords into it.
@@ -236,6 +251,9 @@ public abstract class GlUtil {
      * Creates a texture object suitable for use with this program.
      * <p>
      * On exit, the texture will be bound.
+     *
+     * @param textureTarget the texture target
+     * @return the int
      */
     public static int createTextureObject(int textureTarget) {
         int[] textures = new int[1];
@@ -259,6 +277,11 @@ public abstract class GlUtil {
         return texId;
     }
 
+    /**
+     * Delete texture object.
+     *
+     * @param textureId the texture id
+     */
     public static void deleteTextureObject(int textureId) {
         int[] textures = new int[1];
         textures[0] = textureId;
@@ -266,6 +289,16 @@ public abstract class GlUtil {
         GlUtil.checkGlError("glDeleteTextures");
     }
 
+    /**
+     * Change mvp matrix float [ ].
+     *
+     * @param mvpMatrix     the mvp matrix
+     * @param viewWidth     the view width
+     * @param viewHeight    the view height
+     * @param textureWidth  the texture width
+     * @param textureHeight the texture height
+     * @return the float [ ]
+     */
     public static float[] changeMVPMatrix(float[] mvpMatrix, float viewWidth, float viewHeight, float textureWidth, float textureHeight) {
         float scale = viewWidth * textureHeight / viewHeight / textureWidth;
         if (scale == 1) {

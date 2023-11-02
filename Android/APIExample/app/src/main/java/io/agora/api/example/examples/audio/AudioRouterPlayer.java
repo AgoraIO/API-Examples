@@ -17,6 +17,9 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.databinding.FragmentAudiorouterPlayerBinding;
 
+/**
+ * The type Audio router player.
+ */
 @Example(
         index = 17,
         group = ADVANCED,
@@ -41,7 +44,7 @@ public class AudioRouterPlayer extends BaseFragment {
 
         mBinding.btnJoin.setOnClickListener(v -> {
             String channelId = mBinding.etChannel.getText().toString();
-            if(TextUtils.isEmpty(channelId)){
+            if (TextUtils.isEmpty(channelId)) {
                 showAlert("Please enter channel id firstly!");
                 return;
             }

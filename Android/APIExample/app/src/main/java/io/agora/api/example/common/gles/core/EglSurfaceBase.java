@@ -35,15 +35,26 @@ import java.nio.ByteOrder;
  * There can be multiple surfaces associated with a single context.
  */
 public class EglSurfaceBase {
+    /**
+     * The constant TAG.
+     */
     protected static final String TAG = GlUtil.TAG;
 
-    // EglCore object we're associated with.  It may be associated with multiple surfaces.
+    /**
+     * The M egl core.
+     */
+// EglCore object we're associated with.  It may be associated with multiple surfaces.
     protected EglCore mEglCore;
 
     private EGLSurface mEGLSurface = EGL14.EGL_NO_SURFACE;
     private int mWidth = -1;
     private int mHeight = -1;
 
+    /**
+     * Instantiates a new Egl surface base.
+     *
+     * @param eglCore the egl core
+     */
     protected EglSurfaceBase(EglCore eglCore) {
         mEglCore = eglCore;
     }
@@ -68,6 +79,9 @@ public class EglSurfaceBase {
 
     /**
      * Creates an off-screen surface.
+     *
+     * @param width  the width
+     * @param height the height
      */
     public void createOffscreenSurface(int width, int height) {
         if (mEGLSurface != EGL14.EGL_NO_SURFACE) {
@@ -84,6 +98,8 @@ public class EglSurfaceBase {
      * If this is called on a window surface, and the underlying surface is in the process
      * of changing size, we may not see the new size right away (e.g. in the "surfaceChanged"
      * callback).  The size should match after the next buffer swap.
+     *
+     * @return the width
      */
     public int getWidth() {
         if (mWidth < 0) {
@@ -95,6 +111,8 @@ public class EglSurfaceBase {
 
     /**
      * Returns the surface's height, in pixels.
+     *
+     * @return the height
      */
     public int getHeight() {
         if (mHeight < 0) {
@@ -110,7 +128,8 @@ public class EglSurfaceBase {
     public void releaseEglSurface() {
         mEglCore.releaseSurface(mEGLSurface);
         mEGLSurface = EGL14.EGL_NO_SURFACE;
-        mWidth = mHeight = -1;
+        mWidth = -1;
+        mHeight = -1;
     }
 
     /**
@@ -123,6 +142,8 @@ public class EglSurfaceBase {
     /**
      * Makes our EGL context and surface current for drawing, using the supplied surface
      * for reading.
+     *
+     * @param readSurface the read surface
      */
     public void makeCurrentReadFrom(EglSurfaceBase readSurface) {
         mEglCore.makeCurrent(mEGLSurface, readSurface.mEGLSurface);
@@ -154,6 +175,9 @@ public class EglSurfaceBase {
      * Saves the EGL surface to a file.
      * <p>
      * Expects that this object's EGL surface is current.
+     *
+     * @param file the file
+     * @throws IOException the io exception
      */
     public void saveFrame(File file) throws IOException {
         if (!mEglCore.isCurrent(mEGLSurface)) {
@@ -191,7 +215,9 @@ public class EglSurfaceBase {
             bmp.compress(Bitmap.CompressFormat.PNG, 90, bos);
             bmp.recycle();
         } finally {
-            if (bos != null) bos.close();
+            if (bos != null) {
+                bos.close();
+            }
         }
         Log.d(TAG, "Saved " + width + "x" + height + " frame as '" + filename + "'");
     }

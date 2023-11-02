@@ -11,14 +11,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RomUtils {
+/**
+ * The type Rom utils.
+ */
+public final class RomUtils {
     private static final String TAG = "RomUtils";
+
+    private RomUtils() {
+
+    }
 
     /**
      * 获取 emui 版本号
-     * @return
+     *
+     * @return emui version
      */
     public static double getEmuiVersion() {
+        final double defaultVersion = 4.0;
         try {
             String emuiVersion = getSystemProperty("ro.build.version.emui");
             String version = emuiVersion.substring(emuiVersion.indexOf("_") + 1);
@@ -26,7 +35,7 @@ public class RomUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 4.0;
+        return defaultVersion;
     }
 
     /**
@@ -46,6 +55,12 @@ public class RomUtils {
         return -1;
     }
 
+    /**
+     * Gets system property.
+     *
+     * @param propName the prop name
+     * @return the system property
+     */
     public static String getSystemProperty(String propName) {
         String line;
         BufferedReader input = null;
@@ -68,35 +83,56 @@ public class RomUtils {
         }
         return line;
     }
+
+    /**
+     * Check is huawei rom boolean.
+     *
+     * @return the boolean
+     */
     public static boolean checkIsHuaweiRom() {
         return Build.MANUFACTURER.contains("HUAWEI");
     }
 
     /**
      * check if is miui ROM
+     *
+     * @return the boolean
      */
     public static boolean checkIsMiuiRom() {
         return !TextUtils.isEmpty(getSystemProperty("ro.miui.ui.version.name"));
     }
 
+    /**
+     * Check is meizu rom boolean.
+     *
+     * @return the boolean
+     */
     public static boolean checkIsMeizuRom() {
         //return Build.MANUFACTURER.contains("Meizu");
-        String meizuFlymeOSFlag  = getSystemProperty("ro.build.display.id");
-        if (TextUtils.isEmpty(meizuFlymeOSFlag)){
+        String meizuFlymeOSFlag = getSystemProperty("ro.build.display.id");
+        if (TextUtils.isEmpty(meizuFlymeOSFlag)) {
             return false;
-        }else if (meizuFlymeOSFlag.contains("flyme") || meizuFlymeOSFlag.toLowerCase().contains("flyme")){
-            return  true;
-        }else {
-            return false;
+        } else {
+            return meizuFlymeOSFlag.contains("flyme") || meizuFlymeOSFlag.toLowerCase().contains("flyme");
         }
     }
 
+    /**
+     * Check is 360 rom boolean.
+     *
+     * @return the boolean
+     */
     public static boolean checkIs360Rom() {
         //fix issue https://github.com/zhaozepeng/FloatWindowPermission/issues/9
         return Build.MANUFACTURER.contains("QiKU")
                 || Build.MANUFACTURER.contains("360");
     }
 
+    /**
+     * Check is oppo rom boolean.
+     *
+     * @return the boolean
+     */
     public static boolean checkIsOppoRom() {
         //https://github.com/zhaozepeng/FloatWindowPermission/pull/26
         return Build.MANUFACTURER.contains("OPPO") || Build.MANUFACTURER.contains("oppo");

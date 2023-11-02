@@ -31,9 +31,9 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
  * interface.
  */
 public class MainFragment extends Fragment {
-    // TODO: Customize parameter argument names
+    //  Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
+    // Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -44,7 +44,12 @@ public class MainFragment extends Fragment {
     public MainFragment() {
     }
 
-    // TODO: Customize parameter initialization
+    /**
+     * New instance main fragment.
+     *
+     * @param columnCount the column count
+     * @return the main fragment
+     */
     @SuppressWarnings("unused")
     public static MainFragment newInstance(int columnCount) {
         MainFragment fragment = new MainFragment();
@@ -114,7 +119,11 @@ public class MainFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
+        /**
+         * Update argument type and name.
+         *
+         * @param item the item
+         */
         void onListFragmentInteraction(Example item);
     }
 

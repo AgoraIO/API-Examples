@@ -46,6 +46,9 @@ import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Join multiple channel.
+ */
 @Example(
         index = 13,
         group = ADVANCED,
@@ -96,22 +99,22 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -119,7 +122,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -142,7 +145,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
             engine.stopPreview();
@@ -169,14 +172,13 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channel1);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -224,7 +226,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
 
     private void takeSnapshotEx() {
         int remoteUid = fl_remote2.getReportUid();
-        if( remoteUid <= 0 || !joinedEx){
+        if (remoteUid <= 0 || !joinedEx) {
             showLongToast(getString(R.string.remote_screenshot_tip));
             return;
         }
@@ -254,7 +256,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
@@ -268,13 +270,13 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -360,7 +362,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             super.onLocalAudioStateChanged(state, error);
             Log.i(TAG, String.format("onLocalAudioStateChanged state:%d!", state));
             showLongToast(String.format(Locale.US, "onLocalAudioStateChanged state:%d!", state));
-            if(state == Constants.LOCAL_AUDIO_STREAM_STATE_STOPPED){
+            if (state == Constants.LOCAL_AUDIO_STREAM_STATE_STOPPED) {
                 runOnUIThread(() -> fl_local.setLocalAudioStats(new LocalAudioStats()));
                 showAlert(getString(R.string.microphone_stop_tip));
             }
@@ -382,7 +384,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onRemoteAudioStats(RemoteAudioStats stats) {
             super.onRemoteAudioStats(stats);
             runOnUIThread(() -> {
-                if(fl_remote2.getReportUid() == stats.uid){
+                if (fl_remote2.getReportUid() == stats.uid) {
                     fl_remote2.setRemoteAudioStats(stats);
                 }
             });
@@ -392,7 +394,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onRemoteVideoStats(RemoteVideoStats stats) {
             super.onRemoteVideoStats(stats);
             runOnUIThread(() -> {
-                if(fl_remote2.getReportUid() == stats.uid){
+                if (fl_remote2.getReportUid() == stats.uid) {
                     fl_remote2.setRemoteVideoStats(stats);
                 }
             });
@@ -409,14 +411,13 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onUserJoined(int uid, int elapsed) {
             Log.i(TAG, "channel2 onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            runOnUIThread(() ->
-            {
-                /**Display remote video stream*/
+            runOnUIThread(() -> {
+                /*Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (fl_remote2.getChildCount() > 0) {
                     fl_remote2.removeAllViews();
@@ -601,7 +602,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onRemoteAudioStats(RemoteAudioStats stats) {
             super.onRemoteAudioStats(stats);
             runOnUIThread(() -> {
-                if(fl_remote.getReportUid() == stats.uid){
+                if (fl_remote.getReportUid() == stats.uid) {
                     fl_remote.setRemoteAudioStats(stats);
                 }
             });
@@ -611,7 +612,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onRemoteVideoStats(RemoteVideoStats stats) {
             super.onRemoteVideoStats(stats);
             runOnUIThread(() -> {
-                if(fl_remote.getReportUid() == stats.uid){
+                if (fl_remote.getReportUid() == stats.uid) {
                     fl_remote.setRemoteVideoStats(stats);
                 }
             });
@@ -629,14 +630,13 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
@@ -673,7 +673,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));

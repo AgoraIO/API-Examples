@@ -13,6 +13,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
+/**
+ * The type Av call float view.
+ */
 public class AVCallFloatView extends FrameLayout {
     private static final String TAG = "AVCallFloatView";
 
@@ -51,6 +54,11 @@ public class AVCallFloatView extends FrameLayout {
     private WindowManager.LayoutParams mParams = null;
 
 
+    /**
+     * Instantiates a new Av call float view.
+     *
+     * @param context the context
+     */
     public AVCallFloatView(Context context) {
         super(context);
         initView();
@@ -60,10 +68,20 @@ public class AVCallFloatView extends FrameLayout {
         windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
     }
 
+    /**
+     * Sets params.
+     *
+     * @param params the params
+     */
     public void setParams(WindowManager.LayoutParams params) {
         mParams = params;
     }
 
+    /**
+     * Sets is showing.
+     *
+     * @param isShowing the is showing
+     */
     public void setIsShowing(boolean isShowing) {
         this.isShowing = isShowing;
     }
@@ -92,7 +110,7 @@ public class AVCallFloatView extends FrameLayout {
                 if (Math.abs(xDownInScreen - xInScreen) <= ViewConfiguration.get(getContext()).getScaledTouchSlop()
                         && Math.abs(yDownInScreen - yInScreen) <= ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
                     // 点击效果
-                    // Toast.makeText(getContext(), "this float window is clicked", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "this float window is clicked");
                 } else {
                     //吸附效果
                     anchorToSide();
@@ -119,44 +137,44 @@ public class AVCallFloatView extends FrameLayout {
 
         int dp_25 = dp2px(15);
 
-        //1
-        if (middleX <= dp_25 + getWidth() / 2) {
+
+        if (middleX <= dp_25 + getWidth() / 2) { //1
             xDistance = dp_25 - mParams.x;
-        }
-        //2
-        else if (middleX <= screenWidth / 2) {
+        } else if (middleX <= screenWidth / 2) { //2
             xDistance = dp_25 - mParams.x;
-        }
-        //3
-        else if (middleX >= screenWidth - getWidth() / 2 - dp_25) {
+        } else if (middleX >= screenWidth - getWidth() / 2 - dp_25) { //3
             xDistance = screenWidth - mParams.x - getWidth() - dp_25;
-        }
-        //4
-        else {
+        } else { //4
             xDistance = screenWidth - mParams.x - getWidth() - dp_25;
         }
 
-        //1
-        if (mParams.y < dp_25) {
+
+        if (mParams.y < dp_25) { //1
             yDistance = dp_25 - mParams.y;
-        }
-        //2
-        else if (mParams.y + getHeight() + dp_25 >= screenHeight) {
+        } else if (mParams.y + getHeight() + dp_25 >= screenHeight) { //2
             yDistance = screenHeight - dp_25 - mParams.y - getHeight();
         }
         Log.e(TAG, "xDistance  " + xDistance + "   yDistance" + yDistance);
 
-        animTime = Math.abs(xDistance) > Math.abs(yDistance) ? (int) (((float) xDistance / (float) screenWidth) * 600f)
-                : (int) (((float) yDistance / (float) screenHeight) * 900f);
+        final float animFactorWidth = 600f;
+        final float animFactorHeight = 900f;
+        animTime = Math.abs(xDistance) > Math.abs(yDistance) ? (int) (((float) xDistance / (float) screenWidth) * animFactorWidth)
+                : (int) (((float) yDistance / (float) screenHeight) * animFactorHeight);
         this.post(new AnchorAnimRunnable(Math.abs(animTime), xDistance, yDistance, System.currentTimeMillis()));
     }
 
-    public int dp2px(float dp){
+    /**
+     * Dp 2 px int.
+     *
+     * @param dp the dp
+     * @return the int
+     */
+    public int dp2px(float dp) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
-    private class AnchorAnimRunnable implements Runnable {
+    private final class AnchorAnimRunnable implements Runnable {
 
         private int animTime;
         private long currentStartTime;
@@ -166,7 +184,7 @@ public class AVCallFloatView extends FrameLayout {
         private int startX;
         private int startY;
 
-        public AnchorAnimRunnable(int animTime, int xDistance, int yDistance, long currentStartTime) {
+        private AnchorAnimRunnable(int animTime, int xDistance, int yDistance, long currentStartTime) {
             this.animTime = animTime;
             this.currentStartTime = currentStartTime;
             interpolator = new AccelerateDecelerateInterpolator();

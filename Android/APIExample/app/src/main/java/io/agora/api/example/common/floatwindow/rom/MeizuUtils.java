@@ -13,11 +13,21 @@ import android.util.Log;
 
 import java.lang.reflect.Method;
 
-public class MeizuUtils {
+/**
+ * The type Meizu utils.
+ */
+public final class MeizuUtils {
     private static final String TAG = "MeizuUtils";
+
+    private MeizuUtils() {
+
+    }
 
     /**
      * 检测 meizu 悬浮窗权限
+     *
+     * @param context the context
+     * @return the boolean
      */
     public static boolean checkFloatWindowPermission(Context context) {
         final int version = Build.VERSION.SDK_INT;
@@ -29,6 +39,9 @@ public class MeizuUtils {
 
     /**
      * 去魅族权限申请页面
+     *
+     * @param context    the context
+     * @param errHandler the err handler
      */
     public static void applyPermission(Context context, Runnable errHandler) {
         try {
@@ -37,12 +50,12 @@ public class MeizuUtils {
             intent.putExtra("packageName", context.getPackageName());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        }catch (Exception e) {
+        } catch (Exception e) {
             try {
                 Log.e(TAG, "获取悬浮窗权限, 打开AppSecActivity失败, " + Log.getStackTraceString(e));
                 // 最新的魅族flyme 6.2.5 用上述方法获取权限失败, 不过又可以用下述方法获取权限了
                 // FloatWindowManager.commonROMPermissionApplyInternal(context);
-                if(errHandler != null){
+                if (errHandler != null) {
                     errHandler.run();
                 }
 

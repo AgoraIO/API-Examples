@@ -54,6 +54,9 @@ import io.agora.rtc2.gl.EglBaseProvider;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Push external video yuv.
+ */
 @Example(
         index = 7,
         group = ADVANCED,
@@ -106,22 +109,22 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -129,7 +132,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -158,9 +161,9 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             videoFileReader.stop();
         }
 
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
-            /**After joining a channel, the user must call the leaveChannel method to end the
+            /*After joining a channel, the user must call the leaveChannel method to end the
              * call before joining another channel. This method returns 0 if the user leaves the
              * channel and releases all resources related to the call. This method call is
              * asynchronous, and the user has not exited the channel when the method call returns.
@@ -217,8 +220,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -245,10 +247,10 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enables the video module.
         engine.enableVideo();
@@ -259,7 +261,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-        /**Configures the external video source.
+        /*Configures the external video source.
          * @param enable Sets whether or not to use the external video source:
          *                 true: Use the external video source.
          *                 false: Do not use the external video source.
@@ -282,13 +284,13 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                 ViewGroup.LayoutParams.MATCH_PARENT));
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -314,11 +316,11 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Push video frame by i420.
      *
-     * @param yuv i420 data
-     * @param width width
+     * @param yuv    i420 data
+     * @param width  width
      * @param height height
      */
-    private void pushVideoFrameByI420(byte[] yuv, int width, int height){
+    private void pushVideoFrameByI420(byte[] yuv, int width, int height) {
         JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
         i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
         i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
@@ -349,11 +351,11 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Push video frame by nv21.
      *
-     * @param nv21 nv21
-     * @param width width
+     * @param nv21   nv21
+     * @param width  width
      * @param height height
      */
-    private void pushVideoFrameByNV21(byte[] nv21, int width, int height){
+    private void pushVideoFrameByNV21(byte[] nv21, int width, int height) {
 
         VideoFrame.Buffer frameBuffer = new NV21Buffer(nv21, width, height, null);
 
@@ -380,11 +382,11 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Push video frame by nv12.
      *
-     * @param nv12 nv12 buffer.
-     * @param width width.
+     * @param nv12   nv12 buffer.
+     * @param width  width.
      * @param height height.
      */
-    private void pushVideoFrameByNV12(ByteBuffer nv12, int width, int height){
+    private void pushVideoFrameByNV12(ByteBuffer nv12, int width, int height) {
         VideoFrame.Buffer frameBuffer = new NV12Buffer(width, height, width, height, nv12, null);
 
         /*
@@ -410,13 +412,13 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Push video frame by texture id.
      *
-     * @param textureId texture id.
+     * @param textureId   texture id.
      * @param textureType texture type. rgb or oes.
-     * @param width width.
-     * @param height height.
+     * @param width       width.
+     * @param height      height.
      */
     @GLThread
-    private void pushVideoFrameByTexture(int textureId, VideoFrame.TextureBuffer.Type textureType, int width, int height){
+    private void pushVideoFrameByTexture(int textureId, VideoFrame.TextureBuffer.Type textureType, int width, int height) {
         VideoFrame.Buffer frameBuffer = new TextureBuffer(
                 EglBaseProvider.getCurrentEglContext(),
                 width,
@@ -531,14 +533,13 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
@@ -570,7 +571,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     fl_remote.removeAllViews();
@@ -584,8 +585,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
      * Yuv 2 texture id.
      * Run on gl thread.
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height heigh
      * @return rgba texture id
      */
@@ -600,8 +601,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Transform yuv to nv12
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height height
      * @return nv12
      */
@@ -634,8 +635,8 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
     /**
      * Transform yuv to nv21.
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height height
      * @return nv21
      */

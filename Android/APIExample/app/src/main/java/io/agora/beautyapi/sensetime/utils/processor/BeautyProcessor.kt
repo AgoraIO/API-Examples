@@ -20,8 +20,13 @@ import io.agora.beautyapi.sensetime.utils.LogUtils
 import io.agora.beautyapi.sensetime.utils.egl.GLCopyHelper
 import io.agora.beautyapi.sensetime.utils.egl.GLFrameBuffer
 import io.agora.beautyapi.sensetime.utils.egl.GLTextureBufferQueue
-import io.agora.beautyapi.sensetime.utils.processor.Accelerometer.CLOCKWISE_ANGLE
+import io.agora.beautyapi.sensetime.utils.processor.Accelerometer.ClockwiseAngle
 
+/**
+ * Beauty processor
+ *
+ * @constructor Create empty Beauty processor
+ */
 class BeautyProcessor : IBeautyProcessor {
     private val TAG = this::class.java.simpleName
 
@@ -48,6 +53,12 @@ class BeautyProcessor : IBeautyProcessor {
     @Volatile
     private var isReleased = false
 
+    /**
+     * Initialize
+     *
+     * @param effectNative
+     * @param humanActionNative
+     */
     override fun initialize(
         effectNative: STMobileEffectNative,
         humanActionNative: STMobileHumanActionNative
@@ -56,6 +67,10 @@ class BeautyProcessor : IBeautyProcessor {
         mFaceDetector = FaceDetector(humanActionNative, effectNative)
     }
 
+    /**
+     * Release
+     *
+     */
     override fun release() {
         isReleased = true
         mFaceDetector.release()
@@ -82,10 +97,21 @@ class BeautyProcessor : IBeautyProcessor {
         mSTMobileHardwareBufferNative = null
     }
 
+    /**
+     * Enable sensor
+     *
+     * @param context
+     * @param enable
+     */
     override fun enableSensor(context: Context, enable: Boolean) {
         mFaceDetector.enableSensor(context, enable)
     }
 
+    /**
+     * Trigger screen tap
+     *
+     * @param isDouble
+     */
     override fun triggerScreenTap(isDouble: Boolean) {
         LogUtils.d(
             TAG,
@@ -100,6 +126,12 @@ class BeautyProcessor : IBeautyProcessor {
     }
 
 
+    /**
+     * Process
+     *
+     * @param input
+     * @return
+     */
     override fun process(input: InputInfo): OutputInfo? {
         if (isReleased) {
             return null
@@ -423,6 +455,10 @@ class BeautyProcessor : IBeautyProcessor {
         return finalOutTextureId
     }
 
+    /**
+     * Reset
+     *
+     */
     override fun reset() {
         mFaceDetector.reset()
         glTextureBufferQueue.reset()
@@ -438,7 +474,7 @@ class BeautyProcessor : IBeautyProcessor {
 
 
     private fun getCurrentOrientation(): Int {
-        val dir = mFaceDetector.getAccelerometer()?.direction ?: CLOCKWISE_ANGLE.Deg90.value
+        val dir = mFaceDetector.getAccelerometer()?.direction ?: ClockwiseAngle.Deg90.value
         var orientation = dir - 1
         if (orientation < 0) {
             orientation = dir xor 3

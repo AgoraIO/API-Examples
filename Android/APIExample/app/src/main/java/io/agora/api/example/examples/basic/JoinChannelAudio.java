@@ -132,7 +132,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         audioRouteInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!joined){
+                if (!joined) {
                     return;
                 }
                 boolean isChatRoomMode = "CHATROOM".equals(audioScenarioInput.getSelectedItem());
@@ -208,22 +208,22 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -231,7 +231,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -254,7 +254,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -280,8 +280,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                     audioProfileInput.setEnabled(false);
@@ -289,7 +288,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -323,7 +322,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         } else if (v.getId() == R.id.microphone) {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
+            /*Turn off / on the microphone, stop / start local audio collection and push streaming.*/
             engine.muteLocalAudioStream(mute.isActivated());
         }
     }
@@ -333,7 +332,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
 
         int channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -359,14 +358,14 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -539,22 +538,22 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             showShortToast("onAudioRouteChanged : " + routing);
             runOnUIThread(() -> {
                 String selectedRouteStr = getString(R.string.audio_route_speakerphone);
-                if(routing == Constants.AUDIO_ROUTE_EARPIECE){
+                if (routing == Constants.AUDIO_ROUTE_EARPIECE) {
                     selectedRouteStr = getString(R.string.audio_route_earpiece);
-                }else if(routing == Constants.AUDIO_ROUTE_SPEAKERPHONE){
+                } else if (routing == Constants.AUDIO_ROUTE_SPEAKERPHONE) {
                     selectedRouteStr = getString(R.string.audio_route_speakerphone);
-                }else if(routing == Constants.AUDIO_ROUTE_HEADSET){
+                } else if (routing == Constants.AUDIO_ROUTE_HEADSET) {
                     selectedRouteStr = getString(R.string.audio_route_headset);
-                }else if(routing == Constants.AUDIO_ROUTE_HEADSETBLUETOOTH){
+                } else if (routing == Constants.AUDIO_ROUTE_HEADSETBLUETOOTH) {
                     selectedRouteStr = getString(R.string.audio_route_headset_bluetooth);
-                }else if(routing == Constants.AUDIO_ROUTE_USBDEVICE){
+                } else if (routing == Constants.AUDIO_ROUTE_USBDEVICE) {
                     selectedRouteStr = getString(R.string.audio_route_headset_typec);
                 }
 
                 int selection = 0;
                 for (int i = 0; i < audioRouteInput.getAdapter().getCount(); i++) {
                     String routeStr = (String) audioRouteInput.getItemAtPosition(i);
-                    if(routeStr.equals(selectedRouteStr)){
+                    if (routeStr.equals(selectedRouteStr)) {
                         selection = i;
                         break;
                     }

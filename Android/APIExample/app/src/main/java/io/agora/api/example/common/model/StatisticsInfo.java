@@ -1,40 +1,74 @@
 package io.agora.api.example.common.model;
 
-import io.agora.rtc2.IRtcEngineEventHandler.*;
 
+import io.agora.rtc2.IRtcEngineEventHandler;
+
+/**
+ * The type Statistics info.
+ */
 public class StatisticsInfo {
-    private LocalVideoStats localVideoStats = new LocalVideoStats();
-    private LocalAudioStats localAudioStats = new LocalAudioStats();
-    private RemoteVideoStats remoteVideoStats = new RemoteVideoStats();
-    private RemoteAudioStats remoteAudioStats = new RemoteAudioStats();
-    private RtcStats rtcStats = new RtcStats();
+    private IRtcEngineEventHandler.LocalVideoStats localVideoStats = new IRtcEngineEventHandler.LocalVideoStats();
+    private IRtcEngineEventHandler.LocalAudioStats localAudioStats = new IRtcEngineEventHandler.LocalAudioStats();
+    private IRtcEngineEventHandler.RemoteVideoStats remoteVideoStats = new IRtcEngineEventHandler.RemoteVideoStats();
+    private IRtcEngineEventHandler.RemoteAudioStats remoteAudioStats = new IRtcEngineEventHandler.RemoteAudioStats();
+    private IRtcEngineEventHandler.RtcStats rtcStats = new IRtcEngineEventHandler.RtcStats();
     private int quality;
-    private LastmileProbeResult lastMileProbeResult;
+    private IRtcEngineEventHandler.LastmileProbeResult lastMileProbeResult;
 
-    public void setLocalVideoStats(LocalVideoStats localVideoStats) {
+    /**
+     * Sets local video stats.
+     *
+     * @param localVideoStats the local video stats
+     */
+    public void setLocalVideoStats(IRtcEngineEventHandler.LocalVideoStats localVideoStats) {
         this.localVideoStats = localVideoStats;
     }
 
-    public void setLocalAudioStats(LocalAudioStats localAudioStats) {
+    /**
+     * Sets local audio stats.
+     *
+     * @param localAudioStats the local audio stats
+     */
+    public void setLocalAudioStats(IRtcEngineEventHandler.LocalAudioStats localAudioStats) {
         this.localAudioStats = localAudioStats;
     }
 
-    public void setRemoteVideoStats(RemoteVideoStats remoteVideoStats) {
+    /**
+     * Sets remote video stats.
+     *
+     * @param remoteVideoStats the remote video stats
+     */
+    public void setRemoteVideoStats(IRtcEngineEventHandler.RemoteVideoStats remoteVideoStats) {
         this.remoteVideoStats = remoteVideoStats;
     }
 
-    public void setRemoteAudioStats(RemoteAudioStats remoteAudioStats) {
+    /**
+     * Sets remote audio stats.
+     *
+     * @param remoteAudioStats the remote audio stats
+     */
+    public void setRemoteAudioStats(IRtcEngineEventHandler.RemoteAudioStats remoteAudioStats) {
         this.remoteAudioStats = remoteAudioStats;
     }
 
-    public void setRtcStats(RtcStats rtcStats) {
+    /**
+     * Sets rtc stats.
+     *
+     * @param rtcStats the rtc stats
+     */
+    public void setRtcStats(IRtcEngineEventHandler.RtcStats rtcStats) {
         this.rtcStats = rtcStats;
     }
 
+    /**
+     * Gets local video stats.
+     *
+     * @return the local video stats
+     */
     public String getLocalVideoStats() {
         StringBuilder builder = new StringBuilder();
         return builder
-                .append(""+localVideoStats.encodedFrameWidth)
+                .append("" + localVideoStats.encodedFrameWidth)
                 .append("×")
                 .append(localVideoStats.encodedFrameHeight)
                 .append(",")
@@ -65,6 +99,11 @@ public class StatisticsInfo {
                 .toString();
     }
 
+    /**
+     * Gets remote video stats.
+     *
+     * @return the remote video stats
+     */
     public String getRemoteVideoStats() {
         StringBuilder builder = new StringBuilder();
         return builder
@@ -96,12 +135,22 @@ public class StatisticsInfo {
                 .toString();
     }
 
+    /**
+     * Sets last mile quality.
+     *
+     * @param quality the quality
+     */
     public void setLastMileQuality(int quality) {
         this.quality = quality;
     }
 
-    public String getLastMileQuality(){
-        switch (quality){
+    /**
+     * Get last mile quality string.
+     *
+     * @return the string
+     */
+    public String getLastMileQuality() {
+        switch (quality) {
             case 1:
                 return "EXCELLENT";
             case 2:
@@ -123,9 +172,15 @@ public class StatisticsInfo {
         }
     }
 
+    /**
+     * Gets last mile result.
+     *
+     * @return the last mile result
+     */
     public String getLastMileResult() {
-        if(lastMileProbeResult == null)
+        if (lastMileProbeResult == null) {
             return null;
+        }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Rtt: ")
                 .append(lastMileProbeResult.rtt)
@@ -157,7 +212,12 @@ public class StatisticsInfo {
         return stringBuilder.toString();
     }
 
-    public void setLastMileProbeResult(LastmileProbeResult lastmileProbeResult) {
+    /**
+     * Sets last mile probe result.
+     *
+     * @param lastmileProbeResult the lastmile probe result
+     */
+    public void setLastMileProbeResult(IRtcEngineEventHandler.LastmileProbeResult lastmileProbeResult) {
         this.lastMileProbeResult = lastmileProbeResult;
     }
 
