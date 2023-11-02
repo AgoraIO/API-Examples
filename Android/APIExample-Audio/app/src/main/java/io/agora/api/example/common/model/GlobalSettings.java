@@ -28,7 +28,7 @@ public class GlobalSettings {
     public LocalAccessPointConfiguration getPrivateCloudConfig() {
         LocalAccessPointConfiguration config = new LocalAccessPointConfiguration();
         if(TextUtils.isEmpty(privateCloudIp)){
-            return config;
+            return null;
         }
         config.ipList = new ArrayList<>();
         config.ipList.add(privateCloudIp);
