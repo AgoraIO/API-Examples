@@ -26,6 +26,7 @@ enum Util {
                 advancedConfig.logUploadServer = logUploadServer
                 localAccessPointConfig.advancedConfig = advancedConfig
             }
+            // This api can only be used in the private media server scenario, otherwise some problems may occur.
             agoraKit.setLocalAccessPoint(withConfig: localAccessPointConfig)
         }
     }

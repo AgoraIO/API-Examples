@@ -33,6 +33,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 /**This demo demonstrates how to make a one-to-one voice call
  * @author cjw*/
@@ -126,7 +127,11 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
                     + "}"
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
-            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+            LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
+            if (localAccessPointConfiguration != null) {
+                // This api can only be used in the private media server scenario, otherwise some problems may occur.
+                engine.setLocalAccessPoint(localAccessPointConfiguration);
+            }
 
             return true;
         }
