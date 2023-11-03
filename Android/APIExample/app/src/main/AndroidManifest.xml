@@ -46,16 +46,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".examples.advanced.SwitchCameraScreenShare$MediaProjectFgService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="mediaProjection"  />
-
-        <service android:name=".examples.advanced.ScreenSharing$MediaProjectFgService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="mediaProjection"  />
-
         <activity
             android:name=".SettingActivity"
             android:label="@string/setting"
