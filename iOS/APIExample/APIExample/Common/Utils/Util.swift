@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import AgoraRtcKit
 
 enum Util {
-    
     /// Configuring Privatization Parameters
     static func configPrivatization(agoraKit: AgoraRtcEngineKit) {
         if !GlobalSettings.shared.getCache(key: "ip").isEmpty {
@@ -28,19 +28,5 @@ enum Util {
             }
             agoraKit.setLocalAccessPoint(withConfig: localAccessPointConfig)
         }
-    }
-}
-
-struct Throttle {
-    static var timer: Timer?
-    static func throttle(_ interval: TimeInterval, block: @escaping () -> Void) {
-        guard timer == nil else { return }
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { t in
-            // 一秒内只执行一次最后一次触发的函数
-            t.invalidate()
-            timer = nil
-            block()
-        }
-        RunLoop.current.add(timer!, forMode: .common)
     }
 }

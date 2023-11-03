@@ -10,18 +10,19 @@ import UIKit
 import Foundation
 import AgoraRtcKit
 
-class SpatialAudioEntry : UIViewController
-{
+class SpatialAudioEntry: UIViewController {
     @IBOutlet weak var channelTextField: UITextField!
 
     @IBAction func joinBtnClicked(sender: UIButton) {
         guard let channelName = channelTextField.text,
-              channelName.lengthOfBytes(using: .utf8) > 0 else {return}
+              channelName.lengthOfBytes(using: .utf8) > 0 else { return }
         channelTextField.resignFirstResponder()
         
         let identifier = "SpatialAudio"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
@@ -137,8 +138,9 @@ class SpatialAudioMain: BaseViewController {
         
     @objc func panGestureChanged(gesture: UIPanGestureRecognizer) {
         let move = gesture.translation(in: self.view)
-        var objectCenter = gesture.view!.center
-        objectCenter = CGPoint(x: objectCenter.x + move.x, y: objectCenter.y + move.y)
+        guard var objectCenter = gesture.view?.center else { return }
+        objectCenter = CGPoint(x: objectCenter.x + move.x,
+                               y: objectCenter.y + move.y)
         selfPostionView.center = objectCenter
         gesture.setTranslation(.zero, in: self.view)
         if gesture.state == .ended {
@@ -236,7 +238,7 @@ class SpatialAudioMain: BaseViewController {
         let mathAngle = deltaY > 0 ? cosAngle : (TwoPI - cosAngle)
         var spatialAngle = TwoPI + TwoPI / 4.0 - mathAngle
         if spatialAngle > TwoPI {
-            spatialAngle = spatialAngle - TwoPI
+            spatialAngle -= TwoPI
         }
         
         currentAngle = spatialAngle
@@ -246,8 +248,8 @@ class SpatialAudioMain: BaseViewController {
         let maxSpatailDistance = 30.0
         let spatialDistance = currentDistance * maxSpatailDistance / maxR
 
-        let posForward = spatialDistance * cos(currentAngle);
-        let posRight = spatialDistance * sin(currentAngle);
+        let posForward = spatialDistance * cos(currentAngle)
+        let posRight = spatialDistance * sin(currentAngle)
         let position = [NSNumber(value: posForward), NSNumber(value: posRight), NSNumber(0.0)]
         let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
         
@@ -298,7 +300,6 @@ extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
         }
     }
 }
-
 
 class SpatialAudioActionSheet: UIView {
     var onTapMuteSwitchClosure: ((Bool) -> Void)?
@@ -399,7 +400,6 @@ class SpatialAudioActionSheet: UIView {
         attenuationSilder.centerYAnchor.constraint(equalTo: attenuationLabel.centerYAnchor).isActive = true
         attenuationSilder.leadingAnchor.constraint(equalTo: attenuationLabel.trailingAnchor, constant: 15).isActive = true
     }
-    
     
     @objc
     private func onTapMuteSwitch(sender: UISwitch) {

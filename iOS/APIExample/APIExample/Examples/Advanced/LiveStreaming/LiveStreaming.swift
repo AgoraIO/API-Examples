@@ -9,13 +9,12 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class LiveStreamingEntry : UIViewController
-{
+class LiveStreamingEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var preloadButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "LiveStreaming"
-    var role:AgoraClientRole = .broadcaster
+    var role: AgoraClientRole = .broadcaster
     private var isFirstFrame: Bool = false
     private var backgroundColor: UInt32 = 0x000000
     
@@ -25,8 +24,8 @@ class LiveStreamingEntry : UIViewController
         preloadButton.setTitle("cancel preload".localized, for: .selected)
     }
     
-    func getRoleAction(_ role: AgoraClientRole) -> UIAlertAction{
-        return UIAlertAction(title: "\(role.description())", style: .default, handler: {[unowned self] action in
+    func getRoleAction(_ role: AgoraClientRole) -> UIAlertAction {
+        return UIAlertAction(title: "\(role.description())", style: .default, handler: { [unowned self] _ in
             self.role = role
             self.doJoin()
         })
@@ -42,7 +41,10 @@ class LiveStreamingEntry : UIViewController
     
     @IBAction func doOptimizeFirstFrameSwitch(_ sender: UISwitch) {
         if sender.isOn {
-            let alertVC = UIAlertController(title: "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized,
+            // swiftlint:disable line_length
+            let title = "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized
+            // swiftlint:enable line_length
+            let alertVC = UIAlertController(title: title,
                                             message: nil,
                                             preferredStyle: .alert)
             
@@ -77,12 +79,14 @@ class LiveStreamingEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let _ = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
-        //display role picker
-        let alert = UIAlertController(title: "Pick Role".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        // display role picker
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Pick Role".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getRoleAction(.broadcaster))
         alert.addAction(getRoleAction(.audience))
         alert.addCancelAction()
@@ -90,13 +94,14 @@ class LiveStreamingEntry : UIViewController
     }
     
     func doJoin() {
-        guard let channelName = channelTextField.text else {return}
+        guard let channelName = channelTextField.text else { return }
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName,
-                                     "role":self.role,
+        newViewController.configs = ["channelName": channelName,
+                                     "role": self.role,
                                      "isFirstFrame": isFirstFrame,
                                      "isPreloadChannel": preloadButton.isSelected,
                                      "backgroundColor": backgroundColor]
@@ -107,12 +112,12 @@ class LiveStreamingEntry : UIViewController
 class LiveStreamingMain: BaseViewController {
     var foregroundVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var backgroundVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
-    @IBOutlet weak var foregroundVideoContainer:UIView!
-    @IBOutlet weak var backgroundVideoContainer:UIView!
-    @IBOutlet weak var clientRoleToggleView:UIView!
-    @IBOutlet weak var ultraLowLatencyToggleView:UIView!
-    @IBOutlet weak var clientRoleToggle:UISwitch!
-    @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
+    @IBOutlet weak var foregroundVideoContainer: UIView!
+    @IBOutlet weak var backgroundVideoContainer: UIView!
+    @IBOutlet weak var clientRoleToggleView: UIView!
+    @IBOutlet weak var ultraLowLatencyToggleView: UIView!
+    @IBOutlet weak var clientRoleToggle: UISwitch!
+    @IBOutlet weak var ultraLowLatencyToggle: UISwitch!
     @IBOutlet weak var takeSnapshot: UIButton!
     @IBOutlet weak var watarMarkContainer: UIView!
     @IBOutlet weak var dualStreamContainer: UIView!
@@ -120,7 +125,6 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var bFrameContainer: UIView!
     @IBOutlet weak var codingSegment: UISegmentedControl!
     @IBOutlet weak var videoImageContainer: UIView!
-    
     
     var remoteUid: UInt? {
         didSet {
@@ -302,7 +306,6 @@ class LiveStreamingMain: BaseViewController {
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
     
-    
     // setup watermark
     @IBAction func onTapWatermarkSwitch(_ sender: UISwitch) {
         if sender.isOn {
@@ -320,7 +323,7 @@ class LiveStreamingMain: BaseViewController {
         }
     }
     @IBAction func onTapDualStreamSwitch(_ sender: UISwitch) {
-        agoraKit.enableDualStreamMode(sender.isOn)
+        agoraKit.setDualStreamMode(sender.isOn ? .enableSimulcastStream : .disableSimulcastStream)
         dualStreamTipsLabel.text = sender.isOn ? "已开启": "默认: 大流"
     }
     
@@ -333,7 +336,7 @@ class LiveStreamingMain: BaseViewController {
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
         showAlert(title: "Screenshot successful".localized, message: path)
     }
-    @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
+    @IBAction func onTapForegroundVideo(_ sender: UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
         let localVideoCanvas = AgoraRtcVideoCanvas()
         localVideoCanvas.uid = 0
@@ -351,14 +354,14 @@ class LiveStreamingMain: BaseViewController {
         }
     }
     
-    @IBAction func onToggleClientRole(_ sender:UISwitch) {
-        let role:AgoraClientRole = sender.isOn ? .broadcaster : .audience
+    @IBAction func onToggleClientRole(_ sender: UISwitch) {
+        let role: AgoraClientRole = sender.isOn ? .broadcaster : .audience
         updateClientRole(role)
     }
     
-    fileprivate func updateClientRole(_ role:AgoraClientRole) {
+    fileprivate func updateClientRole(_ role: AgoraClientRole) {
         self.role = role
-        if(role == .broadcaster) {
+        if role == .broadcaster {
             becomeBroadcaster()
         } else {
             becomeAudience()
@@ -369,12 +372,12 @@ class LiveStreamingMain: BaseViewController {
         agoraKit.updateChannel(with: option)
     }
     
-    @IBAction func onToggleUltraLowLatency(_ sender:UISwitch) {
+    @IBAction func onToggleUltraLowLatency(_ sender: UISwitch) {
         updateUltraLowLatency(sender.isOn)
     }
     
-    fileprivate func updateUltraLowLatency(_ enabled:Bool) {
-        if(self.role == .audience) {
+    fileprivate func updateUltraLowLatency(_ enabled: Bool) {
+        if self.role == .audience {
             self.isUltraLowLatencyOn = enabled
             updateClientRole(.audience)
         }
@@ -435,7 +438,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         backgroundVideo.statsInfo?.updateRemoteUid(remoteUid: uid)
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        //record remote uid
+        // record remote uid
         remoteUid = uid
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
@@ -459,8 +462,8 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        //clear remote uid
-        if(remoteUid == uid){
+        // clear remote uid
+        if remoteUid == uid {
             remoteUid = nil
         }
         
@@ -499,7 +502,10 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         backgroundVideo.statsInfo?.updateAudioStats(stats)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   videoRenderingTracingResultOfUid uid: UInt,
+                   currentEvent: AgoraMediaTraceEvent,
+                   tracingInfo: AgoraVideoRenderingTracingInfo) {
         backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
 }

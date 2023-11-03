@@ -215,7 +215,7 @@ class ToastView: UIView {
         label.leadingAnchor.constraint(equalTo: tagImageView.trailingAnchor, constant: 5).isActive = true
         label.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        label.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -10).isActive = true
+        label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
     }
 }
 extension UIViewController {
@@ -239,18 +239,15 @@ extension UIViewController {
         let viewController = viewController ?? keyWindow?.rootViewController
         
         if let navigationController = viewController as? UINavigationController,
-            !navigationController.viewControllers.isEmpty
-        {
+            !navigationController.viewControllers.isEmpty {
             return self.cl_topViewController(navigationController.viewControllers.last)
             
         } else if let tabBarController = viewController as? UITabBarController,
-            let selectedController = tabBarController.selectedViewController
-        {
+            let selectedController = tabBarController.selectedViewController {
             return self.cl_topViewController(selectedController)
             
         } else if let presentedController = viewController?.presentedViewController {
             return self.cl_topViewController(presentedController)
-            
         }
         return viewController
     }

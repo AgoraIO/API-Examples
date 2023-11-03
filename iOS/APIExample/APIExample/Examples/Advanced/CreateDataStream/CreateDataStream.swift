@@ -21,12 +21,13 @@ class CreateDataStreamEntry: UIViewController {
     
     @IBAction func doJoinPressed(sender: UIButton) {
         guard let channelName = channelTextField.text else { return }
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
@@ -74,8 +75,8 @@ class CreateDataStreamMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-        
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode else { return }
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
@@ -127,13 +128,9 @@ class CreateDataStreamMain: BaseViewController {
     /// send message
     @IBAction func onSendPress(_ sender: UIButton) {
         // indicate if stream has created
-        var streamCreated = false
         var streamId: Int = 0
         
-        let message = messageField.text
-        if message == nil || message!.isEmpty {
-            return
-        }
+        guard let message = messageField.text, !message.isEmpty else { return }
         // create the data stream
         // Each user can create up to five data streams during the lifecycle of the agoraKit
         let config = AgoraDataStreamConfig()
@@ -141,10 +138,11 @@ class CreateDataStreamMain: BaseViewController {
         if result != 0 {
             showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
         }
-        
-        let sendResult = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
+        let sendResult = agoraKit.sendStreamMessage(streamId,
+                                                    data: Data(message.utf8))
         if sendResult != 0 {
-            showAlert(title: "Error", message: "sendStreamMessage call failed: \(sendResult), please check your params")
+            showAlert(title: "Error", 
+                      message: "sendStreamMessage call failed: \(sendResult), please check your params")
         } else {
             messageField.text = nil
         }
@@ -197,7 +195,8 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
-    /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
+    /// callback when a remote user is joinning the channel, 
+    /// note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -214,7 +213,8 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
-    /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
+    /// callback when a remote user is leaving the channel, 
+    /// note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
@@ -238,12 +238,22 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
         showAlert(message: "from: \(uid) message: \(message)")
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
-        LogUtils.log(message: "didOccurStreamMessageErrorFromUid: \(uid), error \(error), missed \(missed), cached \(cached)", level: .info)
+    // swiftlint:disable function_parameter_count
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   didOccurStreamMessageErrorFromUid uid: UInt,
+                   streamId: Int,
+                   error: Int,
+                   missed: Int,
+                   cached: Int) {
+        // swiftlint:enable function_parameter_count
+        let message = "streamMessageErrorFromUid: \(uid), error \(error),"
+        let message1 = "missed \(missed), cached \(cached)"
+        LogUtils.log(message: message + message1, level: .info)
         showAlert(message: "didOccurStreamMessageErrorFromUid: \(uid)")
     }
     
-    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// Reports the statistics of the current call. 
+    /// The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
         localVideo.statsInfo?.updateChannelStats(stats)

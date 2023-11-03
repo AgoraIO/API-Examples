@@ -9,8 +9,7 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class MediaChannelRelayEntry : UIViewController
-{
+class MediaChannelRelayEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "MediaChannelRelay"
@@ -20,15 +19,17 @@ class MediaChannelRelayEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -78,7 +79,6 @@ class MediaChannelRelayMain: BaseViewController {
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
-        
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
@@ -88,7 +88,8 @@ class MediaChannelRelayMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -132,10 +133,10 @@ class MediaChannelRelayMain: BaseViewController {
     
     /// start relay
     @IBAction func doRelay(_ sender: UIButton) {
-        guard let destinationChannelName = relayChannelField.text else {return}
+        guard let destinationChannelName = relayChannelField.text else { return }
         
         // prevent operation if target channel name is empty
-        if(destinationChannelName.isEmpty) {
+        if destinationChannelName.isEmpty {
             self.showAlert(message: "Destination channel name is empty")
             return
         }
@@ -147,7 +148,7 @@ class MediaChannelRelayMain: BaseViewController {
         // configure target channel info
         let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
         config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-        agoraKit.startChannelMediaRelay(config)
+        agoraKit.startOrUpdateChannelMediaRelay(config)
     }
     
     /// stop relay
@@ -240,21 +241,23 @@ extension MediaChannelRelayMain: AgoraRtcEngineDelegate {
     /// callback when a media relay process state changed
     /// @param state state of media relay
     /// @param error error details if media relay reaches failure state
-    func rtcEngine(_ engine: AgoraRtcEngineKit, channelMediaRelayStateDidChange state: AgoraChannelMediaRelayState, error: AgoraChannelMediaRelayError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   channelMediaRelayStateDidChange state: AgoraChannelMediaRelayState,
+                   error: AgoraChannelMediaRelayError) {
         LogUtils.log(message: "channelMediaRelayStateDidChange: \(state.rawValue) error \(error.rawValue)", level: .info)
         
-        switch(state){
+        switch state {
         case .running:
             isRelaying = true
-            break
+            
         case .failure:
             showAlert(message: "Media Relay Failed: \(error.rawValue)")
             isRelaying = false
-            break
+            
         case .idle:
             isRelaying = false
-            break
-        default:break
+
+        default: break
         }
     }
     

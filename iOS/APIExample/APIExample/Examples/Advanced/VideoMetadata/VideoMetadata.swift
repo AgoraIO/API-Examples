@@ -10,8 +10,7 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class VideoMetadataEntry : UIViewController
-{
+class VideoMetadataEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "VideoMetadata"
@@ -22,14 +21,16 @@ class VideoMetadataEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -55,7 +56,7 @@ class VideoMetadataMain: BaseViewController {
     // metadata lenght limitation
     let MAX_META_LENGTH = 1024
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         sendMetadataButton.isHidden = true
@@ -87,7 +88,8 @@ class VideoMetadataMain: BaseViewController {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -119,7 +121,7 @@ class VideoMetadataMain: BaseViewController {
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-            if(result != 0) {
+            if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
@@ -243,7 +245,7 @@ extension VideoMetadataMain: AgoraRtcEngineDelegate {
 }
 
 /// AgoraMediaMetadataDelegate and AgoraMediaMetadataDataSource
-extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSource {
+extension VideoMetadataMain: AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSource {
     func metadataMaxSize() -> Int {
         // the data to send should not exceed this size
         return MAX_META_LENGTH
@@ -255,13 +257,13 @@ extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataData
     /// @param timestamp The timestamp (ms) of the current metadata.
     /// @return The metadata that you want to send in the format of Data
     func readyToSendMetadata(atTimestamp timestamp: TimeInterval, sourceType: AgoraVideoSourceType) -> Data? {
-        guard let metadata = self.metadata else {return nil}
+        guard let metadata = self.metadata else { return nil }
         
         // clear self.metadata to nil after any success send to avoid redundancy
         self.metadata = nil
         
-        if(metadata.count > MAX_META_LENGTH) {
-            //if data exceeding limit, return nil to not send anything
+        if metadata.count > MAX_META_LENGTH {
+            // if data exceeding limit, return nil to not send anything
             LogUtils.log(message: "invalid metadata: length exceeds \(MAX_META_LENGTH)", level: .info)
             return nil
         }
@@ -282,5 +284,4 @@ extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataData
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
 }

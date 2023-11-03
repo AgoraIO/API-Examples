@@ -6,14 +6,12 @@
 //  Copyright © 2022 Agora Corp. All rights reserved.
 //
 
-
 /// Content Inspect
 /// This module show how to use sdk ability to inspect sexy video content.
 /// 1.Enable content inspect: agoraKit.enableContentInspect(true, config:inspectConfig).
 /// 2.Call back mathod contentInspectResult of AgoraVideoFrameDelegate to get the inspect result.
 ///
 /// More detail: https://docs.agora.io/cn/content-moderation/landing-page?platform=iOS
-
 
 import AgoraRtcKit
 
@@ -23,7 +21,6 @@ class ContentInspectViewController: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
 
-    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +47,7 @@ class ContentInspectViewController: BaseViewController {
         
         let inspectConfig = AgoraContentInspectConfig()
         inspectConfig.modules = [moderateModule]
-        agoraKit.enableContentInspect(true, config:inspectConfig)
+        agoraKit.enableContentInspect(true, config: inspectConfig)
         
         let options = AgoraRtcChannelMediaOptions()
         options.publishCameraTrack = true
@@ -79,7 +76,10 @@ class ContentInspectViewController: BaseViewController {
     
     // MARK: - UI
     func setupUI () {
-        let rightBarButton = UIBarButtonItem(title: "SwitchCamera".localized, style: .plain, target: self, action: #selector(switchCameraBtnClicked))
+        let rightBarButton = UIBarButtonItem(title: "SwitchCamera".localized, 
+                                             style: .plain,
+                                             target: self,
+                                             action: #selector(switchCameraBtnClicked))
         self.navigationItem.rightBarButtonItem = rightBarButton
     }
     
@@ -103,7 +103,6 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
 }
-
 
 class ContentInspectEntryViewController: UIViewController {
     @IBOutlet weak var channelTextField: UITextField!

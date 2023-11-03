@@ -10,8 +10,7 @@ import AGEVideoLayout
 import AgoraRtcKit
 import ReplayKit
 
-class ScreenShareEntry : UIViewController
-{
+class ScreenShareEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "ScreenShare"
@@ -22,14 +21,16 @@ class ScreenShareEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: UIButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -107,7 +108,6 @@ class ScreenShareMain: BaseViewController {
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
-        
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
@@ -116,7 +116,8 @@ class ScreenShareMain: BaseViewController {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -140,9 +141,9 @@ class ScreenShareMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        
-
-        NetworkManager.shared.generateToken(channelName: channelName, uid: SCREEN_SHARE_UID, success: { token in
+        NetworkManager.shared.generateToken(channelName: channelName, 
+                                            uid: SCREEN_SHARE_UID,
+                                            success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: SCREEN_SHARE_UID, mediaOptions: self.option)
             self.agoraKit.muteRemoteAudioStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
             self.agoraKit.muteRemoteVideoStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
@@ -158,7 +159,7 @@ class ScreenShareMain: BaseViewController {
     
     func prepareSystemBroadcaster() {
         if #available(iOS 12.0, *) {
-            let frame = CGRect(x: 0, y:0, width: 60, height: 60)
+            let frame = CGRect(x: 0, y: 0, width: 60, height: 60)
             systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
             systemBroadcastPicker?.showsMicrophoneButton = false
             systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
@@ -320,7 +321,10 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   localVideoStateChangedOf state: AgoraVideoLocalState,
+                   error: AgoraLocalVideoStreamError,
+                   sourceType: AgoraVideoSourceType) {
         switch (state, sourceType) {
         case (.capturing, .screen):
             option.publishScreenCaptureVideo = !UIScreen.main.isCaptured
@@ -329,7 +333,8 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
             agoraKit.updateChannel(with: option)
     
             // 开始屏幕共享后, 如果想自动隐藏系统界面, 需要配置scheme, 使用scheme唤醒自身的方式关闭系统界面
-            // If you want to hide the system interface automatically after you start screen sharing, you need to configure scheme and use scheme to wake up the system interface
+            // If you want to hide the system interface automatically after you start screen sharing,
+            // you need to configure scheme and use scheme to wake up the system interface
             UIApplication.shared.open(URL(string: "APIExample://") ?? URL(fileURLWithPath: "APIExample://"))
             
         default: break
@@ -360,7 +365,6 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         remoteVideo.statsInfo?.updateAudioStats(stats)
     }
 }
-
 
 extension ScreenShareMain: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {

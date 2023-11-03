@@ -25,8 +25,7 @@ enum StreamingMode {
     }
 }
 
-class FusionCDNEntry : UIViewController
-{
+class FusionCDNEntry: UIViewController {
     @IBOutlet weak var joinButtonHost: AGButton!
     @IBOutlet weak var joinButtonAudience: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -34,23 +33,20 @@ class FusionCDNEntry : UIViewController
     let identifier = "FusionCDN"
     let hostView = "Host"
     let audienceView = "Audience"
-    var mode:StreamingMode = .agoraChannel
+    var mode: StreamingMode = .agoraChannel
     
     override func viewDidLoad() {
         super.viewDidLoad()
         modeBtn.setTitle("\(mode.description())", for: .normal)
     }
     
-    
-    func getStreamingMode(_ mode:StreamingMode) -> UIAlertAction {
-        return UIAlertAction(title: "\(mode.description())", style: .default, handler: {[unowned self] action in
+    func getStreamingMode(_ mode: StreamingMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(mode.description())", style: .default, handler: { [unowned self] _ in
             switch mode {
             case .agoraChannel:
                 channelTextField.placeholder = "Set Channel Name"
-                break
             case .cdnUrl:
                 channelTextField.placeholder = "Set CDN URL"
-                break
             }
             self.mode = mode
             self.modeBtn.setTitle("\(mode.description())", for: .normal)
@@ -66,28 +62,31 @@ class FusionCDNEntry : UIViewController
     }
     
     @IBAction func joinAsHost(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
-        
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: hostView) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: hostView) as? BaseViewController else { 
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "mode":mode]
+        newViewController.configs = ["channelName": channelName, "mode": mode]
         navigationController?.pushViewController(newViewController, animated: true)
     }
     
     @IBAction func joinAsAudience(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: audienceView) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: audienceView) as? BaseViewController else { 
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "mode":mode]
+        newViewController.configs = ["channelName": channelName, "mode": mode]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -104,7 +103,7 @@ class FusionCDNHost: BaseViewController {
     var cdnStreaming: Bool = false
     var rtcStreaming: Bool = false
     var transcoding = AgoraLiveTranscoding.default()
-    var videoViews: [UInt:VideoView] = [:]
+    var videoViews: [UInt: VideoView] = [:]
     var videoConfig: AgoraVideoEncoderConfiguration!
     let localUid = UInt.random(in: 1001...2000)
     
@@ -117,7 +116,7 @@ class FusionCDNHost: BaseViewController {
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area
+        // config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // Configuring Privatization Parameters
@@ -130,21 +129,22 @@ class FusionCDNHost: BaseViewController {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         
-        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let _ = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?
+            .selectedOption().value as? CGSize else {
+            return
+        }
         
         WIDTH = Int(resolution.height > resolution.width ? resolution.width : resolution.height)
         HEIGHT = Int(resolution.height > resolution.width ? resolution.height : resolution.width)
         videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
                                                      frameRate: AgoraVideoFrameRate.fps15,
-                                                        bitrate: AgoraVideoBitrateStandard,
-                                                        orientationMode: .fixedPortrait, mirrorMode: .auto)
+                                                     bitrate: AgoraVideoBitrateStandard,
+                                                     orientationMode: .fixedPortrait, mirrorMode: .auto)
         agoraKit.setVideoEncoderConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingAudioConfiguration(.default)
-        transcoding.size = CGSize(width: WIDTH, height: HEIGHT);
+        transcoding.size = CGSize(width: WIDTH, height: HEIGHT)
         transcoding.videoFramerate = 15
-        
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -166,22 +166,21 @@ class FusionCDNHost: BaseViewController {
         if mode == .agoraChannel {
             streamingUrl = "rtmp://push.webdemo.agoraio.cn/lbhd/\(channelName)"
             rtcSwitcher.isEnabled = false
-        }
-        else {
+        } else {
             streamingUrl = channelName
             rtcSwitcher.isHidden = true
             rtcSwitcherLabel.isHidden = true
         }
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangeRecordingVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
         agoraKit.adjustRecordingSignalVolume(value)
     }
     
     @IBAction func setStreaming(sender: AGButton) {
-        if rtcStreaming{
+        if rtcStreaming {
             stopRtcStreaming()
             
         } else if cdnStreaming {
@@ -204,7 +203,7 @@ class FusionCDNHost: BaseViewController {
             streamingButton.setTitle("Streaming", for: .normal)
             streamingButton.setTitleColor(.gray, for: .normal)
             agoraKit.startPreview()
-        } else{
+        } else {
             stopRskStreaming()
             resetUI()
             self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
@@ -256,7 +255,6 @@ class FusionCDNHost: BaseViewController {
         streamingButton.setTitleColor(.blue, for: .normal)
     }
     
-        
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
         rtcStreaming = sender.isOn
         if rtcStreaming {
@@ -269,7 +267,7 @@ class FusionCDNHost: BaseViewController {
     }
     
     func sortedViews() -> [VideoView] {
-        return Array(videoViews.values).sorted(by: { $0.uid < $1.uid })
+        Array(videoViews.values).sorted(by: { $0.uid < $1.uid })
     }
     
     func updateTranscodeLayout() {
@@ -282,19 +280,16 @@ class FusionCDNHost: BaseViewController {
                 user.rect = CGRect(x: WIDTH / 2, y: 0, width: WIDTH / 2, height: HEIGHT / 2)
                 user.uid = view.uid
                 self.transcoding.add(user)
-                break
             case 3:
                 let user = AgoraLiveTranscodingUser()
                 user.rect = CGRect(x: 0, y: HEIGHT / 2, width: WIDTH / 2, height: HEIGHT / 2)
                 user.uid = view.uid
                 self.transcoding.add(user)
-                break
             case 4:
                 let user = AgoraLiveTranscodingUser()
                 user.rect = CGRect(x: WIDTH / 2, y: HEIGHT / 2, width: WIDTH / 2, height: HEIGHT / 2)
                 user.uid = view.uid
                 self.transcoding.add(user)
-                break
             default:
                 LogUtils.log(message: "igored user \(view.uid) as only 2x2 video layout supported in this demo.", level: .warning)
             }
@@ -309,8 +304,7 @@ class FusionCDNHost: BaseViewController {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
                 stopRtcStreaming()
-            }
-            else if cdnStreaming {
+            } else if cdnStreaming {
                 stopRskStreaming()
                 resetUI()
             }
@@ -326,7 +320,7 @@ struct CDNChannelInfo {
 
 extension CDNChannelInfo {
     /// static function to generate 4 channels based on given channel name
-    static func AllChannelList(_ num:Int32) -> [CDNChannelInfo] {
+    static func AllChannelList(_ num: Int32) -> [CDNChannelInfo] {
         var channels = [CDNChannelInfo]()
         for index in 0..<num {
             let channel = CDNChannelInfo(
@@ -353,8 +347,8 @@ class FusionCDNAudience: BaseViewController {
     var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
     var streamingUrl: String = ""
     var channelNumber: Int32 = 0
-    var rtcStreaming:Bool = false
-    var videoViews: [UInt:VideoView] = [:]
+    var rtcStreaming: Bool = false
+    var videoViews: [UInt: VideoView] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -379,7 +373,6 @@ class FusionCDNAudience: BaseViewController {
         guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
         
-        
         let videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
                                                         frameRate: fps,
                                                         bitrate: AgoraVideoBitrateStandard,
@@ -390,7 +383,6 @@ class FusionCDNAudience: BaseViewController {
         mediaPlayerKit = agoraKit.createMediaPlayer(with: self)
         mediaPlayerKit.setView(playerVideo.videoView)
 
-        
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = playerVideo.videoView
         videoCanvas.renderMode = .hidden
@@ -411,8 +403,7 @@ class FusionCDNAudience: BaseViewController {
             let mediaSource = AgoraMediaSource()
             mediaSource.url = streamingUrl
             mediaPlayerKit.open(streamingUrl, startPos: 0)
-        }
-        else {
+        } else {
             streamingUrl = channelName
             rtcSwitcher.isHidden = true
             rtcSwitcherLabel.isHidden = true
@@ -421,7 +412,7 @@ class FusionCDNAudience: BaseViewController {
     }
     
     func sortedViews() -> [VideoView] {
-        return Array(videoViews.values).sorted(by: { $0.uid < $1.uid })
+        Array(videoViews.values).sorted(by: { $0.uid < $1.uid })
     }
     
     @IBAction func setRtcStreaming(sender: UISwitch) {
@@ -440,8 +431,7 @@ class FusionCDNAudience: BaseViewController {
                     // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                }
-                else{
+                } else {
                     // set up local video to render your local camera preview
                     let videoCanvas = AgoraRtcVideoCanvas()
                     videoCanvas.uid = 0
@@ -458,8 +448,7 @@ class FusionCDNAudience: BaseViewController {
                     self.volumeSliderLabel.isHidden = false
                 }
             })
-        }
-        else {
+        } else {
             let leaveChannelOption = AgoraLeaveChannelOptions()
             leaveChannelOption.stopMicrophoneRecording = false
             agoraKit.leaveChannel(leaveChannelOption) { stats in
@@ -476,8 +465,8 @@ class FusionCDNAudience: BaseViewController {
         }
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangeRecordingVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
         agoraKit.adjustRecordingSignalVolume(value)
     }
@@ -491,8 +480,8 @@ class FusionCDNAudience: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func getCDNChannel(_ channel:CDNChannelInfo) -> UIAlertAction {
-        return UIAlertAction(title: channel.channelName, style: .default, handler: {[unowned self] action in
+    func getCDNChannel(_ channel: CDNChannelInfo) -> UIAlertAction {
+        return UIAlertAction(title: channel.channelName, style: .default, handler: { [unowned self] _ in
             self.cdnSelector.setTitle(channel.channelName, for: .normal)
             let ret = mediaPlayerKit.switchAgoraCDNLine(by: channel.index)
             print(ret)
@@ -503,40 +492,42 @@ class FusionCDNAudience: BaseViewController {
         super.viewDidDisappear(animated)
         agoraKit.disableVideo()
         agoraKit.disableAudio()
-        agoraKit.leaveChannel { (stats) -> Void in
+        agoraKit.leaveChannel { stats -> Void in
             LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
         AgoraRtcEngineKit.destroy()
     }
 }
 
-
 extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
-    func onDirectCdnStreamingStateChanged(_ state: AgoraDirectCdnStreamingState, error: AgoraDirectCdnStreamingError, message: String?) {
+    func onDirectCdnStreamingStateChanged(_ state: AgoraDirectCdnStreamingState, 
+                                          error: AgoraDirectCdnStreamingError,
+                                          message: String?) {
         DispatchQueue.main.async {[self] in
-            switch state{
+            switch state {
             case .running:
                 self.streamingButton.setTitle("Stop Streaming", for: .normal)
                 self.streamingButton.setTitleColor(.red, for: .normal)
                 cdnStreaming = true
                 rtcSwitcher.isEnabled = true
                 
-                break
             case .stopped:
                 if rtcStreaming {
                     // switch to rtc streaming when direct cdn streaming completely stopped
                     switchToRtcStreaming()
 
-                } else{
+                } else {
                     self.streamingButton.setTitle("Start Live Streaming", for: .normal)
                     self.streamingButton.setTitleColor(.blue, for: .normal)
                     cdnStreaming = false
                 }
-                break
+
             case .failed:
-                self.showAlert(title: "Error", message: "Start Streaming failed, please go back to previous page and check the settings.")
+                self.showAlert(title: "Error", 
+                               message: "Start Streaming failed, please go back to previous page and check the settings.")
             default:
-                LogUtils.log(message: "onDirectCdnStreamingStateChanged: \(state.rawValue), \(error.rawValue), \(message!)", level: .info)
+                LogUtils.log(message: "onDirectCdnStreamingStateChanged: \(state.rawValue), \(error.rawValue), \(message ?? "")",
+                             level: .info)
             }
         }
     }
@@ -599,11 +590,16 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         updateTranscodeLayout()
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   rtmpStreamingChangedToState url: String,
+                   state: AgoraRtmpStreamingState,
+                   errCode: AgoraRtmpStreamingErrorCode) {
+        LogUtils.log(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)", 
+                     level: .info)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   streamUnpublishedWithUrl url: String) {
         switchToRtcStreaming()
         // set up local video to render your local camera preview
 //        let videoCanvas = AgoraRtcVideoCanvas()
@@ -615,14 +611,17 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
 //        videoViews.removeAll()
 //        videoViews[0] = localVideo
 //        agoraKit.setupLocalVideo(videoCanvas)
-        self.container.layoutStream(views: [videoViews[0]!.videoView])
+        guard let view = videoViews[0] else { return }
+        self.container.layoutStream(views: [view.videoView])
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   didOfflineOfUid uid: UInt,
+                   reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -632,7 +631,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
-        //remove remote audio view
+        // remove remote audio view
         self.videoViews.removeValue(forKey: uid)
         self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
@@ -705,7 +704,7 @@ extension FusionCDNAudience: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
-        //remove remote audio view
+        // remove remote audio view
         self.videoViews.removeValue(forKey: uid)
         self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
@@ -738,11 +737,11 @@ extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
             switch state {
             case .failed:
                 weakself.showAlert(message: "media player error: \(error.rawValue)")
-                break
+
             case .openCompleted:
                 weakself.mediaPlayerKit.play()
                 guard let mode = weakself.configs["mode"] as? StreamingMode else {return}
-                if (mode == .agoraChannel){
+                if mode == .agoraChannel {
                     let num = weakself.mediaPlayerKit.getAgoraCDNLineCount()
                     if num > 0 {
                         weakself.channelNumber = num
@@ -752,29 +751,27 @@ extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
                     }
                     weakself.rtcSwitcher.isEnabled = true
                 }
-                break
-            case .stopped:
-                break
+            case .stopped: break
             default: break
             }
         }
     }
     
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
-        DispatchQueue.main.async {[weak self] in
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, 
+                             didOccur event: AgoraMediaPlayerEvent,
+                             elapsedTime time: Int,
+                             message: String?) {
+        DispatchQueue.main.async { [weak self] in
             guard let weakself = self else { return }
-            switch event{
+            switch event {
             case .switchError:
                 weakself.showAlert(message: "switch cdn channel error!: \(message ?? "")")
-                break
+
             case .switchComplete:
                 weakself.showAlert(message: "switch cdn channel complete!")
-                break
                 
             default: break
-            
             }
         }
     }
 }
-

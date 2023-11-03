@@ -15,8 +15,7 @@ enum ThirdPlayerType: String {
     case origin = "avplayer"
 }
 
-class AuidoRouterPlayerEntry : UIViewController
-{
+class AuidoRouterPlayerEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "AuidoRouterPlayer"
@@ -24,53 +23,54 @@ class AuidoRouterPlayerEntry : UIViewController
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
     @IBOutlet weak var chosePlayerButton: UIButton!
-    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
+    var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
     private var playerType: ThirdPlayerType = .ijk
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    
     @IBAction func onChosePlayerType(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         let alert = UIAlertController(title: "Player Type(ijkplayer/avplayer)".localized,
                                       message: nil,
-                                      preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+                                      preferredStyle: style)
         alert.addAction(getPlayerAction(ThirdPlayerType.ijk.rawValue))
         alert.addAction(getPlayerAction(ThirdPlayerType.origin.rawValue))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
-    func getPlayerAction(_ title: String) -> UIAlertAction{
-        return UIAlertAction(title: title, style: .default, handler: {[unowned self] action in
+    func getPlayerAction(_ title: String) -> UIAlertAction {
+        return UIAlertAction(title: title, style: .default, handler: { [unowned self] _ in
             self.chosePlayerButton.setTitle(title, for: .normal)
             self.playerType = ThirdPlayerType(rawValue: title) ?? .ijk
         })
     }
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+    func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: { [unowned self] _ in
             self.width = width
             self.height = height
             self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+    func getFpsAction(_ fps: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: { [unowned self] _ in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+    func getOrientationAction(_ orientation: AgoraVideoOutputOrientationMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: { [unowned self] _ in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setResolution() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: style)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -80,8 +80,9 @@ class AuidoRouterPlayerEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setFps() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: style)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -91,8 +92,9 @@ class AuidoRouterPlayerEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setOrientation() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: style)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -101,16 +103,17 @@ class AuidoRouterPlayerEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName,
-                                     "resolution":CGSize(width: width, height: height),
+        newViewController.configs = ["channelName": channelName,
+                                     "resolution": CGSize(width: width, height: height),
                                      "fps": fps,
                                      "orientation": orientation,
                                      "playerType": playerType.rawValue]
@@ -228,7 +231,7 @@ class AuidoRouterPlayerMain: BaseViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
+        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as? String ?? "")
         if playerType == .ijk {
             setupIJKPlayer()
         } else {
@@ -261,7 +264,7 @@ class AuidoRouterPlayerMain: BaseViewController {
             }
         }
         AgoraRtcEngineKit.destroy()
-        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as! String)
+        let playerType = ThirdPlayerType(rawValue: configs["playerType"] as? String ?? "")
         if playerType == .origin {
             avPlayer?.player?.pause()
         } else {
@@ -271,9 +274,10 @@ class AuidoRouterPlayerMain: BaseViewController {
 }
 
 extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
-    func playerViewController(_ playerViewController: AVPlayerViewController, willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    func playerViewController(_ playerViewController: AVPlayerViewController,
+                              willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         // The system pauses when returning from full screen, we need to 'resume' manually.
-        coordinator.animate(alongsideTransition: nil) { transitionContext in
+        coordinator.animate(alongsideTransition: nil) { _ in
             playerViewController.player?.play()
         }
     }
@@ -307,7 +311,8 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
-    /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
+    /// callback when a remote user is joinning the channel, 
+    /// note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -324,7 +329,8 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
-    /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
+    /// callback when a remote user is leaving the channel,
+    ///  note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
@@ -342,7 +348,8 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
-    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// Reports the statistics of the current call. 
+    /// The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
         localVideo.statsInfo?.updateChannelStats(stats)
