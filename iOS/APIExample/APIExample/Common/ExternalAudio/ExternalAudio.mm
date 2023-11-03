@@ -26,6 +26,7 @@
 @property (nonatomic, assign) int sampleRate;
 @property (nonatomic, assign) int channelCount;
 @property (nonatomic, weak) AgoraRtcEngineKit *agoraKit;
+@property (nonatomic, assign) int32_t trackId;
 @end
 
 @implementation ExternalAudio
@@ -245,7 +246,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     return audio;
 }
 
-- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType {
+- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType trackId: (int32_t)trackId {
     
     threadLockCapture = [[NSObject alloc] init];
     threadLockPlay = [[NSObject alloc] init];
@@ -276,6 +277,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     
     self.agoraKit = agoraKit;
     self.audioCRMode = audioCRMode;
+    self.trackId = trackId;
 }
 
 - (void)startWork {
@@ -303,7 +305,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     }
     else {
 //        [self.agoraKit pushExternalAudioFrameNSData:[NSData dataWithBytes:data length:bytesLength] sourceId:1 timestamp:0];
-        [self.agoraKit pushExternalAudioFrameRawData: data samples: 441 * 10 trackId:1 timestamp:0];
+        [self.agoraKit pushExternalAudioFrameRawData: data samples: 441 * 10 trackId:self.trackId timestamp:0];
     }
     
 }

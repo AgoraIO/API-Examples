@@ -15,7 +15,6 @@ class KtvCopyrightMusic: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
     @IBAction func onTapKtvCopyrightButton(_ sender: Any) {
         guard let url = URL(string: urlString) else { return }

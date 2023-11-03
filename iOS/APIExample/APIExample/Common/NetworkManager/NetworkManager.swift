@@ -10,8 +10,8 @@ import UIKit
 @objc
 class NetworkManager: NSObject {
     enum HTTPMethods: String {
-        case GET = "GET"
-        case POST = "POST"
+        case GET
+        case POST
     }
         
     typealias SuccessClosure = ([String: Any]) -> Void
@@ -47,7 +47,7 @@ class NetworkManager: NSObject {
                       "src": "iOS",
                       "ts": "".timeStamp,
                       "type": 1,
-                      "uid": "\(uid)"] as [String : Any]
+                      "uid": "\(uid)"] as [String: Any]
         ToastView.showWait(text: "loading...", view: nil)
         NetworkManager.shared.postRequest(urlString: "https://toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
             let data = response["data"] as? [String: String]
@@ -78,8 +78,9 @@ class NetworkManager: NSObject {
             return
         }
         DispatchQueue.global().async {
-            let downloadTask = session.downloadTask(with: request) { location, response, error in
-                let locationPath = location!.path
+            let downloadTask = session.downloadTask(with: request) { location, _, _ in
+                guard let location = location else { return }
+                let locationPath = location.path
                 let fileManager = FileManager.default
                 try? fileManager.moveItem(atPath: locationPath, toPath: documnets)
                 success?(["fileName": fileName, "path": documnets])
@@ -105,7 +106,7 @@ class NetworkManager: NSObject {
                                        method: method,
                                        success: success,
                                        failure: failure) else { return }
-        session.dataTask(with: request) { data, response, error in
+        session.dataTask(with: request) { data, response, _ in
             DispatchQueue.main.async {
                 self.checkResponse(response: response, data: data, success: success, failure: failure)
             }
@@ -125,7 +126,8 @@ class NetworkManager: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         if method == .POST {
-            request.httpBody = try? JSONSerialization.data(withJSONObject: params ?? [], options: .sortedKeys)//convertParams(params: params).data(using: .utf8)
+            request.httpBody = try? JSONSerialization.data(withJSONObject: params ?? [], 
+                                                           options: .sortedKeys)
         }
         let curl = request.cURL(pretty: true)
         debugPrint("curl == \(curl)")
@@ -157,7 +159,7 @@ class NetworkManager: NSObject {
 }
 
 extension URLRequest {
-    public func cURL(pretty: Bool = false) -> String {
+    func cURL(pretty: Bool = false) -> String {
         let newLine = pretty ? "\\\n" : ""
         let method = (pretty ? "--request " : "-X ") + "\(httpMethod ?? "GET") \(newLine)"
         let url: String = (pretty ? "--url " : "") + "\'\(url?.absoluteString ?? "")\' \(newLine)"
@@ -166,8 +168,8 @@ extension URLRequest {
         var header = ""
         var data: String = ""
         
-        if let httpHeaders = allHTTPHeaderFields, httpHeaders.keys.count > 0 {
-            for (key,value) in httpHeaders {
+        if let httpHeaders = allHTTPHeaderFields, !httpHeaders.keys.isEmpty {
+            for (key, value) in httpHeaders {
                 header += (pretty ? "--header " : "-H ") + "\'\(key): \(value)\' \(newLine)"
             }
         }

@@ -20,8 +20,7 @@ class UserModel {
     var customEncodeSource: KFMP4Demuxer?
 }
 
-class CustomVideoSourcePushMultiEntry : UIViewController
-{
+class CustomVideoSourcePushMultiEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomVideoSourcePushMulti"
@@ -31,15 +30,17 @@ class CustomVideoSourcePushMultiEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -54,7 +55,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
                                            withType: SampleBufferDisplayView.self)
         return model
     })
-    var customCamera:AgoraYUVImageSourcePush?
+    var customCamera: AgoraYUVImageSourcePush?
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -78,7 +79,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         
         container.layoutStream2x2(views: [localVideo] + remoteVideos.compactMap({ $0.canvasView }))
         // make myself a broadcaster
-        //agoraKit.setClientRole(.broadcaster)
+        // agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -88,7 +89,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
         customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
+                                               fileName: "sample",
                                                frameRate: 15)
         customCamera?.trackId = agoraKit.createCustomVideoTrack()
         customCamera?.delegate = self
@@ -97,7 +98,8 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -156,7 +158,8 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
             userModel.isEncode = true
             userModel.isJoin = true
         }
-        NetworkManager.shared.download(urlString: "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4") { response in
+        let urlString = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4"
+        NetworkManager.shared.download(urlString: urlString) { response in
             let path = response["path"] as? String
             let config = KFDemuxerConfig()
             config.demuxerType = .video
@@ -192,7 +195,7 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
     
     private func createVideoTrack(userModel: UserModel) {
         let customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
+                                               fileName: "sample",
                                                frameRate: 15)
         customCamera.trackId = userModel.trackId
         customCamera.delegate = self
@@ -291,10 +294,8 @@ extension CustomVideoSourcePushMultiMain: AgoraRtcEngineDelegate {
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         if uid == 999 { return }
-        for model in remoteVideos {
-            if model.uid == uid {
-                return
-            }
+        for model in remoteVideos where model.uid == uid {
+            return
         }
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
@@ -353,7 +354,7 @@ extension CustomVideoSourcePushMultiMain: AgoraYUVImageSourcePushDelegate {
             let userModel = remoteVideos.first(where: { $0.trackId == trackId })
             userModel?.canvasView?.videoView.renderVideoPixelBuffer(outputVideoFrame)
         }
-        //once we have the video frame, we can push to agora sdk
+        // once we have the video frame, we can push to agora sdk
         agoraKit?.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
     }
 }

@@ -10,8 +10,7 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class VideoProcessEntry : UIViewController
-{
+class VideoProcessEntry: UIViewController {
     @IBOutlet weak var channelTextField: AGTextField!
     
     override func viewDidLoad() {
@@ -19,21 +18,21 @@ class VideoProcessEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+        guard let channelName = channelTextField.text else { return }
         channelTextField.resignFirstResponder()
         
         let identifier = "VideoProcess"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
-
-class VideoProcessMain : BaseViewController
-{
+class VideoProcessMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var beautySwitch: UISwitch!
     @IBOutlet weak var colorEnhanceSwitch: UISwitch!
@@ -45,7 +44,6 @@ class VideoProcessMain : BaseViewController
     @IBOutlet weak var smoothSlider: UISlider!
     @IBOutlet weak var strengthSlider: UISlider!
     @IBOutlet weak var skinProtectSlider: UISlider!
-    
 
     var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -57,7 +55,7 @@ class VideoProcessMain : BaseViewController
     var skinProtect = 0.5
     var strength = 0.5
 
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         
@@ -65,7 +63,8 @@ class VideoProcessMain : BaseViewController
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -79,7 +78,10 @@ class VideoProcessMain : BaseViewController
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // enable filters
-        agoraKit.enableExtension(withVendor: "agora_video_filters_clear_vision", extension: "clear_vision", enabled: true, sourceType: .primaryCamera)
+        agoraKit.enableExtension(withVendor: "agora_video_filters_clear_vision", 
+                                 extension: "clear_vision",
+                                 enabled: true,
+                                 sourceType: .primaryCamera)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         // make myself a broadcaster
@@ -153,7 +155,6 @@ class VideoProcessMain : BaseViewController
     }
     
     // MARK: - UI
-    
     func setupUI() {
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
@@ -168,7 +169,7 @@ class VideoProcessMain : BaseViewController
         skinProtectSlider.value = Float(skinProtect)
     }
     
-    @IBAction func onChangeBeauty(_ sender:UISwitch){
+    @IBAction func onChangeBeauty(_ sender: UISwitch) {
         if sender.isOn {
             if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
                 agoraKit.setBeautyEffectOptions(true, options: beautifyOption)
@@ -180,22 +181,22 @@ class VideoProcessMain : BaseViewController
         }
     }
 
-    @IBAction func onLightenSlider(_ sender:UISlider){
+    @IBAction func onLightenSlider(_ sender: UISlider) {
         beautifyOption.lighteningLevel = sender.value
         agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
     
-    @IBAction func onRednessSlider(_ sender:UISlider){
+    @IBAction func onRednessSlider(_ sender: UISlider) {
         beautifyOption.rednessLevel = sender.value
         agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
     
-    @IBAction func onSharpnessSlider(_ sender:UISlider){
+    @IBAction func onSharpnessSlider(_ sender: UISlider) {
         beautifyOption.sharpnessLevel = sender.value
         agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
     
-    @IBAction func onSmoothSlider(_ sender:UISlider){
+    @IBAction func onSmoothSlider(_ sender: UISlider) {
         beautifyOption.smoothnessLevel = sender.value
         agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
@@ -221,7 +222,7 @@ class VideoProcessMain : BaseViewController
         agoraKit.setColorEnhanceOptions(sender.isOn, options: options)
     }
     
-    @IBAction func onStrengthSlider(_ sender:UISlider){
+    @IBAction func onStrengthSlider(_ sender: UISlider) {
         strength = Double(sender.value)
         let options = AgoraColorEnhanceOptions()
         options.strengthLevel = Float(strength)
@@ -229,7 +230,7 @@ class VideoProcessMain : BaseViewController
         agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: options)
     }
     
-    @IBAction func onSkinProtectSlider(_ sender:UISlider){
+    @IBAction func onSkinProtectSlider(_ sender: UISlider) {
         skinProtect = Double(sender.value)
         let options = AgoraColorEnhanceOptions()
         options.strengthLevel = Float(strength)
@@ -260,23 +261,21 @@ class VideoProcessMain : BaseViewController
             let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
             source.backgroundSourceType = .img
             source.source = imgPath
-            break
+            
         case 1:
             source.backgroundSourceType = .color
             source.color = 0xFFFFFF
-            break
+            
         case 2:
             source.backgroundSourceType = .blur
             source.blurDegree = .high
-            break
             
         case 3:
             let videoPath = Bundle.main.path(forResource: "sample", ofType: "mov")
             source.backgroundSourceType = .video
             source.source = videoPath
             
-        default:
-            break
+        default: break
         }
         source.backgroundSourceType = virtualBgSwitch.isOn ? source.backgroundSourceType : .none
         let result = agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())

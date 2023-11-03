@@ -10,7 +10,7 @@ import AGEVideoLayout
 import AgoraRtcKit
 import AVFoundation
 
-class CustomVideoSourcePreview : UIView {
+class CustomVideoSourcePreview: UIView {
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
     func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
@@ -27,8 +27,7 @@ class CustomVideoSourcePreview : UIView {
     }
 }
 
-class CustomVideoSourcePushEntry : UIViewController
-{
+class CustomVideoSourcePushEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomVideoSourcePush"
@@ -38,15 +37,16 @@ class CustomVideoSourcePushEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -54,7 +54,7 @@ class CustomVideoSourcePushEntry : UIViewController
 class CustomVideoSourcePushMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoViewSampleBufferDisplayView", withType: SampleBufferDisplayView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var customCamera:AgoraYUVImageSourcePush?
+    var customCamera: AgoraYUVImageSourcePush?
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -82,7 +82,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        //agoraKit.setClientRole(.broadcaster)
+        // agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -92,7 +92,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
         customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
+                                               fileName: "sample",
                                                frameRate: 15)
         customCamera?.delegate = self
         customCamera?.startSource()
@@ -100,7 +100,8 @@ class CustomVideoSourcePushMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -234,7 +235,7 @@ extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
         videoFrame.format = 12
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
-        //once we have the video frame, we can push to agora sdk
+        // once we have the video frame, we can push to agora sdk
         agoraKit?.pushExternalVideoFrame(videoFrame)
         
         let outputVideoFrame = AgoraOutputVideoFrame()
