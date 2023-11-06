@@ -71,7 +71,7 @@ CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 
 # 归档路径
-ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive"
+ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # 编译环境
 
 # plist路径
@@ -85,16 +85,16 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 cd ${WORKSPACE}
 
 # 压缩archive
-7za a -slp "${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+7za a -slp "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
 # 签名
-sh sign "${WORKSPACE}/${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
+sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
 # 上传IPA
-python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.app.zip" --project
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
 
 # 删除archive文件
-rm -rf ${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive
+rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
 rm -rf *.zip
 
 #复原Keycenter文件
