@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +25,7 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.model.StatisticsInfo;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.EchoTestConfiguration;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
@@ -159,7 +161,13 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         }
         else if (v.getId() == R.id.btn_echo){
             num = 0;
-            engine.startEchoTest(MAX_COUNT_DOWN);
+            engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+            EchoTestConfiguration config = new EchoTestConfiguration();
+            config.enableVideo = false;
+            config.enableAudio = true;
+            config.intervalInSeconds = MAX_COUNT_DOWN;
+            config.channelId = (new Random().nextInt(10000) + 100000) + "";
+            engine.startEchoTest(config);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
             echoTimer = new Timer(true);
