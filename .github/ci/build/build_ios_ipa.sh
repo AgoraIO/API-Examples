@@ -147,7 +147,7 @@ SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 PAYLOAD_PATH="${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_Payload"
 mkdir "${PAYLOAD_PATH}"
 # mv "${TARGET_NAME}_${BUILD_NUMBER}_iOS.ipa" "${PAYLOAD_PATH}"
-mv "${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
+mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
 7za a "${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
 python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}_IPA.zip" --project
