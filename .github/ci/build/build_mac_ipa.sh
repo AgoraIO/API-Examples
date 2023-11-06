@@ -94,7 +94,7 @@ sh sign "${WORKSPACE}/${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarc
 python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.app.zip" --project
 
 # 删除archive文件
-rm -rf ${TARGET_NAME}_${SDK_VERSION}_${BUILD_NUMBER}.xcarchive
+rm -rf ${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive
 rm -rf *.zip
 
 #复原Keycenter文件
