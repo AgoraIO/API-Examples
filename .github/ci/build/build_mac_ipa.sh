@@ -90,8 +90,11 @@ cd ${WORKSPACE}
 # 签名
 sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
 
+# 重命名
+cp "${TARGET_NAME}_${BUILD_NUMBER}.app.zip" "${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.app.zip"
+
 # 上传IPA
-python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_${BUILD_NUMBER}.app.zip" --project
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.app.zip" --project
 
 # 删除archive文件
 rm -rf ${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
