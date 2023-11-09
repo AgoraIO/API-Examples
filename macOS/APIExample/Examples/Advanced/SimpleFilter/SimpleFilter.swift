@@ -238,7 +238,13 @@ class SimpleFilterMain: BaseViewController {
         selectRolePicker.onSelectChanged {
             guard let selected = self.selectedRole else { return }
             if self.isJoined {
+                let mediaOption = AgoraRtcChannelMediaOptions()
+                mediaOption.publishCameraTrack = selected == .broadcaster
+                mediaOption.publishMicrophoneTrack = selected == .broadcaster
+                mediaOption.clientRoleType = selected
+                self.agoraKit.updateChannel(with: mediaOption)
                 self.agoraKit.setClientRole(selected)
+                _ = selected == .broadcaster ? self.agoraKit.startPreview() : self.agoraKit.stopPreview()
             }
         }
     }
@@ -371,7 +377,11 @@ class SimpleFilterMain: BaseViewController {
             videoCanvas.renderMode = .hidden
             agoraKit.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
-            agoraKit.startPreview()
+            if role == .broadcaster {
+                agoraKit.startPreview()
+            } else {
+                agoraKit.stopPreview()
+            }
             
             // start joining channel
             // 1. Users can only see each other after they join the
