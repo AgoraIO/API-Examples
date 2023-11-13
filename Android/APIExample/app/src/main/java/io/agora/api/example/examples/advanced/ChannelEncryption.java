@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 import io.agora.api.example.MainApplication;
@@ -149,6 +151,9 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
     public void onDestroy()
     {
         super.onDestroy();
+        if(joined && encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))){
+            enablePacketProcessor(false);
+        }
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
@@ -165,15 +170,19 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         {
             if (!joined)
             {
-                // Creates an EncryptionConfig instance.
-                EncryptionConfig config = new EncryptionConfig();
-                // Sets the encryption mode as AES_128_XTS.
-                config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
-                // Sets the encryption key.
-                config.encryptionKey = et_password.getText().toString();
-                System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
-                // Enables the built-in encryption.
-                engine.enableEncryption(true, config);
+                if (encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
+                    enablePacketProcessor(true);
+                } else {
+                    // Creates an EncryptionConfig instance.
+                    EncryptionConfig config = new EncryptionConfig();
+                    // Sets the encryption mode as AES_128_XTS.
+                    config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
+                    // Sets the encryption key.
+                    config.encryptionKey = et_password.getText().toString();
+                    System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
+                    // Enables the built-in encryption.
+                    engine.enableEncryption(true, config);
+                }
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -197,6 +206,9 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
             else
             {
                 joined = false;
+                if (encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
+                    enablePacketProcessor(false);
+                }
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -219,6 +231,22 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 et_password.setEnabled(true);
                 encry_mode.setEnabled(true);
             }
+        }
+    }
+
+    private void enablePacketProcessor(boolean enable) {
+        try {
+            Class<?> aClass = Class.forName("io.agora.api.streamencrypt.PacketProcessor");
+            if (enable) {
+                Method registerProcessing = aClass.getDeclaredMethod("registerProcessing", long.class);
+                registerProcessing.invoke(null, engine.getNativeHandle());
+            } else {
+                Method unregisterProcessing = aClass.getDeclaredMethod("unregisterProcessing", long.class);
+                unregisterProcessing.invoke(null, engine.getNativeHandle());
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "", e);
+            Toast.makeText(requireContext(), R.string.custom_stream_encrypt_tip, Toast.LENGTH_SHORT).show();
         }
     }
 

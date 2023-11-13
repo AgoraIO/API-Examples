@@ -90,7 +90,34 @@ In order to enable it, you could do as follows:
 
 1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
 2. Download [Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
+
+```text
+Android/APIExample/agora-simple-filter/src/main/agoraLibs
+├── arm64-v8a
+├── armeabi-v7a
+├── x86
+└── x86_64
+```
+
 3. Modify simpleFilter to true in Android/APIExample/gradle.properties
+
+### Stream Encrypt
+
+This project contains custom stream encrypt examples, which cannot be enabled by default. 
+The configuration method is as follows:
+
+1. Download [Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+
+```text
+Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+├── arm64-v8a
+├── armeabi-v7a
+├── x86
+└── x86_64
+```
+
+2. Modify streamEncrypt to true in Android/APIExample/gradle.properties
+
 
 ## Contact Us
 

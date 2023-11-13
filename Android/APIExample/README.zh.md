@@ -86,7 +86,32 @@
 
 1. 下载 [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
 2. 手动下载[Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
+
+```text
+Android/APIExample/agora-simple-filter/src/main/agoraLibs
+├── arm64-v8a
+├── armeabi-v7a
+├── x86
+└── x86_64
+```
+
 3. 修改Android/APIExample/gradle.properties配置文件中simpleFilter值为true
+
+### 自定义加密
+
+本项目包含自定义加密示例，默认是不启用的。配置方法如下：
+
+1. 手动下载[Agora SDK包](https://docs.agora.io/cn/video-call-4.x/downloads?platform=Android), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+
+```text
+Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+├── arm64-v8a
+├── armeabi-v7a
+├── x86
+└── x86_64
+```
+
+2. 修改Android/APIExample/gradle.properties配置文件中streamEncrypt值为true
 
 ## 联系我们
 
