@@ -99,6 +99,7 @@ private:
 	bool m_audioInputTest;
 	bool m_audioOutputTest;
 	bool m_cameraTest;
+	bool m_initialize;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  

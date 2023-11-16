@@ -185,10 +185,14 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 void CAgoraSpatialAudioDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		m_mediaPlayerLeft->stop();
-		m_mediaPlayerLeft = nullptr;
-		m_mediaPlayerRight->stop();
-		m_mediaPlayerRight = nullptr;
+		if (m_mediaPlayerLeft) {
+			m_mediaPlayerLeft->stop();
+			m_mediaPlayerLeft = nullptr;
+		}
+		if (m_mediaPlayerRight) {
+			m_mediaPlayerRight->stop();
+			m_mediaPlayerRight = nullptr;
+		}
 		m_localSpatial = nullptr;
 
 		if (m_joinChannel)
@@ -201,8 +205,10 @@ void CAgoraSpatialAudioDlg::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableAudio"));
 
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
 		m_rtcEngine = NULL;
 	}
 }
