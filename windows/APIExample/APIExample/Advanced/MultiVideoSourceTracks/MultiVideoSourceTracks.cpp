@@ -322,8 +322,10 @@ void MultiVideoSourceTracks::UnInitAgora()
 
 		m_rtcEngine->stopPreview();
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
 		m_rtcEngine = NULL;
 	}
 }

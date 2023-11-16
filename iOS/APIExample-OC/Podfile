@@ -5,7 +5,7 @@ target 'APIExample-OC' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
- pod 'AgoraRtcEngine_iOS', '4.2.3'
+ pod 'AgoraRtcEngine_iOS', '4.2.6'
   # pod 'sdk', :path => 'sdk.podspec'
 
   
@@ -14,11 +14,11 @@ end
 target 'Agora-ScreenShare-Extension-OC' do
   use_frameworks!
   # pod 'sdk', :path => 'sdk.podspec'
-pod 'AgoraRtcEngine_iOS', '4.2.3'
+pod 'AgoraRtcEngine_iOS', '4.2.6'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
       # pod 'sdk', :path => 'sdk.podspec'
-   pod 'AgoraRtcEngine_iOS', '4.2.3'
+   pod 'AgoraRtcEngine_iOS', '4.2.6'
 end
