@@ -40,7 +40,8 @@ class JoinChannelAudioMain: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -69,7 +70,8 @@ class JoinChannelAudioMain: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     

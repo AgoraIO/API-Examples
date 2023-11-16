@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CDlgBeauty::OnBnClickedCheckVideoDenoise)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE2, &CDlgBeauty::OnBnClickedCheckVideoDenoise2)
 	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty::OnBnClickedCheckLowlight)
+	ON_WM_SHOWWINDOW()
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_VIRTUAL_BG_BLUR, IDC_RADIO_VIRTUAL_BG_IMAGE, &CDlgBeauty::OnBnClickedStaticVirtualBgChoose)
 END_MESSAGE_MAP()
 
@@ -123,6 +124,20 @@ void CDlgBeauty::OnBnClickedButtonJoinchannel()
 		//m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	}
 	m_joinChannel = !m_joinChannel;
+}
+
+void CDlgBeauty::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+
+	if (bShow) {
+		//init control text.
+		InitCtrlText();
+	}
+	else {
+		//resume window status.
+		ResumeStatus();
+	}
 }
 
 bool CDlgBeauty::InitAgora()
@@ -210,8 +225,11 @@ void CDlgBeauty::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
 
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
+		
 		m_rtcEngine = NULL;
 	}
 }
