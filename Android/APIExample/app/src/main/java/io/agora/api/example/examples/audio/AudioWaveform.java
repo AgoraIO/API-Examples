@@ -26,6 +26,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 /**
  * The type Audio waveform.
@@ -89,8 +90,11 @@ public class AudioWaveform extends BaseFragment {
                     + "}"
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
-            engine.setLocalAccessPoint(((MainApplication) requireActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
-
+            LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
+            if (localAccessPointConfiguration != null) {
+                // This api can only be used in the private media server scenario, otherwise some problems may occur.
+                engine.setLocalAccessPoint(localAccessPointConfiguration);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             onBackPressed();

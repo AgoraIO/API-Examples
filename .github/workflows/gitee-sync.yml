@@ -1,0 +1,27 @@
+name: gitee-sync
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: gitee-sync
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Gitee sync repo
+        uses: Yikun/hub-mirror-action@v1.3
+        with:
+          src: github/AgoraIO
+          dst: gitee/agoraio-community
+          white_list: "API-Examples"
+          static_list: "API-Examples"
+          cache_path: "./cache"
+          dst_key: ${{ secrets.GITEE_PI_SSH }}
+          dst_token: ${{ secrets.GITEE_PRIVATE_TOKEN }}
+          force_update: true
+          account_type: org

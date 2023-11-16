@@ -32,6 +32,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -94,8 +95,11 @@ public class AudioRouterPlayerIjk extends BaseFragment {
                     + "}"
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
-            mRtcEngine.setLocalAccessPoint(((MainApplication) requireActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
-
+            LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
+            if (localAccessPointConfiguration != null) {
+                // This api can only be used in the private media server scenario, otherwise some problems may occur.
+                mRtcEngine.setLocalAccessPoint(localAccessPointConfiguration);
+            }
             // Set audio route to microPhone
             mRtcEngine.setDefaultAudioRoutetoSpeakerphone(true);
             /*In the demo, the default is to enter as the anchor.*/

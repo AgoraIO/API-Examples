@@ -34,6 +34,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -108,8 +109,11 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\"" + "}"
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
-            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
-
+            LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
+            if (localAccessPointConfiguration != null) {
+                // This api can only be used in the private media server scenario, otherwise some problems may occur.
+                engine.setLocalAccessPoint(localAccessPointConfiguration);
+            }
             return true;
         } catch (Exception e) {
             showAlert(e.getMessage());
