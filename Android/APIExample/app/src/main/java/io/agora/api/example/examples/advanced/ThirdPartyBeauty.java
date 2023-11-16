@@ -26,6 +26,9 @@ import io.agora.api.example.examples.advanced.beauty.ByteDanceBeautySDK;
 import io.agora.api.example.examples.advanced.beauty.FaceUnityBeautySDK;
 import io.agora.api.example.examples.advanced.beauty.SenseTimeBeautySDK;
 
+/**
+ * The type Third party beauty.
+ */
 @Example(
         index = 24,
         group = ADVANCED,

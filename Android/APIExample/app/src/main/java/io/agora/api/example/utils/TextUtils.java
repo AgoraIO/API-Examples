@@ -1,8 +1,18 @@
 package io.agora.api.example.utils;
 
-public class TextUtils {
+/**
+ * The type Text utils.
+ */
+public final class TextUtils {
+
+    private TextUtils() {
+
+    }
     /**
-     * Print thread stack
+     * Format stack trace string.
+     *
+     * @param stackTrace the stack trace
+     * @return the string
      */
     public static String formatStackTrace(StackTraceElement[] stackTrace) {
         StringBuilder sb = new StringBuilder();

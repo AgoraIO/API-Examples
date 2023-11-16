@@ -79,15 +79,13 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video_enhancement, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         join.setOnClickListener(this);
@@ -148,49 +146,46 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 backgroundSource.source = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
             }
             engine.enableVirtualBackground(true, backgroundSource, segproperty);
-        }else{
+        } else {
             engine.enableVirtualBackground(false, null, null);
         }
 
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -210,21 +205,17 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             }
 
             engine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        /*leaveChannel and Destroy the RtcEngine instance*/
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -232,20 +223,16 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     }
 
 
-
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -255,25 +242,25 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.autoSubscribeAudio = true;
@@ -281,8 +268,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             option.publishMicrophoneTrack = true;
             option.publishCameraTrack = true;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
-            if (res != 0)
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -297,16 +283,13 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -315,16 +298,13 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -350,7 +330,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(buttonView.getId() == beauty.getId()){
+        if (buttonView.getId() == beauty.getId()) {
             if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
                 buttonView.setChecked(false);
                 Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
@@ -358,25 +338,21 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             }
 
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
-        }
-        else if(buttonView.getId() == lightness2.getId()){
+        } else if (buttonView.getId() == lightness2.getId()) {
             LowLightEnhanceOptions options = new LowLightEnhanceOptions();
             options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST;
             options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_AUTO;
             engine.setLowlightEnhanceOptions(isChecked, options);
-        }
-        else if(buttonView.getId() == colorful2.getId()){
+        } else if (buttonView.getId() == colorful2.getId()) {
             setColorEnhance(isChecked);
-        }
-        else if(buttonView.getId() == virtualBackground.getId()){
+        } else if (buttonView.getId() == virtualBackground.getId()) {
             if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_VIRTUAL_BACKGROUND)) {
                 buttonView.setChecked(false);
                 Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
                 return;
             }
             resetVirtualBackground();
-        }
-        else if(buttonView.getId() == noiseReduce2.getId()){
+        } else if (buttonView.getId() == noiseReduce2.getId()) {
             VideoDenoiserOptions options = new VideoDenoiserOptions();
             options.denoiserLevel = VideoDenoiserOptions.VIDEO_DENOISER_AUTO;
             options.denoiserMode = VideoDenoiserOptions.VIDEO_DENOISER_LEVEL_HIGH_QUALITY;
@@ -384,7 +360,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         }
     }
 
-    private void setColorEnhance(boolean isChecked){
+    private void setColorEnhance(boolean isChecked) {
         ColorEnhanceOptions options = new ColorEnhanceOptions();
         options.strengthLevel = (float) strength;
         options.skinProtectLevel = (float) skinProtect;
@@ -394,27 +370,22 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float value = ((float) progress) / 10;
-        if(seekBar.getId() == seek_lightness.getId()){
+        if (seekBar.getId() == seek_lightness.getId()) {
             beautyOptions.lighteningLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_redness.getId()){
+        } else if (seekBar.getId() == seek_redness.getId()) {
             beautyOptions.rednessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_sharpness.getId()){
+        } else if (seekBar.getId() == seek_sharpness.getId()) {
             beautyOptions.sharpnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_smoothness.getId()){
+        } else if (seekBar.getId() == seek_smoothness.getId()) {
             beautyOptions.smoothnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_strength.getId()) {
+        } else if (seekBar.getId() == seek_strength.getId()) {
             strength = value;
             setColorEnhance(colorful2.isChecked());
-        }
-        else if(seekBar.getId() == seek_skin.getId()) {
+        } else if (seekBar.getId() == seek_skin.getId()) {
             skinProtect = value;
             setColorEnhance(colorful2.isChecked());
         }
@@ -435,16 +406,14 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
@@ -452,8 +421,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -466,17 +434,14 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     controlPanel.setVisibility(View.VISIBLE);
@@ -560,8 +525,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -571,23 +535,20 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
-            }
-            else{
-                handler.post(() ->
-                {
-                    if(fl_remote.getChildCount() > 0){
+            } else {
+                handler.post(() -> {
+                    if (fl_remote.getChildCount() > 0) {
                         fl_remote.removeAllViews();
                     }
-                    /**Display remote video stream*/
+                    /*Display remote video stream*/
                     SurfaceView surfaceView = null;
                     // Create render view by RtcEngine
                     surfaceView = new SurfaceView(context);
@@ -611,14 +572,13 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));

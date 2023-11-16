@@ -69,7 +69,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
     private AudioSeatManager audioSeatManager;
 
-    private void openAudioFile(){
+    private void openAudioFile() {
         try {
             inputStream = this.getResources().getAssets().open(AUDIO_FILE);
         } catch (IOException e) {
@@ -77,7 +77,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void closeAudioFile(){
+    private void closeAudioFile() {
         try {
             inputStream.close();
         } catch (IOException e) {
@@ -85,11 +85,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private byte[] readBuffer(){
+    private byte[] readBuffer() {
         int byteSize = SAMPLES * SAMPLE_NUM_OF_CHANNEL * 2;
         byte[] buffer = new byte[byteSize];
         try {
-            if(inputStream.read(buffer) < 0){
+            if (inputStream.read(buffer) < 0) {
                 inputStream.reset();
                 return readBuffer();
             }
@@ -144,29 +144,29 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -188,8 +188,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
             engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
             openAudioFile();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -199,7 +198,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         byte[] output = new byte[buffer.length];
         for (int i = 0; i < origin.length; i++) {
             output[i] = (byte) ((long) origin[i] / 2 + (long) buffer[i] / 2);
-            if(i == 2){
+            if (i == 2) {
                 Log.i(TAG, "origin :" + (int) origin[i] + " audio: " + (int) buffer[i]);
             }
         }
@@ -209,7 +208,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -234,14 +233,13 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -270,11 +268,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
@@ -303,8 +301,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
 
         @Override
-        public boolean onRecordAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            if(isWriteBackAudio){
+        public boolean onRecordAudioFrame(String channel, int audioFrameType,
+                                          int samples, int bytesPerSample,
+                                          int channels, int samplesPerSec,
+                                          ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+            if (isWriteBackAudio) {
                 int length = byteBuffer.remaining();
 //                byteBuffer.flip();
                 byte[] buffer = readBuffer();
@@ -319,22 +320,34 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
 
         @Override
-        public boolean onPlaybackAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+        public boolean onPlaybackAudioFrame(String channel, int audioFrameType,
+                                            int samples, int bytesPerSample,
+                                            int channels, int samplesPerSec,
+                                            ByteBuffer byteBuffer, long renderTimeMs,
+                                            int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onMixedAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+        public boolean onMixedAudioFrame(String channel, int audioFrameType,
+                                         int samples, int bytesPerSample, int channels,
+                                         int samplesPerSec, ByteBuffer byteBuffer,
+                                         long renderTimeMs, int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onEarMonitoringAudioFrame(int type, int samplesPerChannel, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer buffer, long renderTimeMs, int avsync_type) {
+        public boolean onEarMonitoringAudioFrame(int type, int samplesPerChannel, int bytesPerSample,
+                                                 int channels, int samplesPerSec,
+                                                 ByteBuffer buffer, long renderTimeMs, int avsyncType) {
             return false;
         }
 
         @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int uid, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int uid, int audioFrameType,
+                                                        int samples, int bytesPerSample, int channels,
+                                                        int samplesPerSec, ByteBuffer byteBuffer,
+                                                        long renderTimeMs, int bufferLength) {
             return false;
         }
 

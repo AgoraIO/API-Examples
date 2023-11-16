@@ -24,21 +24,36 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public class TokenUtils {
+/**
+ * The type Token utils.
+ */
+public final class TokenUtils {
     private static final String TAG = "TokenGenerator";
-    private final static OkHttpClient client;
+    private final static OkHttpClient CLIENT;
+
+    private TokenUtils() {
+
+    }
 
     static {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client = new OkHttpClient.Builder()
+        CLIENT = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build();
     }
 
-    public static void gen(Context context, String channelName,  int uid, OnTokenGenCallback<String> onGetToken){
+    /**
+     * Gen.
+     *
+     * @param context     the context
+     * @param channelName the channel name
+     * @param uid         the uid
+     * @param onGetToken  the on get token
+     */
+    public static void gen(Context context, String channelName, int uid, OnTokenGenCallback<String> onGetToken) {
         gen(context.getString(R.string.agora_app_id), context.getString(R.string.agora_app_certificate), channelName, uid, ret -> {
-            if(onGetToken != null){
+            if (onGetToken != null) {
                 runOnUiThread(() -> {
                     onGetToken.onTokenGen(ret);
                 });
@@ -53,17 +68,17 @@ public class TokenUtils {
         });
     }
 
-    private static void runOnUiThread(@NonNull Runnable runnable){
-        if(Thread.currentThread() == Looper.getMainLooper().getThread()){
+    private static void runOnUiThread(@NonNull Runnable runnable) {
+        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
             runnable.run();
-        }else{
+        } else {
             new Handler(Looper.getMainLooper()).post(runnable);
         }
     }
 
-    private static void gen(String appId, String certificate, String channelName, int uid, OnTokenGenCallback<String> onGetToken, OnTokenGenCallback<Exception> onError)  {
-        if(TextUtils.isEmpty(appId) || TextUtils.isEmpty(certificate) || TextUtils.isEmpty(channelName)){
-            if(onError != null){
+    private static void gen(String appId, String certificate, String channelName, int uid, OnTokenGenCallback<String> onGetToken, OnTokenGenCallback<Exception> onError) {
+        if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(certificate) || TextUtils.isEmpty(channelName)) {
+            if (onError != null) {
                 onError.onTokenGen(new IllegalArgumentException("appId=" + appId + ", certificate=" + certificate + ", channelName=" + channelName));
             }
             return;
@@ -73,13 +88,13 @@ public class TokenUtils {
             postBody.put("appId", appId);
             postBody.put("appCertificate", certificate);
             postBody.put("channelName", channelName);
-            postBody.put("expire", 900);// s
+            postBody.put("expire", 900); // s
             postBody.put("src", "Android");
             postBody.put("ts", System.currentTimeMillis() + "");
             postBody.put("type", 1); // 1: RTC Token ; 2: RTM Token
             postBody.put("uid", uid + "");
         } catch (JSONException e) {
-            if(onError != null){
+            if (onError != null) {
                 onError.onTokenGen(e);
             }
         }
@@ -89,10 +104,10 @@ public class TokenUtils {
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(postBody.toString(), null))
                 .build();
-        client.newCall(request).enqueue(new Callback() {
+        CLIENT.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                if(onError != null){
+                if (onError != null) {
                     onError.onTokenGen(e);
                 }
             }
@@ -105,11 +120,11 @@ public class TokenUtils {
                         JSONObject jsonObject = new JSONObject(body.string());
                         JSONObject data = jsonObject.optJSONObject("data");
                         String token = Objects.requireNonNull(data).optString("token");
-                        if(onGetToken != null){
+                        if (onGetToken != null) {
                             onGetToken.onTokenGen(token);
                         }
                     } catch (Exception e) {
-                        if(onError != null){
+                        if (onError != null) {
                             onError.onTokenGen(e);
                         }
                     }
@@ -118,7 +133,17 @@ public class TokenUtils {
         });
     }
 
+    /**
+     * The interface On token gen callback.
+     *
+     * @param <T> the type parameter
+     */
     public interface OnTokenGenCallback<T> {
+        /**
+         * On token gen.
+         *
+         * @param token the token
+         */
         void onTokenGen(T token);
     }
 

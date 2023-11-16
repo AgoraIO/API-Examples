@@ -33,6 +33,12 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import javax.microedition.khronos.egl.EGLContext
 
+/**
+ * Texture process helper
+ *
+ * @property cacheCount
+ * @constructor Create empty Texture process helper
+ */
 class TextureProcessHelper(
     private val cacheCount: Int = 2
 ) {
@@ -49,10 +55,29 @@ class TextureProcessHelper(
     private var isBegin = false
     private var frameIndex = 0
 
+    /**
+     * Set filter
+     *
+     * @param filter
+     * @receiver
+     */
     fun setFilter(filter: (GLTextureBufferQueue.TextureOut) -> Int) {
         this.filter = filter
     }
 
+    /**
+     * Process
+     *
+     * @param texId
+     * @param texType
+     * @param width
+     * @param height
+     * @param rotation
+     * @param transform
+     * @param isFrontCamera
+     * @param isMirror
+     * @return
+     */
     fun process(
         texId: Int, texType: Int,
         width: Int, height: Int, rotation: Int,
@@ -159,6 +184,10 @@ class TextureProcessHelper(
         return ret
     }
 
+    /**
+     * Reset
+     *
+     */
     fun reset(){
         if(frameIndex == 0){
             return
@@ -176,8 +205,16 @@ class TextureProcessHelper(
         }
     }
 
+    /**
+     * Size
+     *
+     */
     fun size() = futureQueue.size
 
+    /**
+     * Release
+     *
+     */
     fun release() {
         isReleased = true
         filter = null
@@ -199,6 +236,12 @@ class TextureProcessHelper(
         workerThread.shutdown()
     }
 
+    /**
+     * Execute sync
+     *
+     * @param run
+     * @receiver
+     */
     fun executeSync(run: () -> Unit) {
         val latch = CountDownLatch(1)
         workerThread.execute {

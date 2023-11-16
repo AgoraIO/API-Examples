@@ -38,6 +38,13 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
+/**
+ * Face detector
+ *
+ * @property humanActionNative
+ * @property effectNative
+ * @constructor Create empty Face detector
+ */
 class FaceDetector(
     private val humanActionNative: STMobileHumanActionNative,
     private val effectNative: STMobileEffectNative
@@ -52,6 +59,12 @@ class FaceDetector(
     private val cacheFutureQueue = ConcurrentLinkedQueue<Future<Int>>()
     private var isDequeBegin = false
 
+    /**
+     * Enable sensor
+     *
+     * @param context
+     * @param enable
+     */
     fun enableSensor(context: Context, enable: Boolean) {
         if (enable) {
             if (accelerometer == null) {
@@ -67,8 +80,16 @@ class FaceDetector(
         }
     }
 
+    /**
+     * Get accelerometer
+     *
+     */
     fun getAccelerometer() = accelerometer
 
+    /**
+     * Reset
+     *
+     */
     fun reset() {
         cacheIndex = 0
         isDequeBegin = false
@@ -79,12 +100,22 @@ class FaceDetector(
         }
     }
 
+    /**
+     * Release
+     *
+     */
     fun release(){
         reset()
         accelerometer?.stop()
         workerThread.shutdownNow()
     }
 
+    /**
+     * Enqueue
+     *
+     * @param iN
+     * @return
+     */
     fun enqueue(iN: DetectorIn): Int {
         val index = cacheIndex
         val size = cacheFutureQueue.size
@@ -102,6 +133,11 @@ class FaceDetector(
         return size
     }
 
+    /**
+     * Dequeue
+     *
+     * @return
+     */
     fun dequeue(): DetectorOut? {
         val size = cacheFutureQueue.size
         if(isDequeBegin || size >= cacheSize){
@@ -121,6 +157,10 @@ class FaceDetector(
         return null
     }
 
+    /**
+     * Size
+     *
+     */
     fun size() = cacheFutureQueue.size
 
     private fun detectHuman(iN: DetectorIn, index: Int) {
@@ -130,7 +170,7 @@ class FaceDetector(
                 iN.orientation
             )
         val deviceOrientation: Int =
-            accelerometer?.direction ?: Accelerometer.CLOCKWISE_ANGLE.Deg90.value
+            accelerometer?.direction ?: Accelerometer.ClockwiseAngle.Deg90.value
         val ret: Int = humanActionNative.nativeHumanActionDetectPtr(
             iN.bytes,
             iN.bytesType,
@@ -169,7 +209,7 @@ class FaceDetector(
      */
     private fun getHumanActionOrientation(frontCamera: Boolean, cameraRotation: Int): Int {
         //获取重力传感器返回的方向
-        var orientation: Int = accelerometer?.direction ?: Accelerometer.CLOCKWISE_ANGLE.Deg90.value
+        var orientation: Int = accelerometer?.direction ?: Accelerometer.ClockwiseAngle.Deg90.value
 
         //在使用后置摄像头，且传感器方向为0或2时，后置摄像头与前置orientation相反
         if (!frontCamera && orientation == STRotateType.ST_CLOCKWISE_ROTATE_0) {
@@ -189,6 +229,18 @@ class FaceDetector(
     }
 
 
+    /**
+     * Detector in
+     *
+     * @property bytes
+     * @property bytesType
+     * @property width
+     * @property height
+     * @property isFront
+     * @property isMirror
+     * @property orientation
+     * @constructor Create empty Detector in
+     */
     data class DetectorIn(
         val bytes: ByteArray,
         val bytesType: Int,
@@ -199,6 +251,13 @@ class FaceDetector(
         val orientation: Int
     )
 
+    /**
+     * Detector out
+     *
+     * @property humanResult
+     * @property animalResult
+     * @constructor Create empty Detector out
+     */
     data class DetectorOut(
         val humanResult: Long,
         val animalResult: STMobileAnimalResult? = null

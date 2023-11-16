@@ -64,8 +64,9 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 //)
 
 /**
- * @deprecated The impletation of custom has been moved to {@link PushExternalVideoYUV}.
- *             You can refer to {@link PushExternalVideoYUV} example.
+ * The type Push external video.
+ *
+ * @deprecated The impletation of custom has been moved to {@link PushExternalVideoYUV}.             You can refer to {@link PushExternalVideoYUV} example.
  */
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener {
@@ -137,30 +138,30 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -188,9 +189,9 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onDestroy() {
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
-            /**After joining a channel, the user must call the leaveChannel method to end the
+            /*After joining a channel, the user must call the leaveChannel method to end the
              * call before joining another channel. This method returns 0 if the user leaves the
              * channel and releases all resources related to the call. This method call is
              * asynchronous, and the user has not exited the channel when the method call returns.
@@ -209,8 +210,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              *          triggers the removeInjectStreamUrl method.*/
             engine.leaveChannel();
             engine.stopPreview();
-            if (textureBufferHelper != null)
-            {
+            if (textureBufferHelper != null) {
                 textureBufferHelper.dispose();
                 textureBufferHelper = null;
             }
@@ -237,8 +237,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -264,21 +263,21 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         // Add to the local container
         fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enables the video module.
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-        /**Configures the external video source.
+        /*Configures the external video source.
          * @param enable Sets whether or not to use the external video source:
          *                 true: Use the external video source.
          *                 false: Do not use the external video source.
@@ -290,13 +289,13 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
         engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, token -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -326,24 +325,19 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         if (!mEglCore.isCurrent(mDrawSurface)) {
             mEglCore.makeCurrent(mDrawSurface);
         }
-        /** Use surfaceTexture's timestamp, in nanosecond */
-        long timestampNs = -1;
         try {
             surfaceTexture.updateTexImage();
             surfaceTexture.getTransformMatrix(mTransform);
-            timestampNs = surfaceTexture.getTimestamp();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        /**The rectangle ratio of frames and the screen surface may be different, so cropping may
+        /*The rectangle ratio of frames and the screen surface may be different, so cropping may
          *  happen when display frames to the screen.
          * The display transformation matrix does not change for the same camera when the screen
          *  orientation remains the same.*/
         if (!mMVPMatrixInit) {
-            /***/
-            /**For simplicity, we only consider the activity as portrait mode. In this case, the captured
+            /*For simplicity, we only consider the activity as portrait mode. In this case, the captured
              * images should be rotated 90 degrees (left or right).Thus the frame width and height
              * should be swapped.*/
             float frameRatio = DEFAULT_CAPTURE_HEIGHT / (float) DEFAULT_CAPTURE_WIDTH;
@@ -368,15 +362,14 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         if (joined) {
             VideoFrame.Buffer buffer = textureBufferHelper.invoke(new Callable<VideoFrame.Buffer>() {
                 @Override
-                public VideoFrame.Buffer call() throws Exception
-                {
-                    return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
+                public VideoFrame.Buffer call() throws Exception {
+                    return textureBufferHelper.wrapTextureBuffer(DEFAULT_CAPTURE_HEIGHT,
                             DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
                             RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
                 }
             });
             VideoFrame frame = new VideoFrame(buffer, 0, 0);
-            /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
+            /*Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
              * @param frame AgoraVideoFrame
@@ -396,13 +389,13 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         mTextureDestroyed = false;
         mSurfaceWidth = width;
         mSurfaceHeight = height;
-        /** handler associate to the GL thread which creates the texture.
+        /* handler associate to the GL thread which creates the texture.
          * in some condition SDK need to convert from texture format to YUV format, in this case,
          * SDK will use this handler to switch into the GL thread to complete the conversion.
          * */
         mHandler = new Handler(Looper.myLooper());
         mEglCore = new EglCore();
-        if(!glPrepared){
+        if (!glPrepared) {
             // setup egl context
             EglBase.Context eglContext = new EglBase14.Context(mEglCore.getEGLContext());
             glPrepared = prepareGl(eglContext, width, height);
@@ -420,19 +413,18 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         }
         try {
             mCamera = Camera.open(mFacing);
-            /**It is assumed to capture images of resolution 640x480. During development, it should
+            /*It is assumed to capture images of resolution 640x480. During development, it should
              * be the most suitable supported resolution that best fits the scenario.*/
             Camera.Parameters parameters = mCamera.getParameters();
             parameters.setPreviewSize(DEFAULT_CAPTURE_WIDTH, DEFAULT_CAPTURE_HEIGHT);
             mCamera.setParameters(parameters);
             mCamera.setPreviewTexture(mPreviewSurfaceTexture);
-            /**The display orientation is 90 for both front and back facing cameras using a surface
+            /*The display orientation is 90 for both front and back facing cameras using a surface
              * texture for the preview when the screen is in portrait mode.*/
             mCamera.setDisplayOrientation(90);
             mCamera.startPreview();
             mPreviewing = true;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -519,14 +511,13 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
@@ -558,7 +549,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));

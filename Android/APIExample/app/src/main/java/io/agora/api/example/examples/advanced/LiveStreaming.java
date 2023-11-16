@@ -147,11 +147,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (getString(R.string.render_mode_hidden).equals(parent.getSelectedItem())) {
                     canvasRenderMode = Constants.RENDER_MODE_HIDDEN;
-                }
-                else if(getString(R.string.render_mode_fit).equals(parent.getSelectedItem())){
+                } else if (getString(R.string.render_mode_fit).equals(parent.getSelectedItem())) {
                     canvasRenderMode = Constants.RENDER_MODE_FIT;
-                }
-                else if(getString(R.string.render_mode_adaptive).equals(parent.getSelectedItem())){
+                } else if (getString(R.string.render_mode_adaptive).equals(parent.getSelectedItem())) {
                     canvasRenderMode = Constants.RENDER_MODE_ADAPTIVE;
                 }
                 updateVideoView();
@@ -181,7 +179,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
         });
         mSettingBinding.switchVideoImage.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isHost && isChecked){
+            if (!isHost && isChecked) {
                 showShortToast("Please join channel with broadcast role firstly.");
                 buttonView.setChecked(false);
                 return;
@@ -200,20 +198,20 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
     private void updateVideoView() {
 
-        if(backGroundVideo.getChildCount() > 0 && backGroundVideo.getReportUid() != -1){
+        if (backGroundVideo.getChildCount() > 0 && backGroundVideo.getReportUid() != -1) {
             int reportUid = backGroundVideo.getReportUid();
             SurfaceView videoView = new SurfaceView(requireContext());
             backGroundVideo.removeAllViews();
             backGroundVideo.addView(videoView);
             VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
             local.backgroundColor = canvasBgColor;
-            if(reportUid == myUid){
+            if (reportUid == myUid) {
                 engine.setupLocalVideo(local);
-            }else{
+            } else {
                 engine.setupRemoteVideo(local);
             }
         }
-        if(foreGroundVideo.getChildCount() > 0 && foreGroundVideo.getReportUid() != -1){
+        if (foreGroundVideo.getChildCount() > 0 && foreGroundVideo.getReportUid() != -1) {
             int reportUid = foreGroundVideo.getReportUid();
             SurfaceView videoView = new SurfaceView(requireContext());
             videoView.setZOrderMediaOverlay(true);
@@ -221,9 +219,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             foreGroundVideo.addView(videoView);
             VideoCanvas local = new VideoCanvas(videoView, canvasRenderMode, reportUid);
             local.backgroundColor = canvasBgColor;
-            if(reportUid == myUid){
+            if (reportUid == myUid) {
                 engine.setupLocalVideo(local);
-            }else{
+            } else {
                 engine.setupRemoteVideo(local);
             }
         }
@@ -310,8 +308,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -330,7 +327,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 foreGroundVideo.removeAllViews();
                 backGroundVideo.removeAllViews();
 
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -357,7 +354,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
             } else {
                 ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
-                clientRoleOptions.audienceLatencyLevel = mSettingBinding.switchLowLatency.isChecked() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+                clientRoleOptions.audienceLatencyLevel = mSettingBinding.switchLowLatency.isChecked() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY
+                        : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
                 engine.setClientRole(CLIENT_ROLE_AUDIENCE, clientRoleOptions);
             }
             mRootBinding.btnPublish.setEnabled(false);
@@ -379,7 +377,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             SurfaceView remoteView = new SurfaceView(getContext());
             if (isLocalVideoForeground) {
                 // Add to the local container
-                foreGroundVideo.addView(localView,0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                foreGroundVideo.addView(localView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Add to the remote container
                 backGroundVideo.addView(remoteView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
@@ -416,8 +414,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 Toast.makeText(getContext(), "The channel name is empty!", Toast.LENGTH_SHORT).show();
             } else {
                 myUid = new Random().nextInt(1000) + 10000;
-                TokenUtils.gen(getContext(), channelName, myUid, token ->
-                {
+                TokenUtils.gen(getContext(), channelName, myUid, token -> {
                     myToken = token;
                     int ret = engine.preloadChannel(token, channelName, myUid);
                     if (ret == Constants.ERR_OK) {
@@ -541,9 +538,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     }
 
     private void enableBFrame(boolean enable) {
-        videoEncoderConfiguration.advanceOptions.compressionPreference = enable ?
-                VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_QUALITY :
-                VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_LOW_LATENCY;
+        videoEncoderConfiguration.advanceOptions.compressionPreference = enable
+                ? VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_QUALITY
+                : VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_LOW_LATENCY;
         engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
     }
 
@@ -674,7 +671,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
@@ -684,10 +681,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             } else {
                 remoteUid = uid;
             }
-            handler.post(() ->
-            {
+            handler.post(() -> {
                 VideoReportLayout videoContainer = isLocalVideoForeground ? backGroundVideo : foreGroundVideo;
-                /**Display remote video stream*/
+                /*Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (videoContainer.getChildCount() > 0) {
                     videoContainer.removeAllViews();
@@ -725,7 +721,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
-                        /**Clear render view
+                        /*Clear render view
                          Note: The video will stay at its last frame, to completely remove it you will need to
                          remove the SurfaceView from its parent*/
                         VideoCanvas remote = new VideoCanvas(null, canvasRenderMode, uid);

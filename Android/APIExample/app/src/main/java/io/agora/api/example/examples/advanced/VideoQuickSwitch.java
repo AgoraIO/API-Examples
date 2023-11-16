@@ -47,13 +47,16 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-/**---------------------------------------Important!!!----------------------------------------------
+/**
+ * ---------------------------------------Important!!!----------------------------------------------
  * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
- 1: You can only access the channel as an audience{@link VideoQuickSwitch#joinChannel(String)}.
- 2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
- push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
- at the same time, the appid you used to set up the live room should be consistent with this example program).
- * @author cjw*/
+ * 1: You can only access the channel as an audience{@link VideoQuickSwitch#joinChannel(String)}.
+ * 2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
+ * push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
+ * at the same time, the appid you used to set up the live room should be consistent with this example program).
+ *
+ * @author cjw
+ */
 @Example(
         index = 12,
         group = ADVANCED,
@@ -61,8 +64,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_QuickSwitch,
         tipsId = R.string.quickswitchchannel
 )
-public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnCheckedChangeListener
-{
+public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = VideoQuickSwitch.class.getSimpleName();
     private ViewPager viewPager;
     private RtcEngine engine;
@@ -76,56 +78,50 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
     private FrameLayout fl_local;
     private boolean publish = false;
     private Switch localVideo;
-    private Runnable runnable = new Runnable()
-    {
+    private Runnable runnable = new Runnable() {
         @Override
-        public void run()
-        {
-            if(noBroadcaster)
-            {
-                /**There is no broadcaster in the current channel*/
+        public void run() {
+            if (noBroadcaster) {
+                /*There is no broadcaster in the current channel*/
                 viewPagerAdapter.notifyBroadcaster(currentIndex, !noBroadcaster);
             }
         }
     };
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -144,8 +140,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -153,48 +148,39 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quick_switch_channel, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fl_local = view.findViewById(R.id.local_video);
         localVideo = view.findViewById(R.id.enableLocal);
         viewPager = view.findViewById(R.id.viewPager);
-        /**Prepare data*/
-        for (String channel : channels)
-        {
+        /*Prepare data*/
+        for (String channel : channels) {
             channelList.add(channel);
         }
         viewPagerAdapter = new ViewPagerAdapter(getContext(), channelList);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
-                if (positionOffset == 0f && position != currentIndex)
-                {
-                    viewPager.post(new Runnable()
-                    {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffset == 0f && position != currentIndex) {
+                    viewPager.post(new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             Log.i(TAG, "Will switch channel to " + channelList.get(position));
 
                             currentIndex = position;
-                            if (lastIndex >= 0)
-                            {
+                            if (lastIndex >= 0) {
                                 viewPagerAdapter.removeSurfaceViewByIndex(lastIndex);
                                 viewPagerAdapter.notifyBroadcaster(lastIndex, true);
                             }
 
-                            /**Since v2.9.0.
+                            /*Since v2.9.0.
                              * Switches to a different channel.
                              * This method allows the audience of a Live-broadcast channel to switch to a different channel.
                              * After the user successfully switches to another channel, the onLeaveChannel
@@ -231,25 +217,25 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
                     });
                 }
             }
+
             @Override
-            public void onPageSelected(int position)
-            {}
+            public void onPageSelected(int position) {
+            }
+
             @Override
-            public void onPageScrollStateChanged(int state)
-            {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
-        /**Swipe left and right to switch channel tips*/
+        /*Swipe left and right to switch channel tips*/
         showAlert(getString(R.string.swiptips));
         localVideo.setOnCheckedChangeListener(this);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check permission
-        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-        {
+        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
             joinChannel(channelList.get(0));
             return;
         }
@@ -257,39 +243,33 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
         AndPermission.with(this).runtime().permission(
                 Permission.READ_EXTERNAL_STORAGE,
                 Permission.WRITE_EXTERNAL_STORAGE
-        ).onGranted(permissions ->
-        {
+        ).onGranted(permissions -> {
             // Permissions Granted
             joinChannel(channelList.get(0));
         }).start();
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null)
-        {
+        /*leaveChannel and Destroy the RtcEngine instance*/
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
 
-    private final void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        if(publish){
+        if (publish) {
             // Create render view by RtcEngine
             SurfaceView surfaceView = new SurfaceView(context);
-            if(fl_local.getChildCount() > 0)
-            {
+            if (fl_local.getChildCount() > 0) {
                 fl_local.removeAllViews();
             }
             surfaceView.setZOrderMediaOverlay(true);
@@ -299,8 +279,8 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             // Setup local video to render your local camera preview
             engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, 0));
         }
-        /**In the demo, the default is to enter as the broadcaster.*/
-        engine.setClientRole(publish?Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE);
+        /*In the demo, the default is to enter as the broadcaster.*/
+        engine.setClientRole(publish ? Constants.CLIENT_ROLE_BROADCASTER : Constants.CLIENT_ROLE_AUDIENCE);
         engine.startPreview();
         // Enable video module
         engine.enableVideo();
@@ -311,16 +291,16 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /**Allows a user to join a channel.
+            /*Allows a user to join a channel.
              * if you do not specify the uid, we will generate the uid for you.
              * If your account has enabled token mechanism through the console, you must fill in the
              * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
@@ -330,8 +310,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             option.publishMicrophoneTrack = true;
             option.publishCameraTrack = true;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
-            if (res != 0)
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -346,16 +325,14 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
@@ -367,8 +344,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          *   Important! Because the channel is entered by the role of an audience, this callback will
          *   only be received when the broadcaster exits the channel.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -382,12 +358,11 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
-            /**Determine if there is a host in the channel*/
+            /*Determine if there is a host in the channel*/
             noBroadcaster = true;
             handler.post(runnable);
         }
@@ -468,13 +443,11 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-            if(state == REMOTE_VIDEO_STATE_PLAYING)
-            {
-                /**REMOTE_VIDEO_STATE_PLAYING as the basis for judging whether there is a broadcaster
+            if (state == REMOTE_VIDEO_STATE_PLAYING) {
+                /*REMOTE_VIDEO_STATE_PLAYING as the basis for judging whether there is a broadcaster
                  *  in the channel.
                  * But you should judge according to your own business logic, here is just for example,
                  *  not for reference.*/
@@ -490,20 +463,17 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          *   Important! Because the channel is entered by the role of an audience, this callback will
          *   only be received when the broadcaster exits the channel.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                if(uid != myUid)
-                {
+            handler.post(() -> {
+                if (uid != myUid) {
                     SurfaceView surfaceV = new SurfaceView(getContext().getApplicationContext());
                     surfaceV.setZOrderMediaOverlay(true);
                     engine.setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
@@ -526,16 +496,13 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          *   Important! Because the channel is entered by the role of an audience, this callback will
          *   only be received when the broadcaster exits the channel.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
-                    /**Clear render view
+                public void run() {
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -548,11 +515,10 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         publish = b;
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
-        if(b){
+        if (b) {
             engine.startPreview();
             // Create render view by RtcEngine
             SurfaceView surfaceView = new SurfaceView(getContext());
@@ -563,27 +529,32 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             // Setup local video to render your local camera preview
             engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, 0));
         }
-        engine.setClientRole(b?Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE);
+        engine.setClientRole(b ? Constants.CLIENT_ROLE_BROADCASTER : Constants.CLIENT_ROLE_AUDIENCE);
     }
 
-    public class ViewPagerAdapter extends PagerAdapter
-    {
+    /**
+     * The type View pager adapter.
+     */
+    public class ViewPagerAdapter extends PagerAdapter {
         private SparseArray<ViewGroup> viewList = new SparseArray<>();
         private Context context;
         private List<String> roomNameList = new ArrayList<>();
 
-        public ViewPagerAdapter(Context context, List<String> roomNameList)
-        {
+        /**
+         * Instantiates a new View pager adapter.
+         *
+         * @param context      the context
+         * @param roomNameList the room name list
+         */
+        public ViewPagerAdapter(Context context, List<String> roomNameList) {
             this.context = context;
             this.roomNameList = roomNameList;
         }
 
         @Override
-        public Object instantiateItem(ViewGroup collection, int position)
-        {
+        public Object instantiateItem(ViewGroup collection, int position) {
             ViewGroup layout = viewList.get(position);
-            if (layout == null)
-            {
+            if (layout == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
                 layout = (ViewGroup) inflater.inflate(R.layout.view_item_quickswitch, collection, false);
                 viewList.put(position, layout);
@@ -598,22 +569,18 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
         }
 
         @Override
-        public void destroyItem(ViewGroup collection, int position, Object view)
-        {
+        public void destroyItem(ViewGroup collection, int position, Object view) {
             collection.removeView((View) view);
         }
 
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return roomNameList.size();
         }
 
-        private void setSurfaceView(int position, final int uid, final SurfaceView view)
-        {
+        private void setSurfaceView(int position, final int uid, final SurfaceView view) {
             final ViewGroup viewGroup = viewList.get(position);
-            if (viewGroup != null)
-            {
+            if (viewGroup != null) {
                 ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
                 surfaceContainer.removeAllViews();
                 view.setZOrderMediaOverlay(true);
@@ -627,30 +594,24 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             }
         }
 
-        private void removeSurfaceView(int uid)
-        {
-            for (int i = 0; i < viewList.size(); i++)
-            {
+        private void removeSurfaceView(int uid) {
+            for (int i = 0; i < viewList.size(); i++) {
                 ViewGroup viewGroup = viewList.get(i);
 
-                if (viewGroup.getTag() != null && ((Integer) viewGroup.getTag()) == uid)
-                {
+                if (viewGroup.getTag() != null && ((Integer) viewGroup.getTag()) == uid) {
                     removeSurfaceView(viewGroup);
                 }
             }
         }
 
-        private void removeSurfaceViewByIndex(int index)
-        {
+        private void removeSurfaceViewByIndex(int index) {
             ViewGroup viewGroup = viewList.get(index);
-            if (viewGroup != null)
-            {
+            if (viewGroup != null) {
                 removeSurfaceView(viewGroup);
             }
         }
 
-        private void removeSurfaceView(ViewGroup viewGroup)
-        {
+        private void removeSurfaceView(ViewGroup viewGroup) {
             ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
             surfaceContainer.removeAllViews();
 
@@ -658,25 +619,27 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             uidTextView.setText("");
         }
 
-        public void notifyBroadcaster(int index, boolean exists)
-        {
+        /**
+         * Notify broadcaster.
+         *
+         * @param index  the index
+         * @param exists the exists
+         */
+        public void notifyBroadcaster(int index, boolean exists) {
             ViewGroup viewGroup = viewList.get(index);
-            if (viewGroup != null)
-            {
+            if (viewGroup != null) {
                 TextView textView = viewGroup.findViewById(R.id.noBroadcaster);
                 textView.setVisibility(exists ? View.GONE : View.VISIBLE);
             }
         }
 
         @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object)
-        {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
 
         @Override
-        public CharSequence getPageTitle(int position)
-        {
+        public CharSequence getPageTitle(int position) {
             return "";
         }
     }

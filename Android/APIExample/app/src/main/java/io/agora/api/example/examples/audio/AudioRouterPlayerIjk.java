@@ -37,7 +37,10 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
-public class AudioRouterPlayerIjk extends BaseFragment{
+/**
+ * The type Audio router player ijk.
+ */
+public class AudioRouterPlayerIjk extends BaseFragment {
     private static final String TAG = "AudioRouterPlayerIjk";
     private FragmentAudiorouterPlayerDetailBinding mBinding;
     private RtcEngine mRtcEngine;
@@ -49,14 +52,12 @@ public class AudioRouterPlayerIjk extends BaseFragment{
         super.onCreate(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
         String channelId = requireArguments().getString("channelId");
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /*
              * The context of Android Activity
@@ -79,7 +80,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)requireActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) requireActivity().getApplication()).getGlobalSettings().getAreaCode();
             mRtcEngine = RtcEngine.create(config);
             /*
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -107,8 +108,8 @@ public class AudioRouterPlayerIjk extends BaseFragment{
             mRtcEngine.enableVideo();
             // Setup video encoding configs
             mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                    ((MainApplication)requireActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)requireActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                    ((MainApplication) requireActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                    VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) requireActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                     STANDARD_BITRATE,
                     VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
             ));
@@ -129,8 +130,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
                 /* Allows a user to join a channel.
                  if you do not specify the uid, we will generate the uid for you*/
                 int res = mRtcEngine.joinChannel(ret, channelId, uid, option);
-                if (res != 0)
-                {
+                if (res != 0) {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
                     // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -138,9 +138,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
                     showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             requireActivity().onBackPressed();
         }
@@ -159,8 +157,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRtcEngine != null)
-        {
+        if (mRtcEngine != null) {
             mRtcEngine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -219,8 +216,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: <a href="https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror">...</a>
@@ -232,7 +228,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
             showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
             if (Constants.ERR_INVALID_TOKEN == err) {
                 showAlert(getString(R.string.token_invalid));
-            } if (Constants.ERR_TOKEN_EXPIRED == err) {
+            } else if (Constants.ERR_TOKEN_EXPIRED == err) {
                 showAlert(getString(R.string.token_expired));
             }
         }
@@ -244,8 +240,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format(Locale.US, "onJoinChannelSuccess channel %s uid %d", channel, uid));
             runOnUIThread(() -> mBinding.localVideo.setReportUid(uid));
@@ -256,8 +251,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format(Locale.US, "user %d joined!", uid));
@@ -266,8 +260,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
             if (context == null) {
                 return;
             }
-            runOnUIThread(() ->
-            {
+            runOnUIThread(() -> {
                 /*Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = new SurfaceView(context);
@@ -293,8 +286,7 @@ public class AudioRouterPlayerIjk extends BaseFragment{
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format(Locale.US, "user %d offline! reason:%d", uid, reason));
             runOnUIThread(() -> {

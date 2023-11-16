@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply from: "${rootDir.absolutePath}/git-hooks.gradle"
 
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 

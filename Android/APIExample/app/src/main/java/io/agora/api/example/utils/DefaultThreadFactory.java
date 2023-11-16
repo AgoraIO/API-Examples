@@ -12,37 +12,40 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author zhilong <a href="mailto:zhilong.liu@aliyun.com">Contact me.</a>
  * @version 1.0
- * @since 15/12/25 上午10:51
+ * @since 15 /12/25 上午10:51
  */
-public class DefaultThreadFactory implements ThreadFactory
-{
+public class DefaultThreadFactory implements ThreadFactory {
     private static final String TAG = DefaultThreadFactory.class.getSimpleName();
 
-    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
 
     private final AtomicInteger threadNumber = new AtomicInteger(1);
     private final ThreadGroup group;
     private final String namePrefix;
 
-    public DefaultThreadFactory()
-    {
+    /**
+     * Instantiates a new Default thread factory.
+     */
+    public DefaultThreadFactory() {
         SecurityManager s = System.getSecurityManager();
-        group = (s != null) ? s.getThreadGroup() :
-                Thread.currentThread().getThreadGroup();
-        namePrefix = "ARouter task pool No." + poolNumber.getAndIncrement() + ", thread No.";
+        group = (s != null) ? s.getThreadGroup()
+                : Thread.currentThread().getThreadGroup();
+        namePrefix = "ARouter task pool No." + POOL_NUMBER.getAndIncrement() + ", thread No.";
     }
 
-    public Thread newThread(@NonNull Runnable runnable)
-    {
+    /**
+     * New thread.
+     * @param runnable a runnable to be executed by new thread instance
+     * @return Thread
+     */
+    public Thread newThread(@NonNull Runnable runnable) {
         String threadName = namePrefix + threadNumber.getAndIncrement();
         Log.i(TAG, "Thread production, name is [" + threadName + "]");
         Thread thread = new Thread(group, runnable, threadName, 0);
-        if (thread.isDaemon())
-        {   //Make non-background thread
+        if (thread.isDaemon()) {   //Make non-background thread
             thread.setDaemon(false);
         }
-        if (thread.getPriority() != Thread.NORM_PRIORITY)
-        {
+        if (thread.getPriority() != Thread.NORM_PRIORITY) {
             thread.setPriority(Thread.NORM_PRIORITY);
         }
 

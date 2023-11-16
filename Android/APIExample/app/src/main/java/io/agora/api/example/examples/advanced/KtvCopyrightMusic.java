@@ -6,6 +6,9 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseBrowserFragment;
 
+/**
+ * The type Ktv copyright music.
+ */
 @Example(
         index = 24,
         group = ADVANCED,

@@ -34,9 +34,21 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 
+/**
+ * File kt utils
+ *
+ * @constructor Create empty File kt utils
+ */
 object FileKtUtils {
-    val TAG = "FileUtils"
+    private const val TAG = "FileUtils"
 
+    /**
+     * Get assets string
+     *
+     * @param context
+     * @param path
+     * @return
+     */
     fun getAssetsString(context: Context, path: String): String {
         val sb = StringBuilder()
         var isr: InputStreamReader? = null
@@ -56,20 +68,27 @@ object FileKtUtils {
                 try {
                     isr.close()
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Log.e(TAG, "", e)
                 }
             }
             if (br != null) {
                 try {
                     br.close()
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Log.e(TAG, "", e)
                 }
             }
         }
         return sb.toString()
     }
 
+    /**
+     * Copy assets
+     *
+     * @param context
+     * @param assetsPath
+     * @param targetPath
+     */
     fun copyAssets(context: Context, assetsPath: String, targetPath: String) {
         // 获取assets目录assetDir下一级所有文件以及文件夹
         val fileNames = context.resources.assets.list(assetsPath)

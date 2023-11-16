@@ -64,6 +64,9 @@ import io.agora.rtc2.video.EncodedVideoFrameInfo;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Multi video source tracks.
+ */
 @Example(
         index = 10,
         group = ADVANCED,
@@ -127,22 +130,22 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -150,7 +153,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -176,7 +179,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
 
     @Override
     public void onDestroy() {
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             destroyAllPushingVideoTrack();
             engine.leaveChannel();
@@ -205,8 +208,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -230,10 +232,10 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             return;
         }
 
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enables the video module.
         engine.enableVideo();
@@ -245,13 +247,13 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -276,11 +278,11 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
      * Push video frame by i420.
      *
      * @param trackId video track id.
-     * @param yuv i420 data
-     * @param width width
-     * @param height height
+     * @param yuv     i420 data
+     * @param width   width
+     * @param height  height
      */
-    private void pushVideoFrameByI420(int trackId, byte[] yuv, int width, int height){
+    private void pushVideoFrameByI420(int trackId, byte[] yuv, int width, int height) {
         JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(width, height);
         i420Buffer.getDataY().put(yuv, 0, i420Buffer.getDataY().limit());
         i420Buffer.getDataU().put(yuv, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
@@ -312,11 +314,11 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
      * Push video frame by nv21.
      *
      * @param trackId video track id.
-     * @param nv21 nv21
-     * @param width width
-     * @param height height
+     * @param nv21    nv21
+     * @param width   width
+     * @param height  height
      */
-    private void pushVideoFrameByNV21(int trackId, byte[] nv21, int width, int height){
+    private void pushVideoFrameByNV21(int trackId, byte[] nv21, int width, int height) {
 
         VideoFrame.Buffer frameBuffer = new NV21Buffer(nv21, width, height, null);
 
@@ -344,11 +346,11 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
      * Push video frame by nv12.
      *
      * @param trackId video track id.
-     * @param nv12 nv12 buffer.
-     * @param width width.
-     * @param height height.
+     * @param nv12    nv12 buffer.
+     * @param width   width.
+     * @param height  height.
      */
-    private void pushVideoFrameByNV12(int trackId, ByteBuffer nv12, int width, int height){
+    private void pushVideoFrameByNV12(int trackId, ByteBuffer nv12, int width, int height) {
         VideoFrame.Buffer frameBuffer = new NV12Buffer(width, height, width, height, nv12, null);
 
         /*
@@ -374,14 +376,14 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
     /**
      * Push video frame by texture id.
      *
-     * @param trackId video track id.
-     * @param textureId texture id.
+     * @param trackId     video track id.
+     * @param textureId   texture id.
      * @param textureType texture type. rgb or oes.
-     * @param width width.
-     * @param height height.
+     * @param width       width.
+     * @param height      height.
      */
     @GLThread
-    private void pushVideoFrameByTexture(int trackId, int textureId, VideoFrame.TextureBuffer.Type textureType, int width, int height){
+    private void pushVideoFrameByTexture(int trackId, int textureId, VideoFrame.TextureBuffer.Type textureType, int width, int height) {
         VideoFrame.Buffer frameBuffer = new TextureBuffer(
                 EglBaseProvider.getCurrentEglContext(),
                 width,
@@ -633,9 +635,9 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         RtcConnection connection = connections.remove(lastIndex);
 
         Iterator<VideoFileReader> fileReaderIterator = videoFileReaders.iterator();
-        while (fileReaderIterator.hasNext()){
+        while (fileReaderIterator.hasNext()) {
             VideoFileReader next = fileReaderIterator.next();
-            if(next.getTrackId() == videoTrack){
+            if (next.getTrackId() == videoTrack) {
                 next.stop();
                 /*
                  * destroy a created custom video track id
@@ -652,9 +654,9 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         }
 
         Iterator<MediaExtractorThread> extractorIterator = videoExtractorThreads.iterator();
-        while (extractorIterator.hasNext()){
+        while (extractorIterator.hasNext()) {
             MediaExtractorThread next = extractorIterator.next();
-            if(next.getTrackId() == videoTrack){
+            if (next.getTrackId() == videoTrack) {
                 next.stop();
                 /*
                  * destroy a created custom video track id
@@ -787,14 +789,13 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 View videoView = createVideoView(uid);
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(videoView, RENDER_MODE_FIT, uid));
@@ -816,7 +817,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             runOnUIThread(() -> {
-                /**Clear render view
+                /*Clear render view
                  Note: The video will stay at its last frame, to completely remove it you will need to
                  remove the SurfaceView from its parent*/
                 resetVideoLayout(uid);
@@ -844,6 +845,17 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
 
 
     private interface MediaExtractorCallback {
+        /**
+         * On extract frame.
+         *
+         * @param buffer             the buffer
+         * @param presentationTimeUs the presentation time us
+         * @param size               the size
+         * @param isKeyFrame         the is key frame
+         * @param width              the width
+         * @param height             the height
+         * @param frameRate          the frame rate
+         */
         void onExtractFrame(ByteBuffer buffer, long presentationTimeUs, int size, boolean isKeyFrame, int width, int height, int frameRate);
     }
 
@@ -861,6 +873,11 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
             this.callback = callback;
         }
 
+        /**
+         * Gets track id.
+         *
+         * @return the track id
+         */
         public int getTrackId() {
             return trackId;
         }
@@ -983,8 +1000,8 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
      * Yuv 2 texture id.
      * Run on gl thread.
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height heigh
      * @return rgba texture id
      */
@@ -999,8 +1016,8 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
     /**
      * Transform yuv to nv12
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height height
      * @return nv12
      */
@@ -1033,8 +1050,8 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
     /**
      * Transform yuv to nv21.
      *
-     * @param yuv yuv
-     * @param width width
+     * @param yuv    yuv
+     * @param width  width
      * @param height height
      * @return nv21
      */
