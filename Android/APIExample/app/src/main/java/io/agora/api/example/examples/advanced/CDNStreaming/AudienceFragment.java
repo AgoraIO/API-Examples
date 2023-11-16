@@ -34,6 +34,8 @@ import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.CacheStatistics;
+import io.agora.mediaplayer.data.PlayerPlaybackStats;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -496,7 +498,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     }
 
     @Override
-    public void onPositionChanged(long l) {
+    public void onPositionChanged(long positionMs, long timestampMs) {
 
     }
 
@@ -548,6 +550,16 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     @Override
     public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onPlayerCacheStats(CacheStatistics stats) {
+
+    }
+
+    @Override
+    public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
 
     }
 

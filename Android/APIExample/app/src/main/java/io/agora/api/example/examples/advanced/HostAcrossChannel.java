@@ -137,8 +137,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -213,7 +212,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 mediaRelayConfiguration.setSrcChannelInfo(srcChannelInfo);
                 ChannelMediaInfo destChannelInfo = new ChannelMediaInfo(destChannelName, null, myUid);
                 mediaRelayConfiguration.setDestChannelInfo(destChannelName, destChannelInfo);
-                engine.startChannelMediaRelay(mediaRelayConfiguration);
+                engine.startOrUpdateChannelMediaRelay(mediaRelayConfiguration);
                 et_channel_ex.setEnabled(false);
                 join_ex.setEnabled(false);
                 pause.setEnabled(true);

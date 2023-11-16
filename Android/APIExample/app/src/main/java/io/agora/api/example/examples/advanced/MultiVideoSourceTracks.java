@@ -301,7 +301,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         /*
          * Pushes the external video frame to the app.
          */
-        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, trackId);
 
         i420Buffer.release();
 
@@ -335,7 +335,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         /*
          * Pushes the external video frame to the app.
          */
-        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, trackId);
 
         if (ret != Constants.ERR_OK) {
             Log.w(TAG, "pushExternalVideoFrame error");
@@ -366,7 +366,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         /*
          * Pushes the external video frame to the app.
          */
-        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, trackId);
 
         if (ret != Constants.ERR_OK) {
             Log.w(TAG, "pushExternalVideoFrame error");
@@ -409,7 +409,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
         /*
          * Pushes the external video frame to the app.
          */
-        int ret = engine.pushExternalVideoFrameEx(videoFrame, trackId);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, trackId);
 
         if (ret != Constants.ERR_OK) {
             Log.w(TAG, "pushExternalVideoFrame error");
@@ -608,7 +608,7 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                         frameInfo.codecType = Constants.VIDEO_CODEC_H264;
                         frameInfo.framesPerSecond = frameRate;
                         frameInfo.frameType = isKeyFrame ? Constants.VIDEO_FRAME_TYPE_KEY_FRAME : Constants.VIDEO_FRAME_TYPE_DELTA_FRAME;
-                        int ret = engine.pushExternalEncodedVideoFrameEx(buffer, frameInfo, videoTrack);
+                        int ret = engine.pushExternalEncodedVideoFrameById(buffer, frameInfo, videoTrack);
                         if (ret != Constants.ERR_OK) {
                             Log.e(TAG, "pushExternalEncodedVideoFrame error: " + ret);
                         }

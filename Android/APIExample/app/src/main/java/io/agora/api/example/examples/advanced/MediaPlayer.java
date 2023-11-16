@@ -19,16 +19,23 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -38,6 +45,10 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.CacheStatistics;
+import io.agora.mediaplayer.data.MediaPlayerSource;
+import io.agora.mediaplayer.data.MediaStreamInfo;
+import io.agora.mediaplayer.data.PlayerPlaybackStats;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -59,7 +70,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_MediaPlayer,
         tipsId = R.string.mediaplayer
 )
-public class MediaPlayer extends BaseFragment implements View.OnClickListener, IMediaPlayerObserver {
+public class MediaPlayer extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, IMediaPlayerObserver {
 
     private static final String TAG = MediaPlayer.class.getSimpleName();
 
@@ -70,6 +81,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     private ChannelMediaOptions options = new ChannelMediaOptions();
     private int myUid;
     private FrameLayout fl_local, fl_remote;
+    private LinearLayout ll_streams;
+    private Spinner sp_player_stream, sp_publish_stream;
+    private List<MediaStreamInfo> mediaStreamInfoList;
+    private int playerStreamIndex, publishStreamIndex;
 
     private boolean joined = false;
     private SeekBar progressBar;
@@ -151,6 +166,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         stop = view.findViewById(R.id.stop);
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
+        ll_streams = view.findViewById(R.id.ll_streams);
+        sp_publish_stream = view.findViewById(R.id.sp_publish_stream);
+        sp_player_stream = view.findViewById(R.id.sp_player_stream);
+        sp_player_stream.setOnItemSelectedListener(this);
+        sp_publish_stream.setOnItemSelectedListener(this);
 
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setMax(100);
@@ -235,7 +255,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         } else if (v.getId() == R.id.open) {
             String url = et_url.getText().toString();
             if (!TextUtils.isEmpty(url)) {
-                mediaPlayer.open(url, 0);
+                MediaPlayerSource source = new MediaPlayerSource();
+                source.setUrl(url);
+                source.setEnableMultiAudioTrack(true);
+                mediaPlayer.openWithMediaSource(source);
             }
         } else if (v.getId() == R.id.play) {
             mediaPlayer.play();
@@ -250,6 +273,24 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             options.publishMediaPlayerId = mediaPlayer.getMediaPlayerId();
             engine.updateChannelMediaOptions(options);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == sp_player_stream) {
+            MediaStreamInfo mediaStreamInfo = mediaStreamInfoList.get(sp_player_stream.getSelectedItemPosition());
+            playerStreamIndex = mediaStreamInfo.getStreamIndex();
+            mediaPlayer.selectMultiAudioTrack(playerStreamIndex, publishStreamIndex);
+        } else if (parent == sp_publish_stream) {
+            MediaStreamInfo mediaStreamInfo = mediaStreamInfoList.get(sp_publish_stream.getSelectedItemPosition());
+            publishStreamIndex = mediaStreamInfo.getStreamIndex();
+            mediaPlayer.selectMultiAudioTrack(playerStreamIndex, publishStreamIndex);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void joinChannel(String channelId) {
@@ -518,13 +559,40 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     private void setMediaPlayerViewEnable(boolean enable) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                play.setEnabled(enable);
-                stop.setEnabled(enable);
-                pause.setEnabled(enable);
-                publish.setEnabled(enable);
+        runOnUIThread(() -> {
+            play.setEnabled(enable);
+            stop.setEnabled(enable);
+            pause.setEnabled(enable);
+            publish.setEnabled(enable);
+
+            if (enable) {
+                ll_streams.setVisibility(View.VISIBLE);
+                mediaStreamInfoList = new ArrayList<>();
+                for (int i = 0; i < mediaPlayer.getStreamCount(); i++) {
+                    MediaStreamInfo streamInfo = mediaPlayer.getStreamInfo(i);
+                    if (streamInfo.getMediaStreamType()
+                            == io.agora.mediaplayer.Constants.MediaStreamType.getValue(
+                            io.agora.mediaplayer.Constants.MediaStreamType.STREAM_TYPE_AUDIO)) {
+                        mediaStreamInfoList.add(streamInfo);
+                    }
+                }
+
+                String[] trackNames = new String[mediaStreamInfoList.size()];
+                for (int i = 0; i < mediaStreamInfoList.size(); i++) {
+                    trackNames[i] = getString(R.string.audio_stream_index, i);
+                }
+                sp_player_stream.setAdapter(
+                        new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+                                android.R.id.text1, trackNames)
+                );
+                sp_publish_stream.setAdapter(
+                        new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+                                android.R.id.text1, trackNames)
+                );
+                playerStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                publishStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+            } else {
+                ll_streams.setVisibility(View.GONE);
             }
         });
     }
@@ -543,10 +611,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPositionChanged(long position) {
-        Log.e(TAG, "onPositionChanged position " + position);
+    public void onPositionChanged(long positionMs, long timestampMs) {
+        Log.e(TAG, "onPositionChanged position " + positionMs);
         if (playerDuration > 0) {
-            final int result = (int) ((float) position / (float) playerDuration * 100);
+            final int result = (int) ((float) positionMs / (float) playerDuration * 100);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -587,6 +655,16 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
     @Override
     public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onPlayerCacheStats(CacheStatistics stats) {
+
+    }
+
+    @Override
+    public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
 
     }
 

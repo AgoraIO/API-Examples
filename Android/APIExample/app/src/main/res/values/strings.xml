@@ -356,4 +356,7 @@
     <string name="video_image_source">Video Image</string>
     <string name="custom">Custom</string>
     <string name="custom_stream_encrypt_tip">Please refer to README to config stream encrypt firstly.</string>
+    <string name="player_stream">Player Stream</string>
+    <string name="publish_stream">Publish Stream</string>
+    <string name="audio_stream_index">AudioStream%d</string>
 </resources>
