@@ -1,26 +1,24 @@
 package io.agora.api.example.common.model;
 
-import io.agora.rtc2.IRtcEngineEventHandler.LastmileProbeResult;
-import io.agora.rtc2.IRtcEngineEventHandler.LocalAudioStats;
 import io.agora.rtc2.IRtcEngineEventHandler.LocalVideoStats;
 import io.agora.rtc2.IRtcEngineEventHandler.RemoteAudioStats;
 import io.agora.rtc2.IRtcEngineEventHandler.RemoteVideoStats;
-import io.agora.rtc2.IRtcEngineEventHandler.RtcStats;
+import io.agora.rtc2.IRtcEngineEventHandlerBase;
 
 public class StatisticsInfo {
-    private LocalVideoStats localVideoStats = new LocalVideoStats();
-    private LocalAudioStats localAudioStats = new LocalAudioStats();
-    private RemoteVideoStats remoteVideoStats = new RemoteVideoStats();
-    private RemoteAudioStats remoteAudioStats = new RemoteAudioStats();
-    private RtcStats rtcStats = new RtcStats();
+    private LocalVideoStats localVideoStats = new LocalVideoStats(new IRtcEngineEventHandlerBase.LocalVideoStatsBase());
+    private IRtcEngineEventHandlerBase.LocalAudioStats localAudioStats = new IRtcEngineEventHandlerBase.LocalAudioStats();
+    private RemoteVideoStats remoteVideoStats = new RemoteVideoStats(new IRtcEngineEventHandlerBase.RemoteVideoStatsBase());
+    private RemoteAudioStats remoteAudioStats = new RemoteAudioStats(new IRtcEngineEventHandlerBase.RemoteAudioStatsBase());
+    private IRtcEngineEventHandlerBase.RtcStats rtcStats = new IRtcEngineEventHandlerBase.RtcStats();
     private int quality;
-    private LastmileProbeResult lastMileProbeResult;
+    private IRtcEngineEventHandlerBase.LastmileProbeResult lastMileProbeResult;
 
     public void setLocalVideoStats(LocalVideoStats localVideoStats) {
         this.localVideoStats = localVideoStats;
     }
 
-    public void setLocalAudioStats(LocalAudioStats localAudioStats) {
+    public void setLocalAudioStats(IRtcEngineEventHandlerBase.LocalAudioStats localAudioStats) {
         this.localAudioStats = localAudioStats;
     }
 
@@ -32,7 +30,7 @@ public class StatisticsInfo {
         this.remoteAudioStats = remoteAudioStats;
     }
 
-    public void setRtcStats(RtcStats rtcStats) {
+    public void setRtcStats(IRtcEngineEventHandlerBase.RtcStats rtcStats) {
         this.rtcStats = rtcStats;
     }
 
@@ -162,7 +160,7 @@ public class StatisticsInfo {
         return stringBuilder.toString();
     }
 
-    public void setLastMileProbeResult(LastmileProbeResult lastmileProbeResult) {
+    public void setLastMileProbeResult(IRtcEngineEventHandlerBase.LastmileProbeResult lastmileProbeResult) {
         this.lastMileProbeResult = lastmileProbeResult;
     }
 
