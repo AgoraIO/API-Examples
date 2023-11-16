@@ -36,6 +36,8 @@ import io.agora.api.example.utils.TokenUtils;
 import io.agora.mediaplayer.Constants;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.CacheStatistics;
+import io.agora.mediaplayer.data.PlayerPlaybackStats;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -406,7 +408,7 @@ public class SpatialSound extends BaseFragment {
             }
 
             @Override
-            public void onPositionChanged(long position_ms) {
+            public void onPositionChanged(long positionMs, long timestampMs) {
 
             }
 
@@ -442,6 +444,16 @@ public class SpatialSound extends BaseFragment {
 
             @Override
             public void onPlayerInfoUpdated(PlayerUpdatedInfo info) {
+
+            }
+
+            @Override
+            public void onPlayerCacheStats(CacheStatistics stats) {
+
+            }
+
+            @Override
+            public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
 
             }
 
