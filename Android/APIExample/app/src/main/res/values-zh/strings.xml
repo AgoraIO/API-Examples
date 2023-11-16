@@ -335,4 +335,6 @@
     <string name="third_party_player">第三方播放器</string>
     <string name="feature_unavailable">当前设备不支持！</string>
     <string name="video_image_source">垫片</string>
+    <string name="custom">自定义</string>
+    <string name="custom_stream_encrypt_tip">请先参考README配置stream encrypt!</string>
 </resources>
