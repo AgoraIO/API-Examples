@@ -130,6 +130,7 @@
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
     <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
+    <string name="item_face_capture">Face Capture</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -198,6 +199,7 @@
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
+    <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -359,4 +361,5 @@
     <string name="player_stream">Player Stream</string>
     <string name="publish_stream">Publish Stream</string>
     <string name="audio_stream_index">AudioStream%d</string>
+    <string name="face_capture_authentication">Please contact Shengwang customer service to obtain the face capture certificate and configure it to the AUTHENTICATION constant.</string>
 </resources>

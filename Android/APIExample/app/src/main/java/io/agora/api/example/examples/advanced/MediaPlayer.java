@@ -589,8 +589,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
                         new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
                                 android.R.id.text1, trackNames)
                 );
-                playerStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
-                publishStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                if (mediaStreamInfoList.size() > 0) {
+                    playerStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                    publishStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                }
             } else {
                 ll_streams.setVisibility(View.GONE);
             }

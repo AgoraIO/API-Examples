@@ -140,6 +140,9 @@
         <action
             android:id="@+id/action_mainFragment_to_third_party_beauty"
             app:destination="@id/thirdPartyBeauty" />
+        <action
+            android:id="@+id/action_mainFragment_to_face_capture"
+            app:destination="@id/faceCapture" />
     </fragment>
 
     <fragment
@@ -423,4 +426,10 @@
         android:name="io.agora.api.example.examples.advanced.KtvCopyrightMusic"
         android:label="@string/item_ktv_copyright_music"
         tools:layout="@layout/fragment_base_browser" />
+
+    <fragment
+        android:id="@+id/faceCapture"
+        android:name="io.agora.api.example.examples.advanced.FaceCapture"
+        android:label="@string/item_face_capture"
+        tools:layout="@layout/fragment_face_capture" />
 </navigation>
