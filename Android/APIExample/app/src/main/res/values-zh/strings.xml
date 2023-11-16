@@ -124,6 +124,7 @@
     <string name="item_ktv_copyright_music">KTV版权音乐</string>
     <string name="item_media_recorder">本地/远端录制</string>
     <string name="item_localvideotranscoding">本地合图</string>
+    <string name="item_face_capture">获取面捕数据</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -191,6 +192,7 @@
     <string name="picture_in_picture">此示例演示了如何在画中画中使用sdk进行远端视频显示的功能。</string>
     <string name="third_party_beauty">此示例演示了如何集成第三方美颜sdk</string>
     <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
+    <string name="face_capture_tip">此示例演示如何使用面捕功能获取面捕数据</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -340,4 +342,5 @@
     <string name="player_stream">播放音轨</string>
     <string name="publish_stream">推送音轨</string>
     <string name="audio_stream_index">音轨%d</string>
+    <string name="face_capture_authentication">请联系声网客服获取面捕证书并配置到AUTHENTICATION常量上</string>
 </resources>
