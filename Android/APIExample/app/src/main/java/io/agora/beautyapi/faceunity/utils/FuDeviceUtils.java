@@ -40,12 +40,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FuDeviceUtils {
+/**
+ * The type Fu device utils.
+ */
+public final class FuDeviceUtils {
 
+    private FuDeviceUtils() {
+
+    }
+
+    /**
+     * The constant TAG.
+     */
     public static final String TAG = "FuDeviceUtils";
 
+    /**
+     * The constant DEVICE_LEVEL_HIGH.
+     */
     public static final int DEVICE_LEVEL_HIGH = 2;
+    /**
+     * The constant DEVICE_LEVEL_MID.
+     */
     public static final int DEVICE_LEVEL_MID = 1;
+    /**
+     * The constant DEVICE_LEVEL_LOW.
+     */
     public static final int DEVICE_LEVEL_LOW = 0;
 
     /**
@@ -148,7 +167,9 @@ public class FuDeviceUtils {
                 try {
                     int freqBound = parseFileForValue("cpu MHz", stream);
                     freqBound *= 1024; //MHz -> kHz
-                    if (freqBound > maxFreq) maxFreq = freqBound;
+                    if (freqBound > maxFreq) {
+                        maxFreq = freqBound;
+                    }
                 } finally {
                     stream.close();
                 }
@@ -245,7 +266,9 @@ public class FuDeviceUtils {
             int length = stream.read(buffer);
             for (int i = 0; i < length; i++) {
                 if (buffer[i] == '\n' || i == 0) {
-                    if (buffer[i] == '\n') i++;
+                    if (buffer[i] == '\n') {
+                        i++;
+                    }
                     for (int j = i; j < length; j++) {
                         int textIndex = j - i;
                         //Text doesn't match query at some point.
@@ -270,6 +293,7 @@ public class FuDeviceUtils {
      * Helper method used by {@link #parseFileForValue(String, FileInputStream) parseFileForValue}. Parses
      * the next available number after the match in the file being read and returns it as an integer.
      *
+     * @param buffer Buffer.
      * @param index - The index in the buffer array to begin looking.
      * @return The next number on that line in the buffer, returned as an int. Returns
      * DEVICEINFO_UNKNOWN = -1 in the event that no more numbers exist on the same line.
@@ -293,8 +317,8 @@ public class FuDeviceUtils {
     /**
      * 获取当前剩余内存(ram)
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return avail memory
      */
     public static long getAvailMemory(Context context) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -306,7 +330,7 @@ public class FuDeviceUtils {
     /**
      * 获取厂商信息
      *
-     * @return
+     * @return brand
      */
     public static String getBrand() {
         return Build.BRAND;
@@ -315,7 +339,7 @@ public class FuDeviceUtils {
     /**
      * 获取手机机型
      *
-     * @return
+     * @return model
      */
     public static String getModel() {
         return Build.MODEL;
@@ -324,7 +348,7 @@ public class FuDeviceUtils {
     /**
      * 获取硬件信息(cpu型号)
      *
-     * @return
+     * @return hard ware
      */
     public static String getHardWare() {
         try {
@@ -353,13 +377,15 @@ public class FuDeviceUtils {
      * Level judgement based on current memory and CPU.
      *
      * @param context - Context object.
-     * @return
+     * @return int
      */
     public static int judgeDeviceLevel(Context context) {
         int level;
         //有一些设备不符合下述的判断规则，则走一个机型判断模式
         int specialDevice = judgeDeviceLevelInDeviceName();
-        if (specialDevice >= 0) return specialDevice;
+        if (specialDevice >= 0) {
+            return specialDevice;
+        }
 
         int ramLevel = judgeMemory(context);
         int cpuLevel = judgeCPU();
@@ -372,29 +398,30 @@ public class FuDeviceUtils {
                 level = DEVICE_LEVEL_MID;
             }
         }
-        LogUtils.d(TAG,"DeviceLevel: " + level);
+        LogUtils.d(TAG, "DeviceLevel: " + level);
         return level;
     }
 
     /**
      * -1 不是特定的高低端机型
-     * @return
+     *
+     * @return level.
      */
     private static int judgeDeviceLevelInDeviceName() {
         String currentDeviceName = getDeviceName();
-        for (String deviceName:upscaleDevice) {
+        for (String deviceName : UPSCALE_DEVICE) {
             if (deviceName.equals(currentDeviceName)) {
                 return DEVICE_LEVEL_HIGH;
             }
         }
 
-        for (String deviceName:middleDevice) {
+        for (String deviceName : MIDDLE_DEVICES) {
             if (deviceName.equals(currentDeviceName)) {
                 return DEVICE_LEVEL_MID;
             }
         }
 
-        for (String deviceName:lowDevice) {
+        for (String deviceName : LOW_DEVICES) {
             if (deviceName.equals(currentDeviceName)) {
                 return DEVICE_LEVEL_LOW;
             }
@@ -402,14 +429,24 @@ public class FuDeviceUtils {
         return -1;
     }
 
-    public static final String[] upscaleDevice = {"vivo X6S A","MHA-AL00","VKY-AL00","V1838A"};
-    public static final String[] lowDevice = {};
-    public static final String[] middleDevice = {"OPPO R11s","PAR-AL00","MI 8 Lite","ONEPLUS A6000","PRO 6","PRO 7 Plus"};
+    /**
+     * The constant upscaleDevice.
+     */
+    public static final String[] UPSCALE_DEVICE = {"vivo X6S A", "MHA-AL00", "VKY-AL00", "V1838A"};
+    /**
+     * The constant lowDevice.
+     */
+    public static final String[] LOW_DEVICES = {};
+    /**
+     * The constant middleDevice.
+     */
+    public static final String[] MIDDLE_DEVICES = {"OPPO R11s", "PAR-AL00", "MI 8 Lite", "ONEPLUS A6000", "PRO 6", "PRO 7 Plus"};
 
     /**
      * 评定内存的等级.
      *
-     * @return
+     * @param context Context.
+     * @return level.
      */
     private static int judgeMemory(Context context) {
         long ramMB = getTotalMemory(context) / (1024 * 1024);
@@ -431,7 +468,7 @@ public class FuDeviceUtils {
     /**
      * 评定CPU等级.（按频率和厂商型号综合判断）
      *
-     * @return
+     * @return level.
      */
     private static int judgeCPU() {
         int level = 0;
@@ -445,7 +482,8 @@ public class FuDeviceUtils {
                 return judgeQualcommCPU(cpuName, freqMHz);
             } else if (cpuName.contains("hi") || cpuName.contains("kirin")) { //海思麒麟
                 return judgeSkinCPU(cpuName, freqMHz);
-            } else if (cpuName.contains("MT")) {//联发科
+            } else if (cpuName.contains("MT")) {
+                //联发科
                 return judgeMTCPU(cpuName, freqMHz);
             }
         }
@@ -466,7 +504,9 @@ public class FuDeviceUtils {
     /**
      * 联发科芯片等级判定
      *
-     * @return
+     * @param cpuName CPU Name.
+     * @param freqMHz CPU Freq MHz.
+     * @return level
      */
     private static int judgeMTCPU(String cpuName, int freqMHz) {
         //P60之前的全是低端机 MT6771V/C
@@ -508,8 +548,8 @@ public class FuDeviceUtils {
     /**
      * 通过联发科CPU型号定义 -> 获取cpu version
      *
-     * @param cpuName
-     * @return
+     * @param cpuName CPU Name.
+     * @return CPU Version.
      */
     private static int getMTCPUVersion(String cpuName) {
         //截取MT后面的四位数字
@@ -529,7 +569,9 @@ public class FuDeviceUtils {
     /**
      * 高通骁龙芯片等级判定
      *
-     * @return
+     * @param cpuName CPU Name.
+     * @param freqMHz CPU Freq MHz.
+     * @return level
      */
     private static int judgeQualcommCPU(String cpuName, int freqMHz) {
         int level = 0;
@@ -561,8 +603,9 @@ public class FuDeviceUtils {
     /**
      * 麒麟芯片等级判定
      *
-     * @param freqMHz
-     * @return
+     * @param cpuName CPU Name.
+     * @param freqMHz CPU Freq MHz.
+     * @return level
      */
     private static int judgeSkinCPU(String cpuName, int freqMHz) {
         //型号 -> kirin710之后 & 最高核心频率
@@ -590,17 +633,22 @@ public class FuDeviceUtils {
         return level;
     }
 
-    public static final String Nexus_6P = "Nexus 6P";
+    /**
+     * The constant NEXUS_6P.
+     */
+    public static final String NEXUS_6P = "Nexus 6P";
 
     /**
-     * 获取设备名
+     * 获取设备名。
      *
-     * @return
+     * @return the device name
      */
     public static String getDeviceName() {
         String deviceName = "";
-        if (Build.MODEL != null) deviceName = Build.MODEL;
-        LogUtils.e(TAG,"deviceName: " + deviceName);
+        if (Build.MODEL != null) {
+            deviceName = Build.MODEL;
+        }
+        LogUtils.e(TAG, "deviceName: " + deviceName);
         return deviceName;
     }
 }

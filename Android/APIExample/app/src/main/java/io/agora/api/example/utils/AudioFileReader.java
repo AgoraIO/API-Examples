@@ -6,14 +6,35 @@ import android.os.Process;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * The type Audio file reader.
+ */
 public class AudioFileReader {
     private static final String AUDIO_FILE = "output.raw";
+    /**
+     * The constant SAMPLE_RATE.
+     */
     public static final int SAMPLE_RATE = 44100;
+    /**
+     * The constant SAMPLE_NUM_OF_CHANNEL.
+     */
     public static final int SAMPLE_NUM_OF_CHANNEL = 2;
+    /**
+     * The constant BITS_PER_SAMPLE.
+     */
     public static final int BITS_PER_SAMPLE = 16;
 
+    /**
+     * The constant BYTE_PER_SAMPLE.
+     */
     public static final float BYTE_PER_SAMPLE = 1.0f * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+    /**
+     * The constant DURATION_PER_SAMPLE.
+     */
     public static final float DURATION_PER_SAMPLE = 1000.0f / SAMPLE_RATE; // ms
+    /**
+     * The constant SAMPLE_COUNT_PER_MS.
+     */
     public static final float SAMPLE_COUNT_PER_MS = SAMPLE_RATE * 1.0f / 1000; // ms
 
     private static final int BUFFER_SAMPLE_COUNT = (int) (SAMPLE_COUNT_PER_MS * 10); // 10ms sample count
@@ -26,21 +47,33 @@ public class AudioFileReader {
     private InnerThread thread;
     private InputStream inputStream;
 
-    public AudioFileReader(Context context, OnAudioReadListener listener){
+    /**
+     * Instantiates a new Audio file reader.
+     *
+     * @param context  the context
+     * @param listener the listener
+     */
+    public AudioFileReader(Context context, OnAudioReadListener listener) {
         this.context = context;
         this.audioReadListener = listener;
     }
 
+    /**
+     * Start.
+     */
     public void start() {
-        if(thread == null){
+        if (thread == null) {
             thread = new InnerThread();
             thread.start();
         }
     }
 
-    public void stop(){
+    /**
+     * Stop.
+     */
+    public void stop() {
         pushing = false;
-        if(thread != null){
+        if (thread != null) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
@@ -51,11 +84,20 @@ public class AudioFileReader {
         }
     }
 
+    /**
+     * The interface On audio read listener.
+     */
     public interface OnAudioReadListener {
+        /**
+         * On audio read.
+         *
+         * @param buffer    the buffer
+         * @param timestamp the timestamp
+         */
         void onAudioRead(byte[] buffer, long timestamp);
     }
 
-    private class InnerThread extends Thread{
+    private final class InnerThread extends Thread {
 
         @Override
         public void run() {
@@ -68,17 +110,17 @@ public class AudioFileReader {
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
             pushing = true;
 
-            long start_time = System.currentTimeMillis();;
+            long start_time = System.currentTimeMillis();
             int sent_audio_frames = 0;
             while (pushing) {
-                if(audioReadListener != null){
+                if (audioReadListener != null) {
                     audioReadListener.onAudioRead(readBuffer(), System.currentTimeMillis());
                 }
-                ++ sent_audio_frames;
+                ++sent_audio_frames;
                 long next_frame_start_time = sent_audio_frames * BUFFER_DURATION + start_time;
                 long now = System.currentTimeMillis();
 
-                if(next_frame_start_time > now){
+                if (next_frame_start_time > now) {
                     long sleep_duration = next_frame_start_time - now;
                     try {
                         Thread.sleep(sleep_duration);

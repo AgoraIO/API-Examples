@@ -46,7 +46,9 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-/**This demo demonstrates how to make a one-to-one video call*/
+/**
+ * This demo demonstrates how to make a one-to-one video call
+ */
 @Example(
         index = 1,
         group = BASIC,
@@ -54,8 +56,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_joinChannelVideo,
         tipsId = R.string.joinchannelvideo
 )
-public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
-{
+public class JoinChannelVideo extends BaseFragment implements View.OnClickListener {
     private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
     private VideoReportLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
@@ -69,15 +70,13 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_joinchannel_video, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         switch_camera = view.findViewById(R.id.btn_switch_camera);
@@ -91,42 +90,39 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -145,20 +141,17 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        /*leaveChannel and Destroy the RtcEngine instance*/
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -167,12 +160,9 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 
     @SuppressLint("WrongConstant")
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -182,31 +172,27 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
                 permissionList.add(Permission.RECORD_AUDIO);
                 permissionList.add(Permission.CAMERA);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
                 }
 
                 String[] permissionArray = new String[permissionList.size()];
                 permissionList.toArray(permissionArray);
 
-                if (AndPermission.hasPermissions(this,permissionArray))
-                {
+                if (AndPermission.hasPermissions(this, permissionArray)) {
                     joinChannel(channelId);
                     return;
                 }
                 // Request permission
                 AndPermission.with(this).runtime().permission(
                         permissionArray
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -230,26 +216,23 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 }
                 remoteViews.clear();
             }
-        }else if(v.getId() == switch_camera.getId()){
-            if(engine != null && joined){
+        } else if (v.getId() == switch_camera.getId()) {
+            if (engine != null && joined) {
                 engine.switchCamera();
             }
         }
     }
 
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -259,14 +242,14 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
         ));
@@ -277,7 +260,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         option.publishMicrophoneTrack = true;
         option.publishCameraTrack = true;
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
@@ -285,11 +268,10 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         int uid = new Random().nextInt(1000) + 100000;
         TokenUtils.gen(requireContext(), channelId, uid, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, uid, option);
-            if (res != 0)
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -307,12 +289,11 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
-         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * en: {@see https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror}
+         * cn: {@see https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror}
          */
         @Override
         public void onError(int err) {
@@ -324,7 +305,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 
                 if (Constants.ERR_INVALID_TOKEN == err) {
                     showAlert(getString(R.string.token_invalid));
-                } if (Constants.ERR_TOKEN_EXPIRED == err) {
+                } else {
                     showAlert(getString(R.string.token_expired));
                 }
             }
@@ -334,8 +315,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -348,17 +328,14 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     fl_local.setReportUid(uid);
@@ -442,8 +419,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -453,23 +429,20 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            if(remoteViews.containsKey(uid)){
+            if (remoteViews.containsKey(uid)) {
                 return;
-            }
-            else{
-                handler.post(() ->
-                {
-                    /**Display remote video stream*/
+            } else {
+                handler.post(() -> {
+                    /*Display remote video stream*/
                     SurfaceView surfaceView = null;
                     // Create render view by RtcEngine
                     surfaceView = new SurfaceView(context);
@@ -496,14 +469,13 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -543,16 +515,13 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     };
 
     private VideoReportLayout getAvailableView() {
-        if(fl_remote.getChildCount() == 0){
+        if (fl_remote.getChildCount() == 0) {
             return fl_remote;
-        }
-        else if(fl_remote_2.getChildCount() == 0){
+        } else if (fl_remote_2.getChildCount() == 0) {
             return fl_remote_2;
-        }
-        else if(fl_remote_3.getChildCount() == 0){
+        } else if (fl_remote_3.getChildCount() == 0) {
             return fl_remote_3;
-        }
-        else{
+        } else {
             return fl_remote;
         }
     }

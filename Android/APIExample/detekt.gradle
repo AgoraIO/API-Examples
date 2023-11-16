@@ -1,0 +1,55 @@
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+
+def filterDetektFiles(String diffFiles){
+    ArrayList<String> filterList = new ArrayList<String>();
+    String [] files = diffFiles.split("\\n")
+    for (String file : files) {
+        if (file.endsWith(".kt")) {
+            filterList.add(file)
+        }
+    }
+    return filterList
+}
+
+detekt {
+
+    toolVersion = "1.23.1"
+
+    // Builds the AST in parallel. Rules are always executed in parallel.
+    // Can lead to speedups in larger projects. `false` by default.
+    parallel = true
+
+    // Define the detekt configuration(s) you want to use.
+    // Defaults to the default detekt configuration.
+    config.setFrom("${rootDir.absolutePath}/detekt-config.yml")
+
+    // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
+    baseline = file("${rootDir.absolutePath}/detekt-baseline.xml")
+
+    if (project.hasProperty('commit_diff_files')) {
+        def ft = filterDetektFiles(project.property('commit_diff_files'))
+        source.from = files()
+        for (int i = 0; i < ft.size(); i++) {
+            String splitter = ft[i];
+            String[] fileName = splitter.split("/")
+            int srcIndex = 0;
+            for (final def name in fileName) {
+                if(name == "src"){
+                    break
+                }
+                srcIndex += name.length() + 1
+            }
+            source.from += splitter.substring(srcIndex)
+        }
+        println("detekt >> check commit diff files...")
+        println("detekt >> " + source.from.toList())
+    } else {
+        println("detekt >> check all kt files...")
+    }
+}
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1"
+}
+

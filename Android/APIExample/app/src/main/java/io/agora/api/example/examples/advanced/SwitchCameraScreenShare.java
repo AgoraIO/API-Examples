@@ -114,35 +114,35 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         if (context == null) {
             return;
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             fgServiceIntent = new Intent(getActivity(), MediaProjectFgService.class);
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -168,12 +168,12 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
     @Override
     public void onDestroy() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getActivity().stopService(fgServiceIntent);
         }
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
-            if(camera.isChecked()){
+            if (camera.isChecked()) {
                 engine.leaveChannelEx(rtcConnection2);
             }
             engine.leaveChannel();
@@ -189,8 +189,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (compoundButton.getId() == R.id.screenShare) {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                if(b){
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (b) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         getActivity().startForegroundService(fgServiceIntent);
                     }
                     DisplayMetrics metrics = new DisplayMetrics();
@@ -207,11 +207,10 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     options.publishScreenCaptureAudio = true;
                     engine.updateChannelMediaOptions(options);
                     addScreenSharePreview();
-                }
-                else{
+                } else {
                     // stop screen capture and update options
                     engine.stopScreenCapture();
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         getActivity().stopService(fgServiceIntent);
                     }
                     options.publishScreenCaptureVideo = false;
@@ -223,26 +222,25 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 showAlert(getString(R.string.lowversiontip));
             }
         } else if (compoundButton.getId() == R.id.camera) {
-                if(b){
-                    ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
-                    mediaOptions.autoSubscribeAudio = false;
-                    mediaOptions.autoSubscribeVideo = false;
-                    mediaOptions.publishScreenCaptureVideo = false;
-                    mediaOptions.publishCameraTrack = true;
-                    mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
-                    mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-                    rtcConnection2.channelId = et_channel.getText().toString();
-                    rtcConnection2.localUid = new Random().nextInt(512)+512;
-                    engine.joinChannelEx(null ,rtcConnection2,mediaOptions,iRtcEngineEventHandler);
-                }
-                else{
-                    engine.leaveChannelEx(rtcConnection2);
-                    engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
-                }
-        }else if (compoundButton.getId() == R.id.screenSharePreview) {
-            if(b){
+            if (b) {
+                ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+                mediaOptions.autoSubscribeAudio = false;
+                mediaOptions.autoSubscribeVideo = false;
+                mediaOptions.publishScreenCaptureVideo = false;
+                mediaOptions.publishCameraTrack = true;
+                mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+                mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+                rtcConnection2.channelId = et_channel.getText().toString();
+                rtcConnection2.localUid = new Random().nextInt(512) + 512;
+                engine.joinChannelEx(null, rtcConnection2, mediaOptions, iRtcEngineEventHandler);
+            } else {
+                engine.leaveChannelEx(rtcConnection2);
+                engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
+            }
+        } else if (compoundButton.getId() == R.id.screenSharePreview) {
+            if (b) {
                 addScreenSharePreview();
-            }else{
+            } else {
                 fl_screen.removeAllViews();
                 engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
             }
@@ -266,8 +264,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -284,16 +281,16 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     engine.leaveChannelEx(rtcConnection2);
                     camera.setChecked(false);
                 }
-                if(screenSharePreview.isChecked()){
+                if (screenSharePreview.isChecked()) {
                     engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
                     screenSharePreview.setChecked(false);
                 }
-                if(screenShare.isChecked()){
+                if (screenShare.isChecked()) {
                     engine.stopScreenCapture();
                     screenShare.setChecked(false);
                 }
                 engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -374,7 +371,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         options.enableAudioRecordingOrPlayout = false;
         options.publishEncodedVideoTrack = false;
 
-        /**Enable video module*/
+        /*Enable video module*/
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
@@ -383,16 +380,16 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(accessToken, channelId, 0, options);
             if (res != 0) {
@@ -530,6 +527,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
     };
 
+    /**
+     * The type Media project fg service.
+     */
     public static class MediaProjectFgService extends Service {
         @Nullable
         @Override

@@ -17,7 +17,7 @@ import io.agora.rtc2.RtcEngine;
 /**
  * @author cjw
  */
-public class SettingActivity extends AppCompatActivity{
+public class SettingActivity extends AppCompatActivity {
     private static final String TAG = SettingActivity.class.getSimpleName();
 
     private ActivitySettingLayoutBinding mBinding;
@@ -31,24 +31,24 @@ public class SettingActivity extends AppCompatActivity{
         mBinding.sdkVersion.setText(String.format(getString(R.string.sdkversion1), RtcEngine.getSdkVersion()));
         String[] mItems = getResources().getStringArray(R.array.orientations);
         String[] labels = new String[mItems.length];
-        for(int i = 0;i<mItems.length;i++){
-            int resId = getResources().getIdentifier( mItems[i], "string", getPackageName() );
+        for (int i = 0; i < mItems.length; i++) {
+            int resId = getResources().getIdentifier(mItems[i], "string", getPackageName());
             labels[i] = getString(resId);
         }
-        ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, labels);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels);
         mBinding.orientationSpinner.setAdapter(arrayAdapter);
         fetchGlobalSettings();
     }
 
-    private void fetchGlobalSettings(){
-        GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
+    private void fetchGlobalSettings() {
+        GlobalSettings globalSettings = ((MainApplication) getApplication()).getGlobalSettings();
 
         String[] mItems = getResources().getStringArray(R.array.orientations);
         String selectedItem = globalSettings.getVideoEncodingOrientation();
         int i = 0;
-        if(selectedItem!=null){
-            for(String item : mItems){
-                if(selectedItem.equals(item)){
+        if (selectedItem != null) {
+            for (String item : mItems) {
+                if (selectedItem.equals(item)) {
                     break;
                 }
                 i++;
@@ -58,9 +58,9 @@ public class SettingActivity extends AppCompatActivity{
         mItems = getResources().getStringArray(R.array.fps);
         selectedItem = globalSettings.getVideoEncodingFrameRate();
         i = 0;
-        if(selectedItem!=null){
-            for(String item : mItems){
-                if(selectedItem.equals(item)){
+        if (selectedItem != null) {
+            for (String item : mItems) {
+                if (selectedItem.equals(item)) {
                     break;
                 }
                 i++;
@@ -70,9 +70,9 @@ public class SettingActivity extends AppCompatActivity{
         mItems = getResources().getStringArray(R.array.dimensions);
         selectedItem = globalSettings.getVideoEncodingDimension();
         i = 0;
-        if(selectedItem!=null){
-            for(String item : mItems){
-                if(selectedItem.equals(item)){
+        if (selectedItem != null) {
+            for (String item : mItems) {
+                if (selectedItem.equals(item)) {
                     break;
                 }
                 i++;
@@ -82,9 +82,9 @@ public class SettingActivity extends AppCompatActivity{
         mItems = getResources().getStringArray(R.array.areaCode);
         selectedItem = globalSettings.getAreaCodeStr();
         i = 0;
-        if(selectedItem!=null){
-            for(String item : mItems){
-                if(selectedItem.equals(item)){
+        if (selectedItem != null) {
+            for (String item : mItems) {
+                if (selectedItem.equals(item)) {
                     break;
                 }
                 i++;
@@ -111,7 +111,7 @@ public class SettingActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == saveMenu.getItemId()) {
-            GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
+            GlobalSettings globalSettings = ((MainApplication) getApplication()).getGlobalSettings();
             globalSettings.privateCloudIp = mBinding.privateCloudLayout.etIpAddress.getText().toString();
             globalSettings.privateCloudLogReportEnable = mBinding.privateCloudLayout.swLogReport.isChecked();
             globalSettings.privateCloudLogServerDomain = mBinding.privateCloudLayout.etLogServerDomain.getText().toString();

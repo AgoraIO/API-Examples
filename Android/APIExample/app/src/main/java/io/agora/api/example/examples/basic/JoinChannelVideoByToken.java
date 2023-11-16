@@ -41,13 +41,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 /**
  * This demo demonstrates how to make a one-to-one video call
  */
-@Example(
-        index = 0,
-        group = BASIC,
-        name = R.string.item_joinvideo_by_token,
-        actionId = R.id.action_mainFragment_to_joinChannelVideoByToken,
-        tipsId = R.string.joinchannelvideoByToken
-)
+@Example(index = 0, group = BASIC, name = R.string.item_joinvideo_by_token, actionId = R.id.action_mainFragment_to_joinChannelVideoByToken, tipsId = R.string.joinchannelvideoByToken)
 public class JoinChannelVideoByToken extends BaseFragment implements View.OnClickListener {
     private static final String TAG = JoinChannelVideoByToken.class.getSimpleName();
 
@@ -87,40 +81,32 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
     private boolean createRtcEngine(String appId) {
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
-             * The context of Android Activity
-             */
+
+            // The context of Android Activity
             config.mContext = requireContext().getApplicationContext();
-            /**
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
-             */
+            // The App ID issued to you by Agora.
+            // See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
             config.mAppId = appId;
-            /** Sets the channel profile of the Agora RtcEngine.
-             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-             Use this profile in one-on-one calls or group calls, where all users can talk freely.
-             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-             an audience can only receive streams.*/
+            // Sets the channel profile of the Agora RtcEngine.
+            //  CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
+            //  Use this profile in one-on-one calls or group calls, where all users can talk freely.
+            //  CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
+            //  channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
+            //  an audience can only receive streams.
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
-             * IRtcEngineEventHandler is an abstract class providing default implementation.
-             * The SDK uses this class to report to the app on SDK runtime events.
-             */
+            // RtcEngineEventHandler is an abstract class providing default implementation.
+            // he SDK uses this class to report to the app on SDK runtime events.
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
-             * This parameter is for reporting the usages of APIExample to agora background.
-             * Generally, it is not necessary for you to set this parameter.
-             */
+            // This parameter is for reporting the usages of APIExample to agora background.
+            // Generally, it is not necessary for you to set this parameter.
             engine.setParameters("{"
                     + "\"rtc.report_app_scenario\":"
-                    + "{"
-                    + "\"appScenario\":" + 100 + ","
+                    + "{" + "\"appScenario\":" + 100 + ","
                     + "\"serviceType\":" + 11 + ","
-                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
-                    + "}"
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\"" + "}"
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
@@ -135,9 +121,9 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         return false;
     }
 
-    private void destroyRtcEngine(){
+    private void destroyRtcEngine() {
         if (engine != null) {
-            /**leaveChannel and Destroy the RtcEngine instance*/
+            // leaveChannel and Destroy the RtcEngine instance
             engine.leaveChannel();
             RtcEngine.destroy();
             engine = null;
@@ -161,7 +147,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                 String channelId = et_channel.getText().toString();
                 String token = et_token.getText().toString();
 
-                if(TextUtils.isEmpty(appId)){
+                if (TextUtils.isEmpty(appId)) {
                     showLongToast(getString(R.string.app_id_empty));
                     return;
                 }
@@ -205,7 +191,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        // In the demo, the default is to enter as the anchor.
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
@@ -214,8 +200,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                 ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
                 VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
-        ));
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())));
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -223,8 +208,8 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         option.publishMicrophoneTrack = true;
         option.publishCameraTrack = true;
 
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+        //Allows a user to join a channel.
+        // if you do not specify the uid, we will generate the uid for you
         int res = engine.joinChannel(token, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
@@ -260,7 +245,8 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
 
                 if (Constants.ERR_INVALID_TOKEN == err) {
                     showAlert(getString(R.string.token_invalid));
-                } if (Constants.ERR_TOKEN_EXPIRED == err) {
+                }
+                if (Constants.ERR_TOKEN_EXPIRED == err) {
                     showAlert(getString(R.string.token_expired));
                 }
             }
@@ -388,7 +374,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            // Check if the context is correct
             Context context = getContext();
             if (context == null) {
                 return;
@@ -396,9 +382,8 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             if (remoteViews.containsKey(uid)) {
                 return;
             } else {
-                handler.post(() ->
-                {
-                    /**Display remote video stream*/
+                handler.post(() -> {
+                    // Display remote video stream
                     SurfaceView surfaceView = null;
                     // Create render view by RtcEngine
                     surfaceView = new SurfaceView(context);
@@ -431,9 +416,9 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
+                    //Clear render view
+                    // Note: The video will stay at its last frame, to completely remove it you will need to
+                    // remove the SurfaceView from its parent
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                     remoteViews.get(uid).removeAllViews();
                     remoteViews.remove(uid);

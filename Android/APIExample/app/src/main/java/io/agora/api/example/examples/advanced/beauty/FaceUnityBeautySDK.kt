@@ -15,10 +15,19 @@ import com.faceunity.wrapper.faceunity
 import java.io.File
 import java.util.concurrent.Executors
 
+/**
+ * Face unity beauty s d k
+ *
+ * @constructor Create empty Face unity beauty s d k
+ */
 object FaceUnityBeautySDK {
     private val TAG = "FaceUnityBeautySDK"
 
     private val fuAIKit = FUAIKit.getInstance()
+
+    /**
+     * Fu render kit
+     */
     val fuRenderKit = FURenderKit.getInstance()
 
     /* AI道具*/
@@ -27,6 +36,11 @@ object FaceUnityBeautySDK {
 
     private val workerThread = Executors.newSingleThreadExecutor()
 
+    /**
+     * Init beauty
+     *
+     * @param context
+     */
     fun initBeauty(context: Context) {
         FURenderManager.setKitDebug(FULogger.LogLevel.TRACE)
         FURenderManager.setCoreDebug(FULogger.LogLevel.ERROR)
@@ -51,18 +65,51 @@ object FaceUnityBeautySDK {
         })
     }
 
+    /**
+     * Release
+     *
+     */
     fun release() {
         FURenderKit.getInstance().release()
     }
 
+    /**
+     * Get auth
+     *
+     * @return
+     */
     private fun getAuth(): ByteArray {
-        val authpack = Class.forName("io.agora.api.example.examples.advanced.beauty.authpack")
-        val aMethod = authpack.getDeclaredMethod("A")
-        aMethod.isAccessible = true
-        val authValue = aMethod.invoke(null) as? ByteArray
-        return authValue ?: ByteArray(0)
+        try {
+            val authpack = Class.forName("io.agora.api.example.examples.advanced.beauty.authpack")
+            val aMethod = authpack.getDeclaredMethod("A")
+            aMethod.isAccessible = true
+            val authValue = aMethod.invoke(null) as? ByteArray
+            return authValue ?: ByteArray(0)
+        } catch (e: Exception){
+            Log.e(TAG, "getAuth >> error : $e")
+        }
+        return ByteArray(0)
     }
 
+    /**
+     * Set beauty
+     *
+     * @param smooth
+     * @param whiten
+     * @param thinFace
+     * @param enlargeEye
+     * @param redden
+     * @param shrinkCheekbone
+     * @param shrinkJawbone
+     * @param whiteTeeth
+     * @param hairlineHeight
+     * @param narrowNose
+     * @param mouthSize
+     * @param chinLength
+     * @param brightEye
+     * @param darkCircles
+     * @param nasolabialFolds
+     */
     fun setBeauty(
         smooth: Double? = null,
         whiten: Double? = null,

@@ -10,6 +10,9 @@ import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.GlUtil;
 import io.agora.base.internal.video.YuvHelper;
 
+/**
+ * The type Yuv uploader.
+ */
 public class YuvUploader {
     // Intermediate copy buffer for uploading yuv frames that are not packed, i.e. stride > width.
     // TODO(magjed): Investigate when GL_UNPACK_ROW_LENGTH is available, or make a custom shader
@@ -20,6 +23,10 @@ public class YuvUploader {
     /**
      * Upload |planes| into OpenGL textures, taking stride into consideration.
      *
+     * @param width   the width
+     * @param height  the height
+     * @param strides the strides
+     * @param planes  the planes
      * @return Array of three texture indices corresponding to Y-, U-, and V-plane respectively.
      */
     @Nullable
@@ -65,6 +72,12 @@ public class YuvUploader {
         return yuvTextures;
     }
 
+    /**
+     * Upload from buffer int [ ].
+     *
+     * @param buffer the buffer
+     * @return the int [ ]
+     */
     @Nullable
     public int[] uploadFromBuffer(VideoFrame.I420Buffer buffer) {
         int[] strides = {buffer.getStrideY(), buffer.getStrideU(), buffer.getStrideV()};
@@ -72,6 +85,11 @@ public class YuvUploader {
         return uploadYuvData(buffer.getWidth(), buffer.getHeight(), strides, planes);
     }
 
+    /**
+     * Get yuv textures int [ ].
+     *
+     * @return the int [ ]
+     */
     @Nullable
     public int[] getYuvTextures() {
         return yuvTextures;

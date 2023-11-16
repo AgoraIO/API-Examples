@@ -122,35 +122,35 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         if (context == null) {
             return;
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             fgServiceIntent = new Intent(getActivity(), ScreenSharing.MediaProjectFgService.class);
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -176,10 +176,10 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onDestroy() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getActivity().stopService(fgServiceIntent);
         }
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
             engine.stopScreenCapture();
@@ -228,8 +228,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
@@ -273,7 +272,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         engine.setParameters("{\"che.video.mobile_1080p\":true}");
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
 
-        /**Enable video module*/
+        /*Enable video module*/
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
@@ -282,10 +281,10 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getActivity().startForegroundService(fgServiceIntent);
         }
 
@@ -303,13 +302,13 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             startScreenSharePreview();
         }
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             // set options
             ChannelMediaOptions options = new ChannelMediaOptions();
@@ -372,7 +371,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         public void onLocalVideoStateChanged(Constants.VideoSourceType source, int state, int error) {
             super.onLocalVideoStateChanged(source, state, error);
             Log.i(TAG, "onLocalVideoStateChanged source=" + source + ", state=" + state + ", error=" + error);
-            if(source == Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY){
+            if (source == Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY) {
                 if (state == Constants.LOCAL_VIDEO_STREAM_STATE_ENCODING) {
                     if (error == Constants.ERR_OK) {
                         showLongToast("Screen sharing start successfully.");
@@ -488,7 +487,8 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         join.setText(getString(R.string.join));
         fl_local.removeAllViews();
         fl_remote.removeAllViews();
-        remoteUid = myUid = -1;
+        remoteUid = -1;
+        myUid = -1;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getActivity().stopService(fgServiceIntent);
@@ -531,6 +531,9 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     }
 
+    /**
+     * The type Media project fg service.
+     */
     public static class MediaProjectFgService extends Service {
         @Nullable
         @Override

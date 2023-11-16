@@ -41,18 +41,15 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 /**
  * This demo demonstrates how to make a one-to-one voice call
  */
-@Example(
-        index = 6,
-        group = ADVANCED,
-        name = R.string.item_customaudiorender,
-        actionId = R.id.action_mainFragment_to_CustomAudioRender,
-        tipsId = R.string.customaudiorender
-)
+@Example(index = 6, group = ADVANCED, name = R.string.item_customaudiorender, actionId = R.id.action_mainFragment_to_CustomAudioRender, tipsId = R.string.customaudiorender)
 public class CustomAudioRender extends BaseFragment implements View.OnClickListener {
     private static final String TAG = CustomAudioRender.class.getSimpleName();
     private EditText et_channel;
     private Button join;
     private boolean joined = false;
+    /**
+     * The constant engine.
+     */
     public static RtcEngineEx engine;
     private ChannelMediaOptions option = new ChannelMediaOptions();
 
@@ -109,8 +106,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                 view.findViewById(R.id.audio_place_06),
                 view.findViewById(R.id.audio_place_07),
                 view.findViewById(R.id.audio_place_08),
-                view.findViewById(R.id.audio_place_09)
-        );
+                view.findViewById(R.id.audio_place_09));
     }
 
     @Override
@@ -123,30 +119,30 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -167,7 +163,9 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
 
             engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
 
-            audioPlayer = new AudioPlayer(AudioManager.STREAM_MUSIC, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL,
+            audioPlayer = new AudioPlayer(AudioManager.STREAM_MUSIC,
+                    SAMPLE_RATE,
+                    SAMPLE_NUM_OF_CHANNEL,
                     AudioFormat.ENCODING_PCM_16BIT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,7 +177,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
     public void onDestroy() {
         super.onDestroy();
         pulling = false;
-        if(pullingTask != null){
+        if (pullingTask != null) {
             try {
                 pullingTask.join();
                 pullingTask = null;
@@ -188,14 +186,13 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
             }
         }
         audioPlayer.stopPlayer();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
-
 
 
     @Override
@@ -211,17 +208,13 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                     return;
                 }
                 // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                AndPermission.with(this).runtime().permission(Permission.Group.STORAGE, Permission.Group.MICROPHONE).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -242,7 +235,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                 pulling = false;
                 join.setText(getString(R.string.join));
                 audioSeatManager.downAllSeats();
-                if(pullingTask != null){
+                if (pullingTask != null) {
                     try {
                         pullingTask.join();
                         pullingTask = null;
@@ -259,9 +252,9 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        /**Sets the external audio source.
+        /*Sets the external audio source.
          * @param enabled Sets whether to enable/disable the external audio source:
          *                  true: Enable the external audio source.
          *                  false: (Default) Disable the external audio source.
@@ -277,15 +270,14 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         // engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
 
 
-
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -337,7 +329,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                     join.setText(getString(R.string.leave));
                     pulling = true;
                     audioPlayer.startPlayer();
-                    if(pullingTask == null){
+                    if (pullingTask == null) {
                         pullingTask = new Thread(new PullingTask());
                         pullingTask.start();
                     }
@@ -358,7 +350,13 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         }
     };
 
+    /**
+     * The type Pulling task.
+     */
     class PullingTask implements Runnable {
+        /**
+         * The Number.
+         */
         long number = 0;
 
         @Override
@@ -376,7 +374,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
 
                 long now = System.currentTimeMillis();
                 long consuming = now - before;
-                if(consuming < PULL_INTERVAL){
+                if (consuming < PULL_INTERVAL) {
                     try {
                         Thread.sleep(PULL_INTERVAL - consuming);
                     } catch (InterruptedException e) {

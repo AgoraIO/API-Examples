@@ -50,13 +50,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 /**
  * This demo demonstrates how to make a one-to-one video call
  */
-@Example(
-        index = 11,
-        group = ADVANCED,
-        name = R.string.item_picture_in_picture,
-        actionId = R.id.action_mainFragment_to_picture_in_picture,
-        tipsId = R.string.picture_in_picture
-)
+@Example(index = 11, group = ADVANCED, name = R.string.item_picture_in_picture, actionId = R.id.action_mainFragment_to_picture_in_picture, tipsId = R.string.picture_in_picture)
 public class PictureInPicture extends BaseFragment implements View.OnClickListener {
     private static final String TAG = PictureInPicture.class.getSimpleName();
 
@@ -99,22 +93,22 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -122,7 +116,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -149,7 +143,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -184,16 +178,13 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                     return;
                 }
                 // Request permission
-                AndPermission.with(this).runtime().permission(
-                        permissionArray
-                ).onGranted(permissions ->
-                {
+                AndPermission.with(this).runtime().permission(permissionArray).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -239,7 +230,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
@@ -257,14 +248,14 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         option.publishMicrophoneTrack = true;
         option.publishCameraTrack = true;
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -418,7 +409,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
@@ -426,9 +417,8 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             if (fl_remote.getReportUid() > 0) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 TextureView surfaceView = null;
                 // Create render view by RtcEngine
                 surfaceView = new TextureView(context);
@@ -457,7 +447,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -518,7 +508,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     }
 
     private void dismissFloatWindow() {
-        if(!isFloatWindowShowing()){
+        if (!isFloatWindowShowing()) {
             return;
         }
         FrameLayout container = floatWindowView.findViewById(R.id.fl_container);

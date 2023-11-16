@@ -30,6 +30,9 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.internal.LastmileProbeConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
+/**
+ * The type Pre call test.
+ */
 @Example(
         index = 16,
         group = ADVANCED,
@@ -72,30 +75,30 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime evepnts.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -140,12 +143,12 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_lastmile)
-        {
+        if (v.getId() == R.id.btn_lastmile) {
             // Configure a LastmileProbeConfig instance.
-            LastmileProbeConfig config = new LastmileProbeConfig(){};
+            LastmileProbeConfig config = new LastmileProbeConfig() {
+            };
             // Probe the uplink network quality.
-            config.probeUplink =  true;
+            config.probeUplink = true;
             // Probe the downlink network quality.
             config.probeDownlink = true;
             // The expected uplink bitrate (bps). The value range is [100000, 5000000].
@@ -156,28 +159,25 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             engine.startLastmileProbeTest(config);
             btn_lastmile.setEnabled(false);
             btn_lastmile.setText("Testing ...");
-        }
-        else if (v.getId() == R.id.btn_echo){
+        } else if (v.getId() == R.id.btn_echo) {
             num = 0;
             engine.startEchoTest(MAX_COUNT_DOWN);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
             echoTimer = new Timer(true);
-            echoTimer.schedule(new TimerTask(){
+            echoTimer.schedule(new TimerTask() {
                 public void run() {
                     num++;
-                    if(num >= MAX_COUNT_DOWN * 2){
+                    if (num >= MAX_COUNT_DOWN * 2) {
                         handler.post(() -> {
                             btn_echo.setEnabled(true);
                             btn_echo.setText(R.string.start);
                         });
                         engine.stopEchoTest();
                         echoTimer.cancel();
-                    }
-                    else if(num >= MAX_COUNT_DOWN) {
+                    } else if (num >= MAX_COUNT_DOWN) {
                         handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
-                    }
-                    else{
+                    } else {
                         handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
                     }
                 }
@@ -294,7 +294,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
          * @param quality
          */
         @Override
-        public void onLastmileQuality(int quality){
+        public void onLastmileQuality(int quality) {
             statisticsInfo.setLastMileQuality(quality);
             updateLastMileResult();
         }
@@ -320,10 +320,10 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
 
     private void updateLastMileResult() {
         handler.post(() -> {
-            if(statisticsInfo.getLastMileQuality() != null){
+            if (statisticsInfo.getLastMileQuality() != null) {
                 lastmileQuality.setText("Quality: " + statisticsInfo.getLastMileQuality());
             }
-            if(statisticsInfo.getLastMileResult() != null){
+            if (statisticsInfo.getLastMileResult() != null) {
                 lastmileResult.setText(statisticsInfo.getLastMileResult());
             }
         });

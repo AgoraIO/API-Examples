@@ -8,6 +8,9 @@ import io.agora.base.internal.video.GlRectDrawer;
 import io.agora.base.internal.video.GlUtil;
 import io.agora.base.internal.video.RendererCommon;
 
+/**
+ * The type Yuv fbo program.
+ */
 public class YuvFboProgram {
 
     private int[] mFboTextureId;
@@ -17,13 +20,19 @@ public class YuvFboProgram {
     private int mWidth, mHeight;
     private volatile boolean isRelease;
 
-    // GL Thread
+    /**
+     * Instantiates a new Yuv fbo program.
+     */
+// GL Thread
     public YuvFboProgram() {
         yuvUploader = new YuvUploader();
         glRectDrawer = new GlRectDrawer();
     }
 
-    // GL Thread
+    /**
+     * Release.
+     */
+// GL Thread
     public void release() {
         isRelease = true;
         if (mFboTextureId != null) {
@@ -35,7 +44,15 @@ public class YuvFboProgram {
         }
     }
 
-    // GL Thread
+    /**
+     * Draw yuv integer.
+     *
+     * @param yuv    the yuv
+     * @param width  the width
+     * @param height the height
+     * @return the integer
+     */
+// GL Thread
     public Integer drawYuv(byte[] yuv, int width, int height) {
         if (isRelease) {
             return -1;
@@ -77,7 +94,7 @@ public class YuvFboProgram {
         yuvUploader.uploadFromBuffer(i420Buffer);
         Matrix matrix = new Matrix();
         matrix.preTranslate(0.5f, 0.5f);
-        matrix.preScale(1f, -1f);// I420-frames are upside down
+        matrix.preScale(1f, -1f); // I420-frames are upside down
         matrix.preTranslate(-0.5f, -0.5f);
         glRectDrawer.drawYuv(yuvUploader.getYuvTextures(), RendererCommon.convertMatrixFromAndroidGraphicsMatrix(matrix), width, height, 0, 0, width, height);
 

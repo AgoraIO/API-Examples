@@ -44,8 +44,10 @@ import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Face unity beauty.
+ */
 public class FaceUnityBeauty extends BaseFragment {
-    private static final String TAG = "SceneTimeBeauty";
 
     private FragmentBeautyFaceunityBinding mBinding;
     private RtcEngine rtcEngine;
@@ -77,20 +79,10 @@ public class FaceUnityBeauty extends BaseFragment {
         initRtcEngine();
 
 
-        faceUnityBeautyAPI.initialize(new Config(
-                requireContext(),
-                rtcEngine,
-                FaceUnityBeautySDK.INSTANCE.getFuRenderKit(),
-                null,
-                CaptureMode.Agora,
-                0,
-                false,
-                new CameraConfig()
-        ));
+        faceUnityBeautyAPI.initialize(new Config(requireContext(), rtcEngine, FaceUnityBeautySDK.INSTANCE.getFuRenderKit(), null, CaptureMode.Agora, 0, false, new CameraConfig()));
         faceUnityBeautyAPI.enable(true);
         joinChannel();
-        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
-        {
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             ColorEnhanceOptions options = new ColorEnhanceOptions();
             options.strengthLevel = 0.5f;
             options.skinProtectLevel = 0.5f;
@@ -117,7 +109,7 @@ public class FaceUnityBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            faceUnityBeautyAPI.setBeautyPreset(isChecked? BeautyPreset.DEFAULT: BeautyPreset.CUSTOM);
+            faceUnityBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM);
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
             FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();

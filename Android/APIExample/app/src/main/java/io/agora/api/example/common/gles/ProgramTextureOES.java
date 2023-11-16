@@ -24,30 +24,33 @@ import io.agora.api.example.common.gles.core.GlUtil;
 import io.agora.api.example.common.gles.core.Program;
 
 
+/**
+ * The type Program texture oes.
+ */
 public class ProgramTextureOES extends Program {
 
     // Simple vertex shader, used for all programs.
     private static final String VERTEX_SHADER =
-            "uniform mat4 uMVPMatrix;\n" +
-            "uniform mat4 uTexMatrix;\n" +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec4 aTextureCoord;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "void main() {\n" +
-            "    gl_Position = uMVPMatrix * aPosition;\n" +
-            "    vTextureCoord = (uTexMatrix * aTextureCoord).xy;\n" +
-            "}\n";
+            "uniform mat4 uMVPMatrix;\n"
+                    + "uniform mat4 uTexMatrix;\n"
+                    + "attribute vec4 aPosition;\n"
+                    + "attribute vec4 aTextureCoord;\n"
+                    + "varying vec2 vTextureCoord;\n"
+                    + "void main() {\n"
+                    + "    gl_Position = uMVPMatrix * aPosition;\n"
+                    + "    vTextureCoord = (uTexMatrix * aTextureCoord).xy;\n"
+                    + "}\n";
 
     // Simple fragment shader for use with external 2D textures (e.g. what we get from
     // SurfaceTexture).
     private static final String FRAGMENT_SHADER_EXT =
-            "#extension GL_OES_EGL_image_external : require\n" +
-            "precision mediump float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "void main() {\n" +
-            "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-            "}\n";
+            "#extension GL_OES_EGL_image_external : require\n"
+                    + "precision mediump float;\n"
+                    + "varying vec2 vTextureCoord;\n"
+                    + "uniform samplerExternalOES sTexture;\n"
+                    + "void main() {\n"
+                    + "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n"
+                    + "}\n";
 
     private int muMVPMatrixLoc;
     private int muTexMatrixLoc;
