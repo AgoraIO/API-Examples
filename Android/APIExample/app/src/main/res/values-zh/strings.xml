@@ -337,4 +337,7 @@
     <string name="video_image_source">垫片</string>
     <string name="custom">自定义</string>
     <string name="custom_stream_encrypt_tip">请先参考README配置stream encrypt!</string>
+    <string name="player_stream">播放音轨</string>
+    <string name="publish_stream">推送音轨</string>
+    <string name="audio_stream_index">音轨%d</string>
 </resources>
