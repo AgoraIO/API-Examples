@@ -294,7 +294,7 @@ class JoinChannelVideoRecorder: BaseViewController {
 }
 
 extension JoinChannelVideoRecorder: AgoraMediaRecorderDelegate {
-    func mediaRecorder(_ recorder: AgoraMediaRecorder, stateDidChanged channelId: String, uid: UInt, state: AgoraMediaRecorderState, error: AgoraMediaRecorderErrorCode) {
+    func mediaRecorder(_ recorder: AgoraMediaRecorder, stateDidChanged channelId: String, uid: UInt, state: AgoraMediaRecorderState, reason: AgoraMediaRecorderReasonCode) {
         LogUtils.log(message: "uid == \(uid) state == \(state.rawValue)", level: .info)
     }
     

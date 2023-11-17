@@ -261,7 +261,7 @@ class Channel1Delegate: NSObject, AgoraRtcEngineDelegate {
         engine.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioStateChanged == \(state.rawValue)")
     }
 }
@@ -326,7 +326,7 @@ class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
         remoteUid = 0
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioStateChanged == \(state.rawValue)")
     }
 }

@@ -292,8 +292,8 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
     /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(errCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, reason: AgoraRtmpStreamingReason) {
+        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(reason.rawValue)", level: .info)
         if(state == .running) {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true

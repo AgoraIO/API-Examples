@@ -187,7 +187,11 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         guard let url = mediaUrlField.text else { return }
         //resign text field
         mediaUrlField.resignFirstResponder()
-        mediaPlayerKit.open(url, startPos: 0)
+        let mediaSource = AgoraMediaSource()
+        mediaSource.url = url
+        mediaSource.autoPlay = false
+        mediaSource.enableMultiAudioTrack = true
+        mediaPlayerKit.open(with: mediaSource)
     }
     
     @IBAction func doPlay(sender: UIButton) {
@@ -321,13 +325,13 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(reason.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
             switch state.rawValue {
             case 100: // failed
-                weakself.showAlert(message: "media player error: \(error.rawValue)")
+                weakself.showAlert(message: "media player error: \(reason.rawValue)")
                 break
             case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()

@@ -325,9 +325,9 @@ class CustomVideoSourcePushMulti: BaseViewController {
                 info.frameType = .keyFrame
                 info.framesPerSecond = 30
                 info.codecType = .H264
-                self.agoraKit.pushExternalEncodedVideoFrameEx(data,
-                                                              info: info,
-                                                              videoTrackId: UInt(userModel.trackId))
+                self.agoraKit.pushExternalEncodedVideoFrame(data,
+                                                            info: info,
+                                                            videoTrackId: UInt(userModel.trackId))
                 userModel.canvasView?.videoView.renderVideoSampleBuffer(sampleBuffer, size: demuxer?.videoSize ?? .zero)
             }
         } failure: { error in
