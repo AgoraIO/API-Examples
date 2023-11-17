@@ -186,19 +186,6 @@ wchar_t mediaEncryptCtrlSecret[INFO_LEN];
 wchar_t mediaEncryptCtrlSetEncrypt[INFO_LEN];
 
 
-//media player
-wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlOpen[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlClose[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlPause[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlPlay[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
-wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
-
 //multi channel
 wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN] = { 0 };
@@ -291,6 +278,10 @@ wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPublishStream[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPlayerStream[INFO_LEN] = { 0 };
+
+// live broadcasting
 wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingModeration[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingEncode[INFO_LEN] = { 0 };
@@ -643,19 +634,6 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaEncryptCtrlSecret, INFO_LEN, Str(_T("MediaEncrypt.Ctrl.Secret")));
 	_tcscpy_s(mediaEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("MediaEncrypt.Ctrl.SetEncrypt")));
 	
-	//media player
-	_tcscpy_s(MeidaPlayerCtrlVideoSource, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.VideoSource")));
-	_tcscpy_s(MeidaPlayerCtrlOpen, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Open")));
-	_tcscpy_s(MeidaPlayerCtrlClose, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Close")));
-	_tcscpy_s(MeidaPlayerCtrlPause, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Pause")));
-	_tcscpy_s(MeidaPlayerCtrlPlay, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Play")));
-	_tcscpy_s(MeidaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.AttachPlayer")));
-	_tcscpy_s(MeidaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.DettachPlayer")));
-	_tcscpy_s(MeidaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishVideo")));
-	_tcscpy_s(MeidaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishVideo")));
-	_tcscpy_s(MeidaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishAudio")));
-	_tcscpy_s(MeidaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishAudio")));
-
 	//multichannel
 	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
 	_tcscpy_s(MultiChannelCtrlJoinExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.JoinExChannel")));
@@ -718,6 +696,8 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishVideo")));
 	_tcscpy_s(mediaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishAudio")));
 	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
+	_tcscpy_s(mediaPlayerCtrlPlayerStream, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PlayerStream")));
+	_tcscpy_s(mediaPlayerCtrlPublishStream, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishStream")));
 
 	//beauty audio
 	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
