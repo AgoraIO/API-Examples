@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -131,6 +131,9 @@
 		E77D54D228F5649500D51C1E /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E77D54D128F5649500D51C1E /* AgoraSampleBufferRender.m */; };
 		E77D54D628F56D3A00D51C1E /* sample.yuv in Resources */ = {isa = PBXBuildFile; fileRef = E77D54D528F56D3A00D51C1E /* sample.yuv */; };
 		E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E77D54D728F5702B00D51C1E /* SampleBufferDisplayView.xib */; };
+		E7883AE02B046CB8003CCF44 /* FaceCapture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7883ADB2B046CB8003CCF44 /* FaceCapture.strings */; };
+		E7883AE12B046CB8003CCF44 /* FaceCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7883ADD2B046CB8003CCF44 /* FaceCapture.storyboard */; };
+		E7883AE22B046CB8003CCF44 /* FaceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7883ADF2B046CB8003CCF44 /* FaceCapture.swift */; };
 		E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BD32860B2F600851463 /* NSData+Extension.swift */; };
 		E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */; };
 		E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE729CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard */; };
@@ -290,7 +293,6 @@
 		E75279CC29F66D1900358F18 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SpatialAudio.strings"; sourceTree = "<group>"; };
 		E75279D129F6728900358F18 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveStreaming.strings"; sourceTree = "<group>"; };
 		E75279D429F6737100358F18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
-		E75279D729F6755300358F18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MediaPlayer.storyboard; sourceTree = "<group>"; };
 		E75279DB29F675A500358F18 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaPlayer.strings"; sourceTree = "<group>"; };
 		E75279DC29F6767700358F18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaPlayer.storyboard; sourceTree = "<group>"; };
 		E75279DD29F676BC00358F18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/QuickSwitchChannel.storyboard; sourceTree = "<group>"; };
@@ -319,6 +321,9 @@
 		E77D54D128F5649500D51C1E /* AgoraSampleBufferRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraSampleBufferRender.m; sourceTree = "<group>"; };
 		E77D54D528F56D3A00D51C1E /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
 		E77D54D728F5702B00D51C1E /* SampleBufferDisplayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SampleBufferDisplayView.xib; sourceTree = "<group>"; };
+		E7883ADC2B046CB8003CCF44 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FaceCapture.strings"; sourceTree = "<group>"; };
+		E7883ADE2B046CB8003CCF44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FaceCapture.storyboard; sourceTree = "<group>"; };
+		E7883ADF2B046CB8003CCF44 /* FaceCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCapture.swift; sourceTree = "<group>"; };
 		E7899BD32860B2F600851463 /* NSData+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Extension.swift"; sourceTree = "<group>"; };
 		E7AD0DE629CAAF2B00C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoRecorder.strings"; sourceTree = "<group>"; };
 		E7AD0DE829CAAF2B00C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
@@ -532,6 +537,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7883ADA2B046CB8003CCF44 /* FaceCapture */,
 				E732E9242A3960A2004403AF /* MultiCameraSourece */,
 				E7AD0DFA29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti */,
 				E7AD0DEF29CAF78C00C9A4B0 /* LocalCompositeGraph */,
@@ -847,6 +853,16 @@
 			path = "JoinChannelVideo(Token)";
 			sourceTree = "<group>";
 		};
+		E7883ADA2B046CB8003CCF44 /* FaceCapture */ = {
+			isa = PBXGroup;
+			children = (
+				E7883ADB2B046CB8003CCF44 /* FaceCapture.strings */,
+				E7883ADD2B046CB8003CCF44 /* FaceCapture.storyboard */,
+				E7883ADF2B046CB8003CCF44 /* FaceCapture.swift */,
+			);
+			path = FaceCapture;
+			sourceTree = "<group>";
+		};
 		E7AD0DE429CAAF2B00C9A4B0 /* JoinChannelVideo(Recorder) */ = {
 			isa = PBXGroup;
 			children = (
@@ -996,6 +1012,7 @@
 				E77D54BF28F553DA00D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
 				E7AD0E0029CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings in Resources */,
+				E7883AE12B046CB8003CCF44 /* FaceCapture.storyboard in Resources */,
 				E7AD0DEA29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
 				E732E92A2A3960A2004403AF /* MultiCameraSourece.strings in Resources */,
@@ -1034,6 +1051,7 @@
 				E7AD0DF529CAF78C00C9A4B0 /* LocalCompositeGraph.strings in Resources */,
 				E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */,
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
+				E7883AE02B046CB8003CCF44 /* FaceCapture.strings in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
 				E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
@@ -1171,6 +1189,7 @@
 				033A9F9E252EA86A00BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */,
 				E77D54C028F553DA00D51C1E /* JoinChannelVideoToken.swift in Sources */,
+				E7883AE22B046CB8003CCF44 /* FaceCapture.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
 				E779025B2A482CFC008791AD /* KFMP4Demuxer.m in Sources */,
 				033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */,
@@ -1443,7 +1462,6 @@
 		E75279D629F6755300358F18 /* MediaPlayer.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E75279D729F6755300358F18 /* en */,
 				E75279DB29F675A500358F18 /* zh-Hans */,
 				E75279DC29F6767700358F18 /* Base */,
 			);
@@ -1464,6 +1482,22 @@
 				E77D54BC28F553DA00D51C1E /* Base */,
 			);
 			name = JoinChannelVideoToken.storyboard;
+			sourceTree = "<group>";
+		};
+		E7883ADB2B046CB8003CCF44 /* FaceCapture.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7883ADC2B046CB8003CCF44 /* zh-Hans */,
+			);
+			name = FaceCapture.strings;
+			sourceTree = "<group>";
+		};
+		E7883ADD2B046CB8003CCF44 /* FaceCapture.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7883ADE2B046CB8003CCF44 /* Base */,
+			);
+			name = FaceCapture.storyboard;
 			sourceTree = "<group>";
 		};
 		E7AD0DE529CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.strings */ = {

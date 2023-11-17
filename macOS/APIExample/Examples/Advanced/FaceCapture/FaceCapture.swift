@@ -9,10 +9,9 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+class FaceCaptureMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
-    var remoteUid: UInt = 0
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
@@ -172,56 +171,6 @@ class JoinChannelVideoMain: BaseViewController {
     }
     
     /**
-     --- Layout Picker ---
-     */
-    @IBOutlet weak var selectLayoutPicker: Picker!
-    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
-    var selectedLayout: Layout? {
-        let index = self.selectLayoutPicker.indexOfSelectedItem
-        if index >= 0 && index < layouts.count {
-            return layouts[index]
-        } else {
-            return nil
-        }
-    }
-    func initSelectLayoutPicker() {
-        layoutVideos(2)
-        selectLayoutPicker.label.stringValue = "Layout".localized
-        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
-        selectLayoutPicker.onSelectChanged {
-            if self.isJoined {
-                return
-            }
-            guard let layout = self.selectedLayout else { return }
-            self.layoutVideos(layout.value)
-        }
-    }
-    
-    /**
-     --- Role Picker ---
-     */
-    @IBOutlet weak var selectRolePicker: Picker!
-    private let roles = AgoraClientRole.allValues()
-    var selectedRole: AgoraClientRole? {
-        let index = self.selectRolePicker.indexOfSelectedItem
-        if index >= 0 && index < roles.count {
-            return roles[index]
-        } else {
-            return nil
-        }
-    }
-    func initSelectRolePicker() {
-        selectRolePicker.label.stringValue = "Role".localized
-        selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
-        selectRolePicker.onSelectChanged {
-            guard let selected = self.selectedRole else { return }
-            if self.isJoined {
-                self.agoraKit.setClientRole(selected)
-            }
-        }
-    }
-    
-    /**
      --- Channel TextField ---
      */
     @IBOutlet weak var channelField: Input!
@@ -242,8 +191,8 @@ class JoinChannelVideoMain: BaseViewController {
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            selectLayoutPicker.isEnabled = !isJoined
             initJoinChannelButton()
+            agoraKit.setVideoFrameDelegate(isJoined ? self : nil)
         }
     }
     
@@ -265,16 +214,30 @@ class JoinChannelVideoMain: BaseViewController {
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
+        if (KeyCenter.FaceCaptureLicense ?? "").isEmpty {
+            showAlert(message: "Please contact Agora customer service to obtain a face capture certificate".localized)
+        } else {
+            // enable face capture
+            agoraKit.enableExtension(withVendor: "agora_video_filters_face_capture",
+                                     extension: "face_capture",
+                                     enabled: true,
+                                     sourceType: .primaryCamera)
+            
+            agoraKit.setExtensionPropertyWithVendor("agora_video_filters_face_capture",
+                                                    extension: "face_capture",
+                                                    key: "authentication_information",
+                                                    value: "{\"company_id\":\"agoraTest\"," +
+                                                    "\"license\":\"" + (KeyCenter.FaceCaptureLicense ?? "") + "\"}",
+                                                    sourceType: .primaryCamera)
+        }
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
         initSelectFpsPicker()
         initSelectMicsPicker()
-        initSelectLayoutPicker()
-        initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
-        remoteUid = 0
+        layoutVideos(1)
     }
 
     func layoutVideos(_ count: Int) {
@@ -306,7 +269,6 @@ class JoinChannelVideoMain: BaseViewController {
             guard let cameraId = selectedCamera?.deviceId,
                   let resolution = selectedResolution,
                   let micId = selectedMicrophone?.deviceId,
-                  let role = selectedRole,
                   let fps = selectedFps else {
                 return
             }
@@ -318,7 +280,7 @@ class JoinChannelVideoMain: BaseViewController {
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)
             // set myself as broadcaster to stream video/audio
-            agoraKit.setClientRole(role)
+            agoraKit.setClientRole(.broadcaster)
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
@@ -348,8 +310,9 @@ class JoinChannelVideoMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = role == .broadcaster
-            option.clientRoleType = role
+            option.publishCameraTrack = false
+            option.publishMicrophoneTrack = false
+            option.clientRoleType = .broadcaster
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
@@ -393,8 +356,22 @@ class JoinChannelVideoMain: BaseViewController {
     }
 }
 
+extension FaceCaptureMain: AgoraVideoFrameDelegate {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        let info = videoFrame.metaInfo["KEY_FACE_CAPTURE"] as? String
+        videos[0].statsInfo?.updateMetaInfo(data: info)
+        return true
+    }
+    func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        .readWrite
+    }
+    func getObservedFramePosition() -> AgoraVideoFramePosition {
+        .postCapture
+    }
+}
+
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension FaceCaptureMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -437,20 +414,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        // find a VideoView w/o uid assigned
-        if let remoteVideo = videos.first(where: { $0.uid == nil }) {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
-            remoteVideo.uid = uid
-            remoteUid = uid
-        } else {
-            LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
-            remoteUid = 0
-        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -463,18 +426,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
-        if let remoteVideo = videos.first(where: { $0.uid == uid }) {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
-            remoteVideo.uid = nil
-        } else {
-            LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
-        }
-        remoteUid = 0
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -508,6 +459,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
-        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(reason.rawValue)", level: .info)
+        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), reason \(reason.rawValue)", level: .info)
     }
 }
