@@ -65,7 +65,7 @@ class ChannelMediaRelay: BaseViewController {
             // configure target channel info
             let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
             config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-            agoraKit.startChannelMediaRelay(config)
+            agoraKit.startOrUpdateChannelMediaRelay(config)
             pauseRelayButton.isEnabled = true
         } else {
             isProcessing = true

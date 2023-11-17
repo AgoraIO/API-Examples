@@ -57,7 +57,13 @@ class VideoView: NSView, NibLoadable {
     var statsInfo:StatisticsInfo? {
         didSet{
             guard let stats = statsInfo else {return}
-            statsLabel.stringValue = stats.description(audioOnly: audioOnly)
+            if Thread.isMainThread {
+                statsLabel.stringValue = stats.description(audioOnly: audioOnly)
+            } else {
+                DispatchQueue.main.async {
+                    self.statsLabel.stringValue = stats.description(audioOnly: self.audioOnly)
+                }
+            }
         }
     }
     var type:StreamType?

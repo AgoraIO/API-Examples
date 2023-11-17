@@ -18,6 +18,13 @@ class MediaPlayer: BaseViewController {
     @IBOutlet weak var selectResolutionPicker: Picker!
     @IBOutlet weak var selectFpsPicker: Picker!
     @IBOutlet weak var selectLayoutPicker: Picker!
+    @IBOutlet weak var playButton: NSButton!
+    @IBOutlet weak var pauseButton: NSButton!
+    @IBOutlet weak var stopButton: NSButton!
+    @IBOutlet weak var playAudioTrackButton: NSButton!
+    @IBOutlet weak var pushAudioTrackButton: NSButton!
+    @IBOutlet weak var startPublishButton: NSButton!
+    @IBOutlet weak var stopPublishButton: NSButton!
     
     var videos: [VideoView] = []
     let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
@@ -25,12 +32,25 @@ class MediaPlayer: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayer: AgoraRtcMediaPlayerProtocol!
     let mediaUrl = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
+    var playAudioTrackId: Int = 0
+    var publishTrackIndex: Int = 0
+    
+    private var trackList: [AgoraRtcMediaStreamInfo]?
     
     var isJoinChannel: Bool = false {
         didSet {
             channelField.isEnabled = !isJoinChannel
-            selectLayoutPicker.isEnabled = !isJoinChannel
             joinChannelButton.title = isJoinChannel ? "Leave Channel".localized : "Join Channel".localized
+            playButton.isEnabled = isJoinChannel
+            
+            if !isJoinChannel {
+                pauseButton.isEnabled = false
+                stopButton.isEnabled = false
+                playAudioTrackButton.isEnabled = false
+                pushAudioTrackButton.isEnabled = false
+                startPublishButton.isEnabled = false
+                stopPublishButton.isEnabled = false
+            }
         }
     }
     
@@ -61,7 +81,11 @@ class MediaPlayer: BaseViewController {
         mediaPlayer.setRenderMode(.fit)
         mediaPlayer.adjustPublishSignalVolume(80)
         mediaPlayer.adjustPlayoutVolume(80)
-        mediaPlayer.open(mediaUrl, startPos: 0)
+        let mediaSource = AgoraMediaSource()
+        mediaSource.url = mediaUrl
+        mediaSource.autoPlay = false
+        mediaSource.enableMultiAudioTrack = true
+        mediaPlayer.open(with: mediaSource)
     }
     
     // MARK: - UI
@@ -98,6 +122,7 @@ class MediaPlayer: BaseViewController {
                 }
             })
         } else {
+            mediaPlayer.stop()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 self.isJoinChannel = false
                 self.videos.forEach {
@@ -111,15 +136,39 @@ class MediaPlayer: BaseViewController {
     
     @IBAction func playButtonPressed(_ sender: Any) {
         mediaPlayer.play()
+        if mediaPlayer.getStreamCount() > 0 {
+            trackList = (0...mediaPlayer.getStreamCount()).filter({
+                mediaPlayer.getStreamBy(Int32($0))?.streamType == .audio
+            }).compactMap({ mediaPlayer.getStreamBy(Int32($0)) })
+            playAudioTrackId = trackList?.first?.streamIndex ?? 0
+            publishTrackIndex = trackList?.first?.streamIndex ?? 0
+            playAudioTrackButton.title = trackList?.first?.codecName ?? ""
+            pushAudioTrackButton.title = playAudioTrackButton.title
+        }
+        playButton.isEnabled = false
+        pauseButton.isEnabled = true
+        stopButton.isEnabled = true
+        startPublishButton.isEnabled = true
+        stopPublishButton.isEnabled = false
+        playAudioTrackButton.isEnabled = true
+        pushAudioTrackButton.isEnabled = true
     }
     
     @IBAction func pauseButtonPressed(_ sender: Any) {
         mediaPlayer.pause()
+        playButton.isEnabled = true
     }
     
     @IBAction func stopButtonPressed(_ sender: Any) {
         mediaPlayer.stop()
         mediaPlayer.open(mediaUrl, startPos: 0)
+        playAudioTrackButton.isEnabled = false
+        pushAudioTrackButton.isEnabled = false
+        playButton.isEnabled = true
+        pauseButton.isEnabled = false
+        stopButton.isEnabled = false
+        startPublishButton.isEnabled = false
+        stopPublishButton.isEnabled = false
     }
     
     @IBAction func publishButtonPressed(_ sender: Any) {
@@ -134,6 +183,8 @@ class MediaPlayer: BaseViewController {
         options.publishMediaPlayerAudioTrack = true
         options.publishMediaPlayerId = Int(mediaPlayer.getMediaPlayerId())
         agoraKit.updateChannel(with: options)
+        startPublishButton.isEnabled = false
+        stopPublishButton.isEnabled = true
     }
     
     @IBAction func unPublishButtonPressed(_ sender: Any) {
@@ -147,6 +198,42 @@ class MediaPlayer: BaseViewController {
         options.publishMediaPlayerVideoTrack = false
         options.publishMediaPlayerAudioTrack = false
         agoraKit.updateChannel(with: options)
+        startPublishButton.isEnabled = true
+        stopPublishButton.isEnabled = false
+    }
+    
+    @IBAction func onClickPlayAudioTrack(_ sender: NSButton) {
+        let menu = NSMenu()
+        menu.autoenablesItems = false
+        trackList?.compactMap({ $0.codecName }).forEach({
+            menu.addItem(withTitle: $0, action: #selector(playItemOption(_:)), keyEquivalent: "")
+        })
+        sender.menu = menu
+        menu.popUp(positioning: nil, at: NSPoint(x: sender.bounds.width, y: 0), in: sender)
+    }
+    
+    @IBAction func onClickPushAudioTrack(_ sender: NSButton) {
+        let menu = NSMenu()
+        menu.autoenablesItems = false
+        trackList?.compactMap({ $0.codecName }).forEach({
+            menu.addItem(withTitle: $0, action: #selector(pushItemOption(_:)), keyEquivalent: "")
+        })
+        sender.menu = menu
+        menu.popUp(positioning: nil, at: NSPoint(x: sender.bounds.width, y: 0), in: sender)
+    }
+    @objc func playItemOption(_ sender: NSMenuItem) {
+        playAudioTrackButton.title = sender.title
+        guard let track = trackList?.filter({ $0.codecName == sender.title }).first else { return }
+        mediaPlayer.selectAudioTrack(Int32(track.streamIndex))
+        mediaPlayer.selectMultiAudioTrack(track.streamIndex, publishTrackIndex: publishTrackIndex)
+        playAudioTrackId = track.streamIndex
+    }
+    
+    @objc func pushItemOption(_ sender: NSMenuItem) {
+        pushAudioTrackButton.title = sender.title
+        guard let track = trackList?.filter({ $0.codecName == sender.title }).first else { return }
+        mediaPlayer.selectMultiAudioTrack(playAudioTrackId, publishTrackIndex: track.streamIndex)
+        publishTrackIndex = track.streamIndex
     }
 }
 
@@ -184,8 +271,8 @@ extension MediaPlayer: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayer: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        print("didChangedTo: \(state.rawValue), \(error.rawValue)")
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+        print("didChangedTo: \(state.rawValue), \(reason.rawValue)")
         switch state {
         case .openCompleted:
             print("OpenCompleted")
@@ -257,6 +344,7 @@ private extension MediaPlayer {
     }
     
     func initSelectLayoutPicker() {
+        selectLayoutPicker.isEnabled = false
         layoutVideos(2)
         selectLayoutPicker.label.stringValue = "Layout".localized
         selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
