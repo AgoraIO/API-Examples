@@ -122,7 +122,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
-	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+	
 
 	if (ret != 0) {
 		m_initialize = false;
@@ -133,6 +133,8 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	}
 	else
 		m_initialize = true;
+
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
@@ -170,8 +172,10 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		m_agAudioCaptureDevice.Stop();
 		m_agAudioCaptureDevice.engine_ = NULL;
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
 		m_rtcEngine = NULL;
 	}
 }
@@ -555,7 +559,7 @@ void CAgoraCaptureAduioDlg::UpdateDevice()
 	nPathLen = MAX_PATH;
 	m_cmbAudioDevice.ResetContent();
 	//enum audio capture device.
-	if (m_agAudioCaptureDevice.EnumDeviceList())
+	if (m_initialize && m_agAudioCaptureDevice.EnumDeviceList())
 	{
 		m_agAudioCaptureDevice.GetCurrentDevice(szDevicePath, &nPathLen);
 		for (int nIndex = 0; nIndex < m_agAudioCaptureDevice.GetDeviceCount(); nIndex++) {

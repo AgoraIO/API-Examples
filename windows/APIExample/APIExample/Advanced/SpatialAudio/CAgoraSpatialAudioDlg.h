@@ -257,10 +257,10 @@ private:
 	bool m_SpatialAudio = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	
-	ILocalSpatialAudioEngine* m_localSpatial;
-	IMediaPlayer* m_mediaPlayerLeft;
+	ILocalSpatialAudioEngine* m_localSpatial = nullptr;
+	IMediaPlayer* m_mediaPlayerLeft = nullptr;
 	CSpatialAudioPlayerObserver playerLeftObserver;
-	IMediaPlayer* m_mediaPlayerRight;
+	IMediaPlayer* m_mediaPlayerRight = nullptr;
 	CSpatialAudioPlayerObserver playerRightObserver;
 
 	CSpatialAudioEventHandler m_eventHandler;

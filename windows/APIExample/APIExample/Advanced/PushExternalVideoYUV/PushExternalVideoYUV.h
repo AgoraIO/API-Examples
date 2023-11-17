@@ -123,7 +123,7 @@ protected:
 	agora::util::AutoPtr<agora::media::IMediaEngine> m_mediaEngine;
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	BYTE* m_imgBuffer;
+	BYTE* m_imgBuffer = nullptr;
 
 
 	DECLARE_MESSAGE_MAP()
