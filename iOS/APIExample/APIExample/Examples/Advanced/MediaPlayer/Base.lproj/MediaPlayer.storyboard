@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -103,7 +103,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="bNQ-vJ-1XB">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="bNQ-vJ-1XB">
                                 <rect key="frame" x="20" y="514.5" width="374" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdv-zd-3aD">
@@ -171,6 +171,34 @@
                                     <action selector="doAdjustPublishVolumeWithSender:" destination="jxp-ZN-2yG" eventType="valueChanged" id="jwd-Jg-gQx"/>
                                 </connections>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="play Track:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aiy-MM-lxz">
+                                <rect key="frame" x="20" y="641" width="82.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="publish Track:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0lb-hX-kmd">
+                                <rect key="frame" x="244.5" y="640" width="106.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uFn-ej-UAH">
+                                <rect key="frame" x="102.5" y="631" width="63" height="40.5"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="track"/>
+                                <connections>
+                                    <action selector="onClickPlayAudioTrack:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="pAA-pW-alI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RyY-Fu-0JL">
+                                <rect key="frame" x="351" y="630" width="63" height="40.5"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="track"/>
+                                <connections>
+                                    <action selector="onClickPublishAudioTrack:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="DfN-AM-OzL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -186,8 +214,12 @@
                             <constraint firstItem="0qz-ne-Fgw" firstAttribute="centerY" secondItem="kIh-KH-AhZ" secondAttribute="centerY" id="6mP-ln-PDK"/>
                             <constraint firstItem="0qz-ne-Fgw" firstAttribute="leading" secondItem="kIh-KH-AhZ" secondAttribute="trailing" constant="20.5" id="8yZ-rI-cZj"/>
                             <constraint firstItem="bBH-Cp-zvD" firstAttribute="leading" secondItem="jtM-0I-8yU" secondAttribute="trailing" constant="5" id="K5H-F3-HFU"/>
+                            <constraint firstItem="aiy-MM-lxz" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="MXJ-zV-DaG"/>
                             <constraint firstItem="jtM-0I-8yU" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="10" id="P5K-8E-Ewb"/>
                             <constraint firstItem="bBH-Cp-zvD" firstAttribute="centerY" secondItem="jtM-0I-8yU" secondAttribute="centerY" id="UIQ-2u-OR3"/>
+                            <constraint firstItem="RyY-Fu-0JL" firstAttribute="centerY" secondItem="0lb-hX-kmd" secondAttribute="centerY" id="XVb-V2-7yy"/>
+                            <constraint firstItem="aiy-MM-lxz" firstAttribute="centerY" secondItem="uFn-ej-UAH" secondAttribute="centerY" id="Yub-ic-Yab"/>
+                            <constraint firstItem="RyY-Fu-0JL" firstAttribute="top" secondItem="hGl-9W-ThE" secondAttribute="bottom" constant="43" id="Zxz-LL-ggv"/>
                             <constraint firstItem="hGl-9W-ThE" firstAttribute="centerY" secondItem="nDn-o2-Vmd" secondAttribute="centerY" id="cKo-Va-xAS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="qN0-s6-ZGP" firstAttribute="bottom" secondItem="bNQ-vJ-1XB" secondAttribute="top" constant="-10" id="hod-ei-Co8"/>
@@ -197,8 +229,12 @@
                             <constraint firstItem="4et-fL-YHJ" firstAttribute="leading" secondItem="qN0-s6-ZGP" secondAttribute="trailing" constant="10" id="pXK-Wz-N1M"/>
                             <constraint firstItem="4et-fL-YHJ" firstAttribute="centerY" secondItem="qN0-s6-ZGP" secondAttribute="centerY" id="pmw-JJ-Y3d"/>
                             <constraint firstItem="hGl-9W-ThE" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" constant="-20" id="qtq-Yn-8PG"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="RyY-Fu-0JL" secondAttribute="trailing" id="tlh-Nm-gJl"/>
                             <constraint firstItem="kIh-KH-AhZ" firstAttribute="leading" secondItem="nDn-o2-Vmd" secondAttribute="leading" id="u1a-2x-WhD"/>
+                            <constraint firstItem="aiy-MM-lxz" firstAttribute="top" secondItem="kIh-KH-AhZ" secondAttribute="bottom" constant="18" id="vhd-4S-YhC"/>
+                            <constraint firstItem="RyY-Fu-0JL" firstAttribute="leading" secondItem="0lb-hX-kmd" secondAttribute="trailing" id="wk6-Mg-lai"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
+                            <constraint firstItem="uFn-ej-UAH" firstAttribute="leading" secondItem="aiy-MM-lxz" secondAttribute="trailing" id="xci-T3-gtk"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="bBH-Cp-zvD" secondAttribute="trailing" id="yh9-3e-q3W"/>
                             <constraint firstItem="nDn-o2-Vmd" firstAttribute="leading" secondItem="jtM-0I-8yU" secondAttribute="leading" id="yqw-3G-cYd"/>
                             <constraint firstItem="jtM-0I-8yU" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="zrX-vB-COz"/>
@@ -207,10 +243,12 @@
                     <connections>
                         <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
                         <outlet property="mediaUrlField" destination="jtM-0I-8yU" id="Kkp-f5-yVi"/>
+                        <outlet property="playAudioTrackButton" destination="uFn-ej-UAH" id="7cN-zF-7Tw"/>
                         <outlet property="playerControlStack" destination="bNQ-vJ-1XB" id="TR3-IL-G5E"/>
                         <outlet property="playerDurationLabel" destination="4et-fL-YHJ" id="V3n-2F-ule"/>
                         <outlet property="playerProgressSlider" destination="qN0-s6-ZGP" id="spT-zQ-gKy"/>
                         <outlet property="playoutVolume" destination="hGl-9W-ThE" id="1fx-eU-uFR"/>
+                        <outlet property="publishAudioTrackButton" destination="RyY-Fu-0JL" id="Nzz-jL-T6V"/>
                         <outlet property="publishVolume" destination="0qz-ne-Fgw" id="Mfp-ai-3oN"/>
                     </connections>
                 </viewController>
@@ -221,7 +259,7 @@
     </scenes>
     <resources>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

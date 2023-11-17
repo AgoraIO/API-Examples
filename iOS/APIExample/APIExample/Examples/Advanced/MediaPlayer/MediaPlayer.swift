@@ -48,9 +48,14 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     @IBOutlet weak var playoutVolume: UISlider!
     @IBOutlet weak var publishVolume: UISlider!
     @IBOutlet weak var playerDurationLabel: UILabel!
+    @IBOutlet weak var playAudioTrackButton: UIButton!
+    @IBOutlet weak var publishAudioTrackButton: UIButton!
     
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
+    var playAudioTrackId: Int = 0
+    var publishTrackIndex: Int = 0
+    var trackList: [AgoraRtcMediaStreamInfo]?
     
     private var originY: CGFloat = 0
     
@@ -195,11 +200,15 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     }
     
     @IBAction func doPlay(sender: UIButton) {
-        mediaPlayerKit.play()// get channel name from configs
+        mediaPlayerKit.play()
+        playAudioTrackButton.isEnabled = true
+        publishAudioTrackButton.isEnabled = true
     }
     
     @IBAction func doStop(sender: UIButton) {
         mediaPlayerKit.stop()
+        playAudioTrackButton.isEnabled = false
+        publishAudioTrackButton.isEnabled = false
     }
     
     @IBAction func doPause(sender: UIButton) {
@@ -238,6 +247,34 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     @IBAction func doAdjustPublishVolume(sender: UISlider) {
         mediaPlayerKit.adjustPublishSignalVolume(Int32(Int(sender.value)))
+    }
+    
+    @IBAction func onClickPlayAudioTrack(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = trackList?.compactMap({ $0.codecName })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            sender.setTitle(value, for: .normal)
+            guard let track = self.trackList?.filter({ $0.codecName == value }).first else { return }
+            self.playAudioTrackId = track.streamIndex
+            self.mediaPlayerKit.selectMultiAudioTrack(track.streamIndex,
+                                                      publishTrackIndex: self.publishTrackIndex)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+    }
+    
+    @IBAction func onClickPublishAudioTrack(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = trackList?.compactMap({ $0.codecName })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            sender.setTitle(value, for: .normal)
+            guard let track = self.trackList?.filter({ $0.codecName == value }).first else { return }
+            self.publishTrackIndex = track.streamIndex
+            self.mediaPlayerKit.selectMultiAudioTrack(self.playAudioTrackId,
+                                                      publishTrackIndex: track.streamIndex)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -335,12 +372,20 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
                 break
             case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
-                weakself.playerControlStack.isHidden = false
                 weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
                 weakself.playerProgressSlider.setValue(0, animated: true)
+                
+                if weakself.mediaPlayerKit.getStreamCount() > 0 {
+                    weakself.trackList = (0...weakself.mediaPlayerKit.getStreamCount()).filter({
+                        weakself.mediaPlayerKit.getStreamBy(Int32($0))?.streamType == .audio
+                    }).compactMap({ weakself.mediaPlayerKit.getStreamBy(Int32($0)) })
+                    weakself.playAudioTrackId = weakself.trackList?.first?.streamIndex ?? 0
+                    weakself.publishTrackIndex = weakself.trackList?.first?.streamIndex ?? 0
+                    weakself.playAudioTrackButton.setTitle(weakself.trackList?.first?.codecName, for: .normal)
+                    weakself.publishAudioTrackButton.setTitle(weakself.playAudioTrackButton.title, for: .normal)
+                }
                 break
             case 7: // stopped
-                weakself.playerControlStack.isHidden = true
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 weakself.playerDurationLabel.text = "00 : 00"
                 guard let channelName = weakself.configs["channelName"] as? String else { return }

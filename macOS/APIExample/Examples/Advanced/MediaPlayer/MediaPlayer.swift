@@ -224,7 +224,6 @@ class MediaPlayer: BaseViewController {
     @objc func playItemOption(_ sender: NSMenuItem) {
         playAudioTrackButton.title = sender.title
         guard let track = trackList?.filter({ $0.codecName == sender.title }).first else { return }
-        mediaPlayer.selectAudioTrack(Int32(track.streamIndex))
         mediaPlayer.selectMultiAudioTrack(track.streamIndex, publishTrackIndex: publishTrackIndex)
         playAudioTrackId = track.streamIndex
     }
