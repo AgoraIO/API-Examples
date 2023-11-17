@@ -82,7 +82,16 @@ bool CAgoraPreCallTestDlg::InitAgora()
 	context.eventHandler = &m_eventHandler;
 	//initialize the Agora RTC engine context.
 	int ret = m_rtcEngine->initialize(context);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize rtc engine"));
+	if (ret != 0) {
+		m_initialize = false;
+		CString strInfo;
+		strInfo.Format(_T("initialize failed: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		return false;
+	}
+	else
+		m_initialize = true;
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	LastmileProbeConfig config;
 	config.probeUplink = true;
 	config.probeDownlink = true;
@@ -106,14 +115,22 @@ bool CAgoraPreCallTestDlg::InitAgora()
 void CAgoraPreCallTestDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		//release device manager.
-		m_audioDeviceManager->release();
-		m_videoDeviceManager->release();
+		
 		m_rtcEngine->stopLastmileProbeTest();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopLastmileProbeTest"));
-		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		
+		if (m_initialize) {
+			//release device manager.
+			m_audioDeviceManager->release();
+			m_videoDeviceManager->release();
+
+			//release engine.
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
+		
+		m_audioDeviceManager = NULL;
+		m_videoDeviceManager = NULL;
 		m_rtcEngine = NULL;
 	}
 }
@@ -146,6 +163,9 @@ void CAgoraPreCallTestDlg::UpdateViews()
 	m_cmbAudioInput.ResetContent();
 	m_cmbAudioOutput.ResetContent();
 	m_cmbVideo.ResetContent();
+	if (!m_initialize) {
+		return;
+	}
 	int nVol;
 	(*m_audioDeviceManager)->getPlaybackDeviceVolume(&nVol);
 	m_sldAudioOutputVol.SetPos(nVol);
