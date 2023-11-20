@@ -357,18 +357,60 @@ struct CacheStatistics {
   int64_t downloadSize;
 };
 
+/**
+ * @brief The real time statistics of the media stream being played.
+ *
+ */
+struct PlayerPlaybackStats {
+  /**  Video fps.
+   */
+  int videoFps;
+  /**  Video bitrate (Kbps).
+   */
+  int videoBitrateInKbps;
+  /**  Audio bitrate (Kbps).
+   */
+  int audioBitrateInKbps;
+  /**  Total bitrate (Kbps).
+   */
+  int totalBitrateInKbps;
+};
+
+/**
+ * @brief The updated information of media player.
+ *
+ */
 struct PlayerUpdatedInfo {
-  /** playerId has value when user trigger interface of opening
+  /** @technical preview
    */
-  Optional<const char*> playerId;
+  const char* internalPlayerUuid;
+  /** The device ID of the playback device.
+   */
+  const char* deviceId;
+  /**  Video height.
+   */
+  int videoHeight;
+  /**  Video width.
+   */
+  int videoWidth;
+  /**  Audio sample rate.
+   */
+  int audioSampleRate;
+  /**  The audio channel number.
+   */
+  int audioChannels;
+  /**  The bit number of each audio sample.
+   */
+  int audioBitsPerSample;
 
-  /** deviceId has value when user trigger interface of opening
-   */
-  Optional<const char*> deviceId;
-
-  /** cacheStatistics exist if you enable cache, triggered 1s at a time after openning url
-   */
-  Optional<CacheStatistics> cacheStatistics;
+  PlayerUpdatedInfo()
+      : internalPlayerUuid(NULL),
+        deviceId(NULL),
+        videoHeight(0),
+        videoWidth(0),
+        audioSampleRate(0),
+        audioChannels(0),
+        audioBitsPerSample(0) {}
 };
 
 /**
@@ -437,6 +479,17 @@ struct MediaSource {
    */
   bool enableCache;
   /**
+   * Determines whether to enable multi-track audio stream decoding.
+   * Then you can select multi audio track of the media file for playback or publish to channel
+   *
+   * @note
+   * If you use the selectMultiAudioTrack API, you must set enableMultiAudioTrack to true.
+   *
+   * - true: Enable MultiAudioTrack;.
+   * - false: (Default) Disable MultiAudioTrack;.
+   */
+  bool enableMultiAudioTrack;
+  /**
    * Determines whether the opened media resource is a stream through the Agora Broadcast Streaming Network(CDN).
    * - true: It is a stream through the Agora Broadcast Streaming Network.
    * - false: (Default) It is not a stream through the Agora Broadcast Streaming Network.
@@ -454,7 +507,7 @@ struct MediaSource {
   IMediaPlayerCustomDataProvider* provider;
 
   MediaSource() : url(NULL), uri(NULL), startPos(0), autoPlay(true), enableCache(false),
-                  provider(NULL){
+                  enableMultiAudioTrack(false), provider(NULL){
   }
 };
 

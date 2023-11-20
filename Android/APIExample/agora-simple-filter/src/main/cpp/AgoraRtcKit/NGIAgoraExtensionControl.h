@@ -9,7 +9,6 @@
 #pragma once  // NOLINT(build/header_guard)
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
-#include "AgoraRefCountedObject.h"
 #include "IAgoraLog.h"
 #include "NGIAgoraVideoFrame.h"
 #include "NGIAgoraExtensionProvider.h"
@@ -50,7 +49,7 @@ class IExtensionControl {
    * you can still call this method to perform an immediate memory recycle.
    * @param type Frame type to be recycled.
    */
-  virtual void recycleVideoCache() = 0;
+  virtual int recycleVideoCache() = 0;
 
   /**
    * This method dumps the content of the video frame to the specified file.

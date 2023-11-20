@@ -51,7 +51,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int addVideoTrack(const char* id, agora_refptr<IVideoTrack> track) = 0;
+  virtual int addVideoTrack(const char* id, agora_refptr<IVideoTrack> track, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Remove the video track.
    * @param id The unique id of the stream.
@@ -60,7 +60,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int removeVideoTrack(const char* id, agora_refptr<IVideoTrack> track) = 0;
+  virtual int removeVideoTrack(const char* id, agora_refptr<IVideoTrack> track, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Configures the layout of video frames comming from a specific track (indicated by uid)
    * on the mixer canvas.
@@ -70,7 +70,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int setStreamLayout(const char* id, const MixerLayoutConfig& config) = 0;
+  virtual int setStreamLayout(const char* id, const MixerLayoutConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Remove the user layout on the mixer canvas
    * @param id The unique id of the stream.
@@ -79,7 +79,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int delStreamLayout(const char* id) = 0;
+  virtual int delStreamLayout(const char* id, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Add a image source to the mixer with its layout configuration on the mixer canvas.
    * @param id The unique id of the image.
@@ -88,7 +88,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int addImageSource(const char* id, const MixerLayoutConfig& config, ImageType type = kPng) = 0;
+  virtual int addImageSource(const char* id, const MixerLayoutConfig& config, ImageType type = kPng, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Delete a image source to the mixer.
    * @param id The unique id of the image.
@@ -96,18 +96,18 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int delImageSource(const char* id) = 0;
+  virtual int delImageSource(const char* id, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Clear all the layout settings set previously
    */
-  virtual void clearLayout() = 0;
+  virtual int clearLayout(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Refresh the user layout on the mixer canvas
    * @return
    * 0 - Success
    * <0 - Failure
    */
-  virtual int refresh() = 0;
+  virtual int refresh(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Set the mixer canvas background to override the default configuration
    * @param width width of the canvas
@@ -118,7 +118,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int setBackground(uint32_t width, uint32_t height, int fps, uint32_t color_argb = 0) = 0;
+  virtual int setBackground(uint32_t width, uint32_t height, int fps, uint32_t color_argb = 0, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Set the mixer canvas background to override the default configuration
    * @param width width of the canvas
@@ -129,7 +129,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int setBackground(uint32_t width, uint32_t height, int fps, const char* url) = 0;
+  virtual int setBackground(uint32_t width, uint32_t height, int fps, const char* url, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Set the rotation of the mixed video stream
    * @param rotation:0:none, 1:90°, 2:180°, 3:270° 
@@ -137,7 +137,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int setRotation(uint8_t rotation) = 0;
+  virtual int setRotation(uint8_t rotation, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Get the average delay in ms introduced by the mixer module, which includes the average
    * mixing delay plus the encoder delay.
@@ -152,7 +152,7 @@ public:
    * 0 - Success
    * <0 - Failure
    */
-  virtual int setMasterClockSource(const char* id = NULL) = 0;
+  virtual int setMasterClockSource(const char* id = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 };
 
 } //namespace rtc

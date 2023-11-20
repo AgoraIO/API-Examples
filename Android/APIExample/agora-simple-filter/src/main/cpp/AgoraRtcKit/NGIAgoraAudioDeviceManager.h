@@ -10,6 +10,7 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
+#include "api/cpp/ahpl_ares_class.h"
 namespace agora {
 namespace media {
 namespace base {
@@ -146,7 +147,7 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-    virtual int startRecording() = 0;
+    virtual int startRecording(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Stop the recording device.
@@ -154,7 +155,7 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-    virtual int stopRecording() = 0;
+    virtual int stopRecording(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Registers an audio frame observer.
@@ -164,7 +165,7 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-    virtual int registerAudioFrameObserver(media::IAudioPcmFrameSink* observer) = 0;
+    virtual int registerAudioFrameObserver(media::IAudioPcmFrameSink* observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Releases the registered IAudioFrameObserver object.
@@ -182,7 +183,7 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-    virtual int setLoopbackDeviceParameter(const LoopbackRecordingOption &option) = 0;
+    virtual int setLoopbackDeviceParameter(const LoopbackRecordingOption &option, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
     virtual ~IRecordingDeviceSource() {}
 };
@@ -212,7 +213,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setMicrophoneVolume(unsigned int volume) = 0;
+  virtual int setMicrophoneVolume(unsigned int volume, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the volume of the microphone.
    * @param volume The volume of the microphone.
@@ -228,7 +229,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setSpeakerVolume(unsigned int volume) = 0;
+  virtual int setSpeakerVolume(unsigned int volume, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the volume of the speaker.
    * @param volume The volume of the speaker.
@@ -246,7 +247,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setMicrophoneMute(bool mute) = 0;
+  virtual int setMicrophoneMute(bool mute, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the mute state of the microphone.
    * @param mute The mute state of the microphone.
@@ -264,7 +265,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setSpeakerMute(bool mute) = 0;
+  virtual int setSpeakerMute(bool mute, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the mute state of the speaker.
    * @param mute A reference to the mute state of the speaker.
@@ -308,7 +309,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setDefaultAudioRouting(AudioRoute route) = 0;
+  virtual int setDefaultAudioRouting(AudioRoute route, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Changes the current audio routing.
    *
@@ -320,7 +321,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int changeAudioRouting(AudioRoute route) = 0;
+  virtual int changeAudioRouting(AudioRoute route, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Changes the speaker status on/off.
    *
@@ -332,7 +333,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setAudioRoutingSpeakerOn(bool enable) = 0;
+  virtual int setAudioRoutingSpeakerOn(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the current audio routing.
    *
@@ -404,7 +405,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setPlayoutDevice(int index) = 0;
+  virtual int setPlayoutDevice(int index, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets the recording device.
    *
@@ -416,7 +417,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setRecordingDevice(int index) = 0;
+  virtual int setRecordingDevice(int index, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /** The status of following system default playback device.
 
    @note The status of following system default playback device.
@@ -428,7 +429,7 @@ public:
    - 0: Success.
    - < 0: Failure.
    */
-  virtual int followSystemPlaybackDevice(bool enable) = 0;
+  virtual int followSystemPlaybackDevice(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /** The status of following system default recording device.
 
@@ -441,7 +442,7 @@ public:
    - 0: Success.
    - < 0: Failure.
    */
-  virtual int followSystemRecordingDevice(bool enable) = 0;
+  virtual int followSystemRecordingDevice(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 #endif  // _WIN32 || (TARGET_OS_MAC && !TARGET_OS_IPHONE)
 
 #if defined(_WIN32)
@@ -456,7 +457,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setApplicationVolume(unsigned int volume) = 0;
+  virtual int setApplicationVolume(unsigned int volume, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the volume of the app.
    *
@@ -482,7 +483,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setApplicationMuteState(bool mute) = 0;
+  virtual int setApplicationMuteState(bool mute, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the mute state of the app.
    *
@@ -517,7 +518,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLoopbackDevice(int index) = 0;
+  virtual int setLoopbackDevice(int index, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /** The status of following system default loopback device.
 
    @note The status of following system default loopback device.
@@ -529,7 +530,7 @@ public:
    - 0: Success.
    - < 0: Failure.
    */
-  virtual int followSystemLoopbackDevice(bool enable) = 0;
+  virtual int followSystemLoopbackDevice(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 #endif  // _WIN32
 
   /**
@@ -543,7 +544,7 @@ public:
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IAudioDeviceManagerObserver* observer, void(*safeDeleter)(IAudioDeviceManagerObserver*) = NULL) = 0;
+  virtual int registerObserver(IAudioDeviceManagerObserver* observer, void(*safeDeleter)(IAudioDeviceManagerObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Releases the IAudioDeviceManagerObserver object.
    * @param observer The pointer to the IAudioDeviceManagerObserver class registered using #registerObserver.
@@ -553,7 +554,7 @@ public:
    */
   virtual int unregisterObserver(IAudioDeviceManagerObserver* observer) = 0;
 
-  virtual int setupAudioAttributeContext(void* audioAttr) = 0;
+  virtual int setupAudioAttributeContext(void* audioAttr, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
 protected:
   ~INGAudioDeviceManager() {}
