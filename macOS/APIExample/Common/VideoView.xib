@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,7 +12,7 @@
         <customView translatesAutoresizingMaskIntoConstraints="NO" id="c22-O7-iKe" customClass="VideoView" customModule="APIExample" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="479" height="272"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ynp-tk-S9G">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ynp-tk-S9G">
                     <rect key="frame" x="219" y="128" width="41" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="eQW-GM-aZG">
                         <font key="font" usesAppearanceFont="YES"/>
@@ -22,7 +23,7 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="gsN-mQ-sdW">
                     <rect key="frame" x="0.0" y="0.0" width="479" height="272"/>
                 </customView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mkn-3L-AsR">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mkn-3L-AsR">
                     <rect key="frame" x="457" y="246" width="4" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" id="wzT-zH-F5v">
                         <font key="font" metaFont="system"/>
@@ -30,9 +31,12 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qoJ-Q8-9za" userLabel="statslabel">
-                    <rect key="frame" x="18" y="10" width="4" height="10"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" id="11f-hZ-024">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qoJ-Q8-9za" userLabel="statslabel">
+                    <rect key="frame" x="18" y="10" width="304" height="10"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="300" id="VMG-ot-abN"/>
+                    </constraints>
+                    <textFieldCell key="cell" id="11f-hZ-024">
                         <font key="font" metaFont="systemLight" size="8"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -42,10 +46,10 @@
             <constraints>
                 <constraint firstItem="gsN-mQ-sdW" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="1qL-m0-hPR"/>
                 <constraint firstItem="mkn-3L-AsR" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="10" id="4zk-29-n6C"/>
-                <constraint firstAttribute="bottom" secondItem="qoJ-Q8-9za" secondAttribute="bottom" constant="10" id="Da2-Dx-uOU"/>
+                <constraint firstItem="qoJ-Q8-9za" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" symbolic="YES" id="Fyx-fU-Xon"/>
+                <constraint firstAttribute="bottom" secondItem="qoJ-Q8-9za" secondAttribute="bottom" constant="10" id="MMS-hP-QIZ"/>
                 <constraint firstItem="Ynp-tk-S9G" firstAttribute="centerY" secondItem="gsN-mQ-sdW" secondAttribute="centerY" id="NsC-fo-Zya"/>
                 <constraint firstAttribute="bottom" secondItem="gsN-mQ-sdW" secondAttribute="bottom" id="TLU-oa-Wyh"/>
-                <constraint firstItem="qoJ-Q8-9za" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="YSO-cx-nZF"/>
                 <constraint firstAttribute="trailing" secondItem="mkn-3L-AsR" secondAttribute="trailing" constant="20" id="dlI-Of-far"/>
                 <constraint firstAttribute="trailing" secondItem="gsN-mQ-sdW" secondAttribute="trailing" id="eJn-Hl-5k5"/>
                 <constraint firstItem="Ynp-tk-S9G" firstAttribute="centerX" secondItem="gsN-mQ-sdW" secondAttribute="centerX" id="tfN-1K-BcG"/>

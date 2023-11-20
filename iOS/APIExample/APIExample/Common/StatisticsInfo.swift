@@ -38,6 +38,7 @@ struct StatisticsInfo {
     var preloadElapsedTime: Double = 0
     var uid: UInt = 0
     var remoteUid: UInt = 0
+    var metaInfo: String?
     
     var type: StatisticsType
     
@@ -124,6 +125,10 @@ struct StatisticsInfo {
         preloadElapsedTime = Double(info.join2JoinSuccess)
     }
     
+    mutating func updateMetaInfo(data: String?) {
+        metaInfo = data
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -155,6 +160,9 @@ struct StatisticsInfo {
             return array.joined(separator: "\n")
         }
         var array = firstFrameElapsedTime > 0 ? [localUid, firstFrame, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss] : [localUid, dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss]
+        if let metaInfo = metaInfo {
+            array.append(metaInfo)
+        }
         return array.joined(separator: "\n")
     }
     

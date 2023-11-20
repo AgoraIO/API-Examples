@@ -32,9 +32,9 @@ class SpatialAudioMain: BaseViewController {
     var currentAngle = 0.0
     var currentDistance = 0.0
     var maxDistance: CGFloat = 10
-    let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
-    let right = [NSNumber(0.0), NSNumber(1.0), NSNumber(0.0)]
-    let up = [NSNumber(0.0), NSNumber(0.0), NSNumber(1.0)]
+    let forward = simd_float3(1.0, 0.0, 0.0)
+    let right = simd_float3(0.0, 1.0, 0.0)
+    let up = simd_float3(0.0, 0.0, 1.0)
     var isJoind: Bool = false {
         didSet {
             voice1Button.isEnabled = isJoind
@@ -88,7 +88,8 @@ class SpatialAudioMain: BaseViewController {
         agoraKit?.setChannelProfile(.liveBroadcasting)
         agoraKit?.setClientRole(.broadcaster)
 
-        agoraKit?.setAudioProfile(.default, scenario: .gameStreaming)
+        agoraKit?.setAudioProfile(.default)
+        agoraKit?.setAudioScenario(.gameStreaming)
         
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit
@@ -159,10 +160,10 @@ class SpatialAudioMain: BaseViewController {
         positionInfo.forward = forward
         return positionInfo
     }
-    private func getViewCenterPostion(view: NSView) -> [NSNumber] {
+    private func getViewCenterPostion(view: NSView) -> simd_float3 {
         let centerX = view.frame.origin.x + view.frame.width * 0.5
         let centerY = view.frame.origin.y + view.frame.height * 0.5
-        return [NSNumber(value: Double(centerX)), NSNumber(value: Double(centerY)), NSNumber(0.0)]
+        return simd_float3(Float(centerX), Float(centerY), 0.0)
     }
     
     @IBAction func onTapVoice1Button(_ sender: Any) {
@@ -268,8 +269,8 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        print("didChangedTo: \(state.rawValue), \(error.rawValue)")
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+        print("didChangedTo: \(state.rawValue), \(reason.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()
         }

@@ -50,9 +50,9 @@ class SpatialAudioMain: BaseViewController {
     var currentAngle = 0.0
     var currentDistance = 0.0
     var maxDistance: CGFloat = 10
-    let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
-    let right = [NSNumber(0.0), NSNumber(1.0), NSNumber(0.0)]
-    let up = [NSNumber(0.0), NSNumber(0.0), NSNumber(1.0)]
+    let forward = simd_float3(1.0, 0.0, 0.0)
+    let right = simd_float3(0.0, 1.0, 0.0)
+    let up = simd_float3(0.0, 0.0, 1.0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,8 +220,8 @@ class SpatialAudioMain: BaseViewController {
         positionInfo.forward = forward
         return positionInfo
     }
-    private func getViewCenterPostion(view: UIView) -> [NSNumber] {
-        [NSNumber(value: Double(view.center.x)), NSNumber(value: Double(view.center.y)), NSNumber(0.0)]
+    private func getViewCenterPostion(view: UIView) -> simd_float3 {
+        simd_float3(Float(view.center.x), Float(view.center.y), 0.0)
     }
     
     private func updateSpatialAngle(objectCenter: CGPoint) -> AgoraRemoteVoicePositionInfo {
@@ -248,8 +248,8 @@ class SpatialAudioMain: BaseViewController {
 
         let posForward = spatialDistance * cos(currentAngle);
         let posRight = spatialDistance * sin(currentAngle);
-        let position = [NSNumber(value: posForward), NSNumber(value: posRight), NSNumber(0.0)]
-        let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
+        let position = simd_float3(Float(posForward), Float(posRight), 0.0)
+        let forward = simd_float3(1.0, 0.0, 0.0)
         
         let positionInfo = AgoraRemoteVoicePositionInfo()
         positionInfo.position = position
@@ -291,8 +291,8 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        print("didChangedTo: \(state.rawValue), \(error.rawValue)")
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+        print("didChangedTo: \(state.rawValue), \(reason.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()
         }

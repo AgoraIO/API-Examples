@@ -43,6 +43,7 @@ class CustomAudioSourceMain: BaseViewController {
 
     // indicate if current instance has joined channel
     var isJoined: Bool = false
+    var trackId: Int32 = 0
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -72,10 +73,17 @@ class CustomAudioSourceMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+        let trackConfig = AgoraAudioTrackConfig()
+        trackConfig.enableLocalPlayback = true
+        trackId = agoraKit.createCustomAudioTrack(.mixable, config: trackConfig)
+        
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureExterRender, ioType: .remoteIO)
-        // MIGRATED
-        agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, 
+                                   sampleRate: UInt32(sampleRate),
+                                   channels: UInt32(channel),
+                                   trackId: trackId,
+                                   audioCRMode: .exterCaptureExterRender,
+                                   ioType: .remoteIO)
 
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -86,6 +94,8 @@ class CustomAudioSourceMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
         option.publishCustomAudioTrack = true
+        option.publishCustomAudioTrack = true
+        option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)

@@ -52,7 +52,13 @@ class VideoView: UIView {
     }
     var statsInfo:StatisticsInfo? {
         didSet{
-            statsLabel.text = statsInfo?.description(audioOnly: audioOnly)
+            if Thread.isMainThread {
+                statsLabel.text = statsInfo?.description(audioOnly: audioOnly)
+            } else {
+                DispatchQueue.main.async {
+                    self.statsLabel.text = self.statsInfo?.description(audioOnly: self.audioOnly)
+                }
+            }
         }
     }
     var type:StreamType?
@@ -71,6 +77,7 @@ class VideoView: UIView {
         statsLabel.layer.shadowOffset = CGSize(width: 1, height: 1)
         statsLabel.layer.shadowRadius = 1.0
         statsLabel.layer.shadowOpacity = 0.7
+        statsLabel.preferredMaxLayoutWidth = frame.width * 0.7
     }
 }
 

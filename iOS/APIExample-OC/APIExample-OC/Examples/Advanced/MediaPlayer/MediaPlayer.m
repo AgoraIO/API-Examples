@@ -269,13 +269,13 @@
     [AgoraRtcEngineKit destroy];
 }
 
-- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state error:(AgoraMediaPlayerError)error {
-    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, error]];
+- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {
+    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, reason]];
     __weak MediaPlayer *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (state) {
             case AgoraMediaPlayerStateFailed:
-                [weakSelf showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", error]];
+                [weakSelf showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", reason]];
                 break;
             
             case AgoraMediaPlayerStateOpenCompleted:

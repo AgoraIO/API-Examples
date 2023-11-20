@@ -276,8 +276,8 @@ static CGFloat CANVAS_HEIGHT = 480;
     }
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state errCode:(AgoraRtmpStreamingErrorCode)errCode {
-    [LogUtil log:[NSString stringWithFormat:@"streamStateChanged: %@ state %ld error %ld", url, state, errCode] level:(LogLevelDebug)];
+-(void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state reason:(AgoraRtmpStreamingReason)reason {
+    [LogUtil log:[NSString stringWithFormat:@"streamStateChanged: %@ state %ld reason %ld", url, state, reason] level:(LogLevelDebug)];
     if (state == AgoraRtmpStreamingStateRunning) {
         [self showAlertWithTitle:@"Notice" message:@"RTMP Publish SUccess"];
         self.isPublished = YES;

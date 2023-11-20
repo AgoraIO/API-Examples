@@ -257,7 +257,12 @@
     NSLog(@"uid == %lu info == %@", uid, info.description);
 }
 
-- (void)mediaRecorder:(AgoraMediaRecorder *)recorder stateDidChanged:(NSString *)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state error:(AgoraMediaRecorderErrorCode)error {
+- (void)mediaRecorder:(AgoraMediaRecorder * _Nonnull)recorder stateDidChanged:(NSString * _Nonnull)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state reason:(AgoraMediaRecorderReasonCode)reason { 
+    [LogUtil log: [NSString stringWithFormat:@"stateDidChanged uid == %lu state == %ld reason == %ld", uid, state, reason]];
+}
+
+
+- (void)mediaRecorder:(AgoraMediaRecorder *)recorder stateDidChanged:(NSString *)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state {
     NSLog(@"uid == %lu state == %ld", uid, state);
 }
 
