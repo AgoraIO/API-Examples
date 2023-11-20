@@ -22,6 +22,10 @@ void CAgoraMediaPlayer::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_STATIC_PUBLISH_STREAM, m_staPublishStream);
+	DDX_Control(pDX, IDC_STATIC_PLAYER_STREAM, m_staPlayerStream);
+	DDX_Control(pDX, IDC_COMBO_PLAYER_STREAM_INDEX, m_cmbPlayerStream);
+	DDX_Control(pDX, IDC_COMBO_PUBLISH_STREAM_INDEX, m_cmbPublishStream);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_STATIC_VIDEO_SOURCE, m_staVideoSource);
@@ -46,13 +50,15 @@ void CAgoraMediaPlayer::InitCtrlText()
 	m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staPublishStream.SetWindowText(mediaPlayerCtrlPublishStream);
+	m_staPlayerStream.SetWindowText(mediaPlayerCtrlPlayerStream);
 }
 
 //Initialize media player.
 void CAgoraMediaPlayer::InitMediaPlayerKit()
 {
 	//create agora media player.
-	m_mediaPlayer = m_rtcEngine->createMediaPlayer().get();//createAgoraMediaPlayer();
+	m_mediaPlayer = m_rtcEngine->createMediaPlayer();//createAgoraMediaPlayer();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("createAgoraMediaPlayer"));
 	//agora::rtc::MediaPlayerContext context;
 	//initialize media player context.
@@ -128,6 +134,9 @@ void CAgoraMediaPlayer::UnInitAgora()
 		if (m_joinChannel)
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+
+		m_mediaPlayer->Release();
+		m_mediaPlayer = NULL;
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -135,8 +144,10 @@ void CAgoraMediaPlayer::UnInitAgora()
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
 		m_rtcEngine = NULL;
 	}
 }
@@ -155,6 +166,10 @@ void CAgoraMediaPlayer::ResumeStatus()
 	m_btnPublishVideo.EnableWindow(FALSE);
 	
 	m_btnPlay.EnableWindow(FALSE);
+	m_staPublishStream.ShowWindow(FALSE);
+	m_staPlayerStream.ShowWindow(FALSE);
+	m_cmbPlayerStream.ShowWindow(FALSE);
+	m_cmbPublishStream.ShowWindow(FALSE);
 	m_mediaPlayerState = mediaPLAYER_READY;
 	m_joinChannel = false;
 	m_initialize = false;
@@ -180,6 +195,9 @@ BEGIN_MESSAGE_MAP(CAgoraMediaPlayer, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaPlayer::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaPlayer::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(mediaPLAYER_EVENT), &CAgoraMediaPlayer::OnEIDPlayerEvent)
+
+	ON_CBN_SELCHANGE(IDC_COMBO_PUBLISH_STREAM_INDEX, &CAgoraMediaPlayer::OnSelchangeComboPublishOrPlayerStream)
+	ON_CBN_SELCHANGE(IDC_COMBO_PLAYER_STREAM_INDEX, &CAgoraMediaPlayer::OnSelchangeComboPublishOrPlayerStream)
 	
 	ON_WM_DESTROY()
 	ON_WM_HSCROLL()
@@ -259,18 +277,21 @@ void CAgoraMediaPlayer::OnBnClickedButtonOpen()
 	CString strInfo;
 	m_edtVideoSource.GetWindowText(strUrl);
 	std::string tmp = cs2utf8(strUrl);
+	MediaSource mediaSource;
 	switch (m_mediaPlayerState)
 	{
 	case mediaPLAYER_READY:
 	case mediaPLAYER_STOP:
-		
 		if (tmp.empty())
 		{
 			AfxMessageBox(_T("you can fill video source."));
 			return;
 		}
 		//call media player open function
-		m_mediaPlayer->open(tmp.c_str(), 0);
+		mediaSource.url = tmp.c_str();
+		mediaSource.enableMultiAudioTrack = TRUE;
+		mediaSource.autoPlay = FALSE;
+		m_mediaPlayer->openWithMediaSource(mediaSource);
 		break;
 	default:
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("can not open player."));
@@ -403,6 +424,37 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		m_mediaPlayer->getDuration(duration);
 		m_sldVideo.SetRangeMax((int)duration);
 
+		// get aduio stream list
+		audioStreams.clear();
+		int64_t streamCount;
+		m_mediaPlayer->getStreamCount(streamCount);
+		for (int i = 0; i < streamCount; i++) {
+			PlayerStreamInfo streamInfo;
+			m_mediaPlayer->getStreamInfo(i, &streamInfo);
+			if (streamInfo.streamType == MEDIA_STREAM_TYPE::STREAM_TYPE_AUDIO) {
+				audioStreams.push_back(streamInfo.streamIndex);
+			}
+		}
+
+		if (audioStreams.size() > 0) {
+			m_staPublishStream.ShowWindow(TRUE);
+			m_staPlayerStream.ShowWindow(TRUE);
+			m_cmbPublishStream.ShowWindow(TRUE);
+			m_cmbPlayerStream.ShowWindow(TRUE);
+			m_cmbPublishStream.ResetContent();
+			m_cmbPlayerStream.ResetContent();
+
+			for (int i = 0; i < audioStreams.size(); i++) {
+				CString strInfo;
+				strInfo.Format(_T("AudioStream %d"), i);
+				m_cmbPublishStream.AddString(strInfo);
+				m_cmbPlayerStream.AddString(strInfo);
+			}
+
+			m_cmbPublishStream.SetCurSel(0);
+			m_cmbPlayerStream.SetCurSel(0);
+		}
+
 		break;
 	case  agora::media::base::PLAYER_STATE_OPENING:
 		strState = _T("PLAYER_STATE_OPENING");
@@ -430,6 +482,11 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		if (m_publishMeidaplayer) {
 			ToggleMediaPlayerPublish();
 		}
+		m_staPublishStream.ShowWindow(FALSE);
+		m_staPlayerStream.ShowWindow(FALSE);
+		m_cmbPublishStream.ShowWindow(FALSE);
+		m_cmbPlayerStream.ShowWindow(FALSE);
+
 		break;
 	case agora::media::base::PLAYER_STATE_FAILED:
 		strState = _T("PLAYER_STATE_FAILED");
@@ -559,7 +616,6 @@ LRESULT CAgoraMediaPlayer::OnEIDPlayerEvent(WPARAM wParam, LPARAM lParam) {
 	case PLAYER_EVENT_SEEK_ERROR:
 		strInfo = _T("PLAYER_EVENT_SEEK_ERROR");
 		break;
-	
 	case PLAYER_EVENT_AUDIO_TRACK_CHANGED:
 		strInfo = _T("PLAYER_EVENT_AUDIO_TRACK_CHANGED");
 		break;
@@ -681,3 +737,17 @@ void CAgoraMediaPlayer::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 		//m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 }
+
+
+void CAgoraMediaPlayer::OnSelchangeComboPublishOrPlayerStream()
+{
+	int playerStream = audioStreams[m_cmbPlayerStream.GetCurSel()];
+	int publishStream = audioStreams[m_cmbPublishStream.GetCurSel()];
+	int ret = m_mediaPlayer->selectMultiAudioTrack(playerStream, publishStream);
+
+	CString strInfo;
+	strInfo.Format(_T("selectMultiAudioTrack playerStream:%d, publishStream:%d, ret:%d"), playerStream, publishStream, ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+

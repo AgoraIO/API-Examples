@@ -473,10 +473,12 @@ class LiveStreamingMain: BaseViewController {
             // the view to be binded
             videoCanvas.view = localVideo.videocanvas
             videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
+            agoraKit.setupLocalVideo(videoCanvas)
             if role == .broadcaster {
                 agoraKit.startPreview()
+            } else {
+                agoraKit.stopPreview()
             }
             
             // start joining channel

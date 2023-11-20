@@ -130,4 +130,5 @@ public:
 	afx_msg void OnBnClickedCheckLowlight();
 
 	afx_msg void OnBnClickedStaticVirtualBgChoose(UINT idCtl);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 };
