@@ -385,7 +385,7 @@ class JoinChannelVideoToken: BaseViewController {
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result ?? 0), please check your params")
             }
             
         } else {
@@ -535,7 +535,7 @@ extension JoinChannelVideoToken: AgoraRtcEngineDelegate {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType:AgoraVideoSourceType) {
-        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(error)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
+        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(reason.rawValue)", level: .info)
     }
 }

@@ -587,7 +587,7 @@ extension MultiCameraSoureceMain: AgoraRtcEngineDelegate {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType:AgoraVideoSourceType) {
-        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(error)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
+        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(reason.rawValue)", level: .info)
     }
 }

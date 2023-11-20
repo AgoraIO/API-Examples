@@ -512,7 +512,7 @@ class FusionCDNAudience: BaseViewController {
 
 
 extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
-    func onDirectCdnStreamingStateChanged(_ state: AgoraDirectCdnStreamingState, error: AgoraDirectCdnStreamingError, message: String?) {
+    func onDirectCdnStreamingStateChanged(_ state: AgoraDirectCdnStreamingState, reason: AgoraDirectCdnStreamingReason, message: String?) {
         DispatchQueue.main.async {[self] in
             switch state{
             case .running:
@@ -536,7 +536,7 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
             case .failed:
                 self.showAlert(title: "Error", message: "Start Streaming failed, please go back to previous page and check the settings.")
             default:
-                LogUtils.log(message: "onDirectCdnStreamingStateChanged: \(state.rawValue), \(error.rawValue), \(message!)", level: .info)
+                LogUtils.log(message: "onDirectCdnStreamingStateChanged: \(state.rawValue), \(reason.rawValue), \(message!)", level: .info)
             }
         }
     }
@@ -599,8 +599,8 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         updateTranscodeLayout()
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, reason: AgoraRtmpStreamingReason) {
+        LogUtils.log(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(reason.rawValue)", level: .info)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
@@ -731,13 +731,13 @@ extension FusionCDNAudience: AgoraRtcEngineDelegate {
 }
 
 extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(reason.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
             switch state {
             case .failed:
-                weakself.showAlert(message: "media player error: \(error.rawValue)")
+                weakself.showAlert(message: "media player error: \(reason.rawValue)")
                 break
             case .openCompleted:
                 weakself.mediaPlayerKit.play()

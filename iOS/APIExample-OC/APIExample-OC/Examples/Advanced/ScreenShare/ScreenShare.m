@@ -301,7 +301,8 @@
     self.remoteView.uid = 0;
     [LogUtil log:[NSString stringWithFormat:@"remote user left: %lu", uid] level:(LogLevelDebug)];
 }
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine localVideoStateChangedOfState:(AgoraVideoLocalState)state error:(AgoraLocalVideoStreamError)error sourceType:(AgoraVideoSourceType)sourceType {
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine localVideoStateChangedOfState:(AgoraVideoLocalState)state reason:(AgoraLocalVideoStreamReason)reason sourceType:(AgoraVideoSourceType)sourceType {
     if (state == AgoraVideoLocalStateCapturing && sourceType == AgoraVideoSourceTypeScreen) {
         self.option.publishScreenCaptureAudio = YES;
         self.option.publishScreenCaptureVideo = YES;

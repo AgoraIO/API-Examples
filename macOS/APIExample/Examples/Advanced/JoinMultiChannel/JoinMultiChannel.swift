@@ -274,7 +274,7 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioStateChanged == \(state.rawValue)")
     }
 }
@@ -394,7 +394,7 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
             self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didOfflineOfUid: uid, reason: reason)
         }
     }
-    internal func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioState == \(state.rawValue)")
     }
 }

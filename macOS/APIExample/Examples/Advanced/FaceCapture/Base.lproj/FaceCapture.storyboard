@@ -6,10 +6,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Media Player-->
+        <!--Face Capture-->
         <scene sceneID="bmq-gY-cAa">
             <objects>
-                <viewController title="Media Player" storyboardIdentifier="MediaPlayer" id="YjT-yy-DnJ" customClass="MediaPlayer" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Face Capture" storyboardIdentifier="FaceCapture" id="YjT-yy-DnJ" customClass="FaceCaptureMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <subviews>
@@ -32,83 +32,23 @@
                                             <rect key="frame" x="310" y="0.0" width="314" height="498"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <view id="Umi-Rd-77k" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                <view id="Wvv-X8-f7U" customClass="Picker" customModule="APIExample" customModuleProvider="target">
                                                     <rect key="frame" x="27" y="428" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
-                                                <view id="jHK-UU-E1C" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                <view id="hcG-z6-b03" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="281" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="Umi-Rd-77k" customClass="Picker" customModule="APIExample" customModuleProvider="target">
                                                     <rect key="frame" x="27" y="379" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
-                                                <view id="hcG-z6-b03" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                <view id="jHK-UU-E1C" customClass="Picker" customModule="APIExample" customModuleProvider="target">
                                                     <rect key="frame" x="27" y="330" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9uM-Md-TCW">
-                                                    <rect key="frame" x="20" y="283" width="60" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Play" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a6R-z9-GrM">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="playButtonPressed:" target="YjT-yy-DnJ" id="rJ2-hC-QYq"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="csh-82-xRE">
-                                                    <rect key="frame" x="86" y="283" width="60" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D7O-6d-Yj4">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="pauseButtonPressed:" target="YjT-yy-DnJ" id="L56-Jo-Hey"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Jd-mF-TpV">
-                                                    <rect key="frame" x="154" y="283" width="63" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5JL-UH-JLr">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="stopButtonPressed:" target="YjT-yy-DnJ" id="lJY-As-RfK"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N8r-tN-Xmb">
-                                                    <rect key="frame" x="6" y="143" width="116" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Start Pushing" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TUJ-eJ-Vx7">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="publishButtonPressed:" target="YjT-yy-DnJ" id="geA-R1-6LF"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I7M-0K-u05">
-                                                    <rect key="frame" x="121" y="143" width="107" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Stp Pushing" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F6H-KV-6va">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="unPublishButtonPressed:" target="YjT-yy-DnJ" id="6wZ-nu-Pzj"/>
-                                                    </connections>
-                                                </button>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="7Jd-mF-TpV" firstAttribute="leading" secondItem="csh-82-xRE" secondAttribute="trailing" constant="22" id="8fM-QL-TUf"/>
-                                                <constraint firstItem="N8r-tN-Xmb" firstAttribute="top" secondItem="9uM-Md-TCW" secondAttribute="bottom" constant="120" id="8ro-eu-cqD"/>
-                                                <constraint firstItem="csh-82-xRE" firstAttribute="leading" secondItem="9uM-Md-TCW" secondAttribute="trailing" constant="20" id="FnK-XS-L5s"/>
-                                                <constraint firstItem="9uM-Md-TCW" firstAttribute="baseline" secondItem="csh-82-xRE" secondAttribute="baseline" id="O9q-DJ-SMt"/>
-                                                <constraint firstItem="N8r-tN-Xmb" firstAttribute="baseline" secondItem="I7M-0K-u05" secondAttribute="baseline" id="P4f-qt-dne"/>
-                                                <constraint firstItem="9uM-Md-TCW" firstAttribute="leading" secondItem="hcG-z6-b03" secondAttribute="leading" id="SzH-BA-S4D"/>
-                                                <constraint firstItem="N8r-tN-Xmb" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="13" id="Xgl-Oy-bVk"/>
-                                                <constraint firstAttribute="trailing" secondItem="I7M-0K-u05" secondAttribute="trailing" constant="93" id="nnK-zV-8qc"/>
-                                                <constraint firstItem="9uM-Md-TCW" firstAttribute="baseline" secondItem="7Jd-mF-TpV" secondAttribute="baseline" id="opf-yX-J6a"/>
-                                                <constraint firstItem="I7M-0K-u05" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="N8r-tN-Xmb" secondAttribute="trailing" constant="12" symbolic="YES" id="tCr-a0-6kw"/>
-                                                <constraint firstAttribute="trailing" secondItem="7Jd-mF-TpV" secondAttribute="trailing" constant="104" id="wM2-Fc-dAx"/>
-                                                <constraint firstItem="9uM-Md-TCW" firstAttribute="top" secondItem="hcG-z6-b03" secondAttribute="bottom" constant="20" symbolic="YES" id="xMd-Zm-Nw2"/>
-                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>
@@ -139,7 +79,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="joinButtonPressed:" target="YjT-yy-DnJ" id="xey-Vn-omW"/>
+                                                <action selector="onVideoCallButtonPressed:" target="YjT-yy-DnJ" id="0oH-L6-nRD"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -175,12 +115,13 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="Container" destination="r7G-ng-73B" id="dvl-yE-T56"/>
-                        <outlet property="channelField" destination="cOW-S1-5WE" id="hTF-dT-ahY"/>
-                        <outlet property="joinChannelButton" destination="Wck-kx-dah" id="bvL-gt-YYw"/>
-                        <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="HV1-Cm-amy"/>
-                        <outlet property="selectLayoutPicker" destination="hcG-z6-b03" id="n6d-xr-dd8"/>
-                        <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="hGj-OY-YwV"/>
+                        <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
+                        <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
+                        <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
+                        <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
+                        <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>
+                        <outlet property="selectMicsPicker" destination="hcG-z6-b03" id="9Iw-WB-9xr"/>
+                        <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

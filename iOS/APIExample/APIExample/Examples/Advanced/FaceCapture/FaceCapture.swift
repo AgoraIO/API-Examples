@@ -1,26 +1,85 @@
 //
-//  CreateDataStream.swift
+//  JoinChannelVideo.swift
 //  APIExample
 //
-//  Created by XC on 2020/12/28.
+//  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class CreateDataStreamEntry: UIViewController {
+class FaceCaptureEntry : UIViewController
+{
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    let identifier = "CreateDataStream"
+    let identifier = "FaceCapture"
+    @IBOutlet var resolutionBtn: UIButton!
+    @IBOutlet var fpsBtn: UIButton!
+    @IBOutlet var orientationBtn: UIButton!
+    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    
+    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+            self.width = width
+            self.height = height
+            self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
+        })
+    }
+    
+    func getFpsAction(_ fps:Int) -> UIAlertAction{
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+            self.fps = fps
+            self.fpsBtn.setTitle("\(fps)fps", for: .normal)
+        })
+    }
+    
+    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+            self.orientation = orientation
+            self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func setResolution(){
+        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        alert.addAction(getResolutionAction(width: 90, height: 90))
+        alert.addAction(getResolutionAction(width: 160, height: 120))
+        alert.addAction(getResolutionAction(width: 320, height: 240))
+        alert.addAction(getResolutionAction(width: 960, height: 540))
+        alert.addAction(getResolutionAction(width: 1280, height: 720))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setFps(){
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        alert.addAction(getFpsAction(10))
+        alert.addAction(getFpsAction(15))
+        alert.addAction(getFpsAction(24))
+        alert.addAction(getFpsAction(30))
+        alert.addAction(getFpsAction(60))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setOrientation(){
+        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        alert.addAction(getOrientationAction(.adaptative))
+        alert.addAction(getOrientationAction(.fixedLandscape))
+        alert.addAction(getOrientationAction(.fixedPortrait))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else { return }
+        guard let channelName = channelTextField.text else {return}
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -28,38 +87,27 @@ class CreateDataStreamEntry: UIViewController {
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName": channelName]
+        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
-class CreateDataStreamMain: BaseViewController {
+class FaceCaptureMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
     @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var sendButton: UIButton!
-    @IBOutlet weak var messageField: UITextField!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
-    var isSending: Bool = false {
-        didSet {
-            sendButton.isEnabled = isJoined && !isSending
-            messageField.isEnabled = !isSending
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
+        container.layoutStream(views: [localVideo])
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
@@ -69,25 +117,41 @@ class CreateDataStreamMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-
+        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
-              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-        
+            let resolution = configs["resolution"] as? CGSize,
+            let fps = configs["fps"] as? Int,
+            let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
-        
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
+                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation, mirrorMode: .auto))
         
+        if (KeyCenter.FaceCaptureLicense ?? "").isEmpty {
+            showAlert(message: "Please contact Agora customer service to obtain a face capture certificate".localized)
+        } else {
+            // enable face capture
+            agoraKit.enableExtension(withVendor: "agora_video_filters_face_capture",
+                                     extension: "face_capture",
+                                     enabled: true,
+                                     sourceType: .primaryCamera)
+            
+            agoraKit.setExtensionPropertyWithVendor("agora_video_filters_face_capture",
+                                                    extension: "face_capture",
+                                                    key: "authentication_information",
+                                                    value: "{\"company_id\":\"agoraTest\"," +
+                                                    "\"license\":\"" + (KeyCenter.FaceCaptureLicense ?? "") + "\"}",
+                                                    sourceType: .primaryCamera)
+            agoraKit.setVideoFrameDelegate(self)
+        }
+
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -97,7 +161,7 @@ class CreateDataStreamMain: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
-
+        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -111,7 +175,6 @@ class CreateDataStreamMain: BaseViewController {
         option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -123,49 +186,36 @@ class CreateDataStreamMain: BaseViewController {
             }
         })
     }
-        
-    /// send message
-    @IBAction func onSendPress(_ sender: UIButton) {
-        // indicate if stream has created
-        var streamId: Int = 0
-        
-        let message = messageField.text
-        if message == nil || message!.isEmpty {
-            return
-        }
-        // create the data stream
-        // Each user can create up to five data streams during the lifecycle of the agoraKit
-        let config = AgoraDataStreamConfig()
-        let result = agoraKit.createDataStream(&streamId, config: config)
-        if result != 0 {
-            showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
-        }
-        
-        let sendResult = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
-        if sendResult != 0 {
-            showAlert(title: "Error", message: "sendStreamMessage call failed: \(sendResult), please check your params")
-        } else {
-            messageField.text = nil
-        }
-    }
-    
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.stopPreview()
-                agoraKit.disableVideo()
-                agoraKit.disableAudio()
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableAudio()
+        agoraKit.disableVideo()
+        if isJoined {
+            agoraKit.stopPreview()
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }
 }
 
+extension FaceCaptureMain: AgoraVideoFrameDelegate {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+        let info = videoFrame.metaInfo["KEY_FACE_CAPTURE"] as? String
+        localVideo.statsInfo?.updateMetaInfo(data: info)
+        return true
+    }
+    func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        .readWrite
+    }
+    func getObservedFramePosition() -> AgoraVideoFramePosition {
+        .postCapture
+    }
+}
+
 /// agora rtc engine delegate events
-extension CreateDataStreamMain: AgoraRtcEngineDelegate {
+extension FaceCaptureMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -187,12 +237,8 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
-    /// callback when the local user joins a specified channel.
-    /// @param channel
-    /// @param uid uid of local user
-    /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-        isJoined = true
+        self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -201,16 +247,6 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -231,17 +267,6 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
-        let message = String.init(data: data, encoding: .utf8) ?? ""
-        LogUtils.log(message: "receiveStreamMessageFromUid: \(uid) \(message)", level: .info)
-        showAlert(message: "from: \(uid) message: \(message)")
-    }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
-        LogUtils.log(message: "didOccurStreamMessageErrorFromUid: \(uid), error \(error), missed \(missed), cached \(cached)", level: .info)
-        showAlert(message: "didOccurStreamMessageErrorFromUid: \(uid)")
-    }
-    
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
@@ -252,17 +277,5 @@ extension CreateDataStreamMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         localVideo.statsInfo?.updateLocalAudioStats(stats)
-    }
-    
-    /// Reports the statistics of the video stream from each remote user/host.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
-        remoteVideo.statsInfo?.updateVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the audio stream from each remote user/host.
-    /// @param stats stats struct for current call statistics
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        remoteVideo.statsInfo?.updateAudioStats(stats)
     }
 }

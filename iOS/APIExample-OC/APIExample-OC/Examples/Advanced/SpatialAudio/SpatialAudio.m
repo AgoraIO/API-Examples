@@ -54,9 +54,9 @@
 @property (nonatomic, assign) CGFloat currentAngle;
 @property (nonatomic, assign) CGFloat currentDistance;
 @property (nonatomic, assign) CGFloat maxDistance;
-@property (nonatomic, strong) NSArray<NSNumber *> *forward;
-@property (nonatomic, strong) NSArray<NSNumber *> *right;
-@property (nonatomic, strong) NSArray<NSNumber *> *up;
+@property (nonatomic, assign) simd_float3 forward;
+@property (nonatomic, assign) simd_float3 right;
+@property (nonatomic, assign) simd_float3 up;
 
 @end
 
@@ -79,9 +79,9 @@
     self.currentAngle = 0;
     self.currentDistance = 0;
     self.maxDistance = 10;
-    self.forward = @[@(1.0), @(0.0), @(0.0)];
-    self.right = @[@(0.0), @(1.0), @(0.0)];
-    self.up = @[@(0.0), @(0.0), @(1.0)];
+    self.forward = simd_make_float3(1.0, 0.0, 0.0);
+    self.right = simd_make_float3(0.0, 1.0, 0.0);
+    self.up = simd_make_float3(0.0, 0.0, 1.0);
     
     self.infoLabel.text = @"Please move the red icon to experience the 3D audio effect".localized;
     [self.voiceButton1 setTitle:@"" forState:(UIControlStateNormal)];
@@ -168,8 +168,11 @@
         audioZone.upLength = self.maxDistance;
         [self.localSpatial setZones:@[audioZone]];
     }
-    NSArray *pos = [self getViewCenterPostion:self.selfPostionView];
-    [self.localSpatial updateSelfPosition:pos axisForward:self.forward axisRight:self.right axisUp:self.up];
+    simd_float3 pos = [self getViewCenterPostion:self.selfPostionView];
+    [self.localSpatial updateSelfPosition:pos
+                              axisForward:self.forward
+                                axisRight:self.right
+                                   axisUp:self.up];
 }
 
 
@@ -250,19 +253,22 @@
 }
 
 - (void)updatePosition {
-    NSArray *pos = [self getViewCenterPostion:self.selfPostionView];
-    [self.localSpatial updateSelfPosition:pos axisForward:self.forward axisRight:self.right axisUp:self.up];
+    simd_float3 pos = [self getViewCenterPostion:self.selfPostionView];
+    [self.localSpatial updateSelfPosition:pos
+                              axisForward:self.forward
+                                axisRight:self.right
+                                   axisUp:self.up];
 }
 
 - (AgoraRemoteVoicePositionInfo *)getPlayerPostion: (UIView *)view {
-    NSArray *postion = [self getViewCenterPostion:view];
+    simd_float3 postion = [self getViewCenterPostion:view];
     AgoraRemoteVoicePositionInfo *postionInfo = [[AgoraRemoteVoicePositionInfo alloc] init];
     postionInfo.position = postion;
     postionInfo.forward = self.forward;
     return postionInfo;
 }
-- (NSArray <NSNumber *> *)getViewCenterPostion: (UIView *)view {
-    return @[@(view.center.x), @(view.center.y), @(0.0)];
+- (simd_float3)getViewCenterPostion: (UIView *)view {
+    return simd_make_float3(view.center.x, view.center.y, 0.0);
 }
 
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -314,7 +320,7 @@
     }
 }
 
-- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state error:(AgoraMediaPlayerError)error {
+- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {
     if (state == AgoraMediaPlayerStateOpenCompleted || state == AgoraMediaPlayerStatePlayBackAllLoopsCompleted || state == AgoraMediaPlayerStatePlayBackCompleted) {
         [playerKit play];
     }
