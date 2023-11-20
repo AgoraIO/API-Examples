@@ -533,7 +533,7 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
 }
 
 extension SimpleFilterMain: AgoraMediaFilterEventDelegate{
-    func onEvent(_ vendor: String?, extension: String?, key: String?, json_value: String?) {
-        LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: json_value))", level: .info)
+    func onEvent(_ provider: String?, extension: String?, key: String?, value: String?) {
+        LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: value))", level: .info)
     }
 }

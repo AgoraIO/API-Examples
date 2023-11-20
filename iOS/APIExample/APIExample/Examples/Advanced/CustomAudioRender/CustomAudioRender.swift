@@ -79,6 +79,7 @@ class CustomAudioRenderMain: BaseViewController {
         exAudio.setupExternalAudio(withAgoraKit: agoraKit,
                                    sampleRate: UInt32(sampleRate),
                                    channels: UInt32(channel),
+                                   trackId: 1,
                                    audioCRMode: .sdkCaptureExterRender,
                                    ioType: .remoteIO)
         agoraKit.setParameters("{\"che.audio.external_render\": true}")

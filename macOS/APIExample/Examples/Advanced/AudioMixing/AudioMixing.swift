@@ -52,7 +52,8 @@ class AudioMixing: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -81,7 +82,8 @@ class AudioMixing: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -386,7 +388,8 @@ class AudioMixing: BaseViewController {
 //            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // disable video module in audio scene
             agoraKit.disableVideo()
-            agoraKit.setAudioProfile(profile, scenario: scenario)
+            agoraKit.setAudioProfile(profile)
+            agoraKit.setAudioScenario(scenario)
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream audio

@@ -156,7 +156,7 @@
     videoFrame.format = 12;
     videoFrame.textureBuf = buffer;
     videoFrame.rotation = rotation;
-    [self.agoraKit pushExternalVideoFrame:videoFrame];
+    [self.agoraKit pushExternalVideoFrame:videoFrame videoTrackId:trackId];
     
     AgoraOutputVideoFrame *outputVideoFrame = [[AgoraOutputVideoFrame alloc] init];
     outputVideoFrame.width = size.width;
