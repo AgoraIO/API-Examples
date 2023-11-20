@@ -36,6 +36,7 @@ wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
+wchar_t advancedFaceCapture[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
 wchar_t advancedMediaRecorder[INFO_LEN]			= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
@@ -320,8 +321,8 @@ std::string cs2ANSI(CString str)
 }
 CString utf82cs(std::string utf8)
 {
-    TCHAR szBuf[2 * MAX_PATH] = { 0 };
-    MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), 2 * MAX_PATH, szBuf, 2 * MAX_PATH);
+    TCHAR szBuf[2048] = { 0 };
+    MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), 2048, szBuf, 2048);
     return szBuf;
 }
 
@@ -452,6 +453,7 @@ void InitKeyInfomation()
 
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
+	_tcscpy_s(advancedFaceCapture, INFO_LEN, Str(_T("Advanced.FaceCapture")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
 	_tcscpy_s(advancedMediaRecorder, INFO_LEN, Str(_T("Advanced.MediaRecorder")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));

@@ -116,6 +116,8 @@ using namespace agora::media;
 #define EID_VIDEO_RENDERING_TRACING_RESULT	0x00000033
 #define EID_RECORDER_STATE_CHANGE	0x00000034
 #define EID_RECORDER_INFO_UPDATE	0x00000035
+#define EID_EXTENSION_EVENT	0x00000036
+#define EID_ON_CAPTURE_VIDEOFRAME	0x00000037
 
 
 typedef struct _tagRtmpStreamStateChanged {
@@ -155,7 +157,12 @@ typedef struct _tagRemoteVideoState {
 	int elapsed;
 }RemoteVideoState, *PRemoteVideoState;
 
-
+typedef struct _tagExtensionEvent {
+	char* provider;
+	char* extension;
+	char* key;
+	char* value;
+}ExtensionEvent, *PExtensionEvent;
 
 std::string cs2ANSI(CString str);
 std::string cs2utf8(CString str);

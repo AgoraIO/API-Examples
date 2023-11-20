@@ -106,6 +106,9 @@
     <Filter Include="Advanced\MultiVideoSourceTracks">
       <UniqueIdentifier>{a7d62827-b116-4a28-b8e7-2e5fddbce712}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\FaceCapture">
+      <UniqueIdentifier>{53c31cfd-3175-427f-afd2-102e745ae081}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -252,6 +255,9 @@
     <ClInclude Include="VideoExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.h">
+      <Filter>Advanced\FaceCapture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -385,6 +391,9 @@
     </ClCompile>
     <ClCompile Include="VideoExtractor.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.cpp">
+      <Filter>Advanced\FaceCapture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
