@@ -70,6 +70,7 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_include_directories(agora-simple-filter PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(agora-simple-filter PRIVATE ${PROJECT_SOURCE_DIR}/AgoraRtcKit)
 
 target_link_libraries( # Specifies the target library.
                         agora-simple-filter

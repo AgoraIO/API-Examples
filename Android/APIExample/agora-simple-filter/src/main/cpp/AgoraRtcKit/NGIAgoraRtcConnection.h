@@ -9,6 +9,7 @@
 
 #include "AgoraBase.h"
 #include "time_utils.h"
+#include "api/cpp/ahpl_ares_class.h"
 
 namespace agora {
 namespace rtc {
@@ -148,6 +149,11 @@ struct RtcConnectionConfiguration {
    */
   bool isInteractiveAudience;
 
+  /**
+   * Indicates data channel only.
+   */
+  bool isDataChannelOnly;
+
   RtcConnectionConfiguration()
       : autoSubscribeAudio(true),
         autoSubscribeVideo(true),
@@ -160,7 +166,8 @@ struct RtcConnectionConfiguration {
         audioRecvEncodedFrame(false),
         audioRecvMediaPacket(false),
         videoRecvMediaPacket(false),
-        isInteractiveAudience(false) {}
+        isInteractiveAudience(false),
+        isDataChannelOnly(false) {}
 };
 
 /**
@@ -205,7 +212,7 @@ class IRtcConnection : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument that you pass is invalid.
    *   - -8(ERR_INVALID_STATE): The current connection state is not CONNECTION_STATE_DISCONNECTED(1).
    */
-  virtual int connect(const char* token, const char* channelId, user_id_t userId) = 0;
+  virtual int connect(const char* token, const char* channelId, user_id_t userId, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Connects to an Agora channel.
@@ -218,7 +225,7 @@ class IRtcConnection : public RefCountInterface {
    * The SDK also triggers `onConnected` or `onDisconnected` to notify you of the state change.
    * @param settings The settings of connecting. 
    */
-  virtual int connect(const TConnectSettings& settings) = 0;
+  virtual int connect(const TConnectSettings& settings, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Disconnects from the Agora channel.
@@ -231,7 +238,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int disconnect() = 0;
+  virtual int disconnect(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Starts the last-mile network probe test.
@@ -260,7 +267,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startLastmileProbeTest(const LastmileProbeConfig& config) = 0;
+  virtual int startLastmileProbeTest(const LastmileProbeConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Stops the last-mile network probe test.
@@ -268,7 +275,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int stopLastmileProbeTest() = 0;
+  virtual int stopLastmileProbeTest(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Renews the token.
@@ -279,7 +286,7 @@ class IRtcConnection : public RefCountInterface {
    *
    * @param token The pointer to the new token.
    */
-  virtual int renewToken(const char* token) = 0;
+  virtual int renewToken(const char* token, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Gets the connection information.
@@ -333,7 +340,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IRtcConnectionObserver* observer, void(*safeDeleter)(IRtcConnectionObserver*) = NULL) = 0;
+  virtual int registerObserver(IRtcConnectionObserver* observer, void(*safeDeleter)(IRtcConnectionObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Releases the registered IRtcConnectionObserver object.
@@ -354,7 +361,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerNetworkObserver(INetworkObserver* observer, void(*safeDeleter)(INetworkObserver*) = NULL) = 0;
+  virtual int registerNetworkObserver(INetworkObserver* observer, void(*safeDeleter)(INetworkObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Releases the registered INetworkObserver object.
@@ -430,7 +437,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendStreamMessage(int streamId, const char* data, size_t length) = 0;
+  virtual int sendStreamMessage(int streamId, const char* data, size_t length, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /** Enables/Disables the built-in encryption.
    *
@@ -450,7 +457,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableEncryption(bool enabled, const EncryptionConfig& config) = 0;
+  virtual int enableEncryption(bool enabled, const EncryptionConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Reports a custom event to Agora.
@@ -465,7 +472,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendCustomReportMessage(const char* id, const char* category, const char* event, const char* label, int value) = 0;
+  virtual int sendCustomReportMessage(const char* id, const char* category, const char* event, const char* label, int value, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /** Gets the user information by user account, which is in string format.
    *
    * @param userAccount The user account of the user.
@@ -685,8 +692,8 @@ class IRtcConnectionObserver {
    * @param height image height
    * @param errCode 0 is ok negative is error
    */
-  virtual void onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode) {
-    (void)uid;
+  virtual void onSnapshotTaken(user_id_t userId, const char* filePath, int width, int height, int errCode) {
+    (void)userId;
     (void)filePath;
     (void)width;
     (void)height;
@@ -786,6 +793,15 @@ class IRtcConnectionObserver {
     (void)reason;
   }
 
+  /**
+   * Occurs when receive use rtm response.
+   *
+   * @param code The error code:
+   */
+  virtual void onSetRtmFlagResult(int code) {
+    (void)code;
+  }
+
   /** Occurs when the WIFI message need be sent to the user.
    *
    * @param reason The reason of notifying the user of a message.
@@ -803,7 +819,7 @@ class IRtcConnectionObserver {
    * @param currentStats Instantaneous value of optimization effect.
    * @param averageStats Average value of cumulative optimization effect.
    */
-  virtual void onWlAccStats(WlAccStats currentStats, WlAccStats averageStats) {
+  virtual void onWlAccStats(const WlAccStats& currentStats, const WlAccStats& averageStats) {
     (void)currentStats;
     (void)averageStats;
   }

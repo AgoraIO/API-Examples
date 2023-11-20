@@ -9,6 +9,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraRefPtr.h"
+#include "api/cpp/ahpl_ares_class.h"
 
 namespace agora {
 namespace rtc {
@@ -37,8 +38,8 @@ struct ImagePayloadData {
 class IFileUploaderService : public RefCountInterface {
  public: 
   virtual ~IFileUploaderService() {}
-  virtual int startImageUpload(const ImagePayloadData* imgData)  = 0;
-  virtual int stopImageUpload() = 0;
+  virtual int startImageUpload(const ImagePayloadData* imgData, ahpl_ref_t ares = AHPL_REF_INVALID)  = 0;
+  virtual int stopImageUpload(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 };
 }  // namespace rtc
 }  // namespace agora

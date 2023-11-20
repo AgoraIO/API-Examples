@@ -7,6 +7,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
+#include "api/cpp/ahpl_ares_class.h"
 
 namespace agora {
 namespace rtc {
@@ -58,17 +59,6 @@ class IMediaNodeFactory : public RefCountInterface {
   virtual agora_refptr<IAudioEncodedFrameSender> createAudioEncodedFrameSender() = 0;
 
   /**
-   * Creates a remote audio mixer source object and returns the pointer.
-   *
-   * @param type The type of audio mixer source you want to create.
-   *
-   * @return
-   * - The pointer to \ref rtc::IRemoteAudioMixerSource "IRemoteAudioMixerSource", if the method call succeeds.
-   * - A null pointer, if the method call fails.
-   */
-  virtual agora_refptr<IRemoteAudioMixerSource> createRemoteAudioMixerSource() = 0;
-
-  /**
    * Creates a camera capturer.
    *
    * Once a camera capturer object is created, you can use the video data captured by the camera as
@@ -80,6 +70,7 @@ class IMediaNodeFactory : public RefCountInterface {
    */
   virtual agora_refptr<ICameraCapturer> createCameraCapturer() = 0;
 
+#if !defined(__ANDROID__) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
   /**
    * Creates a screen capturer.
    *
@@ -91,6 +82,7 @@ class IMediaNodeFactory : public RefCountInterface {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<IScreenCapturer> createScreenCapturer() = 0;
+#endif
 
    /**
    * Creates a video mixer.

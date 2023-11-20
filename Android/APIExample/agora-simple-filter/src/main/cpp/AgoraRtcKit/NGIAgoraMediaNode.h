@@ -4,6 +4,7 @@
 #include "IAgoraLog.h"
 #include "NGIAgoraVideoFrame.h"
 #include "AgoraExtensionVersion.h"
+#include "api/ahpl_ref.h"
 
 #ifndef OPTIONAL_PROCESSRESULT_SPECIFIER
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
@@ -299,16 +300,14 @@ class IExtensionVideoFilter : public IVideoFilter {
   };
 
   /**
-   * @brief SDK will invoke this API first to get the filter's requested process mode @ref ProcessMode and threading model
+   * @brief SDK will invoke this API first to get the filter's requested process mode @ref ProcessMode
    * @param mode [out] filter assign its desired the process mode @ref ProcessMode
-   * @param independent_thread [out] filter assign its desired threading model. When this boolean is set "true", an
-   * indepent thread will be assigned to the current filter and all invocations from SDK afterwards are ensured to
-   * happen on that fixed thread. If this boolean flag is set "false", the filter will re-use the  thread of the SDK's
-   * data path. All invocations from SDK afterwards are also ensured to be on the same thread, however that thread is shared.
+   * @param independent_thread deprecated. SDK will ignore this parameter.
    * @note If the filter implementation is not thread sensitive, we recommend to set the boolean to "false" to reduce thread context
    * switching.
    */
   virtual void getProcessMode(ProcessMode& mode, bool& independent_thread) = 0;
+
   /**
    * @brief SDK will invoke this API before feeding video frame data to the filter. Filter can perform its initialization/preparation job
    * in this step.
@@ -466,7 +465,7 @@ class IAudioPcmDataSender : public RefCountInterface {
       const size_t samples_per_channel,  // for 10ms Data, number_of_samples * 100 = sample_rate
       const agora::rtc::BYTES_PER_SAMPLE bytes_per_sample,     // 2
       const size_t number_of_channels,
-      const uint32_t sample_rate) = 0; // sample_rate > 8000)
+      const uint32_t sample_rate, ahpl_ref_t ares = AHPL_REF_INVALID) = 0; // sample_rate > 8000)
 
  protected:
   ~IAudioPcmDataSender() {}
@@ -494,7 +493,7 @@ class IAudioEncodedFrameSender : public RefCountInterface {
    * - `false`: Failure.
    */
   virtual bool sendEncodedAudioFrame(const uint8_t* payload_data, size_t payload_size,
-                                     const EncodedAudioFrameInfo& audioFrameInfo) = 0;
+                                     const EncodedAudioFrameInfo& audioFrameInfo, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
  protected:
   ~IAudioEncodedFrameSender() {}
@@ -577,7 +576,7 @@ class IMediaPacketSender : public RefCountInterface {
    * - `false`: Failure.
    */
   virtual int sendMediaPacket(const uint8_t *packet, size_t length,
-                              const media::base::PacketOptions &options) = 0;
+                              const media::base::PacketOptions &options, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
  protected:
   ~IMediaPacketSender() {}
 };
@@ -605,7 +604,7 @@ class IMediaControlPacketSender {
    */
   virtual int sendPeerMediaControlPacket(media::base::user_id_t userId,
                                          const uint8_t *packet,
-                                         size_t length) = 0;
+                                         size_t length, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Sends the media transport control packet to all users.
@@ -617,7 +616,7 @@ class IMediaControlPacketSender {
    * - `true`: Success.
    * - `false`: Failure.
    */
-  virtual int sendBroadcastMediaControlPacket(const uint8_t *packet, size_t length) = 0;
+  virtual int sendBroadcastMediaControlPacket(const uint8_t *packet, size_t length, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   virtual ~IMediaControlPacketSender() {}
 };
@@ -659,7 +658,7 @@ class IVideoFrameSender : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendVideoFrame(const media::base::ExternalVideoFrame& videoFrame) = 0;
+  virtual int sendVideoFrame(const media::base::ExternalVideoFrame& videoFrame, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
  protected:
   ~IVideoFrameSender() {}
@@ -686,7 +685,7 @@ class IVideoEncodedImageSender : public RefCountInterface {
    * - `false`: Failure.
    */
   virtual bool sendEncodedVideoImage(const uint8_t* imageBuffer, size_t length,
-                                     const EncodedVideoFrameInfo& videoEncodedFrameInfo) = 0;
+                                     const EncodedVideoFrameInfo& videoEncodedFrameInfo, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
  protected:
   ~IVideoEncodedImageSender() {}
@@ -780,7 +779,7 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setRenderMode(media::base::RENDER_MODE_TYPE renderMode) = 0;
+  virtual int setRenderMode(media::base::RENDER_MODE_TYPE renderMode, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets the render mode of the view.
    * @param view the view to set render mode.
@@ -789,7 +788,7 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setRenderMode(void* view, media::base::RENDER_MODE_TYPE renderMode) = 0;
+  virtual int setRenderMode(void* view, media::base::RENDER_MODE_TYPE renderMode, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets whether to mirror the video.
    * @param mirror Whether to mirror the video:
@@ -799,7 +798,7 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setMirror(bool mirror) = 0;
+  virtual int setMirror(bool mirror, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets whether to mirror the video.
    * @param view the view to set mirror mode.
@@ -810,7 +809,7 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setMirror(void* view, bool mirror) = 0;
+  virtual int setMirror(void* view, bool mirror, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets the video display window.
    * @param view The pointer to the video display window.
@@ -818,7 +817,7 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setView(void* view) = 0;
+  virtual int setView(void* view, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets the video display window.
    * @param view The pointer to the video display window.
@@ -827,14 +826,14 @@ class IVideoRenderer : public IVideoSinkBase {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int addView(void* view, const Rectangle& cropArea) = 0;
+  virtual int addView(void* view, const Rectangle& cropArea, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Stops rendering the video view on the window.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int unsetView() = 0;
+  virtual int unsetView(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * remove rendering the video view on the window.
    * @return
@@ -853,8 +852,8 @@ class IVideoTrack;
 class IVideoFrameTransceiver : public RefCountInterface {
  public:
   virtual int getTranscodingDelayMs() = 0;
-  virtual int addVideoTrack(agora_refptr<IVideoTrack> track) = 0;
-  virtual int removeVideoTrack(agora_refptr<IVideoTrack> track) = 0;
+  virtual int addVideoTrack(agora_refptr<IVideoTrack> track, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int removeVideoTrack(agora_refptr<IVideoTrack> track, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 };
 
 }
