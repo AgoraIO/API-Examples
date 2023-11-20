@@ -230,6 +230,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
    m_vecAdvanced.push_back(advancedOriginalAudio);
+   m_vecAdvanced.push_back(advancedFaceCapture);
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
@@ -296,6 +297,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pOriginalAudioDlg = new CAgoraOriginalAudioDlg(&m_staMainArea);
    m_pOriginalAudioDlg->Create(CAgoraOriginalAudioDlg::IDD);
    m_pOriginalAudioDlg->MoveWindow(&rcWnd);
+
+   m_pAgoraFaceCaptureDlg = new CAgoraFaceCaptureDlg(&m_staMainArea);
+   m_pAgoraFaceCaptureDlg->Create(CAgoraFaceCaptureDlg::IDD);
+   m_pAgoraFaceCaptureDlg->MoveWindow(&rcWnd);
 
    //custom encrypt
    m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
@@ -529,6 +534,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedOriginalAudio) == 0) {
 		m_pOriginalAudioDlg->InitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedFaceCapture) == 0) {
+		m_pAgoraFaceCaptureDlg->InitAgora();
+		m_pAgoraFaceCaptureDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->InitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
@@ -628,6 +636,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedOriginalAudio) == 0) {
 		m_pOriginalAudioDlg->UnInitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedFaceCapture) == 0) {
+		m_pAgoraFaceCaptureDlg->UnInitAgora();
+		m_pAgoraFaceCaptureDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->UnInitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
