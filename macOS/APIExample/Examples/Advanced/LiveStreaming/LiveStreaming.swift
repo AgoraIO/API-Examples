@@ -286,7 +286,7 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var dualStreamTips: NSTextField!
     @IBAction func onDualStreaming(_ sender: NSSwitch) {
         dualStreamTips.stringValue = sender.state == .on ? "Opening".localized : "(Default: flow)".localized
-        agoraKit.enableDualStreamMode(sender.state == .on)
+        agoraKit.setDualStreamMode(sender.state == .on ? .enableSimulcastStream : .disableSimulcastStream)
     }
     
     @IBOutlet weak var firstFrameSwitch: NSSwitch!

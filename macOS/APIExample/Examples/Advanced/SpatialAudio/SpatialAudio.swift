@@ -88,7 +88,8 @@ class SpatialAudioMain: BaseViewController {
         agoraKit?.setChannelProfile(.liveBroadcasting)
         agoraKit?.setClientRole(.broadcaster)
 
-        agoraKit?.setAudioProfile(.default, scenario: .gameStreaming)
+        agoraKit?.setAudioProfile(.default)
+        agoraKit?.setAudioScenario(.gameStreaming)
         
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit

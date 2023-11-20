@@ -213,6 +213,7 @@ class CustomVideoSourcePush: BaseViewController {
                                                    frameRate: 15)
             customCamera?.delegate = self
             customCamera?.startSource()
+            customCamera?.trackId = 1
             agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
 //            agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
             // enable video module and set up video encoding configs
@@ -375,7 +376,7 @@ extension CustomVideoSourcePush: AgoraYUVImageSourcePushDelegate {
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
         //once we have the video frame, we can push to agora sdk
-        agoraKit?.pushExternalVideoFrame(videoFrame)
+        agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
         
         let outputVideoFrame = AgoraOutputVideoFrame()
         outputVideoFrame.width = Int32(size.width)

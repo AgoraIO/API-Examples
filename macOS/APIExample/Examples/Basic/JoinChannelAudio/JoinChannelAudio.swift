@@ -40,7 +40,8 @@ class JoinChannelAudioMain: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -69,7 +70,8 @@ class JoinChannelAudioMain: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -333,7 +335,8 @@ class JoinChannelAudioMain: BaseViewController {
             // disable video module in audio scene
             agoraKit.disableVideo()
             agoraKit.enableAudio()
-            agoraKit.setAudioProfile(profile, scenario: scenario)
+            agoraKit.setAudioProfile(profile)
+            agoraKit.setAudioScenario(scenario)
             
             // set proxy configuration
 //            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value

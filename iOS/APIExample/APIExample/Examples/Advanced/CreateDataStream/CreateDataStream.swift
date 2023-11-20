@@ -127,7 +127,6 @@ class CreateDataStreamMain: BaseViewController {
     /// send message
     @IBAction func onSendPress(_ sender: UIButton) {
         // indicate if stream has created
-        var streamCreated = false
         var streamId: Int = 0
         
         let message = messageField.text
