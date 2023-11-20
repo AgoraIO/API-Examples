@@ -123,8 +123,10 @@ void CAgoraScreenCapture::UnInitAgora()
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		//release engine.
-		m_rtcEngine->release(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		if (m_initialize) {
+			m_rtcEngine->release(true);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
+		}
 		m_rtcEngine = NULL;
 		if (m_screenParam.excludeWindowList != nullptr) {
 			delete[] m_screenParam.excludeWindowList;
@@ -352,7 +354,9 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
     if (!m_rtcEngine || !m_initialize)
         return;
     HWND hWnd = NULL;
-    //if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
+	if (m_cmbScreenCap.GetCurSel() < 0 || m_cmbScreenCap.GetCurSel() >= m_listWnd.GetSize()) {
+		return;
+	}
     hWnd = (HWND)m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel())).sourceId;
     int ret = 0;
     m_windowShare = !m_windowShare;

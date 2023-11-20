@@ -213,10 +213,16 @@ class JoinChannelVideoMain: BaseViewController {
     func initSelectRolePicker() {
         selectRolePicker.label.stringValue = "Role".localized
         selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
-        selectRolePicker.onSelectChanged {
-            guard let selected = self.selectedRole else { return }
+        selectRolePicker.onSelectChanged { [weak self] in
+            guard let self = self, let selected = self.selectedRole else { return }
             if self.isJoined {
+                let mediaOption = AgoraRtcChannelMediaOptions()
+                mediaOption.publishCameraTrack = selected == .broadcaster
+                mediaOption.publishMicrophoneTrack = selected == .broadcaster
+                mediaOption.clientRoleType = selected
+                self.agoraKit.updateChannel(with: mediaOption)
                 self.agoraKit.setClientRole(selected)
+                _ = selected == .broadcaster ? self.agoraKit.startPreview() : self.agoraKit.stopPreview()
             }
         }
     }
@@ -338,7 +344,11 @@ class JoinChannelVideoMain: BaseViewController {
             videoCanvas.renderMode = .hidden
             agoraKit.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
-            agoraKit.startPreview()
+            if role == .broadcaster {
+                agoraKit.startPreview()
+            } else {
+                agoraKit.stopPreview()
+            }
             
             // start joining channel
             // 1. Users can only see each other after they join the

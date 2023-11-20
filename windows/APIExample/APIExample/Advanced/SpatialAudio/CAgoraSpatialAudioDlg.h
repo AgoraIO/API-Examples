@@ -47,10 +47,12 @@ public:
 	 *
 	 * @param position Current playback progress (ms).
 	 */
-	virtual void onPositionChanged(int64_t position)
+	virtual void onPositionChanged(int64_t positionMs, int64_t timestampMs)
 	{
 		
 	}
+
+
 	/**
 	 * Reports the playback event.
 	 *
@@ -123,6 +125,8 @@ public:
 	virtual void onAudioVolumeIndication(int volume)override {
 
 	}
+
+
 private:
 	IMediaPlayer *m_player;
 };
@@ -253,10 +257,10 @@ private:
 	bool m_SpatialAudio = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	
-	ILocalSpatialAudioEngine* m_localSpatial;
-	IMediaPlayer* m_mediaPlayerLeft;
+	ILocalSpatialAudioEngine* m_localSpatial = nullptr;
+	IMediaPlayer* m_mediaPlayerLeft = nullptr;
 	CSpatialAudioPlayerObserver playerLeftObserver;
-	IMediaPlayer* m_mediaPlayerRight;
+	IMediaPlayer* m_mediaPlayerRight = nullptr;
 	CSpatialAudioPlayerObserver playerRightObserver;
 
 	CSpatialAudioEventHandler m_eventHandler;

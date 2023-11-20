@@ -37,9 +37,9 @@ public:
 	 *
 	 * @param position Current playback progress (ms).
 	 */
-	virtual void onPositionChanged(int64_t position)
+	virtual void onPositionChanged(int64_t positionMs, int64_t timestampMs)
 	{
-		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(positionMs), NULL);
 	}
 	/**
 	 * Reports the playback event.
@@ -224,12 +224,13 @@ private:
 	bool m_publishAudio = false;
 	bool m_publishMeidaplayer = false;
 	bool m_isVideoSliderCapturing = false;
+	std::vector<int> audioStreams;
 
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraMediaPlayerHandler m_eventHandler;
 	CMediaPlayerSourceObserver	m_mediaPlayerEvent;
-	IMediaPlayer *m_mediaPlayer = nullptr;
+	agora_refptr<IMediaPlayer> m_mediaPlayer = nullptr;
 	MEDIAPLAYERSTATE m_mediaPlayerState = mediaPLAYER_READY;
 	//AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
 protected:
@@ -248,6 +249,10 @@ public:
 	CListBox m_lstInfo;
 	CStatic m_staDetail;
 	CStatic m_staChannel;
+	CStatic m_staPublishStream;
+	CStatic m_staPlayerStream;
+	CComboBox m_cmbPublishStream;
+	CComboBox m_cmbPlayerStream;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
 	CStatic m_staVideoSource;
@@ -271,4 +276,5 @@ public:
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnSelchangeComboPublishOrPlayerStream();
 };
