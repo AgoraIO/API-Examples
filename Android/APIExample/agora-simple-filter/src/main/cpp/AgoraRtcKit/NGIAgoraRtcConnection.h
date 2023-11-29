@@ -9,7 +9,7 @@
 
 #include "AgoraBase.h"
 #include "time_utils.h"
-#include "api/cpp/ahpl_ares_class.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {

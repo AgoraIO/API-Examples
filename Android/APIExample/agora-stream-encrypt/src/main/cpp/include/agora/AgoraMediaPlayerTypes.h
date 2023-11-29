@@ -105,61 +105,61 @@ enum MEDIA_PLAYER_STATE {
  * @brief Player error code
  *
  */
-enum MEDIA_PLAYER_ERROR {
+enum MEDIA_PLAYER_REASON {
   /** No error.
    */
-  PLAYER_ERROR_NONE = 0,
+  PLAYER_REASON_NONE = 0,
   /** The parameter is invalid.
    */
-  PLAYER_ERROR_INVALID_ARGUMENTS = -1,
+  PLAYER_REASON_INVALID_ARGUMENTS = -1,
   /** Internel error.
    */
-  PLAYER_ERROR_INTERNAL = -2,
+  PLAYER_REASON_INTERNAL = -2,
   /** No resource.
    */
-  PLAYER_ERROR_NO_RESOURCE = -3,
+  PLAYER_REASON_NO_RESOURCE = -3,
   /** Invalid media source.
    */
-  PLAYER_ERROR_INVALID_MEDIA_SOURCE = -4,
+  PLAYER_REASON_INVALID_MEDIA_SOURCE = -4,
   /** The type of the media stream is unknown.
    */
-  PLAYER_ERROR_UNKNOWN_STREAM_TYPE = -5,
+  PLAYER_REASON_UNKNOWN_STREAM_TYPE = -5,
   /** The object is not initialized.
    */
-  PLAYER_ERROR_OBJ_NOT_INITIALIZED = -6,
+  PLAYER_REASON_OBJ_NOT_INITIALIZED = -6,
   /** The codec is not supported.
    */
-  PLAYER_ERROR_CODEC_NOT_SUPPORTED = -7,
+  PLAYER_REASON_CODEC_NOT_SUPPORTED = -7,
   /** Invalid renderer.
    */
-  PLAYER_ERROR_VIDEO_RENDER_FAILED = -8,
+  PLAYER_REASON_VIDEO_RENDER_FAILED = -8,
   /** An error occurs in the internal state of the player.
    */
-  PLAYER_ERROR_INVALID_STATE = -9,
+  PLAYER_REASON_INVALID_STATE = -9,
   /** The URL of the media file cannot be found.
    */
-  PLAYER_ERROR_URL_NOT_FOUND = -10,
+  PLAYER_REASON_URL_NOT_FOUND = -10,
   /** Invalid connection between the player and the Agora server.
    */
-  PLAYER_ERROR_INVALID_CONNECTION_STATE = -11,
+  PLAYER_REASON_INVALID_CONNECTION_STATE = -11,
   /** The playback buffer is insufficient.
    */
-  PLAYER_ERROR_SRC_BUFFER_UNDERFLOW = -12,
+  PLAYER_REASON_SRC_BUFFER_UNDERFLOW = -12,
   /** The audio mixing file playback is interrupted.
    */
-  PLAYER_ERROR_INTERRUPTED = -13,
+  PLAYER_REASON_INTERRUPTED = -13,
   /** The SDK does not support this function.
    */
-  PLAYER_ERROR_NOT_SUPPORTED = -14,
+  PLAYER_REASON_NOT_SUPPORTED = -14,
   /** The token has expired.
    */
-  PLAYER_ERROR_TOKEN_EXPIRED = -15,
+  PLAYER_REASON_TOKEN_EXPIRED = -15,
   /** The ip has expired.
    */
-  PLAYER_ERROR_IP_EXPIRED = -16,
+  PLAYER_REASON_IP_EXPIRED = -16,
   /** An unknown error occurs.
    */
-  PLAYER_ERROR_UNKNOWN = -17,
+  PLAYER_REASON_UNKNOWN = -17,
 };
 
 /**

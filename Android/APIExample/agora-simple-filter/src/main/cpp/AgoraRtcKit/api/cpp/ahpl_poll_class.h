@@ -118,6 +118,10 @@ private:
 	ahpl_poll_class (ahpl_poll_class &&) = delete;
 	ahpl_poll_class &operator = (const ahpl_poll_class &) = delete;
 	ahpl_poll_class &operator = (ahpl_poll_class &&) = delete;
+#else
+private:
+	ahpl_poll_class (const ahpl_poll_class &);
+	ahpl_poll_class &operator = (const ahpl_poll_class &);
 #endif
 };
 

@@ -12,7 +12,7 @@
 #include "AgoraRefPtr.h"
 #include "IAgoraService.h"
 #include "NGIAgoraRtcConnection.h"
-#include "api/cpp/ahpl_ares_class.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -52,13 +52,13 @@ public:
    *
    * @param url The RTMP URL address.
    * @param state The RTMP streaming state: #RTMP_STREAM_PUBLISH_STATE.
-   * @param errCode The detailed error information for streaming: #RTMP_STREAM_PUBLISH_ERROR_TYPE.
+   * @param reason The detailed error information for streaming: #RTMP_STREAM_PUBLISH_REASON.
    */
   virtual void onRtmpStreamingStateChanged(const char* url, RTMP_STREAM_PUBLISH_STATE state,
-                                           RTMP_STREAM_PUBLISH_ERROR_TYPE errCode) {
+                                           RTMP_STREAM_PUBLISH_REASON reason) {
     (void)url;
     (void)state;
-    (void)errCode;
+    (void)reason;
   }
 
   /** Reports events during the RTMP or RTMPS streaming.

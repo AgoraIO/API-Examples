@@ -325,13 +325,13 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    * you to troubleshoot issues when exceptions occur.
    *
    * The SDK triggers the onLocalVideoStateChanged callback with the state code of `LOCAL_VIDEO_STREAM_STATE_FAILED`
-   * and error code of `LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE` in the following situations:
+   * and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE` in the following situations:
    * - The app switches to the background, and the system gets the camera resource.
    * - The camera starts normally, but does not output video for four consecutive seconds.
    *
    * When the camera outputs the captured video frames, if the video frames are the same for 15
    * consecutive frames, the SDK triggers the `onLocalVideoStateChanged` callback with the state code
-   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE`.
+   * of `LOCAL_VIDEO_STREAM_STATE_CAPTURING` and error code of `LOCAL_VIDEO_STREAM_REASON_CAPTURE_FAILURE`.
    * Note that the video frame duplication detection is only available for video frames with a resolution
    * greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
    *
@@ -341,14 +341,14 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    *
    * @param connection The RtcConnection object.
    * @param state The state of the local video. See #LOCAL_VIDEO_STREAM_STATE.
-   * @param error The detailed error information. See #LOCAL_VIDEO_STREAM_ERROR.
+   * @param reason The detailed error information. See #LOCAL_VIDEO_STREAM_REASON.
    */
   virtual void onLocalVideoStateChanged(const RtcConnection& connection,
                                         LOCAL_VIDEO_STREAM_STATE state,
-                                        LOCAL_VIDEO_STREAM_ERROR errorCode) {
+                                        LOCAL_VIDEO_STREAM_REASON reason) {
     (void)connection;
     (void)state;
-    (void)errorCode;
+    (void)reason;
   }
 
   /**
@@ -765,13 +765,13 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
    *
    * @param connection The RtcConnection object.
    * @param state State of the local audio. See #LOCAL_AUDIO_STREAM_STATE.
-   * @param error The error information of the local audio.
-   * See #LOCAL_AUDIO_STREAM_ERROR.
+   * @param reason The reason information of the local audio.
+   * See #LOCAL_AUDIO_STREAM_REASON.
    */
-  virtual void onLocalAudioStateChanged(const RtcConnection& connection, LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) {
+  virtual void onLocalAudioStateChanged(const RtcConnection& connection, LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON reason) {
     (void)connection;
     (void)state;
-    (void)error;
+    (void)reason;
   }
 
   /** Occurs when the remote audio state changes.
