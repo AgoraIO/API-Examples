@@ -7,7 +7,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
-#include "api/cpp/ahpl_ares_class.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {

@@ -1281,11 +1281,11 @@ class ILocalUserObserver {
    *
    * @param videoTrack The pointer to `ILocalVideoTrack`.
    * @param state The state of the local video track.
-   * @param errorCode The error information.
+   * @param reason The error information.
    */
   virtual void onLocalVideoTrackStateChanged(agora_refptr<rtc::ILocalVideoTrack> videoTrack,
                                              LOCAL_VIDEO_STREAM_STATE state,
-                                             LOCAL_VIDEO_STREAM_ERROR errorCode) = 0;
+                                             LOCAL_VIDEO_STREAM_REASON reason) = 0;
 
   /**
    * Reports the statistics of a local video track.

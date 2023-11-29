@@ -9,7 +9,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
-#include "api/cpp/ahpl_ares_class.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 // FIXME(Ender): use this class instead of AudioSendStream as local track
 namespace agora {
@@ -218,10 +218,10 @@ class ILocalAudioTrackObserver {
    * Occurs when the state of a local audio track changes.
    *
    * @param state The state of the local audio track.
-   * @param errorCode The error information for a state failure: \ref agora::rtc::LOCAL_AUDIO_STREAM_ERROR "LOCAL_AUDIO_STREAM_ERROR".
+   * @param reasonCode The error information for a state failure: \ref agora::rtc::LOCAL_AUDIO_STREAM_REASON "LOCAL_AUDIO_STREAM_REASON".
    */
   virtual void onLocalAudioTrackStateChanged(LOCAL_AUDIO_STREAM_STATE state,
-                                             LOCAL_AUDIO_STREAM_ERROR errorCode) = 0;
+                                             LOCAL_AUDIO_STREAM_REASON reasonCode) = 0;
 };
 
 /**

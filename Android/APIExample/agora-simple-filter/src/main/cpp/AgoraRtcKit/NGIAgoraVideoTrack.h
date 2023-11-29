@@ -9,7 +9,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
-#include "api/ahpl_ref.h"
+#include <api/ahpl_ref.h>
 
 #ifndef OPTIONAL_OVERRIDE
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
@@ -143,7 +143,7 @@ class IVideoTrack : public RefCountInterface {
    * - 0: success
    * - <0: failure
    */
-  virtual int getFilterProperty(const char* id, const char* key, char* json_value, size_t buf_size) { return -1; }
+  virtual int getFilterProperty(const char* id, const char* key, char* json_value, size_t buf_size, ahpl_ref_t ares = AHPL_REF_INVALID) { return -1; }
 
  protected:
   ~IVideoTrack() {}

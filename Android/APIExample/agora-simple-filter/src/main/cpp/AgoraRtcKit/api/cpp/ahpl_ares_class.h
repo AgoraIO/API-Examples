@@ -38,7 +38,9 @@ public:
 	 **/
 	virtual ~ahpl_ares_class ()
 	{
-		ahpl_ref_destroy (ref (), true);
+		ahpl_ref_t refid = ref ();
+		if (!ahpl_ref_invalid (refid))
+			ahpl_ref_destroy (refid, true);
 	}
 
 	/* complete the async result */
@@ -78,6 +80,10 @@ private:
 	ahpl_ares_class (ahpl_ares_class &&) = delete;
 	ahpl_ares_class &operator = (const ahpl_ares_class &) = delete;
 	ahpl_ares_class &operator = (ahpl_ares_class &&) = delete;
+#else
+private:
+	ahpl_ares_class (const ahpl_ares_class &);
+	ahpl_ares_class &operator = (const ahpl_ares_class &);
 #endif /* C++11 */
 };
 

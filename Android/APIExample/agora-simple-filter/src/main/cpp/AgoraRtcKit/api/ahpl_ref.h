@@ -24,11 +24,11 @@ extern "C" {
 
 
 
-typedef int ahpl_ref_t;
+typedef struct _internal_ref_od_ *ahpl_ref_t;
 
-#define AHPL_REF_INVALID ((ahpl_ref_t)-1)
+#define AHPL_REF_INVALID ((ahpl_ref_t)(intptr_t)-1)
 
-#define ahpl_ref_invalid(ref) (((int)(ref)) < 0)
+#define ahpl_ref_invalid(ref) (((int)(intptr_t)(ref)) < 0)
 
 
 /**

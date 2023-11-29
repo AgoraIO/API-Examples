@@ -839,6 +839,18 @@ private:
 	}
 #endif /* __AHPL_ASYNC_H__ */
 #endif /* C++11 */
+
+#if (__cplusplus >= 201103) || defined (_MSC_VER)
+private:
+	ahpl_ref_class (const ahpl_ref_class &) = delete;
+	ahpl_ref_class (ahpl_ref_class &&) = delete;
+	ahpl_ref_class &operator = (const ahpl_ref_class &) = delete;
+	ahpl_ref_class &operator = (ahpl_ref_class &&) = delete;
+#else
+private:
+	ahpl_ref_class (const ahpl_ref_class &);
+	ahpl_ref_class &operator = (const ahpl_ref_class &);
+#endif /* C++11 */
 };
 
 

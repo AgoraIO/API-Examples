@@ -9,7 +9,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraRefPtr.h"
-#include "api/cpp/ahpl_ares_class.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {
