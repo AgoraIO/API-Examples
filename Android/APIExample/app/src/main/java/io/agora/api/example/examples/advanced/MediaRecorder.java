@@ -334,7 +334,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     Log.d(TAG, "RemoteMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
                     if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
                         showRecordMediaPathDialog(storagePath);
-                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_ERROR_CONFIG_CHANGED) {
+                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_REASON_CONFIG_CHANGED) {
                         // switch camera while recording
                         runOnUIThread(() -> {
                             VideoReportLayout userView = getUserView(uid);
@@ -388,7 +388,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     Log.d(TAG, "LocalMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
                     if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
                         showRecordMediaPathDialog(storagePath);
-                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_ERROR_CONFIG_CHANGED) {
+                    } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && error == AgoraMediaRecorder.RECORDER_REASON_CONFIG_CHANGED) {
                         // switch camera while recording
                         runOnUIThread(() -> {
                             VideoReportLayout userView = fl_local;

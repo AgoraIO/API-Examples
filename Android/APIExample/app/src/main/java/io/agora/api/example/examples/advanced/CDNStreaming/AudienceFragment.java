@@ -424,12 +424,12 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     }
 
     @Override
-    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-        showShortToast("player state change to " + mediaPlayerState.name());
+    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerReason reason) {
+        showShortToast("player state change to " + state.name());
         handler.post(new Runnable() {
             @Override
             public void run() {
-                switch (mediaPlayerState) {
+                switch (state) {
                     case PLAYER_STATE_FAILED:
                         mediaPlayer.stop();
                         //showLongToast(String.format("media player error: %s", mediaPlayerError.name()));
@@ -444,7 +444,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                                     .setPositiveButton(R.string.confirm, (dialog, which) -> openPlayerWithUrl())
                                     .create();
                         }
-                        mPlayerFailDialog.setMessage(getString(R.string.media_player_error, mediaPlayerError.name()) + "\n\n" + getString(R.string.reopen_url_again));
+                        mPlayerFailDialog.setMessage(getString(R.string.media_player_error, reason.name()) + "\n\n" + getString(R.string.reopen_url_again));
                         mPlayerFailDialog.show();
                         break;
                     case PLAYER_STATE_OPEN_COMPLETED:
