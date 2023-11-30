@@ -8,6 +8,7 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -120,7 +121,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setCameraSource(CAMERA_SOURCE source) = 0;
+  virtual int setCameraSource(CAMERA_SOURCE source, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the camera source.
    *
@@ -136,7 +137,7 @@ class ICameraCapturer : public RefCountInterface {
    * @note
    * This method applies to Android and iOS only.
    */
-  virtual void switchCamera() = 0;
+  virtual int switchCamera(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Returns whether zooming is supported by the current device.
    * @note
@@ -160,7 +161,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int32_t setCameraZoom(float zoomValue) = 0;
+  virtual int32_t setCameraZoom(float zoomValue, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the max zooming factor of the device.
    *
@@ -191,7 +192,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int32_t setCameraFocus(float x, float y) = 0;
+  virtual int32_t setCameraFocus(float x, float y, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Returns whether auto face focus is supported by the current device.
    * @note
@@ -213,7 +214,7 @@ class ICameraCapturer : public RefCountInterface {
     * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int32_t setCameraAutoFaceFocus(bool enable) = 0;
+  virtual int32_t setCameraAutoFaceFocus(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Enables or disables auto face detection.
    * @note
@@ -224,7 +225,7 @@ class ICameraCapturer : public RefCountInterface {
     * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int32_t enableFaceDetection(bool enable) = 0;
+  virtual int32_t enableFaceDetection(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Checks whether the camera face detect is supported.
@@ -273,7 +274,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success
    * - < 0: Failure
    */
-  virtual int setCameraTorchOn(bool isOn) = 0;
+  virtual int setCameraTorchOn(bool on, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /** Checks whether the camera exposure function is supported.
    *
@@ -303,7 +304,7 @@ class ICameraCapturer : public RefCountInterface {
    *     <li>< 0: Failure.</li>
    * </ul>
    */
-  virtual int setCameraExposurePosition(float positionXinView, float positionYinView) = 0;
+  virtual int setCameraExposurePosition(float positionXinView, float positionYinView, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   
   /**
    * Returns whether exposure value adjusting is supported by the current device.
@@ -329,7 +330,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setCameraExposureFactor(float value) = 0;
+  virtual int setCameraExposureFactor(float value, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
   /**
@@ -343,7 +344,7 @@ class ICameraCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual bool enableMultiCamera(bool enable) = 0;
+  virtual bool enableMultiCamera(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Checks whether the camera auto exposure function is supported.
    *
@@ -367,7 +368,7 @@ class ICameraCapturer : public RefCountInterface {
    *     <li>< 0: Failure.</li>
    * </ul>
    */
-  virtual int setCameraAutoExposureFaceModeEnabled(bool enabled) = 0;
+  virtual int setCameraAutoExposureFaceModeEnabled(bool enabled, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 #endif
   
 #elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
@@ -413,7 +414,7 @@ class ICameraCapturer : public RefCountInterface {
    * Set the device orientation of the capture device
    * @param VIDEO_ORIENTATION orientaion of the device 0(by default), 90, 180, 270
    */
-  virtual void setDeviceOrientation(VIDEO_ORIENTATION orientation) = 0;
+  virtual int setDeviceOrientation(VIDEO_ORIENTATION orientation, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Sets the format of the video captured by the camera.
@@ -422,7 +423,7 @@ class ICameraCapturer : public RefCountInterface {
    *
    * @param capture_format The reference to the video format: VideoFormat.
    */
-  virtual void setCaptureFormat(const VideoFormat& capture_format) = 0;
+  virtual int setCaptureFormat(const VideoFormat& capture_format, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Gets the format of the video captured by the camera.
    * @return
@@ -434,7 +435,7 @@ class ICameraCapturer : public RefCountInterface {
    *
    * @param observer Instance of the capture observer.
    */
-  virtual int registerCameraObserver(ICameraCaptureObserver* observer) = 0;
+  virtual int registerCameraObserver(ICameraCaptureObserver* observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Unregisters the camera observer.
    *

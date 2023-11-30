@@ -9,6 +9,7 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -338,7 +339,7 @@ class IRtmpConnection : public RefCountInterface {
    *   - ERR_INVALID_ARGUMENT: The passed in argument is invalid.
    *   - ERR_INVALID_STATE: The current connection state is not STATE_DISCONNECTED(3).
    */
-  virtual int connect(const char* url) = 0;
+  virtual int connect(const char* url, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Disconnects from the RTMP server.
@@ -347,7 +348,7 @@ class IRtmpConnection : public RefCountInterface {
    * STATE_DISCONNECTED(4). You will be notified with the callback
    * \ref onDisconnected "onDisconnected".
    */
-  virtual int disconnect() = 0;
+  virtual int disconnect(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Gets the current connection information.
@@ -375,7 +376,7 @@ class IRtmpConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IRtmpConnectionObserver* observer, void(*safeDeleter)(IRtmpConnectionObserver*) = NULL) = 0;
+  virtual int registerObserver(IRtmpConnectionObserver* observer, void(*safeDeleter)(IRtmpConnectionObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Releases the registered IRtmpConnectionObserver object.

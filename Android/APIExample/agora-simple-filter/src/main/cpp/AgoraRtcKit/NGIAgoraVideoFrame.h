@@ -186,6 +186,7 @@ OPTIONAL_ENUM_CLASS VideoFrameMetaDataType {
   kScreenMetaInfo,
   kVideoSourceType,
   kFaceInfo,
+  kFaceCaptureInfo,
   // Add other types afterwards
 };
 
@@ -211,7 +212,7 @@ class IVideoFrame : public RefCountInterface {
   virtual int getVideoFrameData(VideoFrameData& data) const = 0;
 
   /**
-   * Fill the underlying buffer with source buffer info contained in VideoFrameInfo
+   * Fill the underlying buffer with source buffer info contained in VideoFrameData
    * For frames of type "Type::kMemPixels", This function first tries to fill in-place with no copy and reallocation.
    * When it fails, a copy or copy-plus-reallocation may happen
    * @param data [in] Data to be filled in.

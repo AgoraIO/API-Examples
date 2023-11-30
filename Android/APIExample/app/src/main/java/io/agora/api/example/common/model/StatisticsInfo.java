@@ -2,16 +2,15 @@ package io.agora.api.example.common.model;
 
 
 import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.rtc2.IRtcEngineEventHandlerBase;
 
 /**
  * The type Statistics info.
  */
 public class StatisticsInfo {
-    private IRtcEngineEventHandler.LocalVideoStats localVideoStats = new IRtcEngineEventHandler.LocalVideoStats(new IRtcEngineEventHandlerBase.LocalVideoStatsBase());
+    private IRtcEngineEventHandler.LocalVideoStats localVideoStats = new IRtcEngineEventHandler.LocalVideoStats();
     private IRtcEngineEventHandler.LocalAudioStats localAudioStats = new IRtcEngineEventHandler.LocalAudioStats();
-    private IRtcEngineEventHandler.RemoteVideoStats remoteVideoStats = new IRtcEngineEventHandler.RemoteVideoStats(new IRtcEngineEventHandlerBase.RemoteVideoStatsBase());
-    private IRtcEngineEventHandler.RemoteAudioStats remoteAudioStats = new IRtcEngineEventHandler.RemoteAudioStats(new IRtcEngineEventHandlerBase.RemoteAudioStatsBase());
+    private IRtcEngineEventHandler.RemoteVideoStats remoteVideoStats = new IRtcEngineEventHandler.RemoteVideoStats();
+    private IRtcEngineEventHandler.RemoteAudioStats remoteAudioStats = new IRtcEngineEventHandler.RemoteAudioStats();
     private IRtcEngineEventHandler.RtcStats rtcStats = new IRtcEngineEventHandler.RtcStats();
     private int quality;
     private IRtcEngineEventHandler.LastmileProbeResult lastMileProbeResult;
