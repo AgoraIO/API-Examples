@@ -403,7 +403,7 @@ public class SpatialSound extends BaseFragment {
         IMediaPlayer mediaPlayer = engine.createMediaPlayer();
         mediaPlayer.registerPlayerObserver(new IMediaPlayerObserver() {
             @Override
-            public void onPlayerStateChanged(Constants.MediaPlayerState state, Constants.MediaPlayerError error) {
+            public void onPlayerStateChanged(Constants.MediaPlayerState state, Constants.MediaPlayerReason reason) {
                 if (state.equals(PLAYER_STATE_OPEN_COMPLETED)) {
                     mediaPlayer.setLoopCount(-1);
                     mediaPlayer.play();
