@@ -498,42 +498,42 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		break;
 	}
 
-	switch ((agora::media::base::MEDIA_PLAYER_ERROR)lParam)
+	switch ((agora::media::base::MEDIA_PLAYER_REASON)lParam)
 	{
-	case agora::media::base::PLAYER_ERROR_URL_NOT_FOUND:
+	case agora::media::base::PLAYER_REASON_URL_NOT_FOUND:
 		strError = _T("PLAYER_ERROR_URL_NOT_FOUND");
 		break;
-	case agora::media::base::PLAYER_ERROR_NONE:
+	case agora::media::base::PLAYER_REASON_NONE:
 		strError = _T("PLAYER_ERROR_NONE");
 		break;
-	case agora::media::base::PLAYER_ERROR_CODEC_NOT_SUPPORTED:
+	case agora::media::base::PLAYER_REASON_CODEC_NOT_SUPPORTED:
 		strError = _T("PLAYER_ERROR_NONE");
 		break;
-	case agora::media::base::PLAYER_ERROR_INVALID_ARGUMENTS:
+	case agora::media::base::PLAYER_REASON_INVALID_ARGUMENTS:
 		strError = _T("PLAYER_ERROR_INVALID_ARGUMENTS");
 		break;
-	case agora::media::base::PLAYER_ERROR_SRC_BUFFER_UNDERFLOW:
+	case agora::media::base::PLAYER_REASON_SRC_BUFFER_UNDERFLOW:
 		strError = _T("PLAY_ERROR_SRC_BUFFER_UNDERFLOW");
 		break;
-	case agora::media::base::PLAYER_ERROR_INTERNAL:
+	case agora::media::base::PLAYER_REASON_INTERNAL:
 		strError = _T("PLAYER_ERROR_INTERNAL");
 		break;
-	case agora::media::base::PLAYER_ERROR_INVALID_STATE:
+	case agora::media::base::PLAYER_REASON_INVALID_STATE:
 		strError = _T("PLAYER_ERROR_INVALID_STATE");
 		break;
-	case agora::media::base::PLAYER_ERROR_NO_RESOURCE:
+	case agora::media::base::PLAYER_REASON_NO_RESOURCE:
 		strError = _T("PLAYER_ERROR_NO_RESOURCE");
 		break;
-	case agora::media::base::PLAYER_ERROR_OBJ_NOT_INITIALIZED:
+	case agora::media::base::PLAYER_REASON_OBJ_NOT_INITIALIZED:
 		strError = _T("PLAYER_ERROR_OBJ_NOT_INITIALIZED");
 		break;
-	case agora::media::base::PLAYER_ERROR_INVALID_CONNECTION_STATE:
+	case agora::media::base::PLAYER_REASON_INVALID_CONNECTION_STATE:
 		strError = _T("PLAYER_ERROR_INVALID_CONNECTION_STATE");
 		break;
-	case agora::media::base::PLAYER_ERROR_UNKNOWN_STREAM_TYPE:
+	case agora::media::base::PLAYER_REASON_UNKNOWN_STREAM_TYPE:
 		strError = _T("PLAYER_ERROR_UNKNOWN_STREAM_TYPE");
 		break;
-	case agora::media::base::PLAYER_ERROR_VIDEO_RENDER_FAILED:
+	case agora::media::base::PLAYER_REASON_VIDEO_RENDER_FAILED:
 		strError = _T("PLAYER_ERROR_VIDEO_RENDER_FAILED");
 		break;
 	}
