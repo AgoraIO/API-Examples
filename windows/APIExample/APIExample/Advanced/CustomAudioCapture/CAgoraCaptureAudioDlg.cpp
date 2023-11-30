@@ -302,6 +302,7 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 {
 	int nRet = 0;
+	int interval = 10; // 10ms
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	mediaEngine.queryInterface(self->m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
@@ -310,18 +311,18 @@ void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 	audioFrame.bytesPerSample = TWO_BYTES_PER_SAMPLE;
 	audioFrame.type = agora::media::IAudioFrameObserver::FRAME_TYPE_PCM16;
 	audioFrame.channels = self->m_renderAudioInfo.channels;
-	audioFrame.samplesPerChannel = self->m_renderAudioInfo.sampleRate / 100 * self->m_renderAudioInfo.channels;
+	audioFrame.samplesPerChannel = self->m_renderAudioInfo.sampleRate / (1000 / interval);
 	audioFrame.samplesPerSec = self->m_renderAudioInfo.sampleRate;
-	audioFrame.buffer = new BYTE[audioFrame.samplesPerChannel * audioFrame.bytesPerSample];
+	audioFrame.buffer = new BYTE[audioFrame.samplesPerChannel * audioFrame.channels * audioFrame.bytesPerSample];
 	while (self->m_extenalRenderAudio )
 	{
 		nRet = mediaEngine->pullAudioFrame(&audioFrame);
 		if (nRet != 0)
 		{
-			Sleep(10);
+			Sleep(interval);
 			continue;
 		}
-		SIZE_T nSize = audioFrame.samplesPerChannel * audioFrame.bytesPerSample;
+		SIZE_T nSize = audioFrame.samplesPerChannel * audioFrame.channels * audioFrame.bytesPerSample;
 		self->m_audioRender.Render((BYTE*)audioFrame.buffer, nSize);
 	}
 	delete audioFrame.buffer;
