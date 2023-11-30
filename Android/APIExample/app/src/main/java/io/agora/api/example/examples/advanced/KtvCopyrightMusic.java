@@ -2,6 +2,8 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
+import java.util.Locale;
+
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseBrowserFragment;
@@ -20,7 +22,10 @@ public class KtvCopyrightMusic extends BaseBrowserFragment {
 
     @Override
     protected String getBrowserUrl() {
-        return "https://docs.agora.io/cn/online-ktv/downloads?platform=All%20Platforms&from_wecom=1";
+        if (getResources().getConfiguration().locale.getLanguage() == Locale.CHINESE.getLanguage()) {
+            return "https://doc.shengwang.cn/doc/online-ktv/android/landing-page";
+        }
+        return "https://docs.agora.io/en/interactive-live-streaming/overview/product-overview?platform=android";
     }
 
 }
