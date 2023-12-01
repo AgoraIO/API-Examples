@@ -31,6 +31,7 @@
 #include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
 #include "Advanced/PushExternalVideoYUV/PushExternalVideoYUV.h"
 #include "Advanced/MultiVideoSourceTracks/MultiVideoSourceTracks.h"
+#include "Advanced/FaceCapture/CAgoraFaceCaptureDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -102,7 +103,8 @@ private:
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
     PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
-    MultiVideoSourceTracks     *m_pMultiVideoSourceTracks = nullptr;
+    MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
+    CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;

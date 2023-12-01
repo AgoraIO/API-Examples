@@ -7,6 +7,14 @@
 // of Agora.io.
 #pragma once
 
+#ifndef __AGORA_REF_COUNTED_OBJECT_H__
+#define __AGORA_REF_COUNTED_OBJECT_H__
+#endif
+
+#if defined(__AGORA_REF_COUNTED_OBJECT_INTERNAL_H__)
+#error AgoraRefCountedObject is deprected now, its only purpose is for API compatiable.
+#endif
+
 #include "AgoraRefPtr.h"
 #include "AgoraAtomicOps.h"
 

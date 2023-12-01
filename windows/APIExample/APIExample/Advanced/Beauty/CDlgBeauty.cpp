@@ -238,6 +238,7 @@ void CDlgBeauty::UnInitAgora()
 //Initialize the Ctrl Text.
 void CDlgBeauty::InitCtrlText()
 {
+	m_cmbContrast.ResetContent();
 	m_cmbContrast.InsertString(0, L"CONTRAST_LOW");
 	m_cmbContrast.InsertString(1, L"CONTRAST_NORMAL");
 	m_cmbContrast.InsertString(2, L"CONTRAST_HIGH");
