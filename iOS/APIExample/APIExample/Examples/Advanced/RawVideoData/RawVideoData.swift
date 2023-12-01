@@ -111,6 +111,9 @@ extension RawVideoDataViewController: AgoraVideoFrameDelegate {
         }
         return true
     }
+    func getVideoFormatPreference() -> AgoraVideoFormat {
+        .cvPixelBGRA
+    }
 }
 
 // MARK: - AgoraRtcEngineDelegate
