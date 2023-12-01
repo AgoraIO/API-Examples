@@ -160,6 +160,10 @@
     return YES;
 }
 
+- (AgoraVideoFormat)getVideoFormatPreference {
+    return AgoraVideoFormatCVPixelBGRA;
+}
+
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
