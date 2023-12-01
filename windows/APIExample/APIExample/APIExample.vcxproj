@@ -276,6 +276,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
+    <ClInclude Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.h" />
     <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h" />
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
@@ -326,6 +327,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
+    <ClCompile Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.cpp" />
     <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp" />
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />

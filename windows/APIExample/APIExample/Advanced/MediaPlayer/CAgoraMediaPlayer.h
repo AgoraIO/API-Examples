@@ -25,7 +25,7 @@ public:
 	 * \ref agora::media::base::MEDIA_PLAYER_ERROR "MEDIA_PLAYER_ERROR"
 	 */
 	virtual void onPlayerSourceStateChanged(media::base::MEDIA_PLAYER_STATE state,
-		media::base::MEDIA_PLAYER_ERROR ec) {
+		media::base::MEDIA_PLAYER_REASON ec) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM)ec);
 	}
 

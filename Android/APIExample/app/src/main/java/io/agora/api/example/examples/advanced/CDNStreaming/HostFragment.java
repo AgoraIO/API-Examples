@@ -30,8 +30,8 @@ import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
-import io.agora.rtc2.DirectCdnStreamingError;
 import io.agora.rtc2.DirectCdnStreamingMediaOptions;
+import io.agora.rtc2.DirectCdnStreamingReason;
 import io.agora.rtc2.DirectCdnStreamingState;
 import io.agora.rtc2.DirectCdnStreamingStats;
 import io.agora.rtc2.IDirectCdnStreamingEventHandler;
@@ -461,13 +461,14 @@ public class HostFragment extends BaseFragment {
 
     private final IDirectCdnStreamingEventHandler iDirectCdnStreamingEventHandler = new IDirectCdnStreamingEventHandler() {
 
+
         @Override
-        public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
-            showShortToast(String.format("onDirectCdnStreamingStateChanged state:%s, error:%s", directCdnStreamingState, directCdnStreamingError));
+        public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState state, DirectCdnStreamingReason reason, String message) {
+            showShortToast(String.format("onDirectCdnStreamingStateChanged state:%s, error:%s", state, reason));
             runOnUIThread(new Runnable() {
                 @Override
                 public void run() {
-                    switch (directCdnStreamingState) {
+                    switch (state) {
                         case RUNNING:
                             streamingButton.setText(R.string.stop_streaming);
                             cdnStreaming = true;
@@ -491,7 +492,7 @@ public class HostFragment extends BaseFragment {
                         case FAILED:
                             showLongToast(String.format("Start Streaming failed, please go back to previous page and check the settings."));
                         default:
-                            Log.i(TAG, String.format("onDirectCdnStreamingStateChanged, state: %s error: %s message: %s", directCdnStreamingState.name(), directCdnStreamingError.name(), s));
+                            Log.i(TAG, String.format("onDirectCdnStreamingStateChanged, state: %s error: %s message: %s", state.name(), reason.name(), message));
                     }
                     rtcSwitcher.setEnabled(true);
                 }

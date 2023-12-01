@@ -99,7 +99,7 @@ public:
 		}
 	}
 
-	virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) {
+	virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON error) {
 		if (m_hMsgHanlder&& report) {
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), (WPARAM)state, (LPARAM)error);
 		}
@@ -126,7 +126,7 @@ public:
 		}
 	}
 		
-	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE state, LOCAL_VIDEO_STREAM_ERROR error) {
+	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON error) {
 		if (m_hMsgHanlder&& report) {
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), (WPARAM)state, (LPARAM)error);
 		}

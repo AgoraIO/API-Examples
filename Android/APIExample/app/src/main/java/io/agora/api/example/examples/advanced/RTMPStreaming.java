@@ -150,8 +150,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -530,7 +529,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             }
             if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
                 /*After confirming the successful push, make changes to the UI.*/
-                if (errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_OK) {
+                if (errCode == Constants.RTMP_STREAM_PUBLISH_REASON_OK) {
                     publishing = true;
                     retried = 0;
                     retryTask.cancel(true);
@@ -541,11 +540,11 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                 }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
                 engine.stopRtmpStream(et_url.getText().toString());
-                if (errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
-                        || errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
-                        || errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR
-                        || errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
-                        || errCode == Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN) {
+                if (errCode == Constants.RTMP_STREAM_PUBLISH_REASON_CONNECTION_TIMEOUT
+                        || errCode == Constants.RTMP_STREAM_PUBLISH_REASON_INTERNAL_SERVER_ERROR
+                        || errCode == Constants.RTMP_STREAM_PUBLISH_REASON_RTMP_SERVER_ERROR
+                        || errCode == Constants.RTMP_STREAM_PUBLISH_REASON_STREAM_NOT_FOUND
+                        || errCode == Constants.RTMP_STREAM_PUBLISH_REASON_NET_DOWN) {
                     /*need republishing.*/
                     Log.w(TAG, "RTMP publish failure ->" + url + ", state->" + state + ", errorType->" + errCode);
                 } else {

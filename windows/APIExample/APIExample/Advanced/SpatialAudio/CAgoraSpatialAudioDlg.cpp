@@ -127,12 +127,12 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	m_rtcEngine->enableAudio();
 
 	// initialize media player 
-	m_mediaPlayerLeft = m_rtcEngine->createMediaPlayer().get();
-	playerLeftObserver.setMediaPlayer(m_mediaPlayerLeft);
+	m_mediaPlayerLeft = m_rtcEngine->createMediaPlayer();
+	playerLeftObserver.setMediaPlayer(m_mediaPlayerLeft.get());
 	m_mediaPlayerLeft->registerPlayerSourceObserver(&playerLeftObserver);
 
-	m_mediaPlayerRight = m_rtcEngine->createMediaPlayer().get();
-	playerRightObserver.setMediaPlayer(m_mediaPlayerRight);
+	m_mediaPlayerRight = m_rtcEngine->createMediaPlayer();
+	playerRightObserver.setMediaPlayer(m_mediaPlayerRight.get());
 	m_mediaPlayerRight->registerPlayerSourceObserver(&playerRightObserver);
 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize MediaPlayer"));
@@ -166,7 +166,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	RemoteVoicePositionInfo playerLeftPositionInfo;
 	CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 	playerLeftPositionInfo.forward[0] = 1.0f;
-	m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
+	m_localSpatial->updatePlayerPositionInfo(0, playerLeftPositionInfo);
 	strInfo.Format(_T("media player left position forward=%f, right=%f"), playerLeftPositionInfo.position[0], playerLeftPositionInfo.position[1]);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
@@ -185,13 +185,13 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 void CAgoraSpatialAudioDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		if (m_mediaPlayerLeft) {
+		if (m_mediaPlayerLeft.get() != nullptr) {
 			m_mediaPlayerLeft->stop();
-			m_mediaPlayerLeft = nullptr;
+			m_mediaPlayerLeft.reset();
 		}
-		if (m_mediaPlayerRight) {
+		if (m_mediaPlayerRight.get() != nullptr) {
 			m_mediaPlayerRight->stop();
-			m_mediaPlayerRight = nullptr;
+			m_mediaPlayerRight.reset();
 		}
 		m_localSpatial = nullptr;
 
@@ -685,11 +685,13 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam) {
 
 	m_staMoveTip.ShowWindow(FALSE);
 
-	if (m_mediaPlayerLeft != nullptr) {
+	if (m_mediaPlayerLeft.get() != nullptr) {
 		m_mediaPlayerLeft->stop();
+		m_mediaPlayerLeft.reset();
 	}
-	if (m_mediaPlayerRight != nullptr) {
+	if (m_mediaPlayerRight.get() != nullptr) {
 		m_mediaPlayerRight->stop();
+		m_mediaPlayerRight.reset();
 	}
 
 	remoteLeftUid = 0;
