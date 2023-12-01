@@ -25,6 +25,7 @@ class MediaPlayer: BaseViewController {
     @IBOutlet weak var pushAudioTrackButton: NSButton!
     @IBOutlet weak var startPublishButton: NSButton!
     @IBOutlet weak var stopPublishButton: NSButton!
+    private var isPublishStream: Bool = false
     
     var videos: [VideoView] = []
     let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
@@ -148,8 +149,10 @@ class MediaPlayer: BaseViewController {
         playButton.isEnabled = false
         pauseButton.isEnabled = true
         stopButton.isEnabled = true
-        startPublishButton.isEnabled = true
-        stopPublishButton.isEnabled = false
+        if !isPublishStream {
+            startPublishButton.isEnabled = true
+            stopPublishButton.isEnabled = false
+        }
         playAudioTrackButton.isEnabled = true
         pushAudioTrackButton.isEnabled = true
     }
@@ -185,6 +188,7 @@ class MediaPlayer: BaseViewController {
         agoraKit.updateChannel(with: options)
         startPublishButton.isEnabled = false
         stopPublishButton.isEnabled = true
+        isPublishStream = true
     }
     
     @IBAction func unPublishButtonPressed(_ sender: Any) {
@@ -200,6 +204,7 @@ class MediaPlayer: BaseViewController {
         agoraKit.updateChannel(with: options)
         startPublishButton.isEnabled = true
         stopPublishButton.isEnabled = false
+        isPublishStream = false
     }
     
     @IBAction func onClickPlayAudioTrack(_ sender: NSButton) {
