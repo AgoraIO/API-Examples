@@ -232,7 +232,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                et_password.setEnabled(true);
+                et_password.setEnabled(!encry_mode.getSelectedItem().equals(getString(R.string.custom)));
                 encry_mode.setEnabled(true);
             }
         }

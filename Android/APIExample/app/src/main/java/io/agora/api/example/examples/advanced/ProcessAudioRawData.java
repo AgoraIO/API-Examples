@@ -210,6 +210,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         super.onDestroy();
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
+            engine.registerAudioFrameObserver(null);
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
