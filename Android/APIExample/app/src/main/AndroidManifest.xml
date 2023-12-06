@@ -53,6 +53,9 @@
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />
 
+        <service android:name=".examples.basic.JoinChannelAudio$LocalRecordingService"
+            android:foregroundServiceType="microphone"/>
+
     </application>
 
 </manifest>
