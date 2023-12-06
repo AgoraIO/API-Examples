@@ -1,7 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_PLAYING;
+import static io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_DECODING;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -139,8 +139,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -415,7 +414,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
          *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
          *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
          *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
-         *   REMOTE_VIDEO_STATE_PLAYING(2): The remote video stream is decoded and plays normally,
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
          *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
          *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
          *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
@@ -446,8 +445,8 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
         public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-            if (state == REMOTE_VIDEO_STATE_PLAYING) {
-                /*REMOTE_VIDEO_STATE_PLAYING as the basis for judging whether there is a broadcaster
+            if (state == REMOTE_VIDEO_STATE_DECODING) {
+                /*REMOTE_VIDEO_STATE_DECODING as the basis for judging whether there is a broadcaster
                  *  in the channel.
                  * But you should judge according to your own business logic, here is just for example,
                  *  not for reference.*/
