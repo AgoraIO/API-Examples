@@ -93,4 +93,5 @@
     <string name="audio_route_headset">headset(Not TypeC)</string>
     <string name="audio_route_headset_typec">headset(TypeC)</string>
     <string name="audio_route_headset_bluetooth">bluetooth headset</string>
+    <string name="notifications_enable_tip">Please turn on notification permission to prevent background recording from being interrupted.</string>
 </resources>

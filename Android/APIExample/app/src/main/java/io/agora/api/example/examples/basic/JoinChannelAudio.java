@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -288,6 +291,31 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+        enableNotifications();
+    }
+
+    private void enableNotifications() {
+        if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+            Log.d(TAG, "Notifications enable!");
+            return;
+        }
+        Log.d(TAG, "Notifications not enable!");
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Tip")
+                .setMessage(R.string.notifications_enable_tip)
+                .setPositiveButton(R.string.setting, (dialog, which) -> {
+                    Intent intent = new Intent();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                        intent.putExtra(Settings.EXTRA_CHANNEL_ID, requireContext().getApplicationInfo().uid);
+                    } else {
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    }
+                    startActivity(intent);
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     @Override
@@ -299,7 +327,11 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     private void startRecordingService() {
         if (joined) {
             Intent intent = new Intent(requireContext(), LocalRecordingService.class);
-            requireContext().startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requireContext().startForegroundService(intent);
+            } else {
+                requireContext().startService(intent);
+            }
         }
     }
 
@@ -494,18 +526,15 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mute.setEnabled(true);
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                    record.setEnabled(true);
-                    playout.setEnabled(true);
-                    inear.setEnabled(inEarSwitch.isChecked());
-                    inEarSwitch.setEnabled(true);
-                    audioSeatManager.upLocalSeat(uid);
-                }
+            runOnUIThread(() -> {
+                mute.setEnabled(true);
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                record.setEnabled(true);
+                playout.setEnabled(true);
+                inear.setEnabled(inEarSwitch.isChecked());
+                inEarSwitch.setEnabled(true);
+                audioSeatManager.upLocalSeat(uid);
             });
         }
 
@@ -646,7 +675,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
      */
     public static class LocalRecordingService extends Service {
         private static final int NOTIFICATION_ID = 1234567800;
-        private static final String CHANNEL_ID = "dummy_channel_id";
+        private static final String CHANNEL_ID = "audio_channel_id";
 
 
         @Override
