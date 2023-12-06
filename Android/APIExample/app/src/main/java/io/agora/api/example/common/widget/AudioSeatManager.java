@@ -2,6 +2,8 @@ package io.agora.api.example.common.widget;
 
 import android.view.View;
 
+import java.util.ArrayList;
+
 /**
  * The type Audio seat manager.
  */
@@ -51,6 +53,23 @@ public class AudioSeatManager {
             idleSeat.setVisibility(View.VISIBLE);
             idleSeat.updateUserInfo(uid + "", false);
         }
+    }
+
+    /**
+     * Get seat remote uid list array list.
+     *
+     * @return the array list
+     */
+    public ArrayList<Integer> getSeatRemoteUidList() {
+        ArrayList<Integer> uidList = new ArrayList<>();
+        for (int i = 1; i < audioOnlyLayouts.length; i++) {
+            AudioOnlyLayout audioOnlyLayout = audioOnlyLayouts[i];
+            Object tag = audioOnlyLayout.getTag();
+            if (tag instanceof Integer) {
+                uidList.add((Integer) tag);
+            }
+        }
+        return uidList;
     }
 
     /**

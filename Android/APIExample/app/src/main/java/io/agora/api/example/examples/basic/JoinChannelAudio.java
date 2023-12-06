@@ -2,9 +2,21 @@ package io.agora.api.example.examples.basic;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.ServiceInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +34,11 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.agora.api.example.MainActivity;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -197,6 +211,26 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 view.findViewById(R.id.audio_place_05),
                 view.findViewById(R.id.audio_place_06)
         );
+
+        if (savedInstanceState != null) {
+            joined = savedInstanceState.getBoolean("joined");
+            if (joined) {
+                myUid = savedInstanceState.getInt("myUid");
+                ArrayList<Integer> seatRemoteUidList = savedInstanceState.getIntegerArrayList("seatRemoteUidList");
+                mute.setEnabled(true);
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                record.setEnabled(true);
+                playout.setEnabled(true);
+                inear.setEnabled(inEarSwitch.isChecked());
+                inEarSwitch.setEnabled(true);
+                audioSeatManager.upLocalSeat(myUid);
+
+                for (Integer uid : seatRemoteUidList) {
+                    audioSeatManager.upRemoteSeat(uid);
+                }
+            }
+        }
     }
 
     @Override
@@ -204,7 +238,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null || engine != null) {
             return;
         }
         try {
@@ -257,14 +291,49 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        startRecordingService();
+    }
+
+    private void startRecordingService() {
+        if (joined) {
+            Intent intent = new Intent(requireContext(), LocalRecordingService.class);
+            requireContext().startService(intent);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // join state
+        outState.putBoolean("joined", joined);
+        outState.putInt("myUid", myUid);
+        outState.putIntegerArrayList("seatRemoteUidList", audioSeatManager.getSeatRemoteUidList());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        stopRecordingService();
+    }
+
+    private void stopRecordingService() {
+        Intent intent = new Intent(requireContext(), LocalRecordingService.class);
+        requireContext().stopService(intent);
+    }
+
+    @Override
+    protected void onBackPressed() {
+        joined = false;
+        stopRecordingService();
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+        super.onBackPressed();
     }
 
     @Override
@@ -567,4 +636,86 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             });
         }
     };
+
+
+    /**
+     * The service will display a microphone foreground notification,
+     * which can ensure keeping recording when the activity destroyed by system for memory leak or other reasons.
+     * Note: The "android.permission.FOREGROUND_SERVICE" permission is required.
+     * And the android:foregroundServiceType should be microphone.
+     */
+    public static class LocalRecordingService extends Service {
+        private static final int NOTIFICATION_ID = 1234567800;
+        private static final String CHANNEL_ID = "dummy_channel_id";
+
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            Notification notification = getDefaultNotification();
+
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    this.startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE);
+                } else {
+                    this.startForeground(NOTIFICATION_ID, notification);
+                }
+            } catch (Exception ex) {
+                Log.e(TAG, "", ex);
+            }
+        }
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+
+        private Notification getDefaultNotification() {
+            ApplicationInfo appInfo = this.getApplicationContext().getApplicationInfo();
+            String name = this.getApplicationContext().getPackageManager().getApplicationLabel(appInfo).toString();
+            int icon = appInfo.icon;
+
+            try {
+                Bitmap iconBitMap = BitmapFactory.decodeResource(this.getApplicationContext().getResources(), icon);
+                if (iconBitMap == null || iconBitMap.getByteCount() == 0) {
+                    Log.w(TAG, "Couldn't load icon from icon of applicationInfo, use android default");
+                    icon = R.mipmap.ic_launcher;
+                }
+            } catch (Exception ex) {
+                Log.w(TAG, "Couldn't load icon from icon of applicationInfo, use android default");
+                icon = R.mipmap.ic_launcher;
+            }
+
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.createNotificationChannel(mChannel);
+            }
+
+            PendingIntent activityPendingIntent;
+            Intent intent = new Intent();
+            intent.setClass(this, MainActivity.class);
+            if (Build.VERSION.SDK_INT >= 23) {
+                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            }
+
+            Notification.Builder builder = new Notification.Builder(this)
+                    .addAction(icon, "Back to app", activityPendingIntent)
+                    .setContentText("Agora Recording ...")
+                    .setOngoing(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setSmallIcon(icon)
+                    .setTicker(name)
+                    .setWhen(System.currentTimeMillis());
+            if (Build.VERSION.SDK_INT >= 26) {
+                builder.setChannelId(CHANNEL_ID);
+            }
+
+            return builder.build();
+        }
+
+    }
 }
