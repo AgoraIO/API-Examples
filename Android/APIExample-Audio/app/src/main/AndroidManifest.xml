@@ -13,6 +13,9 @@
 
     <permission-group android:name="io.agora.api.example.audio.andpermission"/>
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />-->
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -43,6 +46,9 @@
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />
 
+        <service android:name=".examples.basic.JoinChannelAudio$LocalRecordingService"
+            android:foregroundServiceType="microphone"/>
+        
     </application>
 
 </manifest>
