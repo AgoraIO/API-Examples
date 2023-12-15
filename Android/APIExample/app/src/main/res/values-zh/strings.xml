@@ -343,4 +343,5 @@
     <string name="publish_stream">推送音轨</string>
     <string name="audio_stream_index">音轨%d</string>
     <string name="face_capture_authentication">请联系声网客服获取面捕证书并配置到AUTHENTICATION常量上</string>
+    <string name="notifications_enable_tip">请打开通知权限，防止后台录音中断</string>
 </resources>

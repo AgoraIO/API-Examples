@@ -147,8 +147,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -157,14 +156,15 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        engine.registerVideoFrameObserver(null);
+
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (textureBufferHelper != null) {
             textureBufferHelper.dispose();
             textureBufferHelper = null;
         }
-        if (yuvUploader != null) {
-            yuvUploader.release();
-        }
+        yuvUploader.release();
         if (engine != null) {
             engine.leaveChannel();
             engine.stopPreview();
@@ -213,6 +213,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
+                engine.registerVideoFrameObserver(null);
                 engine.leaveChannel();
                 engine.stopPreview();
                 remoteUid = 0;

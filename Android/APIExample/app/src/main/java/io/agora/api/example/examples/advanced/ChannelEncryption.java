@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -54,7 +55,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_channel_encryption,
         tipsId = R.string.channelencryption
 )
-public class ChannelEncryption extends BaseFragment implements View.OnClickListener {
+public class ChannelEncryption extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = ChannelEncryption.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
@@ -82,6 +83,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         encry_mode = view.findViewById(R.id.encry_mode_spinner);
+        encry_mode.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -135,9 +137,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -146,15 +146,32 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(joined && encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))){
+        if (joined && encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
             enablePacketProcessor(false);
         }
         /* leaveChannel and Destroy the RtcEngine instance */
-        if(engine != null) {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == encry_mode) {
+            if (encry_mode.getSelectedItem().equals(getString(R.string.custom))) {
+                et_password.setText("");
+                et_password.setEnabled(false);
+            } else {
+                et_password.setEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override
@@ -215,7 +232,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                et_password.setEnabled(true);
+                et_password.setEnabled(!encry_mode.getSelectedItem().equals(getString(R.string.custom)));
                 encry_mode.setEnabled(true);
             }
         }
@@ -486,4 +503,6 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
             });
         }
     };
+
+
 }

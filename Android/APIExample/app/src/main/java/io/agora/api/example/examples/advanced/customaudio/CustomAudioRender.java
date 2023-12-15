@@ -6,7 +6,6 @@ import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Process;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +50,6 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
      * The constant engine.
      */
     public static RtcEngineEx engine;
-    private ChannelMediaOptions option = new ChannelMediaOptions();
 
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
@@ -65,22 +63,6 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
     private AudioPlayer audioPlayer;
 
     private AudioSeatManager audioSeatManager;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-        initMediaOption();
-    }
-
-    private void initMediaOption() {
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        option.publishMicrophoneTrack = true;
-        option.publishCustomAudioTrack = false;
-        option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
-        option.enableAudioRecordingOrPlayout = true;
-    }
 
 
     @Nullable
@@ -160,8 +142,6 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-
-            engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
 
             audioPlayer = new AudioPlayer(AudioManager.STREAM_MUSIC,
                     SAMPLE_RATE,
@@ -252,23 +232,8 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /*In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        /*Sets the external audio source.
-         * @param enabled Sets whether to enable/disable the external audio source:
-         *                  true: Enable the external audio source.
-         *                  false: (Default) Disable the external audio source.
-         * @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be
-         *                   set as 8000, 16000, 32000, 44100, or 48000 Hz.
-         * @param channels Sets the number of channels of the external audio source:
-         *                  1: Mono.
-         *                  2: Stereo.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         * PS: Ensure that you call this method before the joinChannel method.*/
-        // engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
 
+        engine.setExternalAudioSink(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
 
         /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -277,9 +242,15 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+
+
             /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
+
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -364,23 +335,18 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
             while (pulling) {
                 Log.i(TAG, "pushExternalAudioFrame times:" + number++);
-                long before = System.currentTimeMillis();
 
                 ByteBuffer frame = ByteBuffer.allocateDirect(BUFFER_SIZE);
                 engine.pullPlaybackAudioFrame(frame, BUFFER_SIZE);
                 byte[] data = new byte[frame.remaining()];
                 frame.get(data, 0, data.length);
-                audioPlayer.play(data, 0, BUFFER_SIZE);
 
-                long now = System.currentTimeMillis();
-                long consuming = now - before;
-                if (consuming < PULL_INTERVAL) {
-                    try {
-                        Thread.sleep(PULL_INTERVAL - consuming);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "PushingTask Interrupted");
-                    }
+                // simple audio filter
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = (byte) (data[i] + 5);
                 }
+
+                audioPlayer.play(data, 0, BUFFER_SIZE);
             }
         }
     }
