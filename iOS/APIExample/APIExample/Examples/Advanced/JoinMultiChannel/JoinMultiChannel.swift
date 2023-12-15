@@ -193,6 +193,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         group.notify(queue: .main) { [weak self] in
             self?.agoraKit.leaveChannelEx(connection2, options: channelOptions, leaveChannelBlock: nil)
+            self?.channel2.remoteUid = 0
         }
     }
     
