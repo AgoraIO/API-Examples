@@ -150,7 +150,7 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
     
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        return .NV12
+        .cvPixelNV12
     }
     
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
@@ -158,6 +158,9 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
     }
     func onPreEncode(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         true
+    }
+    func getObservedFramePosition() -> AgoraVideoFramePosition {
+        .preRenderer
     }
 }
 
