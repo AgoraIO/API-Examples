@@ -85,4 +85,5 @@
     <string name="audio_route_headset">耳机(非TypeC)</string>
     <string name="audio_route_headset_typec">耳机(TypeC)</string>
     <string name="audio_route_headset_bluetooth">蓝牙耳机</string>
+    <string name="notifications_enable_tip">请打开通知权限，防止后台录音中断</string>
 </resources>

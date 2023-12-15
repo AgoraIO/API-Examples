@@ -126,8 +126,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -161,6 +160,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onDestroy() {
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
+            engine.registerVideoFrameObserver(null);
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -192,6 +192,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 }).start();
             } else {
                 joined = false;
+                engine.registerVideoFrameObserver(null);
                 /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
