@@ -251,8 +251,12 @@ extern wchar_t PerCallTestCtrlAudioInput[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioOutput[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioEchoTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlWaitingStart[INFO_LEN];
+extern wchar_t PerCallTestCtrlRecording[INFO_LEN];
+extern wchar_t PerCallTestCtrlPlaying[INFO_LEN];
 
 //audio volume
 extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];
