@@ -78,8 +78,8 @@ class JoinMultipleChannel: BaseViewController {
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                     self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
                 }
                 else {
@@ -146,8 +146,8 @@ class JoinMultipleChannel: BaseViewController {
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                     self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
                 }
                 else{
@@ -267,8 +267,8 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -360,7 +360,7 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
     /// to let user know something wrong is happening
     /// Error code description can be found at:
     /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         if let connId = self.connectionId {
