@@ -362,17 +362,12 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
     m_windowShare = !m_windowShare;
     if (m_windowShare)
     {
-        ::SwitchToThisWindow(hWnd, TRUE);
         //start screen capture in the engine.
-        CRect rcWnd = { 0 };
-        ::GetClientRect(hWnd, &rcWnd);
-
-		m_screenRegion = { rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top };
-		float scale = m_sldScale.GetPos() * 1.0f / 100;
-        agora::rtc::Rectangle rcCapWnd = { m_screenRegion.x, m_screenRegion.y, (int)(m_screenRegion.width * scale), (int)(m_screenRegion.height * scale) };
-        ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, m_screenParam);
+		agora::rtc::Rectangle rcCapWnd;
+		m_screenParam.windowFocus = true;
+		ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, m_screenParam);
 		//start preview in the engine.
-		m_rtcEngine->startPreview();
+		m_rtcEngine->startPreview(VIDEO_SOURCE_TYPE::VIDEO_SOURCE_SCREEN);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		//disable video in the engine.
 		//m_rtcEngine->enableLocalVideo(false);
@@ -821,6 +816,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 		int id = _ttoi(displayId.Mid(strlen("display"))) - 1;
 		float scale = m_sldScale.GetPos() * 1.0f / 100;
 		agora::rtc::Rectangle rcCapWnd = { m_screenRegion.x, m_screenRegion.y, (int)(m_screenRegion.width * scale), (int)(m_screenRegion.height * scale) };
+		m_screenParam.windowFocus = true;
 		m_rtcEngine->startScreenCaptureByDisplayId(id, rcCapWnd, m_screenParam);
        
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startScreenCaptureByDisplayId"));
