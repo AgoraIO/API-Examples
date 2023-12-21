@@ -212,7 +212,11 @@ class PrecallTest: BaseViewController {
     }
     
     @IBAction func doEchoTest(sender: NSButton) {
-        agoraKit.startEchoTest(withInterval: 10)
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 10
+        testConfig.enableAudio = true
+        testConfig.enableVideo = true
+        agoraKit.startEchoTest(withConfig: testConfig)
         showPopover(isValidate: false, seconds: 10) {[unowned self] in
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()

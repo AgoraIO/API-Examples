@@ -55,8 +55,11 @@ class PrecallTestEntry : BaseViewController
     }
     
     @IBAction func doEchoTest(sender: UIButton) {
-        
-        let ret = agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 10
+        testConfig.enableAudio = true
+        testConfig.enableVideo = true
+        let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
