@@ -56,7 +56,10 @@ class PrecallTestEntry : BaseViewController
     
     @IBAction func doEchoTest(sender: UIButton) {
         
-        let ret = agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 10
+        testConfig.enableAudio = true
+        let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // for errors please take a look at:
             // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
