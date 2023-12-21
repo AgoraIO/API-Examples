@@ -221,8 +221,12 @@ wchar_t PerCallTestCtrlAudioInput[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlAudioOutput[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlAudioVol[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlCamera[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlAudioEchoTest[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlStartTest[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlStopTest[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlWaitingStart[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlRecording[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlPlaying[INFO_LEN] = { 0 };
 
 
 //audio volume
@@ -648,8 +652,12 @@ void InitKeyInfomation()
 	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
 	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
 	_tcscpy_s(PerCallTestCtrlCamera, INFO_LEN, Str(_T("PerCallTest.Ctrl.Camera")));
+	_tcscpy_s(PerCallTestCtrlAudioEchoTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioEchoTest")));
 	_tcscpy_s(PerCallTestCtrlStartTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StartTest")));
 	_tcscpy_s(PerCallTestCtrlStopTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StopTest")));
+	_tcscpy_s(PerCallTestCtrlWaitingStart, INFO_LEN, Str(_T("PerCallTest.Ctrl.WaitingStart")));
+	_tcscpy_s(PerCallTestCtrlRecording, INFO_LEN, Str(_T("PerCallTest.Ctrl.Recording")));
+	_tcscpy_s(PerCallTestCtrlPlaying, INFO_LEN, Str(_T("PerCallTest.Ctrl.Playing")));
 
 	_tcscpy_s(AudioVolumeCtrlCapVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapVol")));
 	_tcscpy_s(AudioVolumeCtrlCapSigVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapSigVol")));
