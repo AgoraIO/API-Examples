@@ -67,7 +67,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private int myUid;
     private boolean joined = false, publishing = false;
     private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
-    private LiveTranscoding transcoding = new LiveTranscoding();
+    private LiveTranscoding transcoding;
     private static final Integer MAX_RETRY_TIMES = 3;
     private int retried = 0;
     private boolean unpublishing = false;
@@ -268,6 +268,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
 
     private void startPublish() {
         if (transCodeSwitch.isChecked()) {
+            transcoding = new LiveTranscoding();
             /*LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
              * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
             transcoding.width = dimensions.height;
@@ -281,6 +282,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             localTranscodingUser.width = transcoding.width;
             localTranscodingUser.height = transcoding.height / MAXUserCount;
             localTranscodingUser.uid = myUid;
+            localTranscodingUser.zOrder = 1;
             /*Adds a user displaying the video in CDN live.
              * @return
              *  0: Success.
