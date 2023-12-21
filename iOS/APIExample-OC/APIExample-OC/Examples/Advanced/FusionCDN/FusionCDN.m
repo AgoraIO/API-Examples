@@ -252,8 +252,8 @@ CGFloat HEIGHT = 640;
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -303,8 +303,8 @@ CGFloat HEIGHT = 640;
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];
@@ -501,8 +501,8 @@ CGFloat HEIGHT = 640;
             if (result != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 NSLog(@"joinChannel call failed: %d, please check your params", result);
             } else {
                 AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
@@ -551,8 +551,8 @@ CGFloat HEIGHT = 640;
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];
