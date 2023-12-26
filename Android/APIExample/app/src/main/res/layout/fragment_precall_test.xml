@@ -66,6 +66,12 @@
             android:layout_below="@id/lb_echo"
             android:text="@string/start" />
 
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_below="@id/btn_echo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
+
     </RelativeLayout>
 
 

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -118,8 +117,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -163,12 +161,11 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             btn_lastmile.setText("Testing ...");
         } else if (v.getId() == R.id.btn_echo) {
             num = 0;
-            engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
             EchoTestConfiguration config = new EchoTestConfiguration();
-            config.enableVideo = false;
+            config.enableVideo = true;
+            config.view = requireView().findViewById(R.id.surfaceView);
             config.enableAudio = true;
             config.intervalInSeconds = MAX_COUNT_DOWN;
-            config.channelId = (new Random().nextInt(10000) + 100000) + "";
             engine.startEchoTest(config);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
