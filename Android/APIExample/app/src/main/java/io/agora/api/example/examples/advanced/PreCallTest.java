@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -166,6 +167,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             config.view = requireView().findViewById(R.id.surfaceView);
             config.enableAudio = true;
             config.intervalInSeconds = MAX_COUNT_DOWN;
+            config.channelId = "EchoTest" + (new Random().nextInt(1000) + 10000);
             engine.startEchoTest(config);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
