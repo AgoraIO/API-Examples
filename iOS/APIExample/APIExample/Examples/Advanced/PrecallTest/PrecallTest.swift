@@ -21,6 +21,9 @@ class PrecallTestEntry : BaseViewController
     @IBOutlet weak var echoTestPopover: UIView!
     @IBOutlet weak var echoValidateCountDownLabel: UILabel!
     @IBOutlet weak var echoValidatePopover: UIView!
+    @IBOutlet weak var videoCanvasView: UIView!
+    @IBOutlet weak var cameraTestButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,6 +44,10 @@ class PrecallTestEntry : BaseViewController
     
     
     @IBAction func doLastmileTest(sender: UIButton) {
+        agoraKit.stopEchoTest()
+        if cameraTestButton.isSelected {
+            doCameraTest(cameraTestButton)
+        }
         lastmileActivityView.startAnimating()
         let config = AgoraLastmileProbeConfig()
         // do uplink testing
@@ -55,10 +62,17 @@ class PrecallTestEntry : BaseViewController
     }
     
     @IBAction func doEchoTest(sender: UIButton) {
+        agoraKit.stopLastmileProbeTest()
+        if cameraTestButton.isSelected {
+            doCameraTest(cameraTestButton)
+        }
+        lastmileResultLabel.text = ""
+        lastmileProbResultLabel.text = ""
         let testConfig = AgoraEchoTestConfiguration()
         testConfig.intervalInSeconds = 10
         testConfig.enableAudio = true
         testConfig.enableVideo = true
+        testConfig.channelId = "222"
         let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // Usually happens with invalid parameters
@@ -71,6 +85,34 @@ class PrecallTestEntry : BaseViewController
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()
             }
+        }
+    }
+    
+    @IBAction func doCameraTest(_ sender: UIButton) {
+        agoraKit.stopEchoTest()
+        lastmileResultLabel.text = ""
+        lastmileProbResultLabel.text = ""
+        sender.isSelected = !sender.isSelected
+        let title = sender.isSelected ? "Stop Camera Test" : "Start Camera Test"
+        sender.setTitle(title, for: .normal)
+        videoCanvasView.isHidden = !sender.isSelected
+        if sender.isSelected {
+            let testConfig = AgoraEchoTestConfiguration()
+            testConfig.intervalInSeconds = 2
+            testConfig.enableAudio = true
+            testConfig.enableVideo = true
+            testConfig.channelId = "222"
+            testConfig.view = videoCanvasView
+            let ret = agoraKit.startEchoTest(withConfig: testConfig)
+            if ret != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
+            }
+        } else {
+            agoraKit.stopEchoTest()
         }
     }
     
