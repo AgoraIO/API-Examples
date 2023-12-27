@@ -172,6 +172,8 @@ class MediaPlayer: BaseViewController {
         stopButton.isEnabled = false
         startPublishButton.isEnabled = false
         stopPublishButton.isEnabled = false
+        stopPublishHandler()
+        isPublishStream = false
     }
     
     @IBAction func publishButtonPressed(_ sender: Any) {
@@ -196,15 +198,18 @@ class MediaPlayer: BaseViewController {
             self.showAlert(title: "Alert", message: "Join channel first")
             return
         }
-        
+        stopPublishHandler()
+        startPublishButton.isEnabled = true
+        stopPublishButton.isEnabled = false
+        isPublishStream = false
+    }
+    
+    private func stopPublishHandler() {
         let options = AgoraRtcChannelMediaOptions()
         options.publishCameraTrack = true
         options.publishMediaPlayerVideoTrack = false
         options.publishMediaPlayerAudioTrack = false
         agoraKit.updateChannel(with: options)
-        startPublishButton.isEnabled = true
-        stopPublishButton.isEnabled = false
-        isPublishStream = false
     }
     
     @IBAction func onClickPlayAudioTrack(_ sender: NSButton) {
