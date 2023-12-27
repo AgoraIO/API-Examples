@@ -379,9 +379,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             if (context == null) {
                 return;
             }
-            if (remoteViews.containsKey(uid)) {
-                return;
-            } else {
+            if (!remoteViews.containsKey(uid)) {
                 handler.post(() -> {
                     // Display remote video stream
                     SurfaceView surfaceView = null;
@@ -389,6 +387,9 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                     surfaceView = new SurfaceView(context);
                     surfaceView.setZOrderMediaOverlay(true);
                     VideoReportLayout view = getAvailableView();
+                    if (view == null) {
+                        return;
+                    }
                     view.setReportUid(uid);
                     remoteViews.put(uid, view);
                     // Add to the remote container
@@ -419,9 +420,12 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                     //Clear render view
                     // Note: The video will stay at its last frame, to completely remove it you will need to
                     // remove the SurfaceView from its parent
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    remoteViews.get(uid).removeAllViews();
-                    remoteViews.remove(uid);
+                    ViewGroup view = remoteViews.get(uid);
+                    if (view != null) {
+                        view.removeAllViews();
+                        remoteViews.remove(uid);
+                        engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    }
                 }
             });
         }
@@ -463,7 +467,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         } else if (fl_remote_3.getChildCount() == 0) {
             return fl_remote_3;
         } else {
-            return fl_remote;
+            return null;
         }
     }
 }

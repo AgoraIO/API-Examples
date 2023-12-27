@@ -153,8 +153,8 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 if (!joined) {
                     return;
                 }
-                boolean isChatRoomMode = "CHATROOM".equals(audioScenarioInput.getSelectedItem());
-                if (isChatRoomMode) {
+                boolean isCommunication = getString(R.string.channel_profile_communication).equals(channelProfileInput.getSelectedItem());
+                if (isCommunication) {
                     int route = Constants.AUDIO_ROUTE_EARPIECE;
                     if (getString(R.string.audio_route_earpiece).equals(parent.getSelectedItem())) {
                         route = Constants.AUDIO_ROUTE_EARPIECE;
@@ -164,8 +164,6 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                         route = Constants.AUDIO_ROUTE_HEADSET;
                     } else if (getString(R.string.audio_route_headset_bluetooth).equals(parent.getSelectedItem())) {
                         route = Constants.AUDIO_ROUTE_HEADSETBLUETOOTH;
-                    } else if (getString(R.string.audio_route_headset_typec).equals(parent.getSelectedItem())) {
-                        route = Constants.AUDIO_ROUTE_USBDEVICE;
                     }
                     int ret = engine.setRouteInCommunicationMode(route);
                     showShortToast("setRouteInCommunicationMode route=" + route + ", ret=" + ret);

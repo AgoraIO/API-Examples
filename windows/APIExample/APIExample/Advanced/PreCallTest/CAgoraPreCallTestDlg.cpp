@@ -32,7 +32,10 @@ void CAgoraPreCallTestDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_INPUT_TEST, m_btnAudioInputTest);
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_OUTPUT_TEST, m_btnAudioOutputTest);
 	DDX_Control(pDX, IDC_BUTTON_CAMERA, m_btnVideoTest);
+	DDX_Control(pDX, IDC_BUTTON_AUDIO_ECHO_TEST, m_btnAudioEchoTest);
+	DDX_Control(pDX, IDC_STATIC_ADUIO_ECHO_TEST, m_staAudioEchoTest);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_STATIC_ADUIO_ECHO_TEST_TIP, m_staAudioEchoTestTip);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
 }
@@ -50,6 +53,8 @@ BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPreCallTestDlg::OnEIDLastmileQuality)
 	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication)
 	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_BUTTON_AUDIO_ECHO_TEST, &CAgoraPreCallTestDlg::OnBnClickedButtonAudioEchoTest)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 //init ctrl text.
@@ -60,9 +65,12 @@ void CAgoraPreCallTestDlg::InitCtrlText()
 	m_staAudioOutput.SetWindowText(PerCallTestCtrlAudioOutput);
 	m_staAudioInputVol.SetWindowText(PerCallTestCtrlAudioVol);
 	m_staAudioOutputVol.SetWindowText(PerCallTestCtrlAudioVol);
+	m_staAudioEchoTest.SetWindowText(PerCallTestCtrlAudioEchoTest);
 	m_btnAudioInputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnAudioOutputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
+	m_staAudioEchoTestTip.SetWindowTextW(PerCallTestCtrlWaitingStart);
+	m_btnAudioEchoTest.SetWindowTextW(PerCallTestCtrlStartTest);
 }
 
 //Initialize the Agora SDK
@@ -152,6 +160,8 @@ void CAgoraPreCallTestDlg::ResumeStatus()
 	m_cameraTest = false;
 	m_audioInputTest = false;
 	m_audioOutputTest = false;
+	m_audioEchoTest = false;
+	m_audioEchoTimeIndex = 0;
 }
 
 
@@ -418,4 +428,52 @@ void CAgoraPreCallTestDlg::OnPaint()
 	m_imgNetQuality.Draw(&dc, m_netQuality, CPoint(16, 40), ILD_NORMAL);
 }
 
+
+
+
+void CAgoraPreCallTestDlg::OnBnClickedButtonAudioEchoTest()
+{
+	if (!m_audioEchoTest) {
+		EchoTestConfiguration config;
+		config.channelId = "AudioEchoTestChannel";
+		config.token = ""; 
+		config.enableAudio = true;
+		config.enableVideo = false;
+		config.intervalInSeconds = m_audioEchoInterval;
+		m_rtcEngine->startEchoTest(config);
+		m_audioEchoTimeIndex = 0;
+		m_audioEchoTest = true;
+		SetTimer(m_audioEchoTimeId, 1000, NULL);
+		m_btnAudioEchoTest.SetWindowTextW(PerCallTestCtrlStopTest);
+	}
+	else {
+		m_rtcEngine->stopEchoTest();
+		m_audioEchoTest = false;
+		m_audioEchoTimeIndex = 0;
+		KillTimer(m_audioEchoTimeId);
+		m_btnAudioEchoTest.SetWindowTextW(PerCallTestCtrlStartTest);
+		m_staAudioEchoTestTip.SetWindowTextW(PerCallTestCtrlWaitingStart);
+	}
+}
+
+void CAgoraPreCallTestDlg::OnTimer(UINT_PTR nIDEvents) {
+	if (nIDEvents != m_audioEchoTimeId || !m_audioEchoTest) {
+		return;
+	}
+	m_audioEchoTimeIndex++;
+	int diff = m_audioEchoInterval - m_audioEchoTimeIndex;
+	if (diff >= 0) {
+		CString str;
+		str.Format(PerCallTestCtrlRecording, diff);
+		m_staAudioEchoTestTip.SetWindowTextW(str);
+	}
+	else if( diff >= -1 * m_audioEchoInterval){
+		CString str;
+		str.Format(PerCallTestCtrlPlaying, -diff);
+		m_staAudioEchoTestTip.SetWindowTextW(str);
+	}
+	else {
+		OnBnClickedButtonAudioEchoTest();
+	}
+}
 
