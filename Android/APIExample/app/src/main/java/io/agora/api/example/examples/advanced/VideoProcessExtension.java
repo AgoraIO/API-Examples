@@ -354,8 +354,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             resetVirtualBackground();
         } else if (buttonView.getId() == noiseReduce2.getId()) {
             VideoDenoiserOptions options = new VideoDenoiserOptions();
-            options.denoiserLevel = VideoDenoiserOptions.VIDEO_DENOISER_AUTO;
-            options.denoiserMode = VideoDenoiserOptions.VIDEO_DENOISER_LEVEL_HIGH_QUALITY;
+            options.denoiserLevel = VideoDenoiserOptions.VIDEO_DENOISER_LEVEL_HIGH_QUALITY;
+            options.denoiserMode = VideoDenoiserOptions.VIDEO_DENOISER_AUTO;
             engine.setVideoDenoiserOptions(isChecked, options);
         }
     }

@@ -347,7 +347,7 @@
     <string name="audio_route_default">default</string>
     <string name="audio_route_speakerphone">speakerphone</string>
     <string name="audio_route_earpiece">earpiece</string>
-    <string name="audio_route_headset">headset(Not TypeC)</string>
+    <string name="audio_route_headset">headset</string>
     <string name="audio_route_headset_typec">headset(TypeC)</string>
     <string name="audio_route_headset_bluetooth">bluetooth headset</string>
     <string name="third_party_player">Third Party Player</string>
