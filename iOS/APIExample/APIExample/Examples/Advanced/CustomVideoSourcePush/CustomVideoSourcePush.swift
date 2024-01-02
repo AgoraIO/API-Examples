@@ -96,7 +96,7 @@ class CustomVideoSourcePushMain: BaseViewController {
                                                frameRate: 15)
         customCamera?.delegate = self
         customCamera?.startSource()
-        customCamera?.trackId = 1
+        customCamera?.trackId = 0
         agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
