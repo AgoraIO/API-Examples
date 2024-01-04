@@ -25,6 +25,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -67,15 +69,14 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private int myUid;
     private boolean joined = false, publishing = false;
     private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
-    private LiveTranscoding transcoding = new LiveTranscoding();
-    private static final Integer MAX_RETRY_TIMES = 3;
+    private final LiveTranscoding transcoding = new LiveTranscoding();
+    private static final int MAX_RETRY_TIMES = 3;
     private int retried = 0;
     private boolean unpublishing = false;
     /**
      * Maximum number of users participating in transcoding (even number)
      */
     private final int MAXUserCount = 2;
-    private LiveTranscoding.TranscodingUser localTranscodingUser;
 
     @Nullable
     @Override
@@ -165,6 +166,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         }
         if (retryTask != null) {
             retryTask.cancel(true);
+            retryTask = null;
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -193,20 +195,24 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                     joinChannel(channelId);
                 }).start();
             } else {
+                if (publishing) {
+                    stopPublish();
+                    publishing = false;
+                }
                 engine.leaveChannel();
                 transCodeSwitch.setEnabled(true);
                 joined = false;
                 join.setText(getString(R.string.join));
-                publishing = false;
                 publish.setEnabled(false);
                 publish.setText(getString(R.string.publish));
+                transcoding.setUsers(new ArrayList<>());
             }
         } else if (v.getId() == R.id.btn_publish) {
             /*Ensure that the user joins a channel before calling this method.*/
             retried = 0;
             if (joined && !publishing) {
                 startPublish();
-            } else if (joined && publishing) {
+            } else if (joined) {
                 stopPublish();
             }
         }
@@ -275,12 +281,13 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             /*The transcodingUser class which defines the video properties of the user displaying the
              * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
              * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
-            localTranscodingUser = new LiveTranscoding.TranscodingUser();
+            LiveTranscoding.TranscodingUser localTranscodingUser = new LiveTranscoding.TranscodingUser();
             localTranscodingUser.x = 0;
             localTranscodingUser.y = 0;
             localTranscodingUser.width = transcoding.width;
             localTranscodingUser.height = transcoding.height / MAXUserCount;
             localTranscodingUser.uid = myUid;
+            localTranscodingUser.zOrder = 1;
             /*Adds a user displaying the video in CDN live.
              * @return
              *  0: Success.
@@ -341,7 +348,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method removes only one stream RTMP URL address each time it is called.*/
         unpublishing = true;
         retryTask.cancel(true);
+        retryTask = null;
         engine.stopRtmpStream(et_url.getText().toString());
+        transcoding.removeUser(myUid);
     }
 
     /**
@@ -561,18 +570,22 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                         publish.setText(getString(R.string.publish));
                         transCodeSwitch.setEnabled(true);
                     });
-                } else if (retried >= MAX_RETRY_TIMES) {
-                    retryTask.cancel(true);
-                    retried = 0;
-                    /*Push stream not started or ended, make changes to the UI.*/
-                    handler.post(() -> {
-                        publish.setEnabled(true);
-                        publish.setText(getString(R.string.publish));
-                        transCodeSwitch.setEnabled(true);
-                    });
-                } else {
-                    retried++;
-                    startRtmpStreaming();
+                }
+                // Retry logic
+                if (retryTask != null) {
+                    if (retried >= MAX_RETRY_TIMES) {
+                        retryTask.cancel(true);
+                        retried = 0;
+                        /*Push stream not started or ended, make changes to the UI.*/
+                        handler.post(() -> {
+                            publish.setEnabled(true);
+                            publish.setText(getString(R.string.publish));
+                            transCodeSwitch.setEnabled(true);
+                        });
+                    } else {
+                        retried++;
+                        startRtmpStreaming();
+                    }
                 }
             }
         }

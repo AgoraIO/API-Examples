@@ -18,7 +18,9 @@
 "e83-fp-COE.text" = "音频网络回路测试";
 
 /* Class = "UIButton"; normalTitle = "Start"; ObjectID = "eol-rm-UUy"; */
-"eol-rm-UUy.normalTitle" = "开始";
+"eol-rm-UUy.normalTitle" = "音频回路开始";
+
+"75u-n0-U1P.normalTitle" == "开始Lastmile网络测试";
 
 /* Class = "UILabel"; text = "Please say something.."; ObjectID = "tFL-Md-flt"; */
 "tFL-Md-flt.text" = "尝试说一些话..";
