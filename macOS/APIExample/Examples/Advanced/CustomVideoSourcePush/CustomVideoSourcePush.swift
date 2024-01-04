@@ -213,7 +213,7 @@ class CustomVideoSourcePush: BaseViewController {
                                                    frameRate: 15)
             customCamera?.delegate = self
             customCamera?.startSource()
-            customCamera?.trackId = 0
+            customCamera?.trackId = agoraKit.createCustomVideoTrack()
             agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
 //            agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
             // enable video module and set up video encoding configs
@@ -237,6 +237,7 @@ class CustomVideoSourcePush: BaseViewController {
             option.clientRoleType = .broadcaster
             option.publishCustomVideoTrack = true
             option.publishCustomAudioTrack = true
+            option.customVideoTrackId = Int(customCamera?.trackId ?? 0)
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
