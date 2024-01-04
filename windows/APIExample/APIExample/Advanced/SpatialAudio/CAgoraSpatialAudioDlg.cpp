@@ -164,6 +164,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 
 	// update media player position
 	RemoteVoicePositionInfo playerLeftPositionInfo;
+	memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 	CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 	playerLeftPositionInfo.forward[0] = 1.0f;
 	m_localSpatial->updatePlayerPositionInfo(0, playerLeftPositionInfo);
@@ -171,6 +172,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	RemoteVoicePositionInfo playerRightPositionInfo;
+	memset(&playerRightPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 	CaculateObjectPosition(m_staPlayerRight, playerRightPositionInfo.position);
 	playerRightPositionInfo.forward[0] = 1.0f;
 	m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerRight->getMediaPlayerId(), playerRightPositionInfo);
@@ -376,6 +378,7 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		m_staRemoteLeft.ShowWindow(TRUE);
 
 		RemoteVoicePositionInfo posInfo;
+		memset(&posInfo, 0, sizeof(RemoteVoicePositionInfo));
 		CaculateObjectPosition(m_staRemoteLeft, posInfo.position);
 		m_localSpatial->updateRemotePosition(remoteLeftUid, posInfo);
 
@@ -388,6 +391,7 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		m_staRemoteRight.ShowWindow(TRUE);
 
 		RemoteVoicePositionInfo posInfo;
+		memset(&posInfo, 0, sizeof(RemoteVoicePositionInfo));
 		CaculateObjectPosition(m_staRemoteRight, posInfo.position);
 		m_localSpatial->updateRemotePosition(remoteRightUid, posInfo);
 
@@ -918,7 +922,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 
 		if (isChecked) {
 			SpatialAudioZone mediaPlayerLeftZone;
-
+			memset(&mediaPlayerLeftZone, 0, sizeof(SpatialAudioZone));
 			mediaPlayerLeftZone.audioAttenuation = 1.0f;
 
 			// zone center point position
@@ -932,7 +936,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 			// zone size
 			RECT zoneSize;
 			CaculateZoneRect(m_staZone, &zoneSize);
-			mediaPlayerLeftZone.forwardLength = (zoneSize.bottom - zoneSize.top) / 2.0f;
+			mediaPlayerLeftZone.forwardLength = zoneSize.bottom - zoneSize.top * 1.0f;
 			mediaPlayerLeftZone.rightLength = zoneSize.right - zoneSize.left * 1.0f;
 			mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
 
@@ -940,6 +944,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 
 			// update position for making zone effective.
 			RemoteVoicePositionInfo playerLeftPositionInfo;
+			memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 			playerLeftPositionInfo.forward[0] = 1.0f;
 			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
@@ -953,6 +958,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 		}
 		else {
 			SpatialAudioZone worldZone;
+			memset(&worldZone, 0, sizeof(SpatialAudioZone));
 
 			// zone size
 			worldZone.forwardLength = AXIS_MAX_DISTANCE;
@@ -962,6 +968,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 			m_localSpatial->setZones(&worldZone, 1);
 
 			RemoteVoicePositionInfo playerLeftPositionInfo;
+			memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 			playerLeftPositionInfo.forward[0] = 1.0f;
 			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
