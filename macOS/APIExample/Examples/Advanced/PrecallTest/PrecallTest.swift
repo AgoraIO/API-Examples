@@ -215,7 +215,8 @@ class PrecallTest: BaseViewController {
         let testConfig = AgoraEchoTestConfiguration()
         testConfig.intervalInSeconds = 10
         testConfig.enableAudio = true
-        testConfig.enableVideo = true
+        testConfig.enableVideo = false
+        testConfig.channelId = "AudioEchoTest" + "\(Int.random(in: 1...1000))"
         agoraKit.startEchoTest(withConfig: testConfig)
         showPopover(isValidate: false, seconds: 10) {[unowned self] in
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
