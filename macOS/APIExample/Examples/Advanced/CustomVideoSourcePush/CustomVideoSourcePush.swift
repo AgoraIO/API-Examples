@@ -177,7 +177,7 @@ class CustomVideoSourcePush: BaseViewController {
     
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
-            self.customCamera?.startSource()
+            self.customCamera?.stopSource()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.remoteVideos[0].uid = nil
@@ -213,7 +213,7 @@ class CustomVideoSourcePush: BaseViewController {
                                                    frameRate: 15)
             customCamera?.delegate = self
             customCamera?.startSource()
-            customCamera?.trackId = 1
+            customCamera?.trackId = agoraKit.createCustomVideoTrack()
             agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
 //            agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
             // enable video module and set up video encoding configs
@@ -234,8 +234,10 @@ class CustomVideoSourcePush: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = true
             option.clientRoleType = .broadcaster
+            option.publishCustomVideoTrack = true
+            option.publishCustomAudioTrack = true
+            option.customVideoTrackId = Int(customCamera?.trackId ?? 0)
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {

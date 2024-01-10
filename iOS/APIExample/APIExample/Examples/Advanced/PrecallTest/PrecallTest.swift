@@ -71,8 +71,8 @@ class PrecallTestEntry : BaseViewController
         let testConfig = AgoraEchoTestConfiguration()
         testConfig.intervalInSeconds = 10
         testConfig.enableAudio = true
-        testConfig.enableVideo = true
-        testConfig.channelId = "222"
+        testConfig.enableVideo = false
+        testConfig.channelId = "AudioEchoTest" + "\(Int.random(in: 1...1000))"
         let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // Usually happens with invalid parameters
@@ -101,7 +101,7 @@ class PrecallTestEntry : BaseViewController
             testConfig.intervalInSeconds = 2
             testConfig.enableAudio = true
             testConfig.enableVideo = true
-            testConfig.channelId = "222"
+            testConfig.channelId = "VideoEchoTest" + "\(Int.random(in: 1...1000))"
             testConfig.view = videoCanvasView
             let ret = agoraKit.startEchoTest(withConfig: testConfig)
             if ret != 0 {

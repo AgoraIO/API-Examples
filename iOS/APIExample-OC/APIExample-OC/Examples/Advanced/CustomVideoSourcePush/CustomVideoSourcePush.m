@@ -88,6 +88,7 @@
     // so you will have to prepare the preview yourself
     self.customCamera = [[AgoraYUVImageSourcePush alloc] initWithSize:CGSizeMake(320, 180) fileName:@"sample" frameRate:15];
     self.customCamera.delegate = self;
+    self.customCamera.trackId = 0;
     [self.customCamera startSource];
     [self.agoraKit setExternalVideoSource:YES
                                useTexture:YES
@@ -112,8 +113,8 @@
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
     options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = YES;
-    options.publishCameraTrack = YES;
-    options.publishMicrophoneTrack = YES;
+    options.publishCustomAudioTrack = YES;
+    options.publishCustomVideoTrack = YES;
     options.clientRoleType = AgoraClientRoleBroadcaster;
     
     [[NetworkManager shared] generateTokenWithChannelName:channelName uid:0 success:^(NSString * _Nullable token) {
