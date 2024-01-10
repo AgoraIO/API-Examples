@@ -118,6 +118,7 @@ using namespace agora::media;
 #define EID_RECORDER_INFO_UPDATE	0x00000035
 #define EID_EXTENSION_EVENT	0x00000036
 #define EID_ON_CAPTURE_VIDEOFRAME	0x00000037
+#define EID_ERROR	0x00000038
 
 
 typedef struct _tagRtmpStreamStateChanged {

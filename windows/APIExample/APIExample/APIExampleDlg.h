@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
+#include "Basic/JoinChannelVideoByToken/CJoinChannelVideoByTokenDlg.h"
 #include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
 #include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
@@ -78,6 +79,7 @@ private:
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
+    CJoinChannelVideoByTokenDlg *m_pJoinChannelVideoByTokenDlg = nullptr;
     CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;

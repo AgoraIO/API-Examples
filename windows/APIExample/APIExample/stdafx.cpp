@@ -22,6 +22,7 @@ wchar_t commonCtrlLeaveChannel[INFO_LEN] = { 0 };
 wchar_t commonCtrlClientRole[INFO_LEN]   = { 0 };
 //scene list
 wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
+wchar_t basicJoinChannelVideoByToken[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
@@ -440,6 +441,7 @@ void InitKeyInfomation()
 
     //basic scene list
     _tcscpy_s(basicLiveBroadcasting, INFO_LEN, Str(_T("Basic.LiveBroadcasting")));
+    _tcscpy_s(basicJoinChannelVideoByToken, INFO_LEN, Str(_T("Basic.JoinChannelVideoByToken")));
     //advanced  scene list
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
