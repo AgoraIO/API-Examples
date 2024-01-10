@@ -33,7 +33,9 @@ void CAgoraPreCallTestDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_OUTPUT_TEST, m_btnAudioOutputTest);
 	DDX_Control(pDX, IDC_BUTTON_CAMERA, m_btnVideoTest);
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_ECHO_TEST, m_btnAudioEchoTest);
+	DDX_Control(pDX, IDC_BUTTON_VIDEO_ECHO_TEST, m_btnVideoEchoTest);
 	DDX_Control(pDX, IDC_STATIC_ADUIO_ECHO_TEST, m_staAudioEchoTest);
+	DDX_Control(pDX, IDC_STATIC_VIDEO_ECHO_TEST, m_staVideoEchoTest);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_STATIC_ADUIO_ECHO_TEST_TIP, m_staAudioEchoTestTip);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
@@ -55,6 +57,7 @@ BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_BN_CLICKED(IDC_BUTTON_AUDIO_ECHO_TEST, &CAgoraPreCallTestDlg::OnBnClickedButtonAudioEchoTest)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BUTTON_VIDEO_ECHO_TEST, &CAgoraPreCallTestDlg::OnBnClickedButtonVideoEchoTest)
 END_MESSAGE_MAP()
 
 //init ctrl text.
@@ -66,11 +69,13 @@ void CAgoraPreCallTestDlg::InitCtrlText()
 	m_staAudioInputVol.SetWindowText(PerCallTestCtrlAudioVol);
 	m_staAudioOutputVol.SetWindowText(PerCallTestCtrlAudioVol);
 	m_staAudioEchoTest.SetWindowText(PerCallTestCtrlAudioEchoTest);
+	m_staVideoEchoTest.SetWindowText(PerCallTestCtrlVideoEchoTest);
 	m_btnAudioInputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnAudioOutputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_staAudioEchoTestTip.SetWindowTextW(PerCallTestCtrlWaitingStart);
 	m_btnAudioEchoTest.SetWindowTextW(PerCallTestCtrlStartTest);
+	m_btnVideoEchoTest.SetWindowTextW(PerCallTestCtrlStartTest);
 }
 
 //Initialize the Agora SDK
@@ -375,6 +380,7 @@ void CAgoraPreCallTestDlg::OnBnClickedButtonCamera()
 		int ret = m_rtcEngine->setupLocalVideo(canvas);
 		ret = m_rtcEngine->startPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStopTest);
+		m_btnVideoEchoTest.EnableWindow(FALSE);
 		CString strInfo;
 		strInfo.Format(_T("startDeviceTest,ret=%d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -383,8 +389,12 @@ void CAgoraPreCallTestDlg::OnBnClickedButtonCamera()
 	else {
 		//stop camera device test.
 		//(*m_videoDeviceManager)->stopDeviceTest();
+		VideoCanvas canvas;
+		canvas.view = nullptr;
+		m_rtcEngine->setupLocalVideo(canvas);
 		m_rtcEngine->stopPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
+		m_btnVideoEchoTest.EnableWindow(TRUE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop camera device test. "));
 	}
 	m_cameraTest = !m_cameraTest;
@@ -477,3 +487,27 @@ void CAgoraPreCallTestDlg::OnTimer(UINT_PTR nIDEvents) {
 	}
 }
 
+
+
+void CAgoraPreCallTestDlg::OnBnClickedButtonVideoEchoTest()
+{
+	if (!m_videoEchoTest) {
+		EchoTestConfiguration config;
+		config.channelId = "VideoEchoTestChannel";
+		config.token = "";
+		config.enableAudio = false;
+		config.enableVideo = true;
+		config.view = m_VideoTest.GetVideoSafeHwnd();
+		config.intervalInSeconds = m_videoEchoInterval;
+		int ret = m_rtcEngine->startEchoTest(config);
+		m_videoEchoTest = true;
+		m_btnVideoEchoTest.SetWindowTextW(PerCallTestCtrlStopTest);
+		m_btnVideoTest.EnableWindow(FALSE);
+	}
+	else {
+		m_rtcEngine->stopEchoTest();
+		m_videoEchoTest = false;
+		m_btnVideoEchoTest.SetWindowTextW(PerCallTestCtrlStartTest);
+		m_btnVideoTest.EnableWindow(TRUE);
+	}
+}
