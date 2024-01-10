@@ -167,7 +167,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 	CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 	playerLeftPositionInfo.forward[0] = 1.0f;
-	m_localSpatial->updatePlayerPositionInfo(0, playerLeftPositionInfo);
+	m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
 	strInfo.Format(_T("media player left position forward=%f, right=%f"), playerLeftPositionInfo.position[0], playerLeftPositionInfo.position[1]);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
@@ -942,36 +942,14 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 
 			m_localSpatial->setZones(&mediaPlayerLeftZone, 1);
 
-			// update position for making zone effective.
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
-
 			CString strInfo;
 			strInfo.Format(_T("Zone position forward=%f, right=%f"), mediaPlayerLeftZone.position[0], mediaPlayerLeftZone.position[1]);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 			strInfo.Format(_T("Zone size forwardLength=%f, rightLength=%f"), mediaPlayerLeftZone.forwardLength, mediaPlayerLeftZone.rightLength);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 		}
 		else {
-			SpatialAudioZone worldZone;
-			memset(&worldZone, 0, sizeof(SpatialAudioZone));
-
-			// zone size
-			worldZone.forwardLength = AXIS_MAX_DISTANCE;
-			worldZone.rightLength = AXIS_MAX_DISTANCE;
-			worldZone.upLength = AXIS_MAX_DISTANCE;
-
-			m_localSpatial->setZones(&worldZone, 1);
-
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
+			m_localSpatial->setZones(nullptr, 0);
 		}
 	}
 }
