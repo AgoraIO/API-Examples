@@ -163,7 +163,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     } else if (getString(R.string.audio_route_headset).equals(parent.getSelectedItem())) {
                         route = Constants.AUDIO_ROUTE_HEADSET;
                     } else if (getString(R.string.audio_route_headset_bluetooth).equals(parent.getSelectedItem())) {
-                        route = Constants.AUDIO_ROUTE_HEADSETBLUETOOTH;
+                        route = Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP;
                     }
                     int ret = engine.setRouteInCommunicationMode(route);
                     showShortToast("setRouteInCommunicationMode route=" + route + ", ret=" + ret);
@@ -644,7 +644,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     selectedRouteStr = getString(R.string.audio_route_speakerphone);
                 } else if (routing == Constants.AUDIO_ROUTE_HEADSET) {
                     selectedRouteStr = getString(R.string.audio_route_headset);
-                } else if (routing == Constants.AUDIO_ROUTE_HEADSETBLUETOOTH) {
+                } else if (routing == Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP) {
                     selectedRouteStr = getString(R.string.audio_route_headset_bluetooth);
                 } else if (routing == Constants.AUDIO_ROUTE_USBDEVICE) {
                     selectedRouteStr = getString(R.string.audio_route_headset_typec);
