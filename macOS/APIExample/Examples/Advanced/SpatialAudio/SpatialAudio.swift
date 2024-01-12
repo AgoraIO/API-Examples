@@ -94,8 +94,6 @@ class SpatialAudioMain: BaseViewController {
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit
         localSpatial = AgoraLocalSpatialAudioKit.sharedLocalSpatialAudio(with: localSpatialConfig)
-        localSpatial?.muteLocalAudioStream(false)
-        localSpatial?.muteAllRemoteAudioStreams(false)
         localSpatial?.setAudioRecvRange(Float(view.frame.height))
         localSpatial?.setMaxAudioRecvCount(2)
         localSpatial?.setDistanceUnit(1)
@@ -194,11 +192,7 @@ class SpatialAudioMain: BaseViewController {
             audioZone.position = getViewCenterPostion(view: voice1ContainerView)
             localSpatial?.setZones([audioZone])
         } else {
-            let audioZone = AgoraSpatialAudioZone()
-            audioZone.forwardLength = Float(view.frame.height)
-            audioZone.rightLength = Float(view.frame.width)
-            audioZone.upLength = Float(maxDistance)
-            localSpatial?.setZones([audioZone])
+            localSpatial?.setZones(nil)
         }
         let pos = getViewCenterPostion(view: selfPostionView)
         localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
