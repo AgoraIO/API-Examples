@@ -129,7 +129,7 @@
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbq-TB-dr1">
                                 <rect key="frame" x="373" y="246" width="214" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTC-4D-0SS">
+                                <buttonCell key="cell" type="push" title="Start Audio Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTC-4D-0SS">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -170,7 +170,7 @@
                                 </textFieldCell>
                             </textField>
                             <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Tc-6I-Jdq">
-                                <rect key="frame" x="137" y="116" width="163" height="96"/>
+                                <rect key="frame" x="137" y="91" width="163" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OBf-Wf-Xcv">
@@ -194,7 +194,7 @@
                                 </subviews>
                             </customView>
                             <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRv-cr-iPK">
-                                <rect key="frame" x="307" y="116" width="163" height="96"/>
+                                <rect key="frame" x="307" y="91" width="163" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3EB-jX-e6g">
@@ -217,9 +217,20 @@
                                     </textField>
                                 </subviews>
                             </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Se2-qE-yPM">
+                                <rect key="frame" x="373" y="218" width="214" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Video Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nkf-bY-zGl">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartVideoEchoTest:" target="Gwp-vd-c2J" id="b4C-Ni-BfT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstAttribute="trailing" secondItem="Se2-qE-yPM" secondAttribute="trailing" constant="20" symbolic="YES" id="2rT-97-wij"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="centerY" secondItem="dcH-0c-s4h" secondAttribute="centerY" id="64o-iE-bQz"/>
                             <constraint firstItem="Kex-rb-pg3" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="8rW-gu-Xoh"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="9LW-S2-jy8"/>
@@ -244,6 +255,8 @@
                             <constraint firstItem="zLk-SB-J3G" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" constant="20" id="ViY-yQ-GgI"/>
                             <constraint firstAttribute="trailing" secondItem="lbq-TB-dr1" secondAttribute="trailing" constant="20" symbolic="YES" id="WoM-YT-bfw"/>
                             <constraint firstItem="8hj-fm-qZJ" firstAttribute="leading" secondItem="Kex-rb-pg3" secondAttribute="leading" id="X00-85-bnb"/>
+                            <constraint firstItem="Se2-qE-yPM" firstAttribute="top" secondItem="lbq-TB-dr1" secondAttribute="bottom" constant="8" id="XUk-QH-YDs"/>
+                            <constraint firstItem="Se2-qE-yPM" firstAttribute="width" secondItem="lbq-TB-dr1" secondAttribute="width" id="Y9b-2z-o6N"/>
                             <constraint firstItem="i6l-8K-zhn" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="Zcj-lH-A1k"/>
                             <constraint firstItem="w3I-hj-fIm" firstAttribute="centerY" secondItem="Cto-Lg-9io" secondAttribute="centerY" id="a9S-3q-Vmm"/>
                             <constraint firstItem="CWd-tL-d6U" firstAttribute="trailing" secondItem="i6l-8K-zhn" secondAttribute="trailing" id="bdy-z2-Hcc"/>
