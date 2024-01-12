@@ -132,7 +132,6 @@ public class SpatialSound extends BaseFragment {
             localSpatialAudioConfig.mRtcEngine = engine;
             localSpatial.initialize(localSpatialAudioConfig);
 
-            //localSpatial.muteAllRemoteAudioStreams(true);
             localSpatial.setMaxAudioRecvCount(2);
             localSpatial.setAudioRecvRange(AXIS_MAX_DISTANCE);
             localSpatial.setDistanceUnit(1);
@@ -201,7 +200,6 @@ public class SpatialSound extends BaseFragment {
                 mediaPlayerLeftZone.rightLength = viewRelativeSizeInAxis[0];
                 mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
                 localSpatial.setZones(new SpatialAudioZone[]{mediaPlayerLeftZone});
-                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
             } else {
                 zoneTv.setVisibility(View.INVISIBLE);
                 SpatialAudioZone worldZone = new SpatialAudioZone();
@@ -209,7 +207,6 @@ public class SpatialSound extends BaseFragment {
                 worldZone.forwardLength = AXIS_MAX_DISTANCE * 2;
                 worldZone.rightLength = AXIS_MAX_DISTANCE * 2;
                 localSpatial.setZones(new SpatialAudioZone[]{worldZone});
-                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
             }
         });
     }
