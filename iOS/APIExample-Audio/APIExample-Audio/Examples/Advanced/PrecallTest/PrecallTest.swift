@@ -59,6 +59,7 @@ class PrecallTestEntry : BaseViewController
         let testConfig = AgoraEchoTestConfiguration()
         testConfig.intervalInSeconds = 10
         testConfig.enableAudio = true
+        testConfig.channelId = "AudioEchoTest" + "\(Int.random(in: 1...1000))"
         let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // for errors please take a look at:
