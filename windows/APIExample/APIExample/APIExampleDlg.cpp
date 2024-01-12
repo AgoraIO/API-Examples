@@ -204,6 +204,7 @@ void CAPIExampleDlg::InitSceneDialog()
 {
     //basic list
     m_vecBasic.push_back(basicLiveBroadcasting);
+    m_vecBasic.push_back(basicJoinChannelVideoByToken);
 
    m_pLiveBroadcasting = new CLiveBroadcastingDlg(&m_staMainArea);
    RECT rcArea, rcWnd;
@@ -215,6 +216,12 @@ void CAPIExampleDlg::InitSceneDialog()
    int h = rcWnd.bottom - rcWnd.top;
    rcWnd = { rcArea.left, rcArea.top - MAIN_AREA_TOP, rcArea.left + w, rcArea.top + h};
    m_pLiveBroadcasting->MoveWindow(&rcWnd);
+
+
+   //join channel video by token
+   m_pJoinChannelVideoByTokenDlg = new CJoinChannelVideoByTokenDlg(&m_staMainArea);
+   m_pJoinChannelVideoByTokenDlg->Create(CJoinChannelVideoByTokenDlg::IDD);
+   m_pJoinChannelVideoByTokenDlg->MoveWindow(&rcWnd);
 
    //advanced list
    // m_vecAdvanced.push_back(advancedRtmpInject);
@@ -504,7 +511,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     if (selectedText.Compare(basicLiveBroadcasting) == 0) {
         m_pLiveBroadcasting->InitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_SHOW);
-    }else if (selectedText.Compare(advancedRtmpInject) == 0) {
+	}else if (selectedText.Compare(basicJoinChannelVideoByToken) == 0) {
+		m_pJoinChannelVideoByTokenDlg->InitAgora();
+		m_pJoinChannelVideoByTokenDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->InitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
@@ -606,7 +616,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         && m_pLiveBroadcasting->IsWindowVisible()) {//pre sel release first
         m_pLiveBroadcasting->UnInitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_HIDE);
-    }else if (str.Compare(advancedRtmpInject) == 0) {
+	}else if (str.Compare(basicJoinChannelVideoByToken) == 0) {
+		m_pJoinChannelVideoByTokenDlg->UnInitAgora();
+		m_pJoinChannelVideoByTokenDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->UnInitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedRtmpStreaming) == 0) {
