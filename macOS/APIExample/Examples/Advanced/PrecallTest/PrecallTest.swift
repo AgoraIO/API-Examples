@@ -225,6 +225,36 @@ class PrecallTest: BaseViewController {
         }
     }
     
+    private var isStartVideoEchoTest: Bool = false
+    @IBAction func onStartVideoEchoTest(_ sender: NSButton) {
+        isStartVideoEchoTest = !isStartVideoEchoTest
+        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
+            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+        }
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 2
+        testConfig.enableAudio = false
+        testConfig.enableVideo = isStartVideoEchoTest
+        testConfig.channelId = "VideoEchoTest" + "\(Int.random(in: 1...1000))"
+        testConfig.view = videos[0]
+        if isStartVideoEchoTest {
+            let ret = agoraKit.startEchoTest(withConfig: testConfig)
+            if ret != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
+            }
+        } else {
+            agoraKit.stopEchoTest()
+        }
+        sender.title = isStartVideoEchoTest ? "Stop Video Echo Test".localized : "Start Video Echo Test".localized
+        startCameraTestBtn.isHidden = isStartVideoEchoTest
+        stopCameraTestBtn.isHidden = true
+    }
+    
+    
     // show popover and hide after seconds
     func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {
         var count = seconds
