@@ -22,6 +22,7 @@ wchar_t commonCtrlLeaveChannel[INFO_LEN] = { 0 };
 wchar_t commonCtrlClientRole[INFO_LEN]   = { 0 };
 //scene list
 wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
+wchar_t basicJoinChannelVideoByToken[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
@@ -222,6 +223,7 @@ wchar_t PerCallTestCtrlAudioOutput[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlAudioVol[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlCamera[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlAudioEchoTest[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlVideoEchoTest[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlStartTest[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlStopTest[INFO_LEN] = { 0 };
 wchar_t PerCallTestCtrlWaitingStart[INFO_LEN] = { 0 };
@@ -439,6 +441,7 @@ void InitKeyInfomation()
 
     //basic scene list
     _tcscpy_s(basicLiveBroadcasting, INFO_LEN, Str(_T("Basic.LiveBroadcasting")));
+    _tcscpy_s(basicJoinChannelVideoByToken, INFO_LEN, Str(_T("Basic.JoinChannelVideoByToken")));
     //advanced  scene list
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
@@ -653,6 +656,7 @@ void InitKeyInfomation()
 	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
 	_tcscpy_s(PerCallTestCtrlCamera, INFO_LEN, Str(_T("PerCallTest.Ctrl.Camera")));
 	_tcscpy_s(PerCallTestCtrlAudioEchoTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioEchoTest")));
+	_tcscpy_s(PerCallTestCtrlVideoEchoTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.VideoEchoTest")));
 	_tcscpy_s(PerCallTestCtrlStartTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StartTest")));
 	_tcscpy_s(PerCallTestCtrlStopTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StopTest")));
 	_tcscpy_s(PerCallTestCtrlWaitingStart, INFO_LEN, Str(_T("PerCallTest.Ctrl.WaitingStart")));

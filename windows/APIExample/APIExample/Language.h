@@ -21,6 +21,7 @@ extern wchar_t commonCtrlLeaveChannel[INFO_LEN];
 extern wchar_t commonCtrlClientRole[INFO_LEN];
 //scene list
 extern wchar_t basicLiveBroadcasting[INFO_LEN];
+extern wchar_t basicJoinChannelVideoByToken[INFO_LEN];
 extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
@@ -252,6 +253,7 @@ extern wchar_t PerCallTestCtrlAudioOutput[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioEchoTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlVideoEchoTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlWaitingStart[INFO_LEN];
