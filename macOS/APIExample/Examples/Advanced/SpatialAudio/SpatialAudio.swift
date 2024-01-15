@@ -239,10 +239,12 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUser1.title = "\(uid)"
             remoteUser1.tag = Int(uid)
             remoteUser1.isHidden = false
+            localSpatial?.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUser1))
         } else if remoteUser2.tag <= 0 {
             remoteUser2.title = "\(uid)"
             remoteUser2.tag = Int(uid)
             remoteUser2.isHidden = false
+            localSpatial?.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUser2))
         }
     }
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -259,6 +261,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUser2.isHidden = true
             remoteUser2.tag = 0
         }
+        localSpatial?.removeRemotePosition(uid)
     }
 }
 

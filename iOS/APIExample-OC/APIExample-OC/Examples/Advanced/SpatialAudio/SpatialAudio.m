@@ -288,10 +288,12 @@
         [self.remoteUserButton1 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton1.tag = uid;
         [self.remoteUserButton1 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton1]];
     } else if (self.remoteUserButton2.tag <= 0) {
         [self.remoteUserButton2 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton2.tag = uid;
         [self.remoteUserButton2 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton2]];
     }
 }
 
@@ -311,6 +313,7 @@
         [self.remoteUserButton2 setHidden:YES];
         self.remoteUserButton2.tag = 0;
     }
+    [self.localSpatial removeRemotePosition:uid];
 }
 
 - (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {

@@ -265,10 +265,12 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUserButton1.setTitle("\(uid)", for: .normal)
             remoteUserButton1.tag = Int(uid)
             remoteUserButton1.isHidden = false
+            localSpatial.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUserButton1))
         } else if remoteUserButton2.tag <= 0 {
             remoteUserButton2.setTitle("\(uid)", for: .normal)
             remoteUserButton2.tag = Int(uid)
             remoteUserButton2.isHidden = false
+            localSpatial.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUserButton2))
         }
     }
    
@@ -286,6 +288,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUserButton2.isHidden = true
             remoteUserButton2.tag = 0
         }
+        localSpatial.removeRemotePosition(uid)
     }
 }
 
