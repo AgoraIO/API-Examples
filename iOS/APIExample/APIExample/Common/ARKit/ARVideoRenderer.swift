@@ -11,7 +11,7 @@ import MetalKit
 import SceneKit
 import AgoraRtcKit
 
-class ARVideoRenderer : NSObject {
+class ARVideoRenderer: NSObject {
     fileprivate var yTexture: MTLTexture?
     fileprivate var uTexture: MTLTexture?
     fileprivate var vTexture: MTLTexture?

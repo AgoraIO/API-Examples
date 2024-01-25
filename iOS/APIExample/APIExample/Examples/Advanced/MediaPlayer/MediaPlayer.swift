@@ -12,8 +12,7 @@ import AgoraRtcKit
 let CAMERA_UID = UInt.random(in: 1001...2000)
 let PLAYER_UID = UInt.random(in: 2001...3000)
 
-class MediaPlayerEntry : UIViewController
-{
+class MediaPlayerEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "MediaPlayer"
@@ -23,18 +22,18 @@ class MediaPlayerEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
-    
 }
 
 class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
@@ -62,27 +61,29 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    @objc func keyboardWillAppear(notification: NSNotification) {
-        let keyboardinfo = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey]
-        let keyboardheight:CGFloat = (keyboardinfo as AnyObject).cgRectValue.size.height
+    @objc 
+    func keyboardWillAppear(notification: NSNotification) {
+        let keyboardinfo = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+        let keyboardheight: CGFloat = (keyboardinfo as AnyObject).cgRectValue.size.height
    
-        if self.originY == 0 {
-            self.originY = self.view.centerY_CS
+        if originY == 0 {
+            originY = view.center.y
         }
-        let rect = self.mediaUrlField.convert(self.mediaUrlField.bounds, to: self.view)
-        let y = self.view.bounds.height - rect.origin.y - self.mediaUrlField.bounds.height - keyboardheight
+        let rect = mediaUrlField.convert(self.mediaUrlField.bounds, to: self.view)
+        let y = view.bounds.height - rect.origin.y - self.mediaUrlField.bounds.height - keyboardheight
 
         if y < 0 {
             let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-                self.view.centerY_CS = y + self.originY
+                self.view.center.y = y + self.originY
             }
             animator.startAnimation()
         }
     }
     
-    @objc func keyboardWillDisappear(notification:NSNotification){
+    @objc
+    func keyboardWillDisappear(notification: NSNotification) {
         let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-            self.view.centerY_CS = self.originY
+            self.view.center.y = self.originY
             self.originY = 0
         }
         animator.startAnimation()
@@ -93,7 +94,9 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         return true
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, 
+                  shouldChangeTextIn range: NSRange,
+                  replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
             return true
@@ -104,13 +107,23 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mediaUrlField.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillAppear),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillDisappear),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
         // layout render view
         localVideo.setPlaceholder(text: "No Player Loaded")
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream1x2(views: [localVideo, remoteVideo])
         
+        setupRTC()
+    }
+    
+    private func setupRTC() {
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -126,7 +139,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -167,6 +181,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         })
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
+        setupChannel2(channelName: channelName)
+    }
+    
+    private func setupChannel2(channelName: String) {
         let option1 = AgoraRtcChannelMediaOptions()
         option1.autoSubscribeAudio = false
         option1.autoSubscribeVideo = false
@@ -176,7 +194,11 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
         NetworkManager.shared.generateToken(channelName: channelName, uid: PLAYER_UID) { token in
-            let result1 = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
+            let result1 = self.agoraKit.joinChannelEx(byToken: token,
+                                                      connection: connection,
+                                                      delegate: self,
+                                                      mediaOptions: option1,
+                                                      joinSuccess: nil)
             if result1 != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -190,7 +212,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     @IBAction func doOpenMediaUrl(sender: UIButton) {
         guard let url = mediaUrlField.text else { return }
-        //resign text field
+        // resign text field
         mediaUrlField.resignFirstResponder()
         let mediaSource = AgoraMediaSource()
         mediaSource.url = url
@@ -369,7 +391,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
             switch state.rawValue {
             case 100: // failed
                 weakself.showAlert(message: "media player error: \(reason.rawValue)")
-                break
+
             case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
                 weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
@@ -384,7 +406,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
                     weakself.playAudioTrackButton.setTitle(weakself.trackList?.first?.codecName, for: .normal)
                     weakself.publishAudioTrackButton.setTitle(weakself.playAudioTrackButton.title, for: .normal)
                 }
-                break
+
             case 7: // stopped
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 weakself.playerDurationLabel.text = "00 : 00"
@@ -396,7 +418,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
                 connection.channelId = channelName
                 connection.localUid = PLAYER_UID
                 weakself.agoraKit.updateChannelEx(with: option, connection: connection)
-                break
+
             default: break
             }
         }

@@ -9,58 +9,68 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class StreamEncryptionEntry : UIViewController
-{
+class StreamEncryptionEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var encryptSecretField: UITextField!
     @IBOutlet weak var encryptModeBtn: UIButton!
-    var mode:AgoraEncryptionMode = .AES128GCM2
-    var useCustom:Bool = false
+    var mode: AgoraEncryptionMode = .AES128GCM2
+    var useCustom: Bool = false
     let identifier = "StreamEncryption"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         encryptModeBtn.setTitle("\(mode.description())", for: .normal)
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text, let secret = encryptSecretField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text,
+                let secret = encryptSecretField.text else { 
+            return
+        }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         encryptSecretField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "mode":mode, "secret":secret, "useCustom": useCustom]
+        newViewController.configs = ["channelName": channelName,
+                                     "mode": mode,
+                                     "secret": secret,
+                                     "useCustom": useCustom]
         navigationController?.pushViewController(newViewController, animated: true)
     }
     
-    func getEncryptionModeAction(_ mode:AgoraEncryptionMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(mode.description())", style: .default, handler: {[unowned self] action in
+    func getEncryptionModeAction(_ mode: AgoraEncryptionMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(mode.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.mode = mode
             self.useCustom = false
             self.encryptModeBtn.setTitle("\(mode.description())", for: .normal)
         })
     }
     
-    @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for profile in AgoraEncryptionMode.allValues(){
+    @IBAction func setEncryptionMode() {
+        let style = UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet
+        let alert = UIAlertController(title: "Set Encryption Mode".localized,
+                                      message: nil,
+                                      preferredStyle: style)
+        for profile in AgoraEncryptionMode.allValues() {
             alert.addAction(getEncryptionModeAction(profile))
         }
         // add custom option
-        alert.addAction(UIAlertAction(title: "Custom", style: .default, handler: { (action:UIAlertAction) in
+        alert.addAction(UIAlertAction(title: "Custom",
+                                      style: .default,
+                                      handler: { _ in
             self.useCustom = true
             self.encryptModeBtn.setTitle("Custom", for: .normal)
         }))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
-    
 }
 
 class StreamEncryptionMain: BaseViewController {
@@ -100,7 +110,7 @@ class StreamEncryptionMain: BaseViewController {
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // enable encryption
-        if(!useCustom) {
+        if !useCustom {
             // sdk encryption
             let config = AgoraEncryptionConfig()
             config.encryptionMode = mode
@@ -109,7 +119,9 @@ class StreamEncryptionMain: BaseViewController {
             let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
             if ret != 0 {
                 // for errors please take a look at:
+                // swiftlint:disable line_length
                 // CN https://docs.agora.io/cn/live-streaming-premium-legacy/API%20Reference/oc/Classes/AgoraRtcChannel.html?platform=iOS#//api/name/enableEncryption:encryptionConfig:
+                // swiftlint:enable line_length
                 // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
                 self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
             }
@@ -123,13 +135,18 @@ class StreamEncryptionMain: BaseViewController {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation,
                                                                              mirrorMode: .auto))
         
+        joinChannel(channelName: channelName)
+    }
+    
+    private func joinChannel(channelName: String) {
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -152,7 +169,7 @@ class StreamEncryptionMain: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token,
                                                    channelId: channelName,
-                                                   info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+                                                   info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
                 self.isJoined = true
                 LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             }
@@ -167,8 +184,7 @@ class StreamEncryptionMain: BaseViewController {
     }
     
     func getEncryptionSaltFromServer() -> Data {
-
-        return "EncryptionKdfSaltInBase64Strings".data(using: .utf8)!
+        return "EncryptionKdfSaltInBase64Strings".data(using: .utf8) ?? Data()
     }
 
     override func willMove(toParent parent: UIViewController?) {

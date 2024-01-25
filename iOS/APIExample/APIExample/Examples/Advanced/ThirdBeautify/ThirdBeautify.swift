@@ -28,7 +28,7 @@ class ThirdBeautifyEntry: UIViewController {
         if let text = channelTextField.text, text.isEmpty {
             return
         }
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let actionSheetVC = UIAlertController(title: "Third Beautify".localized, message: nil, preferredStyle: .actionSheet)
