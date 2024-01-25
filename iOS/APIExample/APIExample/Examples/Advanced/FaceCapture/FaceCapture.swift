@@ -9,46 +9,46 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class FaceCaptureEntry : UIViewController
-{
+class FaceCaptureEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "FaceCapture"
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
-    
+    var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+    func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] _ in
             self.width = width
             self.height = height
             self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+    func getFpsAction(_ fps: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: { [unowned self] _ in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+    func getOrientationAction(_ orientation: AgoraVideoOutputOrientationMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: { [unowned self] _ in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setResolution() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Resolution".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -58,8 +58,11 @@ class FaceCaptureEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setFps() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Fps".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -69,8 +72,11 @@ class FaceCaptureEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setOrientation() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Orientation".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -79,15 +85,18 @@ class FaceCaptureEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName": channelName,
+                                     "resolution": CGSize(width: width, height: height),
+                                     "fps": fps,
+                                     "orientation": orientation]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }

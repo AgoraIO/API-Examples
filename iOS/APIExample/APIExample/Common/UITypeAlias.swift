@@ -617,11 +617,11 @@ extension AGButton {
             context.duration = 0.3
             self.isEnabled = false
             self.animator().alphaValue = 0.3
-        }) {
+        }, completion: {
             self.image = toImage
             self.alphaValue = 1.0
             self.isEnabled = true
-        }
+        })
         #endif
     }
 }
