@@ -33,10 +33,6 @@ namespace agora {
             if (!eglCore_) {
                 eglCore_ = new EglCore();
                 offscreenSurface_ = eglCore_->createOffscreenSurface(640, 320);
-
-            }
-            if  (!eglCore_->isCurrent(offscreenSurface_)) {
-                eglCore_->makeCurrent(offscreenSurface_);
             }
 #endif
             return true;
@@ -57,10 +53,36 @@ namespace agora {
             return true;
         }
 
+        bool WatermarkProcessor::makeCurrent() {
+            const std::lock_guard<std::mutex> lock(mutex_);
+#if defined(__ANDROID__) || defined(TARGET_OS_ANDROID)
+            if  (eglCore_ && offscreenSurface_) {
+                if (!eglCore_->isCurrent(offscreenSurface_)) {
+                    eglCore_->makeCurrent(offscreenSurface_);
+                }
+                return true;
+            }
+#endif
+            return false;
+        }
+
+        bool WatermarkProcessor::detachCurrent() {
+            const std::lock_guard<std::mutex> lock(mutex_);
+#if defined(__ANDROID__) || defined(TARGET_OS_ANDROID)
+            if  (eglCore_) {
+                eglCore_->makeNothingCurrent();
+                return true;
+            }
+#endif
+            return false;
+        }
+
         int WatermarkProcessor::processFrame(agora::rtc::VideoFrameData &capturedFrame) {
 //            PRINTF_INFO("processFrame: w: %d,  h: %d,  r: %d, enable: %d", capturedFrame.width, capturedFrame.height, capturedFrame.rotation, wmEffectEnabled_);
             if (wmEffectEnabled_) {
+                makeCurrent();
                 addWatermark(capturedFrame);
+                detachCurrent();
             }
             return 0;
         }
