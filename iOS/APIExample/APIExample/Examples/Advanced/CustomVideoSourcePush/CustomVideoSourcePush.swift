@@ -236,7 +236,7 @@ extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
         videoFrame.format = 12
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
-        //once we have the video frame, we can push to agora sdk
+        // once we have the video frame, we can push to agora sdk
         agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
         
         let outputVideoFrame = AgoraOutputVideoFrame()

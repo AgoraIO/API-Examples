@@ -384,7 +384,9 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol,
+                             didChangedTo state: AgoraMediaPlayerState,
+                             reason: AgoraMediaPlayerReason) {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(reason.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
@@ -394,7 +396,8 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
 
             case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
-                weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
+                let format = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
+                weakself.playerDurationLabel.text = format
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 
                 if weakself.mediaPlayerKit.getStreamCount() > 0 {

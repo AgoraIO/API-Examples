@@ -73,7 +73,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Audio Router(Third Party Player)".localized, storyboard: "AuidoRouterPlayer", controller: ""),
             MenuItem(name: "Audio Waveform".localized, storyboard: "AudioWaveform", controller: ""),
             MenuItem(name: "Face Capture".localized, storyboard: "FaceCapture", controller: "")
-        ]),
+        ])
     ]
     override func viewDidLoad() {
         super.viewDidLoad()

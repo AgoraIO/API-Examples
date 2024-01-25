@@ -241,8 +241,8 @@ class SpatialAudioMain: BaseViewController {
         let maxSpatailDistance = 30.0
         let spatialDistance = currentDistance * maxSpatailDistance / maxR
 
-        let posForward = spatialDistance * cos(currentAngle);
-        let posRight = spatialDistance * sin(currentAngle);
+        let posForward = spatialDistance * cos(currentAngle)
+        let posRight = spatialDistance * sin(currentAngle)
         let position = simd_float3(Float(posForward), Float(posRight), 0.0)
         let forward = simd_float3(1.0, 0.0, 0.0)
         
@@ -289,7 +289,9 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, 
+                             didChangedTo state: AgoraMediaPlayerState,
+                             reason: AgoraMediaPlayerReason) {
         print("didChangedTo: \(state.rawValue), \(reason.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()
