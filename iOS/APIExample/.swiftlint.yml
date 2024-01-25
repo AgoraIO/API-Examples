@@ -1,0 +1,40 @@
+disabled_rules: # 禁用指定的规则
+  - todo  #去做
+  - trailing_whitespace # 行末尾不加空格
+  - unneeded_override # 不需要的重写函数
+  - identifier_name #  参数变量命名规则
+  - class_delegate_protocol #delegate protocol 应该被设定为 class-only,才能被弱引用
+  - type_body_length # 类型体行数限制
+  - cyclomatic_complexity # 不应该存在太复杂的函数（判断语句过多）
+
+opt_in_rules: # 启用指定的规则
+  - empty_count # 空数
+  - missing_docs # 缺少文档
+  - closure_end_indentation #闭合端压痕
+  - empty_parentheses_with_trailing_closure #带尾随闭包的空括号
+  - duplicate_imports  #重复导入
+  - force_unwrapping # 强制解包
+  - nesting #嵌套
+  - operator_whitespace # 运算符 函数 空白
+  - switch_case_alignment #Switch 和 Case 语句对齐
+
+excluded: # 执行 linting 时忽略的路径。 优先级比 `included` 更高。
+  - Carthage
+  - Pods
+
+# rules that have both warning and error levels, can set just the warning level
+line_length: 145  # 一行的字符长度不超过120个，否则会有warning
+
+large_tuple: 4
+
+# error #函数体长度 默认超过40行warning,超过100行直接报错
+function_body_length:
+   warning: 60
+   error: 100
+ 
+file_length:  # 文件行数超过500行会有warning，超过1200行会有error
+  warning: 800
+  error: 1200
+  
+force_unwrapping:
+  severity: error

@@ -10,14 +10,13 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class AudioWaveformEntry : UIViewController
-{
+class AudioWaveformEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var scenarioBtn: UIButton!
     @IBOutlet weak var profileBtn: UIButton!
-    var profile:AgoraAudioProfile = .default
-    var scenario:AgoraAudioScenario = .default
+    var profile: AgoraAudioProfile = .default
+    var scenario: AgoraAudioScenario = .default
     let identifier = "AudioWaveform"
     
     override func viewDidLoad() {
@@ -29,43 +28,53 @@ class AudioWaveformEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "audioProfile":profile, "audioScenario":scenario]
+        newViewController.configs = ["channelName": channelName,
+                                     "audioProfile": profile,
+                                     "audioScenario": scenario]
         navigationController?.pushViewController(newViewController, animated: true)
     }
     
-    func getAudioProfileAction(_ profile:AgoraAudioProfile) -> UIAlertAction{
-        return UIAlertAction(title: "\(profile.description())", style: .default, handler: {[unowned self] action in
+    func getAudioProfileAction(_ profile: AgoraAudioProfile) -> UIAlertAction {
+        return UIAlertAction(title: "\(profile.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.profile = profile
             self.profileBtn.setTitle("\(profile.description())", for: .normal)
         })
     }
     
-    func getAudioScenarioAction(_ scenario:AgoraAudioScenario) -> UIAlertAction{
-        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: {[unowned self] action in
+    func getAudioScenarioAction(_ scenario: AgoraAudioScenario) -> UIAlertAction {
+        return UIAlertAction(title: "\(scenario.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.scenario = scenario
             self.scenarioBtn.setTitle("\(scenario.description())", for: .normal)
         })
     }
     
-    @IBAction func setAudioProfile(){
-        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for profile in AgoraAudioProfile.allValues(){
+    @IBAction func setAudioProfile() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: style)
+        for profile in AgoraAudioProfile.allValues() {
             alert.addAction(getAudioProfileAction(profile))
         }
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setAudioScenario(){
-        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for scenario in AgoraAudioScenario.allValues(){
+    @IBAction func setAudioScenario() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: style)
+        for scenario in AgoraAudioScenario.allValues() {
             alert.addAction(getAudioScenarioAction(scenario))
         }
         alert.addCancelAction()
@@ -78,12 +87,12 @@ class AudioWaveformMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var boxingview: ZSNBoxingView!
     
-    var audioViews: [UInt:VideoView] = [:]
+    var audioViews: [UInt: VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         guard let channelName = configs["channelName"] as? String,
@@ -114,7 +123,8 @@ class AudioWaveformMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -206,7 +216,7 @@ extension AudioWaveformMain: AgoraRtcEngineDelegate {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .local, audioOnly: true)
         self.audioViews[0] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -219,7 +229,7 @@ extension AudioWaveformMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
         view.uid = uid
         self.audioViews[uid] = view
@@ -235,7 +245,7 @@ extension AudioWaveformMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)

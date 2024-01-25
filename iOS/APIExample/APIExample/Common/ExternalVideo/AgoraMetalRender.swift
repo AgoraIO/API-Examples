@@ -10,7 +10,6 @@ import CoreMedia
 import Metal
 import MetalKit
 
-
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
     import MetalKit
 #endif
@@ -20,7 +19,7 @@ protocol AgoraMetalRenderMirrorDataSource: NSObjectProtocol {
     func renderViewShouldMirror(renderView: AgoraMetalRender) -> Bool
 }
 
-enum AgoraVideoRotation:Int {
+enum AgoraVideoRotation: Int {
     /** 0: No rotation */
     case rotationNone = 0
     /** 1: 90 degrees */
@@ -206,8 +205,12 @@ private extension AgoraMetalRender {
     }
     
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
-    func texture(pixelBuffer: CVPixelBuffer, textureCache: CVMetalTextureCache?, planeIndex: Int = 0, pixelFormat: MTLPixelFormat = .bgra8Unorm) -> MTLTexture? {
-        guard let textureCache = textureCache, CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
+    func texture(pixelBuffer: CVPixelBuffer, 
+                 textureCache: CVMetalTextureCache?,
+                 planeIndex: Int = 0,
+                 pixelFormat: MTLPixelFormat = .bgra8Unorm) -> MTLTexture? {
+        guard let textureCache = textureCache,
+              CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
             return nil
         }
         defer {
@@ -219,7 +222,15 @@ private extension AgoraMetalRender {
         let height = isPlanar ? CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex) : CVPixelBufferGetHeight(pixelBuffer)
         
         var imageTexture: CVMetalTexture?
-        let result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, textureCache, pixelBuffer, nil, pixelFormat, width, height, planeIndex, &imageTexture)
+        let result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, 
+                                                               textureCache,
+                                                               pixelBuffer,
+                                                               nil,
+                                                               pixelFormat,
+                                                               width,
+                                                               height,
+                                                               planeIndex,
+                                                               &imageTexture)
         
         guard let unwrappedImageTexture = imageTexture,
             let texture = CVMetalTextureGetTexture(unwrappedImageTexture),
@@ -276,7 +287,7 @@ extension AgoraMetalRender: MTKViewDelegate {
         encoder.popDebugGroup()
         encoder.endEncoding()
         
-        commandBuffer.addScheduledHandler { [weak self] (buffer) in            
+        commandBuffer.addScheduledHandler { [weak self] _ in
             self?.semaphore.signal()
         }
         commandBuffer.present(currentDrawable)
@@ -284,10 +295,14 @@ extension AgoraMetalRender: MTKViewDelegate {
     }
 }
 #endif
-
 extension AgoraVideoRotation {
-    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [simd_float4]? {
-        guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
+    func renderedCoordinates(mirror: Bool, 
+                             videoSize: CGSize,
+                             viewSize: CGSize) -> [simd_float4]? {
+        guard viewSize.width > 0,
+                viewSize.height > 0,
+              videoSize.width > 0,
+              videoSize.height > 0 else {
             return nil
         }
 
@@ -311,10 +326,10 @@ extension AgoraVideoRotation {
             y = 1
         }
         
-        let A = simd_float4(  x, -y, 0.0, 1.0 )
-        let B = simd_float4( -x, -y, 0.0, 1.0 )
-        let C = simd_float4(  x,  y, 0.0, 1.0 )
-        let D = simd_float4( -x,  y, 0.0, 1.0 )
+        let A = simd_float4(x, -y, 0.0, 1.0)
+        let B = simd_float4(-x, -y, 0.0, 1.0)
+        let C = simd_float4(x, y, 0.0, 1.0)
+        let D = simd_float4(-x, y, 0.0, 1.0)
 
         switch self {
         case .rotationNone:
