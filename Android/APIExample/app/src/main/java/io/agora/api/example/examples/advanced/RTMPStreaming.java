@@ -348,7 +348,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method removes only one stream RTMP URL address each time it is called.*/
         unpublishing = true;
         retryTask.cancel(true);
-        retryTask = null;
         engine.stopRtmpStream(et_url.getText().toString());
         transcoding.removeUser(myUid);
     }
@@ -564,28 +563,25 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
                 if (unpublishing) {
                     unpublishing = false;
+                    publishing = false;
                     /*Push stream not started or ended, make changes to the UI.*/
                     handler.post(() -> {
                         publish.setEnabled(true);
                         publish.setText(getString(R.string.publish));
                         transCodeSwitch.setEnabled(true);
                     });
-                }
-                // Retry logic
-                if (retryTask != null) {
-                    if (retried >= MAX_RETRY_TIMES) {
-                        retryTask.cancel(true);
-                        retried = 0;
-                        /*Push stream not started or ended, make changes to the UI.*/
-                        handler.post(() -> {
-                            publish.setEnabled(true);
-                            publish.setText(getString(R.string.publish));
-                            transCodeSwitch.setEnabled(true);
-                        });
-                    } else {
-                        retried++;
-                        startRtmpStreaming();
-                    }
+                } else if (retried >= MAX_RETRY_TIMES) {
+                    retryTask.cancel(true);
+                    retried = 0;
+                    /*Push stream not started or ended, make changes to the UI.*/
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.publish));
+                        transCodeSwitch.setEnabled(true);
+                    });
+                } else {
+                    retried++;
+                    startRtmpStreaming();
                 }
             }
         }

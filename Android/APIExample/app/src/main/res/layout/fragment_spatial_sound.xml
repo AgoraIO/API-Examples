@@ -66,8 +66,8 @@
 
         <TextView
             android:id="@+id/tv_zone"
-            android:layout_width="100dp"
-            android:layout_height="200dp"
+            android:layout_width="130dp"
+            android:layout_height="230dp"
             android:layout_gravity="center"
             android:background="#88ff8800"
             android:gravity="bottom"
