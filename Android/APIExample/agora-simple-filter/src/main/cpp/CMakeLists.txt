@@ -11,15 +11,6 @@ project(agora-simple-filter)
 set(agora-lib-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-rtc-sdk.so)
 link_libraries(${agora-lib-so})
 
-set(agora-ffmpeg-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-ffmpeg.so)
-link_libraries(${agora-ffmpeg-so})
-
-set(agora-soundtouch-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-soundtouch.so)
-link_libraries(${agora-soundtouch-so})
-
-set(agora-fdkaac-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-fdkaac.so)
-link_libraries(${agora-fdkaac-so})
-
 #link opencv so
 set(opencv-lib-so ${PROJECT_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libopencv_java4.so)
 link_libraries(${opencv-lib-so})
