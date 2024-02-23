@@ -11,8 +11,7 @@ import AgoraRtcKit
 import AGEVideoLayout
 import SimpleFilter
 
-class SimpleFilterEntry : UIViewController
-{
+class SimpleFilterEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "SimpleFilter"
@@ -22,22 +21,23 @@ class SimpleFilterEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
     
 }
 
 class SimpleFilterMain: BaseViewController {
-    
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -48,7 +48,7 @@ class SimpleFilterMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         guard let channelName = configs["channelName"] as? String
@@ -84,7 +84,8 @@ class SimpleFilterMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -126,8 +127,8 @@ class SimpleFilterMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -145,14 +146,20 @@ class SimpleFilterMain: BaseViewController {
         }
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangeRecordingVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
-        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, key: "volume", value: String(value))
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), 
+                                                extension: AUDIO_FILTER_NAME,
+                                                key: "volume",
+                                                value: String(value))
     }
     
     @IBAction func onSwitch(sender: UISwitch) {
-        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: sender.isOn ? "1" : "0")
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), 
+                                                extension: VIDEO_FILTER_NAME,
+                                                key: "grey",
+                                                value: sender.isOn ? "1" : "0")
     }
 }
 
@@ -171,8 +178,8 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -255,8 +262,11 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
     }
 }
 
-extension SimpleFilterMain: AgoraMediaFilterEventDelegate{
-    func onEvent(_ provider: String?, extension: String?, key: String?, value: String?) {
+extension SimpleFilterMain: AgoraMediaFilterEventDelegate {
+    func onEvent(_ provider: String?, 
+                 extension: String?,
+                 key: String?,
+                 value: String?) {
         LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: value))", level: .info)
     }
 }

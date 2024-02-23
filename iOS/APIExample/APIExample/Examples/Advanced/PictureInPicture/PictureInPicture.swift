@@ -9,9 +9,9 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
+import MediaPlayer
 
-class PictureInPictureEntry : UIViewController
-{
+class PictureInPictureEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "PictureInPicture"
@@ -22,14 +22,16 @@ class PictureInPictureEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -77,12 +79,18 @@ class PictureInPictureMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode else {
+            return
+        }
+        
+        // To enable MPNowPlayingInfoCenter, you need to add the following two private parameters
+        agoraKit.setAudioOptionParams("{\"adm_mix_with_others\":false}")
+        agoraKit.setParameters("{\"che.audio.nonmixable.option\":true}")
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
-        
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -118,8 +126,8 @@ class PictureInPictureMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -130,6 +138,34 @@ class PictureInPictureMain: BaseViewController {
                                                selector: #selector(didEnterBackgroundNotification),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupPlayintInfoCenter()
+    }
+    
+    private func setupPlayintInfoCenter() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        var nowPlayingInfo = [String: Any]()
+        let path = Bundle.main.path(forResource: "agora-logo", ofType: "png") ?? ""
+        guard let image = UIImage(contentsOfFile: path) else { return }
+        let artWork = MPMediaItemArtwork(boundsSize: image.size) { _ in
+            return image
+        }
+        nowPlayingInfo[MPMediaItemPropertyArtwork] = artWork
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "Song Title"
+        nowPlayingInfo[MPMediaItemPropertyArtist] = "Artist Name"
+        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "Album Name"
+        nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        if #available(iOS 13.0, *) {
+            MPNowPlayingInfoCenter.default().playbackState = .playing
+        }
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        true
     }
     
     deinit {
@@ -180,8 +216,8 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -218,7 +254,10 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
         // you will need to remove the EAGL sublayer from your binded view
 //        remoteVideo.videoView.reset()
     }
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   remoteVideoStateChangedOfUid uid: UInt,
+                   state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason,
+                   elapsed: Int) {
         if reason == .remoteMuted {
             let pixelBuffer = MediaUtils.cvPixelBufferRef(from: UIImage(named: "agora-logo") ?? UIImage()).takeRetainedValue()
             let videoFrame = AgoraOutputVideoFrame()
@@ -250,33 +289,19 @@ extension PictureInPictureMain: AgoraVideoFrameDelegate {
 }
 
 extension PictureInPictureMain: AVPictureInPictureControllerDelegate {
-    
     func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        
     }
 
     func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        
     }
 
-    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
-        
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
+                                    failedToStartPictureInPictureWithError error: Error) {
     }
     
     func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        
     }
 
     func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        
     }
-
-//    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
-//
-//    }
-
-//    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController) async -> Bool {
-//
-//    }
-
 }

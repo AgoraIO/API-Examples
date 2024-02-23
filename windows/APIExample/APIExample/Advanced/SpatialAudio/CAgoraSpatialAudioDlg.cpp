@@ -127,12 +127,12 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	m_rtcEngine->enableAudio();
 
 	// initialize media player 
-	m_mediaPlayerLeft = m_rtcEngine->createMediaPlayer().get();
-	playerLeftObserver.setMediaPlayer(m_mediaPlayerLeft);
+	m_mediaPlayerLeft = m_rtcEngine->createMediaPlayer();
+	playerLeftObserver.setMediaPlayer(m_mediaPlayerLeft.get());
 	m_mediaPlayerLeft->registerPlayerSourceObserver(&playerLeftObserver);
 
-	m_mediaPlayerRight = m_rtcEngine->createMediaPlayer().get();
-	playerRightObserver.setMediaPlayer(m_mediaPlayerRight);
+	m_mediaPlayerRight = m_rtcEngine->createMediaPlayer();
+	playerRightObserver.setMediaPlayer(m_mediaPlayerRight.get());
 	m_mediaPlayerRight->registerPlayerSourceObserver(&playerRightObserver);
 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize MediaPlayer"));
@@ -164,6 +164,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 
 	// update media player position
 	RemoteVoicePositionInfo playerLeftPositionInfo;
+	memset(&playerLeftPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 	CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
 	playerLeftPositionInfo.forward[0] = 1.0f;
 	m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
@@ -171,6 +172,7 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	RemoteVoicePositionInfo playerRightPositionInfo;
+	memset(&playerRightPositionInfo, 0, sizeof(RemoteVoicePositionInfo));
 	CaculateObjectPosition(m_staPlayerRight, playerRightPositionInfo.position);
 	playerRightPositionInfo.forward[0] = 1.0f;
 	m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerRight->getMediaPlayerId(), playerRightPositionInfo);
@@ -185,13 +187,13 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 void CAgoraSpatialAudioDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		if (m_mediaPlayerLeft) {
+		if (m_mediaPlayerLeft.get() != nullptr) {
 			m_mediaPlayerLeft->stop();
-			m_mediaPlayerLeft = nullptr;
+			m_mediaPlayerLeft.reset();
 		}
-		if (m_mediaPlayerRight) {
+		if (m_mediaPlayerRight.get() != nullptr) {
 			m_mediaPlayerRight->stop();
-			m_mediaPlayerRight = nullptr;
+			m_mediaPlayerRight.reset();
 		}
 		m_localSpatial = nullptr;
 
@@ -376,6 +378,7 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		m_staRemoteLeft.ShowWindow(TRUE);
 
 		RemoteVoicePositionInfo posInfo;
+		memset(&posInfo, 0, sizeof(RemoteVoicePositionInfo));
 		CaculateObjectPosition(m_staRemoteLeft, posInfo.position);
 		m_localSpatial->updateRemotePosition(remoteLeftUid, posInfo);
 
@@ -388,6 +391,7 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		m_staRemoteRight.ShowWindow(TRUE);
 
 		RemoteVoicePositionInfo posInfo;
+		memset(&posInfo, 0, sizeof(RemoteVoicePositionInfo));
 		CaculateObjectPosition(m_staRemoteRight, posInfo.position);
 		m_localSpatial->updateRemotePosition(remoteRightUid, posInfo);
 
@@ -685,11 +689,13 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam) {
 
 	m_staMoveTip.ShowWindow(FALSE);
 
-	if (m_mediaPlayerLeft != nullptr) {
+	if (m_mediaPlayerLeft.get() != nullptr) {
 		m_mediaPlayerLeft->stop();
+		m_mediaPlayerLeft.reset();
 	}
-	if (m_mediaPlayerRight != nullptr) {
+	if (m_mediaPlayerRight.get() != nullptr) {
 		m_mediaPlayerRight->stop();
+		m_mediaPlayerRight.reset();
 	}
 
 	remoteLeftUid = 0;
@@ -916,7 +922,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 
 		if (isChecked) {
 			SpatialAudioZone mediaPlayerLeftZone;
-
+			memset(&mediaPlayerLeftZone, 0, sizeof(SpatialAudioZone));
 			mediaPlayerLeftZone.audioAttenuation = 1.0f;
 
 			// zone center point position
@@ -930,39 +936,20 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 			// zone size
 			RECT zoneSize;
 			CaculateZoneRect(m_staZone, &zoneSize);
-			mediaPlayerLeftZone.forwardLength = (zoneSize.bottom - zoneSize.top) / 2.0f;
+			mediaPlayerLeftZone.forwardLength = zoneSize.bottom - zoneSize.top * 1.0f;
 			mediaPlayerLeftZone.rightLength = zoneSize.right - zoneSize.left * 1.0f;
 			mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
 
 			m_localSpatial->setZones(&mediaPlayerLeftZone, 1);
-
-			// update position for making zone effective.
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
 
 			CString strInfo;
 			strInfo.Format(_T("Zone position forward=%f, right=%f"), mediaPlayerLeftZone.position[0], mediaPlayerLeftZone.position[1]);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 			strInfo.Format(_T("Zone size forwardLength=%f, rightLength=%f"), mediaPlayerLeftZone.forwardLength, mediaPlayerLeftZone.rightLength);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 		}
 		else {
-			SpatialAudioZone worldZone;
-
-			// zone size
-			worldZone.forwardLength = AXIS_MAX_DISTANCE;
-			worldZone.rightLength = AXIS_MAX_DISTANCE;
-			worldZone.upLength = AXIS_MAX_DISTANCE;
-
-			m_localSpatial->setZones(&worldZone, 1);
-
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
+			m_localSpatial->setZones(nullptr, 0);
 		}
 	}
 }

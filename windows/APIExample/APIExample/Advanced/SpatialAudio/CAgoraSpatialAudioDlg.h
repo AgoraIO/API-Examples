@@ -30,7 +30,7 @@ public:
 	 * \ref agora::media::base::MEDIA_PLAYER_ERROR "MEDIA_PLAYER_ERROR"
 	 */
 	virtual void onPlayerSourceStateChanged( media::base::MEDIA_PLAYER_STATE state,
-		media::base::MEDIA_PLAYER_ERROR ec) {
+		media::base::MEDIA_PLAYER_REASON ec) {
 		if (state == media::base::MEDIA_PLAYER_STATE::PLAYER_STATE_OPEN_COMPLETED) {
 			if (m_player != nullptr) {
 				m_player->setLoopCount(-1);
@@ -47,10 +47,12 @@ public:
 	 *
 	 * @param position Current playback progress (ms).
 	 */
-	virtual void onPositionChanged(int64_t position)
+	virtual void onPositionChanged(int64_t positionMs, int64_t timestampMs)
 	{
 		
 	}
+
+
 	/**
 	 * Reports the playback event.
 	 *
@@ -123,6 +125,8 @@ public:
 	virtual void onAudioVolumeIndication(int volume)override {
 
 	}
+
+
 private:
 	IMediaPlayer *m_player;
 };
@@ -254,9 +258,9 @@ private:
 	IRtcEngine* m_rtcEngine = nullptr;
 	
 	ILocalSpatialAudioEngine* m_localSpatial = nullptr;
-	IMediaPlayer* m_mediaPlayerLeft = nullptr;
+	agora_refptr<IMediaPlayer> m_mediaPlayerLeft;
 	CSpatialAudioPlayerObserver playerLeftObserver;
-	IMediaPlayer* m_mediaPlayerRight = nullptr;
+	agora_refptr<IMediaPlayer> m_mediaPlayerRight;
 	CSpatialAudioPlayerObserver playerRightObserver;
 
 	CSpatialAudioEventHandler m_eventHandler;

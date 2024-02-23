@@ -9,46 +9,46 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoEntry : UIViewController
-{
+class JoinChannelVideoEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "JoinChannelVideo"
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
-    
-    
+    var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+    func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: { [unowned self] _ in
             self.width = width
             self.height = height
             self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+    func getFpsAction(_ fps: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: { [unowned self] _ in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+    func getOrientationAction(_ orientation: AgoraVideoOutputOrientationMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: { [unowned self] _ in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setResolution() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Resolution".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -58,8 +58,11 @@ class JoinChannelVideoEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setFps() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Fps".localized, 
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -69,8 +72,11 @@ class JoinChannelVideoEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setOrientation() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Orientation".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -79,15 +85,18 @@ class JoinChannelVideoEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName": channelName,
+                                     "resolution": CGSize(width: width, height: height),
+                                     "fps": fps, 
+                                     "orientation": orientation]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -164,8 +173,8 @@ class JoinChannelVideoMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -199,8 +208,8 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -245,6 +254,10 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionState, reason: AgoraConnectionChangedReason) {
+        LogUtils.log(message: "Connection state changed: \(state) \(reason)", level: .info)
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.

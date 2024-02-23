@@ -9,8 +9,7 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoTokenEntry : BaseViewController
-{
+class JoinChannelVideoTokenEntry: BaseViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewYCons: NSLayoutConstraint!
     @IBOutlet weak var joinButton: UIButton!
@@ -20,24 +19,29 @@ class JoinChannelVideoTokenEntry : BaseViewController
 
     let identifier = "JoinChannelVideoToken"
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTapViewHandler))
         view.addGestureRecognizer(tap)
-        //注册键盘出现通知
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
-                                               name:  UIApplication.keyboardWillShowNotification, object: nil)
+        // 注册键盘出现通知
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(notification:)),
+                                               name: UIApplication.keyboardWillShowNotification,
+                                               object: nil)
         
-        //注册键盘隐藏通知
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
-                                               name:  UIApplication.keyboardWillHideNotification, object: nil)
+        // 注册键盘隐藏通知
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: UIApplication.keyboardWillHideNotification,
+                                               object: nil)
     }
     
     @IBAction func onTapTipsButton(_ sender: Any) {
+        // swiftlint:disable line_length
+        let message = "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff.".localized
+        // swiftlint:enable line_length
         showAlert(title: "Quick input APPID and Token methods".localized,
-                  message:
-                    "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff.".localized,
+                  message: message,
                   textAlignment: .left
                   )
     }
@@ -76,15 +80,17 @@ class JoinChannelVideoTokenEntry : BaseViewController
             return
         }
         
-        //resign channel text field
+        // resign channel text field
         view.endEditing(true)
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         guard let channelName = channelTextField.text else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName,
+        newViewController.configs = ["channelName": channelName,
                                      "appId": appIdTextField.text ?? "",
                                      "token": tokenTextField.text ?? ""]
         navigationController?.pushViewController(newViewController, animated: true)
@@ -133,7 +139,8 @@ class JoinChannelVideoToken: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -168,7 +175,7 @@ class JoinChannelVideoToken: BaseViewController {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
@@ -202,8 +209,8 @@ extension JoinChannelVideoToken: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)

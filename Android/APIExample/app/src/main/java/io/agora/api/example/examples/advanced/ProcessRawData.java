@@ -53,6 +53,9 @@ import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Process raw data.
+ */
 @Example(
         index = 11,
         group = ADVANCED,
@@ -82,30 +85,30 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -123,8 +126,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -156,8 +158,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
+            engine.registerVideoFrameObserver(null);
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -183,14 +186,14 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                engine.registerVideoFrameObserver(null);
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -211,9 +214,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.btn_snapshot)
-        {
+        } else if (v.getId() == R.id.btn_snapshot) {
             isSnapshot = true;
         }
     }
@@ -232,16 +233,16 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         engine.registerVideoFrameObserver(iVideoFrameObserver);
@@ -249,13 +250,13 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         engine.startPreview();
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, token -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -279,7 +280,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
         @Override
         public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
-            Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
+            Log.i(TAG, "OnEncodedVideoImageReceived" + Thread.currentThread().getName());
 
             long startTime = System.currentTimeMillis();
             VideoFrame.Buffer buffer = videoFrame.getBuffer();
@@ -304,7 +305,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             // device: HUAWEI DUB-AL00
             // consume time: 11ms, 8ms, 10ms, 10ms, 9ms, 10ms
             int nv21MinSize = (int) ((width * height * 3 + 1) / 2.0f);
-            if(videoNV21Buffer == null || videoNV21Buffer.capacity() < nv21MinSize){
+            if (videoNV21Buffer == null || videoNV21Buffer.capacity() < nv21MinSize) {
                 videoNV21Buffer = ByteBuffer.allocateDirect(nv21MinSize);
                 videoNV21 = new byte[nv21MinSize];
             }
@@ -321,10 +322,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             // Release the buffer!
             i420Buffer.release();
 
-            if(isSnapshot){
+            if (isSnapshot) {
                 isSnapshot = false;
 
-                Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
+                Bitmap bitmap = YUVUtils.nv21ToBitmap(getContext(),
                         nv21,
                         width,
                         height);
@@ -439,15 +440,13 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
@@ -479,7 +478,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -488,16 +487,23 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
     };
 
-    public void saveBitmap2Gallery(Bitmap bm){
+    /**
+     * Save bitmap 2 gallery.
+     *
+     * @param bm the bm
+     */
+    public void saveBitmap2Gallery(Bitmap bm) {
         long currentTime = System.currentTimeMillis();
 
         // name the file
-        String imageFileName = "IMG_AGORA_"+ currentTime + ".jpg";
+        String imageFileName = "IMG_AGORA_" + currentTime + ".jpg";
         String imageFilePath;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             imageFilePath = Environment.DIRECTORY_PICTURES + File.separator + "Agora" + File.separator;
-        else imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "Agora"+ File.separator;
+        } else {
+            imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                    + File.separator + "Agora" + File.separator;
+        }
 
         // write to file
 
@@ -505,25 +511,25 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         ContentResolver resolver = requireContext().getContentResolver();
         ContentValues newScreenshot = new ContentValues();
         Uri insert;
-        newScreenshot.put(MediaStore.Images.ImageColumns.DATE_ADDED,currentTime);
+        newScreenshot.put(MediaStore.Images.ImageColumns.DATE_ADDED, currentTime);
         newScreenshot.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, imageFileName);
         newScreenshot.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpg");
         newScreenshot.put(MediaStore.Images.ImageColumns.WIDTH, bm.getWidth());
         newScreenshot.put(MediaStore.Images.ImageColumns.HEIGHT, bm.getHeight());
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                newScreenshot.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,imageFilePath);
-            }else{
+                newScreenshot.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, imageFilePath);
+            } else {
                 // make sure the path is existed
                 File imageFileDir = new File(imageFilePath);
-                if(!imageFileDir.exists()){
+                if (!imageFileDir.exists()) {
                     boolean mkdir = imageFileDir.mkdirs();
-                    if(!mkdir) {
+                    if (!mkdir) {
                         showLongToast("save failed, error: cannot create folder. Make sure app has the permission.");
                         return;
                     }
                 }
-                newScreenshot.put(MediaStore.Images.ImageColumns.DATA, imageFilePath+imageFileName);
+                newScreenshot.put(MediaStore.Images.ImageColumns.DATA, imageFilePath + imageFileName);
                 newScreenshot.put(MediaStore.Images.ImageColumns.TITLE, imageFileName);
             }
 
@@ -542,7 +548,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
             showLongToast("save success, you can view it in gallery");
         } catch (Exception e) {
-            showLongToast("save failed, error: "+ e.getMessage());
+            showLongToast("save failed, error: " + e.getMessage());
             e.printStackTrace();
         }
 

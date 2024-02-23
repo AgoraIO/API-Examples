@@ -13,8 +13,7 @@ import AGEVideoLayout
 let DING = "https://webdemo.agora.io/ding.mp3"
 let DANG = "https://webdemo.agora.io/dang.mp3"
 
-class RhythmPlayerEntry : UIViewController
-{
+class RhythmPlayerEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "RhythmPlayer"
@@ -25,20 +24,21 @@ class RhythmPlayerEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
-class RhythmPlayerMain : BaseViewController
-{
+class RhythmPlayerMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
     var localView = Bundle.loadVideoView(type: .local, audioOnly: true)
@@ -53,7 +53,7 @@ class RhythmPlayerMain : BaseViewController
     var isJoined: Bool = false
     var config: AgoraRhythmPlayerConfig = AgoraRhythmPlayerConfig()
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         guard let channelName = configs["channelName"] as? String
@@ -88,8 +88,6 @@ class RhythmPlayerMain : BaseViewController
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // Set default RhythmPlayerConfig
-        
-        
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -106,8 +104,8 @@ class RhythmPlayerMain : BaseViewController
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -126,28 +124,28 @@ class RhythmPlayerMain : BaseViewController
         }
     }
     
-    @IBAction func onPlay(_ sender: UIButton){
+    @IBAction func onPlay(_ sender: UIButton) {
         agoraKit.startRhythmPlayer(DING, sound2: DANG, config: config)
         beatsMinute.isEnabled = false
         beatsMeasure.isEnabled = false
     }
     
-    @IBAction func onStop(_ sender: UIButton){
+    @IBAction func onStop(_ sender: UIButton) {
         agoraKit.stopRhythmPlayer()
         beatsMinute.isEnabled = true
         beatsMeasure.isEnabled = true
     }
     
-    @IBAction func onChangeBeatsMinute(_ sender: UISlider){
+    @IBAction func onChangeBeatsMinute(_ sender: UISlider) {
         config.beatsPerMinute = Int32(sender.value)
     }
     
-    @IBAction func onChangeBeatsMeasure(_ sender: UISlider){
+    @IBAction func onChangeBeatsMeasure(_ sender: UISlider) {
         config.beatsPerMeasure = Int32(sender.value)
     }
 }
 
-extension RhythmPlayerMain : AgoraRtcEngineDelegate {
+extension RhythmPlayerMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -161,8 +159,8 @@ extension RhythmPlayerMain : AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -194,7 +192,9 @@ extension RhythmPlayerMain : AgoraRtcEngineDelegate {
     /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
     /// @params speakers volume info for all speakers
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
-    func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo],
+                   totalVolume: Int) {
 //        for speaker in speakers {
 //            if let audioView = audioViews[speaker.uid] {
 //                audioView.setInfo(text: "Volume:\(speaker.volume)")

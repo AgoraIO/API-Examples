@@ -10,8 +10,7 @@ import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
 
-class CustomAudioRenderEntry : UIViewController
-{
+class CustomAudioRenderEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomAudioRender"
@@ -22,14 +21,16 @@ class CustomAudioRenderEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -39,15 +40,15 @@ class CustomAudioRenderMain: BaseViewController {
     var exAudio: ExternalAudio = ExternalAudio.shared()
 
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
+    var audioViews: [UInt: VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate: UInt = 44100, channel: UInt = 1
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -70,15 +71,10 @@ class CustomAudioRenderMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
-        // important!! this example is using onPlaybackAudioFrame to do custom rendering
-        // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
-//        agoraKit.adjustPlaybackSignalVolume(0)
-//        agoraKit.setAudioFrameDelegate(self)
-//        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(Int(sampleRate), channel: Int(channel), mode: .readOnly, samplesPerCall: Int(sampleRate*channel)/100)
-        
         exAudio.setupExternalAudio(withAgoraKit: agoraKit,
                                    sampleRate: UInt32(sampleRate),
                                    channels: UInt32(channel),
+                                   trackId: 1,
                                    audioCRMode: .sdkCaptureExterRender,
                                    ioType: .remoteIO)
         agoraKit.setParameters("{\"che.audio.external_render\": true}")
@@ -100,8 +96,8 @@ class CustomAudioRenderMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -135,8 +131,8 @@ extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -147,7 +143,7 @@ extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -160,7 +156,7 @@ extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
@@ -175,7 +171,7 @@ extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x3(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)

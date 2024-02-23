@@ -8,38 +8,35 @@
 
 import Foundation
 
-class SettingsBaseCell : UITableViewCell
-{
-    var configs:SettingsBaseParam?
-    weak var delegate:SettingsViewControllerDelegate?
-    func configure(configs:SettingsBaseParam){
+class SettingsBaseCell: UITableViewCell {
+    var configs: SettingsBaseParam?
+    weak var delegate: SettingsViewControllerDelegate?
+    func configure(configs: SettingsBaseParam) {
         self.configs = configs
     }
 }
 
-class SettingsBaseParam: NSObject
-{
-    var key:String
-    var label:String
-    var type:String
+class SettingsBaseParam: NSObject {
+    var key: String
+    var label: String
+    var type: String
     
-    init(key:String, label:String, type:String) {
+    init(key: String, label: String, type: String) {
         self.key = key
         self.label = label
         self.type = type
     }
 }
 
-class SettingsSliderCell : SettingsBaseCell
-{
+class SettingsSliderCell: SettingsBaseCell {
     @IBOutlet weak var settingLabel: UILabel!
     @IBOutlet weak var settingSlider: UISlider!
     @IBOutlet weak var settingValue: UILabel!
     
-    @IBAction func onSliderValueChanged(sender:UISlider){
-        let val = (sender.value*100).rounded()/100
+    @IBAction func onSliderValueChanged(sender: UISlider) {
+        let val = (sender.value * 100).rounded() / 100
         settingValue.text = "\(val)"
-        guard let configs = self.configs as? SettingsSliderParam else {return}
+        guard let configs = self.configs as? SettingsSliderParam else { return }
         delegate?.didChangeValue(type: "SettingsSliderCell", key: configs.key, value: val)
     }
     
@@ -56,10 +53,10 @@ class SettingsSliderCell : SettingsBaseCell
 }
 
 class SettingsSliderParam: SettingsBaseParam {
-    var value:Float
-    var minimumValue:Float
-    var maximumValue:Float
-    init(key:String, label:String, value:Float, minimumValue:Float, maximumValue:Float) {
+    var value: Float
+    var minimumValue: Float
+    var maximumValue: Float
+    init(key: String, label: String, value: Float, minimumValue: Float, maximumValue: Float) {
         self.value = value
         self.minimumValue = minimumValue
         self.maximumValue = maximumValue
@@ -67,54 +64,54 @@ class SettingsSliderParam: SettingsBaseParam {
     }
 }
 
-
-class SettingsLabelCell : SettingsBaseCell
-{
+class SettingsLabelCell: SettingsBaseCell {
     @IBOutlet weak var settingLabel: UILabel!
     @IBOutlet weak var settingValue: UILabel!
     
     override func configure(configs: SettingsBaseParam) {
         super.configure(configs: configs)
         
-        guard let param = configs as? SettingsLabelParam else {return}
+        guard let param = configs as? SettingsLabelParam else { return }
         settingLabel.text = param.label
         settingValue.text = param.value
     }
 }
 
 class SettingsLabelParam: SettingsBaseParam {
-    var value:String
-    init(key:String, label:String, value:String) {
+    var value: String
+    init(key: String, label: String, value: String) {
         self.value = value
         super.init(key: key, label: label, type: "LabelCell")
     }
 }
 
-class SettingsSelectCell : SettingsBaseCell
-{
+class SettingsSelectCell: SettingsBaseCell {
     @IBOutlet weak var settingLabel: UILabel!
     @IBOutlet weak var settingBtn: UIButton!
     
     override func configure(configs: SettingsBaseParam) {
         super.configure(configs: configs)
         
-        guard let param = configs as? SettingsSelectParam else {return}
+        guard let param = configs as? SettingsSelectParam else { return }
         settingLabel.text = param.label
         settingBtn.setTitle(param.value, for: .normal)
     }
     
-    func getSelectAction(_ option:SettingItemOption) -> UIAlertAction {
-        return UIAlertAction(title: "\(option.label)", style: .default, handler: {[unowned self] action in
-            guard let param = self.configs as? SettingsSelectParam else {return}
+    func getSelectAction(_ option: SettingItemOption) -> UIAlertAction {
+        return UIAlertAction(title: "\(option.label)", style: .default, handler: { [unowned self] _ in
+            guard let param = self.configs as? SettingsSelectParam else { return }
             self.settingBtn.setTitle(option.label, for: .normal)
             param.settingItem.selected = option.idx
             self.delegate?.didChangeValue(type: "SettingsSelectCell", key: param.key, value: param.settingItem)
         })
     }
     
-    @IBAction func onSelect(_ sender:UIButton) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        guard let param = configs as? SettingsSelectParam else {return}
+    @IBAction func onSelect(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: nil,
+                                      message: nil,
+                                      preferredStyle: style)
+        guard let param = configs as? SettingsSelectParam else { return }
         for option in param.settingItem.options {
             alert.addAction(getSelectAction(option))
         }
@@ -124,10 +121,10 @@ class SettingsSelectCell : SettingsBaseCell
 }
 
 class SettingsSelectParam: SettingsBaseParam {
-    var value:String
-    var settingItem:SettingItem
-    weak var context:UIViewController?;
-    init(key:String, label:String, settingItem:SettingItem, context:UIViewController) {
+    var value: String
+    var settingItem: SettingItem
+    weak var context: UIViewController?
+    init(key: String, label: String, settingItem: SettingItem, context: UIViewController) {
         self.settingItem = settingItem
         self.context = context
         self.value = settingItem.selectedOption().label
@@ -135,22 +132,21 @@ class SettingsSelectParam: SettingsBaseParam {
     }
 }
 
-class SettingsTextFieldCell : SettingsBaseCell
-{
+class SettingsTextFieldCell: SettingsBaseCell {
     @IBOutlet weak var settingLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     
     override func configure(configs: SettingsBaseParam) {
         super.configure(configs: configs)
         
-        guard let param = configs as? SettingsTextFieldParam else {return}
+        guard let param = configs as? SettingsTextFieldParam else { return }
         settingLabel.text = param.label
         textField.placeholder = param.placeholder
         textField.text = param.text
     }
     
     @IBAction func onTextFieldChanged(_ sender: UITextField) {
-        guard let configs = self.configs as? SettingsTextFieldParam else {return}
+        guard let configs = self.configs as? SettingsTextFieldParam else { return }
         delegate?.didChangeValue(type: "SettingsTextFieldCell", key: configs.key, value: sender.text ?? "")
     }
 }
@@ -165,22 +161,23 @@ class SettingsTextFieldParam: SettingsBaseParam {
     }
 }
 
-class SettingsSwitchCell : SettingsBaseCell
-{
+class SettingsSwitchCell: SettingsBaseCell {
     @IBOutlet weak var settingLabel: UILabel!
     @IBOutlet weak var uiSwitch: UISwitch!
     
     override func configure(configs: SettingsBaseParam) {
         super.configure(configs: configs)
         
-        guard let param = configs as? SettingsSwitchParam else {return}
+        guard let param = configs as? SettingsSwitchParam else { return }
         settingLabel.text = param.label
         uiSwitch.isOn = param.isOn
     }
     
-    @IBAction func onSwitchChanged(sender: UISwitch){
-        guard let configs = self.configs as? SettingsSwitchParam else {return}
-        delegate?.didChangeValue(type: "SettingsSwitchCell", key: configs.key, value:  "\(uiSwitch.isOn ? 1 : 0)")
+    @IBAction func onSwitchChanged(sender: UISwitch) {
+        guard let configs = self.configs as? SettingsSwitchParam else { return }
+        delegate?.didChangeValue(type: "SettingsSwitchCell", 
+                                 key: configs.key,
+                                 value: "\(uiSwitch.isOn ? 1 : 0)")
     }
 }
 

@@ -8,8 +8,8 @@
 import UIKit
 import AVFoundation
 
-public let cl_screenWidht = UIScreen.main.bounds.width
-public let cl_screenHeight = UIScreen.main.bounds.height
+let cl_screenWidht = UIScreen.main.bounds.width
+let cl_screenHeight = UIScreen.main.bounds.height
 class AlertManager: NSObject {
     private struct AlertViewCache {
         var view: UIView?
@@ -19,7 +19,6 @@ class AlertManager: NSObject {
         case center
         case bottom
     }
-    
     private static var vc: UIViewController?
     private static var containerView: UIView?
     private static var currentPosition: AlertPosition = .center
@@ -37,7 +36,9 @@ class AlertManager: NSObject {
             containerView?.backgroundColor = UIColor(red: 0.0/255, green: 0.0/255, blue: 0.0/255, alpha: 0.0)
         }
         if didCoverDismiss {
-            (containerView as? UIButton)?.addTarget(self, action: #selector(tapView), for: .touchUpInside)
+            (containerView as? UIButton)?.addTarget(self, 
+                                                    action: #selector(tapView),
+                                                    for: .touchUpInside)
         }
         guard let containerView = containerView else { return }
         containerView.addSubview(view)
@@ -46,7 +47,7 @@ class AlertManager: NSObject {
         if alertPostion == .center {
             view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
             view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        }else{
+        } else {
             bottomAnchor = view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
             view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
@@ -56,24 +57,31 @@ class AlertManager: NSObject {
             vc?.view.backgroundColor = UIColor.clear
             vc?.view.addSubview(containerView)
             vc?.modalPresentationStyle = .custom
-            UIViewController.cl_topViewController()?.present(vc!, animated: false) {
+            UIViewController.cl_topViewController()?.present(vc ?? UIViewController(), animated: false) {
                 showAlertPostion(alertPostion: alertPostion, view: view)
             }
         } else {
             showAlertPostion(alertPostion: alertPostion, view: view)
         }
-        //注册键盘出现通知
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name:  UIApplication.keyboardWillShowNotification, object: nil)
+        // 注册键盘出现通知
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillShow(notification:)),
+                                               name: UIApplication.keyboardWillShowNotification,
+                                               object: nil)
         
-        //注册键盘隐藏通知
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name:  UIApplication.keyboardWillHideNotification, object: nil)
+        // 注册键盘隐藏通知
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: UIApplication.keyboardWillHideNotification, 
+                                               object: nil)
     }
 
-    private static func showAlertPostion(alertPostion: AlertPosition, view: UIView) {
+    private static func showAlertPostion(alertPostion: AlertPosition, 
+                                         view: UIView) {
         containerView?.layoutIfNeeded()
         if alertPostion == .center {
             showCenterView(view: view)
-        }else{
+        } else {
             bottomAnchor?.constant = view.frame.height
             bottomAnchor?.isActive = true
             containerView?.layoutIfNeeded()
@@ -81,7 +89,7 @@ class AlertManager: NSObject {
         }
     }
     
-    private static func showCenterView(view: UIView){
+    private static func showCenterView(view: UIView) {
         if !viewCache.isEmpty {
             viewCache.forEach({ $0.view?.alpha = 0 })
         }
@@ -94,7 +102,7 @@ class AlertManager: NSObject {
         })
     }
     
-    private static func showBottomView(view: UIView){
+    private static func showBottomView(view: UIView) {
         if !viewCache.isEmpty {
             viewCache.forEach({ $0.view?.alpha = 0 })
         }
@@ -116,7 +124,8 @@ class AlertManager: NSObject {
         })
     }
     
-    static func hiddenView(all: Bool = true, completion: (() -> Void)? = nil){
+    static func hiddenView(all: Bool = true, 
+                           completion: (() -> Void)? = nil) {
         if currentPosition == .bottom {
             guard let lastView = viewCache.last?.view else { return }
             bottomAnchor?.constant = lastView.frame.height
@@ -145,19 +154,21 @@ class AlertManager: NSObject {
     }
     
     @objc
-    private static func tapView(){
+    private static func tapView() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(0.1))) {
             self.hiddenView()
         }
     }
     
-    private static var originFrame:CGRect = .zero
+    private static var originFrame: CGRect = .zero
     // 键盘显示
-    @objc private static func keyboardWillShow(notification: Notification) {
+    @objc 
+    private static func keyboardWillShow(notification: Notification) {
         let keyboardHeight = (notification.userInfo?["UIKeyboardBoundsUserInfoKey"] as? CGRect)?.height
-        let y = cl_screenHeight - (keyboardHeight ?? 304) - containerView!.frame.height
+        guard let viewHeight = containerView?.frame.height else { return }
+        let y = cl_screenHeight - (keyboardHeight ?? 304) - viewHeight
         if originFrame.origin.y != y {
-            originFrame = containerView!.frame
+            originFrame = containerView?.frame ?? .zero
         }
         UIView.animate(withDuration: 0.25) {
             containerView?.frame.origin.y = y
@@ -174,4 +185,3 @@ class AlertManager: NSObject {
         }
     }
 }
-

@@ -115,7 +115,7 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onUserOffline(uid_t uid, USER_
 	@param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	@param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
  */
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_REASON errCode)
 {
 	if (m_hMsgHanlder) {
 		PRtmpStreamStreamStateChanged rtmpState = new RtmpStreamStreamStateChanged;
@@ -575,7 +575,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 	break;
 	case RTMP_STREAM_PUBLISH_STATE_RUNNING:
 		strInfo = agoraRtmpStateRunning;
-		if (rtmpState->error == RTMP_STREAM_PUBLISH_ERROR_OK) {
+		if (rtmpState->error == RTMP_STREAM_PUBLISH_REASON_OK) {
 			strInfo = agoraRtmpStateRunningSuccess;
 			CString  strUrl;
 			strUrl.Format(_T("%S"), rtmpState->url);
@@ -595,52 +595,52 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 	{
 		switch (rtmpState->state)
 		{
-		case RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMENT:
+		case RTMP_STREAM_PUBLISH_REASON_INVALID_ARGUMENT:
 		{
 			strInfo = agoraRtmpStateInvalidArg;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_ENCRYPTED_STREAM_NOT_ALLOWED:
+		case RTMP_STREAM_PUBLISH_REASON_ENCRYPTED_STREAM_NOT_ALLOWED:
 		{
 			strInfo = agoraRtmpStateEncrypted;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT:
+		case RTMP_STREAM_PUBLISH_REASON_CONNECTION_TIMEOUT:
 		{
 			strInfo = agoraRtmpStateConnTimeout;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR:
+		case RTMP_STREAM_PUBLISH_REASON_INTERNAL_SERVER_ERROR:
 		{
 			strInfo = agoraRtmpStateInrealErr;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR:
+		case RTMP_STREAM_PUBLISH_REASON_RTMP_SERVER_ERROR:
 		{
 			strInfo = agoraRtmpStateServerErr;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN:
+		case RTMP_STREAM_PUBLISH_REASON_TOO_OFTEN:
 		{
 			strInfo = agoraRtmpStateTooOften;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT:
+		case RTMP_STREAM_PUBLISH_REASON_REACH_LIMIT:
 		{
 			strInfo = agoraRtmpStateReachLimit;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED:
+		case RTMP_STREAM_PUBLISH_REASON_NOT_AUTHORIZED:
 		{
 			strInfo = agoraRtmpStateNotAuth;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND:
+		case RTMP_STREAM_PUBLISH_REASON_STREAM_NOT_FOUND:
 		{
 			strInfo = agoraRtmpStateNotFound;
 		}
 		break;
-		case RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED:
+		case RTMP_STREAM_PUBLISH_REASON_FORMAT_NOT_SUPPORTED:
 		{
 			strInfo = agoraRtmpStateNotSupported;
 		}

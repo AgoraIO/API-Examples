@@ -9,8 +9,7 @@ import UIKit
 import AgoraRtcKit
 import ARKit
 
-class ARKitEntry : UIViewController
-{
+class ARKitEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var firstFrameSwitch: UISwitch!
@@ -23,11 +22,16 @@ class ARKitEntry : UIViewController
 
     @IBAction func doOptimizeFirstFrameSwitch(_ sender: UISwitch) {
         if sender.isOn {
-            let alertVC = UIAlertController(title: "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized,
+            // swiftlint:disable line_length
+            let title = "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized
+            // swiftlint:enable line_length
+            let alertVC = UIAlertController(title: title,
                                             message: nil,
                                             preferredStyle: .alert)
             
-            let ok = UIAlertAction(title: "Sure".localized, style: .default, handler: nil)
+            let ok = UIAlertAction(title: "Sure".localized, 
+                                   style: .default,
+                                   handler: nil)
             let cancel = UIAlertAction(title: "Cancel".localized, style: .cancel) { _ in
                 sender.isOn = false
             }
@@ -39,14 +43,14 @@ class ARKitEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "isFirstFrame": firstFrameSwitch.isOn]
+        newViewController.configs = ["channelName": channelName, "isFirstFrame": firstFrameSwitch.isOn]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -66,7 +70,7 @@ class ARKitMain: BaseViewController {
     var isJoined: Bool = false
     var planarDetected: Bool = false {
         didSet {
-            if(planarDetected) {
+            if planarDetected {
                 infoLabel.text = "Tap to place remote video canvas".localized
             } else {
                 infoLabel.text = "Move Camera to find a planar\n(Shown as Red Rectangle)".localized
@@ -77,7 +81,7 @@ class ARKitMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //set AR Scene delegate
+        // set AR Scene delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.showsStatistics = true
@@ -111,7 +115,6 @@ class ARKitMain: BaseViewController {
         // start AR Session
         startARSession()
         
-        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -127,7 +130,7 @@ class ARKitMain: BaseViewController {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         }
@@ -136,8 +139,9 @@ class ARKitMain: BaseViewController {
     // start AR World tracking
     func startARSession() {
         guard ARWorldTrackingConfiguration.isSupported else {
+            let message = "This app requires world tracking, which is available only on iOS devices with the A9 processor or later.".localized
             showAlert(title: "ARKit is not available on this device.".localized,
-                      message: "This app requires world tracking, which is available only on iOS devices with the A9 processor or later.".localized)
+                      message: message)
             return
         }
 
@@ -156,7 +160,7 @@ class ARKitMain: BaseViewController {
     }
     
     @IBAction func doSceneViewTapped(_ recognizer: UITapGestureRecognizer) {
-        if(!planarDetected) {
+        if !planarDetected {
             LogUtils.log(message: "Planar not yet found", level: .warning)
             return
         }
@@ -188,23 +192,21 @@ private extension ARKitMain {
         renderer.renderNode = node
         activeScreens[uid] = node
     }
-    
     func addNode(withTransform transform: matrix_float4x4) {
-        let scene = SCNScene(named: "AR.scnassets/displayer.scn")!
+        guard let scene = SCNScene(named: "AR.scnassets/displayer.scn") else { return }
         let rootNode = scene.rootNode
-        
         rootNode.position = SCNVector3(
             transform.columns.3.x,
             transform.columns.3.y,
             transform.columns.3.z
         )
-        rootNode.rotation = SCNVector4(0, 1, 0, sceneView.session.currentFrame!.camera.eulerAngles.y)
-        
+        guard let currentFrame = sceneView.session.currentFrame else { return }
+        rootNode.rotation = SCNVector4(0, 1, 0, currentFrame.camera.eulerAngles.y)
         sceneView.scene.rootNode.addChildNode(rootNode)
-        
-        let displayer = rootNode.childNode(withName: "displayer", recursively: false)!
-        let screen = displayer.childNode(withName: "screen", recursively: false)!
-        
+        let displayer = rootNode.childNode(withName: "displayer",
+                                           recursively: false)
+        guard let screen = displayer?.childNode(withName: "screen",
+                                                recursively: false) else { return }
         if let undisplayedUid = undisplayedUsers.first {
             undisplayedUsers.removeFirst()
             renderRemoteUser(uid: undisplayedUid, toNode: screen)
@@ -212,28 +214,23 @@ private extension ARKitMain {
             unusedScreenNodes.append(screen)
         }
     }
-    
     func removeNode(_ node: SCNNode) {
         let rootNode: SCNNode
         let screen: SCNNode
-        
         if node.name == "screen", let parent = node.parent?.parent {
             rootNode = parent
             screen = node
         } else if node.name == "displayer", let parent = node.parent {
             rootNode = parent
-            screen = parent.childNode(withName: "screen", recursively: false)!
+            screen = parent.childNode(withName: "screen", recursively: false) ?? SCNNode()
         } else {
             rootNode = node
             screen = node
         }
-        
         rootNode.removeFromParentNode()
-        
         if let index = unusedScreenNodes.firstIndex(where: {$0 == screen}) {
             unusedScreenNodes.remove(at: index)
         }
-        
         if let (uid, _) = activeScreens.first(where: {$1 == screen}) {
             activeScreens.removeValue(forKey: uid)
             if let screenNode = unusedScreenNodes.first {
@@ -262,7 +259,7 @@ extension ARKitMain: AgoraRtcEngineDelegate {
     /// to let user know something wrong is happening
     /// Error code description can be found at:
     /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode.rawValue)", level: .error)
@@ -308,12 +305,14 @@ extension ARKitMain: AgoraRtcEngineDelegate {
         }
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, 
+                   videoRenderingTracingResultOfUid uid: UInt,
+                   currentEvent: AgoraMediaTraceEvent,
+                   tracingInfo: AgoraVideoRenderingTracingInfo) {
         statsLabel.isHidden = tracingInfo.elapsedTime <= 0
         statsLabel.text = "firstFrameTime: \(tracingInfo.elapsedTime)"
     }
 }
-
 
 extension ARKitMain: ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -331,8 +330,8 @@ extension ARKitMain: ARSCNViewDelegate {
         node.addChildNode(planeNode)
         planeNode.runAction(SCNAction.fadeOut(duration: 3))
         
-        //found planar
-        if(!planarDetected) {
+        // found planar
+        if !planarDetected {
             DispatchQueue.main.async {[weak self] in
                 guard let weakSelf = self else {
                     return

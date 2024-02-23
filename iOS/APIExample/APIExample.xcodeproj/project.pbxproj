@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -175,6 +175,9 @@
 		E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */; };
 		E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E77D54C428F55E9100D51C1E /* JoinChannelVideoToken.storyboard */; };
 		E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */; };
+		E7883AE92B074746003CCF44 /* FaceCapture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7883AE42B074746003CCF44 /* FaceCapture.strings */; };
+		E7883AEA2B074746003CCF44 /* FaceCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7883AE62B074746003CCF44 /* FaceCapture.storyboard */; };
+		E7883AEB2B074746003CCF44 /* FaceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7883AE82B074746003CCF44 /* FaceCapture.swift */; };
 		E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD72861673600851463 /* CreateDataStream.strings */; };
 		E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD92861673600851463 /* CreateDataStream.storyboard */; };
 		E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BDB2861673600851463 /* CreateDataStream.swift */; };
@@ -491,6 +494,9 @@
 		E77D54C328F55E9100D51C1E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoToken.strings"; sourceTree = "<group>"; };
 		E77D54C528F55E9100D51C1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoToken.storyboard; sourceTree = "<group>"; };
 		E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoToken.swift; sourceTree = "<group>"; };
+		E7883AE52B074746003CCF44 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FaceCapture.strings"; sourceTree = "<group>"; };
+		E7883AE72B074746003CCF44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FaceCapture.storyboard; sourceTree = "<group>"; };
+		E7883AE82B074746003CCF44 /* FaceCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCapture.swift; sourceTree = "<group>"; };
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
@@ -1096,6 +1102,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7883AE32B074746003CCF44 /* FaceCapture */,
 				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
 				E726BFF42A949F70006870E2 /* AuidoRouterPlayer */,
 				E7163F7B2964149800EBBD55 /* ARKit */,
@@ -1291,6 +1298,16 @@
 				E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */,
 			);
 			path = "JoinChannelVideo(Token)";
+			sourceTree = "<group>";
+		};
+		E7883AE32B074746003CCF44 /* FaceCapture */ = {
+			isa = PBXGroup;
+			children = (
+				E7883AE42B074746003CCF44 /* FaceCapture.strings */,
+				E7883AE62B074746003CCF44 /* FaceCapture.storyboard */,
+				E7883AE82B074746003CCF44 /* FaceCapture.swift */,
+			);
+			path = FaceCapture;
 			sourceTree = "<group>";
 		};
 		E7899BD62861673600851463 /* CreateDataStream */ = {
@@ -1501,6 +1518,7 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+				E76F80122AF0A7A200CCB9D6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1613,6 +1631,7 @@
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
 				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
 				E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */,
+				E7883AE92B074746003CCF44 /* FaceCapture.strings in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
@@ -1633,6 +1652,7 @@
 				03414B5525546DEC00AB114D /* frames0.yuv in Resources */,
 				E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */,
 				8B5E5B53274CBF760040E97D /* VideoProcess.storyboard in Resources */,
+				E7883AEA2B074746003CCF44 /* FaceCapture.storyboard in Resources */,
 				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
 				E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */,
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
@@ -1760,6 +1780,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E76F80122AF0A7A200CCB9D6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" \n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1857,6 +1894,7 @@
 				67450169282D5D8B00E79F2F /* ContentInspect.swift in Sources */,
 				67B8C7B52805757200195106 /* MediaUtils.m in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
+				E7883AEB2B074746003CCF44 /* FaceCapture.swift in Sources */,
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
@@ -2341,6 +2379,22 @@
 			name = JoinChannelVideoToken.storyboard;
 			sourceTree = "<group>";
 		};
+		E7883AE42B074746003CCF44 /* FaceCapture.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7883AE52B074746003CCF44 /* zh-Hans */,
+			);
+			name = FaceCapture.strings;
+			sourceTree = "<group>";
+		};
+		E7883AE62B074746003CCF44 /* FaceCapture.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7883AE72B074746003CCF44 /* Base */,
+			);
+			name = FaceCapture.storyboard;
+			sourceTree = "<group>";
+		};
 		E7899BD72861673600851463 /* CreateDataStream.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2533,6 +2587,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -2594,6 +2649,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

@@ -188,8 +188,8 @@
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -208,8 +208,8 @@
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
         [self doOpenMediaUrlWithSender: nil];
@@ -269,13 +269,13 @@
     [AgoraRtcEngineKit destroy];
 }
 
-- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state error:(AgoraMediaPlayerError)error {
-    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, error]];
+- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {
+    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, reason]];
     __weak MediaPlayer *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (state) {
             case AgoraMediaPlayerStateFailed:
-                [weakSelf showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", error]];
+                [weakSelf showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", reason]];
                 break;
             
             case AgoraMediaPlayerStateOpenCompleted:
@@ -325,8 +325,8 @@
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];

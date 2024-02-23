@@ -22,14 +22,14 @@ enum LogLevel {
 }
 
 struct LogItem {
-    var message:String
-    var level:LogLevel
-    var dateTime:Date
+    var message: String
+    var level: LogLevel
+    var dateTime: Date
 }
 
 class LogUtils {
-    static var logs:[LogItem] = []
-    static var appLogPath:String = "\(logFolder())/app-\(Date().getFormattedDate(format: "yyyy-MM-dd")).log"
+    static var logs: [LogItem] = []
+    static var appLogPath: String = "\(logFolder())/app-\(Date().getFormattedDate(format: "yyyy-MM-dd")).log"
     
     static func log(message: String, level: LogLevel) {
         LogUtils.logs.append(LogItem(message: message, level: level, dateTime: Date()))
@@ -87,11 +87,11 @@ extension LogViewController: UITableViewDataSource {
         }
         let logitem = LogUtils.logs[indexPath.row]
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 12)
-        cell?.textLabel?.numberOfLines = 0;
-        cell?.textLabel?.lineBreakMode = .byWordWrapping;
+        cell?.textLabel?.numberOfLines = 0
+        cell?.textLabel?.lineBreakMode = .byWordWrapping
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "yyyy-MM-dd HH:mm:ss"
         cell?.textLabel?.text = "\(dateFormatterPrint.string(from: logitem.dateTime)) - \(logitem.level.description): \(logitem.message)"
-        return cell!
+        return cell ?? UITableViewCell()
     }
 }

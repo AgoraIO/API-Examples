@@ -97,7 +97,7 @@ class PickerView: UIView {
     }
     @objc
     private func onTapSureButton() {
-        pickerViewSelectedValueClosure?(selectedValue ?? "")
+        pickerViewSelectedValueClosure?(selectedValue ?? dataArray?.first ?? "")
         AlertManager.hiddenView()
     }
 }

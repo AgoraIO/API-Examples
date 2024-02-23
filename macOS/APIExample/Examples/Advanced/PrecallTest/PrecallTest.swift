@@ -212,13 +212,48 @@ class PrecallTest: BaseViewController {
     }
     
     @IBAction func doEchoTest(sender: NSButton) {
-        agoraKit.startEchoTest(withInterval: 10)
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 10
+        testConfig.enableAudio = true
+        testConfig.enableVideo = false
+        testConfig.channelId = "AudioEchoTest" + "\(Int.random(in: 1...1000))"
+        agoraKit.startEchoTest(withConfig: testConfig)
         showPopover(isValidate: false, seconds: 10) {[unowned self] in
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()
             }
         }
     }
+    
+    private var isStartVideoEchoTest: Bool = false
+    @IBAction func onStartVideoEchoTest(_ sender: NSButton) {
+        isStartVideoEchoTest = !isStartVideoEchoTest
+        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
+            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+        }
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 2
+        testConfig.enableAudio = false
+        testConfig.enableVideo = isStartVideoEchoTest
+        testConfig.channelId = "VideoEchoTest" + "\(Int.random(in: 1...1000))"
+        testConfig.view = videos[0]
+        if isStartVideoEchoTest {
+            let ret = agoraKit.startEchoTest(withConfig: testConfig)
+            if ret != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
+            }
+        } else {
+            agoraKit.stopEchoTest()
+        }
+        sender.title = isStartVideoEchoTest ? "Stop Video Echo Test".localized : "Start Video Echo Test".localized
+        startCameraTestBtn.isHidden = isStartVideoEchoTest
+        stopCameraTestBtn.isHidden = true
+    }
+    
     
     // show popover and hide after seconds
     func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {
@@ -271,8 +306,8 @@ extension PrecallTest: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)

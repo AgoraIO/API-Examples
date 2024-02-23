@@ -38,6 +38,9 @@ import io.agora.api.example.BuildConfig;
 import io.agora.api.example.R;
 import io.agora.api.example.databinding.FragmentBaseBrowserBinding;
 
+/**
+ * The type Base browser fragment.
+ */
 public abstract class BaseBrowserFragment extends BaseFragment {
 
     private FragmentBaseBrowserBinding mBinding;
@@ -122,7 +125,7 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         // 不使用缓存，只从网络获取数据
         // LOAD_CACHE_ONLY:
         // 不使用网络，只读取本地缓存数据
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);// 设置缓存模式
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 设置缓存模式
 
 
         // js 相关
@@ -153,7 +156,7 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         // 支持同时打开https和http
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mWebView.setWebChromeClient(new WebChromeClient() {
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
@@ -175,7 +178,7 @@ public abstract class BaseBrowserFragment extends BaseFragment {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                if(!request.getUrl().toString().equals(getBrowserUrl())){
+                if (!request.getUrl().toString().equals(getBrowserUrl())) {
                     openWithDefaultBrowser(request.getUrl().toString());
                     return true;
                 }
@@ -212,7 +215,7 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         mWebView.setWebContentsDebuggingEnabled(true);
     }
 
-    private void releaseWebView(){
+    private void releaseWebView() {
         try {
             Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
             if (sConfigCallback != null) {
@@ -261,6 +264,11 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         startActivity(intent);
     }
 
+    /**
+     * Gets browser url.
+     *
+     * @return the browser url
+     */
     protected abstract String getBrowserUrl();
 
 }

@@ -4,31 +4,51 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
+/**
+ * The type Gl copy helper.
+ */
 public class GLCopyHelper {
     private final int bufferCount;
 
-    public GLCopyHelper(){
+    /**
+     * Instantiates a new Gl copy helper.
+     */
+    public GLCopyHelper() {
         this(1);
     }
 
-    public GLCopyHelper(int bufferCount){
+    /**
+     * Instantiates a new Gl copy helper.
+     *
+     * @param bufferCount the buffer count
+     */
+    public GLCopyHelper(int bufferCount) {
         this.bufferCount = bufferCount;
     }
 
     private int[] mDstFrameBuffer;
     private int[] mSrcFrameBuffer;
 
+    /**
+     * Copy 2 d texture to oes texture.
+     *
+     * @param srcTexture the src texture
+     * @param dstTexture the dst texture
+     * @param width      the width
+     * @param height     the height
+     * @param index      the index
+     */
     public void copy2DTextureToOesTexture(
             int srcTexture,
             int dstTexture,
             int width, int height,
-            int index){
-        if(mDstFrameBuffer == null){
+            int index) {
+        if (mDstFrameBuffer == null) {
             mDstFrameBuffer = new int[bufferCount];
             GLES20.glGenFramebuffers(bufferCount, mDstFrameBuffer, 0);
         }
 
-        if(mSrcFrameBuffer == null){
+        if (mSrcFrameBuffer == null) {
             mSrcFrameBuffer = new int[bufferCount];
             GLES20.glGenFramebuffers(bufferCount, mSrcFrameBuffer, 0);
         }
@@ -46,13 +66,16 @@ public class GLCopyHelper {
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
     }
 
-    public void release(){
-        if(mDstFrameBuffer != null){
+    /**
+     * Release.
+     */
+    public void release() {
+        if (mDstFrameBuffer != null) {
             GLES20.glDeleteFramebuffers(mDstFrameBuffer.length, mDstFrameBuffer, 0);
             mDstFrameBuffer = null;
         }
 
-        if(mSrcFrameBuffer != null){
+        if (mSrcFrameBuffer != null) {
             GLES20.glDeleteFramebuffers(mSrcFrameBuffer.length, mSrcFrameBuffer, 0);
             mSrcFrameBuffer = null;
         }

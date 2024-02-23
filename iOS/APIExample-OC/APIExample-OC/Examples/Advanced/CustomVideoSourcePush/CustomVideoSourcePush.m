@@ -88,6 +88,7 @@
     // so you will have to prepare the preview yourself
     self.customCamera = [[AgoraYUVImageSourcePush alloc] initWithSize:CGSizeMake(320, 180) fileName:@"sample" frameRate:15];
     self.customCamera.delegate = self;
+    self.customCamera.trackId = 0;
     [self.customCamera startSource];
     [self.agoraKit setExternalVideoSource:YES
                                useTexture:YES
@@ -112,8 +113,8 @@
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
     options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = YES;
-    options.publishCameraTrack = YES;
-    options.publishMicrophoneTrack = YES;
+    options.publishCustomAudioTrack = YES;
+    options.publishCustomVideoTrack = YES;
     options.clientRoleType = AgoraClientRoleBroadcaster;
     
     [[NetworkManager shared] generateTokenWithChannelName:channelName uid:0 success:^(NSString * _Nullable token) {
@@ -121,8 +122,8 @@
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -156,7 +157,7 @@
     videoFrame.format = 12;
     videoFrame.textureBuf = buffer;
     videoFrame.rotation = rotation;
-    [self.agoraKit pushExternalVideoFrame:videoFrame];
+    [self.agoraKit pushExternalVideoFrame:videoFrame videoTrackId:trackId];
     
     AgoraOutputVideoFrame *outputVideoFrame = [[AgoraOutputVideoFrame alloc] init];
     outputVideoFrame.width = size.width;
@@ -170,8 +171,8 @@
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];

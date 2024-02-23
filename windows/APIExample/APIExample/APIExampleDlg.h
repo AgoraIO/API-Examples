@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
+#include "Basic/JoinChannelVideoByToken/CJoinChannelVideoByTokenDlg.h"
 #include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
 #include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
@@ -31,6 +32,7 @@
 #include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
 #include "Advanced/PushExternalVideoYUV/PushExternalVideoYUV.h"
 #include "Advanced/MultiVideoSourceTracks/MultiVideoSourceTracks.h"
+#include "Advanced/FaceCapture/CAgoraFaceCaptureDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -77,6 +79,7 @@ private:
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
+    CJoinChannelVideoByTokenDlg *m_pJoinChannelVideoByTokenDlg = nullptr;
     CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
@@ -102,7 +105,8 @@ private:
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
     PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
-    MultiVideoSourceTracks     *m_pMultiVideoSourceTracks = nullptr;
+    MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
+    CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;

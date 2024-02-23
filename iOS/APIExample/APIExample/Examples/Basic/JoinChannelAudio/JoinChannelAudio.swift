@@ -10,14 +10,13 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelAudioEntry : UIViewController
-{
+class JoinChannelAudioEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var scenarioBtn: UIButton!
     @IBOutlet weak var profileBtn: UIButton!
-    var profile:AgoraAudioProfile = .default
-    var scenario:AgoraAudioScenario = .default
+    var profile: AgoraAudioProfile = .default
+    var scenario: AgoraAudioScenario = .default
     let identifier = "JoinChannelAudio"
     
     override func viewDidLoad() {
@@ -28,44 +27,53 @@ class JoinChannelAudioEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "audioProfile":profile, "audioScenario":scenario]
+        newViewController.configs = ["channelName": channelName,
+                                     "audioProfile": profile,
+                                     "audioScenario": scenario]
         navigationController?.pushViewController(newViewController, animated: true)
     }
     
-    func getAudioProfileAction(_ profile:AgoraAudioProfile) -> UIAlertAction{
-        return UIAlertAction(title: "\(profile.description())", style: .default, handler: {[unowned self] action in
+    func getAudioProfileAction(_ profile: AgoraAudioProfile) -> UIAlertAction {
+        return UIAlertAction(title: "\(profile.description())", style: .default, handler: { [unowned self] _ in
             self.profile = profile
             self.profileBtn.setTitle("\(profile.description())", for: .normal)
         })
     }
     
-    func getAudioScenarioAction(_ scenario:AgoraAudioScenario) -> UIAlertAction{
-        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: {[unowned self] action in
+    func getAudioScenarioAction(_ scenario: AgoraAudioScenario) -> UIAlertAction {
+        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: { [unowned self] _ in
             self.scenario = scenario
             self.scenarioBtn.setTitle("\(scenario.description())", for: .normal)
         })
     }
     
-    @IBAction func setAudioProfile(){
-        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for profile in AgoraAudioProfile.allValues(){
+    @IBAction func setAudioProfile() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Audio Profile".localized,
+                                      message: nil,
+                                      preferredStyle: style)
+        for profile in AgoraAudioProfile.allValues() {
             alert.addAction(getAudioProfileAction(profile))
         }
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setAudioScenario(){
-        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for scenario in AgoraAudioScenario.allValues(){
+    @IBAction func setAudioScenario() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Audio Scenario".localized,
+                                      message: nil,
+                                      preferredStyle: style)
+        for scenario in AgoraAudioScenario.allValues() {
             alert.addAction(getAudioScenarioAction(scenario))
         }
         alert.addCancelAction()
@@ -82,12 +90,12 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
     @IBOutlet weak var scenarioBtn: UIButton!
         
-    var audioViews: [UInt:VideoView] = [:]
+    var audioViews: [UInt: VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         guard let channelName = configs["channelName"] as? String,
@@ -120,7 +128,8 @@ class JoinChannelAudioMain: BaseViewController {
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -164,8 +173,8 @@ class JoinChannelAudioMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -188,40 +197,43 @@ class JoinChannelAudioMain: BaseViewController {
         return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
     }
     @IBAction func setAudioScenario(_ sender: Any) {
-        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        for scenario in AgoraAudioScenario.allValues(){
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Audio Scenario".localized,
+                                      message: nil,
+                                      preferredStyle: style)
+        for scenario in AgoraAudioScenario.allValues() {
             alert.addAction(getAudioScenarioAction(scenario))
         }
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
     
-    func getAudioScenarioAction(_ scenario:AgoraAudioScenario) -> UIAlertAction{
-        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: {[unowned self] action in
+    func getAudioScenarioAction(_ scenario: AgoraAudioScenario) -> UIAlertAction {
+        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: { [unowned self] _ in
             self.agoraKit.setAudioScenario(scenario)
             self.scenarioBtn.setTitle("\(scenario.description())", for: .normal)
         })
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangeRecordingVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
         agoraKit.adjustRecordingSignalVolume(value)
     }
     
-    @IBAction func onChangePlaybackVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangePlaybackVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("adjustPlaybackSignalVolume \(value)")
         agoraKit.adjustPlaybackSignalVolume(value)
     }
     
-    @IBAction func toggleInEarMonitoring(_ sender:UISwitch){
+    @IBAction func toggleInEarMonitoring(_ sender: UISwitch) {
         inEarMonitoringVolumeSlider.isEnabled = sender.isOn
         agoraKit.enable(inEarMonitoring: sender.isOn)
     }
     
-    @IBAction func onChangeInEarMonitoringVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
+    @IBAction func onChangeInEarMonitoringVolume(_ sender: UISlider) {
+        let value: Int = Int(sender.value)
         print("setInEarMonitoringVolume \(value)")
         agoraKit.setInEarMonitoringVolume(value)
     }
@@ -242,8 +254,8 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -254,7 +266,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .local, audioOnly: true)
         self.audioViews[0] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -267,7 +279,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
         view.uid = uid
         self.audioViews[uid] = view
@@ -283,7 +295,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)

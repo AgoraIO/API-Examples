@@ -12,8 +12,7 @@ import AgoraRtcKit
 let CAMERA_UID = UInt.random(in: 1001...2000)
 let PLAYER_UID = UInt.random(in: 2001...3000)
 
-class MediaPlayerEntry : UIViewController
-{
+class MediaPlayerEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "MediaPlayer"
@@ -23,18 +22,18 @@ class MediaPlayerEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
-    
 }
 
 class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
@@ -48,36 +47,43 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     @IBOutlet weak var playoutVolume: UISlider!
     @IBOutlet weak var publishVolume: UISlider!
     @IBOutlet weak var playerDurationLabel: UILabel!
+    @IBOutlet weak var playAudioTrackButton: UIButton!
+    @IBOutlet weak var publishAudioTrackButton: UIButton!
     
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
+    var playAudioTrackId: Int = 0
+    var publishTrackIndex: Int = 0
+    var trackList: [AgoraRtcMediaStreamInfo]?
     
     private var originY: CGFloat = 0
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    @objc func keyboardWillAppear(notification: NSNotification) {
-        let keyboardinfo = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey]
-        let keyboardheight:CGFloat = (keyboardinfo as AnyObject).cgRectValue.size.height
+    @objc 
+    func keyboardWillAppear(notification: NSNotification) {
+        let keyboardinfo = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+        let keyboardheight: CGFloat = (keyboardinfo as AnyObject).cgRectValue.size.height
    
-        if self.originY == 0 {
-            self.originY = self.view.centerY_CS
+        if originY == 0 {
+            originY = view.center.y
         }
-        let rect = self.mediaUrlField.convert(self.mediaUrlField.bounds, to: self.view)
-        let y = self.view.bounds.height - rect.origin.y - self.mediaUrlField.bounds.height - keyboardheight
+        let rect = mediaUrlField.convert(self.mediaUrlField.bounds, to: self.view)
+        let y = view.bounds.height - rect.origin.y - self.mediaUrlField.bounds.height - keyboardheight
 
         if y < 0 {
             let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-                self.view.centerY_CS = y + self.originY
+                self.view.center.y = y + self.originY
             }
             animator.startAnimation()
         }
     }
     
-    @objc func keyboardWillDisappear(notification:NSNotification){
+    @objc
+    func keyboardWillDisappear(notification: NSNotification) {
         let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
-            self.view.centerY_CS = self.originY
+            self.view.center.y = self.originY
             self.originY = 0
         }
         animator.startAnimation()
@@ -88,7 +94,9 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         return true
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, 
+                  shouldChangeTextIn range: NSRange,
+                  replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
             return true
@@ -99,13 +107,23 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mediaUrlField.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillAppear),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillDisappear),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
         // layout render view
         localVideo.setPlaceholder(text: "No Player Loaded")
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream1x2(views: [localVideo, remoteVideo])
         
+        setupRTC()
+    }
+    
+    private func setupRTC() {
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -121,7 +139,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -162,6 +181,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         })
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
+        setupChannel2(channelName: channelName)
+    }
+    
+    private func setupChannel2(channelName: String) {
         let option1 = AgoraRtcChannelMediaOptions()
         option1.autoSubscribeAudio = false
         option1.autoSubscribeVideo = false
@@ -171,12 +194,16 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
         NetworkManager.shared.generateToken(channelName: channelName, uid: PLAYER_UID) { token in
-            let result1 = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
+            let result1 = self.agoraKit.joinChannelEx(byToken: token,
+                                                      connection: connection,
+                                                      delegate: self,
+                                                      mediaOptions: option1,
+                                                      joinSuccess: nil)
             if result1 != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
             }
             self.doOpenMediaUrl(sender: UIButton())
@@ -185,17 +212,25 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     @IBAction func doOpenMediaUrl(sender: UIButton) {
         guard let url = mediaUrlField.text else { return }
-        //resign text field
+        // resign text field
         mediaUrlField.resignFirstResponder()
-        mediaPlayerKit.open(url, startPos: 0)
+        let mediaSource = AgoraMediaSource()
+        mediaSource.url = url
+        mediaSource.autoPlay = false
+        mediaSource.enableMultiAudioTrack = true
+        mediaPlayerKit.open(with: mediaSource)
     }
     
     @IBAction func doPlay(sender: UIButton) {
-        mediaPlayerKit.play()// get channel name from configs
+        mediaPlayerKit.play()
+        playAudioTrackButton.isEnabled = true
+        publishAudioTrackButton.isEnabled = true
     }
     
     @IBAction func doStop(sender: UIButton) {
         mediaPlayerKit.stop()
+        playAudioTrackButton.isEnabled = false
+        publishAudioTrackButton.isEnabled = false
     }
     
     @IBAction func doPause(sender: UIButton) {
@@ -236,6 +271,34 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         mediaPlayerKit.adjustPublishSignalVolume(Int32(Int(sender.value)))
     }
     
+    @IBAction func onClickPlayAudioTrack(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = trackList?.compactMap({ $0.codecName })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            sender.setTitle(value, for: .normal)
+            guard let track = self.trackList?.filter({ $0.codecName == value }).first else { return }
+            self.playAudioTrackId = track.streamIndex
+            self.mediaPlayerKit.selectMultiAudioTrack(track.streamIndex,
+                                                      publishTrackIndex: self.publishTrackIndex)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+    }
+    
+    @IBAction func onClickPublishAudioTrack(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = trackList?.compactMap({ $0.codecName })
+        pickerView.pickerViewSelectedValueClosure = { [weak self] value in
+            guard let self = self else { return }
+            sender.setTitle(value, for: .normal)
+            guard let track = self.trackList?.filter({ $0.codecName == value }).first else { return }
+            self.publishTrackIndex = track.streamIndex
+            self.mediaPlayerKit.selectMultiAudioTrack(self.playAudioTrackId,
+                                                      publishTrackIndex: track.streamIndex)
+        }
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+    }
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
@@ -268,8 +331,8 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -321,22 +384,33 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol,
+                             didChangedTo state: AgoraMediaPlayerState,
+                             reason: AgoraMediaPlayerReason) {
+        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(reason.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
             switch state.rawValue {
             case 100: // failed
-                weakself.showAlert(message: "media player error: \(error.rawValue)")
-                break
+                weakself.showAlert(message: "media player error: \(reason.rawValue)")
+
             case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
-                weakself.playerControlStack.isHidden = false
-                weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
+                let format = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
+                weakself.playerDurationLabel.text = format
                 weakself.playerProgressSlider.setValue(0, animated: true)
-                break
+                
+                if weakself.mediaPlayerKit.getStreamCount() > 0 {
+                    weakself.trackList = (0...weakself.mediaPlayerKit.getStreamCount()).filter({
+                        weakself.mediaPlayerKit.getStreamBy(Int32($0))?.streamType == .audio
+                    }).compactMap({ weakself.mediaPlayerKit.getStreamBy(Int32($0)) })
+                    weakself.playAudioTrackId = weakself.trackList?.first?.streamIndex ?? 0
+                    weakself.publishTrackIndex = weakself.trackList?.first?.streamIndex ?? 0
+                    weakself.playAudioTrackButton.setTitle(weakself.trackList?.first?.codecName, for: .normal)
+                    weakself.publishAudioTrackButton.setTitle(weakself.playAudioTrackButton.title, for: .normal)
+                }
+
             case 7: // stopped
-                weakself.playerControlStack.isHidden = true
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 weakself.playerDurationLabel.text = "00 : 00"
                 guard let channelName = weakself.configs["channelName"] as? String else { return }
@@ -347,7 +421,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
                 connection.channelId = channelName
                 connection.localUid = PLAYER_UID
                 weakself.agoraKit.updateChannelEx(with: option, connection: connection)
-                break
+
             default: break
             }
         }

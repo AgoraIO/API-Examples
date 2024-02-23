@@ -55,13 +55,37 @@ import io.agora.rtc2.video.VideoCanvas;
 )
 public class SimpleExtension extends BaseFragment implements View.OnClickListener, io.agora.rtc2.IMediaExtensionObserver {
     private static final String TAG = SimpleExtension.class.getSimpleName();
+    /**
+     * The constant EXTENSION_NAME.
+     */
     public static final String EXTENSION_NAME = "agora-simple-filter"; // Name of target link library used in CMakeLists.txt
+    /**
+     * The constant EXTENSION_VENDOR_NAME.
+     */
     public static final String EXTENSION_VENDOR_NAME = "Agora"; // Provider name used for registering in agora-bytedance.cpp
+    /**
+     * The constant EXTENSION_VIDEO_FILTER_WATERMARK.
+     */
     public static final String EXTENSION_VIDEO_FILTER_WATERMARK = "Watermark"; // Video filter name defined in ExtensionProvider.h
+    /**
+     * The constant EXTENSION_AUDIO_FILTER_VOLUME.
+     */
     public static final String EXTENSION_AUDIO_FILTER_VOLUME = "VolumeChange"; // Audio filter name defined in ExtensionProvider.h
+    /**
+     * The constant KEY_ENABLE_WATER_MARK.
+     */
     public static final String KEY_ENABLE_WATER_MARK = "key";
+    /**
+     * The constant ENABLE_WATER_MARK_FLAG.
+     */
     public static final String ENABLE_WATER_MARK_FLAG = "plugin.watermark.wmEffectEnabled";
+    /**
+     * The constant ENABLE_WATER_MARK_STRING.
+     */
     public static final String ENABLE_WATER_MARK_STRING = "plugin.watermark.wmStr";
+    /**
+     * The constant KEY_ADJUST_VOLUME_CHANGE.
+     */
     public static final String KEY_ADJUST_VOLUME_CHANGE = "volume";
     private FrameLayout local_view, remote_view;
     private EditText et_channel;
@@ -72,11 +96,14 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     private SeekBar record;
 
 
+    /**
+     * The Seek bar change listener.
+     */
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(joined && seekBar.getId() == record.getId()){
-                engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, KEY_ADJUST_VOLUME_CHANGE, ""+progress);
+            if (joined && seekBar.getId() == record.getId()) {
+                engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, KEY_ADJUST_VOLUME_CHANGE, "" + progress);
             }
         }
 
@@ -125,7 +152,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         if (context == null) {
             return;
         }
-        if(!hasAgoraSimpleFilterLib()){
+        if (!hasAgoraSimpleFilterLib()) {
             new AlertDialog.Builder(context)
                     .setMessage(R.string.simple_extension_tip)
                     .setCancelable(false)
@@ -138,22 +165,22 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -163,9 +190,9 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             config.addExtension(EXTENSION_NAME);
             config.mExtensionObserver = this;
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -183,7 +210,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-            /**
+            /*
              * Enable/Disable extension.
              *
              * @param id id for extension, e.g. agora.beauty.
@@ -202,8 +229,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             engine.enableVideo();
             // Create render view by RtcEngine
             TextureView textureView = new TextureView(context);
-            if(local_view.getChildCount() > 0)
-            {
+            if (local_view.getChildCount() > 0) {
                 local_view.removeAllViews();
             }
             // Add to the local container
@@ -213,8 +239,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             engine.startPreview();
 
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -223,7 +248,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -231,7 +256,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         engine = null;
     }
 
-    private void setWaterMarkProperty(){
+    private void setWaterMarkProperty() {
 
         String jsonValue = null;
         JSONObject o = new JSONObject();
@@ -263,14 +288,13 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -295,7 +319,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         }
     }
 
-    private boolean hasAgoraSimpleFilterLib(){
+    private boolean hasAgoraSimpleFilterLib() {
         try {
             Class<?> aClass = Class.forName("io.agora.extension.ExtensionManager");
             return aClass != null;
@@ -309,11 +333,11 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(CLIENT_ROLE_BROADCASTER);
         engine.enableAudioVolumeIndication(1000, 3, false);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
@@ -397,18 +421,16 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
-            }
-            else{
-                handler.post(() ->
-                {
-                    if(remote_view.getChildCount() > 0){
+            } else {
+                handler.post(() -> {
+                    if (remote_view.getChildCount() > 0) {
                         remote_view.removeAllViews();
                     }
-                    /**Display remote video stream*/
+                    /*Display remote video stream*/
                     TextureView textureView = null;
                     // Create render view by RtcEngine
                     textureView = new TextureView(context);
@@ -437,7 +459,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));

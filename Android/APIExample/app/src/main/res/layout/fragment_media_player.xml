@@ -15,18 +15,72 @@
 
         <FrameLayout
             android:id="@+id/fl_local"
-            android:layout_weight="1.0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
 
         <FrameLayout
             android:id="@+id/fl_remote"
-            android:layout_marginTop="1dp"
-            android:layout_weight="1.0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1.0" />
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/ll_streams"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/player_controller"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="13dp"
+        android:paddingHorizontal="8dp"
+        android:visibility="gone"
+        android:background="#ccFFFFFF"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/player_stream" />
+
+
+            <Spinner
+                android:id="@+id/sp_player_stream"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/publish_stream" />
+
+
+            <Spinner
+                android:id="@+id/sp_publish_stream"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -43,39 +97,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:textSize="10sp"
             android:enabled="false"
-            android:text="@string/play" />
+            android:text="@string/play"
+            android:textSize="10sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
             android:layout_marginLeft="10dp"
-            android:textSize="10sp"
+            android:layout_weight="1.0"
             android:enabled="false"
-            android:text="@string/stop" />
+            android:text="@string/stop"
+            android:textSize="10sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
             android:layout_marginLeft="10dp"
-            android:textSize="10sp"
+            android:layout_weight="1.0"
             android:enabled="false"
-            android:text="@string/pause" />
+            android:text="@string/pause"
+            android:textSize="10sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/publish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
             android:layout_marginLeft="10dp"
-            android:textSize="10sp"
+            android:layout_weight="1.0"
             android:enabled="false"
-            android:text="@string/publish" />
+            android:text="@string/publish"
+            android:textSize="10sp" />
 
     </LinearLayout>
 
@@ -83,10 +137,10 @@
         android:id="@+id/ctrl_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_alignBottom="@id/link_box"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_alignBottom="@id/link_box" />
+        android:layout_marginBottom="50dp" />
 
     <LinearLayout
         android:id="@+id/link_box"
@@ -102,9 +156,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="text|textUri"
             android:hint="@string/channel_id"
-            android:singleLine="true"/>
+            android:inputType="text|textUri"
+            android:singleLine="true" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/open"
@@ -128,8 +182,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/channel_id"
-            android:digits="@string/chanel_support_char"/>
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_join"

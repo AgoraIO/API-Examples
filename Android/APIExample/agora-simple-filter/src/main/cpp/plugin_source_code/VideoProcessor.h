@@ -26,6 +26,10 @@ namespace agora {
 
             bool releaseOpenGL();
 
+            bool makeCurrent();
+
+            bool detachCurrent();
+
             int processFrame(agora::rtc::VideoFrameData &capturedFrame);
 
             int setParameters(std::string parameter);

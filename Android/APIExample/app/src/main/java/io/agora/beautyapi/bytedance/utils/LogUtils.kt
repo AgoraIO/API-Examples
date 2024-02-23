@@ -32,6 +32,11 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
 
+/**
+ * Log utils
+ *
+ * @constructor Create empty Log utils
+ */
 object LogUtils {
     private const val beautyType = "ByteDance"
     private val timeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ROOT)
@@ -39,6 +44,11 @@ object LogUtils {
     private val workerThread = Executors.newSingleThreadExecutor()
     private var logOutputStream: FileOutputStream? = null
 
+    /**
+     * Set log file path
+     *
+     * @param path
+     */
     @JvmStatic
     fun setLogFilePath(path: String){
         if(path.isEmpty()){
@@ -58,6 +68,13 @@ object LogUtils {
     }
 
 
+    /**
+     * I
+     *
+     * @param tag
+     * @param content
+     * @param args
+     */
     @JvmStatic
     fun i(tag: String, content: String, vararg args: Any) {
         val consoleMessage = "[BeautyAPI][$beautyType] : ${String.format(content, args)}"
@@ -66,6 +83,13 @@ object LogUtils {
         saveToFile(fileMessage)
     }
 
+    /**
+     * D
+     *
+     * @param tag
+     * @param content
+     * @param args
+     */
     @JvmStatic
     fun d(tag: String, content: String, vararg args: Any) {
         val consoleMessage = "[BeautyAPI][$beautyType] : ${String.format(content, args)}"
@@ -74,6 +98,13 @@ object LogUtils {
         saveToFile(fileMessage)
     }
 
+    /**
+     * W
+     *
+     * @param tag
+     * @param content
+     * @param args
+     */
     @JvmStatic
     fun w(tag: String, content: String, vararg args: Any){
         val consoleMessage = "[BeautyAPI][$beautyType] : ${String.format(content, args)}"
@@ -82,6 +113,13 @@ object LogUtils {
         saveToFile(fileMessage)
     }
 
+    /**
+     * E
+     *
+     * @param tag
+     * @param content
+     * @param args
+     */
     @JvmStatic
     fun e(tag: String, content: String, vararg args: Any){
         val consoleMessage = "[BeautyAPI][$beautyType] : ${String.format(content, args)}"

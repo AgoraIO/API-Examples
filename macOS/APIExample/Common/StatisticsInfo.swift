@@ -39,6 +39,7 @@ struct StatisticsInfo {
     var preloadElapsedTime: Double = 0
     var localUid: UInt = 0
     var remoteUid: UInt = 0
+    var metaInfo: String?
     
     init(type: StatisticsType) {
         self.type = type
@@ -136,6 +137,10 @@ struct StatisticsInfo {
         localUid = uid
     }
     
+    mutating func updateMetaInfo(data: String?) {
+        metaInfo = data
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -180,6 +185,9 @@ struct StatisticsInfo {
         }
         if localUid > 0 {
             results.insert(uid, at: 0)
+        }
+        if let metaInfo = metaInfo {
+            results.append(metaInfo)
         }
         return results.joined(separator: "\n")
     }

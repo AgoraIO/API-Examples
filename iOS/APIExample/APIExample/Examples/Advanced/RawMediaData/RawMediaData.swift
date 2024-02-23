@@ -11,8 +11,7 @@ import AgoraRtcKit
 
 var audioRecording = false
 
-class RawMediaDataEntry : UIViewController
-{
+class RawMediaDataEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var audioRecordSwitch: UISwitch!
@@ -23,15 +22,17 @@ class RawMediaDataEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         audioRecording = audioRecordSwitch.isOn
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
@@ -72,7 +73,6 @@ class RawMediaDataMain: BaseViewController {
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
         
-        
         agoraKit.setVideoFrameDelegate(self)
         // enable video module and set up video encoding configs
         // Enable video module should be after calling registerVideoFrameObserver
@@ -81,7 +81,6 @@ class RawMediaDataMain: BaseViewController {
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
-        
         
         // setup raw media data observers
         agoraKit.setAudioFrameDelegate(self)
@@ -236,8 +235,6 @@ extension RawMediaDataMain: AgoraAudioFrameDelegate {
     func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
         return false
     }
-
-    
 }
 
 extension RawMediaDataMain: AgoraVideoFrameDelegate {
@@ -258,7 +255,6 @@ extension RawMediaDataMain: AgoraVideoFrameDelegate {
      * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
      */
     func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-//        LogUtils.log(message: "get captured video frame type:\(videoFrame.type), height: \(videoFrame.height), width: \(videoFrame.width)", level: .info)
         return false
     }
     

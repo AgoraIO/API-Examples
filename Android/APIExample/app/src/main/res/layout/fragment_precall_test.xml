@@ -47,8 +47,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp">
 
@@ -57,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="Echo Pretest" />
+            android:text="Audio Echo Pretest" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_echo"
@@ -65,6 +64,35 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/lb_echo"
             android:text="@string/start" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/lb_echo_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Video Echo Pretest" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_echo_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lb_echo_video"
+            android:text="@string/start" />
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_below="@id/btn_echo_video"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
 
     </RelativeLayout>
 

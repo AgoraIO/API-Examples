@@ -15,7 +15,7 @@ struct ChannelInfo {
 
 extension ChannelInfo {
     /// static function to generate 4 channels based on given channel name
-    static func AllChannelList(_ channelName:String) -> [ChannelInfo] {
+    static func AllChannelList(_ channelName: String) -> [ChannelInfo] {
         var channels = [ChannelInfo]()
         for index in 1..<5 {
             let channel = ChannelInfo(
@@ -38,7 +38,8 @@ class QuickSwitchChannel: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    /// setup page controller, it will auto generates 4 channels with corresponding view controllers for you to swipe, every time you swipe to a new viewcontroller it will switch to that channel
+    /// setup page controller, it will auto generates 4 channels with corresponding view controllers for you to swipe, 
+    /// every time you swipe to a new viewcontroller it will switch to that channel
     func setupPageController(channelName: String) {
         // generate all channel infos
         channels = ChannelInfo.AllChannelList(channelName)
@@ -57,7 +58,7 @@ class QuickSwitchChannel: BaseViewController {
         // add page view controller as child view controller
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
-        pageViewController!.view.frame = view.bounds
+        pageViewController?.view.frame = view.bounds
         pageViewController.didMove(toParent: self)
         
         // Add the page view controller's gesture recognizers to the view controller's view so that the gestures are started more easily.
@@ -88,7 +89,7 @@ class QuickSwitchChannel: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // setup UIPageController for swipe changing vc
-        setupPageController(channelName:channelName)
+        setupPageController(channelName: channelName)
         
         // enable video module
         agoraKit.enableVideo()
@@ -107,12 +108,15 @@ class QuickSwitchChannel: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
+            let result = self.agoraKit.joinChannel(byToken: token,
+                                                   channelId: self.channels[self.currentIndex].channelName,
+                                                   info: nil,
+                                                   uid: 0)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -165,8 +169,8 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -224,7 +228,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
 private extension QuickSwitchChannel {
     /// api to generate QuickSwitchChannelVCItem on demand
     func channelViewController(at index: Int) -> QuickSwitchChannelVCItem? {
-        guard channels.count > 0 else {
+        guard !channels.isEmpty else {
             return nil
         }
         
@@ -248,7 +252,8 @@ private extension QuickSwitchChannel {
 
 /// Page View Controller DataSource
 extension QuickSwitchChannel: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let channelVC = viewController as? QuickSwitchChannelVCItem else {
             return nil
         }
@@ -256,7 +261,8 @@ extension QuickSwitchChannel: UIPageViewControllerDataSource {
         return channelViewController(at: channelVC.index + 1)
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let channelVC = viewController as? QuickSwitchChannelVCItem else {
             return nil
         }
@@ -266,12 +272,15 @@ extension QuickSwitchChannel: UIPageViewControllerDataSource {
 }
 
 /// Page View Controller Delegate
-extension QuickSwitchChannel : UIPageViewControllerDelegate
-{
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+extension QuickSwitchChannel: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
         guard let previousVC = previousViewControllers.last as? QuickSwitchChannelVCItem,
             let currentVC = pageViewController.viewControllers?.first as? QuickSwitchChannelVCItem,
-            previousVC != currentVC else {
+            previousVC != currentVC
+        else {
             return
         }
         
@@ -280,8 +289,13 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         // MIGRATED
         // leave and join new channel
         agoraKit.leaveChannel(nil)
-        NetworkManager.shared.generateToken(channelName: currentVC.channel.channelName, success: { token in
-            self.agoraKit.joinChannel(byToken: token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        NetworkManager.shared.generateToken(channelName: currentVC.channel.channelName, 
+                                            success: { token in
+            self.agoraKit.joinChannel(byToken: token,
+                                      channelId: currentVC.channel.channelName, 
+                                      info: nil,
+                                      uid: 0,
+                                      joinSuccess: nil)
         })
     }
 }

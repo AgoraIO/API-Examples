@@ -9,20 +9,18 @@
 import UIKit
 
 extension Bundle {
-
     static func loadView<T>(fromNib name: String, withType type: T.Type) -> T {
         if let view = Bundle.main.loadNibNamed(name, owner: nil, options: nil)?.first as? T {
             return view
         }
-
         fatalError("Could not load view with type " + String(describing: type))
     }
     
-    static func loadVideoView(type:VideoView.StreamType, audioOnly:Bool) -> VideoView {
+    static func loadVideoView(type: VideoView.StreamType, audioOnly: Bool) -> VideoView {
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         view.audioOnly = audioOnly
         view.type = type
-        if(type.isLocal()) {
+        if type.isLocal() {
             view.statsInfo = StatisticsInfo(type: .local(StatisticsInfo.LocalInfo()))
         } else {
             view.statsInfo = StatisticsInfo(type: .remote(StatisticsInfo.RemoteInfo()))
@@ -32,36 +30,41 @@ extension Bundle {
 }
 
 class VideoView: UIView {
-
-    @IBOutlet weak var videoView:UIView!
-    @IBOutlet weak var placeholderLabel:UILabel!
-    @IBOutlet weak var infoLabel:UILabel!
-    @IBOutlet weak var statsLabel:UILabel!
-    var audioOnly:Bool = false
-    var uid:UInt = 0
+    @IBOutlet weak var videoView: UIView!
+    @IBOutlet weak var placeholderLabel: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var statsLabel: UILabel!
+    var audioOnly: Bool = false
+    var uid: UInt = 0
     enum StreamType {
         case local
         case remote
         
-        func isLocal() -> Bool{
+        func isLocal() -> Bool {
             switch self {
             case .local:  return true
             case .remote: return false
             }
         }
     }
-    var statsInfo:StatisticsInfo? {
-        didSet{
-            statsLabel.text = statsInfo?.description(audioOnly: audioOnly)
+    var statsInfo: StatisticsInfo? {
+        didSet {
+            if Thread.isMainThread {
+                statsLabel.text = statsInfo?.description(audioOnly: audioOnly)
+            } else {
+                DispatchQueue.main.async {
+                    self.statsLabel.text = self.statsInfo?.description(audioOnly: self.audioOnly)
+                }
+            }
         }
     }
-    var type:StreamType?
+    var type: StreamType?
     
-    func setPlaceholder(text:String) {
+    func setPlaceholder(text: String) {
         placeholderLabel.text = text
     }
     
-    func setInfo(text:String) {
+    func setInfo(text: String) {
         infoLabel.text = text
     }
     
@@ -71,6 +74,7 @@ class VideoView: UIView {
         statsLabel.layer.shadowOffset = CGSize(width: 1, height: 1)
         statsLabel.layer.shadowRadius = 1.0
         statsLabel.layer.shadowOpacity = 0.7
+        statsLabel.preferredMaxLayoutWidth = frame.width * 0.7
     }
 }
 
@@ -83,11 +87,11 @@ class MetalVideoView: UIView {
         super.awakeFromNib()
     }
 
-    func setPlaceholder(text:String) {
+    func setPlaceholder(text: String) {
         placeholder.text = text
     }
     
-    func setInfo(text:String) {
+    func setInfo(text: String) {
         infolabel.text = text
     }
 }
@@ -101,11 +105,11 @@ class SampleBufferDisplayView: UIView {
         super.awakeFromNib()
     }
 
-    func setPlaceholder(text:String) {
+    func setPlaceholder(text: String) {
         placeholder.text = text
     }
     
-    func setInfo(text:String) {
+    func setInfo(text: String) {
         infolabel.text = text
     }
 }

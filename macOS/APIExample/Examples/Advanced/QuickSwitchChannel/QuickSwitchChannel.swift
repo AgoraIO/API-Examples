@@ -84,8 +84,8 @@ class QuickSwitchChannel: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
         })

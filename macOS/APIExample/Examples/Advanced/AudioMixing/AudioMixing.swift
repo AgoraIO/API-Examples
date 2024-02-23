@@ -52,7 +52,8 @@ class AudioMixing: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -81,7 +82,8 @@ class AudioMixing: BaseViewController {
                   let scenario = self.selectedAudioScenario else {
                 return
             }
-            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+            self.agoraKit.setAudioProfile(profile)
+            self.agoraKit.setAudioScenario(scenario)
         }
     }
     
@@ -386,7 +388,8 @@ class AudioMixing: BaseViewController {
 //            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // disable video module in audio scene
             agoraKit.disableVideo()
-            agoraKit.setAudioProfile(profile, scenario: scenario)
+            agoraKit.setAudioProfile(profile)
+            agoraKit.setAudioScenario(scenario)
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream audio
@@ -417,8 +420,8 @@ class AudioMixing: BaseViewController {
                     self.isProcessing = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
             })
@@ -556,8 +559,8 @@ extension AudioMixing: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
