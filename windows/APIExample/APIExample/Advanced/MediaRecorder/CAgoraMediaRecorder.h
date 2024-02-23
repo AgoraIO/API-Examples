@@ -97,7 +97,7 @@ public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
-    void onRecorderStateChanged(const char* channelId, rtc::uid_t uid, RecorderState state, RecorderErrorCode error) {
+    void onRecorderStateChanged(const char* channelId, rtc::uid_t uid, RecorderState state, RecorderReasonCode error) {
 		if (m_hMsgHanlder) {
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RECORDER_STATE_CHANGE), (WPARAM)state, (LPARAM)error);
 		}

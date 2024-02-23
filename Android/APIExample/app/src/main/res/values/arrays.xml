@@ -183,6 +183,7 @@
         <item>AES_256_GCM</item>
         <item>AES_128_GCM2</item>
         <item>AES_256_GCM2</item>
+        <item>@string/custom</item>
     </string-array>
     <string-array name="dimensions">
         <item>VD_120x120</item>
@@ -261,7 +262,6 @@
         <item>@string/audio_route_speakerphone</item>
         <item>@string/audio_route_earpiece</item>
         <item>@string/audio_route_headset</item>
-        <item>@string/audio_route_headset_typec</item>
         <item>@string/audio_route_headset_bluetooth</item>
     </string-array>
 

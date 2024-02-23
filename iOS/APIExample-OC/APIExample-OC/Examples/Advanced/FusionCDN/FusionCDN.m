@@ -252,8 +252,8 @@ CGFloat HEIGHT = 640;
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -270,7 +270,7 @@ CGFloat HEIGHT = 640;
     [AgoraRtcEngineKit destroy];
 }
 
-- (void)onDirectCdnStreamingStateChanged:(AgoraDirectCdnStreamingState)state error:(AgoraDirectCdnStreamingError)error message:(NSString *)message {
+- (void)onDirectCdnStreamingStateChanged:(AgoraDirectCdnStreamingState)state reason:(AgoraDirectCdnStreamingReason)reason message:(NSString *)message {
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (state) {
             case AgoraDirectCdnStreamingStateRunning:
@@ -294,7 +294,7 @@ CGFloat HEIGHT = 640;
             case AgoraDirectCdnStreamingStateFailed:
                 [self showAlertWithTitle:@"Error" message:@"Start Streaming failed, please go back to previous page and check the settings."];
             default:
-                [LogUtil log:[NSString stringWithFormat:@"onDirectCdnStreamingStateChanged: %ld, %ld %@", state, error, message] level:(LogLevelDebug)];
+                [LogUtil log:[NSString stringWithFormat:@"onDirectCdnStreamingStateChanged: %ld, %ld %@", state, reason, message] level:(LogLevelDebug)];
                 break;
         }
     });
@@ -303,8 +303,8 @@ CGFloat HEIGHT = 640;
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];
@@ -328,8 +328,8 @@ CGFloat HEIGHT = 640;
     [self.containerView layoutStream:@[self.localView]];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state errCode:(AgoraRtmpStreamingErrorCode)errCode {
-    [LogUtil log:[NSString stringWithFormat:@"On rtmpStreamingChangedToState, state: %ld errCode: %ld", state, errCode] level:(LogLevelDebug)];
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state reason:(AgoraRtmpStreamingReason)reason {
+    [LogUtil log:[NSString stringWithFormat:@"On rtmpStreamingChangedToState, state: %ld reason: %ld", state, reason] level:(LogLevelDebug)];
 }
 
 /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -501,8 +501,8 @@ CGFloat HEIGHT = 640;
             if (result != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 NSLog(@"joinChannel call failed: %d, please check your params", result);
             } else {
                 AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
@@ -551,8 +551,8 @@ CGFloat HEIGHT = 640;
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];
@@ -601,12 +601,12 @@ CGFloat HEIGHT = 640;
     [LogUtil log:[NSString stringWithFormat:@"remote user left: %lu", uid] level:(LogLevelDebug)];
 }
 
-- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state error:(AgoraMediaPlayerError)error {
-    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, error] level:(LogLevelDebug)];
+- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {
+    [LogUtil log:[NSString stringWithFormat:@"player rtc channel publish helper state changed to: %ld error: %ld", state, reason] level:(LogLevelDebug)];
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (state) {
             case AgoraMediaPlayerStateFailed:
-                [self showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", error]];
+                [self showAlertWithTitle:[NSString stringWithFormat:@"media player error: %ld", reason]];
                 break;
             
             case AgoraMediaPlayerStateOpenCompleted:

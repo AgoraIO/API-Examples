@@ -54,9 +54,9 @@
 @property (nonatomic, assign) CGFloat currentAngle;
 @property (nonatomic, assign) CGFloat currentDistance;
 @property (nonatomic, assign) CGFloat maxDistance;
-@property (nonatomic, strong) NSArray<NSNumber *> *forward;
-@property (nonatomic, strong) NSArray<NSNumber *> *right;
-@property (nonatomic, strong) NSArray<NSNumber *> *up;
+@property (nonatomic, assign) simd_float3 forward;
+@property (nonatomic, assign) simd_float3 right;
+@property (nonatomic, assign) simd_float3 up;
 
 @end
 
@@ -79,9 +79,9 @@
     self.currentAngle = 0;
     self.currentDistance = 0;
     self.maxDistance = 10;
-    self.forward = @[@(1.0), @(0.0), @(0.0)];
-    self.right = @[@(0.0), @(1.0), @(0.0)];
-    self.up = @[@(0.0), @(0.0), @(1.0)];
+    self.forward = simd_make_float3(1.0, 0.0, 0.0);
+    self.right = simd_make_float3(0.0, 1.0, 0.0);
+    self.up = simd_make_float3(0.0, 0.0, 1.0);
     
     self.infoLabel.text = @"Please move the red icon to experience the 3D audio effect".localized;
     [self.voiceButton1 setTitle:@"" forState:(UIControlStateNormal)];
@@ -102,7 +102,6 @@
     config.channelProfile = AgoraChannelProfileLiveBroadcasting;
     
     self.agoraKit = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
-    [self.agoraKit muteAllRemoteAudioStreams:YES];
     // make myself a broadcaster
     [self.agoraKit setClientRole:(AgoraClientRoleBroadcaster)];
     // enable video module and set up video encoding configs
@@ -114,8 +113,6 @@
     AgoraLocalSpatialAudioConfig * localSpatialConfig = [[AgoraLocalSpatialAudioConfig alloc] init];
     localSpatialConfig.rtcEngine = self.agoraKit;
     self.localSpatial = [AgoraLocalSpatialAudioKit sharedLocalSpatialAudioWithConfig:localSpatialConfig];
-    [self.localSpatial muteLocalAudioStream:NO];
-    [self.localSpatial muteAllRemoteAudioStreams:NO];
     [self.localSpatial setAudioRecvRange:[UIScreen mainScreen].bounds.size.height];
     [self.localSpatial setMaxAudioRecvCount:2];
     [self.localSpatial setDistanceUnit:1];
@@ -162,14 +159,13 @@
         audioZone.position = [self getViewCenterPostion:self.voiceContainerView1];
         [self.localSpatial setZones:@[audioZone]];
     } else {
-        AgoraSpatialAudioZone *audioZone = [[AgoraSpatialAudioZone alloc] init];
-        audioZone.forwardLength = [UIScreen mainScreen].bounds.size.height;
-        audioZone.rightLength = [UIScreen mainScreen].bounds.size.width;
-        audioZone.upLength = self.maxDistance;
-        [self.localSpatial setZones:@[audioZone]];
+        [self.localSpatial setZones:nil];
     }
-    NSArray *pos = [self getViewCenterPostion:self.selfPostionView];
-    [self.localSpatial updateSelfPosition:pos axisForward:self.forward axisRight:self.right axisUp:self.up];
+    simd_float3 pos = [self getViewCenterPostion:self.selfPostionView];
+    [self.localSpatial updateSelfPosition:pos
+                              axisForward:self.forward
+                                axisRight:self.right
+                                   axisUp:self.up];
 }
 
 
@@ -221,8 +217,8 @@
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -250,26 +246,29 @@
 }
 
 - (void)updatePosition {
-    NSArray *pos = [self getViewCenterPostion:self.selfPostionView];
-    [self.localSpatial updateSelfPosition:pos axisForward:self.forward axisRight:self.right axisUp:self.up];
+    simd_float3 pos = [self getViewCenterPostion:self.selfPostionView];
+    [self.localSpatial updateSelfPosition:pos
+                              axisForward:self.forward
+                                axisRight:self.right
+                                   axisUp:self.up];
 }
 
 - (AgoraRemoteVoicePositionInfo *)getPlayerPostion: (UIView *)view {
-    NSArray *postion = [self getViewCenterPostion:view];
+    simd_float3 postion = [self getViewCenterPostion:view];
     AgoraRemoteVoicePositionInfo *postionInfo = [[AgoraRemoteVoicePositionInfo alloc] init];
     postionInfo.position = postion;
     postionInfo.forward = self.forward;
     return postionInfo;
 }
-- (NSArray <NSNumber *> *)getViewCenterPostion: (UIView *)view {
-    return @[@(view.center.x), @(view.center.y), @(0.0)];
+- (simd_float3)getViewCenterPostion: (UIView *)view {
+    return simd_make_float3(view.center.x, view.center.y, 0.0);
 }
 
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     [LogUtil log:[NSString stringWithFormat:@"Error %ld occur",errorCode] level:(LogLevelError)];
@@ -289,10 +288,12 @@
         [self.remoteUserButton1 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton1.tag = uid;
         [self.remoteUserButton1 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton1]];
     } else if (self.remoteUserButton2.tag <= 0) {
         [self.remoteUserButton2 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton2.tag = uid;
         [self.remoteUserButton2 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton2]];
     }
 }
 
@@ -312,9 +313,10 @@
         [self.remoteUserButton2 setHidden:YES];
         self.remoteUserButton2.tag = 0;
     }
+    [self.localSpatial removeRemotePosition:uid];
 }
 
-- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state error:(AgoraMediaPlayerError)error {
+- (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {
     if (state == AgoraMediaPlayerStateOpenCompleted || state == AgoraMediaPlayerStatePlayBackAllLoopsCompleted || state == AgoraMediaPlayerStatePlayBackCompleted) {
         [playerKit play];
     }

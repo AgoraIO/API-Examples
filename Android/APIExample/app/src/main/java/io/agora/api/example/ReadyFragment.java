@@ -54,7 +54,7 @@ public class ReadyFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle(exampleBean.getName());
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -106,8 +106,7 @@ public class ReadyFragment extends BaseFragment {
         // Request permission
         AndPermission.with(this).runtime().permission(
                 permissionArray
-        ).onGranted(permissions ->
-        {
+        ).onGranted(permissions -> {
             // Permissions Granted
             runnable.run();
         }).start();

@@ -1,0 +1,55 @@
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion = '10.12.3'
+}
+
+def filterCheckstyleFiles(String diffFiles){
+    ArrayList<String> filterList = new ArrayList<String>();
+    String [] files = diffFiles.split("\\n")
+    for (String file : files) {
+        if (file.endsWith(".java")
+                || file.endsWith(".xml")
+                || file.endsWith(".properties")
+        ) {
+            filterList.add(file)
+        }
+    }
+    return filterList
+}
+
+task checkstyle(type: Checkstyle) {
+    source 'src'
+
+    exclude '**/gen/**'
+    exclude '**/test/**'
+    exclude '**/androidTest/**'
+    exclude '**/R.java'
+    exclude '**/BuildConfig.java'
+    exclude '**/authpack.java'
+
+    if (project.hasProperty('commit_diff_files')) {
+        def ft = filterCheckstyleFiles(project.property('commit_diff_files'))
+        if (ft.size() > 0) {
+            for (int i = 0; i < ft.size(); i++) {
+                String splitter = ft[i];
+                String[] fileName = splitter.split("/");
+                include '**/' + fileName[fileName.size() - 1];
+            }
+        } else {
+            include 'null'
+        }
+
+        println("checkstyle >> check commit diff files...")
+        println("checkstyle >> " + includes.toList())
+    } else {
+        include '**/*.java'
+        println("checkstyle >> check all java files...")
+    }
+
+    configFile new File(rootDir, "checkstyle.xml")
+    classpath = files()
+}
+
+
+

@@ -2,9 +2,22 @@ package io.agora.api.example.examples.basic;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.ServiceInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +31,17 @@ import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.agora.api.example.MainActivity;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -133,11 +150,11 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         audioRouteInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!joined){
+                if (!joined) {
                     return;
                 }
-                boolean isChatRoomMode = "CHATROOM".equals(audioScenarioInput.getSelectedItem());
-                if (isChatRoomMode) {
+                boolean isCommunication = getString(R.string.channel_profile_communication).equals(channelProfileInput.getSelectedItem());
+                if (isCommunication) {
                     int route = Constants.AUDIO_ROUTE_EARPIECE;
                     if (getString(R.string.audio_route_earpiece).equals(parent.getSelectedItem())) {
                         route = Constants.AUDIO_ROUTE_EARPIECE;
@@ -146,9 +163,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     } else if (getString(R.string.audio_route_headset).equals(parent.getSelectedItem())) {
                         route = Constants.AUDIO_ROUTE_HEADSET;
                     } else if (getString(R.string.audio_route_headset_bluetooth).equals(parent.getSelectedItem())) {
-                        route = Constants.AUDIO_ROUTE_HEADSETBLUETOOTH;
-                    } else if (getString(R.string.audio_route_headset_typec).equals(parent.getSelectedItem())) {
-                        route = Constants.AUDIO_ROUTE_USBDEVICE;
+                        route = Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP;
                     }
                     int ret = engine.setRouteInCommunicationMode(route);
                     showShortToast("setRouteInCommunicationMode route=" + route + ", ret=" + ret);
@@ -162,7 +177,6 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     int ret = engine.setEnableSpeakerphone(isSpeakerPhone);
                     showShortToast("setEnableSpeakerphone enable=" + isSpeakerPhone + ", ret=" + ret);
                 }
-
             }
 
             @Override
@@ -197,6 +211,26 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 view.findViewById(R.id.audio_place_05),
                 view.findViewById(R.id.audio_place_06)
         );
+
+        if (savedInstanceState != null) {
+            joined = savedInstanceState.getBoolean("joined");
+            if (joined) {
+                myUid = savedInstanceState.getInt("myUid");
+                ArrayList<Integer> seatRemoteUidList = savedInstanceState.getIntegerArrayList("seatRemoteUidList");
+                mute.setEnabled(true);
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                record.setEnabled(true);
+                playout.setEnabled(true);
+                inear.setEnabled(inEarSwitch.isChecked());
+                inEarSwitch.setEnabled(true);
+                audioSeatManager.upLocalSeat(myUid);
+
+                for (Integer uid : seatRemoteUidList) {
+                    audioSeatManager.upRemoteSeat(uid);
+                }
+            }
+        }
     }
 
     @Override
@@ -204,27 +238,27 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null || engine != null) {
             return;
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
@@ -232,7 +266,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -254,17 +288,81 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+        enableNotifications();
+    }
+
+    private void enableNotifications() {
+        if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+            Log.d(TAG, "Notifications enable!");
+            return;
+        }
+        Log.d(TAG, "Notifications not enable!");
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Tip")
+                .setMessage(R.string.notifications_enable_tip)
+                .setPositiveButton(R.string.setting, (dialog, which) -> {
+                    Intent intent = new Intent();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                        intent.putExtra(Settings.EXTRA_CHANNEL_ID, requireContext().getApplicationInfo().uid);
+                    } else {
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    }
+                    startActivity(intent);
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+    public void onPause() {
+        super.onPause();
+        startRecordingService();
+    }
+
+    private void startRecordingService() {
+        if (joined) {
+            Intent intent = new Intent(requireContext(), LocalRecordingService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requireContext().startForegroundService(intent);
+            } else {
+                requireContext().startService(intent);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // join state
+        outState.putBoolean("joined", joined);
+        outState.putInt("myUid", myUid);
+        outState.putIntegerArrayList("seatRemoteUidList", audioSeatManager.getSeatRemoteUidList());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        stopRecordingService();
+    }
+
+    private void stopRecordingService() {
+        Intent intent = new Intent(requireContext(), LocalRecordingService.class);
+        requireContext().stopService(intent);
+    }
+
+    @Override
+    protected void onBackPressed() {
+        joined = false;
+        stopRecordingService();
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+        super.onBackPressed();
     }
 
     @Override
@@ -285,8 +383,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                     audioProfileInput.setEnabled(false);
@@ -294,7 +391,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -328,7 +425,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         } else if (v.getId() == R.id.microphone) {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
+            /*Turn off / on the microphone, stop / start local audio collection and push streaming.*/
             engine.muteLocalAudioStream(mute.isActivated());
         }
     }
@@ -338,7 +435,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
 
         int channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -364,14 +461,14 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -426,18 +523,15 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mute.setEnabled(true);
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                    record.setEnabled(true);
-                    playout.setEnabled(true);
-                    inear.setEnabled(inEarSwitch.isChecked());
-                    inEarSwitch.setEnabled(true);
-                    audioSeatManager.upLocalSeat(uid);
-                }
+            runOnUIThread(() -> {
+                mute.setEnabled(true);
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                record.setEnabled(true);
+                playout.setEnabled(true);
+                inear.setEnabled(inEarSwitch.isChecked());
+                inEarSwitch.setEnabled(true);
+                audioSeatManager.upLocalSeat(uid);
             });
         }
 
@@ -544,22 +638,22 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             showShortToast("onAudioRouteChanged : " + routing);
             runOnUIThread(() -> {
                 String selectedRouteStr = getString(R.string.audio_route_speakerphone);
-                if(routing == Constants.AUDIO_ROUTE_EARPIECE){
+                if (routing == Constants.AUDIO_ROUTE_EARPIECE) {
                     selectedRouteStr = getString(R.string.audio_route_earpiece);
-                }else if(routing == Constants.AUDIO_ROUTE_SPEAKERPHONE){
+                } else if (routing == Constants.AUDIO_ROUTE_SPEAKERPHONE) {
                     selectedRouteStr = getString(R.string.audio_route_speakerphone);
-                }else if(routing == Constants.AUDIO_ROUTE_HEADSET){
+                } else if (routing == Constants.AUDIO_ROUTE_HEADSET) {
                     selectedRouteStr = getString(R.string.audio_route_headset);
-                }else if(routing == Constants.AUDIO_ROUTE_HEADSETBLUETOOTH){
+                } else if (routing == Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP) {
                     selectedRouteStr = getString(R.string.audio_route_headset_bluetooth);
-                }else if(routing == Constants.AUDIO_ROUTE_USBDEVICE){
+                } else if (routing == Constants.AUDIO_ROUTE_USBDEVICE) {
                     selectedRouteStr = getString(R.string.audio_route_headset_typec);
                 }
 
                 int selection = 0;
                 for (int i = 0; i < audioRouteInput.getAdapter().getCount(); i++) {
                     String routeStr = (String) audioRouteInput.getItemAtPosition(i);
-                    if(routeStr.equals(selectedRouteStr)){
+                    if (routeStr.equals(selectedRouteStr)) {
                         selection = i;
                         break;
                     }
@@ -568,4 +662,86 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             });
         }
     };
+
+
+    /**
+     * The service will display a microphone foreground notification,
+     * which can ensure keeping recording when the activity destroyed by system for memory leak or other reasons.
+     * Note: The "android.permission.FOREGROUND_SERVICE" permission is required.
+     * And the android:foregroundServiceType should be microphone.
+     */
+    public static class LocalRecordingService extends Service {
+        private static final int NOTIFICATION_ID = 1234567800;
+        private static final String CHANNEL_ID = "audio_channel_id";
+
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            Notification notification = getDefaultNotification();
+
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    this.startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE);
+                } else {
+                    this.startForeground(NOTIFICATION_ID, notification);
+                }
+            } catch (Exception ex) {
+                Log.e(TAG, "", ex);
+            }
+        }
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+
+        private Notification getDefaultNotification() {
+            ApplicationInfo appInfo = this.getApplicationContext().getApplicationInfo();
+            String name = this.getApplicationContext().getPackageManager().getApplicationLabel(appInfo).toString();
+            int icon = appInfo.icon;
+
+            try {
+                Bitmap iconBitMap = BitmapFactory.decodeResource(this.getApplicationContext().getResources(), icon);
+                if (iconBitMap == null || iconBitMap.getByteCount() == 0) {
+                    Log.w(TAG, "Couldn't load icon from icon of applicationInfo, use android default");
+                    icon = R.mipmap.ic_launcher;
+                }
+            } catch (Exception ex) {
+                Log.w(TAG, "Couldn't load icon from icon of applicationInfo, use android default");
+                icon = R.mipmap.ic_launcher;
+            }
+
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.createNotificationChannel(mChannel);
+            }
+
+            PendingIntent activityPendingIntent;
+            Intent intent = new Intent();
+            intent.setClass(this, MainActivity.class);
+            if (Build.VERSION.SDK_INT >= 23) {
+                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            }
+
+            Notification.Builder builder = new Notification.Builder(this)
+                    .addAction(icon, "Back to app", activityPendingIntent)
+                    .setContentText("Agora Recording ...")
+                    .setOngoing(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setSmallIcon(icon)
+                    .setTicker(name)
+                    .setWhen(System.currentTimeMillis());
+            if (Build.VERSION.SDK_INT >= 26) {
+                builder.setChannelId(CHANNEL_ID);
+            }
+
+            return builder.build();
+        }
+
+    }
 }

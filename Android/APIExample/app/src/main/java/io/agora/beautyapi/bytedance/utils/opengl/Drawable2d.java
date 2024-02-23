@@ -32,24 +32,33 @@ import java.nio.FloatBuffer;
  */
 public class Drawable2d {
     private static final int SIZEOF_FLOAT = 4;
+    /**
+     * The constant COORDS_PER_VERTEX.
+     */
     public static final int COORDS_PER_VERTEX = 2;
 
+    /**
+     * The constant TEXTURE_COORD_STRIDE.
+     */
     public static final int TEXTURE_COORD_STRIDE = COORDS_PER_VERTEX * SIZEOF_FLOAT;
+    /**
+     * The constant VERTEXTURE_STRIDE.
+     */
     public static final int VERTEXTURE_STRIDE = COORDS_PER_VERTEX * SIZEOF_FLOAT;
 
 
     /**
      * Simple equilateral triangle (1.0 per side).  Centered on (0,0).
      */
-    private static final float TRIANGLE_COORDS[] = {
-         0.0f,  0.577350269f,   // 0 top
-        -0.5f, -0.288675135f,   // 1 bottom left
-         0.5f, -0.288675135f    // 2 bottom right
+    private static final float[] TRIANGLE_COORDS = {
+            0.0f, 0.577350269f,   // 0 top
+            -0.5f, -0.288675135f,   // 1 bottom left
+            0.5f, -0.288675135f    // 2 bottom right
     };
-    private static final float TRIANGLE_TEX_COORDS[] = {
-        0.5f, 0.0f,     // 0 top center
-        0.0f, 1.0f,     // 1 bottom left
-        1.0f, 1.0f,     // 2 bottom right
+    private static final float[] TRIANGLE_TEX_COORDS = {
+            0.5f, 0.0f,     // 0 top center
+            0.0f, 1.0f,     // 1 bottom left
+            1.0f, 1.0f,     // 2 bottom right
     };
     private static final FloatBuffer TRIANGLE_BUF =
             GlUtil.createFloatBuffer(TRIANGLE_COORDS);
@@ -62,28 +71,25 @@ public class Drawable2d {
      * <p>
      * Triangles are 0-1-2 and 2-1-3 (counter-clockwise winding).
      */
-    private static final float RECTANGLE_COORDS[] = {
-        -0.5f, -0.5f,   // 0 bottom left
-         0.5f, -0.5f,   // 1 bottom right
-        -0.5f,  0.5f,   // 2 top left
-         0.5f,  0.5f,   // 3 top right
+    private static final float[] RECTANGLE_COORDS = {
+            -0.5f, -0.5f,   // 0 bottom left
+            0.5f, -0.5f,   // 1 bottom right
+            -0.5f, 0.5f,   // 2 top left
+            0.5f, 0.5f,   // 3 top right
     };
-    /** {zh} 
-     * FrameBuffer 与屏幕的坐标系是垂直镜像的，所以在将纹理绘制到一个 FrameBuffer 或屏幕上
-     * 的时候，他们用的纹理顶点坐标是不同的，需要注意。
-     */
-    /** {en} 
+    /**
      * The coordinate system of the FrameBuffer and the screen is mirrored vertically, so when drawing the texture to a FrameBuffer or screen
      * , the vertex coordinates of the texture they use are different, which needs attention.
+     * <p>FrameBuffer 与屏幕的坐标系是垂直镜像的，所以在将纹理绘制到一个 FrameBuffer 或屏幕上
+     * 的时候，他们用的纹理顶点坐标是不同的，需要注意。
      */
-
-    private static final float RECTANGLE_TEX_COORDS[] = {
+    private static final float[] RECTANGLE_TEX_COORDS = {
             0.0f, 1.0f,     // 0 bottom left
             1.0f, 1.0f,     // 1 bottom right
             0.0f, 0.0f,     // 2 top left
             1.0f, 0.0f      // 3 top right
     };
-    private static final float RECTANGLE_TEX_COORDS1[] = {
+    private static final float[] RECTANGLE_TEX_COORDS1 = {
             0.0f, 0.0f,     // 0 bottom left
             1.0f, 0.0f,     // 1 bottom right
             0.0f, 1.0f,     // 2 top left
@@ -103,33 +109,31 @@ public class Drawable2d {
      * The texture coordinates are Y-inverted relative to RECTANGLE.  (This seems to work out
      * right with external textures from SurfaceTexture.)
      */
-    private static final float FULL_RECTANGLE_COORDS[] = {
-        -1.0f, -1.0f,   // 0 bottom left
-         1.0f, -1.0f,   // 1 bottom right
-        -1.0f,  1.0f,   // 2 top left
-         1.0f,  1.0f,   // 3 top right
+    private static final float[] FULL_RECTANGLE_COORDS = {
+            -1.0f, -1.0f,   // 0 bottom left
+            1.0f, -1.0f,   // 1 bottom right
+            -1.0f, 1.0f,   // 2 top left
+            1.0f, 1.0f,   // 3 top right
     };
-    /** {zh} 
-     * FrameBuffer 与屏幕的坐标系是垂直镜像的，所以在将纹理绘制到一个 FrameBuffer 或屏幕上
-     * 的时候，他们用的纹理顶点坐标是不同的，需要注意。
-     */
-    /** {en} 
+
+    /**
      * The coordinate system of the FrameBuffer and the screen is mirrored vertically, so when drawing the texture to a FrameBuffer or screen
      * , the vertex coordinates of the texture they use are different, which needs attention.
+     * <p>FrameBuffer 与屏幕的坐标系是垂直镜像的，所以在将纹理绘制到一个 FrameBuffer 或屏幕上
+     * 的时候，他们用的纹理顶点坐标是不同的，需要注意。
      */
-
-    private static final float FULL_RECTANGLE_TEX_COORDS[] = {
-        0.0f, 1.0f,     // 0 bottom left
-        1.0f, 1.0f,     // 1 bottom right
-        0.0f, 0.0f,     // 2 top left
-        1.0f, 0.0f      // 3 top right
+    private static final float[] FULL_RECTANGLE_TEX_COORDS = {
+            0.0f, 1.0f,     // 0 bottom left
+            1.0f, 1.0f,     // 1 bottom right
+            0.0f, 0.0f,     // 2 top left
+            1.0f, 0.0f      // 3 top right
     };
 
-    private static final float FULL_RECTANGLE_TEX_COORDS1[] = {
-        0.0f, 0.0f,     // 0 bottom left
-        1.0f, 0.0f,     // 1 bottom right
-        0.0f, 1.0f,     // 2 top left
-        1.0f, 1.0f      // 3 top right
+    private static final float[] FULL_RECTANGLE_TEX_COORDS1 = {
+            0.0f, 0.0f,     // 0 bottom left
+            1.0f, 0.0f,     // 1 bottom right
+            0.0f, 1.0f,     // 2 top left
+            1.0f, 1.0f      // 3 top right
     };
     private static final FloatBuffer FULL_RECTANGLE_BUF =
             GlUtil.createFloatBuffer(FULL_RECTANGLE_COORDS);
@@ -152,13 +156,26 @@ public class Drawable2d {
      * Enum values for constructor.
      */
     public enum Prefab {
-        TRIANGLE, RECTANGLE, FULL_RECTANGLE
+        /**
+         * Triangle prefab.
+         */
+        TRIANGLE,
+        /**
+         * Rectangle prefab.
+         */
+        RECTANGLE,
+        /**
+         * Full rectangle prefab.
+         */
+        FULL_RECTANGLE
     }
 
     /**
      * Prepares a drawable from a "pre-fabricated" shape definition.
      * <p>
      * Does no EGL/GL operations, so this can be done at any time.
+     *
+     * @param shape the shape
      */
     public Drawable2d(Prefab shape) {
         switch (shape) {
@@ -197,6 +214,8 @@ public class Drawable2d {
      * Returns the array of vertices.
      * <p>
      * To avoid allocations, this returns internal state.  The caller must not modify it.
+     *
+     * @return the vertex array
      */
     public FloatBuffer getVertexArray() {
         return mVertexArray;
@@ -206,24 +225,27 @@ public class Drawable2d {
      * Returns the array of texture coordinates.
      * <p>
      * To avoid allocations, this returns internal state.  The caller must not modify it.
+     *
+     * @return the tex coord array
      */
     public FloatBuffer getTexCoordArray() {
         return mTexCoordArray;
     }
 
-    /** {zh} 
-     * @brief 返回 frameBuffer 绘制用 texture coordinates
-     */
-    /** {en} 
-     * @brief Returns texture coordinates for drawing frameBuffer
-     */
 
+    /**
+     * Gets tex coor array fb.
+     *
+     * @return the tex coor array fb
+     */
     public FloatBuffer getTexCoorArrayFB() {
         return mTexCoordArrayFB;
     }
 
     /**
      * Returns the number of vertices stored in the vertex array.
+     *
+     * @return the vertex count
      */
     public int getVertexCount() {
         return mVertexCount;
@@ -231,6 +253,8 @@ public class Drawable2d {
 
     /**
      * Returns the width, in bytes, of the data for each vertex.
+     *
+     * @return the vertex stride
      */
     public int getVertexStride() {
         return mVertexStride;
@@ -238,6 +262,8 @@ public class Drawable2d {
 
     /**
      * Returns the width, in bytes, of the data for each texture coordinate.
+     *
+     * @return the tex coord stride
      */
     public int getTexCoordStride() {
         return mTexCoordStride;
@@ -245,20 +271,37 @@ public class Drawable2d {
 
     /**
      * Returns the number of position coordinates per vertex.  This will be 2 or 3.
+     *
+     * @return the coords per vertex
      */
     public int getCoordsPerVertex() {
         return mCoordsPerVertex;
     }
 
-    public void updateVertexArray(float[] FULL_RECTANGLE_COORDS) {
-        mVertexArray = GlUtil.createFloatBuffer(FULL_RECTANGLE_COORDS);
-        mVertexCount = FULL_RECTANGLE_COORDS.length / COORDS_PER_VERTEX;
+    /**
+     * Update vertex array.
+     *
+     * @param fullRectangleCoords the full rectangle coords
+     */
+    public void updateVertexArray(float[] fullRectangleCoords) {
+        mVertexArray = GlUtil.createFloatBuffer(fullRectangleCoords);
+        mVertexCount = fullRectangleCoords.length / COORDS_PER_VERTEX;
     }
 
-    public void updateTexCoordArray(float[] FULL_RECTANGLE_TEX_COORDS) {
-        mTexCoordArray = GlUtil.createFloatBuffer(FULL_RECTANGLE_TEX_COORDS);
+    /**
+     * Update tex coord array.
+     *
+     * @param fullRectangleTexCoords the full rectangle tex coords
+     */
+    public void updateTexCoordArray(float[] fullRectangleTexCoords) {
+        mTexCoordArray = GlUtil.createFloatBuffer(fullRectangleTexCoords);
     }
 
+    /**
+     * Update tex coord array fb.
+     *
+     * @param coords the coords
+     */
     public void updateTexCoordArrayFB(float[] coords) {
         mTexCoordArrayFB = GlUtil.createFloatBuffer(coords);
     }

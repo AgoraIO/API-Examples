@@ -9,7 +9,7 @@
 import Foundation
 
 protocol AgoraPcmSourcePushDelegate {
-    func onAudioFrame(data: UnsafeMutablePointer<UInt8>) -> Void
+    func onAudioFrame(data: UnsafeMutablePointer<UInt8>)
 }
 
 class AgoraPcmSourcePush: NSObject {

@@ -28,6 +28,9 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
+/**
+ * The type Audio waveform.
+ */
 @Example(
         index = 17,
         group = ADVANCED,

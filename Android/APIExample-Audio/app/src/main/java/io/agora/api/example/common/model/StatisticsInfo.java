@@ -1,26 +1,24 @@
 package io.agora.api.example.common.model;
 
-import io.agora.rtc2.IRtcEngineEventHandler.LastmileProbeResult;
-import io.agora.rtc2.IRtcEngineEventHandler.LocalAudioStats;
+import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.IRtcEngineEventHandler.LocalVideoStats;
 import io.agora.rtc2.IRtcEngineEventHandler.RemoteAudioStats;
 import io.agora.rtc2.IRtcEngineEventHandler.RemoteVideoStats;
-import io.agora.rtc2.IRtcEngineEventHandler.RtcStats;
 
 public class StatisticsInfo {
     private LocalVideoStats localVideoStats = new LocalVideoStats();
-    private LocalAudioStats localAudioStats = new LocalAudioStats();
+    private IRtcEngineEventHandler.LocalAudioStats localAudioStats = new IRtcEngineEventHandler.LocalAudioStats();
     private RemoteVideoStats remoteVideoStats = new RemoteVideoStats();
     private RemoteAudioStats remoteAudioStats = new RemoteAudioStats();
-    private RtcStats rtcStats = new RtcStats();
+    private IRtcEngineEventHandler.RtcStats rtcStats = new IRtcEngineEventHandler.RtcStats();
     private int quality;
-    private LastmileProbeResult lastMileProbeResult;
+    private IRtcEngineEventHandler.LastmileProbeResult lastMileProbeResult;
 
     public void setLocalVideoStats(LocalVideoStats localVideoStats) {
         this.localVideoStats = localVideoStats;
     }
 
-    public void setLocalAudioStats(LocalAudioStats localAudioStats) {
+    public void setLocalAudioStats(IRtcEngineEventHandler.LocalAudioStats localAudioStats) {
         this.localAudioStats = localAudioStats;
     }
 
@@ -32,7 +30,7 @@ public class StatisticsInfo {
         this.remoteAudioStats = remoteAudioStats;
     }
 
-    public void setRtcStats(RtcStats rtcStats) {
+    public void setRtcStats(IRtcEngineEventHandler.RtcStats rtcStats) {
         this.rtcStats = rtcStats;
     }
 
@@ -162,7 +160,7 @@ public class StatisticsInfo {
         return stringBuilder.toString();
     }
 
-    public void setLastMileProbeResult(LastmileProbeResult lastmileProbeResult) {
+    public void setLastMileProbeResult(IRtcEngineEventHandler.LastmileProbeResult lastmileProbeResult) {
         this.lastMileProbeResult = lastmileProbeResult;
     }
 

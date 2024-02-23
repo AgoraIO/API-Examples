@@ -14,8 +14,7 @@ import AGEVideoLayout
 let CANVAS_WIDTH = 640
 let CANVAS_HEIGHT = 480
 
-class RTMPStreamingEntry : UIViewController
-{
+class RTMPStreamingEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var noteLabel: UILabel!
@@ -27,15 +26,17 @@ class RTMPStreamingEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -99,7 +100,8 @@ class RTMPStreamingMain: BaseViewController {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -132,16 +134,15 @@ class RTMPStreamingMain: BaseViewController {
         
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-            if (result != 0) {
+            if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
     }
-    
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
@@ -168,7 +169,7 @@ class RTMPStreamingMain: BaseViewController {
         guard let rtmpURL = rtmpTextField.text else {
             return
         }
-        if(isPublished) {
+        if isPublished {
             // stop rtmp streaming
             agoraKit.stopRtmpStream(rtmpURL)
         } else {
@@ -177,7 +178,7 @@ class RTMPStreamingMain: BaseViewController {
             
             // check whether we need to enable transcoding
             let transcodingEnabled = transcodingSwitch.isOn
-            if(transcodingEnabled){
+            if transcodingEnabled {
                 // we will use transcoding to composite multiple hosts' video
                 // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
                 transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
@@ -217,8 +218,8 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode.description)", level: .error)
@@ -278,7 +279,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         
         // check whether we have enabled transcoding
         let transcodingEnabled = transcodingSwitch.isOn
-        if(transcodingEnabled){
+        if transcodingEnabled {
             // remove user from canvas if current cohost left channel
             if let existingUid = remoteUid {
                 transcoding.removeUser(existingUid)
@@ -292,14 +293,17 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
     /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(errCode.rawValue)", level: .info)
-        if(state == .running) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   rtmpStreamingChangedToState url: String,
+                   state: AgoraRtmpStreamingState,
+                   reason: AgoraRtmpStreamingReason) {
+        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(reason.rawValue)", level: .info)
+        if state == .running {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
-        } else if(state == .failure) {
+        } else if state == .failure {
 //            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errCode.rawValue)")
-        } else if(state == .idle) {
+        } else if state == .idle {
             self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
             isPublished = false
         }

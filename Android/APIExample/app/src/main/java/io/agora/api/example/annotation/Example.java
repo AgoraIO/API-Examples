@@ -1,8 +1,5 @@
 package io.agora.api.example.annotation;
 
-import android.os.Parcelable;
-
-import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -7,24 +7,59 @@ import com.bytedance.labcv.effectsdk.RenderManager
 import io.agora.api.example.utils.FileKtUtils
 import java.util.concurrent.Executors
 
+/**
+ * Byte dance beauty s d k
+ *
+ * @constructor Create empty Byte dance beauty s d k
+ */
 object ByteDanceBeautySDK {
     private val TAG = "ByteDanceBeautySDK"
 
-    private val LICENSE_NAME = "Agora_test_20230815_20231115_io.agora.test.entfull_4.5.0_599.licbag"
+    private val LICENSE_NAME = "Agora_test_20231116_20240116_io.agora.test.entfull_4.5.0_893.licbag"
     private val workerThread = Executors.newSingleThreadExecutor()
     private var context: Application?  = null
     private var storagePath  = ""
     private var assetsPath  = ""
 
+    /**
+     * Render manager
+     */
     val renderManager = RenderManager()
+
+    /**
+     * License path
+     */
     var licensePath = ""
+
+    /**
+     * Models path
+     */
     var modelsPath = ""
+
+    /**
+     * Beauty node path
+     */
     var beautyNodePath = ""
+
+    /**
+     * Beauty4items node path
+     */
     var beauty4ItemsNodePath = ""
+
+    /**
+     * Re sharp node path
+     */
     var reSharpNodePath = ""
+
+    /**
+     * Sticker path
+     */
     var stickerPath = ""
 
 
+    /**
+     * Makeup tianmei node path
+     */
     var makeupTianmeiNodePath = ""
         get() {
             if(field.isEmpty()){
@@ -36,6 +71,10 @@ object ByteDanceBeautySDK {
             }
             return field
         }
+
+    /**
+     * Makeup yuan qi node path
+     */
     var makeupYuanQiNodePath = ""
         get() {
             if(field.isEmpty()){
@@ -48,6 +87,11 @@ object ByteDanceBeautySDK {
             return field
         }
 
+    /**
+     * Init beauty s d k
+     *
+     * @param context
+     */
     fun initBeautySDK(context: Context){
         this.context = context.applicationContext as? Application
         storagePath = context.getExternalFilesDir("")?.absolutePath ?: return
@@ -81,7 +125,11 @@ object ByteDanceBeautySDK {
         }
     }
 
-    // GL Thread
+    /**
+     * Init effect
+     *
+     * @param context
+     */// GL Thread
     fun initEffect(context: Context){
         val ret = renderManager.init(
             context,
@@ -96,7 +144,10 @@ object ByteDanceBeautySDK {
         renderManager.loadResourceWithTimeout(-1)
     }
 
-    // GL Thread
+    /**
+     * Un init effect
+     *
+     */// GL Thread
     fun unInitEffect(){
         renderManager.release()
     }
@@ -110,6 +161,25 @@ object ByteDanceBeautySDK {
         return true
     }
 
+    /**
+     * Set beauty
+     *
+     * @param smooth
+     * @param whiten
+     * @param thinFace
+     * @param enlargeEye
+     * @param redden
+     * @param shrinkCheekbone
+     * @param shrinkJawbone
+     * @param whiteTeeth
+     * @param hairlineHeight
+     * @param narrowNose
+     * @param mouthSize
+     * @param chinLength
+     * @param brightEye
+     * @param darkCircles
+     * @param nasolabialFolds
+     */
     fun setBeauty(
         smooth: Float? = null,
         whiten: Float? = null,

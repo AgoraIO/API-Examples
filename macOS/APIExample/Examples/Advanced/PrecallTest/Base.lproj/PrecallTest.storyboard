@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -27,13 +27,13 @@
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dcH-0c-s4h">
                                 <rect key="frame" x="473" y="349" width="114" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Rf9-Nd-6YI"/>
-                                </constraints>
                                 <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xsZ-UP-eoO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Rf9-Nd-6YI"/>
+                                </constraints>
                                 <connections>
                                     <action selector="onStartCameraTest:" target="Gwp-vd-c2J" id="jkO-pw-2hn"/>
                                 </connections>
@@ -129,22 +129,22 @@
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbq-TB-dr1">
                                 <rect key="frame" x="373" y="246" width="214" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="yvj-zJ-hyl"/>
-                                </constraints>
-                                <buttonCell key="cell" type="push" title="Start Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTC-4D-0SS">
+                                <buttonCell key="cell" type="push" title="Start Audio Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTC-4D-0SS">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="yvj-zJ-hyl"/>
+                                </constraints>
                                 <connections>
                                     <action selector="doEchoTestWithSender:" target="Gwp-vd-c2J" id="lzw-ua-Rzb"/>
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="hUe-PL-wVd">
-                                <rect key="frame" x="164" y="223" width="16" height="16"/>
+                                <rect key="frame" x="163" y="223" width="16" height="16"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kex-rb-pg3">
-                                <rect key="frame" x="13" y="214" width="148" height="32"/>
+                                <rect key="frame" x="13" y="214" width="147" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Lastmile Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="flT-Cc-shZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -153,7 +153,7 @@
                                     <action selector="onStartLastmileTest:" target="Gwp-vd-c2J" id="mfH-Y6-hEq"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-fm-qZJ">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-fm-qZJ">
                                 <rect key="frame" x="18" y="197" width="4" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="l10-10-hg0">
                                     <font key="font" metaFont="menu" size="11"/>
@@ -161,7 +161,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tbF-j3-roX">
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tbF-j3-roX">
                                 <rect key="frame" x="18" y="173" width="4" height="14"/>
                                 <textFieldCell key="cell" selectable="YES" id="I5r-WY-d2T">
                                     <font key="font" metaFont="menu" size="11"/>
@@ -170,10 +170,10 @@
                                 </textFieldCell>
                             </textField>
                             <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Tc-6I-Jdq">
-                                <rect key="frame" x="137" y="116" width="163" height="96"/>
+                                <rect key="frame" x="137" y="91" width="163" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OBf-Wf-Xcv">
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OBf-Wf-Xcv">
                                         <rect key="frame" x="66" y="34" width="31" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="L6F-q4-SNZ">
@@ -182,7 +182,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpY-uM-D6x">
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpY-uM-D6x">
                                         <rect key="frame" x="10" y="10" width="143" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Please say something.." id="BPe-Gx-enC">
@@ -194,10 +194,10 @@
                                 </subviews>
                             </customView>
                             <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRv-cr-iPK">
-                                <rect key="frame" x="307" y="116" width="163" height="96"/>
+                                <rect key="frame" x="307" y="91" width="163" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3EB-jX-e6g">
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3EB-jX-e6g">
                                         <rect key="frame" x="66" y="34" width="31" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="aQJ-oH-NdD">
@@ -206,7 +206,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-oj-cNc">
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-oj-cNc">
                                         <rect key="frame" x="5" y="8" width="152" height="10"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Now you should hear what you said..." id="Yjn-ei-T3i">
@@ -217,9 +217,20 @@
                                     </textField>
                                 </subviews>
                             </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Se2-qE-yPM">
+                                <rect key="frame" x="373" y="218" width="214" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Video Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nkf-bY-zGl">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartVideoEchoTest:" target="Gwp-vd-c2J" id="b4C-Ni-BfT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstAttribute="trailing" secondItem="Se2-qE-yPM" secondAttribute="trailing" constant="20" symbolic="YES" id="2rT-97-wij"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="centerY" secondItem="dcH-0c-s4h" secondAttribute="centerY" id="64o-iE-bQz"/>
                             <constraint firstItem="Kex-rb-pg3" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="8rW-gu-Xoh"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="9LW-S2-jy8"/>
@@ -244,6 +255,8 @@
                             <constraint firstItem="zLk-SB-J3G" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" constant="20" id="ViY-yQ-GgI"/>
                             <constraint firstAttribute="trailing" secondItem="lbq-TB-dr1" secondAttribute="trailing" constant="20" symbolic="YES" id="WoM-YT-bfw"/>
                             <constraint firstItem="8hj-fm-qZJ" firstAttribute="leading" secondItem="Kex-rb-pg3" secondAttribute="leading" id="X00-85-bnb"/>
+                            <constraint firstItem="Se2-qE-yPM" firstAttribute="top" secondItem="lbq-TB-dr1" secondAttribute="bottom" constant="8" id="XUk-QH-YDs"/>
+                            <constraint firstItem="Se2-qE-yPM" firstAttribute="width" secondItem="lbq-TB-dr1" secondAttribute="width" id="Y9b-2z-o6N"/>
                             <constraint firstItem="i6l-8K-zhn" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="Zcj-lH-A1k"/>
                             <constraint firstItem="w3I-hj-fIm" firstAttribute="centerY" secondItem="Cto-Lg-9io" secondAttribute="centerY" id="a9S-3q-Vmm"/>
                             <constraint firstItem="CWd-tL-d6U" firstAttribute="trailing" secondItem="i6l-8K-zhn" secondAttribute="trailing" id="bdy-z2-Hcc"/>

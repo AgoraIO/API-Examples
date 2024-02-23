@@ -98,8 +98,14 @@ private:
 	std::map<CString, std::string> m_mapCamera;
 	bool m_audioInputTest;
 	bool m_audioOutputTest;
+	bool m_audioEchoTest = false;
+	bool m_videoEchoTest = false;
 	bool m_cameraTest;
 	bool m_initialize;
+	int m_audioEchoTimeId = 111;
+	int m_audioEchoTimeIndex = 0;
+	int m_audioEchoInterval = 8;
+	int m_videoEchoInterval = 8;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  
@@ -132,8 +138,16 @@ public:
 	CButton m_btnAudioInputTest;
 	CButton m_btnAudioOutputTest;
 	CButton m_btnVideoTest;
+	CButton m_btnAudioEchoTest;
+	CButton m_btnVideoEchoTest;
 	CStatic m_staVideoArea;
+	CStatic m_staAudioEchoTestTip;
+	CStatic m_staAudioEchoTest;
+	CStatic m_staVideoEchoTest;
 	CListBox m_lstInfo;
 	CStatic m_staDetails;
 	afx_msg void OnBnClickedButtonGetNetworkType();
+	afx_msg void OnBnClickedButtonAudioEchoTest();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedButtonVideoEchoTest();
 };

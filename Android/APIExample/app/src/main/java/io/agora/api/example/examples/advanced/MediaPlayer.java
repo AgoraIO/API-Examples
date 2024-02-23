@@ -19,16 +19,23 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -38,6 +45,10 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.CacheStatistics;
+import io.agora.mediaplayer.data.MediaPlayerSource;
+import io.agora.mediaplayer.data.MediaStreamInfo;
+import io.agora.mediaplayer.data.PlayerPlaybackStats;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -49,6 +60,9 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Media player.
+ */
 @Example(
         index = 17,
         group = ADVANCED,
@@ -56,7 +70,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_MediaPlayer,
         tipsId = R.string.mediaplayer
 )
-public class MediaPlayer extends BaseFragment implements View.OnClickListener, IMediaPlayerObserver {
+public class MediaPlayer extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, IMediaPlayerObserver {
 
     private static final String TAG = MediaPlayer.class.getSimpleName();
 
@@ -67,6 +81,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     private ChannelMediaOptions options = new ChannelMediaOptions();
     private int myUid;
     private FrameLayout fl_local, fl_remote;
+    private LinearLayout ll_streams;
+    private Spinner sp_player_stream, sp_publish_stream;
+    private List<MediaStreamInfo> mediaStreamInfoList;
+    private int playerStreamIndex, publishStreamIndex;
 
     private boolean joined = false;
     private SeekBar progressBar;
@@ -90,30 +108,30 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -148,6 +166,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         stop = view.findViewById(R.id.stop);
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
+        ll_streams = view.findViewById(R.id.ll_streams);
+        sp_publish_stream = view.findViewById(R.id.sp_publish_stream);
+        sp_player_stream = view.findViewById(R.id.sp_player_stream);
+        sp_player_stream.setOnItemSelectedListener(this);
+        sp_publish_stream.setOnItemSelectedListener(this);
 
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setMax(100);
@@ -199,14 +222,13 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -233,7 +255,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         } else if (v.getId() == R.id.open) {
             String url = et_url.getText().toString();
             if (!TextUtils.isEmpty(url)) {
-                mediaPlayer.open(url, 0);
+                MediaPlayerSource source = new MediaPlayerSource();
+                source.setUrl(url);
+                source.setEnableMultiAudioTrack(true);
+                mediaPlayer.openWithMediaSource(source);
             }
         } else if (v.getId() == R.id.play) {
             mediaPlayer.play();
@@ -250,6 +275,24 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == sp_player_stream) {
+            MediaStreamInfo mediaStreamInfo = mediaStreamInfoList.get(sp_player_stream.getSelectedItemPosition());
+            playerStreamIndex = mediaStreamInfo.getStreamIndex();
+            mediaPlayer.selectMultiAudioTrack(playerStreamIndex, publishStreamIndex);
+        } else if (parent == sp_publish_stream) {
+            MediaStreamInfo mediaStreamInfo = mediaStreamInfoList.get(sp_publish_stream.getSelectedItemPosition());
+            publishStreamIndex = mediaStreamInfo.getStreamIndex();
+            mediaPlayer.selectMultiAudioTrack(playerStreamIndex, publishStreamIndex);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
@@ -257,7 +300,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             return;
         }
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
@@ -276,14 +319,14 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         }
         fl_local.addView(surfaceView);
         // Setup local video to render your local media player view
-        VideoCanvas videoCanvas = new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN,  0);
+        VideoCanvas videoCanvas = new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, 0);
         videoCanvas.sourceType = Constants.VIDEO_SOURCE_MEDIA_PLAYER;
         videoCanvas.mediaPlayerId = mediaPlayer.getMediaPlayerId();
         engine.setupLocalVideo(videoCanvas);
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // set options
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
@@ -294,13 +337,13 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         options.publishMicrophoneTrack = false;
         options.enableAudioRecordingOrPlayout = true;
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, options);
             if (res != 0) {
@@ -451,14 +494,13 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
@@ -491,7 +533,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -503,7 +545,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (mediaPlayer != null) {
             mediaPlayer.unRegisterPlayerObserver(this);
             mediaPlayer.destroy();
@@ -517,23 +559,52 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     private void setMediaPlayerViewEnable(boolean enable) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                play.setEnabled(enable);
-                stop.setEnabled(enable);
-                pause.setEnabled(enable);
-                publish.setEnabled(enable);
+        runOnUIThread(() -> {
+            play.setEnabled(enable);
+            stop.setEnabled(enable);
+            pause.setEnabled(enable);
+            publish.setEnabled(enable);
+
+            if (enable) {
+                ll_streams.setVisibility(View.VISIBLE);
+                mediaStreamInfoList = new ArrayList<>();
+                for (int i = 0; i < mediaPlayer.getStreamCount(); i++) {
+                    MediaStreamInfo streamInfo = mediaPlayer.getStreamInfo(i);
+                    if (streamInfo.getMediaStreamType()
+                            == io.agora.mediaplayer.Constants.MediaStreamType.getValue(
+                            io.agora.mediaplayer.Constants.MediaStreamType.STREAM_TYPE_AUDIO)) {
+                        mediaStreamInfoList.add(streamInfo);
+                    }
+                }
+
+                String[] trackNames = new String[mediaStreamInfoList.size()];
+                for (int i = 0; i < mediaStreamInfoList.size(); i++) {
+                    trackNames[i] = getString(R.string.audio_stream_index, i);
+                }
+                sp_player_stream.setAdapter(
+                        new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+                                android.R.id.text1, trackNames)
+                );
+                sp_publish_stream.setAdapter(
+                        new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,
+                                android.R.id.text1, trackNames)
+                );
+                if (mediaStreamInfoList.size() > 0) {
+                    playerStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                    publishStreamIndex = mediaStreamInfoList.get(0).getStreamIndex();
+                }
+            } else {
+                ll_streams.setVisibility(View.GONE);
             }
         });
     }
 
     @Override
-    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-        Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + mediaPlayerState + ", error=" + mediaPlayerError);
-        if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
+    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerReason reason) {
+        Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + state + ", reason=" + reason);
+        if (state.equals(PLAYER_STATE_OPEN_COMPLETED)) {
             setMediaPlayerViewEnable(true);
-        } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_STOPPED) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {
+        } else if (state.equals(PLAYER_STATE_IDLE) || state.equals(PLAYER_STATE_STOPPED) || state.equals(PLAYER_STATE_PLAYBACK_COMPLETED)) {
             setMediaPlayerViewEnable(false);
             options.publishMediaPlayerVideoTrack = false;
             options.publishMediaPlayerAudioTrack = false;
@@ -542,10 +613,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPositionChanged(long position) {
-        Log.e(TAG, "onPositionChanged position " + position);
+    public void onPositionChanged(long positionMs, long timestampMs) {
+        Log.e(TAG, "onPositionChanged position " + positionMs);
         if (playerDuration > 0) {
-            final int result = (int) ((float) position / (float) playerDuration * 100);
+            final int result = (int) ((float) positionMs / (float) playerDuration * 100);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -586,6 +657,16 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
     @Override
     public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onPlayerCacheStats(CacheStatistics stats) {
+
+    }
+
+    @Override
+    public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
 
     }
 

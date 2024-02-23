@@ -12,6 +12,11 @@ import com.softsugar.stmobile.params.STHumanActionParamsType
 import io.agora.api.example.utils.FileKtUtils
 import java.util.concurrent.Executors
 
+/**
+ * Sense time beauty s d k
+ *
+ * @constructor Create empty Sense time beauty s d k
+ */
 object SenseTimeBeautySDK {
     private val TAG = "SenseTimeBeautySDK"
 
@@ -28,24 +33,36 @@ object SenseTimeBeautySDK {
     private val MODEL_SEGMENT_HAIR = "models/M_SenseME_Segment_Hair_p_4.4.0.model" // 头发分割
     private val MODEL_FACE_OCCLUSION = "models/M_SenseME_FaceOcclusion_p_1.0.7.1.model" // 妆容遮挡
     private val MODEL_SEGMENT_SKY = "models/M_SenseME_Segment_Sky_p_1.1.0.1.model" // 天空分割
-    private val MODEL_SEGMENT_SKIN = "models/M_SenseME_Segment_Skin_p_1.0.1.1.model" // 皮肤分割
+    // private val MODEL_SEGMENT_SKIN = "models/M_SenseME_Segment_Skin_p_1.0.1.1.model" // 皮肤分割
     private val MODEL_3DMESH = "models/M_SenseME_3DMesh_Face2396pt_280kpts_Ear_p_1.1.0v2.model" // 3DMesh
-    private val MODEL_HEAD_P_EAR = "models/M_SenseME_Ear_p_1.0.1.1.model" // 搭配 mesh 耳朵模型
+    // private val MODEL_HEAD_P_EAR = "models/M_SenseME_Ear_p_1.0.1.1.model" // 搭配 mesh 耳朵模型
     private val MODEL_360HEAD_INSTANCE = "models/M_SenseME_3Dmesh_360Head2396pt_p_1.0.0.1.model" // 360度人头mesh
     private val MODEL_FOOT = "models/M_SenseME_Foot_p_2.10.7.model" // 鞋子检测模型
     private val MODEL_PANT = "models/M_SenseME_Segment_Trousers_p_1.1.10.model" // 裤腿的检测
     private val MODEL_WRIST = "models/M_SenseME_Wrist_p_1.4.0.model" // 试表
     private val MODEL_CLOTH = "models/M_SenseME_Segment_Clothes_p_1.0.2.2.model" // 衣服分割
     private val MODEL_HEAD_INSTANCE = "models/M_SenseME_Segment_Head_Instance_p_1.1.0.1.model" // 实例分割版本
-    private val MODEL_HEAD_P_INSTANCE = "models/M_SenseME_Head_p_1.3.0.1.model" // 360度人头-头部模型
+    // private val MODEL_HEAD_P_INSTANCE = "models/M_SenseME_Head_p_1.3.0.1.model" // 360度人头-头部模型
     private val MODEL_NAIL = "models/M_SenseME_Nail_p_2.4.0.model" // 指甲检测
 
     private val workerThread = Executors.newSingleThreadExecutor()
 
+    /**
+     * Mobile effect native
+     */
     val mobileEffectNative = STMobileEffectNative()
+
+    /**
+     * Human action native
+     */
     val humanActionNative = STMobileHumanActionNative()
 
 
+    /**
+     * Init beauty s d k
+     *
+     * @param context
+     */
     fun initBeautySDK(context: Context){
         workerThread.submit {
             checkLicense(context)
@@ -53,6 +70,11 @@ object SenseTimeBeautySDK {
         }
     }
 
+    /**
+     * Init mobile effect
+     *
+     * @param context
+     */
     fun initMobileEffect(context: Context){
         val result =
             mobileEffectNative.createInstance(context, STMobileEffectNative.EFFECT_CONFIG_NONE)
@@ -60,10 +82,18 @@ object SenseTimeBeautySDK {
         Log.d(TAG, "SenseTime >> STMobileEffectNative create result : $result")
     }
 
+    /**
+     * Un init mobile effect
+     *
+     */
     fun unInitMobileEffect(){
         mobileEffectNative.destroyInstance()
     }
 
+    /**
+     * Release
+     *
+     */
     fun release() {
         mobileEffectNative.destroyInstance()
     }
@@ -126,6 +156,14 @@ object SenseTimeBeautySDK {
         humanActionNative.setParam(STHumanActionParamsType.ST_HUMAN_ACTION_PARAM_HEAD_SEGMENT_INSTANCE, 1.0f)
     }
 
+    /**
+     * Set make up item
+     *
+     * @param context
+     * @param type
+     * @param path
+     * @param strength
+     */
     fun setMakeUpItem(context: Context, type: Int, path: String = "", strength: Float = 1.0f) {
         if (path.isNotEmpty()) {
             val assets = context.assets
@@ -136,6 +174,13 @@ object SenseTimeBeautySDK {
         }
     }
 
+    /**
+     * Set sticker item
+     *
+     * @param context
+     * @param path
+     * @param attach
+     */
     fun setStickerItem(context: Context, path: String, attach: Boolean) {
         if(attach){
             val assets = context.assets
@@ -147,6 +192,10 @@ object SenseTimeBeautySDK {
         }
     }
 
+    /**
+     * Clean sticker
+     *
+     */
     fun cleanSticker(){
         packageMap.values.forEach {
             mobileEffectNative.removeEffect(it)
@@ -154,6 +203,29 @@ object SenseTimeBeautySDK {
         packageMap.clear()
     }
 
+    /**
+     * Set beauty
+     *
+     * @param smooth
+     * @param whiten
+     * @param thinFace
+     * @param enlargeEye
+     * @param redden
+     * @param shrinkCheekbone
+     * @param shrinkJawbone
+     * @param whiteTeeth
+     * @param hairlineHeight
+     * @param narrowNose
+     * @param mouthSize
+     * @param chinLength
+     * @param brightEye
+     * @param darkCircles
+     * @param nasolabialFolds
+     * @param saturation
+     * @param contrast
+     * @param sharpen
+     * @param clear
+     */
     fun setBeauty(
         smooth: Float? = null,
         whiten: Float? = null,

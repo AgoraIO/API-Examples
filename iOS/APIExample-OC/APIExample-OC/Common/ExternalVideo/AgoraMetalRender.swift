@@ -162,7 +162,10 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
     }
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        return .NV12
+        .cvPixelNV12
+    }
+    func getObservedFramePosition() -> AgoraVideoFramePosition {
+        .preRenderer
     }
 }
 

@@ -160,7 +160,7 @@ public:
 	 * @param error The error information of the local audio.
 	 * See #LOCAL_AUDIO_STREAM_ERROR.
 	 */
-	virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) override {
+	virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON error) override {
 		(void)state;
 		(void)error;
 	}
@@ -223,7 +223,7 @@ public:
 	 @param localVideoState State type #LOCAL_VIDEO_STREAM_STATE. When the state is LOCAL_VIDEO_STREAM_STATE_FAILED (3), see the `error` parameter for details.
 	 @param error The detailed error information: #LOCAL_VIDEO_STREAM_ERROR.
 	 */
-	virtual void onLocalVideoStateChanged(VIDEO_SOURCE_TYPE source, LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error)override {
+	virtual void onLocalVideoStateChanged(VIDEO_SOURCE_TYPE source, LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_REASON error)override {
 		(void)localVideoState;
 		(void)error;
 	}

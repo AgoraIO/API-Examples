@@ -17,7 +17,7 @@ class VideoChatEntry: UIViewController {
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
+    var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,30 +26,31 @@ class VideoChatEntry: UIViewController {
         orientationBtn.setTitle("\(orientation.description())", for: .normal)
     }
     
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction {
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+    func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: { [unowned self] _ in
             self.width = width
             self.height = height
             self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction {
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+    func getFpsAction(_ fps: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: { [unowned self] _ in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction {
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+    func getOrientationAction(_ orientation: AgoraVideoOutputOrientationMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: { [unowned self] _ in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
     @IBAction func setResolution() {
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: style)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -61,7 +62,8 @@ class VideoChatEntry: UIViewController {
     }
     
     @IBAction func setFps() {
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: style)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -72,7 +74,8 @@ class VideoChatEntry: UIViewController {
     }
     
     @IBAction func setOrientation() {
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: style)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -81,15 +84,19 @@ class VideoChatEntry: UIViewController {
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName": channelName, "resolution": CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName": channelName, 
+                                     "resolution": CGSize(width: width, height: height),
+                                     "fps": fps,
+                                     "orientation": orientation]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -97,7 +104,7 @@ class VideoChatEntry: UIViewController {
 class VideoChatMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
-    var videoViews: [UInt:VideoView] = [:]
+    var videoViews: [UInt: VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -168,8 +175,8 @@ class VideoChatMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -209,8 +216,8 @@ extension VideoChatMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -224,7 +231,7 @@ extension VideoChatMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        //videoViews[0]?.uid = uid
+        // videoViews[0]?.uid = uid
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -262,7 +269,7 @@ extension VideoChatMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
-        //remove remote audio view
+        // remove remote audio view
         self.videoViews.removeValue(forKey: uid)
         self.container.layoutStream2x3(views: sortedViews())
         self.container.reload(level: 0, animated: true)

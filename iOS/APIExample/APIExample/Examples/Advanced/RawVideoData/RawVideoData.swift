@@ -5,8 +5,6 @@
 //  Created by Arlin on 2022/4/11.
 //  Copyright © 2022 Agora Corp. All rights reserved.
 //
-
-
 /// Raw Video Data
 /// This module show how to get origin raw video frame data.
 /// 1.Register obesever: agoraKit.setVideoFrameDelegate(self)
@@ -35,7 +33,10 @@ class RawVideoDataViewController: BaseViewController {
         guard let channelId = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode else {
+            return
+        }
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         // Configuring Privatization Parameters
@@ -67,8 +68,8 @@ class RawVideoDataViewController: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
             if result != 0 {
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
         })
@@ -97,26 +98,33 @@ class RawVideoDataViewController: BaseViewController {
 
 // MARK: - AgoraVideoFrameDelegate
 extension RawVideoDataViewController: AgoraVideoFrameDelegate {
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame, 
+                   sourceType: AgoraVideoSourceType) -> Bool {
         true
     }
     
-    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, 
+                            uid: UInt,
+                            channelId: String) -> Bool {
         if isSnapShoting {
             isSnapShoting = false
-            let image = MediaUtils.pixelBuffer(toImage: videoFrame.pixelBuffer!)
+            guard let pixelBuffer = videoFrame.pixelBuffer else { return true }
+            let image = MediaUtils.pixelBuffer(toImage: pixelBuffer)
             DispatchQueue.main.async {
                 self.imageView.image = image
             }
         }
         return true
     }
+    func getVideoFormatPreference() -> AgoraVideoFormat {
+        .cvPixelBGRA
+    }
 }
 
 // MARK: - AgoraRtcEngineDelegate
 extension RawVideoDataViewController: AgoraRtcEngineDelegate {
-    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error: \(errorCode.description)")
@@ -177,16 +185,14 @@ class RawVideoDataEntryViewController: UIViewController {
 
     @IBAction func joinBtnClicked(sender: UIButton) {
         guard let channelName = channelTextField.text,
-              channelName.lengthOfBytes(using: .utf8) > 0 else {return}
+              channelName.lengthOfBytes(using: .utf8) > 0 else { return }
         channelTextField.resignFirstResponder()
         
         let identifier = "RawVideoData"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
-
-

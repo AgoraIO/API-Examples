@@ -39,9 +39,24 @@ import java.nio.IntBuffer;
 
 import io.agora.beautyapi.sensetime.utils.LogUtils;
 
-public class GLTestUtils {
+/**
+ * The type Gl test utils.
+ */
+public final class GLTestUtils {
     private static final String TAG = "GLUtils";
 
+    private GLTestUtils() {
+
+    }
+
+    /**
+     * Gets texture 2 d image.
+     *
+     * @param textureID the texture id
+     * @param width     the width
+     * @param height    the height
+     * @return the texture 2 d image
+     */
     public static Bitmap getTexture2DImage(int textureID, int width, int height) {
         try {
             int[] oldFboId = new int[1];
@@ -83,6 +98,14 @@ public class GLTestUtils {
         return null;
     }
 
+    /**
+     * Gets texture oes image.
+     *
+     * @param textureID the texture id
+     * @param width     the width
+     * @param height    the height
+     * @return the texture oes image
+     */
     public static Bitmap getTextureOESImage(int textureID, int width, int height) {
         try {
             int[] oldFboId = new int[1];
@@ -124,6 +147,14 @@ public class GLTestUtils {
         return null;
     }
 
+    /**
+     * Nv 21 to bitmap bitmap.
+     *
+     * @param nv21   the nv 21
+     * @param width  the width
+     * @param height the height
+     * @return the bitmap
+     */
     public static Bitmap nv21ToBitmap(byte[] nv21, int width, int height) {
         Bitmap bitmap = null;
         try {
@@ -138,7 +169,7 @@ public class GLTestUtils {
         return bitmap;
     }
 
-    private static Bitmap readBitmap(int width, int height){
+    private static Bitmap readBitmap(int width, int height) {
         ByteBuffer rgbaBuf = ByteBuffer.allocateDirect(width * height * 4);
         rgbaBuf.position(0);
         GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, rgbaBuf);

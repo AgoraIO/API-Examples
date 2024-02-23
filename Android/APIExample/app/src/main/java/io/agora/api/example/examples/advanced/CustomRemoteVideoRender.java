@@ -106,30 +106,30 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -147,8 +147,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -157,16 +156,16 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+
+        engine.registerVideoFrameObserver(null);
+
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (textureBufferHelper != null) {
             textureBufferHelper.dispose();
             textureBufferHelper = null;
         }
-        if (yuvUploader != null) {
-            yuvUploader.release();
-        }
-        if(engine != null)
-        {
+        yuvUploader.release();
+        if (engine != null) {
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -191,14 +190,13 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -215,6 +213,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
+                engine.registerVideoFrameObserver(null);
                 engine.leaveChannel();
                 engine.stopPreview();
                 remoteUid = 0;
@@ -241,25 +240,25 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
+        /*Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         engine.registerVideoFrameObserver(videoFrameObserver);
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         engine.startPreview();
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
@@ -268,7 +267,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             @Override
             public void onTokenGen(String ret) {
 
-                /** Allows a user to join a channel.
+                /* Allows a user to join a channel.
                  if you do not specify the uid, we will generate the uid for you*/
 
                 ChannelMediaOptions option = new ChannelMediaOptions();
@@ -314,7 +313,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
             lastI420Frame = null;
-            if(mSurfaceView != null){
+            if (mSurfaceView != null) {
                 mSurfaceView.requestRender();
             }
         }
@@ -426,27 +425,24 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             remoteUid = uid;
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null || mSurfaceView != null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 mSurfaceView = new GLTextureView(context);
                 mSurfaceView.setPreserveEGLContextOnPause(true);
                 mSurfaceView.setEGLContextClientVersion(2);
                 mSurfaceView.setRenderer(glRenderer);
                 mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-                if (fl_remote.getChildCount() > 0)
-                {
+                if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
                 // Add to the remote container
@@ -468,13 +464,16 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(mSurfaceView != null){
+            if (mSurfaceView != null) {
                 mSurfaceView.requestRender();
             }
             remoteUid = 0;
         }
     };
 
+    /**
+     * The Video frame observer.
+     */
     IVideoFrameObserver videoFrameObserver = new IVideoFrameObserver() {
         @Override
         public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
@@ -494,7 +493,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         @Override
         public boolean onRenderVideoFrame(String s, int i, VideoFrame videoFrame) {
 //            Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
-            if (mSurfaceView != null && videoFrame != lastI420Frame){
+            if (mSurfaceView != null && videoFrame != lastI420Frame) {
                 Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + s + "  buffer: " + videoFrame.getBuffer());
                 lastI420Frame = videoFrame;
                 textureBufferHelper.invoke(new Callable<Void>() {
@@ -538,7 +537,10 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             return 0;
         }
     };
-    GLTextureView.Renderer glRenderer = new GLTextureView.Renderer(){
+    /**
+     * The Gl renderer.
+     */
+    GLTextureView.Renderer glRenderer = new GLTextureView.Renderer() {
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Log.d(TAG, "onSurfaceCreated");
@@ -556,7 +558,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onDrawFrame(GL10 gl) {
             GLES20.glClearColor(0 /* red */, 0 /* green */, 0 /* blue */, 0 /* alpha */);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-            if (lastI420Frame == null) return;
+            if (lastI420Frame == null) {
+                return;
+            }
             Log.d(TAG, "onDrawFrame: " + lastI420Frame.getRotation());
             renderMatrix.reset();
             renderMatrix.preTranslate(0.5f, 0.5f);
@@ -567,8 +571,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 drawer.drawYuv(yuvUploader.getYuvTextures(),
                         RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix), lastI420Frame.getRotatedWidth(),
                         lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight);
-            }
-            catch (NullPointerException exception){
+            } catch (NullPointerException exception) {
                 Log.e(TAG, "skip empty buffer!");
             }
         }

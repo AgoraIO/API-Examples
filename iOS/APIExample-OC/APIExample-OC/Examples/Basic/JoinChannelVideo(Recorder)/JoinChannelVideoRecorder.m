@@ -203,8 +203,8 @@
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
@@ -257,7 +257,12 @@
     NSLog(@"uid == %lu info == %@", uid, info.description);
 }
 
-- (void)mediaRecorder:(AgoraMediaRecorder *)recorder stateDidChanged:(NSString *)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state error:(AgoraMediaRecorderErrorCode)error {
+- (void)mediaRecorder:(AgoraMediaRecorder * _Nonnull)recorder stateDidChanged:(NSString * _Nonnull)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state reason:(AgoraMediaRecorderReasonCode)reason { 
+    [LogUtil log: [NSString stringWithFormat:@"stateDidChanged uid == %lu state == %ld reason == %ld", uid, state, reason]];
+}
+
+
+- (void)mediaRecorder:(AgoraMediaRecorder *)recorder stateDidChanged:(NSString *)channelId uid:(NSUInteger)uid state:(AgoraMediaRecorderState)state {
     NSLog(@"uid == %lu state == %ld", uid, state);
 }
 
@@ -265,8 +270,8 @@
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
 /// to let user know something wrong is happening
 /// Error code description can be found at:
-/// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-/// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+/// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+/// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
 /// @param errorCode error code of the problem
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
     NSLog(@"Error %ld occur",errorCode);

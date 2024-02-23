@@ -141,6 +141,7 @@ public final class EglCore {
      *
      * @param flags   Bit flags from constructor.
      * @param version Must be 2 or 3.
+     * @return EGLConfig
      */
     private EGLConfig getConfig(int flags, int version) {
         int renderableType = EGL14.EGL_OPENGL_ES2_BIT;
@@ -214,6 +215,11 @@ public final class EglCore {
         }
     }
 
+    /**
+     * Gets egl context.
+     *
+     * @return the egl context
+     */
     public EGLContext getEGLContext() {
         return mEGLContext;
     }
@@ -221,6 +227,8 @@ public final class EglCore {
     /**
      * Destroys the specified surface.  Note the EGLSurface won't actually be destroyed if it's
      * still current in a context.
+     *
+     * @param eglSurface the egl surface
      */
     public void releaseSurface(EGLSurface eglSurface) {
         EGL14.eglDestroySurface(mEGLDisplay, eglSurface);
@@ -230,6 +238,9 @@ public final class EglCore {
      * Creates an EGL surface associated with a Surface.
      * <p>
      * If this is destined for MediaCodec, the EGLConfig should have the "recordable" attribute.
+     *
+     * @param surface the surface
+     * @return the egl surface
      */
     public EGLSurface createWindowSurface(Object surface) {
         if (!(surface instanceof Surface) && !(surface instanceof SurfaceTexture)) {
@@ -251,6 +262,10 @@ public final class EglCore {
 
     /**
      * Creates an EGL surface associated with an offscreen buffer.
+     *
+     * @param width  the width
+     * @param height the height
+     * @return the egl surface
      */
     public EGLSurface createOffscreenSurface(int width, int height) {
         int[] surfaceAttribs = {
@@ -269,6 +284,8 @@ public final class EglCore {
 
     /**
      * Makes our EGL context current, using the supplied surface for both "draw" and "read".
+     *
+     * @param eglSurface the egl surface
      */
     public void makeCurrent(EGLSurface eglSurface) {
         if (mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
@@ -282,6 +299,9 @@ public final class EglCore {
 
     /**
      * Makes our EGL context current, using the supplied "draw" and "read" surfaces.
+     *
+     * @param drawSurface the draw surface
+     * @param readSurface the read surface
      */
     public void makeCurrent(EGLSurface drawSurface, EGLSurface readSurface) {
         if (mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
@@ -306,6 +326,7 @@ public final class EglCore {
     /**
      * Calls eglSwapBuffers.  Use this to "publish" the current frame.
      *
+     * @param eglSurface the egl surface
      * @return false on failure
      */
     public boolean swapBuffers(EGLSurface eglSurface) {
@@ -314,6 +335,9 @@ public final class EglCore {
 
     /**
      * Sends the presentation time stamp to EGL.  Time is expressed in nanoseconds.
+     *
+     * @param eglSurface the egl surface
+     * @param nsecs      the nsecs
      */
     public void setPresentationTime(EGLSurface eglSurface, long nsecs) {
         EGLExt.eglPresentationTimeANDROID(mEGLDisplay, eglSurface, nsecs);
@@ -321,12 +345,20 @@ public final class EglCore {
 
     /**
      * Returns true if our context and the specified surface are current.
+     *
+     * @param eglSurface the egl surface
+     * @return the boolean
      */
     public boolean isCurrent(EGLSurface eglSurface) {
-        return mEGLContext.equals(EGL14.eglGetCurrentContext()) &&
-                eglSurface.equals(EGL14.eglGetCurrentSurface(EGL14.EGL_DRAW));
+        return mEGLContext.equals(EGL14.eglGetCurrentContext())
+                && eglSurface.equals(EGL14.eglGetCurrentSurface(EGL14.EGL_DRAW));
     }
 
+    /**
+     * Gets current drawing surface.
+     *
+     * @return the current drawing surface
+     */
     public EGLSurface getCurrentDrawingSurface() {
         EGLSurface surface = null;
         if (mEGLContext.equals(EGL14.eglGetCurrentContext())) {
@@ -337,6 +369,10 @@ public final class EglCore {
 
     /**
      * Performs a simple surface query.
+     *
+     * @param eglSurface the egl surface
+     * @param what       the what
+     * @return the int
      */
     public int querySurface(EGLSurface eglSurface, int what) {
         int[] value = new int[1];
@@ -346,6 +382,9 @@ public final class EglCore {
 
     /**
      * Queries a string value.
+     *
+     * @param what the what
+     * @return the string
      */
     public String queryString(int what) {
         return EGL14.eglQueryString(mEGLDisplay, what);
@@ -353,6 +392,8 @@ public final class EglCore {
 
     /**
      * Returns the GLES version this context is configured for (currently 2 or 3).
+     *
+     * @return the gl version
      */
     public int getGlVersion() {
         return mGlVersion;
@@ -360,6 +401,8 @@ public final class EglCore {
 
     /**
      * Writes the current display, context, and surface to the log.
+     *
+     * @param msg the msg
      */
     public static void logCurrent(String msg) {
         EGLDisplay display;
@@ -369,16 +412,24 @@ public final class EglCore {
         display = EGL14.eglGetCurrentDisplay();
         context = EGL14.eglGetCurrentContext();
         surface = EGL14.eglGetCurrentSurface(EGL14.EGL_DRAW);
-        Log.i(TAG, "Current EGL (" + msg + "): display=" + display + ", context=" + context +
-                ", surface=" + surface);
+        Log.i(TAG, "Current EGL ("
+                + msg
+                + "): display="
+                + display
+                + ", context="
+                + context
+                + ", surface="
+                + surface);
     }
 
     /**
      * Checks for EGL errors.  Throws an exception if an error has been raised.
+     *
+     * @param msg error message.
      */
     private void checkEglError(String msg) {
-        int error;
-        if ((error = EGL14.eglGetError()) != EGL14.EGL_SUCCESS) {
+        int error = EGL14.eglGetError();
+        if (error != EGL14.EGL_SUCCESS) {
             throw new RuntimeException(msg + ": EGL error: 0x" + Integer.toHexString(error));
         }
     }
