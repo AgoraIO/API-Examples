@@ -32,6 +32,8 @@
 /* Class = "NSButtonCell"; title = "Start Echo Test"; ObjectID = "cTC-4D-0SS"; */
 "cTC-4D-0SS.title" = "开始回声测试";
 
+"Nkf-bY-zGl.title" = "开始视频回路测试";
+
 /* Class = "NSButtonCell"; title = "Start Audio Device Loopback Test"; ObjectID = "fhC-uz-lo8"; */
 "fhC-uz-lo8.title" = "开始本地音频回路测试";
 

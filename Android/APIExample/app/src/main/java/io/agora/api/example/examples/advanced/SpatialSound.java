@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,7 +136,6 @@ public class SpatialSound extends BaseFragment {
             localSpatialAudioConfig.mRtcEngine = engine;
             localSpatial.initialize(localSpatialAudioConfig);
 
-            //localSpatial.muteAllRemoteAudioStreams(true);
             localSpatial.setMaxAudioRecvCount(2);
             localSpatial.setAudioRecvRange(AXIS_MAX_DISTANCE);
             localSpatial.setDistanceUnit(1);
@@ -181,6 +181,7 @@ public class SpatialSound extends BaseFragment {
                 float[] forward = new float[]{1.0F, 0.0F, 0.0F};
                 float[] right = new float[]{0.0F, 1.0F, 0.0F};
                 float[] up = new float[]{0.0F, 0.0F, 1.0F};
+                Log.d(TAG, "updateSelfPosition >> pos=" + Arrays.toString(pos));
                 localSpatial.updateSelfPosition(pos, forward, right, up);
             }
         });
@@ -204,15 +205,9 @@ public class SpatialSound extends BaseFragment {
                 mediaPlayerLeftZone.rightLength = viewRelativeSizeInAxis[0];
                 mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
                 localSpatial.setZones(new SpatialAudioZone[]{mediaPlayerLeftZone});
-                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
             } else {
                 zoneTv.setVisibility(View.INVISIBLE);
-                SpatialAudioZone worldZone = new SpatialAudioZone();
-                worldZone.upLength = AXIS_MAX_DISTANCE * 2;
-                worldZone.forwardLength = AXIS_MAX_DISTANCE * 2;
-                worldZone.rightLength = AXIS_MAX_DISTANCE * 2;
-                localSpatial.setZones(new SpatialAudioZone[]{worldZone});
-                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
+                localSpatial.setZones(null);
             }
         });
     }
@@ -480,7 +475,7 @@ public class SpatialSound extends BaseFragment {
         float transY = view.getTranslationY();
         double posForward = -1 * AXIS_MAX_DISTANCE * transY / ((rootView.getHeight()) / 2.0f);
         double posRight = AXIS_MAX_DISTANCE * transX / ((rootView.getWidth()) / 2.0f);
-        Log.d(TAG, "VoicePosition posForward=" + posForward + ", posRight=" + posRight);
+        //Log.d(TAG, "VoicePosition posForward=" + posForward + ", posRight=" + posRight);
         return new float[]{(float) posForward, (float) posRight, 0.0F};
     }
 
@@ -651,7 +646,9 @@ public class SpatialSound extends BaseFragment {
                     remoteLeftTv.setTag(uid);
                     remoteLeftTv.setVisibility(View.VISIBLE);
                     remoteLeftTv.setText(uid + "");
-                    localSpatial.updateRemotePosition(uid, getVoicePositionInfo(remoteLeftTv));
+                    RemoteVoicePositionInfo info = getVoicePositionInfo(remoteLeftTv);
+                    Log.d(TAG, "left remote user >> pos=" + Arrays.toString(info.position));
+                    localSpatial.updateRemotePosition(uid, info);
 
                     remoteLeftTv.setOnClickListener(v -> showRemoteUserSettingDialog(uid));
                 } else if (remoteRightTv.getTag() == null) {

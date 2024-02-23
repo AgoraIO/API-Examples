@@ -10,18 +10,19 @@ import UIKit
 import Foundation
 import AgoraRtcKit
 
-class SpatialAudioEntry : UIViewController
-{
+class SpatialAudioEntry: UIViewController {
     @IBOutlet weak var channelTextField: UITextField!
 
     @IBAction func joinBtnClicked(sender: UIButton) {
         guard let channelName = channelTextField.text,
-              channelName.lengthOfBytes(using: .utf8) > 0 else {return}
+              channelName.lengthOfBytes(using: .utf8) > 0 else { return }
         channelTextField.resignFirstResponder()
         
         let identifier = "SpatialAudio"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
@@ -63,7 +64,6 @@ class SpatialAudioMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
-        agoraKit.muteAllRemoteAudioStreams(true)
         agoraKit.setParameters("{\"rtc.enable_debug_log\":true}")
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         agoraKit.enableAudio()
@@ -72,8 +72,6 @@ class SpatialAudioMain: BaseViewController {
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit
         localSpatial = AgoraLocalSpatialAudioKit.sharedLocalSpatialAudio(with: localSpatialConfig)
-        localSpatial.muteLocalAudioStream(false)
-        localSpatial.muteAllRemoteAudioStreams(false)
         localSpatial.setAudioRecvRange(Float(SCREENSIZE.height))
         localSpatial.setMaxAudioRecvCount(2)
         localSpatial.setDistanceUnit(1)
@@ -137,8 +135,9 @@ class SpatialAudioMain: BaseViewController {
         
     @objc func panGestureChanged(gesture: UIPanGestureRecognizer) {
         let move = gesture.translation(in: self.view)
-        var objectCenter = gesture.view!.center
-        objectCenter = CGPoint(x: objectCenter.x + move.x, y: objectCenter.y + move.y)
+        guard var objectCenter = gesture.view?.center else { return }
+        objectCenter = CGPoint(x: objectCenter.x + move.x,
+                               y: objectCenter.y + move.y)
         selfPostionView.center = objectCenter
         gesture.setTranslation(.zero, in: self.view)
         if gesture.state == .ended {
@@ -175,11 +174,7 @@ class SpatialAudioMain: BaseViewController {
             audioZone.position = getViewCenterPostion(view: voiceContainerView1)
             localSpatial.setZones([audioZone])
         } else {
-            let audioZone = AgoraSpatialAudioZone()
-            audioZone.forwardLength = Float(SCREENSIZE.height)
-            audioZone.rightLength = Float(SCREENSIZE.width)
-            audioZone.upLength = Float(maxDistance)
-            localSpatial.setZones([audioZone])
+            localSpatial.setZones(nil)
         }
         let pos = getViewCenterPostion(view: selfPostionView)
         localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
@@ -236,7 +231,7 @@ class SpatialAudioMain: BaseViewController {
         let mathAngle = deltaY > 0 ? cosAngle : (TwoPI - cosAngle)
         var spatialAngle = TwoPI + TwoPI / 4.0 - mathAngle
         if spatialAngle > TwoPI {
-            spatialAngle = spatialAngle - TwoPI
+            spatialAngle -= TwoPI
         }
         
         currentAngle = spatialAngle
@@ -246,8 +241,8 @@ class SpatialAudioMain: BaseViewController {
         let maxSpatailDistance = 30.0
         let spatialDistance = currentDistance * maxSpatailDistance / maxR
 
-        let posForward = spatialDistance * cos(currentAngle);
-        let posRight = spatialDistance * sin(currentAngle);
+        let posForward = spatialDistance * cos(currentAngle)
+        let posRight = spatialDistance * sin(currentAngle)
         let position = simd_float3(Float(posForward), Float(posRight), 0.0)
         let forward = simd_float3(1.0, 0.0, 0.0)
         
@@ -266,10 +261,12 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUserButton1.setTitle("\(uid)", for: .normal)
             remoteUserButton1.tag = Int(uid)
             remoteUserButton1.isHidden = false
+            localSpatial.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUserButton1))
         } else if remoteUserButton2.tag <= 0 {
             remoteUserButton2.setTitle("\(uid)", for: .normal)
             remoteUserButton2.tag = Int(uid)
             remoteUserButton2.isHidden = false
+            localSpatial.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUserButton2))
         }
     }
    
@@ -287,18 +284,20 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUserButton2.isHidden = true
             remoteUserButton2.tag = 0
         }
+        localSpatial.removeRemotePosition(uid)
     }
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, reason: AgoraMediaPlayerReason) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, 
+                             didChangedTo state: AgoraMediaPlayerState,
+                             reason: AgoraMediaPlayerReason) {
         print("didChangedTo: \(state.rawValue), \(reason.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()
         }
     }
 }
-
 
 class SpatialAudioActionSheet: UIView {
     var onTapMuteSwitchClosure: ((Bool) -> Void)?
@@ -399,7 +398,6 @@ class SpatialAudioActionSheet: UIView {
         attenuationSilder.centerYAnchor.constraint(equalTo: attenuationLabel.centerYAnchor).isActive = true
         attenuationSilder.leadingAnchor.constraint(equalTo: attenuationLabel.trailingAnchor, constant: 15).isActive = true
     }
-    
     
     @objc
     private func onTapMuteSwitch(sender: UISwitch) {

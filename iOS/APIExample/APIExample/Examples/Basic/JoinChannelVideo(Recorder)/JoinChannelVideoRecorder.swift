@@ -9,46 +9,52 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoRecorderEntry : UIViewController
-{
+class JoinChannelVideoRecorderEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "JoinChannelVideoRecorder"
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
-    
+    var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+    func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(width)x\(height)",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.width = width
             self.height = height
             self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+    func getFpsAction(_ fps: Int) -> UIAlertAction {
+        return UIAlertAction(title: "\(fps)fps",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+    func getOrientationAction(_ orientation: AgoraVideoOutputOrientationMode) -> UIAlertAction {
+        return UIAlertAction(title: "\(orientation.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setResolution() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Resolution".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -58,8 +64,9 @@ class JoinChannelVideoRecorderEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setFps() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: style)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -69,8 +76,11 @@ class JoinChannelVideoRecorderEntry : UIViewController
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func setOrientation() {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Orientation".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -79,15 +89,17 @@ class JoinChannelVideoRecorderEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
-        
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName": channelName,
+                                     "resolution": CGSize(width: width, height: height),
+                                     "fps": fps,
+                                     "orientation": orientation]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -132,21 +144,21 @@ class JoinChannelVideoRecorder: BaseViewController {
             remoteRecordButton.isHidden = remoteUid == 0
         }
     }
-    private lazy var localRecord: AgoraMediaRecorder = {
+    private lazy var localRecord: AgoraMediaRecorder? = {
         let streamInfo = AgoraRecorderStreamInfo()
         streamInfo.channelId = title ?? ""
         streamInfo.uid = localUid
         let record = agoraKit.createMediaRecorder(withInfo: streamInfo)
         record?.setMediaRecorderDelegate(self)
-        return record!
+        return record
     }()
-    private lazy var remoteRecord: AgoraMediaRecorder = {
+    private lazy var remoteRecord: AgoraMediaRecorder? = {
         let streamInfo = AgoraRecorderStreamInfo()
         streamInfo.channelId = title ?? ""
         streamInfo.uid = remoteUid
         let record = agoraKit.createMediaRecorder(withInfo: streamInfo)
         record?.setMediaRecorderDelegate(self)
-        return record!
+        return record
     }()
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
@@ -176,6 +188,10 @@ class JoinChannelVideoRecorder: BaseViewController {
         remoteRecordButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         remoteRecordButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
+        setupRTC()
+    }
+
+    private func setupRTC() {
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -240,14 +256,14 @@ class JoinChannelVideoRecorder: BaseViewController {
             }
         })
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         agoraKit.disableAudio()
         agoraKit.disableVideo()
         if isJoined {
-            localRecord.stopRecording()
-            remoteRecord.stopRecording()
+            localRecord?.stopRecording()
+            remoteRecord?.stopRecording()
             agoraKit.destroy(localRecord)
             agoraKit.destroy(remoteRecord)
             agoraKit.stopPreview()
@@ -266,9 +282,9 @@ class JoinChannelVideoRecorder: BaseViewController {
             config.storagePath = path
             config.containerFormat = .MP4
             config.maxDurationMs = 10 * 1000
-            localRecord.startRecording(config)
+            localRecord?.startRecording(config)
         } else {
-            localRecord.stopRecording()
+            localRecord?.stopRecording()
             ToastView.show(text: path)
         }
     }
@@ -281,9 +297,9 @@ class JoinChannelVideoRecorder: BaseViewController {
             config.storagePath = path
             config.containerFormat = .MP4
             config.maxDurationMs = 10 * 1000
-            remoteRecord.startRecording(config)
+            remoteRecord?.startRecording(config)
         } else {
-            remoteRecord.stopRecording()
+            remoteRecord?.stopRecording()
             ToastView.show(text: path)
         }
     }
@@ -294,7 +310,11 @@ class JoinChannelVideoRecorder: BaseViewController {
 }
 
 extension JoinChannelVideoRecorder: AgoraMediaRecorderDelegate {
-    func mediaRecorder(_ recorder: AgoraMediaRecorder, stateDidChanged channelId: String, uid: UInt, state: AgoraMediaRecorderState, reason: AgoraMediaRecorderReasonCode) {
+    func mediaRecorder(_ recorder: AgoraMediaRecorder, 
+                       stateDidChanged channelId: String,
+                       uid: UInt,
+                       state: AgoraMediaRecorderState,
+                       reason: AgoraMediaRecorderReasonCode) {
         LogUtils.log(message: "uid == \(uid) state == \(state.rawValue)", level: .info)
     }
     

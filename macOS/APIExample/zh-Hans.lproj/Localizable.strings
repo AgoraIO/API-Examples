@@ -221,3 +221,5 @@
 "ULTRALOWLATENCY" = "低延时强降噪模式";
 "Face Capture" = "面捕数据";
 "Please contact Agora customer service to obtain a face capture certificate" = "请联系声网客服获取面捕证书";
+"Start Video Echo Test" = "开始视频回路测试";
+"Stop Video Echo Test" = "停止视频回路测试";

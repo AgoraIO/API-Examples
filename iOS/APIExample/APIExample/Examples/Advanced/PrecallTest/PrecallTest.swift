@@ -9,10 +9,9 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class PrecallTestEntry : BaseViewController
-{
+class PrecallTestEntry: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    var timer:Timer?
+    var timer: Timer?
     @IBOutlet weak var lastmileBtn: UIButton!
     @IBOutlet weak var lastmileResultLabel: UILabel!
     @IBOutlet weak var lastmileProbResultLabel: UILabel!
@@ -42,7 +41,6 @@ class PrecallTestEntry : BaseViewController
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
     }
     
-    
     @IBAction func doLastmileTest(sender: UIButton) {
         agoraKit.stopEchoTest()
         if cameraTestButton.isSelected {
@@ -51,13 +49,13 @@ class PrecallTestEntry : BaseViewController
         lastmileActivityView.startAnimating()
         let config = AgoraLastmileProbeConfig()
         // do uplink testing
-        config.probeUplink =  true;
+        config.probeUplink =  true
         // do downlink testing
-        config.probeDownlink = true;
+        config.probeDownlink = true
         // expected uplink bitrate, range: [100000, 5000000]
-        config.expectedUplinkBitrate = 100000;
+        config.expectedUplinkBitrate = 100000
         // expected downlink bitrate, range: [100000, 5000000]
-        config.expectedDownlinkBitrate = 100000;
+        config.expectedDownlinkBitrate = 100000
         agoraKit.startLastmileProbeTest(config)
     }
     
@@ -81,8 +79,8 @@ class PrecallTestEntry : BaseViewController
             // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
             showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
         }
-        showPopover(isValidate: false, seconds: 10) {[unowned self] in
-            self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
+        showPopover(isValidate: false, seconds: 10) { [unowned self] in
+            self.showPopover(isValidate: true, seconds: 10) { [unowned self] in
                 self.agoraKit.stopEchoTest()
             }
         }
@@ -117,11 +115,11 @@ class PrecallTestEntry : BaseViewController
     }
     
     // show popover and hide after seconds
-    func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {
+    func showPopover(isValidate: Bool, seconds: Int, callback: @escaping (() -> Void)) {
         var count = seconds
-        var countDownLabel:UILabel?
-        var popover:UIView?
-        if(isValidate) {
+        var countDownLabel: UILabel?
+        var popover: UIView?
+        if isValidate {
             countDownLabel = echoValidateCountDownLabel
             popover = echoValidatePopover
         } else {
@@ -131,11 +129,12 @@ class PrecallTestEntry : BaseViewController
         
         countDownLabel?.text = "\(count)"
         popover?.isHidden = false
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[unowned self] (timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [unowned self] _ in
             count -= 1
             countDownLabel?.text = "\(count)"
-            
-            if(count == 0) {
+            // swiftlint:disable empty_count
+            if count == 0 {
+                // swiftlint:enable empty_count
                 self.timer?.invalidate()
                 popover?.isHidden = true
                 callback()
@@ -155,8 +154,7 @@ class PrecallTestEntry : BaseViewController
     }
 }
 
-extension PrecallTestEntry:AgoraRtcEngineDelegate
-{
+extension PrecallTestEntry: AgoraRtcEngineDelegate {
     /// callback to get lastmile quality 2seconds after startLastmileProbeTest
     func rtcEngine(_ engine: AgoraRtcEngineKit, lastmileQuality quality: AgoraNetworkQuality) {
         lastmileResultLabel.text = "Quality: \(quality.description())"
@@ -173,8 +171,13 @@ extension PrecallTestEntry:AgoraRtcEngineDelegate
         let uplinkJitter = "UplinkJitter: \(result.uplinkReport.jitter)ms"
         let uplinkLoss = "UplinkLoss: \(result.uplinkReport.packetLossRate)%"
         
-        lastmileProbResultLabel.text = [rtt, downlinkBandwidth, downlinkJitter, downlinkLoss, uplinkBandwidth, uplinkJitter, uplinkLoss].joined(separator: "\n")
-        
+        lastmileProbResultLabel.text = [rtt, 
+                                        downlinkBandwidth,
+                                        downlinkJitter,
+                                        downlinkLoss,
+                                        uplinkBandwidth,
+                                        uplinkJitter,
+                                        uplinkLoss].joined(separator: "\n")
         // stop testing after get last mile detail result
         engine.stopLastmileProbeTest()
         lastmileActivityView.stopAnimating()

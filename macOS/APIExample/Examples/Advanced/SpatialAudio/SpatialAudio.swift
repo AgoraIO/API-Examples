@@ -94,8 +94,6 @@ class SpatialAudioMain: BaseViewController {
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit
         localSpatial = AgoraLocalSpatialAudioKit.sharedLocalSpatialAudio(with: localSpatialConfig)
-        localSpatial?.muteLocalAudioStream(false)
-        localSpatial?.muteAllRemoteAudioStreams(false)
         localSpatial?.setAudioRecvRange(Float(view.frame.height))
         localSpatial?.setMaxAudioRecvCount(2)
         localSpatial?.setDistanceUnit(1)
@@ -194,11 +192,7 @@ class SpatialAudioMain: BaseViewController {
             audioZone.position = getViewCenterPostion(view: voice1ContainerView)
             localSpatial?.setZones([audioZone])
         } else {
-            let audioZone = AgoraSpatialAudioZone()
-            audioZone.forwardLength = Float(view.frame.height)
-            audioZone.rightLength = Float(view.frame.width)
-            audioZone.upLength = Float(maxDistance)
-            localSpatial?.setZones([audioZone])
+            localSpatial?.setZones(nil)
         }
         let pos = getViewCenterPostion(view: selfPostionView)
         localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
@@ -245,10 +239,12 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUser1.title = "\(uid)"
             remoteUser1.tag = Int(uid)
             remoteUser1.isHidden = false
+            localSpatial?.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUser1))
         } else if remoteUser2.tag <= 0 {
             remoteUser2.title = "\(uid)"
             remoteUser2.tag = Int(uid)
             remoteUser2.isHidden = false
+            localSpatial?.updateRemotePosition(uid, positionInfo: getPlayerPostion(view: remoteUser2))
         }
     }
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -265,6 +261,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
             remoteUser2.isHidden = true
             remoteUser2.tag = 0
         }
+        localSpatial?.removeRemotePosition(uid)
     }
 }
 

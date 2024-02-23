@@ -8,10 +8,11 @@
 
 import UIKit
 import Floaty
+import AgoraRtcKit
 
 struct MenuSection {
     var name: String
-    var rows:[MenuItem]
+    var rows: [MenuItem]
 }
 
 struct MenuItem {
@@ -23,7 +24,7 @@ struct MenuItem {
 }
 
 class ViewController: AGViewController {
-    var menus:[MenuSection] = [
+    var menus: [MenuSection] = [
         MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Token)".localized, storyboard: "JoinChannelVideoToken", controller: ""),
             MenuItem(name: "Join a channel (Video)".localized, storyboard: "JoinChannelVideo", controller: ""),
@@ -40,7 +41,9 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
-            MenuItem(name: "Custom Video Source(Multi)".localized, storyboard: "CustomVideoSourcePushMulti", controller: "CustomVideoSourcePushMulti"),
+            MenuItem(name: "Custom Video Source(Multi)".localized,
+                     storyboard: "CustomVideoSourcePushMulti",
+                     controller: "CustomVideoSourcePushMulti"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
 //            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
@@ -61,19 +64,24 @@ class ViewController: AGViewController {
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
             MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
             MenuItem(name: "Mutli Camera(iOS13.0+)".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
-            MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic"),
+            MenuItem(name: "Ktv copyright music".localized, 
+                     entry: "KtvCopyrightMusic",
+                     storyboard: "KtvCopyrightMusic",
+                     controller: "KtvCopyrightMusic"),
             MenuItem(name: "Third Beautify".localized, storyboard: "ThirdBeautify", controller: ""),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
             MenuItem(name: "Audio Router(Third Party Player)".localized, storyboard: "AuidoRouterPlayer", controller: ""),
             MenuItem(name: "Audio Waveform".localized, storyboard: "AudioWaveform", controller: ""),
             MenuItem(name: "Face Capture".localized, storyboard: "FaceCapture", controller: "")
-        ]),
+        ])
     ]
     override func viewDidLoad() {
         super.viewDidLoad()
-        Floaty.global.button.addItem(title: "Send Logs", handler: {item in
+        Floaty.global.button.addItem(title: "Send Logs", handler: { _ in
             LogUtils.writeAppLogsToDisk()
-            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
+            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), 
+                                                                          isDirectory: true)],
+                                                    applicationActivities: nil)
             activity.modalPresentationStyle = .popover
             if UIDevice.current.userInterfaceIdiom == .pad {
                 activity.popoverPresentationController?.sourceView = Floaty.global.button
@@ -81,27 +89,46 @@ class ViewController: AGViewController {
             self.present(activity, animated: true, completion: nil)
         })
         
-        Floaty.global.button.addItem(title: "Clean Up", handler: {item in
+        Floaty.global.button.addItem(title: "Clean Up", handler: { _ in
             LogUtils.cleanUp()
         })
         Floaty.global.button.isDraggable = true
         Floaty.global.show()
     }
     
-    @IBAction func onSettings(_ sender:UIBarButtonItem) {
+    @IBAction func onSettings(_ sender: UIBarButtonItem) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
+        guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else {
+            return
+        }
         
         settingsViewController.settingsDelegate = self
-        settingsViewController.sectionNames = ["Video Configurations","Metadata", "Private cloud"]
+        settingsViewController.sectionNames = ["Video Configurations", "Metadata", "Private cloud"]
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution"),
+              let fps = GlobalSettings.shared.getSetting(key: "fps"),
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation"),
+              let role = GlobalSettings.shared.getSetting(key: "role") else { return }
         settingsViewController.sections = [
             [
-                SettingsSelectParam(key: "resolution", label:"Resolution".localized, settingItem: GlobalSettings.shared.getSetting(key: "resolution")!, context: self),
-                SettingsSelectParam(key: "fps", label:"Frame Rate".localized, settingItem: GlobalSettings.shared.getSetting(key: "fps")!, context: self),
-                SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self),
-                SettingsSelectParam(key: "role", label:"Pick Role".localized, settingItem: GlobalSettings.shared.getSetting(key: "role")!, context: self)
+                SettingsSelectParam(key: "resolution", 
+                                    label: "Resolution".localized,
+                                    settingItem: resolution,
+                                    context: self),
+                SettingsSelectParam(key: "fps",
+                                    label: "Frame Rate".localized,
+                                    settingItem: fps,
+                                    context: self),
+                SettingsSelectParam(key: "orientation",
+                                    label: "Orientation".localized,
+                                    settingItem: orientation,
+                                    context: self),
+                SettingsSelectParam(key: "role", 
+                                    label: "Pick Role".localized,
+                                    settingItem: role,
+                                    context: self)
             ],
-            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "\(AgoraRtcEngineKit.getSdkVersion())")],
+            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version",
+                                value: "\(AgoraRtcEngineKit.getSdkVersion())")],
             [
                 SettingsTextFieldParam(key: "ip",
                                        label: "IP Address",
@@ -122,7 +149,7 @@ class ViewController: AGViewController {
                 SettingsSwitchParam(key: "log_server_https",
                                     label: "Use Https",
                                     isOn: false)
-            ],
+            ]
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
@@ -148,7 +175,7 @@ extension ViewController: UITableViewDataSource {
             cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
         }
         cell?.textLabel?.text = menus[indexPath.section].rows[indexPath.row].name
-        return cell!
+        return cell ?? UITableViewCell()
     }
 }
 
@@ -159,17 +186,18 @@ extension ViewController: UITableViewDelegate {
         let menuItem = menus[indexPath.section].rows[indexPath.row]
         let storyBoard: UIStoryboard = UIStoryboard(name: menuItem.storyboard, bundle: nil)
         
-        if(menuItem.storyboard == "Main") {
-            guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry) as? EntryViewController else { return }
-            
-            entryViewController.nextVCIdentifier = menuItem.controller
-            entryViewController.title = menuItem.name
-            entryViewController.note = menuItem.note
-            self.navigationController?.pushViewController(entryViewController, animated: true)
+        if menuItem.storyboard == "Main" {
+            guard let controller = storyBoard.instantiateViewController(withIdentifier: menuItem.entry) as? EntryViewController else {
+                return
+            }
+            controller.nextVCIdentifier = menuItem.controller
+            controller.title = menuItem.name
+            controller.note = menuItem.note
+            navigationController?.pushViewController(controller, animated: true)
         } else {
-            let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
+            let entryViewController: UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
             entryViewController.title = menuItem.name
-            self.navigationController?.pushViewController(entryViewController, animated: true)
+            navigationController?.pushViewController(entryViewController, animated: true)
         }
     }
 }
@@ -177,13 +205,13 @@ extension ViewController: UITableViewDelegate {
 extension ViewController: SettingsViewControllerDelegate {
     func didChangeValue(type: String, key: String, value: Any) {
         LogUtils.log(message: "type == \(type) key == \(key) value == \(value)", level: .info)
-        if(type == "SettingsSelectCell") {
-            guard let setting = value as? SettingItem else {return}
+        if type == "SettingsSelectCell" {
+            guard let setting = value as? SettingItem else { return }
             LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
         }
         switch type {
         case "SettingsSelectCell":
-            guard let setting = value as? SettingItem else {return}
+            guard let setting = value as? SettingItem else { return }
             LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
             
         case "SettingsTextFieldCell":

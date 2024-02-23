@@ -102,7 +102,6 @@
     config.channelProfile = AgoraChannelProfileLiveBroadcasting;
     
     self.agoraKit = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
-    [self.agoraKit muteAllRemoteAudioStreams:YES];
     // make myself a broadcaster
     [self.agoraKit setClientRole:(AgoraClientRoleBroadcaster)];
     // enable video module and set up video encoding configs
@@ -114,8 +113,6 @@
     AgoraLocalSpatialAudioConfig * localSpatialConfig = [[AgoraLocalSpatialAudioConfig alloc] init];
     localSpatialConfig.rtcEngine = self.agoraKit;
     self.localSpatial = [AgoraLocalSpatialAudioKit sharedLocalSpatialAudioWithConfig:localSpatialConfig];
-    [self.localSpatial muteLocalAudioStream:NO];
-    [self.localSpatial muteAllRemoteAudioStreams:NO];
     [self.localSpatial setAudioRecvRange:[UIScreen mainScreen].bounds.size.height];
     [self.localSpatial setMaxAudioRecvCount:2];
     [self.localSpatial setDistanceUnit:1];
@@ -162,11 +159,7 @@
         audioZone.position = [self getViewCenterPostion:self.voiceContainerView1];
         [self.localSpatial setZones:@[audioZone]];
     } else {
-        AgoraSpatialAudioZone *audioZone = [[AgoraSpatialAudioZone alloc] init];
-        audioZone.forwardLength = [UIScreen mainScreen].bounds.size.height;
-        audioZone.rightLength = [UIScreen mainScreen].bounds.size.width;
-        audioZone.upLength = self.maxDistance;
-        [self.localSpatial setZones:@[audioZone]];
+        [self.localSpatial setZones:nil];
     }
     simd_float3 pos = [self getViewCenterPostion:self.selfPostionView];
     [self.localSpatial updateSelfPosition:pos
@@ -295,10 +288,12 @@
         [self.remoteUserButton1 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton1.tag = uid;
         [self.remoteUserButton1 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton1]];
     } else if (self.remoteUserButton2.tag <= 0) {
         [self.remoteUserButton2 setTitle:[NSString stringWithFormat:@"%lu",uid] forState:(UIControlStateNormal)];
         self.remoteUserButton2.tag = uid;
         [self.remoteUserButton2 setHidden:NO];
+        [self.localSpatial updateRemotePosition:uid positionInfo:[self getPlayerPostion:self.remoteUserButton2]];
     }
 }
 
@@ -318,6 +313,7 @@
         [self.remoteUserButton2 setHidden:YES];
         self.remoteUserButton2.tag = 0;
     }
+    [self.localSpatial removeRemotePosition:uid];
 }
 
 - (void)AgoraRtcMediaPlayer:(id<AgoraRtcMediaPlayerProtocol>)playerKit didChangedToState:(AgoraMediaPlayerState)state reason:(AgoraMediaPlayerReason)reason {

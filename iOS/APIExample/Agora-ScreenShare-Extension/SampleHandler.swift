@@ -9,7 +9,7 @@
 import ReplayKit
 
 class SampleHandler: AgoraReplayKitHandler {
-    override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
+    override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
         // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
         super.broadcastStarted(withSetupInfo: setupInfo)
     }

@@ -11,8 +11,7 @@ import AgoraRtcKit
 import AGEVideoLayout
 import AVFoundation
 
-class CustomAudioSourceEntry : UIViewController
-{
+class CustomAudioSourceEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomAudioSource"
@@ -23,12 +22,14 @@ class CustomAudioSourceEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
@@ -39,16 +40,16 @@ class CustomAudioSourceMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
+    var audioViews: [UInt: VideoView] = [:]
 
     // indicate if current instance has joined channel
     var isJoined: Bool = false
-    var trackId: Int32 = 0
+    private var trackId: Int32 = 0
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate: UInt = 44100, channel: UInt = 1
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -73,9 +74,9 @@ class CustomAudioSourceMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
-        let trackConfig = AgoraAudioTrackConfig()
-        trackConfig.enableLocalPlayback = true
-        trackId = agoraKit.createCustomAudioTrack(.mixable, config: trackConfig)
+        let audioTrack = AgoraAudioTrackConfig()
+        audioTrack.enableLocalPlayback = true
+        trackId = agoraKit.createCustomAudioTrack(.mixable, config: audioTrack)
         
         // setup external audio source
         exAudio.setupExternalAudio(withAgoraKit: agoraKit, 
@@ -93,7 +94,6 @@ class CustomAudioSourceMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishCustomAudioTrack = true
         option.publishCustomAudioTrack = true
         option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
@@ -114,6 +114,7 @@ class CustomAudioSourceMain: BaseViewController {
             // leave channel when exiting the view
             if isJoined {
                 agoraKit.disableAudio()
+                agoraKit.destroyCustomAudioTrack(Int(trackId))
                 exAudio.stopWork()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -146,13 +147,16 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   didJoinChannel channel: String,
+                   withUid uid: UInt,
+                   elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        let sampleRate:UInt = 44100
+        let sampleRate: UInt = 44100
         try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
         self.exAudio.startWork()
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -168,7 +172,7 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
             LogUtils.log(message: "Ignore pcm play uid", level: .info)
             return
         }
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
@@ -183,7 +187,7 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x3(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)
