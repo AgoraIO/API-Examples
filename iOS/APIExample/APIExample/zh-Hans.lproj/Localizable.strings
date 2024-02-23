@@ -173,3 +173,5 @@
 "AGGRESSIVE" = "强降噪模式";
 "BALANCED" = "(默认)均衡降噪模式";
 "ULTRALOWLATENCY" = "低延时强降噪模式";
+"Face Capture" = "面捕数据";
+"Please contact Agora customer service to obtain a face capture certificate" = "请联系声网客服获取面捕证书";

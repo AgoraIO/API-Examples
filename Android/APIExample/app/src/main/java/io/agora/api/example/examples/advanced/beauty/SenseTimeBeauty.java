@@ -40,6 +40,9 @@ import io.agora.rtc2.video.ColorEnhanceOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Sense time beauty.
+ */
 public class SenseTimeBeauty extends BaseFragment {
     private static final String TAG = "SceneTimeBeauty";
 
@@ -81,8 +84,7 @@ public class SenseTimeBeauty extends BaseFragment {
         initVideoView();
         initRtcEngine();
         joinChannel();
-        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) ->
-        {
+        mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             ColorEnhanceOptions options = new ColorEnhanceOptions();
             options.strengthLevel = (float) 0.5f;
             options.skinProtectLevel = (float) 0.5f;
@@ -127,32 +129,19 @@ public class SenseTimeBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            senseTimeBeautyAPI.setBeautyPreset(isChecked? BeautyPreset.DEFAULT: BeautyPreset.CUSTOM);
+            senseTimeBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM);
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
-                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(
-                        requireContext(),
-                        STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL,
-                        "makeup_lip" + File.separator + "12自然.zip",
-                        1.0f
-                );
-            }else{
-                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(
-                        requireContext(),
-                        STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL,
-                        "", 0.0f
-                );
+            if (isChecked) {
+                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(requireContext(), STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL, "makeup_lip" + File.separator + "12自然.zip", 1.0f);
+            } else {
+                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(requireContext(), STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL, "", 0.0f);
             }
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked){
-                SenseTimeBeautySDK.INSTANCE.setStickerItem(
-                        requireContext(),
-                        "sticker_face_shape" + File.separator + "ShangBanLe.zip",
-                        true
-                );
-            }else{
+            if (isChecked) {
+                SenseTimeBeautySDK.INSTANCE.setStickerItem(requireContext(), "sticker_face_shape" + File.separator + "ShangBanLe.zip", true);
+            } else {
                 SenseTimeBeautySDK.INSTANCE.cleanSticker();
             }
         });
@@ -258,7 +247,6 @@ public class SenseTimeBeauty extends BaseFragment {
     }
 
 
-
     private void joinChannel() {
         int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
         ChannelMediaOptions options = new ChannelMediaOptions();
@@ -300,7 +288,7 @@ public class SenseTimeBeauty extends BaseFragment {
                 if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
                     ((ViewGroup) parent).removeView(mRemoteVideoLayout);
                     mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
-                } else if(parent == null){
+                } else if (parent == null) {
                     mBinding.smallVideoContainer.addView(mRemoteVideoLayout);
                 }
             }
@@ -311,7 +299,7 @@ public class SenseTimeBeauty extends BaseFragment {
                 if (parent instanceof ViewGroup && parent != mBinding.smallVideoContainer) {
                     ((ViewGroup) parent).removeView(mLocalVideoLayout);
                     mBinding.smallVideoContainer.addView(mLocalVideoLayout);
-                } else if(parent == null){
+                } else if (parent == null) {
                     mBinding.smallVideoContainer.addView(mLocalVideoLayout);
                 }
             }
@@ -321,13 +309,12 @@ public class SenseTimeBeauty extends BaseFragment {
                 if (parent instanceof ViewGroup && parent != mBinding.fullVideoContainer) {
                     ((ViewGroup) parent).removeView(mRemoteVideoLayout);
                     mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
-                } else if(parent == null) {
+                } else if (parent == null) {
                     mBinding.fullVideoContainer.addView(mRemoteVideoLayout);
                 }
             }
         }
     }
-
 
 
 }

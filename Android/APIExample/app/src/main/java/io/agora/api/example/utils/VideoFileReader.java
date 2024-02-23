@@ -5,6 +5,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * The type Video file reader.
+ */
 public class VideoFileReader {
     private final String RAW_VIDEO_PATH = "sample.yuv";
     private final int RAW_VIDEO_WIDTH = 320;
@@ -21,47 +24,81 @@ public class VideoFileReader {
     private InnerThread thread;
     private final int trackId;
 
-    public VideoFileReader(Context context, OnVideoReadListener listener){
+    /**
+     * Instantiates a new Video file reader.
+     *
+     * @param context  the context
+     * @param listener the listener
+     */
+    public VideoFileReader(Context context, OnVideoReadListener listener) {
         this(context, 0, listener);
     }
 
-    public VideoFileReader(Context context, int trackId, OnVideoReadListener listener){
+    /**
+     * Instantiates a new Video file reader.
+     *
+     * @param context  the context
+     * @param trackId  the track id
+     * @param listener the listener
+     */
+    public VideoFileReader(Context context, int trackId, OnVideoReadListener listener) {
         this.trackId = trackId;
         this.context = context.getApplicationContext();
         this.videoReadListener = listener;
     }
 
+    /**
+     * Gets track id.
+     *
+     * @return the track id
+     */
     public int getTrackId() {
         return trackId;
     }
 
-    public final void start(){
-        if(thread != null){
+    /**
+     * Start.
+     */
+    public final void start() {
+        if (thread != null) {
             return;
         }
         thread = new InnerThread();
         thread.start();
     }
 
-    public final void stop(){
-        if(thread != null){
+    /**
+     * Stop.
+     */
+    public final void stop() {
+        if (thread != null) {
             pushing = false;
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 thread = null;
             }
         }
     }
 
 
+    /**
+     * The interface On video read listener.
+     */
     public interface OnVideoReadListener {
+        /**
+         * On video read.
+         *
+         * @param buffer the buffer
+         * @param width  the width
+         * @param height the height
+         */
         void onVideoRead(byte[] buffer, int width, int height);
     }
 
-    private class InnerThread extends Thread {
+    private final class InnerThread extends Thread {
         @Override
         public void run() {
             super.run();
@@ -84,7 +121,7 @@ public class VideoFileReader {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(videoReadListener != null){
+                if (videoReadListener != null) {
                     videoReadListener.onVideoRead(buffer, RAW_VIDEO_WIDTH, RAW_VIDEO_HEIGHT);
                 }
                 long consume = System.nanoTime() - start;

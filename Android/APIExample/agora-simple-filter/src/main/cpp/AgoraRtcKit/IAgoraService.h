@@ -8,6 +8,7 @@
 #include "IAgoraLog.h"
 #include "AgoraBase.h"
 #include "AgoraOptional.h"
+#include <api/cpp/ahpl_ares_class.h>
 
 namespace agora {
 class ILocalDataChannel;
@@ -392,7 +393,7 @@ class IAgoraService {
   /**
    * Flush log & cache before exit
    */
-  virtual void atExit() = 0;
+  virtual int atExit(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Releases the \ref agora::base::IAgoraService "AgoraService" object.
@@ -412,7 +413,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setAudioSessionPreset(agora::rtc::AUDIO_SCENARIO_TYPE scenario) = 0;
+  virtual int setAudioSessionPreset(agora::rtc::AUDIO_SCENARIO_TYPE scenario, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Customizes the audio session configuration.
@@ -422,7 +423,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setAudioSessionConfiguration(const AudioSessionConfiguration& config) = 0;
+  virtual int setAudioSessionConfiguration(const AudioSessionConfiguration& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Gets the audio session configuration.
@@ -448,12 +449,12 @@ class IAgoraService {
    * \ref agora::base::IAgoraService::initialize "initialize".
    *
    * @param filePath The pointer to the log file. Ensure that the directory of the log file exists and is writable.
-   * @param fileSize The size of the SDK log file size (KB).
+   * @param fileSize The size of the SDK log file size (Byte), which means fileSize bytes per log file.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLogFile(const char* filePath, unsigned int fileSize) = 0;
+  virtual int setLogFile(const char* filePath, unsigned int fileSize, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Sets the SDK log output filter.
    *
@@ -472,7 +473,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLogFilter(unsigned int filters) = 0;
+  virtual int setLogFilter(unsigned int filters, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Creates an \ref agora::rtc::IRtcConnection "RtcConnection" object and returns the pointer.
@@ -500,6 +501,17 @@ class IAgoraService {
    * - `INVALID_STATE`, if `enableAudioProcessor` in \ref agora::base::AgoraServiceConfiguration "AgoraServiceConfiguration" is set as `false`.
    */
   virtual agora_refptr<rtc::ILocalAudioTrack> createLocalAudioTrack() = 0;
+
+  /**
+   * Creates a local mixed audio track object and returns the pointer.
+   *
+   * By default, the audio track is created from mix source, which could mixed target track.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createLocalMixedAudioTrack() = 0;
 
   /**
    * Creates a local audio track object with a PCM data sender and returns the pointer.
@@ -661,19 +673,6 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createCameraVideoTrack(
       agora_refptr<rtc::ICameraCapturer> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
-
-  /**
-   * Creates a local video track object with a screen capturer and returns the pointer.
-   *
-   * Once created, this track can be used to send video data for screen sharing.
-   *
-   * @param videoSource The pointer to the screen capturer: \ref agora::rtc::IScreenCapturer "IScreenCapturer".
-   * @return
-   * - The pointer to \ref rtc::ILocalVideoTrack "ILocalVideoTrack": Success.
-   * - A null pointer: Failure.
-   */
-  virtual agora_refptr<rtc::ILocalVideoTrack> createScreenVideoTrack(
-      agora_refptr<rtc::IScreenCapturer> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
 
    /**
    * Creates a local video track object with a video mixer and returns the pointer.
@@ -867,9 +866,9 @@ class IAgoraService {
    */
   virtual rtm::IRtmService* createRtmService() = 0;
 
-  virtual int addExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer) = 0;
+  virtual int addExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
-  virtual int removeExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer) = 0;
+  virtual int removeExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
 
   /**
    * Creates an audio device manager and returns the pointer.
@@ -925,7 +924,7 @@ class IAgoraService {
    */
   virtual int enableExtension(
       const char* provider_name, const char* extension_name, const char* track_id = NULL,
-      bool auto_enable_on_track = false) = 0;
+      bool auto_enable_on_track = false, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
   /**
    * Disable extension.
    * 
@@ -938,7 +937,16 @@ class IAgoraService {
    * - < 0: Failure.
    */
   virtual int disableExtension(
-      const char* provider_name, const char* extension_name, const char* track_id = NULL) = 0;
+      const char* provider_name, const char* extension_name, const char* track_id = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+
+  /**
+   * Gets the IAgoraParameter object.
+   * @since 4.3.0
+   * @return
+   * - The pointer to the \ref agora::base::IAgoraParameter "IAgoraParameter" object.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<base::IAgoraParameter> getAgoraParameter() = 0;
 
   /**
    * Get the \ref agora::rtc::IConfigCenter "IConfigCenter" object and return the pointer.

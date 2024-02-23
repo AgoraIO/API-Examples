@@ -29,6 +29,14 @@ import android.util.Log
 import android.util.Size
 import java.util.concurrent.ConcurrentLinkedQueue
 
+/**
+ * G l texture buffer queue
+ *
+ * @property glFrameBuffer
+ * @property cacheCount
+ * @property loggable
+ * @constructor Create empty G l texture buffer queue
+ */
 class GLTextureBufferQueue(
     private val glFrameBuffer: GLFrameBuffer = GLFrameBuffer(),
     private val cacheCount: Int = 6,
@@ -41,6 +49,12 @@ class GLTextureBufferQueue(
     private val textureIdQueue = ConcurrentLinkedQueue<TextureOut>()
 
 
+    /**
+     * Enqueue
+     *
+     * @param iN
+     * @return
+     */
     fun enqueue(iN: TextureIn): Int {
         var size = textureIdQueue.size
         if (size < cacheCount) {
@@ -126,6 +140,11 @@ class GLTextureBufferQueue(
         return size
     }
 
+    /**
+     * Dequeue
+     *
+     * @return
+     */
     fun dequeue(): TextureOut? {
         val size = textureIdQueue.size
         val poll = textureIdQueue.poll()
@@ -136,11 +155,19 @@ class GLTextureBufferQueue(
         return poll
     }
 
+    /**
+     * Reset
+     *
+     */
     fun reset() {
         cacheIndex = 0
         textureIdQueue.clear()
     }
 
+    /**
+     * Release
+     *
+     */
     fun release() {
         cacheIndex = 0
         cacheTextureOuts.forEachIndexed { index, textureOut ->
@@ -153,6 +180,21 @@ class GLTextureBufferQueue(
         glFrameBuffer.release()
     }
 
+    /**
+     * Texture in
+     *
+     * @property textureId
+     * @property textureType
+     * @property width
+     * @property height
+     * @property rotation
+     * @property flipV
+     * @property isFrontCamera
+     * @property isMirror
+     * @property transform
+     * @property tag
+     * @constructor Create empty Texture in
+     */
     data class TextureIn(
         val textureId: Int,
         val textureType: Int,
@@ -166,6 +208,18 @@ class GLTextureBufferQueue(
         val tag: Any? = null
     )
 
+    /**
+     * Texture out
+     *
+     * @property index
+     * @property textureId
+     * @property textureType
+     * @property width
+     * @property height
+     * @property isFrontCamera
+     * @property tag
+     * @constructor Create empty Texture out
+     */
     data class TextureOut(
         var index: Int = 0,
         val textureId: Int,

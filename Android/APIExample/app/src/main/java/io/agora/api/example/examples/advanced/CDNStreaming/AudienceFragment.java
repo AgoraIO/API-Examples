@@ -34,6 +34,8 @@ import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.CacheStatistics;
+import io.agora.mediaplayer.data.PlayerPlaybackStats;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -45,6 +47,9 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+/**
+ * The type Audience fragment.
+ */
 public class AudienceFragment extends BaseFragment implements IMediaPlayerObserver {
     private static final String TAG = AudienceFragment.class.getSimpleName();
     private static final String AGORA_CHANNEL_PREFIX = "rtmp://pull.webdemo.agoraio.cn/lbhd/";
@@ -104,29 +109,29 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -192,7 +197,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             engine.leaveChannel();
         }
         mediaPlayer.stop();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         engine.stopPreview();
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -252,7 +257,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
@@ -263,7 +268,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        /**Display remote video stream*/
+                        /*Display remote video stream*/
                         SurfaceView surfaceView = null;
                         // Create render view by RtcEngine
                         surfaceView = RtcEngine.CreateRendererView(context);
@@ -297,7 +302,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -419,12 +424,12 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     }
 
     @Override
-    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-        showShortToast("player state change to " + mediaPlayerState.name());
+    public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState state, io.agora.mediaplayer.Constants.MediaPlayerReason reason) {
+        showShortToast("player state change to " + state.name());
         handler.post(new Runnable() {
             @Override
             public void run() {
-                switch (mediaPlayerState) {
+                switch (state) {
                     case PLAYER_STATE_FAILED:
                         mediaPlayer.stop();
                         //showLongToast(String.format("media player error: %s", mediaPlayerError.name()));
@@ -439,13 +444,14 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                                     .setPositiveButton(R.string.confirm, (dialog, which) -> openPlayerWithUrl())
                                     .create();
                         }
-                        mPlayerFailDialog.setMessage(getString(R.string.media_player_error, mediaPlayerError.name()) + "\n\n" + getString(R.string.reopen_url_again));
+                        mPlayerFailDialog.setMessage(getString(R.string.media_player_error, reason.name()) + "\n\n" + getString(R.string.reopen_url_again));
                         mPlayerFailDialog.show();
                         break;
                     case PLAYER_STATE_OPEN_COMPLETED:
                         mediaPlayer.play();
-                        if (isAgoraChannel)
+                        if (isAgoraChannel) {
                             loadAgoraChannels();
+                        }
                         rtcSwitcher.setEnabled(true);
                         if (mPlayerFailDialog != null) {
                             mPlayerFailDialog.dismiss();
@@ -492,7 +498,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     }
 
     @Override
-    public void onPositionChanged(long l) {
+    public void onPositionChanged(long positionMs, long timestampMs) {
 
     }
 
@@ -544,6 +550,16 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     @Override
     public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onPlayerCacheStats(CacheStatistics stats) {
+
+    }
+
+    @Override
+    public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
 
     }
 

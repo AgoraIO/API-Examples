@@ -11,8 +11,7 @@ import AgoraRtcKit
 import AGEVideoLayout
 import AVFoundation
 
-class CustomPcmAudioSourceEntry : UIViewController
-{
+class CustomPcmAudioSourceEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomPcmAudioSource"
@@ -23,7 +22,7 @@ class CustomPcmAudioSourceEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else { return }
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
@@ -39,7 +38,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var pcmSourcePush: AgoraPcmSourcePush?
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
+    var audioViews: [UInt: VideoView] = [:]
     @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
     private var trackId: Int32 = 0
@@ -51,8 +50,8 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
-    let sampleRate:UInt = 44100, channel:UInt = 1, bitPerSample = 16, samples = 441 * 10
-    override func viewDidLoad(){
+    let sampleRate: UInt = 44100, channel: UInt = 1, bitPerSample = 16, samples = 441 * 10
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         // set up agora instance when view loaded
@@ -105,8 +104,8 @@ class CustomPcmAudioSourceMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -166,8 +165,8 @@ extension CustomPcmAudioSourceMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -177,7 +176,7 @@ extension CustomPcmAudioSourceMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -189,7 +188,7 @@ extension CustomPcmAudioSourceMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
@@ -204,10 +203,9 @@ extension CustomPcmAudioSourceMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x3(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)
     }
 }
-

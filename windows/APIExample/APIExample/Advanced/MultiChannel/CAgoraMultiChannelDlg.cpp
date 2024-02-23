@@ -447,7 +447,7 @@ LRESULT CAgoraMultiChannelDlg::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lParam
 LRESULT CAgoraMultiChannelDlg::OnEIDLocalAudioStateChange(WPARAM wParam, LPARAM lParam)
 {
 	LOCAL_AUDIO_STREAM_STATE state = LOCAL_AUDIO_STREAM_STATE(wParam);
-	LOCAL_AUDIO_STREAM_ERROR error = LOCAL_AUDIO_STREAM_ERROR(lParam);
+	LOCAL_AUDIO_STREAM_REASON error = LOCAL_AUDIO_STREAM_REASON(lParam);
 
 	CString strInfo;
 	strInfo.Format(_T("Local Audio State : %d"), state);
@@ -585,7 +585,7 @@ void CAgoraMultiChannelEventHandler::onLocalAudioStats(const LocalAudioStats& st
 	}
 }
 
-void CAgoraMultiChannelEventHandler::onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error)
+void CAgoraMultiChannelEventHandler::onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_REASON error)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), (WPARAM)state, error);

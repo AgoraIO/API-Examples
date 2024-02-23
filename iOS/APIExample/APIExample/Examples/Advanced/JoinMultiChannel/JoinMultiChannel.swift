@@ -9,8 +9,7 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinMultiChannelEntry : UIViewController
-{
+class JoinMultiChannelEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "JoinMultiChannel"
@@ -21,14 +20,16 @@ class JoinMultiChannelEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -77,7 +78,6 @@ class JoinMultiChannelMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
-        
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         channel1RemoteVideo.setPlaceholder(text: "\(channelName1 )\nRemote Host")
@@ -90,7 +90,8 @@ class JoinMultiChannelMain: BaseViewController {
         agoraKit.enableAudio()
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -113,8 +114,13 @@ class JoinMultiChannelMain: BaseViewController {
         // you have to call startPreview to see local video
         agoraKit.startPreview()
         
+        joinChannel1()
+        joinChannel2()
+    }
+    
+    private func joinChannel1() {
         // join channel1
-        var mediaOptions = AgoraRtcChannelMediaOptions()
+        let mediaOptions = AgoraRtcChannelMediaOptions()
         // publish audio and camera track for channel 1
         mediaOptions.publishCameraTrack = false
         mediaOptions.publishMicrophoneTrack = false
@@ -127,20 +133,19 @@ class JoinMultiChannelMain: BaseViewController {
                                                    uid: CONNECTION_1_UID,
                                                    mediaOptions: mediaOptions,
                                                    joinSuccess: nil)
-            
-//            self.agoraKit.setExternalAudioSource(true, sampleRate: 44100, channels: 2, sourceNumber: 3, localPlayback: false, publish: true)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
             }
         }
-
-        
+    }
+    
+    private func joinChannel2() {
         // join channel2
-        mediaOptions = AgoraRtcChannelMediaOptions()
+        let mediaOptions = AgoraRtcChannelMediaOptions()
         mediaOptions.publishMicrophoneTrack = true
         mediaOptions.publishCameraTrack = true
         mediaOptions.autoSubscribeVideo = true
@@ -158,8 +163,8 @@ class JoinMultiChannelMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
             }
         }
@@ -193,6 +198,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         group.notify(queue: .main) { [weak self] in
             self?.agoraKit.leaveChannelEx(connection2, options: channelOptions, leaveChannelBlock: nil)
+            self?.channel2.remoteUid = 0
         }
     }
     
@@ -214,7 +220,7 @@ class JoinMultiChannelMain: BaseViewController {
 
 class Channel1Delegate: NSObject, AgoraRtcEngineDelegate {
     var channelId: String?
-    var view:VideoView?
+    var view: VideoView?
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         
@@ -261,15 +267,15 @@ class Channel1Delegate: NSObject, AgoraRtcEngineDelegate {
         engine.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioStateChanged == \(state.rawValue)")
     }
 }
 
 /// agora rtc engine delegate events
 class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
-    var channelId:String?
-    var view:VideoView?
+    var channelId: String?
+    var view: VideoView?
     var remoteUid: UInt = 0
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -326,7 +332,7 @@ class Channel2Delegate: NSObject, AgoraRtcEngineDelegate {
         remoteUid = 0
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, reason: AgoraAudioLocalReason) {
         print("localAudioStateChanged == \(state.rawValue)")
     }
 }

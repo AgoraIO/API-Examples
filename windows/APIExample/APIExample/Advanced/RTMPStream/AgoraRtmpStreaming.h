@@ -92,7 +92,7 @@ public:
 	   @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	   @param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
    */
-	virtual void onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)override;
+	virtual void onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_REASON errCode)override;
 
 private:
 	HWND m_hMsgHanlder;

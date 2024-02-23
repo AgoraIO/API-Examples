@@ -10,7 +10,7 @@ import AGEVideoLayout
 import AgoraRtcKit
 import AVFoundation
 
-class CustomVideoSourcePreview : UIView {
+class CustomVideoSourcePreview: UIView {
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
     func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
@@ -27,8 +27,7 @@ class CustomVideoSourcePreview : UIView {
     }
 }
 
-class CustomVideoSourcePushEntry : UIViewController
-{
+class CustomVideoSourcePushEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomVideoSourcePush"
@@ -38,15 +37,16 @@ class CustomVideoSourcePushEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        guard let channelName = channelTextField.text else { return }
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -54,7 +54,7 @@ class CustomVideoSourcePushEntry : UIViewController
 class CustomVideoSourcePushMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoViewSampleBufferDisplayView", withType: SampleBufferDisplayView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var customCamera:AgoraYUVImageSourcePush?
+    var customCamera: AgoraYUVImageSourcePush?
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -82,7 +82,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        //agoraKit.setClientRole(.broadcaster)
+        // agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -92,15 +92,17 @@ class CustomVideoSourcePushMain: BaseViewController {
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
         customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
+                                               fileName: "sample",
                                                frameRate: 15)
         customCamera?.delegate = self
         customCamera?.startSource()
+        customCamera?.trackId = 0
         agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         
         let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
-        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -125,8 +127,8 @@ class CustomVideoSourcePushMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
@@ -168,8 +170,8 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
@@ -234,8 +236,8 @@ extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
         videoFrame.format = 12
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
-        //once we have the video frame, we can push to agora sdk
-        agoraKit?.pushExternalVideoFrame(videoFrame)
+        // once we have the video frame, we can push to agora sdk
+        agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
         
         let outputVideoFrame = AgoraOutputVideoFrame()
         outputVideoFrame.width = Int32(size.width)

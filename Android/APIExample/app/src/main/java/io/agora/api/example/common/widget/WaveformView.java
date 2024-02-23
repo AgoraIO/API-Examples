@@ -16,12 +16,15 @@ import java.util.ArrayList;
 
 import io.agora.api.example.R;
 
+/**
+ * The type Waveform view.
+ */
 public class WaveformView extends View {
     private ArrayList<Short> datas = new ArrayList<>();
     private short max = 100;
     private float mWidth;
     private float mHeight;
-    private float space =1f;
+    private float space = 1f;
     private Paint mWavePaint;
     private Paint baseLinePaint;
     private int mWaveColor = Color.WHITE;
@@ -31,14 +34,32 @@ public class WaveformView extends View {
     private long drawTime;
     private boolean isMaxConstant = false;
 
+    /**
+     * Instantiates a new Waveform view.
+     *
+     * @param context the context
+     */
     public WaveformView(Context context) {
         this(context, null);
     }
 
+    /**
+     * Instantiates a new Waveform view.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public WaveformView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Instantiates a new Waveform view.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public WaveformView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs, defStyleAttr);
@@ -69,8 +90,8 @@ public class WaveformView extends View {
 
     private void initPainters() {
         mWavePaint = new Paint();
-        mWavePaint.setColor(mWaveColor);// 画笔为color
-        mWavePaint.setStrokeWidth(waveStrokeWidth);// 设置画笔粗细
+        mWavePaint.setColor(mWaveColor); // 画笔为color
+        mWavePaint.setStrokeWidth(waveStrokeWidth); // 设置画笔粗细
         mWavePaint.setAntiAlias(true);
         mWavePaint.setFilterBitmap(true);
         mWavePaint.setStrokeCap(Paint.Cap.ROUND);
@@ -78,68 +99,138 @@ public class WaveformView extends View {
         Shader shader = new LinearGradient(0, 0, 1000, 0, 0xffffffff, 0xFFe850ee, Shader.TileMode.CLAMP);
         mWavePaint.setShader(shader);
         baseLinePaint = new Paint();
-        baseLinePaint.setColor(mBaseLineColor);// 画笔为color
-        baseLinePaint.setStrokeWidth(1f);// 设置画笔粗细
+        baseLinePaint.setColor(mBaseLineColor); // 画笔为color
+        baseLinePaint.setStrokeWidth(1f); // 设置画笔粗细
         baseLinePaint.setAntiAlias(true);
         baseLinePaint.setFilterBitmap(true);
         baseLinePaint.setStyle(Paint.Style.FILL);
     }
 
+    /**
+     * Gets max.
+     *
+     * @return the max
+     */
     public short getMax() {
         return max;
     }
 
+    /**
+     * Sets max.
+     *
+     * @param max the max
+     */
     public void setMax(short max) {
         this.max = max;
     }
 
+    /**
+     * Gets space.
+     *
+     * @return the space
+     */
     public float getSpace() {
         return space;
     }
 
+    /**
+     * Sets space.
+     *
+     * @param space the space
+     */
     public void setSpace(float space) {
         this.space = space;
     }
 
+    /**
+     * Gets wave color.
+     *
+     * @return the wave color
+     */
     public int getmWaveColor() {
         return mWaveColor;
     }
 
+    /**
+     * Sets wave color.
+     *
+     * @param mWaveColor the m wave color
+     */
     public void setmWaveColor(int mWaveColor) {
         this.mWaveColor = mWaveColor;
         invalidateNow();
     }
 
+    /**
+     * Gets base line color.
+     *
+     * @return the base line color
+     */
     public int getmBaseLineColor() {
         return mBaseLineColor;
     }
 
+    /**
+     * Sets base line color.
+     *
+     * @param mBaseLineColor the m base line color
+     */
     public void setmBaseLineColor(int mBaseLineColor) {
         this.mBaseLineColor = mBaseLineColor;
         invalidateNow();
     }
 
+    /**
+     * Gets wave stroke width.
+     *
+     * @return the wave stroke width
+     */
     public float getWaveStrokeWidth() {
         return waveStrokeWidth;
     }
 
+    /**
+     * Sets wave stroke width.
+     *
+     * @param waveStrokeWidth the wave stroke width
+     */
     public void setWaveStrokeWidth(float waveStrokeWidth) {
         this.waveStrokeWidth = waveStrokeWidth;
         invalidateNow();
     }
 
+    /**
+     * Gets invalidate time.
+     *
+     * @return the invalidate time
+     */
     public int getInvalidateTime() {
         return invalidateTime;
     }
 
+    /**
+     * Sets invalidate time.
+     *
+     * @param invalidateTime the invalidate time
+     */
     public void setInvalidateTime(int invalidateTime) {
         this.invalidateTime = invalidateTime;
     }
 
+    /**
+     * Is max constant boolean.
+     *
+     * @return the boolean
+     */
     public boolean isMaxConstant() {
         return isMaxConstant;
     }
 
+    /**
+     * Sets max constant.
+     *
+     * @param maxConstant the max constant
+     */
     public void setMaxConstant(boolean maxConstant) {
         isMaxConstant = maxConstant;
     }
@@ -152,6 +243,11 @@ public class WaveformView extends View {
         invalidate();
     }
 
+    /**
+     * Add data.
+     *
+     * @param data the data
+     */
     public void addData(short data) {
 
         if (data < 0) {
@@ -175,6 +271,9 @@ public class WaveformView extends View {
 
     }
 
+    /**
+     * Clear.
+     */
     public void clear() {
         datas.clear();
         invalidateNow();
@@ -196,7 +295,7 @@ public class WaveformView extends View {
 
     private void drawWave(Canvas mCanvas) {
         for (int i = 0; i < datas.size(); i++) {
-            float x = (i) * space;
+            float x = i * space;
             float y = (float) datas.get(i) / max * mHeight / 2;
             mCanvas.drawLine(x, -y, x, y, mWavePaint);
         }

@@ -10,6 +10,9 @@ import io.agora.api.example.common.model.Examples;
 import io.agora.api.example.common.model.GlobalSettings;
 import io.agora.api.example.utils.ClassUtils;
 
+/**
+ * The type Main application.
+ */
 public class MainApplication extends Application {
 
     private GlobalSettings globalSettings;
@@ -34,14 +37,18 @@ public class MainApplication extends Application {
                 }
             }
             Examples.sortItem();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Gets global settings.
+     *
+     * @return the global settings
+     */
     public GlobalSettings getGlobalSettings() {
-        if(globalSettings == null){
+        if (globalSettings == null) {
             globalSettings = new GlobalSettings();
         }
         return globalSettings;

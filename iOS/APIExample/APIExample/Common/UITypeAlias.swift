@@ -38,23 +38,20 @@ enum Font {
         case boldItalic = "BoldItalic"
         
         func with(size: CGFloat) -> UIFont {
-            return UIFont(name: "HelveticaNeue-\(rawValue)", size: size)!
+            UIFont(name: "HelveticaNeue-\(rawValue)", size: size) ?? .systemFont(ofSize: size)
         }
     }
 }
 
 extension UIColor {
-    
     /// Get color rgba components in order.
     func rgba() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
-        let components = self.cgColor.components
+        guard let components = self.cgColor.components else { return (0, 0, 0, 0) }
         let numberOfComponents = self.cgColor.numberOfComponents
         
         switch numberOfComponents {
-        case 4:
-            return (components![0], components![1], components![2], components![3])
-        case 2:
-            return (components![0], components![0], components![0], components![1])
+        case 4: return (components[0], components[1], components[2], components[3])
+        case 2: return (components[0], components[0], components[0], components[1])
         default:
             // FIXME: Fallback to black
             return (0, 0, 0, 1)
@@ -64,13 +61,12 @@ extension UIColor {
     /// Check the black or white contrast on given color.
     func blackOrWhiteContrastingColor() -> Color {
         let rgbaT = rgba()
-        let value = 1 - ((0.299 * rgbaT.r) + (0.587 * rgbaT.g) + (0.114 * rgbaT.b));
+        let value = 1 - ((0.299 * rgbaT.r) + (0.587 * rgbaT.g) + (0.114 * rgbaT.b))
         return value < 0.5 ? Color.black : Color.white
     }
-    
 }
 
-enum AssetsColor : String {
+enum AssetsColor: String {
   case videoBackground
   case videoPlaceholder
   case textShadow
@@ -78,12 +74,11 @@ enum AssetsColor : String {
 
 extension UIColor {
   static func appColor(_ name: AssetsColor) -> UIColor? {
-     return UIColor(named: name.rawValue)
+     UIColor(named: name.rawValue)
   }
 }
 
 extension UIView {
-
     /// Adds constraints to this `UIView` instances `superview` object to make sure this always has the same size as the superview.
     /// Please note that this has no effect if its `superview` is `nil` – add this `UIView` instance as a subview before calling this.
     func bindFrameToSuperviewBounds() {
@@ -91,17 +86,15 @@ extension UIView {
             print("Error! `superview` was nil – call `addSubview(view: UIView)` before calling `bindFrameToSuperviewBounds()` to fix this.")
             return
         }
-
         self.translatesAutoresizingMaskIntoConstraints = false
         self.topAnchor.constraint(equalTo: superview.topAnchor, constant: 0).isActive = true
         self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: 0).isActive = true
         self.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 0).isActive = true
         self.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: 0).isActive = true
-
     }
 }
 
-//MARK: - Color
+// MARK: - Color
 #if os(iOS)
 typealias AGColor = UIColor
 #else
@@ -133,17 +126,16 @@ extension AGColor {
     convenience init(hex: String, alpha: CGFloat = 1) {
         var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
-        if (cString.hasPrefix("#")) {
+        if cString.hasPrefix("#") {
             let range = cString.index(after: cString.startIndex) ..< cString.endIndex
             cString = String(cString[range])
         }
-        if (cString.hasPrefix("0X")) {
+        if cString.hasPrefix("0X") {
             let range = cString.index(cString.startIndex, offsetBy: 2) ..< cString.endIndex
             cString = String(cString[range])
         }
         
-        
-        if (cString.count != 6) {
+        if cString.count != 6 {
             self.init()
             return
         }
@@ -155,19 +147,21 @@ extension AGColor {
     }
     
     static func randomColor() -> AGColor {
+        // swiftlint:disable legacy_random
         let randomHex = Int(arc4random_uniform(0xCCCCCC) + 0x555555)
+        // swiftlint:enable legacy_random
         return AGColor(hex: randomHex)
     }
 }
 
-//MARK: - Font
+// MARK: - Font
 #if os(iOS)
 typealias AGFont = UIFont
 #else
 typealias AGFont = NSFont
 #endif
 
-//MARK: - Image
+// MARK: - Image
 #if os(iOS)
 typealias AGImage = UIImage
 #else
@@ -258,7 +252,7 @@ extension AGLabel {
     #endif
 }
 
-//MARK: - TextField
+// MARK: - TextField
 #if os(iOS)
 typealias AGTextField = UITextField
 #else
@@ -326,7 +320,7 @@ extension AGTextField {
     
     var stringValue: String {
         get {
-            return text!
+            return text ?? ""
         }
         set {
             text = newValue
@@ -351,7 +345,7 @@ extension AGTextField {
     }
 }
 
-//MARK: - Indicator
+// MARK: - Indicator
 #if os(iOS)
 typealias AGIndicator = UIActivityIndicatorView
 #else
@@ -378,7 +372,7 @@ extension AGIndicator {
     
 }
 
-//MARK: - View
+// MARK: - View
 #if os(iOS)
 typealias AGView = UIView
 #else
@@ -500,35 +494,34 @@ extension AGView {
     #endif
 }
 
-
 #if os(iOS)
 typealias AGVisualEffectView = UIVisualEffectView
 #else
 typealias AGVisualEffectView = NSVisualEffectView
 #endif
 
-//MARK: - ImageView
+// MARK: - ImageView
 #if os(iOS)
 typealias AGImageView = UIImageView
 #else
 typealias AGImageView = NSImageView
 #endif
 
-//MARK: - TableView
+// MARK: - TableView
 #if os(iOS)
 typealias AGTableView = UITableView
 #else
 typealias AGTableView = NSTableView
 #endif
 
-//MARK: - TableViewCell
+// MARK: - TableViewCell
 #if os(iOS)
 typealias AGTableViewCell = UITableViewCell
 #else
 typealias AGTableViewCell = NSTableCellView
 #endif
 
-//MARK: - CollectionView
+// MARK: - CollectionView
 #if os(iOS)
 typealias AGCollectionView = UICollectionView
 #else
@@ -541,7 +534,7 @@ typealias AGCollectionViewFlowLayout = UICollectionViewFlowLayout
 typealias AGCollectionViewFlowLayout = NSCollectionViewFlowLayout
 #endif
 
-//MARK: - CollectionViewCell
+// MARK: - CollectionViewCell
 #if os(iOS)
 typealias AGCollectionViewCell = UICollectionViewCell
 #else
@@ -561,7 +554,7 @@ extension AGCollectionViewCell {
     #endif
 }
 
-//MARK: - Button
+// MARK: - Button
 #if os(iOS)
 typealias AGButton = UIButton
 #else
@@ -602,7 +595,9 @@ extension AGButton {
         set {
             let pstyle = NSMutableParagraphStyle()
             pstyle.alignment = .left
-            attributedTitle = NSAttributedString(string: title, attributes: [ NSAttributedString.Key.foregroundColor : newValue, NSAttributedString.Key.paragraphStyle : pstyle ])
+            attributedTitle = NSAttributedString(string: title, 
+                                                 attributes: [ NSAttributedString.Key.foregroundColor: newValue,
+                                                               NSAttributedString.Key.paragraphStyle: pstyle ])
         }
     }
     #endif
@@ -612,26 +607,26 @@ extension AGButton {
         UIView.animate(withDuration: 0.15, animations: {
             self.isEnabled = false
             self.alpha = 0.3
-        }) { (_) in
+        }, completion: { _ in
             self.image = toImage
             self.alpha = 1.0
             self.isEnabled = true
-        }
+        })
         #else
         NSAnimationContext.runAnimationGroup({ (context) in
             context.duration = 0.3
             self.isEnabled = false
             self.animator().alphaValue = 0.3
-        }) {
+        }, completion: {
             self.image = toImage
             self.alphaValue = 1.0
             self.isEnabled = true
-        }
+        })
         #endif
     }
 }
 
-//MARK: - Switch
+// MARK: - Switch
 #if os(iOS)
 typealias AGSwitch = UISwitch
 #else
@@ -650,7 +645,7 @@ extension AGSwitch {
 }
 #endif
 
-//MARK: - WebView
+// MARK: - WebView
 #if os(iOS)
 typealias AGWebView = WKWebView
 #else
@@ -666,7 +661,7 @@ extension AGWebView {
 }
 #endif
 
-//MARK: - Slider
+// MARK: - Slider
 #if os(iOS)
 typealias AGSlider = UISlider
 #else
@@ -726,14 +721,14 @@ extension AGSlider {
     #endif
 }
 
-//MARK: - SegmentedControl
+// MARK: - SegmentedControl
 #if os(iOS)
 typealias AGPopSheetButton = UIButton
 #else
 typealias AGPopSheetButton = NSPopUpButton
 #endif
 
-//MARK: - SegmentedControl
+// MARK: - SegmentedControl
 #if os(iOS)
 typealias AGSegmentedControl = UISegmentedControl
 #else
@@ -752,7 +747,7 @@ extension AGSegmentedControl {
 }
 #endif
 
-//MARK: - StoryboardSegue
+// MARK: - StoryboardSegue
 #if os(iOS)
 typealias AGStoryboardSegue = UIStoryboardSegue
 #else
@@ -760,32 +755,24 @@ typealias AGStoryboardSegue = NSStoryboardSegue
 #endif
 extension AGStoryboardSegue {
     var identifierString: String? {
-        get {
-            #if os(iOS)
-            return identifier
-            #else
-            return identifier
-            #endif
-        }
+        return identifier
     }
     
     #if os(iOS)
     var destinationController: AGViewController? {
-        get {
-            return destination
-        }
+        return destination
     }
     #endif
 }
 
-//MARK: - Storyboard
+// MARK: - Storyboard
 #if os(iOS)
 typealias AGStoryboard = UIStoryboard
 #else
 typealias AGStoryboard = NSStoryboard
 #endif
 
-//MARK: - ViewController
+// MARK: - ViewController
 #if os(iOS)
 typealias AGViewController = UIViewController
 #else
@@ -823,13 +810,12 @@ extension AGViewController {
     }
 }
 
-//MARK: - TableViewController
+// MARK: - TableViewController
 #if os(iOS)
 typealias AGTableViewController = UITableViewController
 #else
 typealias AGTableViewController = NSViewController
 #endif
-
 
 #if os(iOS)
 typealias AGBezierPath = UIBezierPath
@@ -856,7 +842,6 @@ typealias AGControl = UIControl
 typealias AGControl = NSControl
 #endif
 
-
 #if os(OSX)
 extension String {
     func buttonWhiteAttributedTitleString() -> NSAttributedString {
@@ -870,11 +855,10 @@ extension String {
     fileprivate func buttonAttributedTitleStringWithColor(_ color: AGColor) -> NSAttributedString {
         let attributes = [NSAttributedString.Key.foregroundColor: color, NSAttributedString.Key.font: NSFont.systemFont(ofSize: 13)]
         let attributedString = NSMutableAttributedString(string: self)
-        let range = NSMakeRange(0, attributedString.length)
+        let range = NSRange(location: 0, length: attributedString.length)
         attributedString.addAttributes(attributes, range: range)
         attributedString.setAlignment(.center, range: range)
         attributedString.fixAttributes(in: range)
-        
         return attributedString
     }
 }
@@ -885,4 +869,3 @@ typealias AGApplication = UIApplication
 #else
 typealias AGApplication = NSApplication
 #endif
-

@@ -10,14 +10,13 @@ import Foundation
 import UIKit
 
 protocol SettingsViewControllerDelegate: AnyObject {
-    func didChangeValue(type:String, key:String, value: Any)
+    func didChangeValue(type: String, key: String, value: Any)
 }
 
-class SettingsViewController : UITableViewController
-{
-    var sections:[[SettingsBaseParam]] = []
-    var sectionNames:[String] = []
-    weak var settingsDelegate:SettingsViewControllerDelegate?
+class SettingsViewController: UITableViewController {
+    var sections: [[SettingsBaseParam]] = []
+    var sectionNames: [String] = []
+    weak var settingsDelegate: SettingsViewControllerDelegate?
     override func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -29,7 +28,9 @@ class SettingsViewController : UITableViewController
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let param = sections[indexPath.section][indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: param.type, for: indexPath) as? SettingsBaseCell else {return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: param.type, for: indexPath) as? SettingsBaseCell else {
+            return UITableViewCell()
+        }
         cell.delegate = settingsDelegate
         cell.configure(configs: param)
 

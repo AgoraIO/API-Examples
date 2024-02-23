@@ -14,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 import io.agora.api.example.MainApplication;
@@ -42,7 +45,9 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-/**This demo demonstrates how to make a one-to-one video call*/
+/**
+ * This demo demonstrates how to make a one-to-one video call
+ */
 @Example(
         index = 14,
         group = ADVANCED,
@@ -50,8 +55,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         actionId = R.id.action_mainFragment_to_channel_encryption,
         tipsId = R.string.channelencryption
 )
-public class ChannelEncryption extends BaseFragment implements View.OnClickListener
-{
+public class ChannelEncryption extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = ChannelEncryption.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
@@ -64,15 +68,13 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel_encryption, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
@@ -81,45 +83,43 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         encry_mode = view.findViewById(R.id.encry_mode_spinner);
+        encry_mode.setOnItemSelectedListener(this);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -137,21 +137,20 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (joined && encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
+            enablePacketProcessor(false);
+        }
+        /* leaveChannel and Destroy the RtcEngine instance */
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -159,27 +158,44 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
-                // Creates an EncryptionConfig instance.
-                EncryptionConfig config = new EncryptionConfig();
-                // Sets the encryption mode as AES_128_XTS.
-                config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
-                // Sets the encryption key.
-                config.encryptionKey = et_password.getText().toString();
-                System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
-                // Enables the built-in encryption.
-                engine.enableEncryption(true, config);
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == encry_mode) {
+            if (encry_mode.getSelectedItem().equals(getString(R.string.custom))) {
+                et_password.setText("");
+                et_password.setEnabled(false);
+            } else {
+                et_password.setEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
+                if (encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
+                    enablePacketProcessor(true);
+                } else {
+                    // Creates an EncryptionConfig instance.
+                    EncryptionConfig config = new EncryptionConfig();
+                    // Sets the encryption mode as AES_128_XTS.
+                    config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
+                    // Sets the encryption key.
+                    config.encryptionKey = et_password.getText().toString();
+                    System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
+                    // Enables the built-in encryption.
+                    engine.enableEncryption(true, config);
+                }
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -188,16 +204,16 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                if (encry_mode.getSelectedItem().toString().equals(getString(R.string.custom))) {
+                    enablePacketProcessor(false);
+                }
+                /* After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -216,9 +232,25 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                et_password.setEnabled(true);
+                et_password.setEnabled(!encry_mode.getSelectedItem().equals(getString(R.string.custom)));
                 encry_mode.setEnabled(true);
             }
+        }
+    }
+
+    private void enablePacketProcessor(boolean enable) {
+        try {
+            Class<?> aClass = Class.forName("io.agora.api.streamencrypt.PacketProcessor");
+            if (enable) {
+                Method registerProcessing = aClass.getDeclaredMethod("registerProcessing", long.class);
+                registerProcessing.invoke(null, engine.getNativeHandle());
+            } else {
+                Method unregisterProcessing = aClass.getDeclaredMethod("unregisterProcessing", long.class);
+                unregisterProcessing.invoke(null, engine.getNativeHandle());
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "", e);
+            Toast.makeText(requireContext(), R.string.custom_stream_encrypt_tip, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -226,12 +258,10 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         return "EncryptionKdfSaltInBase64Strings".getBytes(StandardCharsets.UTF_8);
     }
 
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
@@ -239,8 +269,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         SurfaceView surfaceView = new SurfaceView(context);
         // Local video is on the top
         surfaceView.setZOrderMediaOverlay(true);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -249,7 +278,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
@@ -261,17 +290,16 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 ORIENTATION_MODE_ADAPTIVE
         ));
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, "Extra Optional Data", 0);
-            if (res != 0)
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -289,16 +317,14 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)), false);
         }
@@ -307,8 +333,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -322,17 +347,14 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     et_password.setEnabled(false);
@@ -417,8 +439,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -428,23 +449,20 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             resetAlert();
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
+            /*Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
+            handler.post(() -> {
+                /*Display remote video stream*/
                 SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0)
-                {
+                if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
@@ -470,15 +488,14 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             resetAlert();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    /**Clear render view
+                    /*Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
@@ -486,4 +503,6 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
             });
         }
     };
+
+
 }

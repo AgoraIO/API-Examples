@@ -15,7 +15,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+/**
+ * The type Base fragment.
+ */
 public class BaseFragment extends Fragment {
+    /**
+     * The Handler.
+     */
     protected Handler handler;
     private AlertDialog mAlertDialog;
     private String mAlertMessage;
@@ -45,11 +51,22 @@ public class BaseFragment extends Fragment {
         onBackPressedCallback.setEnabled(false);
     }
 
+    /**
+     * Show alert.
+     *
+     * @param message the message
+     */
     protected void showAlert(String message) {
         this.showAlert(message, true);
     }
 
-    protected void showAlert(String message, boolean showRepeatMsg){
+    /**
+     * Show alert.
+     *
+     * @param message       the message
+     * @param showRepeatMsg the show repeat msg
+     */
+    protected void showAlert(String message, boolean showRepeatMsg) {
         runOnUIThread(() -> {
             Context context = getContext();
             if (context == null) {
@@ -60,7 +77,7 @@ public class BaseFragment extends Fragment {
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .create();
             }
-            if(!showRepeatMsg && !TextUtils.isEmpty(mAlertMessage) && mAlertMessage.equals(message)){
+            if (!showRepeatMsg && !TextUtils.isEmpty(mAlertMessage) && mAlertMessage.equals(message)) {
                 return;
             }
             mAlertMessage = message;
@@ -69,10 +86,18 @@ public class BaseFragment extends Fragment {
         });
     }
 
-    protected void resetAlert(){
+    /**
+     * Reset alert.
+     */
+    protected void resetAlert() {
         runOnUIThread(() -> mAlertMessage = "");
     }
 
+    /**
+     * Show long toast.
+     *
+     * @param msg the msg
+     */
     protected final void showLongToast(final String msg) {
         runOnUIThread(() -> {
             Context context = getContext();
@@ -83,6 +108,11 @@ public class BaseFragment extends Fragment {
         });
     }
 
+    /**
+     * Show short toast.
+     *
+     * @param msg the msg
+     */
     protected final void showShortToast(final String msg) {
         runOnUIThread(() -> {
             Context context = getContext();
@@ -93,10 +123,21 @@ public class BaseFragment extends Fragment {
         });
     }
 
+    /**
+     * Run on ui thread.
+     *
+     * @param runnable the runnable
+     */
     protected final void runOnUIThread(Runnable runnable) {
         this.runOnUIThread(runnable, 0);
     }
 
+    /**
+     * Run on ui thread.
+     *
+     * @param runnable the runnable
+     * @param delay    the delay
+     */
     protected final void runOnUIThread(Runnable runnable, long delay) {
         if (handler != null && runnable != null && getContext() != null) {
             if (delay <= 0 && handler.getLooper().getThread() == Thread.currentThread()) {
@@ -121,6 +162,9 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * On back pressed.
+     */
     protected void onBackPressed() {
         View view = getView();
         if (view != null) {

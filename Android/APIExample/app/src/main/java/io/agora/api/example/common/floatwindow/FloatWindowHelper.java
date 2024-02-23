@@ -25,10 +25,25 @@ import io.agora.api.example.common.floatwindow.rom.OppoUtils;
 import io.agora.api.example.common.floatwindow.rom.QikuUtils;
 import io.agora.api.example.common.floatwindow.rom.RomUtils;
 
-public class FloatWindowHelper {
+/**
+ * The type Float window helper.
+ */
+public final class FloatWindowHelper {
     private static final String TAG = "FloatWindowHelper";
 
-    public static AVCallFloatView createFloatView(@NonNull Context context, int xDp, int yDp){
+    private FloatWindowHelper() {
+
+    }
+
+    /**
+     * Create float view av call float view.
+     *
+     * @param context the context
+     * @param xDp     the x dp
+     * @param yDp     the y dp
+     * @return the av call float view
+     */
+    public static AVCallFloatView createFloatView(@NonNull Context context, int xDp, int yDp) {
         WindowManager windowManager = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         Point size = new Point();
         windowManager.getDefaultDisplay().getSize(size);
@@ -61,12 +76,23 @@ public class FloatWindowHelper {
         return floatView;
     }
 
+    /**
+     * Destroy float view.
+     *
+     * @param floatView the float view
+     */
     public static void destroyFloatView(@NonNull AVCallFloatView floatView) {
         WindowManager windowManager = (WindowManager) floatView.getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         floatView.setIsShowing(false);
         windowManager.removeViewImmediate(floatView);
     }
 
+    /**
+     * Check permission boolean.
+     *
+     * @param context the context
+     * @return the boolean
+     */
     public static boolean checkPermission(Context context) {
         //6.0 版本之后由于 google 增加了对悬浮窗权限的管理，所以方式就统一了
         if (Build.VERSION.SDK_INT < 23) {
@@ -85,6 +111,11 @@ public class FloatWindowHelper {
         return commonROMPermissionCheck(context);
     }
 
+    /**
+     * Apply permission.
+     *
+     * @param context the context
+     */
     public static void applyPermission(Context context) {
         if (Build.VERSION.SDK_INT < 23) {
             if (RomUtils.checkIsMiuiRom()) {
@@ -94,7 +125,7 @@ public class FloatWindowHelper {
             } else if (RomUtils.checkIsHuaweiRom()) {
                 huaweiROMPermissionApply(context);
             } else if (RomUtils.checkIs360Rom()) {
-                ROM360PermissionApply(context);
+                rom360Permissionapply(context);
             } else if (RomUtils.checkIsOppoRom()) {
                 oppoROMPermissionApply(context);
             }
@@ -103,7 +134,14 @@ public class FloatWindowHelper {
         }
     }
 
-    public static int dp2px(Context context, float dp){
+    /**
+     * Dp 2 px int.
+     *
+     * @param context the context
+     * @param dp      the dp
+     * @return the int
+     */
+    public static int dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
@@ -148,7 +186,7 @@ public class FloatWindowHelper {
         }
     }
 
-    private static void ROM360PermissionApply(final Context context) {
+    private static void rom360Permissionapply(final Context context) {
         showConfirmDialog(context, () -> QikuUtils.applyPermission(context));
     }
 
@@ -176,6 +214,8 @@ public class FloatWindowHelper {
 
     /**
      * 通用 rom 权限申请
+     *
+     * @param context Context.
      */
     private static void commonROMPermissionApply(final Context context) {
         //这里也一样，魅族系统需要单独适配
@@ -210,7 +250,7 @@ public class FloatWindowHelper {
                 .setMessage(R.string.float_window_confirm_dialog_msg)
                 .setPositiveButton(R.string.float_window_confirm_dialog_confirm,
                         (dialog, which) -> {
-                            if(confirm != null){
+                            if (confirm != null) {
                                 confirm.run();
                             }
                             dialog.dismiss();

@@ -56,11 +56,15 @@ class PrecallTestEntry : BaseViewController
     
     @IBAction func doEchoTest(sender: UIButton) {
         
-        let ret = agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
+        let testConfig = AgoraEchoTestConfiguration()
+        testConfig.intervalInSeconds = 10
+        testConfig.enableAudio = true
+        testConfig.channelId = "AudioEchoTest" + "\(Int.random(in: 1...1000))"
+        let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // for errors please take a look at:
-            // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-            // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
+            // CN https://doc.shengwang.cn/api-ref/rtc/ios/error-code:
+            // EN https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
             showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
         }
         showPopover(isValidate: false, seconds: 10) {[unowned self] in

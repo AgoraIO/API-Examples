@@ -21,6 +21,7 @@ extern wchar_t commonCtrlLeaveChannel[INFO_LEN];
 extern wchar_t commonCtrlClientRole[INFO_LEN];
 //scene list
 extern wchar_t basicLiveBroadcasting[INFO_LEN];
+extern wchar_t basicJoinChannelVideoByToken[INFO_LEN];
 extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
@@ -35,6 +36,7 @@ extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
+extern wchar_t advancedFaceCapture[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedMediaRecorder[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
@@ -216,19 +218,6 @@ extern wchar_t OriginalAudioCtrlProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlSetProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN];
 
-//media player
-extern wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlOpen[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlClose[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPause[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPlay[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
-
 
 //multi channel
 extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
@@ -263,8 +252,13 @@ extern wchar_t PerCallTestCtrlAudioInput[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioOutput[INFO_LEN];
 extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioEchoTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlVideoEchoTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlWaitingStart[INFO_LEN];
+extern wchar_t PerCallTestCtrlRecording[INFO_LEN];
+extern wchar_t PerCallTestCtrlPlaying[INFO_LEN];
 
 //audio volume
 extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];
@@ -320,6 +314,8 @@ extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishStream[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPlayerStream[INFO_LEN];
 
 
 extern wchar_t liveBraodcastingReport[INFO_LEN];

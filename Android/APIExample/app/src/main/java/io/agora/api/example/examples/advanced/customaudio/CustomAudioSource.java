@@ -40,19 +40,16 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 /**
  * This demo demonstrates how to make a one-to-one voice call
  */
-@Example(
-        index = 5,
-        group = ADVANCED,
-        name = R.string.item_customaudiosource,
-        actionId = R.id.action_mainFragment_to_CustomAudioSource,
-        tipsId = R.string.customaudio
-)
+@Example(index = 5, group = ADVANCED, name = R.string.item_customaudiosource, actionId = R.id.action_mainFragment_to_CustomAudioSource, tipsId = R.string.customaudio)
 public class CustomAudioSource extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = CustomAudioSource.class.getSimpleName();
     private EditText et_channel;
     private Button join;
     private int myUid;
     private boolean joined = false;
+    /**
+     * The constant engine.
+     */
     public static RtcEngineEx engine;
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
@@ -119,41 +116,37 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
-            engine.setParameters("{"
-                    + "\"rtc.report_app_scenario\":"
-                    + "{"
-                    + "\"appScenario\":" + 100 + ","
-                    + "\"serviceType\":" + 11 + ","
-                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
-                    + "}"
-                    + "}");
+            engine.setParameters("{" + "\"rtc.report_app_scenario\":"
+                    + "{" + "\"appScenario\":"
+                    + 100 + "," + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\"" + "}" + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             LocalAccessPointConfiguration localAccessPointConfiguration = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
             if (localAccessPointConfiguration != null) {
@@ -162,8 +155,12 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             }
 
             audioPushingHelper = new AudioFileReader(requireContext(), (buffer, timestamp) -> {
-                if(joined && engine != null && customAudioTrack != -1){
-                    int ret = engine.pushExternalAudioFrame(buffer, timestamp, AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, Constants.BytesPerSample.TWO_BYTES_PER_SAMPLE, customAudioTrack);
+                if (joined && engine != null && customAudioTrack != -1) {
+                    int ret = engine.pushExternalAudioFrame(buffer, timestamp,
+                            AudioFileReader.SAMPLE_RATE,
+                            AudioFileReader.SAMPLE_NUM_OF_CHANNEL,
+                            Constants.BytesPerSample.TWO_BYTES_PER_SAMPLE,
+                            customAudioTrack);
                     Log.i(TAG, "pushExternalAudioFrame times:" + (++pushTimes) + ", ret=" + ret);
                 }
             });
@@ -176,14 +173,14 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(customAudioTrack != -1){
+        if (customAudioTrack != -1) {
             engine.destroyCustomAudioTrack(customAudioTrack);
             customAudioTrack = -1;
         }
-        if(audioPushingHelper != null){
+        if (audioPushingHelper != null) {
             audioPushingHelper.stop();
         }
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -219,17 +216,13 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     return;
                 }
                 // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                AndPermission.with(this).runtime().permission(Permission.Group.STORAGE, Permission.Group.MICROPHONE).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -252,7 +245,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 pcm.setEnabled(false);
                 pcm.setChecked(false);
                 mic.setChecked(true);
-                if(audioPushingHelper != null){
+                if (audioPushingHelper != null) {
                     audioPushingHelper.stop();
                 }
                 audioSeatManager.downAllSeats();
@@ -265,9 +258,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        /**Sets the external audio source.
+        /*Sets the external audio source.
          * @param enabled Sets whether to enable/disable the external audio source:
          *                  true: Enable the external audio source.
          *                  false: (Default) Disable the external audio source.
@@ -284,14 +277,14 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         config.enableLocalPlayback = false;
         customAudioTrack = engine.createCustomAudioTrack(Constants.AudioTrackType.AUDIO_TRACK_MIXABLE, config);
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
 
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
@@ -343,7 +336,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    if(audioPushingHelper != null){
+                    if (audioPushingHelper != null) {
                         pushTimes = 0;
                         audioPushingHelper.start();
                     }

@@ -790,7 +790,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 
 LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
 	LOCAL_AUDIO_STREAM_STATE state = (LOCAL_AUDIO_STREAM_STATE)wParam; 
-	LOCAL_AUDIO_STREAM_ERROR error = (LOCAL_AUDIO_STREAM_ERROR)lParam;
+	LOCAL_AUDIO_STREAM_REASON error = (LOCAL_AUDIO_STREAM_REASON)lParam;
 	CString strInfo = _T("===onLocalAudioStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
@@ -911,7 +911,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
 
 	LOCAL_VIDEO_STREAM_STATE state = (LOCAL_VIDEO_STREAM_STATE)wParam;
-	LOCAL_VIDEO_STREAM_ERROR error = (LOCAL_VIDEO_STREAM_ERROR)lParam;
+	LOCAL_VIDEO_STREAM_REASON error = (LOCAL_VIDEO_STREAM_REASON)lParam;
 	CString strInfo = _T("===onLocalVideoStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
