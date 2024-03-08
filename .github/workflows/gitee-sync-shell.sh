@@ -5,6 +5,12 @@ git config --global user.name "sync2gitee"
 pwd
 git remote -v
 
+GITHUB_REF=$1
+ACTION_BRANCH=$(echo ${GITHUB_REF#refs/heads})
+echo ACTION_BRANCH=$ACTION_BRANCH
+
+git checkout $ACTION_BRANCH
+
 # change android maven to china repos
 sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" Android/APIExample/settings.gradle
 sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" Android/APIExample/gradle/wrapper/gradle-wrapper.properties
