@@ -4,6 +4,7 @@ git config --global user.name "sync2gitee"
 
 pwd
 git remote -v
+git checkout dev/4.3.1
 
 # change android maven to china repos
 sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" Android/APIExample/settings.gradle
