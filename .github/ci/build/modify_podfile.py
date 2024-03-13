@@ -8,6 +8,8 @@ def modfiy(path):
                 line = '\t'+"pod 'sdk', :path => '../../sdk.podspec'"
             elif "pod 'sdk" in line:
                 line = ""
+            elif 'sh .download_script' in line:
+                line = line.replace('true', 'false')
             contents.append(line)
         file.close()
         
