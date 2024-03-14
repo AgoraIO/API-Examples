@@ -315,8 +315,10 @@ class StreamEncryption: BaseViewController {
     }
     
     func getEncryptionSaltFromServer() -> Data {
-
-        return "EncryptionKdfSaltInBase64Strings".data(using: .utf8)!
+        // Salt string should be the output of the following command:
+        // openssl rand -base64 32
+        let saltBase64String = "NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0="
+        return Data(base64Encoded: saltBase64String.data(using: .utf8)!)!
     }
     
     func layoutVideos(_ count: Int) {

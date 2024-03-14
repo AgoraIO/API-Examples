@@ -9,6 +9,7 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -28,7 +29,6 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -255,7 +255,10 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
     }
 
     private byte[] getKdfSaltFromServer() {
-        return "EncryptionKdfSaltInBase64Strings".getBytes(StandardCharsets.UTF_8);
+        // Salt string should be the output of the following command:
+        // openssl rand -base64 32
+        String saltBase64String = "NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0=";
+        return Base64.decode(saltBase64String, Base64.DEFAULT);
     }
 
     private void joinChannel(String channelId) {

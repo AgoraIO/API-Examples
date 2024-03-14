@@ -127,10 +127,14 @@
         [AgoraCustomEncryption registerPacketProcessing:self.agoraKit];
         
     } else {
+        // Salt string should be the output of the following command:
+        // openssl rand -base64 32
+        NSString *saltBase64String = @"NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0=";
+        
         AgoraEncryptionConfig *config = [[AgoraEncryptionConfig alloc] init];
         config.encryptionMode = mode;
         config.encryptionKey = secret;
-        config.encryptionKdfSalt = [@"EncryptionKdfSaltInBase64Strings" dataUsingEncoding:(kCFStringEncodingUTF8)];
+        config.encryptionKdfSalt = [[NSData alloc] initWithBase64EncodedString:(saltBase64String) options:(0)];
        int ret = [self.agoraKit enableEncryption:YES encryptionConfig:config];
         if (ret != 0) {
             // for errors please take a look at:
