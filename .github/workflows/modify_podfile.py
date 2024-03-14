@@ -7,7 +7,7 @@ def modfiy(path):
             if "pod 'Agora" in line:
                 line = '\t'+"pod 'sdk', :path => 'sdk.podspec'" + "\n"
             elif "pod 'sdk" in line:
-                line = "" + "\n"
+                line = ""
             elif "pod 'Floaty" in line:
                 line = '\t'+"pod 'Floaty', :git => 'https://gitee.com/shengwang-dependencies/Floaty.git'" + "\n"
             elif "pod 'AGEVideoLayout" in line:

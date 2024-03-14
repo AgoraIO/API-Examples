@@ -7,7 +7,7 @@ def modfiy(path):
             if "pod 'Agora" in line:
                 line = '\t'+"pod 'sdk', :path => '../../sdk.podspec'" + "\n"
             elif "pod 'sdk" in line:
-                line = "" + "\n"
+                line = ""
             elif 'sh .download_script' in line:
                 line = line.replace('true', 'false') + "\n"
             contents.append(line)
