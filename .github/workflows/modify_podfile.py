@@ -15,7 +15,7 @@ def modfiy(path):
             elif "pod 'CocoaAsyncSocket" in line:
                 line = '\t'+"pod 'CocoaAsyncSocket', :git => 'https://gitee.com/shengwang-dependencies/CocoaAsyncSocket.git'" + "\n"
             elif 'sh .download_script' in line:
-                line = line.replace('#system', 'system').replace('#  system', 'system').replace('# system', 'system').replace('false', 'true')
+                line = line.replace('#', '').replace('false', 'true')
             contents.append(line)
         file.close()
         
