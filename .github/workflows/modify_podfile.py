@@ -14,6 +14,10 @@ def modfiy(path):
                 line = '\t'+"pod 'AGEVideoLayout', :git => 'https://gitee.com/shengwang-dependencies/AGEVideoLayout.git'" + "\n"
             elif "pod 'CocoaAsyncSocket" in line:
                 line = '\t'+"pod 'CocoaAsyncSocket', :git => 'https://gitee.com/shengwang-dependencies/CocoaAsyncSocket.git'" + "\n"
+            elif "pod 'SwiftLint" in line:
+                line = '\t'+"pod 'SwiftLint', :git => 'https://gitee.com/shengwang-dependencies/SwiftLint', :commit => '1067113303c134ef472a71b30d21e5350de7889d'" + "\n"
+            elif "pod 'ijkplayer" in line:
+                line = '\t'+"pod 'ijkplayer', :path => 'ijkplayer/ijkplayer.podspec'" + "\n"
             elif 'sh .download_script' in line:
                 line = line.replace('#', '').replace('false', 'true')
             contents.append(line)

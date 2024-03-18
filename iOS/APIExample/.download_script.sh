@@ -4,6 +4,8 @@ url="https://download.agora.io/sdk/release/Agora_Native_SDK_for_iOS_v${version}_
 # https://download.agora.io/sdk/release/Agora_Native_SDK_for_iOS_v4.3.0_VOICE.zip
 zip_filename=$(basename "$url")
 
+./.download_ijkplayer.sh
+
 if [ -d "libs" ] && [ "$2" = "false" ]; then
     echo "Folder exists"
     exit;
@@ -24,3 +26,4 @@ rm -rf $zip_filename
 rm -rf $folder_name
 
 echo "download sdk finished！"
+
