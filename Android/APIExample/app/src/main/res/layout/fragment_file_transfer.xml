@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,6 +23,33 @@
             android:textSize="16sp"
             android:textStyle="normal" />
     </FrameLayout>
+
+    <Spinner
+        android:id="@+id/et_encry_mode"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/et_encry_pass"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/encryptionModes"
+        android:hint="Select an Encryption mode"
+        android:spinnerMode="dropdown" />
+    <EditText
+        android:id="@+id/et_encry_pass"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:hint="@string/encryption_password"
+        android:digits="@string/chanel_support_char"
+        android:layout_above="@+id/et_encry_salt"/>
+
+    <EditText
+        android:id="@+id/et_encry_salt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:hint="@string/encryption_salt"
+        android:digits="@string/chanel_support_char"
+        android:layout_above="@+id/ll_join"/>
 
     <LinearLayout
         android:id="@+id/ll_join"
@@ -56,4 +83,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

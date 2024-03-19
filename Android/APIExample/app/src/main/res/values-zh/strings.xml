@@ -10,6 +10,7 @@
     <string name="uid">UID</string>
     <string name="ex_channel_id">目标频道ID</string>
     <string name="encryption_password">加密密钥</string>
+    <string name="encryption_salt">密钥加盐</string>
     <string name="join">加入</string>
     <string name="blur">打开模糊</string>
     <string name="open">打开</string>

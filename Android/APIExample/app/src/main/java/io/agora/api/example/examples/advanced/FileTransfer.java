@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.yanzhenjie.permission.AndPermission;
@@ -36,6 +37,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.internal.EncryptionConfig;
 import io.agora.rtc2.video.ContentInspectConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -65,6 +67,9 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
     String show_transfer_info = "";
     private EditText et_channel;
     private EditText et_uid;
+    private Spinner et_encry_mode;
+    private EditText et_encry_pass;
+    private EditText et_encry_salt;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -95,6 +100,9 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
         tv_transfer_info = view.findViewById(R.id.tv_file_transfer_info);
         et_channel = view.findViewById(R.id.et_channel);
         et_uid = view.findViewById(R.id.et_uid);
+        et_encry_mode = view.findViewById(R.id.et_encry_mode);
+        et_encry_pass = view.findViewById(R.id.et_encry_pass);
+        et_encry_salt = view.findViewById(R.id.et_encry_salt);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         // 启动定时器（任务，延迟时间，间隔时间）
         timer.schedule(task,0,1000);
@@ -236,6 +244,17 @@ public class FileTransfer extends BaseFragment implements View.OnClickListener {
             public void onTokenGen(String ret) {
                 /** Allows a user to join a channel.
                  if you do not specify the uid, we will generate the uid for you*/
+
+                boolean cryptoEnable = !et_encry_pass.getText().toString().isEmpty();
+                EncryptionConfig cryptoConfig = new EncryptionConfig();
+                cryptoConfig.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(et_encry_mode.getSelectedItem().toString());
+                cryptoConfig.encryptionKey = et_encry_pass.getText().toString();
+                String salt = et_encry_salt.getText().toString();
+                for (int i = 0; i < 32 && i < salt.length(); i++) {
+
+                    cryptoConfig.encryptionKdfSalt[i] = (byte)salt.charAt(i);
+                }
+                engine.enableEncryption(cryptoEnable, cryptoConfig);
 
                 ChannelMediaOptions option = new ChannelMediaOptions();
                 option.autoSubscribeAudio = true;

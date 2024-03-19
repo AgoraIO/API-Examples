@@ -11,6 +11,7 @@
     <string name="app_id" translatable="false">App ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
     <string name="encryption_password">Encryption Password</string>
+    <string name="encryption_salt">Encryption Salt</string>
     <string name="join">Join</string>
     <string name="blur">Open Blur</string>
     <string name="open">Open</string>
