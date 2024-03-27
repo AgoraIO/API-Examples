@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,28 +18,47 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDY-3U-UOZ" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="233"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="BDY-3U-UOZ" secondAttribute="height" multiplier="16:9" id="rcC-OS-B0N"/>
                                 </constraints>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please input data" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DPe-Im-fsd">
+                                <rect key="frame" x="20" y="313" width="257" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kTh-3L-D7c">
+                                <rect key="frame" x="297" y="308" width="64" height="41"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Send"/>
+                                <connections>
+                                    <action selector="onTapSendButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="PGM-wu-RKU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kTh-3L-D7c" secondAttribute="trailing" constant="53" id="PVO-M4-Ldh"/>
+                            <constraint firstItem="kTh-3L-D7c" firstAttribute="leading" secondItem="DPe-Im-fsd" secondAttribute="trailing" constant="20" id="Yup-ng-Wbw"/>
+                            <constraint firstItem="DPe-Im-fsd" firstAttribute="top" secondItem="BDY-3U-UOZ" secondAttribute="bottom" constant="32" id="aSN-LP-Hia"/>
+                            <constraint firstItem="DPe-Im-fsd" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="hbu-Tm-N2p"/>
+                            <constraint firstItem="kTh-3L-D7c" firstAttribute="top" secondItem="BDY-3U-UOZ" secondAttribute="bottom" constant="27" id="jmt-39-w7U"/>
                             <constraint firstItem="BDY-3U-UOZ" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="lGY-sx-kC9"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="BDY-3U-UOZ" secondAttribute="trailing" id="mH8-l1-lIC"/>
                             <constraint firstItem="BDY-3U-UOZ" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="piM-7f-M5a"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="videoContainer" destination="BDY-3U-UOZ" id="jkC-a0-1nn"/>
+                        <outlet property="textfield" destination="DPe-Im-fsd" id="hHg-C8-d1T"/>
+                        <outlet property="videoContainer" destination="BDY-3U-UOZ" id="QVb-ob-bdq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="17" y="57"/>
+            <point key="canvasLocation" x="15.942028985507248" y="56.919642857142854"/>
         </scene>
         <!--Raw Audio Data Entry View Controller-->
         <scene sceneID="stN-WJ-jOl">
@@ -50,7 +69,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RFE-Dm-B2l">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GGI-Cu-Sy1" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>

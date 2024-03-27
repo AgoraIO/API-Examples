@@ -295,3 +295,17 @@ extension Date {
         return dateformat.string(from: self)
     }
 }
+
+
+extension AgoraFocalLengthInfo {
+    var value: [String: AgoraFocalLength] {
+        let title = cameraDirection == 0 ? "Front camera".localized + " - " : "Rear camera".localized + " - "
+        switch focalLengthType {
+        case .default: return [title + "Default".localized: focalLengthType]
+        case .wide: return [title + "Wide".localized: focalLengthType]
+        case .ultraWide: return [title + "Length Wide".localized: focalLengthType]
+        case .telephoto: return [title + "Telephoto".localized: focalLengthType]
+        @unknown default: return [title + "Default".localized: focalLengthType]
+        }
+    }
+}
