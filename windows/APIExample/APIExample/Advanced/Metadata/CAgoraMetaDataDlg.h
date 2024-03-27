@@ -114,6 +114,10 @@ public:
          SDK triggers this callback.
      */
     virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+
+
+    virtual void onAudioMetadataReceived(uid_t uid, const char* metadata, size_t length) override;
+
 private:
     HWND m_hMsgHanlder;
 };
@@ -147,6 +151,7 @@ public:
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEIDAudioMetadataReceived(WPARAM wParam, LPARAM lParam);
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
@@ -154,10 +159,12 @@ protected:
 public:
     CStatic m_staChannelName;
     CButton m_btnJoinChannel;
-    CStatic m_staSendSEI;
-    CEdit m_edtSendSEI;
-    CEdit m_edtRecvSEI;
-    CStatic m_staMetaData;
+    CStatic m_staVideoMetadata;
+    CEdit m_edtVideoMetadata;
+    CStatic m_btnSendVideoMetadata;
+    CStatic m_staAudioMetadata;
+    CEdit m_edtAudioMetadata;
+    CStatic m_btnSendAudioMetadata;
     CListBox m_lstInfo;
     afx_msg void OnBnClickedButtonJoinchannel();
     virtual BOOL OnInitDialog();
@@ -177,9 +184,7 @@ public:
     CStatic m_staVideoArea;
     CEdit m_edtChannelName;
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    CButton m_btnSendSEI;
-    afx_msg void OnBnClickedButtonSend();
-    afx_msg void OnBnClickedButtonClear();
+    afx_msg void OnBnClickedButtonSendVideoMetadata();
+    afx_msg void OnBnClickedButtonSendAudioMetadata();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	CButton m_btnClear;
 };
