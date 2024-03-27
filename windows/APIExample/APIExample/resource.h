@@ -84,6 +84,7 @@
 #define IDC_COMBO_PERSONS2              1022
 #define IDC_COMBO_ENCODER               1022
 #define IDC_BUTTON_LOCALRECORDER        1022
+#define IDC_STATIC_VIDEO_METADATA       1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
@@ -94,6 +95,7 @@
 #define IDC_BUTTON_REMOTERECORDER       1023
 #define IDC_STATIC_FPS_VALUE            1023
 #define IDC_EDIT_CHANNELNAME2           1023
+#define IDC_EDIT_AUDIO_METADATA         1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
@@ -101,6 +103,7 @@
 #define IDC_EDIT_AUDIO_AGIN             1024
 #define IDC_BUTTON_OPEN                 1024
 #define IDC_STATIC_CHANNELNAME3         1024
+#define IDC_BUTTON_SEND_VIDEO_METADATA  1024
 #define IDC_EDIT_AUDIO_PITCH            1025
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
@@ -108,11 +111,15 @@
 #define IDC_BUTTON_STOP                 1025
 #define IDC_STATIC_BITRATE_VALUE        1025
 #define IDC_EDIT_CHANNELNAME3           1025
+#define IDC_STATIC_AUDIO_METADATA       1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
 #define IDC_BUTTON_PLAY                 1026
 #define IDC_STATIC_SCALE                1026
+#define IDC_EDIT_SEI2                   1026
+#define IDC_EDIT_VIDEO_METADATA         1026
 #define IDC_BUTTON_ATTACH               1027
 #define IDC_STATIC_HWND                 1027
+#define IDC_BUTTON_SEND_AUDIO_METADATA  1027
 #define IDC_BUTTON_PUBLISH_VIDEO        1028
 #define IDC_STATIC_SCALE_VALUE          1028
 #define IDC_BUTTON_PUBLISH_AUDIO        1029

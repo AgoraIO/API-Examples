@@ -226,7 +226,7 @@ void CAPIExampleDlg::InitSceneDialog()
    //advanced list
    // m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
-   m_vecAdvanced.push_back(advancedVideoMetadata);
+   m_vecAdvanced.push_back(advancedMetadata);
    m_vecAdvanced.push_back(advancedMediaPlayer);
    m_vecAdvanced.push_back(advancedMediaRecorder);
    m_vecAdvanced.push_back(advancedScreenCap);
@@ -520,7 +520,7 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->InitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
-    }else if (selectedText.Compare(advancedVideoMetadata) == 0) {
+    }else if (selectedText.Compare(advancedMetadata) == 0) {
         m_pVideoSEIDlg->InitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedScreenCap) == 0) {
@@ -625,7 +625,7 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
     }else if (str.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
-    }else if (str.Compare(advancedVideoMetadata) == 0) {
+    }else if (str.Compare(advancedMetadata) == 0) {
         m_pVideoSEIDlg->UnInitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedScreenCap) == 0){

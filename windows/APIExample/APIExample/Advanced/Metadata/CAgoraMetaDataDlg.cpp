@@ -38,9 +38,9 @@ bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata, VIDEO_SOU
     std::lock_guard<std::mutex> lockSendData(g_mtxData);
     if (m_sendSEI.length() > 0) {
         memcpy_s(metadata.buffer, m_sendSEI.length(), m_sendSEI.c_str(), m_sendSEI.length());
-
     }
     metadata.size = m_sendSEI.length();
+    m_sendSEI = "";
     return true;
 }
 /*
@@ -168,6 +168,15 @@ void CAgoraMetaDataEventHanlder::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
     }
 }
 
+void CAgoraMetaDataEventHanlder::onAudioMetadataReceived(uid_t uid, const char* metadata, size_t length)
+{
+    if (m_hMsgHanlder && length > 0) {
+        char* buffer = new char[length + 1] {0};
+        memcpy_s(buffer, length, metadata, length);
+        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_ON_RECV_AUDIO_METADATA), (WPARAM)buffer, uid);
+    }
+}
+
 // CAgoraMetaDataDlg dialog
 
 IMPLEMENT_DYNAMIC(CAgoraMetaDataDlg, CDialogEx)
@@ -187,15 +196,15 @@ void CAgoraMetaDataDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_SENDSEI, m_staSendSEI);
-	DDX_Control(pDX, IDC_EDIT_SEI, m_edtSendSEI);
-	DDX_Control(pDX, IDC_EDIT_RECV, m_edtRecvSEI);
-	DDX_Control(pDX, IDC_STATIC_METADATA_INFO, m_staMetaData);
+	DDX_Control(pDX, IDC_STATIC_VIDEO_METADATA, m_staVideoMetadata);
+	DDX_Control(pDX, IDC_EDIT_VIDEO_METADATA, m_edtVideoMetadata);
+    DDX_Control(pDX, IDC_BUTTON_SEND_VIDEO_METADATA, m_btnSendVideoMetadata);
+    DDX_Control(pDX, IDC_STATIC_AUDIO_METADATA, m_staAudioMetadata);
+    DDX_Control(pDX, IDC_EDIT_AUDIO_METADATA, m_edtAudioMetadata);
+    DDX_Control(pDX, IDC_BUTTON_SEND_AUDIO_METADATA, m_btnSendAudioMetadata);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
-	DDX_Control(pDX, IDC_BUTTON_SEND, m_btnSendSEI);
-	DDX_Control(pDX, IDC_BUTTON_CLEAR, m_btnClear);
 }
 
 
@@ -206,10 +215,11 @@ BEGIN_MESSAGE_MAP(CAgoraMetaDataDlg, CDialogEx)
     ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMetaDataDlg::OnEIDUserJoined)
     ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMetaDataDlg::OnEIDUserOffline)
     ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged)
+    ON_MESSAGE(WM_MSGID(EID_ON_RECV_AUDIO_METADATA), &CAgoraMetaDataDlg::OnEIDAudioMetadataReceived)
     ON_MESSAGE(WM_MSGID(RECV_METADATA_MSG), &CAgoraMetaDataDlg::OnEIDMetadataReceived)
     ON_WM_SHOWWINDOW()
-    ON_BN_CLICKED(IDC_BUTTON_SEND, &CAgoraMetaDataDlg::OnBnClickedButtonSend)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR, &CAgoraMetaDataDlg::OnBnClickedButtonClear)
+    ON_BN_CLICKED(IDC_BUTTON_SEND_VIDEO_METADATA, &CAgoraMetaDataDlg::OnBnClickedButtonSendVideoMetadata)
+    ON_BN_CLICKED(IDC_BUTTON_SEND_AUDIO_METADATA, &CAgoraMetaDataDlg::OnBnClickedButtonSendAudioMetadata)
 END_MESSAGE_MAP()
 
 
@@ -238,6 +248,7 @@ void CAgoraMetaDataDlg::OnBnClickedButtonJoinchannel()
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
         }
+
     }
     else {
         //leave channel in the engine.
@@ -273,10 +284,10 @@ BOOL CAgoraMetaDataDlg::OnInitDialog()
 //set control text from config.
 void CAgoraMetaDataDlg::InitCtrlText()
 {
-	m_btnClear.SetWindowText(metadataCtrlBtnClear);
-    m_staMetaData.SetWindowText(videoSEIInformation);
-    m_staSendSEI.SetWindowText(metadataCtrlSendSEI);
-    m_btnSendSEI.SetWindowText(metadataCtrlBtnSend);
+    m_staVideoMetadata.SetWindowText(advancedMetadataVideo);
+    m_btnSendVideoMetadata.SetWindowText(advancedMetadataSend);
+    m_staAudioMetadata.SetWindowText(advancedMetadataAudio);
+    m_btnSendAudioMetadata.SetWindowText(advancedMetadataSend);
     m_staChannelName.SetWindowText(commonCtrlChannel);
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 }
@@ -314,6 +325,8 @@ bool CAgoraMetaDataDlg::InitAgora()
     m_rtcEngine->enableVideo();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
    
+    m_rtcEngine->enableAudio();
+
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
     //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
@@ -458,17 +471,32 @@ LRESULT CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lP
 LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
 {
     IMetadataObserver::Metadata* metaData = (IMetadataObserver::Metadata*)wParam;
-     CString strInfo;
-     strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size);
+    CString strInfo;
+    strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size);
+    m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+    if (metaData->size > 0) {
+        strInfo.Format(_T("Info: %s"), utf82cs((char *)metaData->buffer));
+        m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+    }
     
-     if (metaData->size > 0) {
-         CString str;
-         str.Format(_T("Info: %s"), utf82cs((char *)metaData->buffer));
-         strInfo += str;
-     }
-    m_edtRecvSEI.SetWindowText(strInfo);
     delete metaData->buffer;
     delete metaData;
+    return 0;
+}
+
+LRESULT CAgoraMetaDataDlg::OnEIDAudioMetadataReceived(WPARAM wParam, LPARAM lParam)
+{
+    uid_t uid = lParam;
+    char* metadata = (char*)wParam;
+    CString strInfo;
+    strInfo.Format(_T("onAuidoMetadataReceived:uid:%u, size:%d."), uid, sizeof(metadata));
+    m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+    strInfo.Format(_T("Info: %s"), utf82cs(metadata));
+    m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+    delete metadata;
     return 0;
 }
 
@@ -494,8 +522,8 @@ void CAgoraMetaDataDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_metaDataObserver.SetSendSEI("");
 	m_edtChannelName.SetWindowText(_T(""));
-	m_edtSendSEI.SetWindowText(_T(""));
-	m_edtRecvSEI.SetWindowText(_T(""));
+	m_edtVideoMetadata.SetWindowText(_T(""));
+	m_edtAudioMetadata.SetWindowText(_T(""));
 	m_joinChannel = false;
 	m_initialize = false;
 	m_remoteJoined = false;
@@ -514,10 +542,10 @@ void CAgoraMetaDataDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 //send button handler.
-void CAgoraMetaDataDlg::OnBnClickedButtonSend()
+void CAgoraMetaDataDlg::OnBnClickedButtonSendVideoMetadata()
 {
     CString strSend;
-    m_edtSendSEI.GetWindowText(strSend);
+    m_edtVideoMetadata.GetWindowText(strSend);
     if (strSend.IsEmpty())
         return;
     std::string utf8msg = cs2utf8(strSend);
@@ -526,11 +554,14 @@ void CAgoraMetaDataDlg::OnBnClickedButtonSend()
 }
 
 //clear button handler.
-void CAgoraMetaDataDlg::OnBnClickedButtonClear()
+void CAgoraMetaDataDlg::OnBnClickedButtonSendAudioMetadata()
 {
-    m_edtSendSEI.SetWindowText(_T(""));
-    //set send message string.
-    m_metaDataObserver.SetSendSEI("");
+    CString strSend;
+    m_edtAudioMetadata.GetWindowText(strSend);
+    if (strSend.IsEmpty())
+        return;
+    std::string utf8msg = cs2utf8(strSend);
+    m_rtcEngine->sendAudioMetadata(utf8msg.c_str(), utf8msg.length());
 }
 
 

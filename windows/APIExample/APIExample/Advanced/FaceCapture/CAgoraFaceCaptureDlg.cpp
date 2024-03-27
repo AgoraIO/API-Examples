@@ -71,7 +71,7 @@ bool CAgoraFaceCaptureDlg::InitAgora()
 
 	// enable face capture
 	ret = m_rtcEngine->enableExtension("agora_video_filters_face_capture", "face_capture", true, MEDIA_SOURCE_TYPE::PRIMARY_CAMERA_SOURCE);
-	strInfo.Format(_T("Enable face capture cxtension ret: %d"), ret);
+	strInfo.Format(_T("Enable face capture extension ret: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	// face capture authentication
@@ -85,9 +85,31 @@ bool CAgoraFaceCaptureDlg::InitAgora()
 	strInfo.Format(_T("Auth face capture ret: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+	// load speech driven extension
+	ret = m_rtcEngine->loadExtensionProvider("libagora_lip_sync_extension.dll");
+	strInfo.Format(_T("Load speech driven extension ret: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	// enable speech driven
+	ret = m_rtcEngine->enableExtension("agora_filters_lip_sync", "lip_sync", true, MEDIA_SOURCE_TYPE::SPEECH_DRIVEN_VIDEO_SOURCE);
+	strInfo.Format(_T("Enable speech driven extension ret: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	// speech driven authentication
+	strAuth.Format(_T("{\"company_id\":\"%s\",\"license\":\"%s\",\"open_agc\":true}"), _T("agoraTest"), utf82cs(std::string(FACE_CAPTURE_LICENSE)));
+	ret = m_rtcEngine->setExtensionProperty("agora_filters_lip_sync",
+		"lip_sync",
+		"parameters",
+		cs2utf8(strAuth).c_str(),
+		MEDIA_SOURCE_TYPE::SPEECH_DRIVEN_VIDEO_SOURCE);
+	strInfo.Format(_T("Auth speech driven ret: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 
 	m_videoFrameObserver.SetMsgReceiver(m_hWnd);
 	RegisterVideoFrameObserver(TRUE, &m_videoFrameObserver);
+	m_faceInfoObserver.SetMsgReceiver(m_hWnd);
+	RegisterFaceInfoObserver(TRUE, &m_faceInfoObserver);
 
 	return true;
 }
@@ -108,6 +130,8 @@ void CAgoraFaceCaptureDlg::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		RegisterVideoFrameObserver(FALSE);
 		m_videoFrameObserver.SetMsgReceiver(nullptr);
+		RegisterFaceInfoObserver(FALSE);
+		m_faceInfoObserver.SetMsgReceiver(nullptr);
 		//release engine.
 		if (m_initialize) {
 			m_rtcEngine->release(true);
@@ -170,6 +194,7 @@ BEGIN_MESSAGE_MAP(CAgoraFaceCaptureDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraFaceCaptureDlg::OnBnClickedButtonJoinchannel)
 	ON_MESSAGE(WM_MSGID(EID_EXTENSION_EVENT), &CAgoraFaceCaptureDlg::OnEIDExtensionEvent)
 	ON_MESSAGE(WM_MSGID(EID_ON_CAPTURE_VIDEOFRAME), &CAgoraFaceCaptureDlg::OnEIDonCaptureVideoFrame)
+	ON_MESSAGE(WM_MSGID(EID_ON_FACE_INFO), &CAgoraFaceCaptureDlg::OnEIDonFaceInfo)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraFaceCaptureDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
@@ -221,6 +246,25 @@ BOOL CAgoraFaceCaptureDlg::RegisterVideoFrameObserver(BOOL bEnable, agora::media
 	else {
 		//unregister agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(nullptr);
+	}
+	return nRet == 0 ? TRUE : FALSE;
+}
+
+BOOL CAgoraFaceCaptureDlg::RegisterFaceInfoObserver(BOOL bEnable, agora::media::IFaceInfoObserver* faceInfoObserver)
+{
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+	int nRet = 0;
+	if (mediaEngine.get() == NULL)
+		return FALSE;
+	if (bEnable) {
+		//register agora video frame observer.
+		nRet = mediaEngine->registerFaceInfoObserver(faceInfoObserver);
+	}
+	else {
+		//unregister agora video frame observer.
+		nRet = mediaEngine->registerFaceInfoObserver(nullptr);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }
@@ -370,6 +414,17 @@ LRESULT CAgoraFaceCaptureDlg::OnEIDExtensionEvent(WPARAM wParam, LPARAM lParam)
 			strInfo.Format(_T("Face caputure authentication unset."));
 		}
 	}
+	else if (strcmp(event->provider, "agora_filters_lip_sync") == 0
+		&& strcmp(event->extension, "lip_sync") == 0
+		&& strcmp(event->key, "status_code") == 0) {
+		if (strcmp(event->value, "0") == 0) {
+			// authentication successful.
+			strInfo.Format(_T("Speech driven authentication successful."));
+		}
+		else {
+			strInfo.Format(_T("Speech driven authentication failed. code=%s"), event->value);
+		}
+	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	delete[] event->provider;
@@ -385,8 +440,18 @@ LRESULT CAgoraFaceCaptureDlg::OnEIDonCaptureVideoFrame(WPARAM wParam, LPARAM lPa
 {
 	char* metedata = (char*)wParam;
 
-	m_edtMetadataInfo.SetWindowTextW(utf82cs(std::string(metedata)));
+	// m_edtMetadataInfo.SetWindowTextW(utf82cs(std::string(metedata)));
+
 	delete[] metedata;
+	return 0;
+}
+
+LRESULT CAgoraFaceCaptureDlg::OnEIDonFaceInfo(WPARAM wParam, LPARAM lParam)
+{
+	char* faceInfo = (char*)wParam;
+
+	m_edtMetadataInfo.SetWindowTextW(utf82cs(std::string(faceInfo)));
+	delete[] faceInfo;
 	return 0;
 }
 
@@ -533,6 +598,19 @@ bool FaceCaptureVideoFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE
 			}
 		}
 		
+	}
+	return true;
+}
+
+bool FaceCaptureFaceInfoObserver::onFaceInfo(const char* outFaceInfo) {
+	if (m_hMsgHanlder && outFaceInfo) {
+
+		int len = strlen(outFaceInfo);
+		char* out = new char[len + 1];
+		out[len] = 0;
+		strcpy_s(out, len + 1, outFaceInfo);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_ON_FACE_INFO), (WPARAM)out, 0);
+
 	}
 	return true;
 }

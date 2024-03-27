@@ -22,9 +22,6 @@
     <Filter Include="Advanced\RTMPInject">
       <UniqueIdentifier>{0637d784-14a1-4260-901a-caa73030f229}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\VideoMetadata">
-      <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Basic">
       <UniqueIdentifier>{7682a8b6-0c3d-46bc-8519-8ec74432ff48}</UniqueIdentifier>
     </Filter>
@@ -112,6 +109,9 @@
     <Filter Include="Basic\JoinChannelVideoByToken">
       <UniqueIdentifier>{f40fbcc5-c4fb-4581-a7b2-05cbcc5f737c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\Metadata">
+      <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -155,9 +155,6 @@
     </ClInclude>
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h">
       <Filter>Advanced\ScreenShare</Filter>
-    </ClInclude>
-    <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h">
-      <Filter>Advanced\VideoMetadata</Filter>
     </ClInclude>
     <ClInclude Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.h">
       <Filter>Basic\LiveBroadcasting</Filter>
@@ -264,6 +261,9 @@
     <ClInclude Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.h">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h">
+      <Filter>Advanced\Metadata</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -298,9 +298,6 @@
     </ClCompile>
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp">
       <Filter>Advanced\ScreenShare</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp">
-      <Filter>Advanced\VideoMetadata</Filter>
     </ClCompile>
     <ClCompile Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.cpp">
       <Filter>Basic\LiveBroadcasting</Filter>
@@ -403,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.cpp">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp">
+      <Filter>Advanced\Metadata</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
