@@ -311,6 +311,7 @@ bool CAgoraMetaDataDlg::InitAgora()
 	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
     //initialize the Agora RTC engine context.  
     int ret = m_rtcEngine->initialize(context);
+    m_rtcEngine->setParameters("{\"rtc.use_audio4\":true}");
     if (ret != 0) {
         m_initialize = false;
         CString strInfo;
