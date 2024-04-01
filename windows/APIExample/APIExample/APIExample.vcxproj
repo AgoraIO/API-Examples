@@ -281,6 +281,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
     <ClInclude Include="Advanced\MediaRecorder\CAgoraMediaRecorder.h" />
+    <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
@@ -294,7 +295,6 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
     <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h" />
-    <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
     <ClInclude Include="AGVideoTestWnd.h" />
     <ClInclude Include="AGVideoWnd.h" />
     <ClInclude Include="APIExample.h" />
@@ -333,6 +333,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
     <ClCompile Include="Advanced\MediaRecorder\CAgoraMediaRecorder.cpp" />
+    <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
@@ -346,7 +347,6 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
     <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp" />
-    <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
     <ClCompile Include="AGVideoTestWnd.cpp" />
     <ClCompile Include="AGVideoWnd.cpp" />
     <ClCompile Include="APIExample.cpp" />

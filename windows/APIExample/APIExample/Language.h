@@ -24,7 +24,7 @@ extern wchar_t basicLiveBroadcasting[INFO_LEN];
 extern wchar_t basicJoinChannelVideoByToken[INFO_LEN];
 extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
-extern wchar_t advancedVideoMetadata[INFO_LEN];
+extern wchar_t advancedMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
@@ -342,3 +342,8 @@ extern wchar_t mediaRecorderStartRecording[INFO_LEN];
 extern wchar_t mediaRecorderStopRecording[INFO_LEN];
 
 extern wchar_t localVideoTranscodingVirtualBg[INFO_LEN];
+
+// metadata
+extern wchar_t advancedMetadataVideo[INFO_LEN];
+extern wchar_t advancedMetadataAudio[INFO_LEN];
+extern wchar_t advancedMetadataSend[INFO_LEN];

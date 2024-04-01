@@ -7,7 +7,7 @@
 #include "Basic/JoinChannelVideoByToken/CJoinChannelVideoByTokenDlg.h"
 #include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
-#include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
+#include "Advanced/Metadata/CAgoraMetaDataDlg.h"
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
