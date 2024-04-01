@@ -10,11 +10,11 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class LiveStreamingMain: BaseViewController {
-    
+    @IBOutlet weak var scrollView: NSScrollView!
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt = 0 {
         didSet {
-            snapShot.isEnabled = remoteUid != 0
+            functionVC?.snapShot.isEnabled = remoteUid != 0
         }
     }
     var isPreloadChannel: Bool = false {
@@ -237,6 +237,7 @@ class LiveStreamingMain: BaseViewController {
             return nil
         }
     }
+
     func initSelectRolePicker() {
         selectRolePicker.label.stringValue = "Role".localized
         selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
@@ -251,103 +252,31 @@ class LiveStreamingMain: BaseViewController {
                 self.agoraKit.setClientRole(selected)
                 _ = selected == .broadcaster ? self.agoraKit.startPreview() : self.agoraKit.stopPreview()
             }
-            self.waterMarkContainer.isHidden = selected == .audience
-            self.bFrameContainer.isHidden = selected == .audience
-            self.encoderSegment.isHidden = selected == .audience
-            self.videoImageContainerView.isHidden = selected == .audience
+            self.functionVC?.waterMarkContainer.isHidden = selected == .audience
+            self.functionVC?.bFrameContainer.isHidden = selected == .audience
+            self.functionVC?.encoderSegment.isHidden = selected == .audience
+            self.functionVC?.videoImageContainerView.isHidden = selected == .audience
         }
     }
-    @IBOutlet weak var snapShot: NSButton!
-    @IBAction func onTakeSnapshot(_ sender: Any) {
-        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
-        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
-        let path = "/Users/\(programPath)/Downloads/1.png"
-        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
-    }
-    
-    @IBOutlet weak var waterMarkContainer: NSView!
-    @IBAction func onWaterMark(_ sender: NSSwitch) {
-        if sender.state == .on {
-            if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
-                if let url = URL(string: filepath) {
-                    let waterMark = WatermarkOptions()
-                    waterMark.visibleInPreview = true
-                    let localVideo = self.videos[0]
-                    waterMark.positionInPortraitMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
-                    waterMark.positionInLandscapeMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
-                    agoraKit.addVideoWatermark(url, options: waterMark)
-                }
-            }
-        } else {
-            agoraKit.clearVideoWatermarks()
+  
+    @IBOutlet weak var centerStage: Picker!
+    func initSelectCentetStagePicker() {
+        centerStage.isEnabled = agoraKit.isSupportPortraitCenterStage()
+        let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
+                                                              "level1": .level1,
+                                                              "level2": .level2,
+                                                              "level3": .level3,
+                                                              "off": .off]
+        let datas = params.map { $0.key }.sorted()
+        centerStage.label.stringValue = "Center Stage".localized
+        centerStage.picker.addItems(withTitles: datas)
+        centerStage.onSelectChanged { [weak self] in
+            guard let self = self else { return }
+            let index = self.selectRolePicker.indexOfSelectedItem
+            let key = datas[index]
+            let mode = params[key]
+            self.agoraKit.enablePortraitCenterStage(mode != .off)
         }
-    }
-    
-    @IBOutlet weak var dualStreamTips: NSTextField!
-    @IBAction func onDualStreaming(_ sender: NSSwitch) {
-        dualStreamTips.stringValue = sender.state == .on ? "Opening".localized : "(Default: flow)".localized
-        agoraKit.setDualStreamMode(sender.state == .on ? .enableSimulcastStream : .disableSimulcastStream)
-    }
-    
-    @IBOutlet weak var firstFrameSwitch: NSSwitch!
-    @IBAction func onFirstFrameSwitch(_ sender: NSSwitch) {
-        if sender.state == .on {
-            let alertVC = NSAlert()
-            alertVC.alertStyle = .critical
-            alertVC.addButton(withTitle: "Sure".localized)
-            alertVC.addButton(withTitle: "Cancel".localized)
-            alertVC.messageText = "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized
-            let response = alertVC.runModal()
-            if response == .alertFirstButtonReturn {
-                sender.isEnabled = false
-                agoraKit.enableInstantMediaRendering()
-                agoraKit.startMediaRenderingTracing()
-            }
-            if response == .alertSecondButtonReturn {
-                sender.state = .off
-            }
-        }
-    }
-    
-    @IBOutlet weak var videoImageSwitch: NSSwitch!
-    @IBOutlet weak var videoImageContainerView: NSView!
-    @IBAction func onTapVideoImageSwitch(_ sender: NSSwitch) {
-        let options = AgoraImageTrackOptions()
-        if let resourcePath = Bundle.main.resourcePath {
-            let imgPath = resourcePath + "/" + "bg.jpg"
-            options.imageUrl = imgPath
-        }
-        agoraKit.enableVideoImageSource(sender.state == .on, options: options)
-    }
-    
-    @IBOutlet weak var bFrameContainer: NSView!
-    @IBAction func bFrameSwitch(_ sender: NSSwitch) {
-        let encoderConfig = AgoraVideoEncoderConfiguration()
-        let videoOptions = AgoraAdvancedVideoOptions()
-        videoOptions.compressionPreference = sender.state == .on ? .quality : .lowLatency
-        encoderConfig.advancedVideoOptions = videoOptions
-        agoraKit.setVideoEncoderConfiguration(encoderConfig)
-    }
-    
-    @IBOutlet weak var encoderSegment: NSSegmentedControl!
-    @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
-        let encoderConfig = AgoraVideoEncoderConfiguration()
-        let advancedOptions = AgoraAdvancedVideoOptions()
-        print(sender.indexOfSelectedItem)
-        switch sender.indexOfSelectedItem {
-        case 0:
-            advancedOptions.encodingPreference = .preferAuto
-            
-        case 1:
-            advancedOptions.encodingPreference = .prefersoftware
-            
-        case 2:
-            advancedOptions.encodingPreference = .preferhardware
-            
-        default: break
-        }
-        encoderConfig.advancedVideoOptions = advancedOptions
-        agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
     
     /**
@@ -372,8 +301,8 @@ class LiveStreamingMain: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
-            firstFrameSwitch.isEnabled = !isJoined
-            videoImageSwitch.isEnabled = isJoined
+            functionVC?.firstFrameSwitch.isEnabled = !isJoined
+            functionVC?.videoImageSwitch.isEnabled = isJoined
             initJoinChannelButton()
         }
     }
@@ -397,12 +326,15 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
+        scrollView.documentView?.setFrameSize(CGSizeMake(314, 645))
+        
         initSelectCameraPicker()
         initSelectResolutionPicker()
         initSelectFpsPicker()
         initSelectMicsPicker()
         initSelectLayoutPicker()
         initSelectRolePicker()
+        initSelectCentetStagePicker()
         initChannelField()
         initJoinChannelButton()
         initSelectCanvasColor()
@@ -535,6 +467,155 @@ class LiveStreamingMain: BaseViewController {
             }
         }
         AgoraRtcEngineKit.destroy()
+    }
+    private var functionVC: LiveStreamingRTCFunctionVC?
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        functionVC = segue.destinationController as? LiveStreamingRTCFunctionVC
+        functionVC?.clickTakeSnapshotClosure = { [weak self] in
+            self?.onTakeSnapshot()
+        }
+        functionVC?.clickWaterMarkClosure = { [weak self] isOn in
+            self?.onWaterMark(isOn)
+        }
+        functionVC?.clickDualStreamingClosure = { [weak self] isOn in
+            self?.onDualStreaming(isOn)
+        }
+        functionVC?.clickFirstFrameSwitch = { [weak self] s in
+            self?.onFirstFrameSwitch(s)
+        }
+        functionVC?.clickVideoImageSwitch = { [weak self] s in
+            self?.onTapVideoImageSwitch(s)
+        }
+        functionVC?.clickBFrameSwitch = { [weak self] s in
+            self?.bFrameSwitch(s)
+        }
+        functionVC?.clickEncoderSegmentSwitch = { [weak self] s in
+            self?.onTapEncoderSegment(s)
+        }
+    }
+    
+    private func onTakeSnapshot() {
+        let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
+        let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
+        let path = "/Users/\(programPath)/Downloads/1.png"
+        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
+    }
+    
+    private func onWaterMark(_ isOn: Bool) {
+        if isOn {
+            if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
+                if let url = URL(string: filepath) {
+                    let waterMark = WatermarkOptions()
+                    waterMark.visibleInPreview = true
+                    let localVideo = self.videos[0]
+                    waterMark.positionInPortraitMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+                    waterMark.positionInLandscapeMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+                    agoraKit.addVideoWatermark(url, options: waterMark)
+                }
+            }
+        } else {
+            agoraKit.clearVideoWatermarks()
+        }
+    }
+    private func onDualStreaming(_ isOn: Bool) {
+        agoraKit.setDualStreamMode(isOn ? .enableSimulcastStream : .disableSimulcastStream)
+    }
+    private func onFirstFrameSwitch(_ sender: NSSwitch) {
+        if sender.state == .on {
+            let alertVC = NSAlert()
+            alertVC.alertStyle = .critical
+            alertVC.addButton(withTitle: "Sure".localized)
+            alertVC.addButton(withTitle: "Cancel".localized)
+            alertVC.messageText = "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized
+            let response = alertVC.runModal()
+            if response == .alertFirstButtonReturn {
+                sender.isEnabled = false
+                agoraKit.enableInstantMediaRendering()
+                agoraKit.startMediaRenderingTracing()
+            }
+            if response == .alertSecondButtonReturn {
+                sender.state = .off
+            }
+        }
+    }
+    private func onTapVideoImageSwitch(_ sender: NSSwitch) {
+        let options = AgoraImageTrackOptions()
+        if let resourcePath = Bundle.main.resourcePath {
+            let imgPath = resourcePath + "/" + "bg.jpg"
+            options.imageUrl = imgPath
+        }
+        agoraKit.enableVideoImageSource(sender.state == .on, options: options)
+    }
+    private func bFrameSwitch(_ sender: NSSwitch) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let videoOptions = AgoraAdvancedVideoOptions()
+        videoOptions.compressionPreference = sender.state == .on ? .quality : .lowLatency
+        encoderConfig.advancedVideoOptions = videoOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    private func onTapEncoderSegment(_ sender: NSSegmentedControl) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let advancedOptions = AgoraAdvancedVideoOptions()
+        print(sender.indexOfSelectedItem)
+        switch sender.indexOfSelectedItem {
+        case 0:
+            advancedOptions.encodingPreference = .preferAuto
+            
+        case 1:
+            advancedOptions.encodingPreference = .prefersoftware
+            
+        case 2:
+            advancedOptions.encodingPreference = .preferhardware
+            
+        default: break
+        }
+        encoderConfig.advancedVideoOptions = advancedOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+}
+
+class LiveStreamingRTCFunctionVC: BaseViewController {
+    var clickTakeSnapshotClosure: (() -> Void)?
+    var clickWaterMarkClosure: ((Bool) -> Void)?
+    var clickDualStreamingClosure: ((Bool) -> Void)?
+    var clickFirstFrameSwitch: ((NSSwitch) -> Void)?
+    var clickVideoImageSwitch: ((NSSwitch) -> Void)?
+    var clickBFrameSwitch: ((NSSwitch) -> Void)?
+    var clickEncoderSegmentSwitch: ((NSSegmentedControl) -> Void)?
+    @IBOutlet weak var snapShot: NSButton!
+    @IBAction func onTakeSnapshot(_ sender: Any) {
+        clickTakeSnapshotClosure?()
+    }
+    
+    @IBOutlet weak var waterMarkContainer: NSView!
+    @IBAction func onWaterMark(_ sender: NSSwitch) {
+        clickWaterMarkClosure?(sender.state == .on)
+    }
+    
+    @IBOutlet weak var dualStreamTips: NSTextField!
+    @IBAction func onDualStreaming(_ sender: NSSwitch) {
+        dualStreamTips.stringValue = sender.state == .on ? "Opening".localized : "(Default: flow)".localized
+        clickDualStreamingClosure?(sender.state == .on)
+    }
+    @IBOutlet weak var firstFrameSwitch: NSSwitch!
+    @IBAction func onFirstFrameSwitch(_ sender: NSSwitch) {
+        clickFirstFrameSwitch?(sender)
+    }
+    
+    @IBOutlet weak var videoImageSwitch: NSSwitch!
+    @IBOutlet weak var videoImageContainerView: NSView!
+    @IBAction func onTapVideoImageSwitch(_ sender: NSSwitch) {
+        clickVideoImageSwitch?(sender)
+    }
+    
+    @IBOutlet weak var bFrameContainer: NSView!
+    @IBAction func bFrameSwitch(_ sender: NSSwitch) {
+        clickBFrameSwitch?(sender)
+    }
+    
+    @IBOutlet weak var encoderSegment: NSSegmentedControl!
+    @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
+        clickEncoderSegmentSwitch?(sender)
     }
 }
 
