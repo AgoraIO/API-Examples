@@ -17,6 +17,7 @@ class RawAudioData: BaseViewController {
         
     @IBOutlet weak var Container: AGEVideoContainer!
     
+    @IBOutlet weak var textField: NSTextField!
     /**
      --- Microphones Picker ---
      */
@@ -104,6 +105,7 @@ class RawAudioData: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
+            textField.isEnabled = isJoined
             initJoinChannelButton()
         }
     }
@@ -139,6 +141,12 @@ class RawAudioData: BaseViewController {
             }
         }
         AgoraRtcEngineKit.destroy()
+    }
+    
+    @IBAction func onClickSendButton(_ sender: Any) {
+        guard let data = textField.stringValue.data(using: .utf8) else { return }
+        agoraKit.sendAudioMetadata(data)
+        textField.stringValue = ""
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -223,6 +231,10 @@ class RawAudioData: BaseViewController {
 
 /// agora rtc engine delegate events
 extension RawAudioData: AgoraRtcEngineDelegate {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMetadataReceived uid: UInt, metadata: Data) {
+        let data = String(data: metadata, encoding: .utf8) ?? ""
+        showAlert(message: data)
+    }
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:

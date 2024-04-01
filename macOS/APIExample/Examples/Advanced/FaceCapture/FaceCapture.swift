@@ -193,6 +193,7 @@ class FaceCaptureMain: BaseViewController {
             channelField.isEnabled = !isJoined
             initJoinChannelButton()
             agoraKit.setVideoFrameDelegate(isJoined ? self : nil)
+            agoraKit.setFaceInfoDelegate(isJoined ? self : nil)
         }
     }
     
@@ -229,6 +230,16 @@ class FaceCaptureMain: BaseViewController {
                                                     value: "{\"company_id\":\"agoraTest\"," +
                                                     "\"license\":\"" + (KeyCenter.FaceCaptureLicense ?? "") + "\"}",
                                                     sourceType: .primaryCamera)
+            
+            agoraKit.enableExtension(withVendor: "agora_filters_lip_sync",
+                                     extension: "lip_sync",
+                                     enabled: true,
+                                     sourceType: .speechDriven)
+            agoraKit.setExtensionPropertyWithVendor("agora_filters_lip_sync",
+                                                    extension: "lip_sync",
+                                                    key: "parameters",
+                                                    value: "{\"company_id\":\"agoraTest\",  \"license\":\"abc\", \"open_agc\":true}",
+                                                    sourceType: .speechDriven)
         }
         
         initSelectCameraPicker()
@@ -356,10 +367,17 @@ class FaceCaptureMain: BaseViewController {
     }
 }
 
+extension FaceCaptureMain: AgoraFaceInfoDelegate {
+    func onFaceInfo(_ outFaceInfo: String) -> Bool {
+        videos[0].statsInfo?.updateMetaInfo(data: outFaceInfo)
+        return true
+    }
+}
+
 extension FaceCaptureMain: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         let info = videoFrame.metaInfo["KEY_FACE_CAPTURE"] as? String
-        videos[0].statsInfo?.updateMetaInfo(data: info)
+        LogUtils.log(message: info ?? "", level: .info)
         return true
     }
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
