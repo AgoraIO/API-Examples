@@ -35,6 +35,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
+import io.agora.rtc2.video.IFaceInfoObserver;
 import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -95,6 +96,7 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
             config.mAreaCode = ((MainApplication) requireActivity().getApplication()).getGlobalSettings().getAreaCode();
             /* For Android, the agora_face_capture_extension will not load default. You must add it manually. */
             config.addExtension("agora_face_capture_extension");
+            config.addExtension("agora_lip_sync_extension");
             /* Config extension observer to receive the events. */
             config.mExtensionObserver = iMediaExtensionObserver;
             engine = RtcEngine.create(config);
@@ -118,6 +120,7 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
             }
 
             engine.registerVideoFrameObserver(iVideoFrameObserver);
+            engine.registerFaceInfoObserver(iFaceInfoObserver);
             engine.enableExtension("agora_video_filters_face_capture", "face_capture", true, PRIMARY_CAMERA_SOURCE);
             engine.setExtensionProperty("agora_video_filters_face_capture",
                     "face_capture",
@@ -127,6 +130,15 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
                             + AUTHENTICATION
                             + "\"}"
             );
+
+            engine.enableExtension("agora_filters_lip_sync", "lip_sync", true, Constants.MediaSourceType.SPEECH_DRIVEN_VIDEO_SOURCE);
+            engine.setExtensionProperty("agora_filters_lip_sync","lip_sync", "parameters",
+                    "{\"company_id\":\"agoraTest\""
+                            + ",\"license\":\"" + AUTHENTICATION + "\""
+                            + ",\"open_agc\":true"
+                            + "}",
+                    Constants.MediaSourceType.SPEECH_DRIVEN_VIDEO_SOURCE);
+
         } catch (Exception e) {
             e.printStackTrace();
             requireActivity().onBackPressed();
@@ -263,7 +275,7 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
         public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
             Log.i(TAG, String.format(Locale.US, "VideoFrameObserver >> onCaptureVideoFrame : metadata=%s",
                     videoFrame.getMetaInfo().toString()));
-            runOnUIThread(() -> et_capture_info.setText(videoFrame.getMetaInfo().toString()));
+            // runOnUIThread(() -> et_capture_info.setText(videoFrame.getMetaInfo().toString()));
             return true;
         }
 
@@ -319,6 +331,14 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
                     showShortToast("Face capture authentication information not set!");
                     showAlert(getString(R.string.face_capture_authentication), false);
                 }
+            } else if ("agora_filters_lip_sync".equals(provider)
+                    && "lip_sync".equals(extension)
+                    && "status_code".equals(key)) {
+                if ("0".equals(value)) {
+                    showShortToast("Speech driven authentication successful.");
+                } else {
+                    showShortToast("Speech driven authentication failed. code=" + value);
+                }
             }
         }
 
@@ -338,6 +358,14 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
         public void onError(String provider, String extension, int error, String message) {
             Log.i(TAG, String.format(Locale.US, "ExtensionObserver >> onError : provider=%s, extension=%s, error=%d, message=%s",
                     provider, extension, error, message));
+        }
+    };
+
+    private final IFaceInfoObserver iFaceInfoObserver = new IFaceInfoObserver() {
+        @Override
+        public boolean onFaceInfo(String outFaceInfo) {
+            runOnUIThread(() -> et_capture_info.setText(outFaceInfo));
+            return false;
         }
     };
 

@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
@@ -49,6 +51,8 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
+import io.agora.rtc2.video.AgoraFocalLengthInfo;
+import io.agora.rtc2.video.CameraCapturerConfiguration;
 import io.agora.rtc2.video.ImageTrackOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -88,6 +92,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private int canvasBgColor = 0x0000ffff; // RGBA
     private int canvasRenderMode = Constants.RENDER_MODE_HIDDEN;
     private final VideoEncoderConfiguration videoEncoderConfiguration = new VideoEncoderConfiguration();
+    private AgoraFocalLengthInfo[] agoraFocalLengthInfos;
 
     @Nullable
     @Override
@@ -106,6 +111,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         mRootBinding.btnPreload.setOnClickListener(this);
         mRootBinding.btnPublish.setOnClickListener(this);
         mRootBinding.btnRemoteScreenshot.setOnClickListener(this);
+        mRootBinding.btnSwitchCamera.setOnClickListener(this);
         foreGroundVideo.setOnClickListener(this);
 
         mSettingBinding = FragmentLiveStreamingSettingBinding.inflate(LayoutInflater.from(getContext()));
@@ -192,6 +198,25 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     15
             ));
         });
+        mSettingBinding.spCamera.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                AgoraFocalLengthInfo info = agoraFocalLengthInfos[position];
+                CameraCapturerConfiguration config = new CameraCapturerConfiguration(
+                        info.cameraDirection,
+                        info.focalLengthType
+                );
+                int ret = engine.setCameraCapturerConfiguration(
+                        config
+                );
+                Log.d(TAG, "setCameraCapturerConfiguration ret=" + ret);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
     }
@@ -274,6 +299,31 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
             engine.enableDualStreamMode(true);
+
+            agoraFocalLengthInfos = engine.queryCameraFocalLengthCapability();
+            ArrayList<String> strings = new ArrayList<>();
+            for (int i = 0; i < agoraFocalLengthInfos.length; i++) {
+                AgoraFocalLengthInfo info = agoraFocalLengthInfos[i];
+
+                String cameraDirection = getString(R.string.camera_front);
+                if (info.cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR) {
+                    cameraDirection = getString(R.string.camera_rear);
+                } else if (info.cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRAL) {
+                    cameraDirection = getString(R.string.camera_extral);
+                }
+
+                String focalLength = getString(R.string.camera_focal_default);
+                if (info.focalLengthType == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE) {
+                    focalLength = getString(R.string.camera_focal_wide_angle);
+                } else if (info.focalLengthType == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_URLTRA_WIDE) {
+                    focalLength = getString(R.string.camera_focal_urltra_wide);
+                } else if (info.focalLengthType == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO) {
+                    focalLength = getString(R.string.camera_focal_telephoto);
+                }
+
+                strings.add(String.format(Locale.US, "[%s] %s", cameraDirection, focalLength));
+            }
+            mSettingBinding.spCamera.setAdapter(new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, strings));
         } catch (Exception e) {
             requireActivity().onBackPressed();
             e.printStackTrace();
@@ -425,6 +475,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     }
                 });
             }
+        } else if (v.getId() == R.id.btn_switch_camera) {
+            engine.switchCamera();
         }
     }
 
@@ -821,5 +873,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             });
         }
 
+
+        @Override
+        public void onCameraCapturerConfigurationChanged(int direction, int focalLengthType, int width, int height, int frameRate) {
+            super.onCameraCapturerConfigurationChanged(direction, focalLengthType, width, height, frameRate);
+            Log.i(TAG, "onCameraCapturerConfigurationChanged >> direction=" + direction + ", focalLengthType" + focalLengthType + ", width=" + width + ", height=" + height + ", frameRate=" + frameRate);
+            showLongToast("Camera change to direction=" + direction + ", focalLengthType" + focalLengthType + ", width=" + width + ", height=" + height + ", frameRate=" + frameRate);
+        }
     };
 }

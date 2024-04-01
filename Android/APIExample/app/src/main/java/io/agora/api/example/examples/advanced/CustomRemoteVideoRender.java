@@ -568,7 +568,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             renderMatrix.preRotate(lastI420Frame.getRotation());
             renderMatrix.preTranslate(-0.5f, -0.5f);
             try {
-                drawer.drawYuv(yuvUploader.getYuvTextures(),
+                drawer.drawYuv(yuvUploader.getYuvTextures(), 0,
                         RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix), lastI420Frame.getRotatedWidth(),
                         lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight);
             } catch (NullPointerException exception) {

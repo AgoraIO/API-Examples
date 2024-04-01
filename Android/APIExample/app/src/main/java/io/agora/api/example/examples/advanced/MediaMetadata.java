@@ -9,6 +9,7 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -26,6 +27,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -48,18 +50,18 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 @Example(
         index = 3,
         group = ADVANCED,
-        name = R.string.item_videometadata,
-        actionId = R.id.action_mainFragment_to_VideoMetadata,
-        tipsId = R.string.videometadata
+        name = R.string.item_mediametadata,
+        actionId = R.id.action_mainFragment_to_MediaMetadata,
+        tipsId = R.string.mediametadata
 )
-public class VideoMetadata extends BaseFragment implements View.OnClickListener {
+public class MediaMetadata extends BaseFragment implements View.OnClickListener {
     /**
      * The constant TAG.
      */
-    public static final String TAG = VideoMetadata.class.getSimpleName();
+    public static final String TAG = MediaMetadata.class.getSimpleName();
     private FrameLayout fl_local, fl_remote;
-    private Button send, join;
-    private EditText et_channel;
+    private Button join, btn_send_video_metadata, btn_send_audio_metadata;
+    private EditText et_channel, et_video_metadata, et_audio_metadata;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -70,24 +72,29 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
     /**
      * Meta data to be sent
      */
-    private byte[] metadata;
+    private byte[] videoMetadata;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_video_metadata, container, false);
+        View view = inflater.inflate(R.layout.fragment_media_metadata, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        send = view.findViewById(R.id.btn_send);
-        send.setOnClickListener(this);
-        send.setEnabled(false);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        et_audio_metadata= view.findViewById(R.id.et_audio_metadata);
+        et_video_metadata= view.findViewById(R.id.et_video_metadata);
+        btn_send_audio_metadata = view.findViewById(R.id.btn_send_audio_metadata);
+        btn_send_video_metadata = view.findViewById(R.id.btn_send_video_metadata);
+        join.setOnClickListener(this);
+        btn_send_audio_metadata.setOnClickListener(this);
+        btn_send_video_metadata.setOnClickListener(this);
+        btn_send_audio_metadata.setEnabled(false);
+        btn_send_video_metadata.setEnabled(false);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -143,6 +150,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
+
+            engine.setParameters("{\"rtc.use_audio4\":true}");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -202,14 +211,23 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                send.setEnabled(false);
+                btn_send_audio_metadata.setEnabled(false);
+                btn_send_video_metadata.setEnabled(false);
                 join.setText(getString(R.string.join));
             }
-        } else if (v.getId() == R.id.btn_send) {
-            /*Click once, the metadata is sent once.
-             * {@link VideoMetadata#iMetadataObserver}.
-             * The metadata here can be flexibly replaced according to your own business.*/
-            metadata = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
+        } else if(v.getId() == R.id.btn_send_video_metadata){
+            String text = et_video_metadata.getText().toString();
+            if(!TextUtils.isEmpty(text)){
+                /*Click once, the metadata is sent once.
+                 * {@link VideoMetadata#iMetadataObserver}.
+                 * The metadata here can be flexibly replaced according to your own business.*/
+                videoMetadata = text.getBytes(StandardCharsets.UTF_8);
+            }
+        } else if(v.getId() == R.id.btn_send_audio_metadata){
+            String text = et_audio_metadata.getText().toString();
+            if(!TextUtils.isEmpty(text)){
+                engine.sendAudioMetadata(text.getBytes(StandardCharsets.UTF_8));
+            }
         }
     }
 
@@ -287,13 +305,13 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
         @Override
         public byte[] onReadyToSendMetadata(long timeStampMs, int sourceType) {
             /*Check if the metadata is empty.*/
-            if (metadata == null) {
+            if (videoMetadata == null) {
                 return null;
             }
             Log.i(TAG, "There is metadata to send!");
             /*Recycle metadata objects.*/
-            byte[] toBeSend = metadata;
-            metadata = null;
+            byte[] toBeSend = videoMetadata;
+            videoMetadata = null;
             if (toBeSend.length > MAX_META_SIZE) {
                 Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
                 return null;
@@ -368,7 +386,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    send.setEnabled(true);
+                    btn_send_audio_metadata.setEnabled(true);
+                    btn_send_video_metadata.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
@@ -508,6 +527,13 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener 
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
+        }
+
+        @Override
+        public void onAudioMetadataReceived(int uid, byte[] data) {
+            super.onAudioMetadataReceived(uid, data);
+            Log.i(TAG, String.format("onAudioMetadataReceived uid=%d data=%s", uid, new String(data, StandardCharsets.UTF_8)));
+            showShortToast("Audio Metadata: uid=" + uid + ", data=" + new String(data, StandardCharsets.UTF_8));
         }
     };
 }

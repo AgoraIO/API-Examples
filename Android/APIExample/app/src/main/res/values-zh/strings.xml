@@ -35,7 +35,8 @@
     <string name="audience">观众</string>
     <string name="localvideo">本地视频</string>
     <string name="screenshare">屏幕分享</string>
-    <string name="camera">发布摄像头</string>
+    <string name="publish_camera">发布摄像头</string>
+    <string name="camera">摄像头</string>
     <string name="rendermode">渲染模式:%s</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
     <string name="alert_no_local_audio_message">本地音频源不可用，请将PCM音频文件拷贝到 %s/ 并且命名为 bgm.pcm.</string>
@@ -106,7 +107,7 @@
     <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始视频数据</string>
-    <string name="item_videometadata">插入视频元数据(SEI)</string>
+    <string name="item_mediametadata">插入元数据</string>
     <string name="item_streamencrypt">媒体流加密(自定义)</string>
     <string name="item_channelencryption">媒体流加密</string>
     <string name="item_setvideoprofile">设置视频编码属性</string>
@@ -146,7 +147,7 @@
     <string name="screensharing">此示例演示了在音视频通话过程中如何进行屏幕共享的方法。</string>
     <string name="localvideotranscoding">此示例演示了在音视频通话过程中如何进行本地合图的方法。</string>
     <string name="switchcamerascreen">此示例演示了在音视频通话过程中，视频如何在摄像头流和屏幕分享流之间灵活切换。</string>
-    <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
+    <string name="mediametadata">此示例演示了在音视频通话过程中如何发送meta信息的方法。</string>
     <string name="geofencing">此示例演示了在音视频通话过程中如何通过AreaCode指定SDK访问限制。</string>
     <string name="setaudioprofile">此示例演示了在音视频通话过程中如何通过setAudioProfile设置profile来适配最佳音频性能。</string>
     <string name="playaudiofiles">此示例演示了在音视频通话过程中播放并管理audio effect和audio mixing文件。</string>
@@ -344,4 +345,14 @@
     <string name="audio_stream_index">音轨%d</string>
     <string name="face_capture_authentication">请联系声网客服获取面捕证书并配置到AUTHENTICATION常量上</string>
     <string name="notifications_enable_tip">请打开通知权限，防止后台录音中断</string>
+    <string name="video_metadata">视频元数据</string>
+    <string name="send">发送</string>
+    <string name="audio_metadata">音频元数据</string>
+    <string name="camera_front">前置</string>
+    <string name="camera_rear">后置</string>
+    <string name="camera_extral">其他</string>
+    <string name="camera_focal_default">默认摄像头</string>
+    <string name="camera_focal_wide_angle">广角摄像头</string>
+    <string name="camera_focal_urltra_wide">超宽摄像头</string>
+    <string name="camera_focal_telephoto">长焦摄像头</string>
 </resources>
