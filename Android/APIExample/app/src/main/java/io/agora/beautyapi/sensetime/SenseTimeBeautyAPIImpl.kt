@@ -52,14 +52,10 @@ import io.agora.rtc2.gl.EglBaseProvider
 import io.agora.rtc2.video.IVideoFrameObserver
 import io.agora.rtc2.video.VideoCanvas
 import java.nio.ByteBuffer
+import java.util.Collections
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-/**
- * Sense time beauty a p i impl
- *
- * @constructor Create empty Sense time beauty a p i impl
- */
 class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
     private val TAG = "SenseTimeBeautyAPIImpl"
     private val reportId = "scenarioAPI"
@@ -81,64 +77,25 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
     private var isFrontCamera = true
     private var cameraConfig = CameraConfig()
     private var localVideoRenderMode = Constants.RENDER_MODE_HIDDEN
+    private val pendingProcessRunList = Collections.synchronizedList(mutableListOf<()->Unit>())
 
     private enum class ProcessSourceType{
-        /**
-         * Unknown
-         *
-         * @constructor Create empty Unknown
-         */
         UNKNOWN,
-
-        /**
-         * Texture Oes Api26
-         *
-         * @constructor Create empty Texture Oes Api26
-         */
         TEXTURE_OES_API26,
-
-        /**
-         * Texture 2d Api26
-         *
-         * @constructor Create empty Texture 2d Api26
-         */
         TEXTURE_2D_API26,
-
-        /**
-         * Texture Oes
-         *
-         * @constructor Create empty Texture Oes
-         */
         TEXTURE_OES,
-
-        /**
-         * Texture 2d
-         *
-         * @constructor Create empty Texture 2d
-         */
         TEXTURE_2D,
-
-        /**
-         * I420
-         *
-         * @constructor Create empty I420
-         */
         I420,
     }
     private var currProcessSourceType = ProcessSourceType.UNKNOWN
 
-    /**
-     * Initialize
-     *
-     * @param config
-     * @return
-     */
     override fun initialize(config: Config): Int {
         if (this.config != null) {
             LogUtils.e(TAG, "initialize >> The beauty api has been initialized!")
             return ErrorCode.ERROR_HAS_INITIALIZED.value
         }
         this.config = config
+        this.cameraConfig = config.cameraConfig
         if (config.captureMode == CaptureMode.Agora) {
             config.rtcEngine.registerVideoFrameObserver(this)
         }
@@ -146,7 +103,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
             this.config?.eventCallback?.onBeautyStats(it)
         }
         cameraConfig = CameraConfig(config.cameraConfig.frontMirror, config.cameraConfig.backMirror)
-        LogUtils.setLogFilePath(config.context.getExternalFilesDir("")?.absolutePath ?: "")
         LogUtils.i(TAG, "initialize >> config = $config")
         LogUtils.i(TAG, "initialize >> beauty api version=$VERSION, beauty sdk version=${STCommonNative.getVersion()}")
         // config.rtcEngine.setParameters("{\"rtc.qos_for_test_purpose\":101}") // 实时上报
@@ -154,12 +110,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
-    /**
-     * Enable
-     *
-     * @param enable
-     * @return
-     */
     override fun enable(enable: Boolean): Int {
         LogUtils.i(TAG, "enable >> enable = $enable")
         if (config == null) {
@@ -185,13 +135,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
-    /**
-     * Setup local video
-     *
-     * @param view
-     * @param renderMode
-     * @return
-     */
     override fun setupLocalVideo(view: View, renderMode: Int): Int {
         val rtcEngine = config?.rtcEngine
         if(rtcEngine == null){
@@ -210,12 +153,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_VIEW_TYPE_ERROR.value
     }
 
-    /**
-     * On frame
-     *
-     * @param videoFrame
-     * @return
-     */
     override fun onFrame(videoFrame: VideoFrame): Int {
         val conf = config
         if(conf == null){
@@ -230,9 +167,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
             LogUtils.e(TAG, "onFrame >> The capture mode is not Custom!")
             return ErrorCode.ERROR_PROCESS_NOT_CUSTOM.value
         }
-        if (!enable) {
-            return ErrorCode.ERROR_PROCESS_DISABLE.value
-        }
         if (processBeauty(videoFrame)) {
             return ErrorCode.ERROR_OK.value
         }
@@ -240,12 +174,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_FRAME_SKIPPED.value
     }
 
-    /**
-     * Set beauty preset
-     *
-     * @param preset
-     * @return
-     */
     override fun setBeautyPreset(preset: BeautyPreset): Int {
         val effectNative = config?.stHandlers?.effectNative
         if(effectNative == null){
@@ -368,12 +296,24 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
-    /**
-     * Update camera config
-     *
-     * @param config
-     * @return
-     */
+    override fun runOnProcessThread(run: () -> Unit) {
+        if (config == null) {
+            LogUtils.e(TAG, "runOnProcessThread >> The beauty api has not been initialized!")
+            return
+        }
+        if (isReleased) {
+            LogUtils.e(TAG, "runOnProcessThread >> The beauty api has been released!")
+            return
+        }
+        if (textureBufferHelper?.handler?.looper?.thread == Thread.currentThread()) {
+            run.invoke()
+        } else if (textureBufferHelper != null) {
+            textureBufferHelper?.handler?.post(run)
+        } else {
+            pendingProcessRunList.add(run)
+        }
+    }
+
     override fun updateCameraConfig(config: CameraConfig): Int {
         LogUtils.i(TAG, "updateCameraConfig >> oldCameraConfig=$cameraConfig, newCameraConfig=$config")
         cameraConfig = CameraConfig(config.frontMirror, config.backMirror)
@@ -382,31 +322,17 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         return ErrorCode.ERROR_OK.value
     }
 
-    /**
-     * Is front camera
-     *
-     */
     override fun isFrontCamera() = isFrontCamera
 
-    /**
-     * Set parameters
-     *
-     * @param key
-     * @param value
-     */
     override fun setParameters(key: String, value: String) {
         when(key){
             "beauty_mode" -> beautyMode = value.toInt()
         }
     }
 
-    /**
-     * Release
-     *
-     * @return
-     */
     override fun release(): Int {
-        if(config == null){
+        val conf = config
+        if(conf == null){
             LogUtils.e(TAG, "release >> The beauty api has not been initialized!")
             return ErrorCode.ERROR_HAS_NOT_INITIALIZED.value
         }
@@ -414,13 +340,17 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
             LogUtils.e(TAG, "setBeautyPreset >> The beauty api has been released!")
             return ErrorCode.ERROR_HAS_RELEASED.value
         }
-        config?.rtcEngine?.sendCustomReportMessage(reportId, reportCategory, "release", "", 0)
+        if (conf.captureMode == CaptureMode.Agora) {
+            conf.rtcEngine.registerVideoFrameObserver(null)
+        }
+        conf.rtcEngine.sendCustomReportMessage(reportId, reportCategory, "release", "", 0)
 
         LogUtils.i(TAG, "release")
         isReleased = true
         workerThreadExecutor.shutdown()
         textureBufferHelper?.let {
             textureBufferHelper = null
+            it.handler.removeCallbacksAndMessages(null)
             it.invoke {
                 beautyProcessor?.release()
                 null
@@ -429,6 +359,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         }
         statsHelper?.reset()
         statsHelper = null
+        pendingProcessRunList.clear()
         return ErrorCode.ERROR_OK.value
     }
 
@@ -510,6 +441,15 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
                 "STRender",
                 EglBaseProvider.instance().rootEglBase.eglBaseContext
             )
+            textureBufferHelper?.invoke {
+                synchronized(pendingProcessRunList){
+                    val iterator = pendingProcessRunList.iterator()
+                    while (iterator.hasNext()){
+                        iterator.next().invoke()
+                        iterator.remove()
+                    }
+                }
+            }
             LogUtils.i(TAG, "processBeauty >> create texture buffer, beautyMode=$beautyMode")
         }
 
@@ -604,7 +544,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
                         TextureBuffer.Type.OES -> GLES11Ext.GL_TEXTURE_EXTERNAL_OES
                         else -> GLES20.GL_TEXTURE_2D
                     },
-                    textureMatrix = matrix
+                    textureMatrix = matrix,
                 )
             )?.textureId ?:  -1
         })
@@ -722,79 +662,32 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
 
     // IVideoFrameObserver implements
 
-    /**
-     * On capture video frame
-     *
-     * @param sourceType
-     * @param videoFrame
-     * @return
-     */
     override fun onCaptureVideoFrame(sourceType: Int, videoFrame: VideoFrame?): Boolean {
         videoFrame ?: return false
         return processBeauty(videoFrame)
     }
 
-    /**
-     * On pre encode video frame
-     *
-     * @param sourceType
-     * @param videoFrame
-     * @return
-     */
     override fun onPreEncodeVideoFrame(sourceType: Int, videoFrame: VideoFrame?) : Boolean {
 
         return true
     }
 
-    /**
-     * On media player video frame
-     *
-     * @param videoFrame
-     * @param mediaPlayerId
-     */
     override fun onMediaPlayerVideoFrame(videoFrame: VideoFrame?, mediaPlayerId: Int) = false
 
-    /**
-     * On render video frame
-     *
-     * @param channelId
-     * @param uid
-     * @param videoFrame
-     */
     override fun onRenderVideoFrame(
         channelId: String?,
         uid: Int,
         videoFrame: VideoFrame?
     ) = false
 
-    /**
-     * Get video frame process mode
-     *
-     */
     override fun getVideoFrameProcessMode() = IVideoFrameObserver.PROCESS_MODE_READ_WRITE
 
-    /**
-     * Get video format preference
-     *
-     */
     override fun getVideoFormatPreference() = IVideoFrameObserver.VIDEO_PIXEL_DEFAULT
 
-    /**
-     * Get rotation applied
-     *
-     */
     override fun getRotationApplied() = false
 
-    /**
-     * Get mirror applied
-     *
-     */
     override fun getMirrorApplied() = captureMirror && !enable
 
-    /**
-     * Get observed frame position
-     *
-     */
     override fun getObservedFramePosition() = IVideoFrameObserver.POSITION_POST_CAPTURER
 
 }

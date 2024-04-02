@@ -30,25 +30,10 @@ import io.agora.base.internal.video.GlRectDrawer
 import io.agora.base.internal.video.GlTextureFrameBuffer
 import io.agora.base.internal.video.RendererCommon.GlDrawer
 
-/**
- * Agora image helper
- *
- * @constructor Create empty Agora image helper
- */
 class AgoraImageHelper {
     private var glFrameBuffer: GlTextureFrameBuffer? = null
     private var drawer : GlDrawer? = null
 
-    /**
-     * Transform texture
-     *
-     * @param texId
-     * @param texType
-     * @param width
-     * @param height
-     * @param transform
-     * @return
-     */
     fun transformTexture(
         texId: Int,
         texType: VideoFrame.TextureBuffer.Type,
@@ -81,10 +66,6 @@ class AgoraImageHelper {
         return frameBuffer.textureId
     }
 
-    /**
-     * Release
-     *
-     */
     fun release() {
         glFrameBuffer?.release()
         glFrameBuffer = null

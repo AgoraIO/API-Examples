@@ -26,45 +26,18 @@ package io.agora.beautyapi.bytedance
 
 import android.content.Context
 import android.view.View
-import com.bytedance.labcv.effectsdk.RenderManager
+import com.effectsar.labcv.effectsdk.RenderManager
 import io.agora.base.VideoFrame
 import io.agora.rtc2.Constants
 import io.agora.rtc2.RtcEngine
 
-/**
- * Version
- */
-const val VERSION = "1.0.3"
+const val VERSION = "1.0.5"
 
-/**
- * Capture mode
- *
- * @constructor Create empty Capture mode
- */
 enum class CaptureMode{
-    /**
-     * Agora
-     *
-     * @constructor Create empty Agora
-     */
     Agora, // 使用声网内部的祼数据接口进行处理
-
-    /**
-     * Custom
-     *
-     * @constructor Create empty Custom
-     */
     Custom // 自定义模式，需要自己调用onFrame接口将原始视频帧传给BeautyAPI做处理
 }
 
-/**
- * Event callback
- *
- * @property onBeautyStats
- * @property onEffectInitialized
- * @property onEffectDestroyed
- * @constructor Create empty Event callback
- */
 data class EventCallback(
     /**
      * 统计数据回调，每处理完一帧后会回调一次
@@ -84,83 +57,27 @@ data class EventCallback(
     val onEffectDestroyed: (()->Unit)? = null
 )
 
-/**
- * Beauty stats
- *
- * @property minCostMs
- * @property maxCostMs
- * @property averageCostMs
- * @constructor Create empty Beauty stats
- */
 data class BeautyStats(
     val minCostMs:Long, // 统计区间内的最小值
     val maxCostMs: Long, // 统计区间内的最大值
     val averageCostMs: Long // 统计区间内的平均值
 )
 
-/**
- * Mirror mode
- *
- * @constructor Create empty Mirror mode
- */
 enum class MirrorMode {
 
     // 没有镜像正常画面的定义：前置拍到画面和手机看到画面是左右不一致的，后置拍到画面和手机看到画面是左右一致的
 
-    /**
-     * Mirror Local Remote
-     *
-     * @constructor Create empty Mirror Local Remote
-     */
     MIRROR_LOCAL_REMOTE, //本地远端都镜像，前置默认，本地和远端贴纸都正常
-
-    /**
-     * Mirror Local Only
-     *
-     * @constructor Create empty Mirror Local Only
-     */
     MIRROR_LOCAL_ONLY, // 仅本地镜像，远端不镜像，，远端贴纸正常，本地贴纸镜像。用于打电话场景，电商直播场景(保证电商直播后面的告示牌文字是正的)；这种模式因为本地远端是反的，所以肯定有一边的文字贴纸方向会是反的
-
-    /**
-     * Mirror Remote Only
-     *
-     * @constructor Create empty Mirror Remote Only
-     */
     MIRROR_REMOTE_ONLY, // 仅远端镜像，本地不镜像，远端贴纸正常，本地贴纸镜像
-
-    /**
-     * Mirror None
-     *
-     * @constructor Create empty Mirror None
-     */
     MIRROR_NONE // 本地远端都不镜像，后置默认，本地和远端贴纸都正常
 }
 
-/**
- * Camera config
- *
- * @property frontMirror
- * @property backMirror
- * @constructor Create empty Camera config
- */
 data class CameraConfig(
     val frontMirror: MirrorMode = MirrorMode.MIRROR_LOCAL_REMOTE, // 前置默认镜像：本地远端都镜像
     val backMirror: MirrorMode = MirrorMode.MIRROR_NONE // 后置默认镜像：本地远端都不镜像
 )
 
-/**
- * Config
- *
- * @property context
- * @property rtcEngine
- * @property renderManager
- * @property eventCallback
- * @property captureMode
- * @property statsDuration
- * @property statsEnable
- * @property cameraConfig
- * @constructor Create empty Config
- */
 data class Config(
     val context: Context, // Android Context上下文
     val rtcEngine: RtcEngine, // 声网Rtc引擎
@@ -172,103 +89,24 @@ data class Config(
     val cameraConfig: CameraConfig = CameraConfig() // 摄像头镜像配置
 )
 
-/**
- * Error code
- *
- * @property value
- * @constructor Create empty Error code
- */
 enum class ErrorCode(val value: Int) {
-    /**
-     * Error Ok
-     *
-     * @constructor Create empty Error Ok
-     */
     ERROR_OK(0), // 一切正常
-
-    /**
-     * Error Has Not Initialized
-     *
-     * @constructor Create empty Error Has Not Initialized
-     */
     ERROR_HAS_NOT_INITIALIZED(101), // 没有调用Initialize或调用失败情况下调用了其他API
-
-    /**
-     * Error Has Initialized
-     *
-     * @constructor Create empty Error Has Initialized
-     */
     ERROR_HAS_INITIALIZED(102), // 已经Initialize成功后再次调用报错
-
-    /**
-     * Error Has Released
-     *
-     * @constructor Create empty Error Has Released
-     */
     ERROR_HAS_RELEASED(103), // 已经调用release销毁后还调用其他API
-
-    /**
-     * Error Process Not Custom
-     *
-     * @constructor Create empty Error Process Not Custom
-     */
     ERROR_PROCESS_NOT_CUSTOM(104), // 非Custom处理模式下调用onFrame接口从外部传入视频帧
-
-    /**
-     * Error Process Disable
-     *
-     * @constructor Create empty Error Process Disable
-     */
     ERROR_PROCESS_DISABLE(105), // 当调用enable(false)禁用美颜后调用onFrame接口返回
-
-    /**
-     * Error View Type Error
-     *
-     * @constructor Create empty Error View Type Error
-     */
     ERROR_VIEW_TYPE_ERROR(106), // 当调用setupLocalVideo时view类型错误时返回
-
-    /**
-     * Error Frame Skipped
-     *
-     * @constructor Create empty Error Frame Skipped
-     */
     ERROR_FRAME_SKIPPED(107), // 当处理帧忽略时在onFrame返回
 }
 
-/**
- * Beauty preset
- *
- * @constructor Create empty Beauty preset
- */
 enum class BeautyPreset {
-    /**
-     * Custom
-     *
-     * @constructor Create empty Custom
-     */
     CUSTOM, // 不使用推荐的美颜参数
-
-    /**
-     * Default
-     *
-     * @constructor Create empty Default
-     */
     DEFAULT // 默认的
 }
 
-/**
- * Create byte dance beauty a p i
- *
- * @return
- */
 fun createByteDanceBeautyAPI(): ByteDanceBeautyAPI = ByteDanceBeautyAPIImpl()
 
-/**
- * Byte dance beauty a p i
- *
- * @constructor Create empty Byte dance beauty a p i
- */
 interface ByteDanceBeautyAPI {
 
     /**
@@ -327,17 +165,19 @@ interface ByteDanceBeautyAPI {
      */
     fun isFrontCamera(): Boolean
 
-    /**
-     * Get mirror applied
-     *
-     * @return
-     */
     fun getMirrorApplied(): Boolean
 
     /**
      * 私参配置，用于不对外api的调用，多用于测试
      */
     fun setParameters(key: String, value: String)
+
+    /**
+     * 在处理线程里执行操作
+     *
+     * @param run 操作run
+     */
+    fun runOnProcessThread(run: ()->Unit)
 
     /**
      * 释放资源，一旦释放后这个实例将无法使用

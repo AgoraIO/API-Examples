@@ -31,96 +31,44 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 
 
-/**
- * The type Program.
- */
 public abstract class Program {
     private static final String TAG = GlUtil.TAG;
 
-    /**
-     * The M program handle.
-     */
-// Handles to the GL program and various components of it.
+    // Handles to the GL program and various components of it.
     protected int mProgramHandle;
 
-    /**
-     * The M drawable 2 d.
-     */
     protected Drawable2d mDrawable2d;
 
 
-    /**
-     * The M frame buffers.
-     */
     protected int[] mFrameBuffers;
-    /**
-     * The M frame buffer textures.
-     */
     protected int[] mFrameBufferTextures;
-    /**
-     * The Frame buffer num.
-     */
-    protected int frameBufferNum = 1;
-    /**
-     * The M frame buffer shape.
-     */
+    protected int FRAME_BUFFER_NUM = 1;
     protected Point mFrameBufferShape;
-
     /**
      * Prepares the program in the current EGL context.
-     *
-     * @param vertexShader      the vertex shader
-     * @param fragmentShader2D the fragment shader 2 d
      */
-    public Program(String vertexShader, String fragmentShader2D) {
-        mProgramHandle = GlUtil.createProgram(vertexShader, fragmentShader2D);
+    public Program(String VERTEX_SHADER, String FRAGMENT_SHADER_2D) {
+        mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_2D);
         mDrawable2d = getDrawable2d();
         getLocations();
     }
 
-    /**
-     * Instantiates a new Program.
-     *
-     * @param context                  the context
-     * @param vertexShaderResourceId   the vertex shader resource id
-     * @param fragmentShaderResourceId the fragment shader resource id
-     */
     public Program(Context context, int vertexShaderResourceId, int fragmentShaderResourceId) {
         this(Extensions.readTextFileFromResource(context, vertexShaderResourceId), Extensions.readTextFileFromResource(context, fragmentShaderResourceId));
     }
 
-    /**
-     * Update vertex array.
-     *
-     * @param fullRectangleCoords the full rectangle coords
-     */
-    public void updateVertexArray(float[] fullRectangleCoords) {
-        mDrawable2d.updateVertexArray(fullRectangleCoords);
+    public void updateVertexArray(float[] FULL_RECTANGLE_COORDS) {
+        mDrawable2d.updateVertexArray(FULL_RECTANGLE_COORDS);
     }
 
-    /**
-     * Update tex coord array.
-     *
-     * @param fullRectangleTexCoords the full rectangle tex coords
-     */
-    public void updateTexCoordArray(float[] fullRectangleTexCoords) {
-        mDrawable2d.updateTexCoordArray(fullRectangleTexCoords);
+    public void updateTexCoordArray(float[] FULL_RECTANGLE_TEX_COORDS) {
+        mDrawable2d.updateTexCoordArray(FULL_RECTANGLE_TEX_COORDS);
     }
 
-    /**
-     * Update tex coord array fb.
-     *
-     * @param coords the coords
-     */
     public void updateTexCoordArrayFB(float[] coords) {
         mDrawable2d.updateTexCoordArrayFB(coords);
     }
 
-    /**
-     * Gets drawable 2 d.
-     *
-     * @return the drawable 2 d
-     */
     protected abstract Drawable2d getDrawable2d();
 
     /**
@@ -130,42 +78,15 @@ public abstract class Program {
 
     /**
      * Issues the draw call.  Does the full setup on every call.
-     *
-     * @param textureId the texture id
-     * @param width     the width
-     * @param height    the height
-     * @param mvpMatrix the mvp matrix
      */
     public abstract void drawFrameOnScreen(int textureId, int width, int height, float[] mvpMatrix);
 
 
-    /**
-     * Draw frame off screen int.
-     *
-     * @param textureId the texture id
-     * @param width     the width
-     * @param height    the height
-     * @param mvpMatrix the mvp matrix
-     * @return the int
-     */
-    public abstract int drawFrameOffScreen(int textureId, int width, int height, float[] mvpMatrix);
 
-    /**
-     * Read buffer byte buffer.
-     *
-     * @param textureId the texture id
-     * @param width     the width
-     * @param height    the height
-     * @return the byte buffer
-     */
+    public abstract int drawFrameOffScreen(int textureId,int width, int height, float[] mvpMatrix);
+
     public abstract ByteBuffer readBuffer(int textureId, int width, int height);
 
-    /**
-     * Init frame buffer if need.
-     *
-     * @param width  the width
-     * @param height the height
-     */
     protected void initFrameBufferIfNeed(int width, int height) {
         boolean need = false;
         if (null == mFrameBufferShape || mFrameBufferShape.x != width || mFrameBufferShape.y != height) {
@@ -175,11 +96,11 @@ public abstract class Program {
             need = true;
         }
         if (need) {
-            mFrameBuffers = new int[frameBufferNum];
-            mFrameBufferTextures = new int[frameBufferNum];
-            GLES20.glGenFramebuffers(frameBufferNum, mFrameBuffers, 0);
-            GLES20.glGenTextures(frameBufferNum, mFrameBufferTextures, 0);
-            for (int i = 0; i < frameBufferNum; i++) {
+            mFrameBuffers = new int[FRAME_BUFFER_NUM];
+            mFrameBufferTextures = new int[FRAME_BUFFER_NUM];
+            GLES20.glGenFramebuffers(FRAME_BUFFER_NUM, mFrameBuffers, 0);
+            GLES20.glGenTextures(FRAME_BUFFER_NUM, mFrameBufferTextures, 0);
+            for (int i = 0; i < FRAME_BUFFER_NUM; i++) {
                 bindFrameBuffer(mFrameBufferTextures[i], mFrameBuffers[i], width, height);
             }
             mFrameBufferShape = new Point(width, height);
@@ -190,14 +111,25 @@ public abstract class Program {
 
     private void destroyFrameBuffers() {
         if (mFrameBufferTextures != null) {
-            GLES20.glDeleteTextures(frameBufferNum, mFrameBufferTextures, 0);
+            GLES20.glDeleteTextures(FRAME_BUFFER_NUM, mFrameBufferTextures, 0);
             mFrameBufferTextures = null;
         }
         if (mFrameBuffers != null) {
-            GLES20.glDeleteFramebuffers(frameBufferNum, mFrameBuffers, 0);
+            GLES20.glDeleteFramebuffers(FRAME_BUFFER_NUM, mFrameBuffers, 0);
             mFrameBuffers = null;
         }
     }
+
+    /** {zh} 
+     * 纹理参数设置+buffer绑定
+     * set texture params
+     * and bind buffer
+     */
+    /** {en} 
+     * Texture parameter setting + buffer binding
+     * set texture params
+     * and binding buffer
+     */
 
     private void bindFrameBuffer(int textureId, int frameBuffer, int width, int height) {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);

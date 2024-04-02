@@ -47,24 +47,15 @@ import javax.microedition.khronos.egl.EGLContext;
 
 import io.agora.beautyapi.sensetime.utils.LogUtils;
 
-/**
- * The type Gl util.
- */
-public final class GlUtil {
+public class GlUtil {
     private static final String TAG = "GlUtil";
+    /** Identity matrix for general use.  Don't modify or life will get weird. */
 
-    /**
-     * Identity matrix for general use.  Don't modify or life will get weird.
-     */
     public static final int NO_TEXTURE = -1;
 
     private static final int SIZEOF_FLOAT = 4;
 
-    /**
-     * The constant IDENTITY_MATRIX.
-     */
     public static final float[] IDENTITY_MATRIX = new float[16];
-
     static {
         Matrix.setIdentityM(IDENTITY_MATRIX, 0);
     }
@@ -72,14 +63,6 @@ public final class GlUtil {
     private GlUtil() { // do not instantiate
     }
 
-    /**
-     * Create program int.
-     *
-     * @param applicationContext  the application context
-     * @param vertexSourceRawId   the vertex source raw id
-     * @param fragmentSourceRawId the fragment source raw id
-     * @return the int
-     */
     public static int createProgram(Context applicationContext, @RawRes int vertexSourceRawId,
                                     @RawRes int fragmentSourceRawId) {
 
@@ -89,13 +72,6 @@ public final class GlUtil {
         return createProgram(vertexSource, fragmentSource);
     }
 
-    /**
-     * Create program int.
-     *
-     * @param vertexSource   the vertex source
-     * @param fragmentSource the fragment source
-     * @return the int
-     */
     public static int createProgram(String vertexSource, String fragmentSource) {
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
         if (vertexShader == 0) {
@@ -126,13 +102,6 @@ public final class GlUtil {
         return program;
     }
 
-    /**
-     * Load shader int.
-     *
-     * @param shaderType the shader type
-     * @param source     the source
-     * @return the int
-     */
     public static int loadShader(int shaderType, String source) {
         int shader = GLES20.glCreateShader(shaderType);
         checkGlError("glCreateShader type=" + shaderType);
@@ -149,17 +118,6 @@ public final class GlUtil {
         return shader;
     }
 
-    /**
-     * Create texture int.
-     *
-     * @param textureTarget the texture target
-     * @param bitmap        the bitmap
-     * @param minFilter     the min filter
-     * @param magFilter     the mag filter
-     * @param wrapS         the wrap s
-     * @param wrapT         the wrap t
-     * @return the int
-     */
     public static int createTexture(int textureTarget, @Nullable Bitmap bitmap, int minFilter,
                                     int magFilter, int wrapS, int wrapT) {
         int[] textureHandle = new int[1];
@@ -181,37 +139,16 @@ public final class GlUtil {
         return textureHandle[0];
     }
 
-    /**
-     * Create texture int.
-     *
-     * @param textureTarget the texture target
-     * @return the int
-     */
     public static int createTexture(int textureTarget) {
         return createTexture(textureTarget, null, GLES20.GL_LINEAR, GLES20.GL_LINEAR,
                 GLES20.GL_CLAMP_TO_EDGE, GLES20.GL_CLAMP_TO_EDGE);
     }
 
-    /**
-     * Create texture int.
-     *
-     * @param textureTarget the texture target
-     * @param bitmap        the bitmap
-     * @return the int
-     */
     public static int createTexture(int textureTarget, Bitmap bitmap) {
         return createTexture(textureTarget, bitmap, GLES20.GL_LINEAR, GLES20.GL_LINEAR,
                 GLES20.GL_CLAMP_TO_EDGE, GLES20.GL_CLAMP_TO_EDGE);
     }
 
-    /**
-     * Init effect texture.
-     *
-     * @param width     the width
-     * @param height    the height
-     * @param textureId the texture id
-     * @param type      the type
-     */
     public static void initEffectTexture(int width, int height, int[] textureId, int type) {
         int len = textureId.length;
         if (len > 0) {
@@ -231,11 +168,8 @@ public final class GlUtil {
                     GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
         }
     }
-
     /**
      * Checks to see if a GLES error has been raised.
-     *
-     * @param op the op
      */
     public static void checkGlError(String op) {
         int error = GLES20.glGetError();
@@ -248,9 +182,6 @@ public final class GlUtil {
 
     /**
      * Allocates a direct float buffer, and populates it with the float array data.
-     *
-     * @param coords the coords
-     * @return the float buffer
      */
     public static FloatBuffer createFloatBuffer(float[] coords) {
         // Allocate a direct ByteBuffer, using 4 bytes per float, and copy coords into it.
@@ -262,13 +193,6 @@ public final class GlUtil {
         return fb;
     }
 
-    /**
-     * Read text from raw resource string.
-     *
-     * @param applicationContext the application context
-     * @param resourceId         the resource id
-     * @return the string
-     */
     public static String readTextFromRawResource(final Context applicationContext,
                                                  @RawRes final int resourceId) {
         final InputStream inputStream =
@@ -289,22 +213,14 @@ public final class GlUtil {
         return body.toString();
     }
 
-    /**
-     * Create transform matrix float [ ].
-     *
-     * @param rotation the rotation
-     * @param flipH    the flip h
-     * @param flipV    the flip v
-     * @return the float [ ]
-     */
-    public static float[] createTransformMatrix(int rotation, boolean flipH, boolean flipV) {
+    public static float[] createTransformMatrix(int rotation, boolean flipH, boolean flipV){
         float[] renderMVPMatrix = new float[16];
         float[] tmp = new float[16];
         Matrix.setIdentityM(tmp, 0);
 
         boolean _flipH = flipH;
         boolean _flipV = flipV;
-        if (rotation % 180 != 0) {
+        if(rotation % 180 != 0){
             _flipH = flipV;
             _flipV = flipH;
         }
@@ -318,7 +234,7 @@ public final class GlUtil {
 
         float _rotation = rotation;
         if (_rotation != 0) {
-            if (_flipH != _flipV) {
+            if(_flipH != _flipV){
                 _rotation *= -1;
             }
             Matrix.rotateM(tmp, 0, tmp, 0, _rotation, 0, 0, 1);
@@ -329,13 +245,8 @@ public final class GlUtil {
         return renderMVPMatrix;
     }
 
-    /**
-     * Gets curr gl context.
-     *
-     * @return the curr gl context
-     */
-    public static EGLContext getCurrGLContext() {
-        EGL10 egl = (EGL10) EGLContext.getEGL();
+    public static EGLContext getCurrGLContext(){
+        EGL10 egl = (EGL10)EGLContext.getEGL();
         if (egl != null && !Objects.equals(egl.eglGetCurrentContext(), EGL10.EGL_NO_CONTEXT)) {
             return egl.eglGetCurrentContext();
         }
