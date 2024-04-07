@@ -83,6 +83,7 @@ BOOL CAgoraMutilVideoSourceDlg::OnInitDialog()
 	}
 	m_maxVideoCount = 6;
 	ShowVideoWnds();
+	ResumeStatus();
 	return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -381,7 +382,13 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 void CAgoraMutilVideoSourceDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
-	ResumeStatus();
+	if (bShow)//bShwo is true ,show window 
+	{
+		InitCtrlText();
+	}
+	else {
+		ResumeStatus();
+	}
 }
 
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)

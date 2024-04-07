@@ -70,6 +70,7 @@ BOOL MultiVideoSourceTracks::OnInitDialog()
 	
 	int version = avformat_version();
 	avformat_network_init();
+	ResumeStatus();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -253,10 +254,12 @@ void MultiVideoSourceTracks::ResumeStatus()
 {
 	InitCtrlText();
 
-
+	m_initialize = false;
 	m_joinChannel = false;
 
 	m_btnJoinChannel.EnableWindow(TRUE);
+	m_edtChannelName.SetWindowTextW(_T(""));
+	m_lstInfo.ResetContent();
 
 	// Reset windows
 	for (int i = 0; i < VIDEO_WINDOWS_SIZE; i++)
@@ -334,7 +337,13 @@ void MultiVideoSourceTracks::UnInitAgora()
 void MultiVideoSourceTracks::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
-	ResumeStatus();
+	if (bShow)//bShwo is true ,show window 
+	{
+		InitCtrlText();
+	}
+	else {
+		ResumeStatus();
+	}
 }
 
 
