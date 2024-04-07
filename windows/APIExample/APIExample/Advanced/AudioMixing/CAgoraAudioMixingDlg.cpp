@@ -76,7 +76,7 @@ bool CAgoraAudioMixingDlg::InitAgora()
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
-	
+
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
@@ -186,14 +186,14 @@ BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_MIXING_RESUME, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingResume)
 	ON_BN_CLICKED(IDC_BUTTON_MIXING_PAUSE, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingPause)
 	ON_BN_CLICKED(IDC_BUTTON_MIXING_STOP, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingStop)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingVolume)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_PLAYOUT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPlayoutVolume)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_PUBLISH_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPublishVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_MIXING_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_MIXING_PLAYOUT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPlayoutVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_MIXING_PUBLISH_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPublishVolume)
 	ON_BN_CLICKED(IDC_BUTTON_EFFECT_START, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectStart)
 	ON_BN_CLICKED(IDC_BUTTON_EFFECT_RESUME, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectResume)
 	ON_BN_CLICKED(IDC_BUTTON_EFFECT_PAUSE, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectPause)
 	ON_BN_CLICKED(IDC_BUTTON_EFFECT_STOP, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectStop)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_EFFECT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderEffectVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_EFFECT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderEffectVolume)
 END_MESSAGE_MAP()
 
 
