@@ -692,8 +692,10 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 			}
 		}
 		//start primary camera capture
-		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
+		CString infoStr;
+		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
+		infoStr.Format(_T("start primary camera capture. ret=%d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		VideoCanvas canvas;
 		canvas.uid = 0;
 		canvas.sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
@@ -769,8 +771,10 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		}
 
 		//start secondary camera capture
-		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY, config2);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start secondary camera capture"));
+		CString infoStr;
+		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY, config2);
+		infoStr.Format(_T("start secondary camera capture. ret=%d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture2.SetWindowText(MultiVideoSourceStopCapture);
 		VideoCanvas canvas;
 		canvas.uid = connection2.localUid;
@@ -795,7 +799,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		// joinChannelEx secondary camera capture(broadcaster)
 		connection2.channelId = szChannelId.data();
-		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection2, options2, &m_camera2EventHandler);
+		ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection2, options2, &m_camera2EventHandler);
 		CString str;
 		str.Format(_T("joinChannelEx: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
@@ -875,8 +879,10 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
 		
 
 		//start secondary camera capture
-		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_THIRD, config);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start third camera capture"));
+		CString infoStr;
+		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_THIRD, config);
+		infoStr.Format(_T("start third camera capture. ret=%d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture3.SetWindowText(MultiVideoSourceStopCapture);
 		VideoCanvas canvas;
 		canvas.uid = connection3.localUid;
@@ -902,7 +908,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
 		options3.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		// joinChannelEx secondary camera capture(broadcaster)
 		connection3.channelId = szChannelId.data();
-		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection3, options3, &m_camera3EventHandler);
+		ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection3, options3, &m_camera3EventHandler);
 		CString str;
 		str.Format(_T("joinChannelEx: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
@@ -984,8 +990,10 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
 		m_camera4EventHandler.SetMsgReceiver(m_hWnd);
 
 		//start secondary camera capture
-		m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_FOURTH, config);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start fourth camera capture"));
+		CString infoStr;
+		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_FOURTH, config);
+		infoStr.Format(_T("start fourth camera capture. ret=%d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture4.SetWindowText(MultiVideoSourceStopCapture);
 		VideoCanvas canvas;
 		canvas.uid = connection4.localUid;
@@ -1008,7 +1016,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
 		options4.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		// joinChannelEx secondary camera capture(broadcaster)
 		connection4.channelId = szChannelId.data();
-		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection4, options4, &m_camera4EventHandler);
+		ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection4, options4, &m_camera4EventHandler);
 		CString str;
 		str.Format(_T("joinChannelEx: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
