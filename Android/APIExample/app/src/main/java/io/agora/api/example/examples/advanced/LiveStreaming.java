@@ -311,7 +311,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 } else if (info.cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRAL) {
                     cameraDirection = getString(R.string.camera_extral);
                 }
-
                 String focalLength = getString(R.string.camera_focal_default);
                 if (info.focalLengthType == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE) {
                     focalLength = getString(R.string.camera_focal_wide_angle);

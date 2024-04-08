@@ -53,7 +53,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 public class FaceCapture extends BaseFragment implements View.OnClickListener {
     private static final String TAG = FaceCapture.class.getSimpleName();
 
-    private static final String AUTHENTICATION = "";
+    private static final String AUTHENTICATION = "i1RXlMcDyB5F6Yn9aPijy1MouDxdsI4ajOj+NrHsc99FntK1drIlJNWdodNzBjAeH8cSUSuRkX6LwoE0WDgEAnivcXbsYv8atcZYZFl4FoXONgI6uIOmi+r5SGjsgZe+yI6wdh5eW1pLLh6m/W02M35EX1wtBvP3l79q3KeGsDQ=";
 
     private FrameLayout fl_local;
     private Button join;

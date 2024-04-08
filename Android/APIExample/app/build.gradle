@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "${rootDir.absolutePath}/git-hooks.gradle"
+apply from: 'vendors.gradle'
 
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
@@ -9,7 +10,7 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        applicationId "io.agora.test.entfull"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -18,7 +19,7 @@ android {
         manifestPlaceholders = [
                AppId: "${applicationId}"
         ]
-        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a'//, 'x86', 'x86-64'
     }
 
     buildTypes {
@@ -111,8 +112,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
-    implementation 'com.faceunity:core:8.3.0'
-    implementation 'com.faceunity:model:8.3.0'
+    implementation 'com.faceunity:core:8.7.0'
+    implementation 'com.faceunity:model:8.7.0'
 
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'

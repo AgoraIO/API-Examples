@@ -1,6 +1,5 @@
 package io.agora.api.example.examples.advanced.beauty;
 
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.TextureView;
@@ -11,8 +10,6 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bytedance.labcv.effectsdk.RenderManager;
-
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Random;
@@ -22,7 +19,6 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.databinding.FragmentBeautyBytedanceBinding;
 import io.agora.api.example.utils.TokenUtils;
-import io.agora.beautyapi.bytedance.BeautyPreset;
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPI;
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPIKt;
 import io.agora.beautyapi.bytedance.CameraConfig;
@@ -40,9 +36,6 @@ import io.agora.rtc2.video.VideoCanvas;
  * The type Byte dance beauty.
  */
 public class ByteDanceBeauty extends BaseFragment {
-    private static final String TAG = "SceneTimeBeauty";
-    private static final Matrix IDENTITY_MATRIX = new Matrix();
-    private static final String LICENSE_NAME = "agora_test_20220805_20230815_io.agora.test.entfull_4.2.3.licbag";
     private FragmentBeautyBytedanceBinding mBinding;
     private RtcEngine rtcEngine;
     private String channelId;
@@ -85,13 +78,20 @@ public class ByteDanceBeauty extends BaseFragment {
             rtcEngine.setColorEnhanceOptions(isChecked, options);
         });
 
-        byteDanceBeautyAPI.initialize(new Config(requireContext(), rtcEngine, ByteDanceBeautySDK.INSTANCE.getRenderManager(), new EventCallback(beautyStats -> null, () -> {
-            ByteDanceBeautySDK.INSTANCE.initEffect(requireContext());
-            return null;
-        }, () -> {
-            ByteDanceBeautySDK.INSTANCE.unInitEffect();
-            return null;
-        }), CaptureMode.Agora, 0, false, new CameraConfig()));
+        byteDanceBeautyAPI.initialize(new Config(requireContext(), rtcEngine,
+                ByteDanceBeautySDK.INSTANCE.getRenderManager(),
+                new EventCallback(beautyStats -> null,
+                        () -> {
+                            ByteDanceBeautySDK.INSTANCE.initEffect(requireContext());
+                            return null;
+                        },
+                        () -> {
+                            ByteDanceBeautySDK.INSTANCE.unInitEffect();
+                            return null;
+                        }),
+                CaptureMode.Agora,
+                0,
+                false, new CameraConfig()));
         byteDanceBeautyAPI.enable(true);
     }
 
@@ -114,23 +114,28 @@ public class ByteDanceBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            byteDanceBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM,
-                    ByteDanceBeautySDK.INSTANCE.getBeautyNodePath(),
-                    ByteDanceBeautySDK.INSTANCE.getBeauty4ItemsNodePath(),
-                    ByteDanceBeautySDK.INSTANCE.getReSharpNodePath());
+            ByteDanceBeautySDK.INSTANCE.getBeautyConfig().setWhiten(
+                    isChecked ? 1.0f : 0.0f
+            );
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            RenderManager renderManager = ByteDanceBeautySDK.INSTANCE.getRenderManager();
-            renderManager.appendComposerNodes(new String[]{ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath()});
-            renderManager.updateComposerNodes(ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath(), "Filter_ALL", isChecked ? 0.5f : 0.f);
-            renderManager.updateComposerNodes(ByteDanceBeautySDK.INSTANCE.getMakeupTianmeiNodePath(), "Makeup_ALL", isChecked ? 0.5f : 0f);
+            if (isChecked) {
+                ByteDanceBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(
+                        new ByteDanceBeautySDK.MakeUpItem(
+                                requireContext(),
+                                "yuanqi",
+                                1.0f
+                        )
+                );
+            } else {
+                ByteDanceBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(null);
+            }
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            RenderManager renderManager = ByteDanceBeautySDK.INSTANCE.getRenderManager();
             if (isChecked) {
-                renderManager.setSticker(ByteDanceBeautySDK.INSTANCE.getStickerPath() + "/wochaotian");
+                ByteDanceBeautySDK.INSTANCE.getBeautyConfig().setSticker("zhaocaimao");
             } else {
-                renderManager.setSticker(null);
+                ByteDanceBeautySDK.INSTANCE.getBeautyConfig().setSticker(null);
             }
         });
         mBinding.ivCamera.setOnClickListener(v -> {
