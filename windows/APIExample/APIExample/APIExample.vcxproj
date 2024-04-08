@@ -182,7 +182,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)$(Configuration))
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -231,7 +231,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
