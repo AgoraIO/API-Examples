@@ -99,7 +99,7 @@ public class ThirdPartyBeauty extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SenseTimeBeautySDK.INSTANCE.release();
-        FaceUnityBeautySDK.INSTANCE.release();
+        SenseTimeBeautySDK.INSTANCE.unInitBeautySDK();
+        FaceUnityBeautySDK.INSTANCE.unInitBeauty();
     }
 }

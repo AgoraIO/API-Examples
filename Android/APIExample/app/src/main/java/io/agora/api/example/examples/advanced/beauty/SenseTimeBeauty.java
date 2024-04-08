@@ -12,8 +12,6 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.softsugar.stmobile.params.STEffectBeautyType;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -25,7 +23,6 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.databinding.FragmentBeautyScenetimeBinding;
 import io.agora.api.example.utils.TokenUtils;
-import io.agora.beautyapi.sensetime.BeautyPreset;
 import io.agora.beautyapi.sensetime.CameraConfig;
 import io.agora.beautyapi.sensetime.CaptureMode;
 import io.agora.beautyapi.sensetime.Config;
@@ -129,20 +126,29 @@ public class SenseTimeBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            senseTimeBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM);
+            SenseTimeBeautySDK.INSTANCE.getBeautyConfig().setWhiten(
+                    isChecked ? 1.0f: 0.0f
+            );
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(requireContext(), STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL, "makeup_lip" + File.separator + "12自然.zip", 1.0f);
+                SenseTimeBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(new SenseTimeBeautySDK.MakeUpItem(
+                        requireContext(),
+                        "style_lightly" + File.separator + "hunxue.zip",
+                        1.0f
+                ));
             } else {
-                SenseTimeBeautySDK.INSTANCE.setMakeUpItem(requireContext(), STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL, "", 0.0f);
+                SenseTimeBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(null);
             }
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                SenseTimeBeautySDK.INSTANCE.setStickerItem(requireContext(), "sticker_face_shape" + File.separator + "ShangBanLe.zip", true);
+                SenseTimeBeautySDK.INSTANCE.getBeautyConfig().setSticker(new SenseTimeBeautySDK.StickerItem(
+                        requireContext(),
+                        "sticker_face_shape" + File.separator + "ShangBanLe.zip"
+                ));
             } else {
-                SenseTimeBeautySDK.INSTANCE.cleanSticker();
+                SenseTimeBeautySDK.INSTANCE.getBeautyConfig().setSticker(null);
             }
         });
         mBinding.ivCamera.setOnClickListener(v -> {

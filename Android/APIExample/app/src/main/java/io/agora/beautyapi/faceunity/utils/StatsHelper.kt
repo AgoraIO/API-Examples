@@ -30,13 +30,6 @@ import io.agora.beautyapi.faceunity.BeautyStats
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * Stats helper
- *
- * @property statsDuration
- * @property onStatsChanged
- * @constructor Create empty Stats helper
- */
 class StatsHelper(
     private val statsDuration: Long,
     private val onStatsChanged: (BeautyStats) -> Unit
@@ -48,11 +41,6 @@ class StatsHelper(
     private var mCostMax = 0L
     private var mCostMin = Long.MAX_VALUE
 
-    /**
-     * Once
-     *
-     * @param cost
-     */
     fun once(cost: Long) {
         val curr = System.currentTimeMillis()
         if (mStartTime == 0L) {
@@ -80,10 +68,6 @@ class StatsHelper(
         mCostMin = min(mCostMin, cost)
     }
 
-    /**
-     * Reset
-     *
-     */
     fun reset() {
         mMainHandler.removeCallbacksAndMessages(null)
         mStartTime = 0

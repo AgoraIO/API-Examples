@@ -4,12 +4,10 @@ import android.graphics.Matrix;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 
+import io.agora.base.internal.video.EglBase;
 import io.agora.base.internal.video.GlRectDrawer;
 import io.agora.base.internal.video.RendererCommon;
 
-/**
- * The type Gl frame buffer.
- */
 public class GLFrameBuffer {
 
     private int mFramebufferId = -1;
@@ -21,20 +19,10 @@ public class GLFrameBuffer {
 
     private float[] mTexMatrix = GLUtils.IDENTITY_MATRIX;
 
-    /**
-     * Instantiates a new Gl frame buffer.
-     */
     public GLFrameBuffer() {
 
     }
 
-    /**
-     * Sets size.
-     *
-     * @param width  the width
-     * @param height the height
-     * @return the size
-     */
     public boolean setSize(int width, int height) {
         if (mWidth != width || mHeight != height) {
             mWidth = width;
@@ -45,66 +33,36 @@ public class GLFrameBuffer {
         return false;
     }
 
-    /**
-     * Sets rotation.
-     *
-     * @param rotation the rotation
-     */
     public void setRotation(int rotation) {
         if (mRotation != rotation) {
             mRotation = rotation;
         }
     }
 
-    /**
-     * Sets flip v.
-     *
-     * @param flipV the flip v
-     */
     public void setFlipV(boolean flipV) {
         if (isFlipV != flipV) {
             isFlipV = flipV;
         }
     }
 
-    /**
-     * Sets flip h.
-     *
-     * @param flipH the flip h
-     */
     public void setFlipH(boolean flipH) {
         if (isFlipH != flipH) {
             isFlipH = flipH;
         }
     }
 
-    /**
-     * Sets texture id.
-     *
-     * @param textureId the texture id
-     */
-    public void setTextureId(int textureId) {
-        if (mTextureId != textureId) {
+    public void setTextureId(int textureId){
+        if(mTextureId != textureId){
             deleteTexture();
             mTextureId = textureId;
             isTextureChanged = true;
         }
     }
 
-    /**
-     * Gets texture id.
-     *
-     * @return the texture id
-     */
-    public int getTextureId() {
+    public int getTextureId(){
         return mTextureId;
     }
 
-    /**
-     * Sets tex matrix.
-     *
-     * @param matrix the matrix
-     */
     public void setTexMatrix(float[] matrix) {
         if (matrix != null) {
             mTexMatrix = matrix;
@@ -113,43 +71,32 @@ public class GLFrameBuffer {
         }
     }
 
-    /**
-     * Reset transform.
-     */
-    public void resetTransform() {
+    public void resetTransform(){
         mTexMatrix = GLUtils.IDENTITY_MATRIX;
-        isFlipH = false;
-        isFlipV = false;
+        isFlipH = isFlipV = false;
         mRotation = 0;
     }
 
-    /**
-     * Process int.
-     *
-     * @param textureId   the texture id
-     * @param textureType the texture type
-     * @return the int
-     */
     public int process(int textureId, int textureType) {
         if (mWidth <= 0 && mHeight <= 0) {
             throw new RuntimeException("setSize firstly!");
         }
 
-        if (mTextureId == -1) {
+        if(mTextureId == -1){
             mTextureId = createTexture(mWidth, mHeight);
             bindFramebuffer(mTextureId);
             isTextureInner = true;
-        } else if (isTextureInner && isSizeChanged) {
+        }else if(isTextureInner && isSizeChanged){
             GLES20.glDeleteTextures(1, new int[]{mTextureId}, 0);
             mTextureId = createTexture(mWidth, mHeight);
             bindFramebuffer(mTextureId);
-        } else if (isTextureChanged) {
+        }else if(isTextureChanged){
             bindFramebuffer(mTextureId);
         }
         isTextureChanged = false;
         isSizeChanged = false;
 
-        if (drawer == null) {
+        if(drawer == null){
             drawer = new GlRectDrawer();
         }
 
@@ -160,31 +107,31 @@ public class GLFrameBuffer {
         transform.preTranslate(0.5f, 0.5f);
         transform.preRotate(mRotation, 0.f, 0.f);
         transform.preScale(
-                isFlipH ? -1.f : 1.f,
-                isFlipV ? -1.f : 1.f
+                isFlipH ? -1.f: 1.f,
+                isFlipV ? -1.f: 1.f
         );
         transform.preTranslate(-0.5f, -0.5f);
         float[] matrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(transform);
 
-        if (textureType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES) {
-            drawer.drawOes(textureId, 0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
-        } else {
-            drawer.drawRgb(textureId, 0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
+        synchronized (EglBase.lock){
+            if(textureType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES){
+                drawer.drawOes(textureId, 0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
+            }else{
+                drawer.drawRgb(textureId, 0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight);
+            }
         }
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_NONE);
         GLES20.glFinish();
 
         return mTextureId;
     }
 
-    /**
-     * Release.
-     */
-    public void release() {
+    public void release(){
         deleteTexture();
         deleteFramebuffer();
 
-        if (drawer != null) {
+        if(drawer != null){
             drawer.release();
             drawer = null;
         }
@@ -198,14 +145,7 @@ public class GLFrameBuffer {
         }
     }
 
-    /**
-     * Create texture int.
-     *
-     * @param width  the width
-     * @param height the height
-     * @return the int
-     */
-    public int createTexture(int width, int height) {
+    public int createTexture(int width, int height){
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures, 0);
         GLUtils.checkGlError("glGenTextures");
@@ -229,13 +169,6 @@ public class GLFrameBuffer {
         return textureId;
     }
 
-    /**
-     * Resize texture.
-     *
-     * @param textureId the texture id
-     * @param width     the width
-     * @param height    the height
-     */
     public void resizeTexture(int textureId, int width, int height) {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0,
@@ -252,7 +185,7 @@ public class GLFrameBuffer {
     }
 
     private void bindFramebuffer(int textureId) {
-        if (mFramebufferId == -1) {
+        if(mFramebufferId == -1){
             int[] framebuffers = new int[1];
             GLES20.glGenFramebuffers(1, framebuffers, 0);
             GLUtils.checkGlError("glGenFramebuffers");

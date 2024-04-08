@@ -32,32 +32,29 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 
 
-/**
- * The type Program texture oes.
- */
 public class ProgramTextureOES extends Program {
 
     // Simple vertex shader, used for all programs.
     private static final String VERTEX_SHADER =
-            "uniform mat4 uMVPMatrix;\n"
-                    + "attribute vec4 aPosition;\n"
-                    + "attribute vec2 aTextureCoord;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "void main() {\n"
-                    + "    gl_Position = uMVPMatrix * aPosition;\n"
-                    + "    vTextureCoord = aTextureCoord;\n"
-                    + "}\n";
+            "uniform mat4 uMVPMatrix;\n" +
+                    "attribute vec4 aPosition;\n" +
+                    "attribute vec2 aTextureCoord;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "void main() {\n" +
+                    "    gl_Position = uMVPMatrix * aPosition;\n" +
+                    "    vTextureCoord = aTextureCoord;\n" +
+                    "}\n";
 
     // Simple fragment shader for use with external 2D textures (e.g. what we get from
     // SurfaceTexture).
     private static final String FRAGMENT_SHADER_EXT =
-            "#extension GL_OES_EGL_image_external : require\n"
-                    + "precision mediump float;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "uniform samplerExternalOES sTexture;\n"
-                    + "void main() {\n"
-                    + "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n"
-                    + "}\n";
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "}\n";
 
     private int muMVPMatrixLoc;
     private int maPositionLoc;
@@ -86,7 +83,7 @@ public class ProgramTextureOES extends Program {
     }
 
     @Override
-    public void drawFrameOnScreen(int textureId, int width, int height, float[] mvpMatrix) {
+    public void drawFrameOnScreen(int textureId,int width, int height,  float[] mvpMatrix) {
         GlUtil.checkGlError("draw start");
 
         // Select the program.
@@ -159,6 +156,7 @@ public class ProgramTextureOES extends Program {
         GlUtil.checkGlError("glUniformMatrix4fv");
 
 
+
         // Enable the "aPosition" vertex attribute.
         GLES20.glEnableVertexAttribArray(maPositionLoc);
         GlUtil.checkGlError("glEnableVertexAttribArray");
@@ -194,28 +192,33 @@ public class ProgramTextureOES extends Program {
     }
 
 
-    /**
-     * {en}
+    /** {zh} 
+     * 读取渲染结果的buffer
+     * @param width 目标宽度
+     * @param height 目标高度
+     * @return 渲染结果的像素Buffer 格式RGBA
+     */
+    /** {en} 
      * Read the buffer
-     *
-     * @param width  target width
+     * @param width target width
      * @param height target height
      * @return pixel Buffer  format of the rendered result RGBA
      */
+
     @Override
     public ByteBuffer readBuffer(int textureId, int width, int height) {
-        if (textureId == GlUtil.NO_TEXTURE) {
+        if ( textureId == GlUtil.NO_TEXTURE) {
             return null;
         }
-        if (width * height == 0) {
-            return null;
+        if (width* height == 0){
+            return  null;
         }
 
-        ByteBuffer mCaptureBuffer = ByteBuffer.allocateDirect(width * height * 4);
+        ByteBuffer mCaptureBuffer = ByteBuffer.allocateDirect(width* height*4);
 
         mCaptureBuffer.position(0);
         int[] frameBuffer = new int[1];
-        GLES20.glGenFramebuffers(1, frameBuffer, 0);
+        GLES20.glGenFramebuffers(1,frameBuffer,0);
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
