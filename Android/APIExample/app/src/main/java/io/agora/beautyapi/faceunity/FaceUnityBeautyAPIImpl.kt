@@ -66,7 +66,7 @@ class FaceUnityBeautyAPIImpl : FaceUnityBeautyAPI, IVideoFrameObserver {
     private val reportId = "scenarioAPI"
     private val reportCategory = "beauty_android_$VERSION"
     private var beautyMode = 0 // 0: 自动根据buffer类型切换，1：固定使用OES纹理，2：固定使用i420，3: 单纹理模式
-    private var enableTextureAsync = true // 是否开启纹理+异步缓存处理，不支持在预览中实时切换。对于GPU性能好的手机可以减小美颜处理耗时，对于中端机开启后效果也不明显。
+    private var enableTextureAsync = true // 是否开启纹理+异步缓存处理。对于GPU性能好的手机可以减小美颜处理耗时，对于中端机开启后效果也不明显。
 
     private var textureBufferHelper: TextureBufferHelper? = null
     private var wrapTextureBufferHelper: TextureBufferHelper? = null
@@ -239,8 +239,7 @@ class FaceUnityBeautyAPIImpl : FaceUnityBeautyAPI, IVideoFrameObserver {
         LogUtils.i(TAG, "setBeautyPreset >> preset = $preset")
         config?.rtcEngine?.sendCustomReportMessage(reportId, reportCategory, "enable", "preset=$preset", 0)
 
-        val recommendFaceBeauty = conf.fuRenderKit.faceBeauty ?:
-            FaceBeauty(FUBundleData("graphics" + File.separator + "face_beautification.bundle"))
+        val recommendFaceBeauty = FaceBeauty(FUBundleData("graphics" + File.separator + "face_beautification.bundle"))
         if (preset == BeautyPreset.DEFAULT) {
             recommendFaceBeauty.filterName = FaceBeautyFilterEnum.FENNEN_1
             recommendFaceBeauty.filterIntensity = 0.7
@@ -569,7 +568,7 @@ class FaceUnityBeautyAPIImpl : FaceUnityBeautyAPI, IVideoFrameObserver {
     }
 
     private fun processBeautySingleTexture(videoFrame: VideoFrame): Int {
-        val texBufferHelper = wrapTextureBufferHelper ?: return -1
+        val texBufferHelper = textureBufferHelper ?: return -1
         val textureBuffer = videoFrame.buffer as? TextureBuffer ?: return -1
 
         when(textureBuffer.type){

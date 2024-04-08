@@ -92,9 +92,8 @@ enum class ErrorCode(val value: Int) {
     ERROR_HAS_INITIALIZED(102), // 已经Initialize成功后再次调用报错
     ERROR_HAS_RELEASED(103), // 已经调用release销毁后还调用其他API
     ERROR_PROCESS_NOT_CUSTOM(104), // 非Custom处理模式下调用onFrame接口从外部传入视频帧
-    ERROR_PROCESS_DISABLE(105), // 当调用enable(false)禁用美颜后调用onFrame接口返回
-    ERROR_VIEW_TYPE_ERROR(106), // 当调用setupLocalVideo时view类型错误时返回
-    ERROR_FRAME_SKIPPED(107), // 当处理帧忽略时在onFrame返回
+    ERROR_VIEW_TYPE_ERROR(105), // 当调用setupLocalVideo时view类型错误时返回
+    ERROR_FRAME_SKIPPED(106), // 当处理帧忽略时在onFrame返回
 }
 
 enum class BeautyPreset {

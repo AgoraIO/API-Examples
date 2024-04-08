@@ -60,7 +60,6 @@ object FaceUnityBeautySDK {
                 Log.e(TAG, "FURenderManager onFail -- code=$errCode, msg=$errMsg")
             }
         })
-        beautyConfig.resume()
         return true
     }
 
@@ -92,8 +91,17 @@ object FaceUnityBeautySDK {
         private val fuRenderKit = FURenderKit.getInstance()
 
         // 美颜配置
-        private val faceBeauty =
-            FaceBeauty(FUBundleData("graphics" + File.separator + "face_beautification.bundle"))
+        private val faceBeauty: FaceBeauty
+            get() {
+                var faceBeauty = fuRenderKit.faceBeauty
+                if (faceBeauty == null) {
+                    faceBeauty =
+                        FaceBeauty(FUBundleData("graphics" + File.separator + "face_beautification.bundle"))
+                    fuRenderKit.faceBeauty = faceBeauty
+                }
+                return faceBeauty
+            }
+
 
         // 资源基础路径
         private val resourceBase = "beauty_faceunity"
@@ -285,7 +293,7 @@ object FaceUnityBeautySDK {
             }
 
 
-        internal fun reset() {
+        fun reset() {
             smooth = 0.65f
             whiten = 0.65f
             thinFace = 0.3f
@@ -307,11 +315,6 @@ object FaceUnityBeautySDK {
             sticker = null
         }
 
-        internal fun resume() {
-            runOnBeautyThread {
-                fuRenderKit.faceBeauty = faceBeauty
-            }
-        }
     }
 
     data class MakeUpItem(
