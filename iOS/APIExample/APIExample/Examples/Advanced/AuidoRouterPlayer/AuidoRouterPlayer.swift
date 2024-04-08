@@ -123,7 +123,6 @@ class AuidoRouterPlayerEntry: UIViewController {
 
 class AuidoRouterPlayerMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var speakerSwitch: UISwitch!
     @IBOutlet weak var container: AGEVideoContainer!
@@ -161,8 +160,7 @@ class AuidoRouterPlayerMain: BaseViewController {
         super.viewDidLoad()
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
+        container.layoutStream(views: [localVideo])
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -216,6 +214,8 @@ class AuidoRouterPlayerMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.autoSubscribeVideo = false
+        option.autoSubscribeAudio = false
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -318,15 +318,6 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// callback when a remote user is leaving the channel,
@@ -336,16 +327,6 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
-        // to unlink your view from sdk, so that your view reference will be released
-        // note the video will stay at its last frame, to completely remove it
-        // you will need to remove the EAGL sublayer from your binded view
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = nil
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// Reports the statistics of the current call. 
@@ -359,17 +340,5 @@ extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         localVideo.statsInfo?.updateLocalAudioStats(stats)
-    }
-    
-    /// Reports the statistics of the video stream from each remote user/host.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
-        remoteVideo.statsInfo?.updateVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the audio stream from each remote user/host.
-    /// @param stats stats struct for current call statistics
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        remoteVideo.statsInfo?.updateAudioStats(stats)
     }
 }
