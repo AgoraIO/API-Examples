@@ -262,9 +262,6 @@ object FaceUnityBeautySDK {
         // 贴纸
         var sticker: String? = null
             set(value) {
-                if(field == value){
-                    return
-                }
                 field = value
                 runOnBeautyThread {
                     fuRenderKit.propContainer.removeAllProp()

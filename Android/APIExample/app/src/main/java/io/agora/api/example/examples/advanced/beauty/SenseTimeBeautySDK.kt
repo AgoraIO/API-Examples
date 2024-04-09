@@ -418,7 +418,6 @@ object SenseTimeBeautySDK {
         // 美妆
         var makeUp: MakeUpItem? = null
             set(value) {
-                val shouldReset = field?.path != value?.path
                 field = value
                 runOnBeautyThread {
                     if (value == null) {
@@ -427,14 +426,12 @@ object SenseTimeBeautySDK {
                             null
                         )
                     } else {
-                        if(shouldReset){
-                            val assets = value.context.assets
-                            _mobileEffectNative?.setBeautyFromAssetsFile(
-                                STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL,
-                                "$resourcePath/${value.path}",
-                                assets
-                            )
-                        }
+                        val assets = value.context.assets
+                        _mobileEffectNative?.setBeautyFromAssetsFile(
+                            STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL,
+                            "$resourcePath/${value.path}",
+                            assets
+                        )
                         _mobileEffectNative?.setBeautyStrength(
                             STEffectBeautyType.EFFECT_BEAUTY_MAKEUP_ALL,
                             value.strength
