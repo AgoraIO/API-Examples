@@ -66,8 +66,10 @@ echo zip_name: %zip_name%
 
 dir
 
-REM curl --silent %sdk_url% ./
-python3 %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
+curl --silent %sdk_url% ./
+
+C:\Users\jenkins\.pyenv\pyenv-win\versions\3.8.10\python.exe -m pip install --upgrade pip
+python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
 
 dir
