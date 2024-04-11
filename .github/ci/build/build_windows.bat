@@ -66,11 +66,9 @@ echo zip_name: %zip_name%
 
 dir
 
-echo off
 REM curl --silent %sdk_url% ./
-python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
+python3 %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
-echo on
 
 dir
 
