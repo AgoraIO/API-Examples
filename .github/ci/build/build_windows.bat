@@ -68,11 +68,10 @@ dir
 
 echo off
 curl --silent %sdk_url% ./
+REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
+7z x ./%zip_name% -y
 echo on
 
-python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
-dir
-7z x ./%zip_name% -y
 dir
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
 del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
