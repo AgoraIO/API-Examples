@@ -66,14 +66,14 @@ echo zip_name: %zip_name%
 
 dir
 
+echo off
 curl --silent %sdk_url% ./
+echo on
 
-C:\Users\jenkins\.pyenv\pyenv-win\versions\3.8.10\python.exe -m pip install --upgrade pip
 python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
-7z x ./%zip_name% -y
-
 dir
-
+7z x ./%zip_name% -y
+dir
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
 del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
 del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
