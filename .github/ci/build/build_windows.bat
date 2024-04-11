@@ -66,11 +66,9 @@ echo zip_name: %zip_name%
 
 dir
 
-echo off
-curl --silent %sdk_url% ./
+curl %sdk_url% -o %zip_name%
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
-echo on
 
 dir
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
