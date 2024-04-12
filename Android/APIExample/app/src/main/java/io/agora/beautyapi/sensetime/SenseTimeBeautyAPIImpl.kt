@@ -308,7 +308,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         if (textureBufferHelper?.handler?.looper?.thread == Thread.currentThread()) {
             run.invoke()
         } else if (textureBufferHelper != null) {
-            textureBufferHelper?.handler?.post(run)
+            textureBufferHelper?.invoke(run)
         } else {
             pendingProcessRunList.add(run)
         }
@@ -350,7 +350,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         workerThreadExecutor.shutdown()
         textureBufferHelper?.let {
             textureBufferHelper = null
-            it.handler.removeCallbacksAndMessages(null)
+            // it.handler.removeCallbacksAndMessages(null)
             it.invoke {
                 beautyProcessor?.release()
                 null

@@ -374,4 +374,5 @@
     <string name="camera_focal_wide_angle">Wide Angle</string>
     <string name="camera_focal_urltra_wide">Urltra Wide</string>
     <string name="camera_focal_telephoto">Telephoto</string>
+    <string name="enter_pip">Enter picture in picture mode</string>
 </resources>

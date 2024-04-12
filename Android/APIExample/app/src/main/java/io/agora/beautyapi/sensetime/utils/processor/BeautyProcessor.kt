@@ -45,9 +45,17 @@ class BeautyProcessor : IBeautyProcessor {
     private var mInputHeight = 0
     private var mInputOrientation = 0
     private var isLastFrontCamera = false
+    private var skipFrame = 0
+    private var processMode = ProcessMode.DOUBLE_INPUT
 
     @Volatile
     private var isReleased = false
+
+    enum class ProcessMode {
+        DOUBLE_INPUT,
+        SINGLE_BYTES_INPUT,
+        SINGLE_TEXTURE_INPUT
+    }
 
     override fun initialize(
         effectNative: STMobileEffectNative,
@@ -106,13 +114,31 @@ class BeautyProcessor : IBeautyProcessor {
             return null
         }
         return if (input.bytes != null && input.textureId != null) {
+            if(processMode != ProcessMode.DOUBLE_INPUT){
+                processMode = ProcessMode.DOUBLE_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processDoubleInput(input)
         } else if (input.bytes != null) {
+            if(processMode != ProcessMode.SINGLE_BYTES_INPUT){
+                processMode = ProcessMode.SINGLE_BYTES_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processSingleBytesInput(input)
         } else if (input.textureId != null && Build.VERSION.SDK_INT >= 26) {
+            if(processMode != ProcessMode.SINGLE_TEXTURE_INPUT){
+                processMode = ProcessMode.SINGLE_TEXTURE_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processSingleTextureInput(input)
         } else {
-            null
+            throw RuntimeException("Single texture input is not supported when SDK_INT < 26!");
         }
     }
 
@@ -252,6 +278,9 @@ class BeautyProcessor : IBeautyProcessor {
             return null
         }
         if (mInputWidth != input.width || mInputHeight != input.height || mInputOrientation != input.cameraOrientation || isLastFrontCamera != input.isFrontCamera) {
+            if(mInputWidth > 0 || mInputHeight > 0){
+                skipFrame = 3
+            }
             mInputWidth = input.width
             mInputHeight = input.height
             mInputOrientation = input.cameraOrientation
@@ -259,6 +288,8 @@ class BeautyProcessor : IBeautyProcessor {
             reset()
             return null
         }
+
+
 
         val diff = glTextureBufferQueue.size() - mFaceDetector.size()
         if(diff < input.diffBetweenBytesAndTexture){
@@ -329,6 +360,11 @@ class BeautyProcessor : IBeautyProcessor {
                 input.cameraOrientation
             )
         )
+
+        if(skipFrame > 0){
+            skipFrame --
+            return null
+        }
 
         return out
     }
@@ -404,16 +440,23 @@ class BeautyProcessor : IBeautyProcessor {
             STEffectParam.EFFECT_PARAM_USE_INPUT_TIMESTAMP,
             1.0f
         )
+        if (isReleased) {
+            return -1
+        }
         mSTMobileEffectNative.render(
             sTEffectRenderInParam,
             stEffectRenderOutParam,
             false
         )
 
+
         if (event == mCustomEvent) {
             mCustomEvent = 0
         }
 
+        if (isReleased) {
+            return -1
+        }
         glFrameBuffer.setSize(width, height)
         glFrameBuffer.resetTransform()
         glFrameBuffer.setFlipV(true)

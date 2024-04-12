@@ -173,7 +173,7 @@ class TextureProcessHelper(
             future = futureQueue.poll()
         }
         glTextureBufferQueueIn.reset()
-        glFrameBuffer.release()
+//        glFrameBuffer.release()
         executeSync {
             glTextureBufferQueueOut.reset()
         }
