@@ -13,4 +13,4 @@ echo $script_path
 today=$(date +"%Y-%m-%d")
 project_name=$(echo $script_path | rev | cut -d'/' -f1 | rev)
 echo $project_name
-zip -r ${project_name}_${today}.zip .
+zip -r $1+'-'${project_name}_${today}.zip .
