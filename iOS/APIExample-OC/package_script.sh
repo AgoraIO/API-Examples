@@ -11,6 +11,4 @@ fi
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 echo $script_path
 today=$(date +"%Y-%m-%d")
-project_name=$(echo $script_path | rev | cut -d'/' -f1 | rev)
-echo $project_name
-zip -r ${project_name}_${today}.zip .
+zip -r ${1}_OC_${today}.zip .
