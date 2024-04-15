@@ -36,11 +36,13 @@ fun ExampleItem(
                     text = example.name,
                     style = MaterialTheme.typography.titleSmall
                 )
-                Spacer(modifier = Modifier.height(ExampleItemTextPadding))
-                Text(
-                    text = example.description,
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                if(example.description.isNotEmpty()){
+                    Spacer(modifier = Modifier.height(ExampleItemTextPadding))
+                    Text(
+                        text = example.description,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             Spacer(modifier = Modifier.width(ExampleItemPadding))
             Icon(

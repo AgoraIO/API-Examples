@@ -1,52 +1,65 @@
 package io.agora.api.example.compose.ui.home
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.model.Component
-import io.agora.api.example.compose.ui.common.CatalogScaffold
-import io.agora.api.example.compose.ui.component.ComponentItem
+import io.agora.api.example.compose.model.Example
+import io.agora.api.example.compose.ui.common.APIExampleScaffold
+import io.agora.api.example.compose.ui.example.ExampleItem
 
 @Composable
 fun Home(
     components: List<Component>,
-    onComponentClick: (component: Component) -> Unit,
+    onExampleClick: (example: Example, component: Component) -> Unit,
     onSettingClick: () -> Unit,
 ) {
     val ltr = LocalLayoutDirection.current
-    CatalogScaffold(
+    APIExampleScaffold(
         topBarTitle = "APIExample",
         showSettingIcon = true,
         onSettingClick = onSettingClick,
     ) { paddingValues ->
-        LazyVerticalGrid(
+        LazyColumn(
             modifier = Modifier.consumeWindowInsets(paddingValues),
-            columns = GridCells.Adaptive(HomeCellMinSize),
-            content = {
-                items(components) { component ->
-                    ComponentItem(
-                        component = component,
-                        onClick = onComponentClick
-                    )
-                }
-            },
             contentPadding = PaddingValues(
-                start = paddingValues.calculateStartPadding(ltr) + HomePadding,
-                top = paddingValues.calculateTopPadding() + HomePadding,
-                end = paddingValues.calculateEndPadding(ltr) + HomePadding,
-                bottom = paddingValues.calculateBottomPadding() + HomePadding
+                start = paddingValues.calculateStartPadding(ltr) + ComponentPadding,
+                top = paddingValues.calculateTopPadding() + ComponentPadding,
+                end = paddingValues.calculateEndPadding(ltr) + ComponentPadding,
+                bottom = paddingValues.calculateBottomPadding() + ComponentPadding
             )
-        )
+        ) {
+            components.forEach { component ->
+                item {
+                    Text(
+                        text = component.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Spacer(modifier = Modifier.height(ComponentPadding))
+                }
+                items(component.examples) { example ->
+                    ExampleItem(
+                        example = example,
+                        onClick = { onExampleClick(example, component) }
+                    )
+                    Spacer(modifier = Modifier.height(ExampleItemPadding))
+                }
+            }
+
+        }
     }
 }
 
-private val HomeCellMinSize = 180.dp
-private val HomePadding = 12.dp
+private val ComponentPadding = 16.dp
+private val ExampleItemPadding = 8.dp

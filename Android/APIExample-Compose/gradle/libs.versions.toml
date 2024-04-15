@@ -11,9 +11,6 @@ activityCompose = "1.8.2"
 composeBom = "2023.08.00"
 materialIconsExtended = "1.6.0"
 navigationCompose = "2.7.7"
-material3Android = "1.2.1"
-datastoreCore = "1.0.0"
-datastorePreferencesCore = "1.0.0"
 agoraSdk = "4.3.0"
 
 [libraries]
@@ -37,9 +34,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
-androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
-androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

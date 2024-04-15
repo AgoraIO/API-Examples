@@ -9,9 +9,9 @@ import androidx.navigation.navArgument
 import io.agora.api.example.compose.model.Component
 import io.agora.api.example.compose.model.Components
 import io.agora.api.example.compose.model.Example
-import io.agora.api.example.compose.ui.component.Component
 import io.agora.api.example.compose.ui.example.Example
 import io.agora.api.example.compose.ui.home.Home
+import io.agora.api.example.compose.ui.settings.Settings
 
 @Composable
 fun NavGraph() {
@@ -23,25 +23,14 @@ fun NavGraph() {
         composable(HomeRoute) {
             Home(
                 components = Components,
-                onComponentClick = { component -> navController.navigate(component.route()) },
+                onExampleClick = { example, component -> navController.navigate(example.route(component)) },
+                onSettingClick = { navController.navigate(SettingsRoute) }
             )
         }
-        composable(
-            route = "$ComponentRoute/" +
-                    "{$ComponentIdArgName}",
-            arguments = listOf(
-                navArgument(ComponentIdArgName) { type = NavType.IntType }
-            )
-        ) { navBackStackEntry ->
-            val arguments = requireNotNull(navBackStackEntry.arguments) { "No arguments" }
-            val componentId = arguments.getInt(ComponentIdArgName)
-            val component = Components.first { component -> component.id == componentId }
-            val componentRoute = component.route()
-            Component(
-                component = component,
-                onExampleClick = { example -> navController.navigate(example.route(component)) },
-                onBackClick = { navController.popBackStack() },
-            )
+        composable(SettingsRoute) {
+            Settings {
+                navController.popBackStack()
+            }
         }
         composable(
             route = "$ExampleRoute/" +
@@ -58,7 +47,6 @@ fun NavGraph() {
             val component = Components.first { component -> component.id == componentId }
             val example = component.examples[exampleIndex]
             Example(
-                component = component,
                 example = example,
                 onBackClick = { navController.popBackStack() },
             )
@@ -67,13 +55,11 @@ fun NavGraph() {
 
 }
 
-private fun Component.route() = "$ComponentRoute/$id"
-
 private fun Example.route(component: Component) =
     "$ExampleRoute/${component.id}/${component.examples.indexOf(this)}"
 
 private const val HomeRoute = "home"
-private const val ComponentRoute = "component"
+private const val SettingsRoute = "settings"
 private const val ExampleRoute = "example"
 private const val ComponentIdArgName = "componentId"
 private const val ExampleIndexArgName = "exampleIndex"
