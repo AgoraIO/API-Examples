@@ -10,7 +10,8 @@ fi
 
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 echo $script_path
-today=$(date +"%Y-%m-%d")
+current_datetime=$(date +'%Y-%m-%d_%H-%M-%S')  
+echo $current_datetime
 project_name=$(echo $script_path | rev | cut -d'/' -f1 | rev)
 echo $project_name
-zip -r ${1}_${project_name}_${today}.zip .
+zip -r ${1}_${project_name}_${current_datetime}.zip .
