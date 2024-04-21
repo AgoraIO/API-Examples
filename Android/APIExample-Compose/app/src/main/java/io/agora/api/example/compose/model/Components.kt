@@ -12,6 +12,13 @@ val basicComponent = Component(
     examples = BasicExampleList
 )
 
+val advanceComponent = Component(
+    1,
+    "Advance",
+    examples = AdvanceExampleList
+)
+
 val Components = listOf(
-    basicComponent
+    basicComponent,
+    advanceComponent
 )

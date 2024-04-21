@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import io.agora.api.example.compose.model.Example
 import io.agora.api.example.compose.ui.common.APIExampleScaffold
 
@@ -18,7 +19,7 @@ fun Example(
     onBackClick: () -> Unit,
 ) {
     APIExampleScaffold(
-        topBarTitle = example.name,
+        topBarTitle = stringResource(id = example.name),
         showBackNavigationIcon = true,
         onBackClick = onBackClick,
     ) { paddingValues ->

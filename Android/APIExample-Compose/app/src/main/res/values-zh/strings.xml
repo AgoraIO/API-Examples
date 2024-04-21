@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">APIExample-Compose</string>
+    <string name="example_join_channel_video">视频互动直播</string>
+    <string name="example_join_channel_audio">音频互动直播</string>
+    <string name="example_live_streaming">RTC实时直播</string>
+    <string name="example_join_channel_video_token">视频互动直播（Token验证）</string>
+</resources>

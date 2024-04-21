@@ -27,7 +27,7 @@ fun Home(
 ) {
     val ltr = LocalLayoutDirection.current
     APIExampleScaffold(
-        topBarTitle = "APIExample",
+        topBarTitle = "Agora API Example",
         showSettingIcon = true,
         onSettingClick = onSettingClick,
     ) { paddingValues ->

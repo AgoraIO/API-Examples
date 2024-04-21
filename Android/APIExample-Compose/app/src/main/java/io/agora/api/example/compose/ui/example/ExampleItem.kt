@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.model.Example
 
@@ -33,7 +34,7 @@ fun ExampleItem(
         Row(modifier = Modifier.padding(ExampleItemPadding)) {
             Column(modifier = Modifier.weight(1f, fill = true)) {
                 Text(
-                    text = example.name,
+                    text = stringResource(id = example.name),
                     style = MaterialTheme.typography.titleSmall
                 )
                 if(example.description.isNotEmpty()){

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -18,8 +20,19 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+        val AGORA_APP_ID = properties.getProperty("AGORA_APP_ID", "")
+        if(AGORA_APP_ID == ""){
+            throw GradleException("请在项目根目录下local.properties文件里正确配置：AGORA_APP_ID=<您的声网AppId>")
+        }
+        buildConfigField("String", "AGORA_APP_ID", "\"$AGORA_APP_ID\"")
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
