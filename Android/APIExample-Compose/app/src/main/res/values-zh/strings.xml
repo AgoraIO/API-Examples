@@ -4,4 +4,5 @@
     <string name="example_join_channel_audio">音频互动直播</string>
     <string name="example_live_streaming">RTC实时直播</string>
     <string name="example_join_channel_video_token">视频互动直播（Token验证）</string>
+    <string name="example_rtmp_streaming">旁路推流CDN</string>
 </resources>

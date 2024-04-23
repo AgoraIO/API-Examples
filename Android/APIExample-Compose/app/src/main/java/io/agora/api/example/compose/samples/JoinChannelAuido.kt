@@ -67,8 +67,8 @@ fun JoinChannelAudio() {
                 override fun onLeaveChannel(stats: RtcStats?) {
                     super.onLeaveChannel(stats)
                     isJoined = false
-                    videoIdList = videoIdList - localUid
-                    statsMap.remove(localUid)
+                    videoIdList = emptyList()
+                    statsMap.clear()
                 }
 
                 override fun onUserJoined(uid: Int, elapsed: Int) {
@@ -193,7 +193,7 @@ fun JoinChannelAudioView(
                         "Bluetooth" to Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP
                     ),
                     selected = 0
-                ) { option ->
+                ) { _, option ->
                     rtcEngine?.setRouteInCommunicationMode(option.second)
                 }
             }
@@ -232,8 +232,8 @@ fun JoinChannelAudioView(
                         "Meeting" to Constants.AUDIO_SCENARIO_MEETING,
                     ),
                     selected = 0
-                ) {
-                    rtcEngine?.setAudioScenario(it.second)
+                ) { _, option ->
+                    rtcEngine?.setAudioScenario(option.second)
                 }
             }
             item {
@@ -248,8 +248,8 @@ fun JoinChannelAudioView(
                         "Music High Quality Stereo" to Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO,
                     ),
                     selected = 0
-                ) {
-                    rtcEngine?.setAudioScenario(it.second)
+                ) { _, option ->
+                    rtcEngine?.setAudioScenario(option.second)
                 }
             }
             item {
@@ -263,8 +263,8 @@ fun JoinChannelAudioView(
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
                     )
-                ) {
-                    rtcEngine?.setChannelProfile(it.second)
+                ) { _, option ->
+                    rtcEngine?.setChannelProfile(option.second)
                 }
             }
         }

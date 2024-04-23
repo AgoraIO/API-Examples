@@ -7,6 +7,7 @@ import io.agora.api.example.compose.samples.JoinChannelAudio
 import io.agora.api.example.compose.samples.JoinChannelVideo
 import io.agora.api.example.compose.samples.JoinChannelVideoToken
 import io.agora.api.example.compose.samples.LiveStreaming
+import io.agora.api.example.compose.samples.RTMPStreaming
 
 data class Example(
     @StringRes val name: Int,
@@ -22,4 +23,5 @@ val BasicExampleList = listOf(
 
 val AdvanceExampleList = listOf(
     Example(R.string.example_live_streaming) { LiveStreaming() },
+    Example(R.string.example_rtmp_streaming) { RTMPStreaming() },
 )

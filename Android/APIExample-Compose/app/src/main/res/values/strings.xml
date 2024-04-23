@@ -4,4 +4,5 @@
     <string name="example_join_channel_audio">Join Audio Channel</string>
     <string name="example_live_streaming">Live Streaming</string>
     <string name="example_join_channel_video_token">Join Video Channel (With Token)</string>
+    <string name="example_rtmp_streaming">旁路推流CDN</string>
 </resources>

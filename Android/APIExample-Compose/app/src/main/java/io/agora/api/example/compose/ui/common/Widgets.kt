@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,8 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -46,6 +45,7 @@ import io.agora.rtc2.IRtcEngineEventHandler
 
 @Composable
 fun ChannelNameInput(
+    modifier: Modifier = Modifier,
     channelName: String,
     isJoined: Boolean,
     onJoinClick: (String) -> Unit,
@@ -53,6 +53,7 @@ fun ChannelNameInput(
 ) {
     var text by rememberSaveable { mutableStateOf(channelName) }
     InputRaw(
+        modifier = modifier,
         text = text,
         btnText = if (isJoined) "Leave" else "Join",
         label = "Channel Name",
@@ -69,7 +70,7 @@ fun VideoGrid(
     raw: Int = 2,
     column: Int = 2,
     videoIdList: List<Int>,
-    setupVideo: (View, Int) -> Unit,
+    setupVideo: (View, Int, Boolean) -> Unit,
     statsMap: Map<Int, VideoStatsInfo> = emptyMap()
 ) {
     Column(modifier) {
@@ -79,7 +80,12 @@ fun VideoGrid(
                     Box(modifier = Modifier.weight(1.0f)) {
                         val index = rawIndex * column + columnIndex
                         videoIdList.getOrNull(index)?.let { id ->
-                            VideoCell(id, index == 0, setupVideo, statsMap[id])
+                            VideoCell(
+                                id = id,
+                                isLocal = index == 0,
+                                setupVideo = setupVideo,
+                                statsInfo = statsMap[id]
+                            )
                         }
                     }
                 }
@@ -90,66 +96,107 @@ fun VideoGrid(
 
 @Composable
 fun VideoCell(
+    modifier: Modifier = Modifier,
     id: Int,
     isLocal: Boolean,
-    setupVideo: (View, Int) -> Unit,
+    setupVideo: (renderView: View, id: Int, isFirstSetup: Boolean) -> Unit,
     statsInfo: VideoStatsInfo? = null
 ) {
-    Box {
-        AndroidView(
-            factory = { context ->
-                Log.d(TAG, "VideoCell: create render view.")
-                TextureView(context).apply {
-                    setupVideo(this, id)
-                }
-            })
+    Box(modifier) {
+        if (id != 0) {
+            AndroidView(
+                factory = { context ->
+                    Log.d(TAG, "VideoCell: create render view.")
+                    TextureView(context).apply {
+                        tag = id
+                        setupVideo(this, id, true)
+                    }
+                },
+                update = { view ->
+                    if (view.tag != id) {
+                        Log.d(TAG, "VideoCell: update render view.")
+                        view.tag = id
+                        setupVideo(view, id, false)
+                    }
+                })
+        }
 
         if (statsInfo != null) {
             var text = ""
             if (isLocal) {
                 statsInfo.localVideoStats?.let { text += "${it.encodedFrameWidth}x${it.encodedFrameHeight},${it.encoderOutputFrameRate}fps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.rtcStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "LM Delay: ${it.lastmileDelay}ms"
                 }
-                statsInfo.rtcStats?.let { text += "LM Delay: ${it.lastmileDelay}ms" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.localVideoStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "VSend: ${it.sentBitrate}kbps"
                 }
-                statsInfo.localVideoStats?.let { text += "VSend: ${it.sentBitrate}kbps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.localAudioStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "ASend: ${it.sentBitrate}kbps"
                 }
-                statsInfo.localAudioStats?.let { text += "ASend: ${it.sentBitrate}kbps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.rtcStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "CPU: ${it.cpuAppUsage}%/${it.cpuTotalUsage}%"
                 }
-                statsInfo.rtcStats?.let { text += "CPU: ${it.cpuAppUsage}%/${it.cpuTotalUsage}%" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.rtcStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "VSend Loss: ${it.txPacketLossRate}%"
                 }
-                statsInfo.rtcStats?.let { text += "VSend Loss: ${it.txPacketLossRate}%" }
             } else {
                 statsInfo.remoteVideoStats?.let { text += "${it.width}x${it.height},${it.decoderOutputFrameRate}fps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.remoteVideoStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "VRecv: ${it.receivedBitrate}kbps"
                 }
-                statsInfo.remoteVideoStats?.let { text += "VRecv: ${it.receivedBitrate}kbps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.remoteAudioStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "ARecv: ${it.receivedBitrate}kbps"
                 }
-                statsInfo.remoteAudioStats?.let { text += "ARecv: ${it.receivedBitrate}kbps" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.remoteVideoStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "VRecv Loss: ${it.packetLossRate}%"
                 }
-                statsInfo.remoteVideoStats?.let { text += "VRecv Loss: ${it.packetLossRate}%" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.remoteAudioStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "ARecv Loss: ${it.audioLossRate}%"
                 }
-                statsInfo.remoteAudioStats?.let { text += "ARecv Loss: ${it.audioLossRate}%" }
-                if (text.isNotEmpty()) {
-                    text += "\n"
+
+                statsInfo.remoteAudioStats?.let {
+                    if (text.isNotEmpty()) {
+                        text += "\n"
+                    }
+                    text += "AQuality: ${it.quality}"
                 }
-                statsInfo.remoteAudioStats?.let { text += "AQuality: ${it.quality}" }
             }
             Text(text = text, color = Color.White)
         }
@@ -258,7 +305,7 @@ fun <T> DropdownMenuRaw(
     options: List<Pair<String, T>>,
     selected: Int = 0,
     enable: Boolean = true,
-    onSelected: (Pair<String, T>) -> Unit = {}
+    onSelected: (Int, Pair<String, T>) -> Unit = { _, _ -> }
 ) {
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(options.getOrNull(selected)?.first ?: "") }
@@ -304,7 +351,7 @@ fun <T> DropdownMenuRaw(
                         onClick = {
                             text = option.first
                             expanded = false
-                            onSelected(option)
+                            onSelected(options.indexOf(option), option)
                         },
                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                     )
@@ -322,7 +369,7 @@ fun SwitchRaw(
     enable: Boolean = true,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
-    var swChecked by remember { mutableStateOf(checked) }
+    var swChecked by rememberSaveable { mutableStateOf(checked) }
 
     Row(
         modifier = Modifier.clickable(enabled = enable) {
@@ -382,34 +429,39 @@ fun SliderRaw(
 
 @Composable
 fun InputRaw(
+    modifier: Modifier = Modifier,
     text: String,
     btnText: String,
     label: String = "",
     enable: Boolean = true,
+    editable: Boolean = true,
     onBtnClick: (String) -> Unit = {}
 ) {
     var rText by rememberSaveable { mutableStateOf(text) }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextField(
-            modifier = Modifier.weight(1.0f),
+            modifier = Modifier
+                .weight(1.0f)
+                .padding(0.dp),
             value = rText,
-            enabled = enable,
+            enabled = enable && editable,
             onValueChange = { rText = it },
             label = { Text(label) },
             singleLine = true,
+            shape = RectangleShape,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
-                errorContainerColor = Color.Transparent
+                errorContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
             )
         )
         Button(
-            modifier = Modifier.size(90.dp, Dp.Unspecified),
             enabled = enable,
             onClick = {
                 onBtnClick(rText)
@@ -417,6 +469,48 @@ fun InputRaw(
         ) {
             Text(btnText)
         }
+    }
+}
+
+@Composable
+fun Switching1v1VideoView(
+    modifier: Modifier = Modifier,
+    localUid: Int,
+    remoteUid: Int,
+    localStats: VideoStatsInfo,
+    remoteStats: VideoStatsInfo,
+    switchable: Boolean = true,
+    localLarge: Boolean = true,
+    onSwitch: () -> Unit = {},
+    localRender: (View, Int, Boolean) -> Unit,
+    remoteRender: (View, Int, Boolean) -> Unit,
+) {
+    Box(
+        modifier = modifier
+    ) {
+        VideoCell(
+            modifier = Modifier
+                .fillMaxSize(),
+            id = if (localLarge) localUid else remoteUid,
+            isLocal = localLarge,
+            setupVideo = if (localLarge) localRender else remoteRender,
+            statsInfo = if (localLarge) localStats else remoteStats
+        )
+        VideoCell(
+            modifier = Modifier
+                .fillMaxSize(0.5f)
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .clickable {
+                    if (switchable) {
+                        onSwitch()
+                    }
+                },
+            id = if (!localLarge) localUid else remoteUid,
+            isLocal = !localLarge,
+            setupVideo = if (!localLarge) localRender else remoteRender,
+            statsInfo = if (!localLarge) localStats else remoteStats
+        )
     }
 }
 

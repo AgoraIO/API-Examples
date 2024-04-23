@@ -68,8 +68,8 @@ fun JoinChannelVideo() {
                 override fun onLeaveChannel(stats: RtcStats?) {
                     super.onLeaveChannel(stats)
                     isJoined = false
-                    videoIdList = videoIdList - localUid
-                    statsMap.remove(localUid)
+                    videoIdList = emptyList()
+                    statsMap.clear()
                 }
 
                 override fun onUserJoined(uid: Int, elapsed: Int) {
@@ -178,7 +178,7 @@ fun JoinChannelVideo() {
         },
         videoIdList = videoIdList,
         statsMap = statsMap.toMap(),
-        setupVideo = { view, id ->
+        setupVideo = { view, id, _ ->
             val canvas = VideoCanvas(view, Constants.RENDER_MODE_HIDDEN, id)
             if (id == localUid) {
                 rtcEngine.setupLocalVideo(canvas)
@@ -198,7 +198,7 @@ fun JoinChannelVideoPreview() {
         onJoinClick = {},
         onLeaveClick = {},
         videoIdList = listOf(0, 1, 2, 3),
-        setupVideo = { _, _ -> }
+        setupVideo = { _, _, _ -> }
     )
 }
 
@@ -209,7 +209,7 @@ fun JoinChannelVideoView(
     onJoinClick: (String) -> Unit,
     onLeaveClick: () -> Unit,
     videoIdList: List<Int>,
-    setupVideo: (View, Int) -> Unit,
+    setupVideo: (View, Int, Boolean) -> Unit,
     statsMap : Map<Int, VideoStatsInfo> = emptyMap()
 ) {
     Box {

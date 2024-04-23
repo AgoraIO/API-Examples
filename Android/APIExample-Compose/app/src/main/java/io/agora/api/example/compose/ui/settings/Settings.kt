@@ -73,7 +73,7 @@ fun Settings(onBackClick: () -> Unit) {
                         it.toText() to it
                     },
                     selected = dimensions.indexOf(SettingPreferences.getVideoDimensions()),
-                ) { option ->
+                ) { _, option ->
                     SettingPreferences.setVideoDimensions(option.second)
                 }
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -91,7 +91,7 @@ fun Settings(onBackClick: () -> Unit) {
                     title = "FrameRate",
                     options = frameRates.map { it.toText()  to it},
                     selected = frameRates.indexOf(SettingPreferences.getVideoFrameRate()),
-                ) { option ->
+                ) { _, option ->
                     SettingPreferences.setVideoFrameRate(option.second)
                 }
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -105,7 +105,7 @@ fun Settings(onBackClick: () -> Unit) {
                     title = "Orientation",
                     options = orientationMode.map { it.toText() to it},
                     selected = orientationMode.indexOf(SettingPreferences.getOrientationMode()),
-                ) { option ->
+                ) { _, option ->
                     SettingPreferences.setOrientationMode(option.second)
                 }
 
