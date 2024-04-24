@@ -8,12 +8,20 @@
 import AgoraRtcKit
 import SwiftUI
 
-class JoinChannelAudioRTC: NSObject, ObservableObject {
+let EFFECT_ID: Int32 = 1
+class AudioMixingRTC: NSObject, ObservableObject {
     private var agoraKit: AgoraRtcEngineKit!
     private var isJoined: Bool = false
     
     private var localView: VideoUIView?
     private var remoteView: VideoUIView?
+    private var timer: Timer?
+    
+    @Published var audioMixingPlaybackVolumeSlider: Double = 50
+    @Published var audioMixingPublishVolumeSlider: Double = 50
+    @Published var audioEffectVolumeSlider: Double = 50
+    @Published var progress: Double = 0
+    @Published var audioMixingDuration: String = "00:00"
     
     func setupRTC(configs: [String: Any],
                   localView: VideoUIView,
@@ -41,6 +49,10 @@ class JoinChannelAudioRTC: NSObject, ObservableObject {
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
+        
+        audioMixingPlaybackVolumeSlider = Double(agoraKit.getAudioMixingPlayoutVolume())
+        audioMixingPublishVolumeSlider = Double(agoraKit.getAudioMixingPublishVolume())
+        audioEffectVolumeSlider = Double(agoraKit.getEffectsVolume())
         
         // disable video module
         agoraKit.disableVideo()
@@ -79,6 +91,132 @@ class JoinChannelAudioRTC: NSObject, ObservableObject {
                 LogUtils.log(message: "joinChannel call failed: \(result), please check your params", level: .error)
             }
         })
+    }
+    
+    func onChangeAudioMixingVolume(_ value: Double) {
+        let value = Int(value)
+        print("adjustAudioMixingVolume \(value)")
+        agoraKit.adjustAudioMixingVolume(value)
+    }
+    
+    func onChangeAudioMixingPlaybackVolume(_ value: Double) {
+        let value = Int(value)
+        print("adjustAudioMixingPlayoutVolume \(value)")
+        agoraKit.adjustAudioMixingPlayoutVolume(value)
+    }
+    
+    func onChangeAudioMixingPublishVolume(_ value: Double) {
+        let value = Int(value)
+        print("adjustAudioMixingPublishVolume \(value)")
+        agoraKit.adjustAudioMixingPublishVolume(value)
+    }
+    
+    func onChangeAudioEffectVolume(_ value: Double) {
+        let value = Int(value)
+        print("setEffectsVolume \(value)")
+        agoraKit.setEffectsVolume(value)
+    }
+    
+    func onStartAudioMixing() {
+        if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, cycle: -1)
+            if result != 0 {
+                LogUtils.log(message: "startAudioMixing call failed: \(result), please check your params", level: .error)
+            }
+        }
+    }
+    
+    func onStopAudioMixing() {
+        let result = agoraKit.stopAudioMixing()
+        if result != 0 {
+            LogUtils.log(message: "stopAudioMixing call failed: \(result), please check your params", level: .error)
+        } else {
+            stopProgressTimer()
+            updateTotalDuration(reset: true)
+        }
+    }
+    
+    func onPauseAudioMixing() {
+        let result = agoraKit.pauseAudioMixing()
+        if result != 0 {
+            LogUtils.log(message: "pauseAudioMixing call failed: \(result), please check your params", level: .error)
+        } else {
+            stopProgressTimer()
+        }
+    }
+    
+    func onResumeAudioMixing() {
+        let result = agoraKit.resumeAudioMixing()
+        if result != 0 {
+            LogUtils.log(message: "resumeAudioMixing call failed: \(result), please check your params", level: .error)
+        } else {
+            startProgressTimer()
+        }
+    }
+    
+    func startProgressTimer() {
+        // begin timer to update progress
+        if timer == nil {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self] _ in
+                guard let weakself = self else {return}
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration())
+                weakself.progress = Double(progress)
+            })
+        }
+    }
+    
+    func stopProgressTimer() {
+        // stop timer
+        if timer != nil {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    func updateTotalDuration(reset: Bool) {
+        if reset {
+            audioMixingDuration = "00 : 00"
+        } else {
+            let duration = agoraKit.getAudioMixingDuration()
+            let seconds = duration / 1000
+            audioMixingDuration = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
+        }
+    }
+    
+    func onPlayEffect() {
+        if let filepath = Bundle.main.path(forResource: "audioeffect", ofType: "mp3") {
+            let result = agoraKit.playEffect(EFFECT_ID,
+                                             filePath:
+                                                filepath,
+                                             loopCount: -1,
+                                             pitch: 1, pan: 0,
+                                             gain: 100,
+                                             publish: true)
+            if result != 0 {
+                LogUtils.log(message: "playEffect call failed: \(result), please check your params", level: .error)
+            }
+        }
+    }
+    
+    func onStopEffect() {
+        let result = agoraKit.stopEffect(EFFECT_ID)
+        if result != 0 {
+            LogUtils.log(message: "stopEffect call failed: \(result), please check your params", level: .error)
+        }
+    }
+    
+    func onPauseEffect() {
+        let result = agoraKit.pauseEffect(EFFECT_ID)
+        if result != 0 {
+            LogUtils.log(message: "pauseEffect call failed: \(result), please check your params", level: .error)
+        }
+    }
+    
+    func onResumeEffect() {
+        let result = agoraKit.resumeEffect(EFFECT_ID)
+        if result != 0 {
+            LogUtils.log(message: "resumeEffect call failed: \(result), please check your params", level: .error)
+        }
     }
     
     func onDestory() {
@@ -121,7 +259,7 @@ class JoinChannelAudioRTC: NSObject, ObservableObject {
 }
 
 // agora rtc engine delegate events
-extension JoinChannelAudioRTC: AgoraRtcEngineDelegate {
+extension AudioMixingRTC: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -203,5 +341,14 @@ extension JoinChannelAudioRTC: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteView?.statsInfo?.updateAudioStats(stats)
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   audioMixingStateChanged state: AgoraAudioMixingStateType,
+                   reasonCode: AgoraAudioMixingReasonCode) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(reasonCode.rawValue)", level: .info)
+        if state == .playing {
+            startProgressTimer()
+            updateTotalDuration(reset: false)
+        }
     }
 }

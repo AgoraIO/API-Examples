@@ -15,17 +15,17 @@ target 'APIExample-SwiftUI' do
 
 end
 
- target 'Agora-ScreenShare-Extension' do
-   use_frameworks!
-   pod 'sdk', :path => 'sdk.podspec'
-#   pod 'AgoraRtcEngine_iOS', '4.3.0'
- end
+target 'Agora-ScreenShare-Extension' do
+  use_frameworks!
+  pod 'sdk', :path => 'sdk.podspec'
+  #   pod 'AgoraRtcEngine_iOS', '4.3.0'
+end
 
-# target 'SimpleFilter' do
-#   use_frameworks!
-# #  pod 'sdk', :path => 'sdk.podspec'
-#   pod 'AgoraRtcEngine_iOS', '4.3.0'
-# end
+#target 'SimpleFilter' do
+#  use_frameworks!
+#  pod 'sdk', :path => 'sdk.podspec'
+#  #   pod 'AgoraRtcEngine_iOS', '4.3.0'
+#end
 
 pre_install do |installer|
 #  system("sh .download_script.sh 4.3.0 true")

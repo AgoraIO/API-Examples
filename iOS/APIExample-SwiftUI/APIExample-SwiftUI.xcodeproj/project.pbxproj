@@ -9,6 +9,18 @@
 /* Begin PBXBuildFile section */
 		5A11DE6F153605EB11D454ED /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 572570FC536B263012B36507 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		DD088D1A24B6EDADF9F7DF60 /* Pods_APIExample_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F61D2B6D1FFBA82BA5DEB050 /* Pods_APIExample_SwiftUI.framework */; };
+		E71D54632BCCD14800656537 /* MediaPlayerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54612BCCD14800656537 /* MediaPlayerRTC.swift */; };
+		E71D54642BCCD14800656537 /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54622BCCD14800656537 /* MediaPlayer.swift */; };
+		E71D54682BCD075700656537 /* PrecallTestRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54662BCD075700656537 /* PrecallTestRTC.swift */; };
+		E71D54692BCD075700656537 /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54672BCD075700656537 /* PrecallTest.swift */; };
+		E71D546D2BCD176B00656537 /* AudioMixingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D546B2BCD176B00656537 /* AudioMixingRTC.swift */; };
+		E71D546E2BCD176B00656537 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D546C2BCD176B00656537 /* AudioMixing.swift */; };
+		E71D54722BCD270800656537 /* StreamEncryptionRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54702BCD270800656537 /* StreamEncryptionRTC.swift */; };
+		E71D54732BCD270800656537 /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54712BCD270800656537 /* StreamEncryption.swift */; };
+		E71D54772BCD337A00656537 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54752BCD337A00656537 /* JoinMultiChannel.swift */; };
+		E71D54782BCD337A00656537 /* JoinMultiChannelRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D54762BCD337A00656537 /* JoinMultiChannelRTC.swift */; };
+		E71D547C2BCE1EB900656537 /* QuickSwitchChannelRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D547A2BCE1EB900656537 /* QuickSwitchChannelRTC.swift */; };
+		E71D547D2BCE1EB900656537 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71D547B2BCE1EB900656537 /* QuickSwitchChannel.swift */; };
 		E73F24002BA82C440000B523 /* APIExample_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F23FF2BA82C440000B523 /* APIExample_SwiftUIApp.swift */; };
 		E73F24022BA82C440000B523 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F24012BA82C440000B523 /* ContentView.swift */; };
 		E73F24042BA82C450000B523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E73F24032BA82C450000B523 /* Assets.xcassets */; };
@@ -112,13 +124,38 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E76515642BCFA6B4004E3821 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C78F61362563C457540BFF1 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
+		255985772B5918C9AD048AC7 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		572570FC536B263012B36507 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6155323BC6FA8D5494B2DA9A /* Pods-APIExample-SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		6A9552243098D7A407CC0729 /* Pods-APIExample-SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		8CC7EDC4E0A91FEAD503BDAB /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		9B8A6802D8AA55B1BF4385E4 /* Pods-SimpleFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		E71D54612BCCD14800656537 /* MediaPlayerRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayerRTC.swift; sourceTree = "<group>"; };
+		E71D54622BCCD14800656537 /* MediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		E71D54662BCD075700656537 /* PrecallTestRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTestRTC.swift; sourceTree = "<group>"; };
+		E71D54672BCD075700656537 /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
+		E71D546B2BCD176B00656537 /* AudioMixingRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixingRTC.swift; sourceTree = "<group>"; };
+		E71D546C2BCD176B00656537 /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
+		E71D54702BCD270800656537 /* StreamEncryptionRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptionRTC.swift; sourceTree = "<group>"; };
+		E71D54712BCD270800656537 /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		E71D54752BCD337A00656537 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
+		E71D54762BCD337A00656537 /* JoinMultiChannelRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannelRTC.swift; sourceTree = "<group>"; };
+		E71D547A2BCE1EB900656537 /* QuickSwitchChannelRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelRTC.swift; sourceTree = "<group>"; };
+		E71D547B2BCE1EB900656537 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
 		E73F23FC2BA82C440000B523 /* APIExample-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E73F23FF2BA82C440000B523 /* APIExample_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExample_SwiftUIApp.swift; sourceTree = "<group>"; };
 		E73F24012BA82C440000B523 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -249,6 +286,7 @@
 				F61D2B6D1FFBA82BA5DEB050 /* Pods_APIExample_SwiftUI.framework */,
 				E73F250A2BB6AE380000B523 /* ReplayKit.framework */,
 				572570FC536B263012B36507 /* Pods_Agora_ScreenShare_Extension.framework */,
+				255985772B5918C9AD048AC7 /* Pods_SimpleFilter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -260,8 +298,64 @@
 				6155323BC6FA8D5494B2DA9A /* Pods-APIExample-SwiftUI.release.xcconfig */,
 				EBC8877FFEE7ACACB6F106A1 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
 				8CC7EDC4E0A91FEAD503BDAB /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
+				9B8A6802D8AA55B1BF4385E4 /* Pods-SimpleFilter.debug.xcconfig */,
+				1C78F61362563C457540BFF1 /* Pods-SimpleFilter.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E71D54602BCCD14800656537 /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E71D54612BCCD14800656537 /* MediaPlayerRTC.swift */,
+				E71D54622BCCD14800656537 /* MediaPlayer.swift */,
+			);
+			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		E71D54652BCD075700656537 /* PrecallTest */ = {
+			isa = PBXGroup;
+			children = (
+				E71D54662BCD075700656537 /* PrecallTestRTC.swift */,
+				E71D54672BCD075700656537 /* PrecallTest.swift */,
+			);
+			path = PrecallTest;
+			sourceTree = "<group>";
+		};
+		E71D546A2BCD176B00656537 /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				E71D546B2BCD176B00656537 /* AudioMixingRTC.swift */,
+				E71D546C2BCD176B00656537 /* AudioMixing.swift */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		E71D546F2BCD270800656537 /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				E71D54702BCD270800656537 /* StreamEncryptionRTC.swift */,
+				E71D54712BCD270800656537 /* StreamEncryption.swift */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		E71D54742BCD337A00656537 /* JoinMultiChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E71D54752BCD337A00656537 /* JoinMultiChannel.swift */,
+				E71D54762BCD337A00656537 /* JoinMultiChannelRTC.swift */,
+			);
+			path = JoinMultiChannel;
+			sourceTree = "<group>";
+		};
+		E71D54792BCE1EB900656537 /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E71D547A2BCE1EB900656537 /* QuickSwitchChannelRTC.swift */,
+				E71D547B2BCE1EB900656537 /* QuickSwitchChannel.swift */,
+			);
+			path = QuickSwitchChannel;
 			sourceTree = "<group>";
 		};
 		E73F23F32BA82C440000B523 = {
@@ -320,6 +414,12 @@
 		E73F240E2BA82D4B0000B523 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E71D54792BCE1EB900656537 /* QuickSwitchChannel */,
+				E71D54742BCD337A00656537 /* JoinMultiChannel */,
+				E71D546F2BCD270800656537 /* StreamEncryption */,
+				E71D546A2BCD176B00656537 /* AudioMixing */,
+				E71D54652BCD075700656537 /* PrecallTest */,
+				E71D54602BCCD14800656537 /* MediaPlayer */,
 				E73F25182BB6B22B0000B523 /* ScreenShare */,
 				E73F24F22BB66F5F0000B523 /* VideoProcess */,
 				E73F24ED2BB6645C0000B523 /* RhythmPlayer */,
@@ -639,6 +739,7 @@
 				E73F23FA2BA82C440000B523 /* Resources */,
 				5523247B1D8DD4721DEA05B7 /* [CP] Embed Pods Frameworks */,
 				E73F25162BB6AE380000B523 /* Embed Foundation Extensions */,
+				E76515642BCFA6B4004E3821 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -807,20 +908,25 @@
 				E73F247B2BA851870000B523 /* UIView+CSshortFrame.m in Sources */,
 				E73F24022BA82C440000B523 /* ContentView.swift in Sources */,
 				E73F24852BA851870000B523 /* AgoraYUVImageSourcePush.m in Sources */,
+				E71D54642BCCD14800656537 /* MediaPlayer.swift in Sources */,
 				E73F24D62BB26F4C0000B523 /* ContentInspect.swift in Sources */,
 				E73F24D12BB17B670000B523 /* MutliCameraRTC.swift in Sources */,
 				E73F24782BA851870000B523 /* AudioWriteToFile.m in Sources */,
 				E73F24A82BAAB69C0000B523 /* JoinChannelVideoToken.swift in Sources */,
 				E73F24792BA851870000B523 /* AgoraPcmSourcePush.swift in Sources */,
 				E73F24A92BAAB69C0000B523 /* JoinChannelVideoTokenRTC.swift in Sources */,
+				E71D54772BCD337A00656537 /* JoinMultiChannel.swift in Sources */,
 				E73F247A2BA851870000B523 /* UIColor+CSRGB.m in Sources */,
 				E73F251B2BB6B22B0000B523 /* ScreenShareRTC.swift in Sources */,
 				E73F24772BA851870000B523 /* ZSNBoxingView.m in Sources */,
 				E73F24B32BAD63A90000B523 /* LogUtil.swift in Sources */,
+				E71D54682BCD075700656537 /* PrecallTestRTC.swift in Sources */,
 				E73F24862BA851870000B523 /* AgoraCustomEncryption.mm in Sources */,
+				E71D547D2BCE1EB900656537 /* QuickSwitchChannel.swift in Sources */,
 				E73F249E2BA9888D0000B523 /* JoinChannelAudio.swift in Sources */,
 				E73F24252BA83D710000B523 /* GlobalSettings.swift in Sources */,
 				E73F24B82BAD85710000B523 /* FaceCapture.swift in Sources */,
+				E71D54722BCD270800656537 /* StreamEncryptionRTC.swift in Sources */,
 				E73F248D2BA851870000B523 /* KFMP4Demuxer.m in Sources */,
 				E73F24F02BB6645C0000B523 /* RhythmPlayer.swift in Sources */,
 				E73F24882BA851870000B523 /* NetworkManager.swift in Sources */,
@@ -832,7 +938,9 @@
 				E73F24892BA851870000B523 /* JSONObject.swift in Sources */,
 				E73F248E2BA851870000B523 /* MediaUtils.m in Sources */,
 				E73F248F2BA851870000B523 /* Util.swift in Sources */,
+				E71D54732BCD270800656537 /* StreamEncryption.swift in Sources */,
 				E73F24E72BB519600000B523 /* CreateDataStreamRTC.swift in Sources */,
+				E71D54692BCD075700656537 /* PrecallTest.swift in Sources */,
 				E73F24BD2BAD89920000B523 /* AudioWaveform.swift in Sources */,
 				E73F24002BA82C440000B523 /* APIExample_SwiftUIApp.swift in Sources */,
 				E73F24F62BB66F5F0000B523 /* VideoProcess.swift in Sources */,
@@ -840,6 +948,8 @@
 				E73F24C42BB152450000B523 /* ARKit.swift in Sources */,
 				E73F247F2BA851870000B523 /* AgoraCameraSourcePush.swift in Sources */,
 				E73F248A2BA851870000B523 /* ARVideoRenderer.swift in Sources */,
+				E71D547C2BCE1EB900656537 /* QuickSwitchChannelRTC.swift in Sources */,
+				E71D546E2BCD176B00656537 /* AudioMixing.swift in Sources */,
 				E73F24AE2BAAC6E70000B523 /* JoinChannelVideoRecorderRTC.swift in Sources */,
 				E79DFB622BBA545300904B08 /* PickerView.swift in Sources */,
 				E73F242E2BA83D710000B523 /* KeyCenter.swift in Sources */,
@@ -848,9 +958,12 @@
 				E73F24F52BB66F5F0000B523 /* VideoProcessRTC.swift in Sources */,
 				E73F24B72BAD85710000B523 /* FaceCaptureRTC.swift in Sources */,
 				E73F24E22BB512840000B523 /* MediaChannelRelayRTC.swift in Sources */,
+				E71D546D2BCD176B00656537 /* AudioMixingRTC.swift in Sources */,
+				E71D54632BCCD14800656537 /* MediaPlayerRTC.swift in Sources */,
 				E73F24242BA83D710000B523 /* AgoraExtension.swift in Sources */,
 				E73F247D2BA851870000B523 /* AudioController.m in Sources */,
 				E73F24CC2BB177B80000B523 /* KtvCopyrightMusic.swift in Sources */,
+				E71D54782BCD337A00656537 /* JoinMultiChannelRTC.swift in Sources */,
 				E73F24B12BAAD65A0000B523 /* SettingsView.swift in Sources */,
 				E73F24D52BB26F4C0000B523 /* ContentInspectRTC.swift in Sources */,
 				E73F24A22BA9A27B0000B523 /* JoinChannelVideoRTC.swift in Sources */,

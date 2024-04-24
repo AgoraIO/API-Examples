@@ -22,11 +22,7 @@ class ToastView: UIView {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = ""
-        if #available(iOS 13.0, *) {
-            label.textColor = .label
-        } else {
-            label.textColor = .white
-        }
+        label.textColor = .white
         label.font = .systemFont(ofSize: 14)
         label.numberOfLines = 0
         label.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 60
@@ -101,12 +97,8 @@ class ToastView: UIView {
     
     static func show(text: String, duration: CGFloat = 2.5, view: UIView? = nil) {
         DispatchQueue.main.async {
-            var textColor: UIColor = .white
-            if #available(iOS 13.0, *) {
-                textColor = .label
-            }
             let toastView = show(text: text, tagImage: nil,
-                                 textColor: textColor, font: nil,
+                                 textColor: .white, font: nil,
                                  postion: .center,
                                  view: view)
             showAnimation(toastView: toastView, duration: duration)
@@ -116,9 +108,6 @@ class ToastView: UIView {
     static func show(text: String, postion: ToastViewPostion = .center) {
         DispatchQueue.main.async {
             var textColor: UIColor = .white
-            if #available(iOS 13.0, *) {
-                textColor = .label
-            }
             let toastView = show(text: text, tagImage: nil,
                                  textColor: textColor, font: nil,
                                  postion: postion,
@@ -132,12 +121,8 @@ class ToastView: UIView {
                      duration: CGFloat = 2.5,
                      view: UIView? = nil) {
         DispatchQueue.main.async {
-            var textColor: UIColor = .white
-            if #available(iOS 13.0, *) {
-                textColor = .label
-            }
             let toastView = show(text: text, tagImage: nil,
-                                 textColor: textColor, font: nil,
+                                 textColor: .white, font: nil,
                                  postion: postion,
                                  view: view)
             showAnimation(toastView: toastView, duration: duration)
@@ -146,12 +131,8 @@ class ToastView: UIView {
     
     static func show(text: String, tagImage: UIImage? = nil, postion: ToastViewPostion = .center, view: UIView? = nil) {
         DispatchQueue.main.async {
-            var textColor: UIColor = .white
-            if #available(iOS 13.0, *) {
-                textColor = .label
-            }
             let toastView = show(text: text, tagImage: tagImage,
-                                 textColor: textColor, font: nil,
+                                 textColor: .white, font: nil,
                                  postion: postion,
                                  view: view)
             
