@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import io.agora.api.example.compose.samples.TAG
 import io.agora.rtc2.IRtcEngineEventHandler
 
 @Composable
@@ -99,6 +98,7 @@ fun VideoCell(
     modifier: Modifier = Modifier,
     id: Int,
     isLocal: Boolean,
+    createView: (() -> View)? = null,
     setupVideo: (renderView: View, id: Int, isFirstSetup: Boolean) -> Unit,
     statsInfo: VideoStatsInfo? = null
 ) {
@@ -106,15 +106,15 @@ fun VideoCell(
         if (id != 0) {
             AndroidView(
                 factory = { context ->
-                    Log.d(TAG, "VideoCell: create render view.")
-                    TextureView(context).apply {
+                    Log.d("VideoCell", "VideoCell: create render view.")
+                    createView?.invoke() ?: TextureView(context).apply {
                         tag = id
                         setupVideo(this, id, true)
                     }
                 },
                 update = { view ->
                     if (view.tag != id) {
-                        Log.d(TAG, "VideoCell: update render view.")
+                        Log.d("VideoCell", "VideoCell: update render view.")
                         view.tag = id
                         setupVideo(view, id, false)
                     }
@@ -483,6 +483,7 @@ fun Switching1v1VideoView(
     localLarge: Boolean = true,
     onSwitch: () -> Unit = {},
     localRender: (View, Int, Boolean) -> Unit,
+    remoteCreate: (() -> View)? = null,
     remoteRender: (View, Int, Boolean) -> Unit,
 ) {
     Box(
@@ -493,6 +494,7 @@ fun Switching1v1VideoView(
                 .fillMaxSize(),
             id = if (localLarge) localUid else remoteUid,
             isLocal = localLarge,
+            createView = if(localLarge) null else remoteCreate,
             setupVideo = if (localLarge) localRender else remoteRender,
             statsInfo = if (localLarge) localStats else remoteStats
         )
@@ -508,6 +510,7 @@ fun Switching1v1VideoView(
                 },
             id = if (!localLarge) localUid else remoteUid,
             isLocal = !localLarge,
+            createView = if(localLarge) remoteCreate else null,
             setupVideo = if (!localLarge) localRender else remoteRender,
             statsInfo = if (!localLarge) localStats else remoteStats
         )
@@ -526,3 +529,4 @@ fun WidgetsPreview() {
         // SliderRaw("Bitrate", 0.5f)
     }
 }
+

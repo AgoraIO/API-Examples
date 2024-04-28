@@ -39,7 +39,7 @@ import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
-const val TAG = "JoinVideoChannel"
+
 
 @Composable
 fun JoinChannelVideo() {

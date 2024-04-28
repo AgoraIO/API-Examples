@@ -48,8 +48,12 @@ fun RTMPStreaming() {
     var localStats by remember { mutableStateOf(VideoStatsInfo()) }
     var remoteStats by remember { mutableStateOf(VideoStatsInfo()) }
     var clientRole by remember { mutableStateOf(Constants.CLIENT_ROLE_BROADCASTER) }
+    var pushing by rememberSaveable { mutableStateOf(false) }
+    var transcoding by rememberSaveable { mutableStateOf(false) }
+    var url by rememberSaveable { mutableStateOf("rtmp://push.webdemo.agoraio.cn/lbhd/test") }
 
     val rtcEngine = remember {
+        var engine: RtcEngine? = null
         RtcEngine.create(RtcEngineConfig().apply {
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
@@ -73,6 +77,9 @@ fun RTMPStreaming() {
                     super.onUserJoined(uid, elapsed)
                     remoteUid = uid
                     remoteStats = VideoStatsInfo()
+                    if(pushing && transcoding){
+                        engine?.updateRtmpTranscoding(getRtmpStreamTranscoding(localUid, remoteUid))
+                    }
                 }
 
                 override fun onUserOffline(uid: Int, reason: Int) {
@@ -80,6 +87,9 @@ fun RTMPStreaming() {
                     if (remoteUid == uid) {
                         remoteUid = 0
                         remoteStats = VideoStatsInfo()
+                        if(pushing && transcoding){
+                            engine?.updateRtmpTranscoding(getRtmpStreamTranscoding(localUid, remoteUid))
+                        }
                     }
                 }
 
@@ -137,6 +147,7 @@ fun RTMPStreaming() {
                 }
             }
         }).apply {
+            engine = this
             setVideoEncoderConfiguration(
                 VideoEncoderConfiguration(
                     SettingPreferences.getVideoDimensions(),
@@ -188,6 +199,37 @@ fun RTMPStreaming() {
         localStats = localStats,
         remoteStats = remoteStats,
         localLarge = localLarge,
+        pushing = pushing,
+        transcoding = transcoding,
+        url = url,
+        onTranscoding = {
+            transcoding = !transcoding
+            if (pushing) {
+                rtcEngine?.stopRtmpStream(url)
+                if (transcoding) {
+                    rtcEngine?.startRtmpStreamWithTranscoding(url, getRtmpStreamTranscoding(localUid, remoteUid))
+                } else {
+                    rtcEngine?.startRtmpStreamWithoutTranscoding(url)
+                }
+            }
+        },
+        onPushing = { u ->
+            url = u
+            pushing = !pushing
+
+            if (pushing) {
+                rtcEngine?.stopRtmpStream(url)
+                if (transcoding) {
+                    rtcEngine?.startRtmpStreamWithTranscoding(url,
+                        getRtmpStreamTranscoding(localUid, remoteUid)
+                    )
+                } else {
+                    rtcEngine?.startRtmpStreamWithoutTranscoding(url)
+                }
+            } else {
+                rtcEngine?.stopRtmpStream(url)
+            }
+        },
         onSwitch = {
             localLarge = !localLarge
         },
@@ -214,19 +256,20 @@ fun RTMPStreamingView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
+    url: String = "",
+    pushing: Boolean = false,
+    transcoding: Boolean = false,
     localUid: Int = 0,
     remoteUid: Int = 0,
     localLarge: Boolean = true,
     localStats: VideoStatsInfo = VideoStatsInfo(),
     remoteStats: VideoStatsInfo = VideoStatsInfo(),
+    onPushing: (String) -> Unit = {},
+    onTranscoding: () -> Unit = {},
     onSwitch: () -> Unit = {},
     onJoinClick: (String) -> Unit = {},
     onLeaveClick: () -> Unit = {}
 ) {
-    var pushing by rememberSaveable { mutableStateOf(false) }
-    var transcoding by rememberSaveable { mutableStateOf(false) }
-    var url by rememberSaveable { mutableStateOf("rtmp://push.webdemo.agoraio.cn/lbhd/test") }
-
     Column {
         Switching1v1VideoView(
             modifier = Modifier.weight(1.0f),
@@ -260,11 +303,8 @@ fun RTMPStreamingView(
             }
         )
 
-        SwitchRaw(title = "是否转码") {
-            transcoding = !transcoding
-            if (pushing) {
-                rtcEngine?.stopRtmpStream(url)
-            }
+        SwitchRaw(title = "是否转码", checked = transcoding) {
+            onTranscoding()
         }
         ChannelNameInput(
             channelName = channelName,
@@ -275,27 +315,41 @@ fun RTMPStreamingView(
         InputRaw(
             text = url,
             label = "推流地址",
-            btnText = if(pushing) "关闭推流" else "开始推流",
+            btnText = if (pushing) "关闭推流" else "开始推流",
             enable = isJoined,
             editable = !pushing
         ) { u ->
-            url = u
-            pushing = !pushing
+            onPushing(u)
+        }
+    }
+}
 
-            if (pushing) {
-                rtcEngine?.stopRtmpStream(url)
-                if (transcoding) {
-                    rtcEngine?.startRtmpStreamWithTranscoding(url,
-                        LiveTranscoding().apply {
-
-                        }
-                    )
-                } else {
-                    rtcEngine?.startRtmpStreamWithoutTranscoding(url)
-                }
-            } else {
-                rtcEngine?.stopRtmpStream(url)
-            }
+private fun getRtmpStreamTranscoding(
+    localUid: Int,
+    remoteUid: Int
+): LiveTranscoding {
+    return LiveTranscoding().apply {
+        width = 640
+        height = 360
+        videoBitrate = 400
+        videoFramerate = 15
+        addUser(LiveTranscoding.TranscodingUser().apply {
+            uid = localUid
+            x = 0
+            y = 0
+            width = 640
+            height = 180
+            zOrder = 1
+        })
+        if (remoteUid != 0) {
+            addUser(LiveTranscoding.TranscodingUser().apply {
+                uid = remoteUid
+                x = 0
+                y = 180
+                width = 640
+                height = 180
+                zOrder = 2
+            })
         }
     }
 }
