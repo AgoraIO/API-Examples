@@ -92,19 +92,22 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		config.format.height = 360;
 		config.format.fps = 15;
 		//get selected camera device id
+		char* buffer = new char[512] {0};
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			LOCALVIDEOTRANSCODING_CAMERAINFO info = m_vecCameraInfos[i];
 			CString strName;
 			m_cmbCamera.GetWindowText(strName);
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				config.deviceId = info.deviceId.c_str();
+				strcpy_s(buffer, 512, info.deviceId.c_str());
+				config.deviceId = buffer;
 				break;
 			}
 		}
 
 		//start primary camera capture
 		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
+		delete[] buffer;
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 
 		//start Screen capture

@@ -683,17 +683,20 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 		//get selected camera device id
 		CString strName;
 		m_cmbCameras.GetWindowText(strName);
+		char* buffer = new char[512] {0};
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				config.deviceId = info.deviceId.c_str();
+				strcpy_s(buffer, 512, info.deviceId.c_str());
+				config.deviceId = buffer;
 				break;
 			}
 		}
 		//start primary camera capture
 		CString infoStr;
 		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY, config);
+		delete[] buffer;
 		infoStr.Format(_T("start primary camera capture. ret=%d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		VideoCanvas canvas;
@@ -760,12 +763,14 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		config2.format.fps = 15;
 		//set camera2 deviceId
 		CString strName;
+		char* buffer = new char[512] {0};
 		m_cmbCamera2.GetWindowText(strName);
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				config2.deviceId = info.deviceId.c_str();
+				strcpy_s(buffer, 512, info.deviceId.c_str());
+				config2.deviceId = buffer;
 				break;
 			}
 		}
@@ -773,6 +778,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		//start secondary camera capture
 		CString infoStr;
 		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_SECONDARY, config2);
+		delete[] buffer;
 		infoStr.Format(_T("start secondary camera capture. ret=%d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture2.SetWindowText(MultiVideoSourceStopCapture);
@@ -867,12 +873,14 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
 		config.format.fps = 15;
 		//set camera2 deviceId
 		CString strName;
+		char* buffer = new char[512] {0};
 		m_cmbCamera3.GetWindowText(strName);
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				config.deviceId = info.deviceId.c_str();
+				strcpy_s(buffer, 512, info.deviceId.c_str());
+				config.deviceId = buffer;
 				break;
 			}
 		}
@@ -881,6 +889,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
 		//start secondary camera capture
 		CString infoStr;
 		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_THIRD, config);
+		delete[] buffer;
 		infoStr.Format(_T("start third camera capture. ret=%d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture3.SetWindowText(MultiVideoSourceStopCapture);
@@ -977,11 +986,13 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
 		//set camera2 deviceId
 		CString strName;
 		m_cmbCamera4.GetWindowText(strName);
+		char* buffer = new char[512] {0};
 		for (UINT i = 0; i < m_vecCameraInfos.size(); i++)
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				config.deviceId = info.deviceId.c_str();
+				strcpy_s(buffer, 512, info.deviceId.c_str());
+				config.deviceId = buffer;
 				break;
 			}
 		}
@@ -992,6 +1003,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
 		//start secondary camera capture
 		CString infoStr;
 		int ret = m_rtcEngine->startCameraCapture(VIDEO_SOURCE_CAMERA_FOURTH, config);
+		delete[] buffer;
 		infoStr.Format(_T("start fourth camera capture. ret=%d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 		m_btnCapture4.SetWindowText(MultiVideoSourceStopCapture);
