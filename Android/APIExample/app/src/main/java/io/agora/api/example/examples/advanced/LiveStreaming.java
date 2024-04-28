@@ -331,42 +331,52 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
     /**
      * Get the camera direction from the AgoraFocalLengthInfo
+     *
      * @param info AgoraFocalLengthInfo
      * @return Camera direction
      */
-    private static CameraCapturerConfiguration.CAMERA_DIRECTION getCameraDirection(AgoraFocalLengthInfo info){
-        String string = info.toString();
-        String[] split = string.split("cameraDirection");
-        String substring = split[1].substring(1, 2);
-        int cameraDirection = Integer.parseInt(substring);
-        if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
-        } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR;
-        } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA;
+    private static CameraCapturerConfiguration.CAMERA_DIRECTION getCameraDirection(AgoraFocalLengthInfo info) {
+        try {
+            String string = info.toString();
+            String[] split = string.split("cameraDirection");
+            String substring = split[1].substring(1, 2);
+            int cameraDirection = Integer.parseInt(substring);
+            if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
+            } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR;
+            } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getCameraDirection error=" + e.getMessage());
         }
         return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
     }
 
     /**
      * Get the focal length type from the AgoraFocalLengthInfo
+     *
      * @param info AgoraFocalLengthInfo
      * @return Focal length type
      */
-    private static CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE getFocalLengthType(AgoraFocalLengthInfo info){
-        String string = info.toString();
-        String[] split = string.split("focalLengthType");
-        String substring = split[1].substring(1, 2);
-        int focalLength = Integer.parseInt(substring);
-        if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
-        } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE;
-        } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE;
-        } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
-            return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO;
+    private static CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE getFocalLengthType(AgoraFocalLengthInfo info) {
+        try {
+            String string = info.toString();
+            String[] split = string.split("focalLengthType");
+            String substring = split[1].substring(1, 2);
+            int focalLength = Integer.parseInt(substring);
+            if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
+            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE;
+            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE;
+            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
+                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getFocalLengthType error=" + e.getMessage());
         }
         return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
     }
