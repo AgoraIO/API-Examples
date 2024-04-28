@@ -687,7 +687,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera1()
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				config.deviceId = info.deviceId.c_str();
 				break;
 			}
 		}
@@ -765,7 +765,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera2()
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				strcpy_s(config2.deviceId, 512, info.deviceId.c_str());
+				config2.deviceId = info.deviceId.c_str();
 				break;
 			}
 		}
@@ -872,7 +872,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera3()
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				config.deviceId = info.deviceId.c_str();
 				break;
 			}
 		}
@@ -981,7 +981,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCamera4()
 		{
 			MULTIVIDEOSOURCE_CAMERAINFO info = m_vecCameraInfos[i];
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				config.deviceId = info.deviceId.c_str();
 				break;
 			}
 		}

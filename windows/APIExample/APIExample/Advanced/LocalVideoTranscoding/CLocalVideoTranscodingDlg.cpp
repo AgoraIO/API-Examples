@@ -98,7 +98,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 			CString strName;
 			m_cmbCamera.GetWindowText(strName);
 			if (info.deviceName.compare(cs2utf8(strName)) == 0) {
-				strcpy_s(config.deviceId, 512, info.deviceId.c_str());
+				config.deviceId = info.deviceId.c_str();
 				break;
 			}
 		}
