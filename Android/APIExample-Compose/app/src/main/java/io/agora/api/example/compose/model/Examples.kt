@@ -14,11 +14,15 @@ import io.agora.api.example.compose.samples.JoinChannelVideoToken
 import io.agora.api.example.compose.samples.JoinMultiChannel
 import io.agora.api.example.compose.samples.LiveStreaming
 import io.agora.api.example.compose.samples.MediaMetadata
+import io.agora.api.example.compose.samples.MediaPlayer
+import io.agora.api.example.compose.samples.MediaRecorder
 import io.agora.api.example.compose.samples.OriginAudioData
 import io.agora.api.example.compose.samples.OriginVideoData
 import io.agora.api.example.compose.samples.PlayAudioFiles
 import io.agora.api.example.compose.samples.PreCallTest
 import io.agora.api.example.compose.samples.RTMPStreaming
+import io.agora.api.example.compose.samples.ScreenSharing
+import io.agora.api.example.compose.samples.VideoProcessExtension
 import io.agora.api.example.compose.samples.VoiceEffects
 
 data class Example(
@@ -48,4 +52,8 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_channelencryption) { ChannelEncryption() },
     Example(R.string.example_playaudiofiles) { PlayAudioFiles() },
     Example(R.string.example_precalltest) { PreCallTest() },
+    Example(R.string.example_mediarecorder) { MediaRecorder() },
+    Example(R.string.example_mediaplayer) { MediaPlayer() },
+    Example(R.string.example_screensharing) { ScreenSharing() },
+    Example(R.string.example_videoprocessextension) { VideoProcessExtension() },
 )

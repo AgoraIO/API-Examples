@@ -1,5 +1,6 @@
 package io.agora.api.example.compose.ui.common
 
+import android.content.Context
 import android.util.Log
 import android.view.TextureView
 import android.view.View
@@ -98,7 +99,7 @@ fun VideoCell(
     modifier: Modifier = Modifier,
     id: Int,
     isLocal: Boolean,
-    createView: (() -> View)? = null,
+    createView: ((context: Context) -> View)? = null,
     setupVideo: (renderView: View, id: Int, isFirstSetup: Boolean) -> Unit,
     statsInfo: VideoStatsInfo? = null
 ) {
@@ -107,7 +108,7 @@ fun VideoCell(
             AndroidView(
                 factory = { context ->
                     Log.d("VideoCell", "VideoCell: create render view.")
-                    createView?.invoke() ?: TextureView(context).apply {
+                    createView?.invoke(context) ?: TextureView(context).apply {
                         tag = id
                         setupVideo(this, id, true)
                     }
@@ -304,11 +305,16 @@ fun <T> DropdownMenuRaw(
     title: String,
     options: List<Pair<String, T>>,
     selected: Int = 0,
+    selectedValue: T = options.getOrNull(selected)?.second ?: options.first().second,
     enable: Boolean = true,
     onSelected: (Int, Pair<String, T>) -> Unit = { _, _ -> }
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(options.getOrNull(selected)?.first ?: "") }
+    var text by remember {
+        mutableStateOf(
+            options.find { it.second == selectedValue }?.first ?: options.first().first
+        )
+    }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
@@ -414,6 +420,7 @@ fun SliderRaw(
         )
         Spacer(Modifier.weight(1f))
         Slider(
+            modifier = Modifier.padding(16.dp, 0.dp),
             value = slValue,
             onValueChange = {
                 slValue = it
@@ -483,7 +490,7 @@ fun Switching1v1VideoView(
     localLarge: Boolean = true,
     onSwitch: () -> Unit = {},
     localRender: (View, Int, Boolean) -> Unit,
-    remoteCreate: (() -> View)? = null,
+    remoteCreate: ((context: Context) -> View)? = null,
     remoteRender: (View, Int, Boolean) -> Unit,
 ) {
     Box(

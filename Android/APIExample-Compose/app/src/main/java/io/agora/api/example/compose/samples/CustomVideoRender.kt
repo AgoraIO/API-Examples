@@ -1,5 +1,6 @@
 package io.agora.api.example.compose.samples
 
+import android.content.Context
 import android.graphics.Matrix
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
@@ -151,7 +152,7 @@ fun CustomVideoRender() {
         localStats = localStats,
         remoteStats = remoteStats,
         onRemoteViewCreate = {
-            GLTextureView(context).apply {
+            GLTextureView(it).apply {
                 render.setGLTextureView(this)
             }
         },
@@ -183,7 +184,7 @@ fun CustomVideoRenderView(
     remoteUid: Int = 0,
     localStats: VideoStatsInfo = VideoStatsInfo(),
     remoteStats: VideoStatsInfo = VideoStatsInfo(),
-    onRemoteViewCreate: (() -> View)? = null,
+    onRemoteViewCreate: ((context: Context) -> View)? = null,
     onJoinClick: (String) -> Unit,
     onLeaveClick: () -> Unit
 ) {

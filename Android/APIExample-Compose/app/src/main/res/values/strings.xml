@@ -17,4 +17,8 @@
     <string name="example_channelencryption">媒体流加密</string>
     <string name="example_playaudiofiles">音频文件混音</string>
     <string name="example_precalltest">通话前质量检测</string>
+    <string name="example_mediarecorder">本地/远端录制</string>
+    <string name="example_mediaplayer">媒体播放器</string>
+    <string name="example_screensharing">屏幕共享</string>
+    <string name="example_videoprocessextension">视频增强组件</string>
 </resources>

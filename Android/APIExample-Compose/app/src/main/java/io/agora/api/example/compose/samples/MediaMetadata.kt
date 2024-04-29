@@ -39,7 +39,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration
 
 @Composable
 fun MediaMetadata() {
-    val handler = Handler(Looper.getMainLooper())
+    val handler = remember { Handler(Looper.getMainLooper()) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val keyboard = LocalSoftwareKeyboardController.current
