@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.text.TextUtils;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * The type File utils.
@@ -114,6 +118,39 @@ public final class FileUtils {
         }
     }
 
+    @NotNull
+    public static String getAssetsString(@NotNull Context context, @NotNull String path) {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+
+        try {
+            isr = new InputStreamReader(context.getResources().getAssets().open(path));
+            br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null){
+                sb.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
 }
 
 

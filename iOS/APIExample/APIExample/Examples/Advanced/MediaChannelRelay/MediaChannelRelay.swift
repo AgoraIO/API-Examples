@@ -140,15 +140,16 @@ class MediaChannelRelayMain: BaseViewController {
             self.showAlert(message: "Destination channel name is empty")
             return
         }
-        
-        // configure source info, channel name defaults to current, and uid defaults to local
-        let config = AgoraChannelMediaRelayConfiguration()
-        config.sourceInfo = AgoraChannelMediaRelayInfo(token: nil)
-        
-        // configure target channel info
-        let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
-        config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-        agoraKit.startOrUpdateChannelMediaRelay(config)
+        NetworkManager.shared.generateToken(channelName: destinationChannelName) { token in
+            // configure source info, channel name defaults to current, and uid defaults to local
+            let config = AgoraChannelMediaRelayConfiguration()
+            config.sourceInfo = AgoraChannelMediaRelayInfo(token: token)
+            
+            // configure target channel info
+            let destinationInfo = AgoraChannelMediaRelayInfo(token: token)
+            config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
+            self.agoraKit.startOrUpdateChannelMediaRelay(config)
+        }
     }
     
     /// stop relay

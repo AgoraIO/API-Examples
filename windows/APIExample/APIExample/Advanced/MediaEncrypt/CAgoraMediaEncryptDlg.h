@@ -1,6 +1,23 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 #include <map>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+#include <boost/range/algorithm/copy.hpp>
+
+
+namespace detail
+{
+	using Base64FromBinary = boost::archive::iterators::base64_from_binary<
+		boost::archive::iterators::transform_width<const char*, 6, 8>>;
+
+	using BinaryFromBase64 = boost::archive::iterators::transform_width<
+		boost::archive::iterators::binary_from_base64<std::string::const_iterator>,
+		8, 6>;
+}
+
 
 
 class CAgoraMediaEncryptHandler : public IRtcEngineEventHandler

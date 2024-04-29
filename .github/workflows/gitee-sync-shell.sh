@@ -13,6 +13,19 @@ sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tence
 git add Android/APIExample/settings.gradle Android/APIExample/gradle/wrapper/gradle-wrapper.properties Android/APIExample-Audio/settings.gradle Android/APIExample-Audio/gradle/wrapper/gradle-wrapper.properties
 git commit -m '[Android] gitee sync >> use china repos.'
 
+# change iOS Podfile to china repos
+python3 .github/workflows/modify_podfile.py iOS/APIExample/Podfile
+python3 .github/workflows/modify_podfile.py iOS/APIExample-Audio/Podfile
+python3 .github/workflows/modify_podfile.py iOS/APIExample-OC/Podfile
+python3 .github/workflows/modify_podfile.py macOS/Podfile
+
+# sed -ie '1s#^#source "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"\n#' iOS/APIExample/Podfile
+# sed -ie '1s#^#source "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"\n#' iOS/APIExample-Audio/Podfile
+# sed -ie '1s#^#source "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"\n#' iOS/APIExample-OC/Podfile
+# sed -ie '1s#^#source "https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git"\n#' macOS/Podfile
+git add iOS/APIExample/Podfile iOS/APIExample-Audio/Podfile iOS/APIExample-OC/Podfile macOS/Podfile
+git commit -m '[iOS] gitee sync >> use china repos.'
+
 git branch
 git status
 git push gitee

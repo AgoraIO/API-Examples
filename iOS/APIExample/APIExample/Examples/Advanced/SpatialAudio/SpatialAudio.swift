@@ -81,13 +81,13 @@ class SpatialAudioMain: BaseViewController {
         super.viewDidAppear(animated)
         guard isJoined == false else { return }
         mediaPlayer1 = agoraKit.createMediaPlayer(with: self)
-        mediaPlayer1.setLoopCount(10000)
+        mediaPlayer1.setLoopCount(-1)
         mediaPlayer1.open("https://webdemo.agora.io/audiomixing.mp3", startPos: 0)
         localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
         localSpatial.setPlayerAttenuation(0.2, playerId: UInt(mediaPlayer1.getMediaPlayerId()), forceSet: false)
         
         mediaPlayer2 = agoraKit.createMediaPlayer(with: self)
-        mediaPlayer2.setLoopCount(10000)
+        mediaPlayer2.setLoopCount(-1)
         mediaPlayer2.open("https://webdemo.agora.io/dang.mp3", startPos: 0)
         localSpatial.updatePlayerPositionInfo(Int(mediaPlayer2.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton2))
         localSpatial.setPlayerAttenuation(0.2, playerId: UInt(mediaPlayer2.getMediaPlayerId()), forceSet: false)

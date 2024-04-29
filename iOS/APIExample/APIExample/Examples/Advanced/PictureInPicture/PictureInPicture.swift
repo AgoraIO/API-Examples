@@ -36,29 +36,53 @@ class PictureInPictureEntry: UIViewController {
     }
 }
 
+@available(iOS 15.0, *)
 class PictureInPictureMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadView(fromNib: "VideoViewSampleBufferDisplayView", withType: SampleBufferDisplayView.self)
-    
-    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
-    var pipController: AgoraPictureInPictureController?
+    private lazy var callViewController: AVPictureInPictureVideoCallViewController = {
+        let callViewController = AVPictureInPictureVideoCallViewController()
+        callViewController.preferredContentSize = view.bounds.size
+        callViewController.view.backgroundColor = .clear
+        callViewController.modalPresentationStyle = .overFullScreen
+        return callViewController
+    }()
+    var pipController: AVPictureInPictureController?
     var remoteUid: UInt?
     // indicate if current instance has joined channel
     var isJoined: Bool = false
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        return view
+    }()
     
+    // swiftlint: disable function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
-        
-        pipController = AgoraPictureInPictureController(displayView: remoteVideo.videoView)
-        if #available(iOS 14.2, *) {
-            pipController?.pipController.canStartPictureInPictureAutomaticallyFromInline = true
-        }
-        pipController?.pipController.delegate = self
+        view.addSubview(containerView)
+        containerView.frame = CGRect(x: 0, y: 0, width: SCREENSIZE.width, height: 280)
+        containerView.addSubview(localVideo)
+        containerView.addSubview(remoteVideo)
+        localVideo.translatesAutoresizingMaskIntoConstraints = false
+        remoteVideo.translatesAutoresizingMaskIntoConstraints = false
+        localVideo.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        localVideo.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        localVideo.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        localVideo.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5).isActive = true
+        remoteVideo.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        remoteVideo.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        remoteVideo.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        remoteVideo.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5).isActive = true
+
+        pipController = AVPictureInPictureController(contentSource: .init(activeVideoCallSourceView: containerView,
+                                                                          contentViewController: callViewController))
+        pipController?.canStartPictureInPictureAutomaticallyFromInline = true
+        pipController?.delegate = self
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -69,12 +93,9 @@ class PictureInPictureMain: BaseViewController {
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
         config.logConfig = logConfig
-        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
-        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
@@ -83,7 +104,6 @@ class PictureInPictureMain: BaseViewController {
             .selectedOption().value as? AgoraVideoOutputOrientationMode else {
             return
         }
-        
         // To enable MPNowPlayingInfoCenter, you need to add the following two private parameters
         agoraKit.setAudioOptionParams("{\"adm_mix_with_others\":false}")
         agoraKit.setParameters("{\"che.audio.nonmixable.option\":true}")
@@ -99,7 +119,6 @@ class PictureInPictureMain: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation,
                                                                              mirrorMode: AgoraVideoMirrorMode.auto))
-                
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -131,14 +150,13 @@ class PictureInPictureMain: BaseViewController {
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         })
-        
-//        rtcEngine(agoraKit, didVideoMuted: true, byUid: 0)
-        
+                
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didEnterBackgroundNotification),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
     }
+    // swiftlint: enable function_body_length
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -159,9 +177,7 @@ class PictureInPictureMain: BaseViewController {
         nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "Album Name"
         nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        if #available(iOS 13.0, *) {
-            MPNowPlayingInfoCenter.default().playbackState = .playing
-        }
+        MPNowPlayingInfoCenter.default().playbackState = .playing
     }
     
     override var canBecomeFirstResponder: Bool {
@@ -169,7 +185,6 @@ class PictureInPictureMain: BaseViewController {
     }
     
     deinit {
-        pipController?.releasePIP()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -180,7 +195,7 @@ class PictureInPictureMain: BaseViewController {
     
     @IBAction func onPIP(_btn: UIButton) {
         if let currentPipController = pipController {
-            currentPipController.pipController.startPictureInPicture()
+            currentPipController.startPictureInPicture()
         } else {
             showAlert(message: "PIP Support iOS 15+".localized)
         }
@@ -190,7 +205,7 @@ class PictureInPictureMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
-                if let pipController = pipController?.pipController, pipController.isPictureInPictureActive {
+                if let pipController = pipController, pipController.isPictureInPictureActive {
                     pipController.stopPictureInPicture()
                 }
                 agoraKit.leaveChannel { (stats) -> Void in
@@ -202,6 +217,7 @@ class PictureInPictureMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
+@available(iOS 15.0, *)
 extension PictureInPictureMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
@@ -270,6 +286,7 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
 }
 
 // MARK: - AgoraVideoDataFrameProtocol
+@available(iOS 15.0, *)
 extension PictureInPictureMain: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         true
@@ -288,11 +305,16 @@ extension PictureInPictureMain: AgoraVideoFrameDelegate {
     }
 }
 
+@available(iOS 15.0, *)
 extension PictureInPictureMain: AVPictureInPictureControllerDelegate {
     func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
     }
 
     func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        containerView.removeFromSuperview()
+        let vc = pictureInPictureController.contentSource?.activeVideoCallContentViewController
+        containerView.frame.size = vc?.view.bounds.size ?? .zero
+        vc?.view.addSubview(containerView)
     }
 
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController,
@@ -300,6 +322,9 @@ extension PictureInPictureMain: AVPictureInPictureControllerDelegate {
     }
     
     func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        containerView.removeFromSuperview()
+        containerView.frame.size = CGSize(width: SCREENSIZE.width, height: 280)
+        view.addSubview(containerView)
     }
 
     func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {

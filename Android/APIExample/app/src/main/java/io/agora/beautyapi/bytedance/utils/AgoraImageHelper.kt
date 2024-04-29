@@ -30,25 +30,10 @@ import io.agora.base.internal.video.GlRectDrawer
 import io.agora.base.internal.video.GlTextureFrameBuffer
 import io.agora.base.internal.video.RendererCommon.GlDrawer
 
-/**
- * Agora image helper
- *
- * @constructor Create empty Agora image helper
- */
 class AgoraImageHelper {
     private var glFrameBuffer: GlTextureFrameBuffer? = null
     private var drawer : GlDrawer? = null
 
-    /**
-     * Transform texture
-     *
-     * @param texId
-     * @param texType
-     * @param width
-     * @param height
-     * @param transform
-     * @return
-     */
     fun transformTexture(
         texId: Int,
         texType: VideoFrame.TextureBuffer.Type,
@@ -71,9 +56,9 @@ class AgoraImageHelper {
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer.frameBufferId)
         if(texType == VideoFrame.TextureBuffer.Type.OES){
-            drawer.drawOes(texId, transform, width, height, 0, 0, width, height)
+            drawer.drawOes(texId, 0, transform, width, height, 0, 0, width, height)
         }else{
-            drawer.drawRgb(texId, transform, width, height, 0, 0, width, height)
+            drawer.drawRgb(texId, 0, transform, width, height, 0, 0, width, height)
         }
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
         GLES20.glFinish()
@@ -81,10 +66,6 @@ class AgoraImageHelper {
         return frameBuffer.textureId
     }
 
-    /**
-     * Release
-     *
-     */
     fun release() {
         glFrameBuffer?.release()
         glFrameBuffer = null

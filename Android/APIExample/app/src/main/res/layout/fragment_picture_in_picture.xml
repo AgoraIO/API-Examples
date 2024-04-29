@@ -1,65 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".examples.basic.JoinChannelVideo">
 
-
-    <LinearLayout
-        android:id="@+id/video_container"
+    <FrameLayout
+        android:id="@+id/video_layout_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="50dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/video_container_row1"
+            android:id="@+id/video_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <io.agora.api.example.common.widget.VideoReportLayout
-                android:id="@+id/fl_local"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+            <LinearLayout
+                android:id="@+id/video_container_row1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:orientation="horizontal">
 
-            <FrameLayout
-                android:id="@+id/fl_remote_container"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                <io.agora.api.example.common.widget.VideoReportLayout
+                    android:id="@+id/fl_local"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <io.agora.api.example.common.widget.VideoReportLayout
                     android:id="@+id/fl_remote"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/video_container_row2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:orientation="horizontal">
+
+                <io.agora.api.example.common.widget.VideoReportLayout
+                    android:id="@+id/fl_remote2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <io.agora.api.example.common.widget.VideoReportLayout
+                    android:id="@+id/fl_remote3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent" />
 
-
-            </FrameLayout>
-
-
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
+    </FrameLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_pip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_pip" />
 
     <Button
         android:id="@+id/btn_float_window"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ll_join"
-        android:layout_alignParentEnd="true"
         android:text="@string/float_window_show" />
 
     <LinearLayout
         android:id="@+id/ll_join"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -79,4 +102,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

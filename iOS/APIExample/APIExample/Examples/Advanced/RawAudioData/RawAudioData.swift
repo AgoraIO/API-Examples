@@ -18,6 +18,7 @@ import AGEVideoLayout
 
 class RawAudioDataViewController: BaseViewController {
     @IBOutlet weak var videoContainer: AGEVideoContainer!
+    @IBOutlet weak var textfield: UITextField!
     
     let localVideo = Bundle.loadVideoView(type: .local, audioOnly: true)
     let remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: true)
@@ -36,6 +37,9 @@ class RawAudioDataViewController: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
+        // Audio4 is required to send Audio Meta Data.
+        agoraKit.setParameters("{\"rtc.use_audio4\":true}")
+        
         // Setup raw auido data frame observer
         agoraKit.setAudioFrameDelegate(self)
         agoraKit.enableAudio()
@@ -49,6 +53,11 @@ class RawAudioDataViewController: BaseViewController {
         })
     }
         
+    @IBAction func onTapSendButton(_ sender: Any) {
+        guard let data = textfield.text?.data(using: .utf8) else { return }
+        agoraKit.sendAudioMetadata(data)
+        textfield.text = ""
+    }
     override func didMove(toParent parent: UIViewController?) {
         if parent == nil {
             agoraKit.setAudioFrameDelegate(nil)
@@ -116,6 +125,10 @@ extension RawAudioDataViewController: AgoraAudioFrameDelegate {
 
 // MARK: - AgoraRtcEngineDelegate
 extension RawAudioDataViewController: AgoraRtcEngineDelegate {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMetadataReceived uid: UInt, metadata: Data) {
+        let data = String(data: metadata, encoding: .utf8) ?? ""
+        ToastView.show(text: "uid: \(uid) data: \(data)")
+    }
     // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
     // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {

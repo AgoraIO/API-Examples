@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>
@@ -69,15 +69,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mgo-dc-iwm" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Mgo-dc-iwm" secondAttribute="height" multiplier="16:9" id="nOl-DR-ZRh"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aMo-In-jKh">
-                                <rect key="frame" x="10" y="297" width="178" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aMo-In-jKh">
+                                <rect key="frame" x="10" y="301" width="178" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title=" Picture In Picture Remote"/>
                                 <connections>
                                     <action selector="onPIPWith_btn:" destination="cAG-6V-STC" eventType="touchUpInside" id="icu-Pc-BvJ"/>
@@ -86,17 +80,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="q2t-Lo-xxs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="aMo-In-jKh" firstAttribute="top" secondItem="Mgo-dc-iwm" secondAttribute="bottom" constant="20" id="MrU-ER-TqC" userLabel="Remote.top = Container.bottom + 20"/>
-                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="top" secondItem="q2t-Lo-xxs" secondAttribute="top" id="SAh-ye-hZF"/>
-                            <constraint firstItem="q2t-Lo-xxs" firstAttribute="trailing" secondItem="Mgo-dc-iwm" secondAttribute="trailing" id="dKV-um-165"/>
-                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="leading" secondItem="q2t-Lo-xxs" secondAttribute="leading" id="eH1-D3-6H2"/>
-                            <constraint firstItem="aMo-In-jKh" firstAttribute="leading" secondItem="Mgo-dc-iwm" secondAttribute="leading" constant="10" id="wRO-m7-QWL"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="container" destination="Mgo-dc-iwm" id="3Wn-Ta-na3"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cQE-Vi-vpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

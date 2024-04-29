@@ -39,8 +39,8 @@
             android:id="@+id/action_mainFragment_to_CDNStreaming"
             app:destination="@id/CDNStreaming" />
         <action
-            android:id="@+id/action_mainFragment_to_VideoMetadata"
-            app:destination="@id/VideoMetadata" />
+            android:id="@+id/action_mainFragment_to_MediaMetadata"
+            app:destination="@id/MediaMetadata" />
         <action
             android:id="@+id/action_mainFragment_to_QuickSwitch"
             app:destination="@id/QuickSwitch" />
@@ -230,10 +230,10 @@
         android:label="@string/item_rtmpstreaming"
         tools:layout="@layout/fragment_cdn_audience" />
     <fragment
-        android:id="@+id/VideoMetadata"
-        android:name="io.agora.api.example.examples.advanced.VideoMetadata"
-        android:label="@string/item_videometadata"
-        tools:layout="@layout/fragment_video_metadata" />
+        android:id="@+id/MediaMetadata"
+        android:name="io.agora.api.example.examples.advanced.MediaMetadata"
+        android:label="@string/item_mediametadata"
+        tools:layout="@layout/fragment_media_metadata" />
     <fragment
         android:id="@+id/QuickSwitch"
         android:name="io.agora.api.example.examples.advanced.VideoQuickSwitch"

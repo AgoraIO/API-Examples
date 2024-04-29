@@ -182,7 +182,7 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO_CANVAS_HIDDEN, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
 	ON_BN_CLICKED(IDC_RADIO_CANVAS_FIT, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
 	ON_BN_CLICKED(IDC_RADIO_CANVAS_ADAPTIVE, &CLiveBroadcastingDlg::OnBnClickedRadioCanvasRenderMode)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_CANVAS_COLOR, &CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_CANVAS_COLOR, &CLiveBroadcastingDlg::OnNMCustomdrawSliderCanvasColor)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_IMAGE, &CLiveBroadcastingDlg::OnBnClickedCheckVideoImage)
 END_MESSAGE_MAP()
 

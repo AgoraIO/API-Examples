@@ -25,7 +25,7 @@ wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
 wchar_t basicJoinChannelVideoByToken[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
-wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
+wchar_t advancedMetadata[INFO_LEN] = { 0 };
 wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN]				= { 0 };
@@ -312,6 +312,11 @@ wchar_t mediaRecorderStopRecording[INFO_LEN] = { 0 };
 
 wchar_t localVideoTranscodingVirtualBg[INFO_LEN] = { 0 };
 
+// metadata
+wchar_t advancedMetadataVideo[INFO_LEN] = { 0 };
+wchar_t advancedMetadataAudio[INFO_LEN] = { 0 };
+wchar_t advancedMetadataSend[INFO_LEN] = { 0 };
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -445,7 +450,7 @@ void InitKeyInfomation()
     //advanced  scene list
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
-    _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
+    _tcscpy_s(advancedMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
 	_tcscpy_s(advancedCustomEncrypt, INFO_LEN, Str(_T("Advanced.CustomEncrypt")));
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
@@ -753,6 +758,13 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaRecorderStopRecording, INFO_LEN, Str(_T("MediaRecoder.StopRecording")));
 
 	_tcscpy_s(localVideoTranscodingVirtualBg, INFO_LEN, Str(_T("LocalVideoTranscoding.VirtualBg")));
+
+
+	// metadata
+	_tcscpy_s(advancedMetadataVideo, INFO_LEN, Str(_T("Metadata.Video")));
+	_tcscpy_s(advancedMetadataAudio, INFO_LEN, Str(_T("Metadata.Audio")));
+	_tcscpy_s(advancedMetadataSend, INFO_LEN, Str(_T("Metadata.Send")));
+
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

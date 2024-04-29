@@ -32,38 +32,32 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 
 
-/**
- * The type Program texture 2 d.
- */
 public class ProgramTexture2d extends Program {
 
     // Simple vertex shader, used for all programs.
     private static final String VERTEX_SHADER =
-            "uniform mat4 uMVPMatrix;\n"
-                    + "attribute vec4 aPosition;\n"
-                    + "attribute vec2 aTextureCoord;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "void main() {\n"
-                    + "    gl_Position = uMVPMatrix * aPosition;\n"
-                    + "    vTextureCoord = aTextureCoord;\n"
-                    + "}\n";
+            "uniform mat4 uMVPMatrix;\n" +
+                    "attribute vec4 aPosition;\n" +
+                    "attribute vec2 aTextureCoord;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "void main() {\n" +
+                    "    gl_Position = uMVPMatrix * aPosition;\n" +
+                    "    vTextureCoord = aTextureCoord;\n" +
+                    "}\n";
 
     // Simple fragment shader for use with "normal" 2D textures.
     private static final String FRAGMENT_SHADER_2D =
-            "precision mediump float;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "uniform sampler2D sTexture;\n"
-                    + "void main() {\n"
-                    + "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n"
-                    + "}\n";
+            "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform sampler2D sTexture;\n" +
+                    "void main() {\n" +
+                    "    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "}\n";
 
     private int muMVPMatrixLoc;
     private int maPositionLoc;
     private int maTextureCoordLoc;
 
-    /**
-     * Instantiates a new Program texture 2 d.
-     */
     public ProgramTexture2d() {
         super(VERTEX_SHADER, FRAGMENT_SHADER_2D);
     }
@@ -120,6 +114,7 @@ public class ProgramTexture2d extends Program {
         GlUtil.checkGlError("glVertexAttribPointer");
 
         GLES20.glViewport(0, 0, width, height);
+
 
 
         // Draw the rect.
@@ -192,17 +187,29 @@ public class ProgramTexture2d extends Program {
         return mFrameBufferTextures[0];
     }
 
+    /** {zh} 
+     * 读取渲染结果的buffer
+     * @param width 目标宽度
+     * @param height 目标高度
+     * @return 渲染结果的像素Buffer 格式RGBA
+     */
+    /** {en} 
+     * Read the buffer
+     * @param width target width
+     * @param height target height
+     * @return pixel Buffer  format of the rendered result RGBA
+     */
+
     private int mWidth = 0;
     private int mHeight = 0;
     private ByteBuffer mCaptureBuffer = null;
-
     @Override
     public ByteBuffer readBuffer(int textureId, int width, int height) {
-        if (textureId == GlUtil.NO_TEXTURE) {
+        if ( textureId == GlUtil.NO_TEXTURE) {
             return null;
         }
-        if (width * height == 0) {
-            return null;
+        if (width* height == 0){
+            return  null;
         }
 
         if (mCaptureBuffer == null || mWidth * mHeight != width * height) {
@@ -212,7 +219,7 @@ public class ProgramTexture2d extends Program {
         }
         mCaptureBuffer.position(0);
         int[] frameBuffer = new int[1];
-        GLES20.glGenFramebuffers(1, frameBuffer, 0);
+        GLES20.glGenFramebuffers(1,frameBuffer,0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                 GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
