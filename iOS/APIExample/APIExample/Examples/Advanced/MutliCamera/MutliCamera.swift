@@ -53,7 +53,7 @@ class MutliCameraMain: BaseViewController {
         super.viewDidLoad()
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
-        localVideo_2.setPlaceholder(text: "第二路摄像头".localized)
+        localVideo_2.setPlaceholder(text: "Second camera".localized)
         container.layoutStream(views: [localVideo, localVideo_2])
         
         // set up agora instance when view loaded

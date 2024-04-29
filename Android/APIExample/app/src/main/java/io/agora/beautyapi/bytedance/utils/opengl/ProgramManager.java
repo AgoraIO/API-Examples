@@ -25,27 +25,21 @@
 package io.agora.beautyapi.bytedance.utils.opengl;
 
 
-import com.bytedance.labcv.effectsdk.BytedEffectConstants;
+import com.effectsar.labcv.effectsdk.EffectsSDKEffectConstants;
 
-/**
- * The type Program manager.
- */
 public class ProgramManager {
 
+
+    public ProgramManager() {
+    }
 
     private ProgramTexture2d mProgramTexture2D;
     private ProgramTextureOES mProgramTextureOES;
 
-    /**
-     * Gets program.
-     *
-     * @param srcTetxureFormat the src tetxure format
-     * @return the program
-     */
-    public Program getProgram(BytedEffectConstants.TextureFormat srcTetxureFormat) {
-        switch (srcTetxureFormat) {
+    public  Program getProgram(EffectsSDKEffectConstants.TextureFormat srcTetxureFormat){
+        switch (srcTetxureFormat){
             case Texure2D:
-                if (null == mProgramTexture2D) {
+                if (null == mProgramTexture2D){
                     mProgramTexture2D = new ProgramTexture2d();
                 }
                 return mProgramTexture2D;
@@ -54,21 +48,18 @@ public class ProgramManager {
                     mProgramTextureOES = new ProgramTextureOES();
                 }
                 return mProgramTextureOES;
-            default:
-                return null;
         }
+        return null;
+
     }
 
-    /**
-     * Release.
-     */
-    public void release() {
-        if (null != mProgramTexture2D) {
+    public void release(){
+        if (null != mProgramTexture2D){
             mProgramTexture2D.release();
             mProgramTexture2D = null;
 
         }
-        if (null != mProgramTextureOES) {
+        if (null != mProgramTextureOES){
             mProgramTextureOES.release();
             mProgramTextureOES = null;
 

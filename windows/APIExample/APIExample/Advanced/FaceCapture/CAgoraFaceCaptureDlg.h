@@ -2,7 +2,7 @@
 #include "AGVideoWnd.h"
 
 
-#define FACE_CAPTURE_LICENSE ""
+#define FACE_CAPTURE_LICENSE "0qIR1q9+df9pr6ha8ESiBoj51vKDGOvAILh8tO5AyGaxaUteIAzkAQlIitWIGypt1y8sDzZy/wYRz/q8FxKDwkev6PvON4z7sHTpQMPXFTbJgoGQsBvbY4zRWC0o1raLlvnA+Rui15ySFTQCgsM8QnsyF/gGPNEy639N8OaUbj0="
 
 // Video processing Frame Observer
 class FaceCaptureVideoFrameObserver :
@@ -53,6 +53,28 @@ public:
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 	virtual bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) { return true; }
+
+private:
+	HWND m_hMsgHanlder;
+};
+
+class FaceCaptureFaceInfoObserver :
+	public agora::media::IFaceInfoObserver
+{
+
+public:
+
+	// set the message notify window handler
+	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+
+	/**
+	* Occurs when the face info is received.
+	* @param outFaceInfo The output face info.
+	* @return
+	* - true: The face info is valid.
+	* - false: The face info is invalid.
+   */
+	virtual bool onFaceInfo(const char* outFaceInfo) override;
 
 private:
 	HWND m_hMsgHanlder;
@@ -165,7 +187,7 @@ public:
 	void ResumeStatus();
 	//register or unregister agora video Frame Observer.
 	BOOL RegisterVideoFrameObserver(BOOL bEnable, agora::media::IVideoFrameObserver * videoFrameObserver = NULL);
-
+	BOOL RegisterFaceInfoObserver(BOOL bEnable, agora::media::IFaceInfoObserver* faceInfoObserver = NULL);
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
@@ -173,6 +195,7 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	FaceCaptureEventHandler m_eventHandler;
 	FaceCaptureVideoFrameObserver m_videoFrameObserver;
+	FaceCaptureFaceInfoObserver m_faceInfoObserver;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -182,6 +205,7 @@ protected:
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDExtensionEvent(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDonCaptureVideoFrame(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDonFaceInfo(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;

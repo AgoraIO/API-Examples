@@ -125,7 +125,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var bFrameContainer: UIView!
     @IBOutlet weak var codingSegment: UISegmentedControl!
     @IBOutlet weak var videoImageContainer: UIView!
-    
+    @IBOutlet weak var centerStageContainerView: UIView!
+    @IBOutlet weak var CameraFocalButton: UIButton!
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -140,6 +141,8 @@ class LiveStreamingMain: BaseViewController {
             bFrameContainer.isHidden = role == .audience
             codingSegment.isHidden = role == .audience
             videoImageContainer.isHidden = role == .audience
+            centerStageContainerView.isHidden = role == .audience
+            CameraFocalButton.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -271,7 +274,52 @@ class LiveStreamingMain: BaseViewController {
     func remoteVideoCanvas() -> UIView {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
-        
+    private var cameraDirection: AgoraCameraDirection = .front
+    @IBAction func onTapCameraFocalButton(_ sender: UIButton) {
+        let infos = agoraKit.queryCameraFocalLengthCapability()
+        let pickerView = PickerView()
+        let params = infos?.flatMap({ $0.value })
+        pickerView.dataArray = params?.map({ $0.key })
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self] key in
+            guard let self = self else { return }
+            let type = params?.first(where: { $0.key == key })?.value ?? .default
+            let config = AgoraCameraCapturerConfiguration()
+            config.cameraFocalLengthType = type
+            config.cameraDirection = key.contains("Front camera".localized) ? .front : .rear
+            if config.cameraDirection != self.cameraDirection {
+                self.agoraKit.switchCamera()
+            }
+            sender.setTitle(key, for: .normal)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: DispatchWorkItem(block: {
+                self.agoraKit.setCameraCapturerConfiguration(config)
+            }))
+            self.cameraDirection = config.cameraDirection
+        }
+    }
+    
+    @IBAction func onTapCenterStage(_ sender: UISwitch) {
+        if agoraKit.isCameraCenterStageSupported() {
+            let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
+                                                                  "level1": .level1,
+                                                                  "level2": .level2,
+                                                                  "level3": .level3]
+            if sender.isOn {
+                let pickerView = PickerView()
+                pickerView.dataArray = params.map({ $0.key }).sorted()
+                AlertManager.show(view: pickerView, alertPostion: .bottom)
+                pickerView.pickerViewSelectedValueClosure = { [weak self] key in
+                    DispatchQueue.global().async {
+                        self?.agoraKit.setCameraStabilizationMode(params[key] ?? .auto)
+                    }
+                }
+            }
+            agoraKit.enableCameraCenterStage(sender.isOn)
+        } else {
+            showAlert(message: "This device does not support Center Stage".localized)
+            sender.setOn(false, animated: false)
+        }
+    }
     @IBAction func onTapVideoImageSwitch(_ sender: UISwitch) {
         let options = AgoraImageTrackOptions()
         let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
@@ -408,6 +456,10 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, cameraFocusDidChangedTo rect: CGRect) {
+        ToastView.show(text: "The camera has changed".localized + " \(rect)")
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand

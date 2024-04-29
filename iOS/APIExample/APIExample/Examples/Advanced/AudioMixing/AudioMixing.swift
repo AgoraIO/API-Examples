@@ -156,7 +156,8 @@ class AudioMixingMain: BaseViewController {
             let result = self.agoraKit.joinChannel(byToken: token,
                                                    channelId: channelName,
                                                    info: nil,
-                                                   uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+                                                   uid: 0) { [weak self] (channel, uid, elapsed) -> Void in
+                guard let self = self else { return }
                 self.isJoined = true
                 LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
                 

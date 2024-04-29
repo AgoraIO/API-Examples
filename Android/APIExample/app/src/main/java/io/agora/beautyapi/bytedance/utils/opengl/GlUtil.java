@@ -48,14 +48,8 @@ import io.agora.beautyapi.bytedance.utils.LogUtils;
  * Some OpenGL utility functions.
  */
 public abstract class GlUtil {
-    /**
-     * The constant TAG.
-     */
     public static final String TAG = GlUtil.class.getSimpleName();
 
-    /**
-     * The constant NO_TEXTURE.
-     */
     public static final int NO_TEXTURE = -1;
 //    public static final int TYPE_FITXY=0;
 //    public static final int TYPE_CENTERCROP=1;
@@ -63,14 +57,8 @@ public abstract class GlUtil {
 //    public static final int TYPE_FITSTART=3;
 //    public static final int TYPE_FITEND=4;
 
-    /**
-     * The constant x_scale.
-     */
-    public static final float X_SCALE = 1.0f;
-    /**
-     * The constant y_scale.
-     */
-    public static final float Y_SCALE = 1.0f;
+    public static float x_scale = 1.0f;
+    public static float y_scale = 1.0f;
 
     /**
      * Identity matrix for general use.  Don't modify or life will get weird.
@@ -91,8 +79,6 @@ public abstract class GlUtil {
     /**
      * Creates a new program from the supplied vertex and fragment shaders.
      *
-     * @param vertexSource   the vertex source
-     * @param fragmentSource the fragment source
      * @return A handle to the program, or 0 on failure.
      */
     public static int createProgram(String vertexSource, String fragmentSource) {
@@ -129,8 +115,6 @@ public abstract class GlUtil {
     /**
      * Compiles the provided shader source.
      *
-     * @param shaderType the shader type
-     * @param source     the source
      * @return A handle to the shader, or 0 on failure.
      */
     public static int loadShader(int shaderType, String source) {
@@ -151,8 +135,6 @@ public abstract class GlUtil {
 
     /**
      * Checks to see if a GLES error has been raised.
-     *
-     * @param op the op
      */
     public static void checkGlError(String op) {
         int error = GLES20.glGetError();
@@ -167,15 +149,13 @@ public abstract class GlUtil {
      * could not be found, but does not set the GL error.
      * <p>
      * Throws a RuntimeException if the location is invalid.
-     *
-     * @param location the location
-     * @param label    the label
      */
     public static void checkLocation(int location, String label) {
         if (location < 0) {
             LogUtils.e(TAG, "Unable to locate '" + label + "' in program");
         }
     }
+
 
 
     /**
@@ -221,9 +201,7 @@ public abstract class GlUtil {
      * @return Handle to texture.
      */
     public static int createImageTexture(Bitmap bmp) {
-        if (null == bmp || bmp.isRecycled()) {
-            return NO_TEXTURE;
-        }
+        if (null == bmp || bmp.isRecycled())return NO_TEXTURE;
         int[] textureHandles = new int[1];
         int textureHandle;
         GLES20.glGenTextures(1, textureHandles, 0);
@@ -254,9 +232,6 @@ public abstract class GlUtil {
 
     /**
      * Allocates a direct float buffer, and populates it with the float array data.
-     *
-     * @param coords the coords
-     * @return the float buffer
      */
     public static FloatBuffer createFloatBuffer(float[] coords) {
         // Allocate a direct ByteBuffer, using 4 bytes per float, and copy coords into it.
@@ -268,15 +243,6 @@ public abstract class GlUtil {
         return fb;
     }
 
-    /**
-     * Change mvp matrix crop float [ ].
-     *
-     * @param viewWidth     the view width
-     * @param viewHeight    the view height
-     * @param textureWidth  the texture width
-     * @param textureHeight the texture height
-     * @return the float [ ]
-     */
     public static float[] changeMVPMatrixCrop(float viewWidth, float viewHeight, float textureWidth, float textureHeight) {
         float scale = viewWidth * textureHeight / viewHeight / textureWidth;
         float[] mvp = new float[16];
@@ -289,9 +255,6 @@ public abstract class GlUtil {
      * Creates a texture object suitable for use with this program.
      * <p>
      * On exit, the texture will be bound.
-     *
-     * @param textureTarget the texture target
-     * @return the int
      */
     public static int createTextureObject(int textureTarget) {
         int[] textures = new int[1];
@@ -311,37 +274,18 @@ public abstract class GlUtil {
         return texId;
     }
 
-    /**
-     * Delete texture id.
-     *
-     * @param textureId the texture id
-     */
     public static void deleteTextureId(int[] textureId) {
         if (textureId != null && textureId.length > 0) {
             GLES20.glDeleteTextures(textureId.length, textureId, 0);
         }
     }
-
-    /**
-     * Delete texture id.
-     *
-     * @param textureId the texture id
-     */
     public static void deleteTextureId(int textureId) {
         int[] textures = new int[1];
-        textures[0] = textureId;
+        textures[0]= textureId;
         GLES20.glDeleteTextures(textures.length, textures, 0);
 
     }
 
-    /**
-     * Create fbo.
-     *
-     * @param fboTex the fbo tex
-     * @param fboId  the fbo id
-     * @param width  the width
-     * @param height the height
-     */
     public static void createFBO(int[] fboTex, int[] fboId, int width, int height) {
 //generate fbo id
         GLES20.glGenFramebuffers(1, fboId, 0);
@@ -365,27 +309,12 @@ public abstract class GlUtil {
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     }
 
-    /**
-     * Delete fbo.
-     *
-     * @param fboId the fbo id
-     */
     public static void deleteFBO(int[] fboId) {
         if (fboId != null && fboId.length > 0) {
             GLES20.glDeleteFramebuffers(fboId.length, fboId, 0);
         }
     }
 
-    /**
-     * Change mvp matrix crop float [ ].
-     *
-     * @param mvpMatrix     the mvp matrix
-     * @param viewWidth     the view width
-     * @param viewHeight    the view height
-     * @param textureWidth  the texture width
-     * @param textureHeight the texture height
-     * @return the float [ ]
-     */
     public static float[] changeMVPMatrixCrop(float[] mvpMatrix, float viewWidth, float viewHeight, float textureWidth, float textureHeight) {
         float scale = viewWidth * textureHeight / viewHeight / textureWidth;
         if (scale == 1.0f) {
@@ -401,106 +330,74 @@ public abstract class GlUtil {
     }
 
 
-    /**
-     * Gets show matrix.
-     *
-     * @param matrix     the matrix
-     * @param imgWidth   the img width
-     * @param imgHeight  the img height
-     * @param viewWidth  the view width
-     * @param viewHeight the view height
-     */
-    public static void getShowMatrix(float[] matrix, int imgWidth, int imgHeight, int viewWidth, int viewHeight) {
-        if (imgHeight > 0 && imgWidth > 0 && viewWidth > 0 && viewHeight > 0) {
-            float sWhView = (float) viewWidth / viewHeight;
-            float sWhImg = (float) imgWidth / imgHeight;
-            float[] projection = new float[16];
-            float[] camera = new float[16];
-            if (sWhImg > sWhView) {
-                Matrix.orthoM(projection, 0, -sWhView / sWhImg, sWhView / sWhImg, -1, 1, 1, 3);
-            } else {
-                Matrix.orthoM(projection, 0, -1, 1, -sWhImg / sWhView, sWhImg / sWhView, 1, 3);
+    public static void getShowMatrix(float[] matrix,int imgWidth,int imgHeight,int viewWidth,int viewHeight){
+        if(imgHeight>0&&imgWidth>0&&viewWidth>0&&viewHeight>0){
+            float sWhView=(float)viewWidth/viewHeight;
+            float sWhImg=(float)imgWidth/imgHeight;
+            float[] projection=new float[16];
+            float[] camera=new float[16];
+            if(sWhImg>sWhView){
+                Matrix.orthoM(projection,0,-sWhView/sWhImg,sWhView/sWhImg,-1,1,1,3);
+            }else{
+                Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
             }
-            Matrix.setLookAtM(camera, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
-            Matrix.multiplyMM(matrix, 0, projection, 0, camera, 0);
+            Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
+            Matrix.multiplyMM(matrix,0,projection,0,camera,0);
         }
     }
 
 
-    /**
-     * Gets show matrix.
-     *
-     * @param matrix     the matrix
-     * @param type       the type
-     * @param imgWidth   the img width
-     * @param imgHeight  the img height
-     * @param viewWidth  the view width
-     * @param viewHeight the view height
-     */
     public static void getShowMatrix(float[] matrix, ImageView.ScaleType type, int imgWidth, int imgHeight, int viewWidth,
-                                     int viewHeight) {
-        if (imgHeight > 0 && imgWidth > 0 && viewWidth > 0 && viewHeight > 0) {
-            float[] projection = new float[16];
-            float[] camera = new float[16];
-            if (type == FIT_XY) {
-                Matrix.orthoM(projection, 0, -1, 1, -1, 1, 1, 3);
-                Matrix.setLookAtM(camera, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
-                Matrix.multiplyMM(matrix, 0, projection, 0, camera, 0);
+                                     int viewHeight){
+        if(imgHeight>0&&imgWidth>0&&viewWidth>0&&viewHeight>0){
+            float[] projection=new float[16];
+            float[] camera=new float[16];
+            if(type== FIT_XY){
+                Matrix.orthoM(projection,0,-1,1,-1,1,1,3);
+                Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
+                Matrix.multiplyMM(matrix,0,projection,0,camera,0);
             }
-            float sWhView = (float) viewWidth / viewHeight;
-            float sWhImg = (float) imgWidth / imgHeight;
-            if (sWhImg > sWhView) {
-                switch (type) {
+            float sWhView=(float)viewWidth/viewHeight;
+            float sWhImg=(float)imgWidth/imgHeight;
+            if(sWhImg>sWhView){
+                switch (type){
                     case CENTER_CROP:
-                        Matrix.orthoM(projection, 0, -sWhView / sWhImg, sWhView / sWhImg, -1, 1, 1, 3);
-                        Matrix.scaleM(projection, 0, X_SCALE, Y_SCALE, 1);
+                        Matrix.orthoM(projection,0,-sWhView/sWhImg,sWhView/sWhImg,-1,1,1,3);
+                        Matrix.scaleM(projection,0,x_scale,y_scale,1);
                         break;
                     case CENTER_INSIDE:
-                        Matrix.orthoM(projection, 0, -1, 1, -sWhImg / sWhView, sWhImg / sWhView, 1, 3);
+                        Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
                         break;
                     case FIT_START:
-                        Matrix.orthoM(projection, 0, -1, 1, 1 - 2 * sWhImg / sWhView, 1, 1, 3);
+                        Matrix.orthoM(projection,0,-1,1,1-2*sWhImg/sWhView,1,1,3);
                         break;
                     case FIT_END:
-                        Matrix.orthoM(projection, 0, -1, 1, -1, 2 * sWhImg / sWhView - 1, 1, 3);
+                        Matrix.orthoM(projection,0,-1,1,-1,2*sWhImg/sWhView-1,1,3);
                         break;
-                    default:
-                        // do nothing
                 }
-            } else {
-                switch (type) {
+            }else{
+                switch (type){
                     case CENTER_CROP:
-                        Matrix.orthoM(projection, 0, -1, 1, -sWhImg / sWhView, sWhImg / sWhView, 1, 3);
-                        Matrix.scaleM(projection, 0, X_SCALE, Y_SCALE, 1);
+                        Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
+                        Matrix.scaleM(projection,0,x_scale,y_scale,1);
                         break;
                     case CENTER_INSIDE:
-                        Matrix.orthoM(projection, 0, -sWhView / sWhImg, sWhView / sWhImg, -1, 1, 1, 3);
+                        Matrix.orthoM(projection,0,-sWhView/sWhImg,sWhView/sWhImg,-1,1,1,3);
                         break;
                     case FIT_START:
-                        Matrix.orthoM(projection, 0, -1, 2 * sWhView / sWhImg - 1, -1, 1, 1, 3);
+                        Matrix.orthoM(projection,0,-1,2*sWhView/sWhImg-1,-1,1,1,3);
                         break;
                     case FIT_END:
-                        Matrix.orthoM(projection, 0, 1 - 2 * sWhView / sWhImg, 1, -1, 1, 1, 3);
+                        Matrix.orthoM(projection,0,1-2*sWhView/sWhImg,1,-1,1,1,3);
                         break;
-                    default:
-                        // do nothing
                 }
             }
 
-            Matrix.setLookAtM(camera, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
-            Matrix.multiplyMM(matrix, 0, projection, 0, camera, 0);
+            Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
+            Matrix.multiplyMM(matrix,0,projection,0,camera,0);
         }
     }
 
-    /**
-     * Change mvp matrix inside float [ ].
-     *
-     * @param viewWidth     the view width
-     * @param viewHeight    the view height
-     * @param textureWidth  the texture width
-     * @param textureHeight the texture height
-     * @return the float [ ]
-     */
     public static float[] changeMVPMatrixInside(float viewWidth, float viewHeight, float textureWidth, float textureHeight) {
         float scale = viewWidth * textureHeight / viewHeight / textureWidth;
         float[] mvp = new float[16];
@@ -512,8 +409,8 @@ public abstract class GlUtil {
     /**
      * Prefer OpenGL ES 3.0, otherwise 2.0
      *
-     * @param context the context
-     * @return support gl version
+     * @param context
+     * @return
      */
     public static int getSupportGLVersion(Context context) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -526,55 +423,24 @@ public abstract class GlUtil {
     }
 
 
-    /**
-     * Rotate float [ ].
-     *
-     * @param m     the m
-     * @param angle the angle
-     * @return the float [ ]
-     */
-    public static float[] rotate(float[] m, float angle) {
-        Matrix.rotateM(m, 0, angle, 0, 0, 1);
+    public static float[] rotate(float[] m,float angle){
+        Matrix.rotateM(m,0,angle,0,0,1);
         return m;
     }
 
-    /**
-     * Flip float [ ].
-     *
-     * @param m the m
-     * @param x the x
-     * @param y the y
-     * @return the float [ ]
-     */
-    public static float[] flip(float[] m, boolean x, boolean y) {
-        if (x || y) {
-            Matrix.scaleM(m, 0, x ? -1 : 1, y ? -1 : 1, 1);
+    public static float[] flip(float[] m,boolean x,boolean y){
+        if(x||y){
+            Matrix.scaleM(m,0,x?-1:1,y?-1:1,1);
         }
         return m;
     }
 
-    /**
-     * Scale float [ ].
-     *
-     * @param m the m
-     * @param x the x
-     * @param y the y
-     * @return the float [ ]
-     */
-    public static float[] scale(float[] m, float x, float y) {
-        Matrix.scaleM(m, 0, x, y, 1);
+    public static float[] scale(float[] m,float x,float y){
+        Matrix.scaleM(m,0,x,y,1);
         return m;
     }
 
 
-    /**
-     * Read pixles buffer byte buffer.
-     *
-     * @param textureId the texture id
-     * @param width     the width
-     * @param height    the height
-     * @return the byte buffer
-     */
     public static ByteBuffer readPixlesBuffer(int textureId, int width, int height) {
 
         if (textureId == GlUtil.NO_TEXTURE) {
@@ -612,12 +478,7 @@ public abstract class GlUtil {
         return mCaptureBuffer;
     }
 
-    /**
-     * Gets external oes texture id.
-     *
-     * @return the external oes texture id
-     */
-    public static int getExternalOESTextureID() {
+    public static int getExternalOESTextureID(){
         int[] texture = new int[1];
 
         GLES20.glGenTextures(1, texture, 0);

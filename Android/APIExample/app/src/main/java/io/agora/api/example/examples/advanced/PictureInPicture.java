@@ -6,10 +6,14 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AppOpsManager;
+import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Rational;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.TextureView;
@@ -21,6 +25,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.yanzhenjie.permission.AndPermission;
@@ -54,14 +60,19 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 public class PictureInPicture extends BaseFragment implements View.OnClickListener {
     private static final String TAG = PictureInPicture.class.getSimpleName();
 
-    private FrameLayout remoteContainer;
-    private VideoReportLayout fl_local, fl_remote;
-    private Button join, switch_float_window;
+    private VideoReportLayout fl_local, fl_remote, fl_remote2, fl_remote3;
+    private Button join, switch_float_window, btn_pip;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private AVCallFloatView floatWindowView;
+    private ViewGroup video_layout_container;
+    private ViewGroup video_layout;
+    private ViewGroup ll_join;
+
+    @RequiresApi(26)
+    private PictureInPictureParams.Builder pictureInPictureParamsBuilder = new PictureInPictureParams.Builder();
 
     @Nullable
     @Override
@@ -74,13 +85,19 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        remoteContainer = view.findViewById(R.id.fl_remote_container);
         switch_float_window = view.findViewById(R.id.btn_float_window);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        view.findViewById(R.id.btn_pip).setOnClickListener(this);
         switch_float_window.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        fl_remote2 = view.findViewById(R.id.fl_remote2);
+        fl_remote3 = view.findViewById(R.id.fl_remote3);
+        video_layout_container = view.findViewById(R.id.video_layout_container);
+        video_layout = view.findViewById(R.id.video_layout);
+        ll_join = view.findViewById(R.id.ll_join);
+        btn_pip = view.findViewById(R.id.btn_pip);
     }
 
     @Override
@@ -205,9 +222,23 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 join.setText(getString(R.string.join));
                 fl_remote.setReportUid(-1);
                 fl_remote.removeAllViews();
+                fl_remote2.setReportUid(-1);
+                fl_remote2.removeAllViews();
+                fl_remote3.setReportUid(-1);
+                fl_remote3.removeAllViews();
             }
         } else if (v.getId() == switch_float_window.getId()) {
             showFloatWindow();
+        } else if (v.getId() == R.id.btn_pip) {
+            if (checkPipSupported()) {
+                if (checkPipEnabled()) {
+                    enterPip();
+                } else {
+                    showLongToast("Please enable Picture-in-Picture mode in the system settings");
+                }
+            } else {
+                showLongToast("The device does not support Picture-in-Picture mode");
+            }
         }
     }
 
@@ -414,17 +445,18 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             if (context == null) {
                 return;
             }
-            if (fl_remote.getReportUid() > 0) {
-                return;
-            }
-            handler.post(() -> {
+            runOnUIThread(() -> {
+                VideoReportLayout view = getAvailableView();
+                if (view == null) {
+                    return;
+                }
                 /*Display remote video stream*/
                 TextureView surfaceView = null;
                 // Create render view by RtcEngine
                 surfaceView = new TextureView(context);
-                fl_remote.setReportUid(uid);
+                view.setReportUid(uid);
                 // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
@@ -444,45 +476,44 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /*Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    if (fl_remote.getReportUid() == uid) {
-                        fl_remote.setReportUid(-1);
-                        fl_remote.removeAllViews();
-                    }
+            runOnUIThread(() -> {
+                /*Clear render view
+                 Note: The video will stay at its last frame, to completely remove it you will need to
+                 remove the SurfaceView from its parent*/
+                engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                VideoReportLayout remoteView = getRemoteView(uid);
+                if (remoteView != null) {
+                    remoteView.setReportUid(-1);
+                    remoteView.removeAllViews();
                 }
             });
         }
 
-        @Override
-        public void onLocalAudioStats(LocalAudioStats stats) {
-            super.onLocalAudioStats(stats);
-            fl_local.setLocalAudioStats(stats);
-        }
-
-        @Override
-        public void onRemoteAudioStats(RemoteAudioStats stats) {
-            super.onRemoteAudioStats(stats);
-            fl_remote.setRemoteAudioStats(stats);
-        }
-
-        @Override
-        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
-            super.onLocalVideoStats(source, stats);
-            fl_local.setLocalVideoStats(stats);
-        }
-
-        @Override
-        public void onRemoteVideoStats(RemoteVideoStats stats) {
-            super.onRemoteVideoStats(stats);
-            fl_remote.setRemoteVideoStats(stats);
-        }
     };
+
+    private VideoReportLayout getAvailableView() {
+        if (fl_remote.getChildCount() == 0) {
+            return fl_remote;
+        } else if (fl_remote2.getChildCount() == 0) {
+            return fl_remote2;
+        } else if (fl_remote3.getChildCount() == 0) {
+            return fl_remote3;
+        } else {
+            return null;
+        }
+    }
+
+    private VideoReportLayout getRemoteView(int uid) {
+        if (fl_remote.getReportUid() == uid) {
+            return fl_remote;
+        } else if (fl_remote2.getReportUid() == uid) {
+            return fl_remote2;
+        } else if (fl_remote3.getReportUid() == uid) {
+            return fl_remote3;
+        } else {
+            return null;
+        }
+    }
 
     private void showFloatWindow() {
         FragmentActivity context = requireActivity();
@@ -499,8 +530,9 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 dismissFloatWindow();
             });
             FrameLayout container = floatView.findViewById(R.id.fl_container);
-            remoteContainer.removeView(fl_remote);
-            container.addView(fl_remote);
+
+            video_layout_container.removeView(video_layout);
+            container.addView(video_layout);
 
         } else {
             FloatWindowHelper.applyPermission(context);
@@ -512,9 +544,10 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
             return;
         }
         FrameLayout container = floatWindowView.findViewById(R.id.fl_container);
+
         if (container.getChildCount() > 0) {
-            container.removeView(fl_remote);
-            remoteContainer.addView(fl_remote);
+            container.removeView(video_layout);
+            video_layout_container.addView(video_layout);
         }
 
         FloatWindowHelper.destroyFloatView(floatWindowView);
@@ -525,5 +558,48 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         return floatWindowView != null;
     }
 
+
+    private boolean checkPipSupported(){
+        if(Build.VERSION.SDK_INT < 26){
+            return false;
+        }
+        return requireActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
+    }
+
+    private boolean checkPipEnabled() {
+        if (android.os.Build.VERSION.SDK_INT < 26) {
+            return false;
+        }
+        AppOpsManager appOpsManager = requireActivity().getSystemService(AppOpsManager.class);
+        return appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                android.os.Process.myUid(),
+                requireActivity().getPackageName())
+                == AppOpsManager.MODE_ALLOWED;
+    }
+
+    private void enterPip(){
+        if (android.os.Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+        requireActivity().enterPictureInPictureMode(pictureInPictureParamsBuilder
+                .setAspectRatio(new Rational(video_layout_container.getWidth(), video_layout_container.getHeight()))
+                .build());
+
+        ((AppCompatActivity)requireActivity()).getSupportActionBar().hide();
+        ll_join.setVisibility(View.GONE);
+        btn_pip.setVisibility(View.GONE);
+        switch_float_window.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+        if (!isInPictureInPictureMode) {
+            ((AppCompatActivity)requireActivity()).getSupportActionBar().show();
+            ll_join.setVisibility(View.VISIBLE);
+            btn_pip.setVisibility(View.VISIBLE);
+            switch_float_window.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

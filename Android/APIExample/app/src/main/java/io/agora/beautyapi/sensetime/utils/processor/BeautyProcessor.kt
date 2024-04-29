@@ -20,13 +20,8 @@ import io.agora.beautyapi.sensetime.utils.LogUtils
 import io.agora.beautyapi.sensetime.utils.egl.GLCopyHelper
 import io.agora.beautyapi.sensetime.utils.egl.GLFrameBuffer
 import io.agora.beautyapi.sensetime.utils.egl.GLTextureBufferQueue
-import io.agora.beautyapi.sensetime.utils.processor.Accelerometer.ClockwiseAngle
+import io.agora.beautyapi.sensetime.utils.processor.Accelerometer.CLOCKWISE_ANGLE
 
-/**
- * Beauty processor
- *
- * @constructor Create empty Beauty processor
- */
 class BeautyProcessor : IBeautyProcessor {
     private val TAG = this::class.java.simpleName
 
@@ -48,17 +43,20 @@ class BeautyProcessor : IBeautyProcessor {
     private var mCustomEvent = 0
     private var mInputWidth = 0
     private var mInputHeight = 0
+    private var mInputOrientation = 0
     private var isLastFrontCamera = false
+    private var skipFrame = 0
+    private var processMode = ProcessMode.DOUBLE_INPUT
 
     @Volatile
     private var isReleased = false
 
-    /**
-     * Initialize
-     *
-     * @param effectNative
-     * @param humanActionNative
-     */
+    enum class ProcessMode {
+        DOUBLE_INPUT,
+        SINGLE_BYTES_INPUT,
+        SINGLE_TEXTURE_INPUT
+    }
+
     override fun initialize(
         effectNative: STMobileEffectNative,
         humanActionNative: STMobileHumanActionNative
@@ -67,10 +65,6 @@ class BeautyProcessor : IBeautyProcessor {
         mFaceDetector = FaceDetector(humanActionNative, effectNative)
     }
 
-    /**
-     * Release
-     *
-     */
     override fun release() {
         isReleased = true
         mFaceDetector.release()
@@ -97,21 +91,10 @@ class BeautyProcessor : IBeautyProcessor {
         mSTMobileHardwareBufferNative = null
     }
 
-    /**
-     * Enable sensor
-     *
-     * @param context
-     * @param enable
-     */
     override fun enableSensor(context: Context, enable: Boolean) {
         mFaceDetector.enableSensor(context, enable)
     }
 
-    /**
-     * Trigger screen tap
-     *
-     * @param isDouble
-     */
     override fun triggerScreenTap(isDouble: Boolean) {
         LogUtils.d(
             TAG,
@@ -126,24 +109,36 @@ class BeautyProcessor : IBeautyProcessor {
     }
 
 
-    /**
-     * Process
-     *
-     * @param input
-     * @return
-     */
     override fun process(input: InputInfo): OutputInfo? {
         if (isReleased) {
             return null
         }
         return if (input.bytes != null && input.textureId != null) {
+            if(processMode != ProcessMode.DOUBLE_INPUT){
+                processMode = ProcessMode.DOUBLE_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processDoubleInput(input)
         } else if (input.bytes != null) {
+            if(processMode != ProcessMode.SINGLE_BYTES_INPUT){
+                processMode = ProcessMode.SINGLE_BYTES_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processSingleBytesInput(input)
         } else if (input.textureId != null && Build.VERSION.SDK_INT >= 26) {
+            if(processMode != ProcessMode.SINGLE_TEXTURE_INPUT){
+                processMode = ProcessMode.SINGLE_TEXTURE_INPUT
+                if (mInputWidth > 0 || mInputHeight > 0) {
+                    skipFrame = 3
+                }
+            }
             processSingleTextureInput(input)
         } else {
-            null
+            throw RuntimeException("Single texture input is not supported when SDK_INT < 26!");
         }
     }
 
@@ -165,6 +160,7 @@ class BeautyProcessor : IBeautyProcessor {
         if (mSTMobileHardwareBufferNative == null) {
             mProcessWidth = width
             mProcessHeight = height
+            glFrameBuffer.resizeTexture(processInTextureId, width, height)
             mSTMobileHardwareBufferNative = STMobileHardwareBufferNative().apply {
                 init(
                     width,
@@ -218,7 +214,7 @@ class BeautyProcessor : IBeautyProcessor {
                 input.isFrontCamera,
                 input.isMirror,
                 input.cameraOrientation,
-                input.timestamp
+                input.timestamp,
             )
         )
     }
@@ -269,7 +265,7 @@ class BeautyProcessor : IBeautyProcessor {
                 input.isFrontCamera,
                 input.isMirror,
                 input.cameraOrientation,
-                input.timestamp
+                input.timestamp,
             )
         )
     }
@@ -281,13 +277,19 @@ class BeautyProcessor : IBeautyProcessor {
         if (input.bytes == null || input.textureId == null) {
             return null
         }
-        if (mInputWidth != input.width || mInputHeight != input.height || isLastFrontCamera != input.isFrontCamera) {
+        if (mInputWidth != input.width || mInputHeight != input.height || mInputOrientation != input.cameraOrientation || isLastFrontCamera != input.isFrontCamera) {
+            if(mInputWidth > 0 || mInputHeight > 0){
+                skipFrame = 3
+            }
             mInputWidth = input.width
             mInputHeight = input.height
+            mInputOrientation = input.cameraOrientation
             isLastFrontCamera = input.isFrontCamera
             reset()
             return null
         }
+
+
 
         val diff = glTextureBufferQueue.size() - mFaceDetector.size()
         if(diff < input.diffBetweenBytesAndTexture){
@@ -358,6 +360,11 @@ class BeautyProcessor : IBeautyProcessor {
                 input.cameraOrientation
             )
         )
+
+        if(skipFrame > 0){
+            skipFrame --
+            return null
+        }
 
         return out
     }
@@ -433,16 +440,23 @@ class BeautyProcessor : IBeautyProcessor {
             STEffectParam.EFFECT_PARAM_USE_INPUT_TIMESTAMP,
             1.0f
         )
+        if (isReleased) {
+            return -1
+        }
         mSTMobileEffectNative.render(
             sTEffectRenderInParam,
             stEffectRenderOutParam,
             false
         )
 
+
         if (event == mCustomEvent) {
             mCustomEvent = 0
         }
 
+        if (isReleased) {
+            return -1
+        }
         glFrameBuffer.setSize(width, height)
         glFrameBuffer.resetTransform()
         glFrameBuffer.setFlipV(true)
@@ -455,10 +469,6 @@ class BeautyProcessor : IBeautyProcessor {
         return finalOutTextureId
     }
 
-    /**
-     * Reset
-     *
-     */
     override fun reset() {
         mFaceDetector.reset()
         glTextureBufferQueue.reset()
@@ -474,7 +484,7 @@ class BeautyProcessor : IBeautyProcessor {
 
 
     private fun getCurrentOrientation(): Int {
-        val dir = mFaceDetector.getAccelerometer()?.direction ?: ClockwiseAngle.Deg90.value
+        val dir = mFaceDetector.getAccelerometer()?.direction ?: CLOCKWISE_ANGLE.Deg90.value
         var orientation = dir - 1
         if (orientation < 0) {
             orientation = dir xor 3
