@@ -184,13 +184,15 @@
     [self.agoraKit disableVideo];
     [self.agoraKit stopPreview];
     [self.agoraKit leaveChannel:nil];
-    if (self.isOpenCamera) {
-        [self.agoraKit stopCameraCapture:(AgoraVideoSourceTypeScreenSecondary)];
-        NSString *channelName = [self.configs objectForKey:@"channelName"];
-        AgoraRtcConnection * connection = [[AgoraRtcConnection alloc] initWithChannelId:channelName localUid:self.mutliCameraUid];
-        [self.agoraKit leaveChannelEx:connection leaveChannelBlock:nil];
-    }
-    [AgoraRtcEngineKit destroy];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if (self.isOpenCamera) {
+            [self.agoraKit stopCameraCapture:(AgoraVideoSourceTypeScreenSecondary)];
+            NSString *channelName = [self.configs objectForKey:@"channelName"];
+            AgoraRtcConnection * connection = [[AgoraRtcConnection alloc] initWithChannelId:channelName localUid:self.mutliCameraUid];
+            [self.agoraKit leaveChannelEx:connection leaveChannelBlock:nil];
+        }
+        [AgoraRtcEngineKit destroy];
+    });
 }
 
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand

@@ -175,3 +175,11 @@
 "ULTRALOWLATENCY" = "低延时强降噪模式";
 "Face Capture" = "面捕数据";
 "Please contact Agora customer service to obtain a face capture certificate" = "请联系声网客服获取面捕证书";
+"Second camera" = "第二路摄像头";
+"This device does not support Center Stage" = "此设备不支持 Center Stage";
+"Wide" = "广角";
+"Length Wide" = "超广角";
+"Telephoto" = "长焦";
+"Front camera" = "前置";
+"Rear camera" = "后置";
+"The camera has changed:" = "摄像头已改变:";

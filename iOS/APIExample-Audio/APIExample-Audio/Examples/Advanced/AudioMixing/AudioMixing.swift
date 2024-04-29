@@ -139,7 +139,8 @@ class AudioMixingMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, info: nil, uid: 0) { [weak self] (channel, uid, elapsed) -> Void in
+                guard let self = self else { return }
                 self.isJoined = true
                 LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
                 

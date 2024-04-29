@@ -158,7 +158,19 @@ class FaceCaptureMain: BaseViewController {
                                                     value: "{\"company_id\":\"agoraTest\"," +
                                                     "\"license\":\"" + (KeyCenter.FaceCaptureLicense ?? "") + "\"}",
                                                     sourceType: .primaryCamera)
+            
+            agoraKit.enableExtension(withVendor: "agora_filters_lip_sync",
+                                     extension: "lip_sync",
+                                     enabled: true,
+                                     sourceType: .speechDriven)
+            agoraKit.setExtensionPropertyWithVendor("agora_filters_lip_sync",
+                                                    extension: "lip_sync",
+                                                    key: "parameters",
+                                                    value: "{\"company_id\":\"agoraTest\",  \"license\":\"abc\", \"open_agc\":true}",
+                                                    sourceType: .speechDriven)
+            
             agoraKit.setVideoFrameDelegate(self)
+            agoraKit.setFaceInfoDelegate(self)
         }
 
         // set up local video to render your local camera preview
@@ -209,10 +221,17 @@ class FaceCaptureMain: BaseViewController {
     }
 }
 
+extension FaceCaptureMain: AgoraFaceInfoDelegate {
+    func onFaceInfo(_ outFaceInfo: String) -> Bool {
+        localVideo.statsInfo?.updateMetaInfo(data: outFaceInfo)
+        return true
+    }
+}
+
 extension FaceCaptureMain: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         let info = videoFrame.metaInfo["KEY_FACE_CAPTURE"] as? String
-        localVideo.statsInfo?.updateMetaInfo(data: info)
+        LogUtils.log(message: info ?? "", level: .info)
         return true
     }
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {

@@ -36,7 +36,8 @@
     <string name="audience">AUDIENCE</string>
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
-    <string name="camera">Publish Camera</string>
+    <string name="publish_camera">Publish Camera</string>
+    <string name="camera">Camera</string>
     <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="alert_no_local_audio_message">Local audio share will not be accessible.\n Please copy your PCM audio file to %s and change the name as bgm.pcm.</string>
@@ -111,7 +112,7 @@
     <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
-    <string name="item_videometadata">Video Metadata(SEI)</string>
+    <string name="item_mediametadata">Media Metadata</string>
     <string name="item_streamencrypt">Media Stream Encryption(Custom Encoder)</string>
     <string name="item_channelencryption">Media Stream Encryption</string>
     <string name="item_setvideoprofile">Set the Video Profile</string>
@@ -152,7 +153,7 @@
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="screensharing">This example demonstrates how to use screen sharing during an audio-video call.</string>
     <string name="localvideotranscoding">This example demonstrates how to use local video transcoding during an audio-video call.</string>
-    <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
+    <string name="mediametadata">This example demonstrates how to send meta information during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
@@ -363,4 +364,15 @@
     <string name="audio_stream_index">AudioStream%d</string>
     <string name="face_capture_authentication">Please contact Shengwang customer service to obtain the face capture certificate and configure it to the AUTHENTICATION constant.</string>
     <string name="notifications_enable_tip">Please turn on notification permission to prevent background recording from being interrupted.</string>
+    <string name="video_metadata">Video Metadata</string>
+    <string name="send">Send</string>
+    <string name="audio_metadata">Audio Metadata</string>
+    <string name="camera_front">Front</string>
+    <string name="camera_rear">Rear</string>
+    <string name="camera_extral">Extral</string>
+    <string name="camera_focal_default">Default</string>
+    <string name="camera_focal_wide_angle">Wide Angle</string>
+    <string name="camera_focal_urltra_wide">Urltra Wide</string>
+    <string name="camera_focal_telephoto">Telephoto</string>
+    <string name="enter_pip">Enter picture in picture mode</string>
 </resources>

@@ -41,9 +41,6 @@ public class ProgramTextureYUV extends Program {
     private int mVTextureLoc;
     private int mVUTextureLoc;
 
-    /**
-     * Instantiates a new Program texture yuv.
-     */
     public ProgramTextureYUV() {
         super(VERTEX, FRAGMENT);
     }
@@ -72,17 +69,6 @@ public class ProgramTextureYUV extends Program {
         GlUtil.checkLocation(muMVPMatrixLoc, "vuTexture");
     }
 
-    /**
-     * Draw frame off screen int.
-     *
-     * @param yTexture  the y texture
-     * @param uTexture  the u texture
-     * @param vTexture  the v texture
-     * @param width     the width
-     * @param height    the height
-     * @param mvpMatrix the mvp matrix
-     * @return the int
-     */
     public int drawFrameOffScreen(int yTexture, int uTexture, int vTexture, int width, int height, float[] mvpMatrix) {
         GlUtil.checkGlError("draw start");
 
@@ -138,16 +124,6 @@ public class ProgramTextureYUV extends Program {
         return mFrameBufferTextures[0];
     }
 
-    /**
-     * Draw frame off screen int.
-     *
-     * @param yTexture  the y texture
-     * @param vuTexture the vu texture
-     * @param width     the width
-     * @param height    the height
-     * @param mvpMatrix the mvp matrix
-     * @return the int
-     */
     public int drawFrameOffScreen(int yTexture, int vuTexture, int width, int height, float[] mvpMatrix) {
         GlUtil.checkGlError("draw start");
 
@@ -212,39 +188,33 @@ public class ProgramTextureYUV extends Program {
         return null;
     }
 
-    /**
-     * The constant VERTEX.
-     */
-    public static final String VERTEX = "uniform mat4 uMVPMatrix;\n"
-            + "attribute vec4 aPosition;\n"
-            + "attribute vec2 aTextureCoord;\n"
-            + "varying vec2 vTextureCoord;\n"
-            + "void main() {\n"
-            + "    gl_Position = uMVPMatrix * aPosition;\n"
-            + "    vTextureCoord = aTextureCoord;\n"
-            + "}\n";
-    /**
-     * The constant FRAGMENT.
-     */
-    public static final String FRAGMENT = "varying highp vec2 vTextureCoord;\n"
-            + " uniform sampler2D yTexture;\n"
-            + " uniform sampler2D vuTexture;\n"
-            + " uniform sampler2D uTexture;\n"
-            + " uniform sampler2D vTexture;\n"
-            + " void main()\n"
-            + " {\n"
-            + "     mediump vec3 yuv;\n"
-            + "     lowp vec3 rgb;\n"
-            + "     yuv.x = texture2D(yTexture, vTextureCoord).a - 0.065;\n"
-            + "     yuv.y = texture2D(vuTexture, vTextureCoord).a - 0.5;\n"
-            + "     yuv.z = texture2D(vuTexture, vTextureCoord).r - 0.5;\n"
-//          +  "     rgb = mat3(      1,       1,       1,\n"
-//          +  "                0, -.21482, 2.12798,\n"
-//          +  "                1.28033, -.38059,       0) * yuv;\n"
-            + "     rgb.x = yuv.x + 1.4075 * yuv.z;\n"
-            + "     rgb.y = yuv.x - 0.3455 * yuv.y - 0.7169 * yuv.z;\n"
-            + "     rgb.z = yuv.x + 1.779 * yuv.y;\n"
-//          +  "     gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1);\n"
-            + "     gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1);\n"
-            + " }";
+    public static final String VERTEX = "uniform mat4 uMVPMatrix;\n" +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "varying vec2 vTextureCoord;\n" +
+            "void main() {\n" +
+            "    gl_Position = uMVPMatrix * aPosition;\n" +
+            "    vTextureCoord = aTextureCoord;\n" +
+            "}\n";
+    public static final String FRAGMENT = "varying highp vec2 vTextureCoord;\n" +
+            " uniform sampler2D yTexture;\n" +
+            " uniform sampler2D vuTexture;\n" +
+            " uniform sampler2D uTexture;\n" +
+            " uniform sampler2D vTexture;\n" +
+            " void main()\n" +
+            " {\n" +
+            "     mediump vec3 yuv;\n" +
+            "     lowp vec3 rgb;\n" +
+            "     yuv.x = texture2D(yTexture, vTextureCoord).a - 0.065;\n" +
+            "     yuv.y = texture2D(vuTexture, vTextureCoord).a - 0.5;\n" +
+            "     yuv.z = texture2D(vuTexture, vTextureCoord).r - 0.5;\n" +
+//            "     rgb = mat3(      1,       1,       1,\n" +
+//            "                0, -.21482, 2.12798,\n" +
+//            "                1.28033, -.38059,       0) * yuv;\n" +
+            "     rgb.x = yuv.x + 1.4075 * yuv.z;\n" +
+            "     rgb.y = yuv.x - 0.3455 * yuv.y - 0.7169 * yuv.z;\n" +
+            "     rgb.z = yuv.x + 1.779 * yuv.y;\n" +
+//            "     gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1);\n" +
+            "     gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1);\n" +
+            " }";
 }

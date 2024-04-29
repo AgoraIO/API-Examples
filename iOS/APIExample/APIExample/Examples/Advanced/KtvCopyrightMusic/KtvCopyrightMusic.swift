@@ -10,7 +10,7 @@ import UIKit
 
 class KtvCopyrightMusic: UIViewController {
 
-    private let urlString = "https://docs.agora.io/cn/online-ktv/downloads?platform=All%20Platforms&from_wecom=1"
+    private let urlString = "https://doc.shengwang.cn/doc/online-ktv/ios/implementation/ktv-scenario/integrate-ktvapi"
     
     override func viewDidLoad() {
         super.viewDidLoad()
