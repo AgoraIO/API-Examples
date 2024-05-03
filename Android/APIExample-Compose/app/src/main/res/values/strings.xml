@@ -21,4 +21,8 @@
     <string name="example_mediaplayer">媒体播放器</string>
     <string name="example_screensharing">屏幕共享</string>
     <string name="example_videoprocessextension">视频增强组件</string>
+    <string name="example_localvideotranscoding">本地合图</string>
+    <string name="example_senddatastream">创建数据流</string>
+    <string name="example_rhythmplayer">虚拟节拍器</string>
+    <string name="example_hostacrosschannel">跨频道媒体流转发</string>
 </resources>

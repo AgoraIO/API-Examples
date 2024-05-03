@@ -22,7 +22,7 @@ import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
 import io.agora.api.example.compose.ui.common.SwitchRaw
-import io.agora.api.example.compose.ui.common.Switching1v1VideoView
+import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.ClientRoleOptions
@@ -271,15 +271,15 @@ fun RTMPStreamingView(
     onLeaveClick: () -> Unit = {}
 ) {
     Column {
-        Switching1v1VideoView(
+        TwoVideoView(
             modifier = Modifier.weight(1.0f),
             localUid = localUid,
             remoteUid = remoteUid,
             localStats = localStats,
             remoteStats = remoteStats,
-            switchable = isJoined && remoteUid != 0,
-            localLarge = localLarge || remoteUid == 0,
-            onSwitch = onSwitch,
+            secondClickable = isJoined && remoteUid != 0,
+            localPrimary = localLarge || remoteUid == 0,
+            onSecondClick = onSwitch,
             localRender = { view, uid, isFirstSetup ->
                 rtcEngine?.setupLocalVideo(
                     VideoCanvas(

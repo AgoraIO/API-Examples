@@ -29,7 +29,7 @@ import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
-import io.agora.api.example.compose.ui.common.Switching1v1VideoView
+import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.ClientRoleOptions
@@ -250,12 +250,12 @@ fun ChannelEncryptionView(
     onLeaveClick: () -> Unit
 ) {
     Column {
-        Switching1v1VideoView(
+        TwoVideoView(
             modifier = Modifier.weight(1f),
             localUid = localUid,
             remoteUid = remoteUid,
-            localLarge = localLarge,
-            onSwitch = onSwitch,
+            localPrimary = localLarge,
+            onSecondClick = onSwitch,
             localStats = localStats,
             remoteStats = remoteStats,
             localRender = { view, id, isFirstCreate ->

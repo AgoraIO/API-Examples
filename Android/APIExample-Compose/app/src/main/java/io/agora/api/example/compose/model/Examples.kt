@@ -8,11 +8,13 @@ import io.agora.api.example.compose.samples.CustomAudioRender
 import io.agora.api.example.compose.samples.CustomAudioSource
 import io.agora.api.example.compose.samples.CustomVideoRender
 import io.agora.api.example.compose.samples.CustomVideoSource
+import io.agora.api.example.compose.samples.HostAcrossChannel
 import io.agora.api.example.compose.samples.JoinChannelAudio
 import io.agora.api.example.compose.samples.JoinChannelVideo
 import io.agora.api.example.compose.samples.JoinChannelVideoToken
 import io.agora.api.example.compose.samples.JoinMultiChannel
 import io.agora.api.example.compose.samples.LiveStreaming
+import io.agora.api.example.compose.samples.LocalVideoTranscoding
 import io.agora.api.example.compose.samples.MediaMetadata
 import io.agora.api.example.compose.samples.MediaPlayer
 import io.agora.api.example.compose.samples.MediaRecorder
@@ -21,7 +23,9 @@ import io.agora.api.example.compose.samples.OriginVideoData
 import io.agora.api.example.compose.samples.PlayAudioFiles
 import io.agora.api.example.compose.samples.PreCallTest
 import io.agora.api.example.compose.samples.RTMPStreaming
+import io.agora.api.example.compose.samples.RhythmPlayer
 import io.agora.api.example.compose.samples.ScreenSharing
+import io.agora.api.example.compose.samples.SendDataStream
 import io.agora.api.example.compose.samples.VideoProcessExtension
 import io.agora.api.example.compose.samples.VoiceEffects
 
@@ -56,4 +60,8 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_mediaplayer) { MediaPlayer() },
     Example(R.string.example_screensharing) { ScreenSharing() },
     Example(R.string.example_videoprocessextension) { VideoProcessExtension() },
+    Example(R.string.example_rhythmplayer) { RhythmPlayer() },
+    Example(R.string.example_localvideotranscoding) { LocalVideoTranscoding() },
+    Example(R.string.example_senddatastream) { SendDataStream() },
+    Example(R.string.example_hostacrosschannel) { HostAcrossChannel() },
 )

@@ -7,18 +7,23 @@ import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -27,6 +32,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -71,7 +78,8 @@ fun VideoGrid(
     column: Int = 2,
     videoIdList: List<Int>,
     setupVideo: (View, Int, Boolean) -> Unit,
-    statsMap: Map<Int, VideoStatsInfo> = emptyMap()
+    statsMap: Map<Int, VideoStatsInfo> = emptyMap(),
+    overlay: @Composable BoxScope.(index: Int, id: Int) -> Unit? = { _, _ -> }
 ) {
     Column(modifier) {
         for (rawIndex in 0..<raw) {
@@ -84,7 +92,8 @@ fun VideoGrid(
                                 id = id,
                                 isLocal = index == 0,
                                 setupVideo = setupVideo,
-                                statsInfo = statsMap[id]
+                                statsInfo = statsMap[id],
+                                overlay = { overlay(index, id) }
                             )
                         }
                     }
@@ -101,7 +110,8 @@ fun VideoCell(
     isLocal: Boolean,
     createView: ((context: Context) -> View)? = null,
     setupVideo: (renderView: View, id: Int, isFirstSetup: Boolean) -> Unit,
-    statsInfo: VideoStatsInfo? = null
+    statsInfo: VideoStatsInfo? = null,
+    overlay: @Composable BoxScope.() -> Unit? = { }
 ) {
     Box(modifier) {
         if (id != 0) {
@@ -202,6 +212,7 @@ fun VideoCell(
             Text(text = text, color = Color.White)
         }
 
+        overlay()
     }
 }
 
@@ -408,9 +419,13 @@ fun SliderRaw(
     title: String,
     value: Float = 0f,
     enable: Boolean = true,
+    isDraggingWhileUpdating : Boolean = false,
     onValueChanged: (Float) -> Unit = {},
 ) {
     var slValue by remember { mutableFloatStateOf(value) }
+    var updatable by rememberSaveable {
+        mutableStateOf(true)
+    }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
@@ -421,11 +436,13 @@ fun SliderRaw(
         Spacer(Modifier.weight(1f))
         Slider(
             modifier = Modifier.padding(16.dp, 0.dp),
-            value = slValue,
+            value = if (updatable && isDraggingWhileUpdating) value else slValue,
             onValueChange = {
+                updatable = false
                 slValue = it
             },
             onValueChangeFinished = {
+                updatable = true
                 onValueChanged(slValue)
             },
             enabled = enable
@@ -479,48 +496,118 @@ fun InputRaw(
     }
 }
 
+enum class TwoVideoViewType {
+    LargeSmall,
+    Row,
+    Column
+}
+
 @Composable
-fun Switching1v1VideoView(
+fun TwoVideoView(
     modifier: Modifier = Modifier,
     localUid: Int,
     remoteUid: Int,
-    localStats: VideoStatsInfo,
-    remoteStats: VideoStatsInfo,
-    switchable: Boolean = true,
-    localLarge: Boolean = true,
-    onSwitch: () -> Unit = {},
-    localRender: (View, Int, Boolean) -> Unit,
+    localStats: VideoStatsInfo = VideoStatsInfo(),
+    remoteStats: VideoStatsInfo = VideoStatsInfo(),
+    type: TwoVideoViewType = TwoVideoViewType.LargeSmall,
+    localPrimary: Boolean = true,
+    secondClickable: Boolean = false,
+    onSecondClick: () -> Unit = {},
+    localCreate: ((context: Context) -> View)? = null,
     remoteCreate: ((context: Context) -> View)? = null,
+    localRender: (View, Int, Boolean) -> Unit,
     remoteRender: (View, Int, Boolean) -> Unit,
 ) {
-    Box(
-        modifier = modifier
-    ) {
+    val primary: @Composable (Modifier) -> Unit = {
         VideoCell(
-            modifier = Modifier
-                .fillMaxSize(),
-            id = if (localLarge) localUid else remoteUid,
-            isLocal = localLarge,
-            createView = if(localLarge) null else remoteCreate,
-            setupVideo = if (localLarge) localRender else remoteRender,
-            statsInfo = if (localLarge) localStats else remoteStats
+            modifier = it,
+            id = if (localPrimary) localUid else remoteUid,
+            isLocal = localPrimary,
+            createView = if (localPrimary) localCreate else remoteCreate,
+            setupVideo = if (localPrimary) localRender else remoteRender,
+            statsInfo = if (localPrimary) localStats else remoteStats
         )
+    }
+    val second: @Composable (Modifier) -> Unit = {
         VideoCell(
-            modifier = Modifier
-                .fillMaxSize(0.5f)
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-                .clickable {
-                    if (switchable) {
-                        onSwitch()
-                    }
-                },
-            id = if (!localLarge) localUid else remoteUid,
-            isLocal = !localLarge,
-            createView = if(localLarge) remoteCreate else null,
-            setupVideo = if (!localLarge) localRender else remoteRender,
-            statsInfo = if (!localLarge) localStats else remoteStats
+            modifier = if (secondClickable) it.clickable {
+                onSecondClick()
+            } else it,
+            id = if (!localPrimary) localUid else remoteUid,
+            isLocal = !localPrimary,
+            createView = if (localPrimary) remoteCreate else localCreate,
+            setupVideo = if (!localPrimary) localRender else remoteRender,
+            statsInfo = if (!localPrimary) localStats else remoteStats
         )
+    }
+    when (type) {
+        TwoVideoViewType.LargeSmall -> {
+            Box(modifier = modifier) {
+                primary(Modifier.fillMaxSize())
+                second(
+                    Modifier
+                        .fillMaxSize(0.5f)
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                )
+            }
+        }
+
+        TwoVideoViewType.Row -> {
+            Row(modifier = modifier) {
+                primary(Modifier.weight(1.0f))
+                second(Modifier.weight(1.0f))
+            }
+        }
+
+        TwoVideoViewType.Column -> {
+            Column(modifier = modifier) {
+                primary(Modifier.weight(1.0f))
+                second(Modifier.weight(1.0f))
+            }
+        }
+    }
+}
+
+
+@Composable
+fun <T> RadioGroup(
+    modifier: Modifier = Modifier,
+    options: List<Pair<String, T>>,
+    selectedValue: T = options.first().second,
+    selected: Int = options.indexOfFirst { it.second == selectedValue },
+    onSelected: (index: Int, option: Pair<String, T>) -> Unit = { _, _ -> }
+) {
+    var selectedIndex by rememberSaveable { mutableIntStateOf(selected) }
+
+    Column(modifier.selectableGroup()) {
+        options.forEachIndexed { index, option ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .height(35.dp)
+                    .selectable(
+                        selected = (selectedIndex == index),
+                        onClick = {
+                            selectedIndex = index
+                            onSelected(index, option)
+                        },
+                        role = Role.RadioButton
+                    )
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = (selectedIndex == index),
+                    onClick = null // null recommended for accessibility with screenreaders
+                )
+                Text(
+                    text = option.first,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+        }
     }
 }
 

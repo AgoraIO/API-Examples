@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
-import io.agora.api.example.compose.ui.common.Switching1v1VideoView
+import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
 import io.agora.api.example.compose.utils.GLTextureView
 import io.agora.api.example.compose.utils.GLTextureView.Renderer
@@ -189,14 +189,14 @@ fun CustomVideoRenderView(
     onLeaveClick: () -> Unit
 ) {
     Column {
-        Switching1v1VideoView(
+        TwoVideoView(
             modifier = Modifier.weight(1.0f),
             localUid = localUid,
             remoteUid = remoteUid,
             localStats = localStats,
             remoteStats = remoteStats,
-            switchable = false,
-            localLarge = true,
+            secondClickable = false,
+            localPrimary = true,
             localRender = { view, uid, isFirstSetup ->
                 rtcEngine?.setupLocalVideo(
                     VideoCanvas(
