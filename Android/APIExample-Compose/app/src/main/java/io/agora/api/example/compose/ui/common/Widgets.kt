@@ -55,8 +55,8 @@ fun ChannelNameInput(
     modifier: Modifier = Modifier,
     channelName: String,
     isJoined: Boolean,
-    onJoinClick: (String) -> Unit,
-    onLeaveClick: () -> Unit,
+    onJoinClick: (String) -> Unit = {_ -> },
+    onLeaveClick: () -> Unit = {},
 ) {
     var text by rememberSaveable { mutableStateOf(channelName) }
     InputRaw(
@@ -459,7 +459,11 @@ fun InputRaw(
     label: String = "",
     enable: Boolean = true,
     editable: Boolean = true,
-    onBtnClick: (String) -> Unit = {}
+    secondVisible: Boolean = false,
+    secondBtnText: String = "",
+    secondEnable: Boolean = false,
+    onSecondBtnClick: () -> Unit = {},
+    onBtnClick: (String) -> Unit = {},
 ) {
     var rText by rememberSaveable { mutableStateOf(text) }
     Row(
@@ -485,6 +489,18 @@ fun InputRaw(
                 disabledContainerColor = Color.Transparent
             )
         )
+        if(secondVisible){
+            Button(
+                modifier = Modifier.padding(end = 8.dp),
+                enabled = secondEnable,
+                onClick = {
+                    onSecondBtnClick()
+                }
+            ) {
+                Text(secondBtnText)
+            }
+        }
+
         Button(
             enabled = enable,
             onClick = {
