@@ -31,6 +31,7 @@ import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.VideoGrid
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -54,6 +55,7 @@ fun JoinChannelVideo() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -153,7 +155,9 @@ fun JoinChannelVideo() {
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                TokenUtils.gen(channelName, 0) {
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
 
             } else {
                 // Permission is denied

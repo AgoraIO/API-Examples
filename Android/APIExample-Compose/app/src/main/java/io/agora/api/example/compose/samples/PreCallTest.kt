@@ -60,6 +60,7 @@ fun PreCallTest() {
     val rtcEngine = remember {
         var engine: RtcEngine? = null
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {

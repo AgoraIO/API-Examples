@@ -29,6 +29,7 @@ import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SwitchRaw
 import io.agora.api.example.compose.ui.common.VideoGrid
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -58,6 +59,7 @@ fun JoinMultiChannel() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -178,15 +180,18 @@ fun JoinMultiChannel() {
                 options.autoSubscribeAudio = true
                 options.publishMicrophoneTrack = false
                 options.publishCameraTrack = false
-                rtcEngine.joinChannel("", channelName, 0, options)
+                TokenUtils.gen(channelName, 0) {
+                    rtcEngine.joinChannel(it, channelName, 0, options)
+                }
 
                 options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
                 options.autoSubscribeVideo = true
                 options.autoSubscribeAudio = true
                 options.publishMicrophoneTrack = true
                 options.publishCameraTrack = true
-                rtcEngine.joinChannelEx("", exConnection, options, exRtcEventHandler)
-
+                TokenUtils.gen(exConnection.channelId, exConnection.localUid){
+                    rtcEngine.joinChannelEx(it, exConnection, options, exRtcEventHandler)
+                }
             } else {
                 // Permission is denied
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -210,7 +215,9 @@ fun JoinMultiChannel() {
             options.autoSubscribeAudio = true
             options.publishMicrophoneTrack = true
             options.publishCameraTrack = true
-            rtcEngine.joinChannelEx("", exConnection, options, exRtcEventHandler)
+            TokenUtils.gen(exConnection.channelId, exConnection.localUid){
+                rtcEngine.joinChannelEx(it, exConnection, options, exRtcEventHandler)
+            }
         },
         onExLeaveClick = {
             val options = LeaveChannelOptions()

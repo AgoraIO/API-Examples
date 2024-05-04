@@ -27,7 +27,9 @@ android {
         if(AGORA_APP_ID == ""){
             throw GradleException("请在项目根目录下local.properties文件里正确配置：AGORA_APP_ID=<您的声网AppId>")
         }
+        val AGORA_APP_CERT = properties.getProperty("AGORA_APP_CERT", "")
         buildConfigField("String", "AGORA_APP_ID", "\"$AGORA_APP_ID\"")
+        buildConfigField("String", "AGORA_APP_CERT", "\"$AGORA_APP_CERT\"")
     }
 
     buildFeatures {
@@ -85,4 +87,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
 }

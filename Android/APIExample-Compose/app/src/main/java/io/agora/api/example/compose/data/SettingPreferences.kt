@@ -1,5 +1,6 @@
 package io.agora.api.example.compose.data
 
+import io.agora.rtc2.RtcEngineConfig.AreaCode
 import io.agora.rtc2.video.VideoEncoderConfiguration
 import io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE
 import io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE
@@ -10,6 +11,7 @@ object SettingPreferences {
     private var videoDimensions : VideoDimensions? = null
     private var videoFrameRate : FRAME_RATE? = null
     private var orientationMode: ORIENTATION_MODE? = null
+    private var area = AreaCode.AREA_CODE_GLOB
 
     fun setVideoDimensions(dimensions: VideoDimensions?) {
         videoDimensions = dimensions
@@ -33,6 +35,14 @@ object SettingPreferences {
 
     fun getOrientationMode(): ORIENTATION_MODE {
         return orientationMode ?: ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
+    }
+
+    fun setArea(area: Int) {
+        this.area = area
+    }
+
+    fun getArea(): Int {
+        return area
     }
 
 }

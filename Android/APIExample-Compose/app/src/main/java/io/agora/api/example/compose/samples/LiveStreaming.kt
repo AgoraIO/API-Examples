@@ -41,6 +41,7 @@ import io.agora.api.example.compose.ui.common.SwitchRaw
 import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
 import io.agora.api.example.compose.utils.FileUtils
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.ClientRoleOptions
 import io.agora.rtc2.Constants
@@ -70,6 +71,7 @@ fun LiveStreaming() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -191,7 +193,9 @@ fun LiveStreaming() {
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = clientRole
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                TokenUtils.gen(channelName, 0) {
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
             } else {
                 // Permission is denied
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()

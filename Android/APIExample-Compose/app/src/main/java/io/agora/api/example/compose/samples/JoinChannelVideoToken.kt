@@ -58,6 +58,7 @@ fun JoinChannelVideoToken() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {

@@ -33,6 +33,7 @@ import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.VideoGrid
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.AgoraMediaRecorder
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -61,6 +62,7 @@ fun MediaRecorder() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -161,8 +163,9 @@ fun MediaRecorder() {
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
-
+                TokenUtils.gen(channelName, 0) {
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
             } else {
                 // Permission is denied
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -303,7 +306,9 @@ fun MediaRecorderView(
             }
         )
         Button(
-            modifier = Modifier.padding(16.dp, 8.dp).align(Alignment.End),
+            modifier = Modifier
+                .padding(16.dp, 8.dp)
+                .align(Alignment.End),
             onClick = onCameraSwitchClick,
             enabled = isJoined
         ) {

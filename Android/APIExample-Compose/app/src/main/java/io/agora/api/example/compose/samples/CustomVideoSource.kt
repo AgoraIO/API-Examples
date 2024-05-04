@@ -27,6 +27,7 @@ import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
 import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.api.example.compose.utils.VideoFileReader
 import io.agora.api.example.compose.utils.YuvFboProgram
 import io.agora.base.JavaI420Buffer
@@ -62,6 +63,7 @@ fun CustomVideoSource() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -176,7 +178,9 @@ fun CustomVideoSource() {
                 mediaOptions.autoSubscribeVideo = true
                 mediaOptions.autoSubscribeVideo = true
                 mediaOptions.publishCustomVideoTrack = true
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                TokenUtils.gen(channelName, 0){
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
 
                 externalVideoFramePusher.start()
             } else {

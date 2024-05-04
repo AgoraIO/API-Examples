@@ -27,6 +27,7 @@ import io.agora.api.example.compose.ui.common.InputRaw
 import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.TwoVideoViewType
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -53,6 +54,7 @@ fun HostAcrossChannel() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -187,7 +189,9 @@ fun HostAcrossChannel() {
                 mediaOptions.autoSubscribeAudio = true
                 mediaOptions.publishMicrophoneTrack = true
                 mediaOptions.publishCameraTrack = true
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                TokenUtils.gen(channelName, 0){
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
             } else {
                 // Permission is denied
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()

@@ -26,6 +26,7 @@ import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.APIExampleScaffold
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
 import io.agora.rtc2.RtcEngine
+import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
 @Composable
@@ -72,7 +73,7 @@ fun Settings(onBackClick: () -> Unit) {
                     options = dimensions.map {
                         it.toText() to it
                     },
-                    selected = dimensions.indexOf(SettingPreferences.getVideoDimensions()),
+                    selectedValue = SettingPreferences.getVideoDimensions(),
                 ) { _, option ->
                     SettingPreferences.setVideoDimensions(option.second)
                 }
@@ -90,7 +91,7 @@ fun Settings(onBackClick: () -> Unit) {
                 DropdownMenuRaw(
                     title = "FrameRate",
                     options = frameRates.map { it.toText()  to it},
-                    selected = frameRates.indexOf(SettingPreferences.getVideoFrameRate()),
+                    selectedValue = SettingPreferences.getVideoFrameRate(),
                 ) { _, option ->
                     SettingPreferences.setVideoFrameRate(option.second)
                 }
@@ -104,9 +105,27 @@ fun Settings(onBackClick: () -> Unit) {
                 DropdownMenuRaw(
                     title = "Orientation",
                     options = orientationMode.map { it.toText() to it},
-                    selected = orientationMode.indexOf(SettingPreferences.getOrientationMode()),
+                    selectedValue = SettingPreferences.getOrientationMode(),
                 ) { _, option ->
                     SettingPreferences.setOrientationMode(option.second)
+                }
+
+                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                DropdownMenuRaw(
+                    title = "Area",
+                    options = listOf(
+                        "Glob" to RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
+                        "China" to RtcEngineConfig.AreaCode.AREA_CODE_CN,
+                        "North America" to RtcEngineConfig.AreaCode.AREA_CODE_NA,
+                        "Europe" to RtcEngineConfig.AreaCode.AREA_CODE_EU,
+                        "Asia Pacific" to RtcEngineConfig.AreaCode.AREA_CODE_AS,
+                        "JP" to RtcEngineConfig.AreaCode.AREA_CODE_JP,
+                        "IN" to RtcEngineConfig.AreaCode.AREA_CODE_IN,
+                    ),
+                    selectedValue = SettingPreferences.getArea(),
+                ) { _, option ->
+                    SettingPreferences.setArea(option.second)
                 }
 
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))

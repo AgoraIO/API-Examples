@@ -23,6 +23,7 @@ import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SliderRaw
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -45,6 +46,7 @@ fun RhythmPlayer() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -103,7 +105,9 @@ fun RhythmPlayer() {
             mediaOptions.publishRhythmPlayerTrack = true
             mediaOptions.publishMicrophoneTrack = false
             mediaOptions.publishCameraTrack = false
-            rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+            TokenUtils.gen(channelName, 0) {
+                rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+            }
         },
         onLeaveClick = {
             rtcEngine.leaveChannel()

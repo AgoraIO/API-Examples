@@ -32,6 +32,7 @@ import io.agora.api.example.compose.ui.common.InputRaw
 import io.agora.api.example.compose.ui.common.SliderRaw
 import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.mediaplayer.IMediaPlayerObserver
 import io.agora.mediaplayer.data.CacheStatistics
 import io.agora.mediaplayer.data.PlayerPlaybackStats
@@ -63,6 +64,7 @@ fun MediaPlayer() {
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -253,7 +255,9 @@ fun MediaPlayer() {
                 mediaOptions.autoSubscribeVideo = true
                 mediaOptions.publishCameraTrack = false
                 mediaOptions.publishMicrophoneTrack = false
-                rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                TokenUtils.gen(channelName, 0) {
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
+                }
             } else {
                 // Permission is denied
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()

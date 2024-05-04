@@ -25,11 +25,13 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.AudioGrid
 import io.agora.api.example.compose.ui.common.AudioStatsInfo
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SwitchRaw
 import io.agora.api.example.compose.utils.AudioFileReader
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -51,6 +53,7 @@ fun CustomAudioSource() {
     val option =  remember { ChannelMediaOptions() }
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
+            mAreaCode = SettingPreferences.getArea()
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
@@ -138,7 +141,9 @@ fun CustomAudioSource() {
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
                 option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-                rtcEngine.joinChannel("", channelName, 0, option)
+                TokenUtils.gen(channelName, 0){
+                    rtcEngine.joinChannel(it, channelName, 0, option)
+                }
 
             } else {
                 // Permission is denied
