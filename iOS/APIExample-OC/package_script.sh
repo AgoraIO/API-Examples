@@ -12,4 +12,4 @@ script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 echo $script_path
 current_datetime=$(date +'%Y-%m-%d_%H-%M-%S')  
 echo $current_datetime
-zip -r ${1}_Swift_${current_datetime}.zip .
+zip -r ${1}_OC_${current_datetime}.zip .

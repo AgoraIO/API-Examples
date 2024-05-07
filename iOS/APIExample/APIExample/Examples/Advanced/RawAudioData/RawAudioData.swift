@@ -37,6 +37,9 @@ class RawAudioDataViewController: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
+        // Audio4 is required to send Audio Meta Data.
+        agoraKit.setParameters("{\"rtc.use_audio4\":true}")
+        
         // Setup raw auido data frame observer
         agoraKit.setAudioFrameDelegate(self)
         agoraKit.enableAudio()

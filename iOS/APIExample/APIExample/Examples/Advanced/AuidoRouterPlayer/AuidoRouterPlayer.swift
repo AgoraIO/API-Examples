@@ -185,9 +185,9 @@ class AuidoRouterPlayerMain: BaseViewController {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation, mirrorMode: .auto))
+                                                                             frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation, mirrorMode: .auto))
 
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()

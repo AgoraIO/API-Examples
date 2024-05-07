@@ -299,12 +299,11 @@ class LiveStreamingMain: BaseViewController {
     }
     
     @IBAction func onTapCenterStage(_ sender: UISwitch) {
-        if agoraKit.isSupportPortraitCenterStage() {
+        if agoraKit.isCameraCenterStageSupported() {
             let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
                                                                   "level1": .level1,
                                                                   "level2": .level2,
-                                                                  "level3": .level3,
-                                                                  "off": .off]
+                                                                  "level3": .level3]
             if sender.isOn {
                 let pickerView = PickerView()
                 pickerView.dataArray = params.map({ $0.key }).sorted()
@@ -315,7 +314,7 @@ class LiveStreamingMain: BaseViewController {
                     }
                 }
             }
-            agoraKit.enablePortraitCenterStage(sender.isOn)
+            agoraKit.enableCameraCenterStage(sender.isOn)
         } else {
             showAlert(message: "This device does not support Center Stage".localized)
             sender.setOn(false, animated: false)
