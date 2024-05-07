@@ -261,7 +261,7 @@ class LiveStreamingMain: BaseViewController {
   
     @IBOutlet weak var centerStage: Picker!
     func initSelectCentetStagePicker() {
-        centerStage.isEnabled = agoraKit.isSupportPortraitCenterStage()
+        centerStage.isEnabled = agoraKit.isCameraCenterStageSupported()
         let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
                                                               "level1": .level1,
                                                               "level2": .level2,
@@ -275,7 +275,7 @@ class LiveStreamingMain: BaseViewController {
             let index = self.selectRolePicker.indexOfSelectedItem
             let key = datas[index]
             let mode = params[key]
-            self.agoraKit.enablePortraitCenterStage(mode != .off)
+            self.agoraKit.enableCameraCenterStage(mode != .off)
         }
     }
     

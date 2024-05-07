@@ -182,7 +182,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_VOICE_FORMANT, &CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOICE_FORMANT, &CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_AINS_MODE, &CAgoraBeautyAudio::OnCbnSelchangeComboAudioAinsMode)
 END_MESSAGE_MAP()
 

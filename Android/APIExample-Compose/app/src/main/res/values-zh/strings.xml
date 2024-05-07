@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">APIExample-Compose</string>
+    <string name="example_join_channel_video">视频互动直播</string>
+    <string name="example_join_channel_audio">音频互动直播</string>
+    <string name="example_live_streaming">RTC实时直播</string>
+    <string name="example_join_channel_video_token">视频互动直播（Token验证）</string>
+    <string name="example_rtmp_streaming">旁路推流CDN</string>
+    <string name="example_media_metadata">音视频元数据</string>
+    <string name="example_voice_effects">美声与音效</string>
+    <string name="example_customaudiosource">自定义音频采集</string>
+    <string name="example_customaudiorender">自定义音频渲染</string>
+    <string name="example_customvideosource">自定义视频采集</string>
+    <string name="example_customvideorender">自定义视频渲染</string>
+    <string name="example_originaudiodata">原始音频数据</string>
+    <string name="example_originvideodata">原始视频数据</string>
+    <string name="example_joinmultichannel">加入多频道</string>
+    <string name="example_channelencryption">媒体流加密</string>
+    <string name="example_playaudiofiles">音频文件混音</string>
+    <string name="example_precalltest">通话前质量检测</string>
+    <string name="example_mediarecorder">本地/远端录制</string>
+    <string name="example_mediaplayer">媒体播放器</string>
+    <string name="example_screensharing">屏幕共享</string>
+    <string name="example_videoprocessextension">视频增强组件</string>
+    <string name="example_localvideotranscoding">本地合图</string>
+    <string name="example_senddatastream">创建数据流</string>
+    <string name="example_rhythmplayer">虚拟节拍器</string>
+    <string name="example_hostacrosschannel">跨频道媒体流转发</string>
+</resources>

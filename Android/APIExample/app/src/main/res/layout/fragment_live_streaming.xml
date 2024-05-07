@@ -63,6 +63,14 @@
         app:layout_constraintBottom_toTopOf="@id/ll_join"
         app:layout_constraintStart_toEndOf="@id/btn_publish" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_switch_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/switch_camera"
+        app:layout_constraintBottom_toTopOf="@id/ll_join"
+        app:layout_constraintStart_toEndOf="@id/btn_preload" />
 
     <LinearLayout
         android:id="@+id/ll_join"

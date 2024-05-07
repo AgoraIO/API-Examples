@@ -12,14 +12,8 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.faceunity.core.entity.FUBundleData;
 import com.faceunity.core.faceunity.FURenderKit;
-import com.faceunity.core.model.bodyBeauty.BodyBeauty;
-import com.faceunity.core.model.makeup.SimpleMakeup;
-import com.faceunity.core.model.prop.Prop;
-import com.faceunity.core.model.prop.sticker.Sticker;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Random;
@@ -30,7 +24,6 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.databinding.FragmentBeautyFaceunityBinding;
 import io.agora.api.example.utils.TokenUtils;
-import io.agora.beautyapi.faceunity.BeautyPreset;
 import io.agora.beautyapi.faceunity.CameraConfig;
 import io.agora.beautyapi.faceunity.CaptureMode;
 import io.agora.beautyapi.faceunity.Config;
@@ -79,7 +72,7 @@ public class FaceUnityBeauty extends BaseFragment {
         initRtcEngine();
 
 
-        faceUnityBeautyAPI.initialize(new Config(requireContext(), rtcEngine, FaceUnityBeautySDK.INSTANCE.getFuRenderKit(), null, CaptureMode.Agora, 0, false, new CameraConfig()));
+        faceUnityBeautyAPI.initialize(new Config(requireContext(), rtcEngine, FURenderKit.getInstance(), null, CaptureMode.Agora, 0, false, new CameraConfig()));
         faceUnityBeautyAPI.enable(true);
         joinChannel();
         mBinding.switchVideoEffect.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -109,33 +102,27 @@ public class FaceUnityBeauty extends BaseFragment {
 
     private void initVideoView() {
         mBinding.cbFaceBeautify.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            faceUnityBeautyAPI.setBeautyPreset(isChecked ? BeautyPreset.DEFAULT : BeautyPreset.CUSTOM);
+            FaceUnityBeautySDK.INSTANCE.getBeautyConfig().setWhiten(
+                    isChecked ? 1.0f : 0.0f
+            );
         });
         mBinding.cbMakeup.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
-            if (isChecked) {
-                SimpleMakeup makeup = new SimpleMakeup(new FUBundleData("graphics" + File.separator + "face_makeup.bundle"));
-                makeup.setCombinedConfig(new FUBundleData("beauty_faceunity/makeup/naicha.bundle"));
-                makeup.setMakeupIntensity(1.0f);
-                fuRenderKit.setMakeup(makeup);
-            } else {
-                fuRenderKit.setMakeup(null);
+            if(isChecked){
+                FaceUnityBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(
+                        new FaceUnityBeautySDK.MakeUpItem(
+                                "makeup/diadiatu.bundle",
+                                1.0f
+                        )
+                );
+            }else{
+                FaceUnityBeautySDK.INSTANCE.getBeautyConfig().setMakeUp(null);
             }
         });
         mBinding.cbSticker.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
             if (isChecked) {
-                Prop prop = new Sticker(new FUBundleData("beauty_faceunity/sticker/fu_zh_fenshu.bundle"));
-                fuRenderKit.getPropContainer().replaceProp(null, prop);
+                FaceUnityBeautySDK.INSTANCE.getBeautyConfig().setSticker("sticker/sdlu.bundle");
             } else {
-                fuRenderKit.getPropContainer().removeAllProp();
-            }
-        });
-        mBinding.cbBodyBeauty.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            FURenderKit fuRenderKit = FaceUnityBeautySDK.INSTANCE.getFuRenderKit();
-            BodyBeauty bodyBeauty = fuRenderKit.getBodyBeauty();
-            if (bodyBeauty != null) {
-                bodyBeauty.setEnable(isChecked);
+                FaceUnityBeautySDK.INSTANCE.getBeautyConfig().setSticker(null);
             }
         });
         mBinding.ivCamera.setOnClickListener(v -> {

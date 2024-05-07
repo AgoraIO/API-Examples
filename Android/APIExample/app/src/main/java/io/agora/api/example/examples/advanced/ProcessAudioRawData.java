@@ -345,10 +345,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
 
         @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int uid, int audioFrameType,
-                                                        int samples, int bytesPerSample, int channels,
-                                                        int samplesPerSec, ByteBuffer byteBuffer,
-                                                        long renderTimeMs, int bufferLength) {
+        public boolean onPlaybackAudioFrameBeforeMixing(String channelId, int uid, int type, int samplesPerChannel, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer buffer, long renderTimeMs, int avsync_type, int rtpTimestamp) {
             return false;
         }
 

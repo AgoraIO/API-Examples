@@ -239,11 +239,33 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-//suggest generate secret using openssl on server
-std::string getEncryptionSaltFromServer()
+
+void decodeBase64(const std::string& encoded, std::vector<uint8_t>& out)
 {
-	return "EncryptionKdfSaltInBase64Strings";
+	auto unpadded = encoded;
+
+	const auto num_padded = std::count(begin(encoded), end(encoded), '=');
+	std::replace(begin(unpadded), end(unpadded), '=', 'A'); // A_64 == \0
+
+	std::string decoded{ detail::BinaryFromBase64{begin(unpadded)},
+	   detail::BinaryFromBase64{begin(unpadded) + unpadded.length()} };
+
+	decoded.erase(end(decoded) - num_padded, end(decoded));
+	std::copy(begin(decoded), end(decoded), out.begin());
 }
+
+//suggest generate secret using openssl on server
+std::vector<uint8_t> getEncryptionSaltFromServer()
+{
+	std::string kdfSaltBase64 = "NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0=";
+	std::vector<uint8_t> kdfSalt;
+	for (int i = 0; i < 32; ++i) {
+		kdfSalt.push_back(0);
+	}
+	decodeBase64(kdfSaltBase64, kdfSalt);
+	return kdfSalt;
+}
+
 //set media encrypt button click handler
 void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 {
@@ -259,7 +281,7 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 	EncryptionConfig config;
 	config.encryptionMode = m_mapEncryptMode[encryption.c_str()];
 	config.encryptionKey = secret.c_str();
-	memcpy(config.encryptionKdfSalt, getEncryptionSaltFromServer().c_str(), 32);
+	memcpy(config.encryptionKdfSalt, getEncryptionSaltFromServer().data(), 32);
 	//set encrypt mode
 	m_rtcEngine->enableEncryption(true, config);
 	CString strInfo;

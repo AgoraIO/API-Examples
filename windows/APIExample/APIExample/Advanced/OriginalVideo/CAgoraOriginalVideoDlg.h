@@ -49,7 +49,13 @@ public:
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 	virtual bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) { return true; }
 
+	virtual VIDEO_FRAME_PROCESS_MODE getVideoFrameProcessMode() {
+		return VIDEO_FRAME_PROCESS_MODE::PROCESS_MODE_READ_WRITE;
+	}
 
+	virtual uint32_t getObservedFramePosition() {
+		return agora::media::base::POSITION_POST_CAPTURER;
+	}
 };
 
 
@@ -104,6 +110,13 @@ public:
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 	virtual bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) { return true; }
 
+	virtual VIDEO_FRAME_PROCESS_MODE getVideoFrameProcessMode() {
+		return VIDEO_FRAME_PROCESS_MODE::PROCESS_MODE_READ_WRITE;
+	}
+
+	virtual uint32_t getObservedFramePosition() {
+		return agora::media::base::POSITION_POST_CAPTURER;
+	}
 };
 
 

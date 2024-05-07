@@ -29,14 +29,6 @@ import android.util.Log
 import android.util.Size
 import java.util.concurrent.ConcurrentLinkedQueue
 
-/**
- * G l texture buffer queue
- *
- * @property glFrameBuffer
- * @property cacheCount
- * @property loggable
- * @constructor Create empty G l texture buffer queue
- */
 class GLTextureBufferQueue(
     private val glFrameBuffer: GLFrameBuffer = GLFrameBuffer(),
     private val cacheCount: Int = 6,
@@ -49,12 +41,6 @@ class GLTextureBufferQueue(
     private val textureIdQueue = ConcurrentLinkedQueue<TextureOut>()
 
 
-    /**
-     * Enqueue
-     *
-     * @param iN
-     * @return
-     */
     fun enqueue(iN: TextureIn): Int {
         var size = textureIdQueue.size
         if (size < cacheCount) {
@@ -73,7 +59,7 @@ class GLTextureBufferQueue(
                     outSize.width,
                     outSize.height,
                     iN.isFrontCamera,
-                    iN.isMirror
+                    iN.isMirror,
                 )
                 cacheTextureOuts[cacheIndex] = out
             } else if (out.width != outSize.width || out.height != outSize.height) {
@@ -85,7 +71,7 @@ class GLTextureBufferQueue(
                     outSize.width,
                     outSize.height,
                     iN.isFrontCamera,
-                    iN.isMirror
+                    iN.isMirror,
                 )
                 cacheTextureOuts[cacheIndex] = out
             } else if(out.isFrontCamera != iN.isFrontCamera){
@@ -96,7 +82,7 @@ class GLTextureBufferQueue(
                     out.width,
                     out.height,
                     iN.isFrontCamera,
-                    iN.isMirror
+                    iN.isMirror,
                 )
                 cacheTextureOuts[cacheIndex] = out
             }
@@ -121,7 +107,6 @@ class GLTextureBufferQueue(
             }
             glFrameBuffer.setFlipV(iN.flipV)
             glFrameBuffer.process(iN.textureId, iN.textureType)
-            GLES20.glFinish()
             out.index = cacheIndex
             out.tag = iN.tag
             textureIdQueue.offer(out)
@@ -140,34 +125,24 @@ class GLTextureBufferQueue(
         return size
     }
 
-    /**
-     * Dequeue
-     *
-     * @return
-     */
-    fun dequeue(): TextureOut? {
+    fun dequeue(remove: Boolean = true): TextureOut? {
         val size = textureIdQueue.size
-        val poll = textureIdQueue.poll()
+        val poll = if(remove){
+            textureIdQueue.poll()
+        }else{
+            textureIdQueue.peek()
+        }
         if(loggable){
             Log.d(TAG, "TextureIdQueue dequeue index=${poll?.index}, size=$size")
         }
-
         return poll
     }
 
-    /**
-     * Reset
-     *
-     */
     fun reset() {
         cacheIndex = 0
         textureIdQueue.clear()
     }
 
-    /**
-     * Release
-     *
-     */
     fun release() {
         cacheIndex = 0
         cacheTextureOuts.forEachIndexed { index, textureOut ->
@@ -180,21 +155,6 @@ class GLTextureBufferQueue(
         glFrameBuffer.release()
     }
 
-    /**
-     * Texture in
-     *
-     * @property textureId
-     * @property textureType
-     * @property width
-     * @property height
-     * @property rotation
-     * @property flipV
-     * @property isFrontCamera
-     * @property isMirror
-     * @property transform
-     * @property tag
-     * @constructor Create empty Texture in
-     */
     data class TextureIn(
         val textureId: Int,
         val textureType: Int,
@@ -208,18 +168,6 @@ class GLTextureBufferQueue(
         val tag: Any? = null
     )
 
-    /**
-     * Texture out
-     *
-     * @property index
-     * @property textureId
-     * @property textureType
-     * @property width
-     * @property height
-     * @property isFrontCamera
-     * @property tag
-     * @constructor Create empty Texture out
-     */
     data class TextureOut(
         var index: Int = 0,
         val textureId: Int,

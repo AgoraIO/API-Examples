@@ -1,0 +1,52 @@
+apply plugin: 'de.undercouch.download'
+
+task downloadVendorLibs {
+    def destFile = new File(buildDir, 'vendor_sensetime_9.3.1.zip')
+    download {
+        src 'https://fullapp.oss-cn-beijing.aliyuncs.com/thirdparty-beuaty/android/vendor_sensetime_9.3.1.zip'
+        dest destFile
+        overwrite false
+    }
+    def fileTree = zipTree(destFile)
+    def HardwareBuffer = fileTree.getFiles().find {
+        it.name.contains("HardwareBuffer")
+    }
+    def SenseArSourceManager = fileTree.getFiles().find {
+        it.name.contains("SenseArSourceManager")
+    }
+    def STMobileJNI = fileTree.getFiles().find {
+        it.name.contains("STMobileJNI")
+    }
+    println "HardwareBuffer path= $HardwareBuffer.absolutePath"
+    println "SenseArSourceManager path= $SenseArSourceManager.absolutePath"
+    println "STMobileJNI path= $STMobileJNI.parentFile.absolutePath"
+    copy {
+        from HardwareBuffer
+        into 'libs'
+    }
+    copy {
+        from SenseArSourceManager
+        into 'libs'
+    }
+    copy {
+        from STMobileJNI
+        into 'libs'
+    }
+
+    destFile = new File(buildDir, 'vendor_bytedance_4.6.0.zip')
+    download {
+        src 'https://fullapp.oss-cn-beijing.aliyuncs.com/thirdparty-beuaty/android/vendor_bytedance_4.6.0.zip'
+        dest destFile
+        overwrite false
+    }
+    fileTree = zipTree(destFile)
+    def EffectAAR = fileTree.getFiles().find {
+        it.name.contains("effectAAR")
+    }
+    println "EffectAAR path= $EffectAAR.absolutePath"
+    copy {
+        from EffectAAR
+        into 'libs'
+    }
+
+}

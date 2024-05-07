@@ -66,14 +66,11 @@ echo zip_name: %zip_name%
 
 dir
 
-echo off
-REM curl --silent %sdk_url% ./
-python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
+curl %sdk_url% -o %zip_name%
+REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
-echo on
 
 dir
-
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
 del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
 del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
