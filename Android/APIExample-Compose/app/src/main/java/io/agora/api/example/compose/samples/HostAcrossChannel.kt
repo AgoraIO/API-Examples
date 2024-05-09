@@ -247,7 +247,7 @@ fun HostAcrossChannel() {
 }
 
 @Composable
-fun HostAcrossChannelView(
+private fun HostAcrossChannelView(
     rtcEngine: RtcEngine?,
     channelName: String,
     isJoined: Boolean,

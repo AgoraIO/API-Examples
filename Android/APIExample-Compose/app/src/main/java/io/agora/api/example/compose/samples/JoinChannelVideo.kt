@@ -195,7 +195,7 @@ fun JoinChannelVideo() {
 
 @Preview
 @Composable
-fun JoinChannelVideoPreview() {
+private fun JoinChannelVideoPreview() {
     JoinChannelVideoView(
         channelName = "Channel Name",
         isJoined = false,
@@ -207,7 +207,7 @@ fun JoinChannelVideoPreview() {
 }
 
 @Composable
-fun JoinChannelVideoView(
+private fun JoinChannelVideoView(
     channelName: String,
     isJoined: Boolean,
     onJoinClick: (String) -> Unit,

@@ -279,7 +279,7 @@ fun LocalVideoTranscoding() {
 }
 
 @Composable
-fun LocalVideoTranscodingView(
+private fun LocalVideoTranscodingView(
     channelName: String,
     isJoined: Boolean,
     localUid: Int = 0,

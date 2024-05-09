@@ -244,7 +244,7 @@ fun JoinMultiChannel() {
 }
 
 @Composable
-fun JoinMultiChannelView(
+private fun JoinMultiChannelView(
     rtcEngine: RtcEngineEx?,
     channelName: String,
     videoList: List<Int>,

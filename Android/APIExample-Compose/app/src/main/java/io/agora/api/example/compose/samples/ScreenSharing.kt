@@ -278,7 +278,7 @@ fun ScreenSharing() {
 
 
 @Composable
-fun ScreenSharingView(
+private fun ScreenSharingView(
     channelName: String,
     isJoined: Boolean,
     localUid: Int = 0,
@@ -353,7 +353,7 @@ fun ScreenSharingView(
 
 @Preview
 @Composable
-fun ScreenSharingViewPreview() {
+private fun ScreenSharingViewPreview() {
     ScreenSharingView(
         channelName = "test",
         isJoined = false,

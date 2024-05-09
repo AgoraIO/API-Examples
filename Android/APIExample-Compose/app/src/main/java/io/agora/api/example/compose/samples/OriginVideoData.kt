@@ -233,7 +233,7 @@ fun OriginVideoData() {
 }
 
 @Composable
-fun OriginVideoDataView(
+private fun OriginVideoDataView(
     channelName: String,
     isJoined: Boolean,
     rtcEngine: RtcEngine? = null,
@@ -298,7 +298,7 @@ fun OriginVideoDataView(
     }
 }
 
-class OriginVideoDataScreenshotTaker(
+private class OriginVideoDataScreenshotTaker(
     private val context: Context,
     private val rtcEngine: RtcEngine
 ) : IVideoFrameObserver {

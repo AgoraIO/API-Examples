@@ -162,7 +162,7 @@ fun JoinChannelAudio() {
 }
 
 @Composable
-fun JoinChannelAudioView(
+private fun JoinChannelAudioView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     rtcEngine: RtcEngine? = null,
@@ -285,7 +285,7 @@ fun JoinChannelAudioView(
 
 @Preview
 @Composable
-fun JoinChannelAudioViewPreview() {
+private fun JoinChannelAudioViewPreview() {
     JoinChannelAudioView(
         listOf(0, 1, 2, 3),
         mapOf(

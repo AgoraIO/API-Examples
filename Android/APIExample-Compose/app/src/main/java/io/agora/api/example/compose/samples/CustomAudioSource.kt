@@ -198,7 +198,7 @@ fun CustomAudioSource() {
 
 
 @Composable
-fun CustomAudioSourceView(
+private fun CustomAudioSourceView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     channelName: String = "",

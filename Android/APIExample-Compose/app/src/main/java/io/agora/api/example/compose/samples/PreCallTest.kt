@@ -184,7 +184,7 @@ fun PreCallTest() {
 }
 
 @Composable
-fun PreCallTestView(
+private fun PreCallTestView(
     isAudioEchoPretesting: Boolean = false,
     isVideoEchoPretesting: Boolean = false,
     isNetworkTesting: Boolean = false,
@@ -274,7 +274,7 @@ fun PreCallTestView(
 
 @Preview
 @Composable
-fun PreCallTestViewPreview() {
+private fun PreCallTestViewPreview() {
     PreCallTestView(
         isVideoEchoPretesting = true
     )

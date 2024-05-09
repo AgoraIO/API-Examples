@@ -171,7 +171,7 @@ fun OriginAudioData() {
 }
 
 @Composable
-fun OriginAudioDataView(
+private fun OriginAudioDataView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     channelName: String = "",
@@ -204,7 +204,7 @@ fun OriginAudioDataView(
     }
 }
 
-class OriginAudioDataRewriter(
+private class OriginAudioDataRewriter(
     private val context: Context,
     private val rtcEngine: RtcEngine
 ) : IAudioFrameObserver {
@@ -351,7 +351,8 @@ class OriginAudioDataRewriter(
         samplesPerSec: Int,
         buffer: ByteBuffer?,
         renderTimeMs: Long,
-        avsync_type: Int
+        avsync_type: Int,
+        rtpTimestamp: Int
     ) = false
 
     override fun getObservedAudioFramePosition() =

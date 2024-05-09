@@ -30,7 +30,7 @@ fun Example(
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            example.content()
+            example.content(onBackClick)
         }
     }
 }
