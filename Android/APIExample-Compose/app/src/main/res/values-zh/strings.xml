@@ -95,4 +95,9 @@
     <string name="ains_mode_2">低延时强降噪模式</string>
     <string name="channel_name">频道名</string>
     <string name="leave">离开</string>
+    <string name="settings">设置</string>
+    <string name="resolution">分辨率</string>
+    <string name="frame_rate">帧率</string>
+    <string name="orientation">方向</string>
+    <string name="area">区域</string>
 </resources>
