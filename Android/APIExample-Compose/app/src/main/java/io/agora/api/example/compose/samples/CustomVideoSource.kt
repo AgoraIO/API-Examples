@@ -221,7 +221,7 @@ fun CustomVideoSource() {
 }
 
 @Composable
-fun CustomVideoSourceView(
+private fun CustomVideoSourceView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -292,7 +292,7 @@ fun CustomVideoSourceView(
     }
 }
 
-class ExternalVideoFramePusher(
+private class ExternalVideoFramePusher(
     private val context: Context,
     private val engine: RtcEngine,
     private val trackId: Int = 0

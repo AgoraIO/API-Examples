@@ -201,7 +201,7 @@ fun VideoProcessExtension() {
 }
 
 @Composable
-fun VideoProcessExtensionView(
+private fun VideoProcessExtensionView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -357,7 +357,7 @@ fun VideoProcessExtensionView(
 
 @Preview
 @Composable
-fun VideoProcessExtensionViewPreview() {
+private fun VideoProcessExtensionViewPreview() {
     VideoProcessExtensionView(channelName = "", isJoined = true, onJoinClick = {}) {
 
     }

@@ -25,4 +25,6 @@
     <string name="example_senddatastream">创建数据流</string>
     <string name="example_rhythmplayer">虚拟节拍器</string>
     <string name="example_hostacrosschannel">跨频道媒体流转发</string>
+    <string name="example_pictureinpicture">画中画</string>
+    <string name="example_spatialsound">空间音频</string>
 </resources>

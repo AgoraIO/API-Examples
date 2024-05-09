@@ -198,7 +198,7 @@ fun JoinChannelVideoToken() {
 
 @Preview
 @Composable
-fun JoinChannelVideoTokenPreview() {
+private fun JoinChannelVideoTokenPreview() {
     JoinChannelVideoTokenView(
         channelName = "Channel Name",
         token = "",
@@ -211,7 +211,7 @@ fun JoinChannelVideoTokenPreview() {
 }
 
 @Composable
-fun JoinChannelVideoTokenView(
+private fun JoinChannelVideoTokenView(
     channelName: String,
     token: String,
     isJoined: Boolean,

@@ -274,7 +274,7 @@ fun MediaRecorder() {
 }
 
 @Composable
-fun MediaRecorderView(
+private fun MediaRecorderView(
     channelName: String,
     isJoined: Boolean,
     onJoinClick: (String) -> Unit,
@@ -325,7 +325,7 @@ fun MediaRecorderView(
 
 @Preview
 @Composable
-fun MediaRecorderViewPreview() {
+private fun MediaRecorderViewPreview() {
     MediaRecorderView(
         channelName = "",
         isJoined = false,

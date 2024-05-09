@@ -256,7 +256,7 @@ fun MediaMetadata() {
 
 
 @Composable
-fun MediaMetadataView(
+private fun MediaMetadataView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,

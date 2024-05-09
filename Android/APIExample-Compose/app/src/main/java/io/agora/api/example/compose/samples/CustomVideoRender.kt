@@ -278,6 +278,7 @@ class CustomVideoRenderRender(
             try {
                 drawer.drawYuv(
                     yuvUploader.yuvTextures,
+                    0,
                     RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix),
                     frame.rotatedWidth,
                     frame.rotatedHeight,

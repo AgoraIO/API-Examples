@@ -20,19 +20,21 @@ import io.agora.api.example.compose.samples.MediaPlayer
 import io.agora.api.example.compose.samples.MediaRecorder
 import io.agora.api.example.compose.samples.OriginAudioData
 import io.agora.api.example.compose.samples.OriginVideoData
+import io.agora.api.example.compose.samples.PictureInPictureEntrance
 import io.agora.api.example.compose.samples.PlayAudioFiles
 import io.agora.api.example.compose.samples.PreCallTest
 import io.agora.api.example.compose.samples.RTMPStreaming
 import io.agora.api.example.compose.samples.RhythmPlayer
 import io.agora.api.example.compose.samples.ScreenSharing
 import io.agora.api.example.compose.samples.SendDataStream
+import io.agora.api.example.compose.samples.SpatialSound
 import io.agora.api.example.compose.samples.VideoProcessExtension
 import io.agora.api.example.compose.samples.VoiceEffects
 
 data class Example(
     @StringRes val name: Int,
     val description: String = "",
-    val content: @Composable () -> Unit
+    val content: @Composable (back: () -> Unit) -> Unit
 )
 
 val BasicExampleList = listOf(
@@ -52,6 +54,7 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_originvideodata) { OriginVideoData() },
     Example(R.string.example_customvideosource) { CustomVideoSource() },
     Example(R.string.example_customvideorender) { CustomVideoRender() },
+    Example(R.string.example_pictureinpicture) { PictureInPictureEntrance(it) },
     Example(R.string.example_joinmultichannel) { JoinMultiChannel() },
     Example(R.string.example_channelencryption) { ChannelEncryption() },
     Example(R.string.example_playaudiofiles) { PlayAudioFiles() },
@@ -64,4 +67,5 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_localvideotranscoding) { LocalVideoTranscoding() },
     Example(R.string.example_senddatastream) { SendDataStream() },
     Example(R.string.example_hostacrosschannel) { HostAcrossChannel() },
+    Example(R.string.example_spatialsound) { SpatialSound() },
 )

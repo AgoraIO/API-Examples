@@ -236,7 +236,7 @@ fun LiveStreaming() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LiveStreamingView(
+private fun LiveStreamingView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -360,7 +360,7 @@ fun LiveStreamingView(
 
 @Preview
 @Composable
-fun LiveStreamingViewPreview() {
+private fun LiveStreamingViewPreview() {
     Box {
         LiveStreamingView(
             channelName = "Channel Name",
@@ -379,7 +379,7 @@ fun LiveStreamingViewPreview() {
 
 
 @Composable
-fun LiveStreamingSettingView(
+private fun LiveStreamingSettingView(
     modifier: Modifier = Modifier,
     rtcEngine: RtcEngine? = null,
     role: Int = Constants.CLIENT_ROLE_AUDIENCE,

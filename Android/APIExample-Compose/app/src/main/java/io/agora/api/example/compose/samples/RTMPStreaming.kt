@@ -256,7 +256,7 @@ fun RTMPStreaming() {
 }
 
 @Composable
-fun RTMPStreamingView(
+private fun RTMPStreamingView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -360,7 +360,7 @@ private fun getRtmpStreamTranscoding(
 
 @Preview
 @Composable
-fun RTMPStreamingViewPreview() {
+private fun RTMPStreamingViewPreview() {
     RTMPStreamingView(
         channelName = "test",
         isJoined = true

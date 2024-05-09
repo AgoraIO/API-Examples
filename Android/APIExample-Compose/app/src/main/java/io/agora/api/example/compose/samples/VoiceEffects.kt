@@ -151,7 +151,7 @@ fun VoiceEffects() {
 }
 
 @Composable
-fun VoiceEffectsView(
+private fun VoiceEffectsView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     rtcEngine: RtcEngine? = null,
@@ -380,6 +380,6 @@ fun VoiceEffectsView(
 
 @Preview
 @Composable
-fun VoiceEffectsViewPreview() {
+private fun VoiceEffectsViewPreview() {
     VoiceEffectsView(videoIdList = listOf(0, 1, 2))
 }

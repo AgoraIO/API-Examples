@@ -330,7 +330,7 @@ fun MediaPlayer() {
 }
 
 @Composable
-fun MediaPlayerView(
+private fun MediaPlayerView(
     channelName: String,
     isJoined: Boolean,
     localUid: Int = 0,
@@ -434,7 +434,7 @@ fun MediaPlayerView(
 
 @Preview
 @Composable
-fun MediaPlayerViewPreview() {
+private fun MediaPlayerViewPreview() {
     MediaPlayerView(channelName = "", isJoined = false, onJoinClick = {}) {
 
     }

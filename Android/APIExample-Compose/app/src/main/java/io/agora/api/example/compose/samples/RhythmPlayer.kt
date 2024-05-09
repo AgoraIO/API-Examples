@@ -115,7 +115,7 @@ fun RhythmPlayer() {
 }
 
 @Composable
-fun RhythmPlayerView(
+private fun RhythmPlayerView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,

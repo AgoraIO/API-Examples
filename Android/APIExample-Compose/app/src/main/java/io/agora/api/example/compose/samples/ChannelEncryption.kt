@@ -235,7 +235,7 @@ fun ChannelEncryption() {
 }
 
 @Composable
-fun ChannelEncryptionView(
+private fun ChannelEncryptionView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,

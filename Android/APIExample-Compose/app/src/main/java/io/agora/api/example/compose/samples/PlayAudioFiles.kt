@@ -160,7 +160,7 @@ fun PlayAudioFiles() {
 
 
 @Composable
-fun PlayAudioFilesView(
+private fun PlayAudioFilesView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     rtcEngine: RtcEngine? = null,
@@ -365,6 +365,6 @@ fun PlayAudioFilesView(
 
 @Preview
 @Composable
-fun PlayAudioFilesViewPreview() {
+private fun PlayAudioFilesViewPreview() {
     PlayAudioFilesView(videoIdList = listOf(1, 2))
 }
