@@ -6,15 +6,17 @@ _English | [中文](README.zh.md) | [한글](README.kr.md)_
 
 This repository contains sample projects for the Agora RTC Native SDK, including the following platforms:
 
-| Platform | Language | Project Location                                       | SDK                                                          |
-| -------- | -------- | ------------------------------------------------------ | ------------------------------------------------------------ |
-| Android  | Java     | [/Android/APIExample](/Android/APIExample)             | [RTC Java Video SDK](https://docs.agora.io/en/sdks?platform=android) |
-| Android  | Java     | [/Android/APIExample-Audio](/Android/APIExample-Audio) | [RTC Java Audio SDK](https://docs.agora.io/en/sdks?platform=android) |
-| iOS      | Swift    | [/iOS/APIExample](/iOS/APIExample)                     | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)|
-| iOS      | Objective-C    | [/iOS/APIExample-OC](/iOS/APIExample-OC) | [RTC Objective-C Video SDK](https://docs.agora.io/cn/video-call-4.x/downloads?platform=iOS) |
-| iOS      | Swift    | [/iOS/APIExample-Audio](/iOS/APIExample-Audio)         | [RTC Objective-C Audio SDK](https://docs.agora.io/en/sdks?platform=ios) |
-| macOS    | Swift    | [/macOS](/macOS)                                       | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=macos) |
-| Windows  | C++      | [/windows](/windows)                                   | [RTC C++ Video SDK](https://docs.agora.io/en/sdks?platform=windows) |
+| Platform | Language    | Project Location                                           | SDK                                                                           |
+|----------|-------------|------------------------------------------------------------|-------------------------------------------------------------------------------|
+| Android  | Java        | [/Android/APIExample](/Android/APIExample)                 | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| Android  | Kotlin      | [/Android/APIExample-Compose](/Android/APIExample-Compose) | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| Android  | Java        | [/Android/APIExample-Audio](/Android/APIExample-Audio)     | [RTC Java Audio SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| iOS      | Swift       | [/iOS/APIExample](/iOS/APIExample)                         | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS      | Objective-C | [/iOS/APIExample-OC](/iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS      | Swift       | [/iOS/APIExample-Swift](/iOS/APIExample-Swift)             | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS      | Swift       | [/iOS/APIExample-Audio](/iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| macOS    | Swift       | [/macOS](/macOS)                                           | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/macos/resources) |
+| Windows  | C++         | [/windows](/windows)                                       | [RTC C++ Video SDK](https://doc.shengwang.cn/doc/rtc/windows/resources)       |
 
 You can refer to each individual platform to learn more about the projects.
 
