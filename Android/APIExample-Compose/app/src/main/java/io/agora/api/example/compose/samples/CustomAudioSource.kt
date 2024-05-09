@@ -23,8 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.AudioGrid
 import io.agora.api.example.compose.ui.common.AudioStatsInfo
@@ -221,8 +223,8 @@ private fun CustomAudioSourceView(
 
         Spacer(modifier = Modifier.weight(1.0f))
 
-        SwitchRaw(title = "发布本地音频", enable = isJoined, onCheckedChange = onLocalAudioPublish)
-        SwitchRaw(title = "发布麦克风", enable = isJoined, onCheckedChange = onMicrophonePublish)
+        SwitchRaw(title = stringResource(id = R.string.publish_local_audio), enable = isJoined, onCheckedChange = onLocalAudioPublish)
+        SwitchRaw(title = stringResource(id = R.string.publish_microphone), enable = isJoined, onCheckedChange = onMicrophonePublish)
 
         ChannelNameInput(
             channelName = channelName,

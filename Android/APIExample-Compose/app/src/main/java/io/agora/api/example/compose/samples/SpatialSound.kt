@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -422,7 +423,7 @@ private fun SpatialSoundView(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = 50.dp),
-                text = "请移动红色图标体验3d音频效果",
+                text = stringResource(id = R.string.spatial_sound_experience_tip),
                 style = MaterialTheme.typography.titleMedium
             )
             DraggableIcon(
@@ -495,7 +496,7 @@ private fun SpatialSoundView(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                SwitchRaw(title = "静音", settingCache[settingUid]?.mute ?: false) {
+                SwitchRaw(title = stringResource(id = R.string.mute_audio), settingCache[settingUid]?.mute ?: false) {
                     onMute(settingType, it, settingUid)
                 }
                 SwitchRaw(title = "VoiceBlur", settingCache[settingUid]?.voiceBlur ?: false) {

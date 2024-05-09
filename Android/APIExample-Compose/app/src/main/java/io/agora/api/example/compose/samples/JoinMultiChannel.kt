@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SwitchRaw
@@ -299,7 +301,7 @@ private fun JoinMultiChannelView(
                     },
                     enabled = exVideoList.isNotEmpty()
                 ) {
-                    Text(text = "Ex频道截图")
+                    Text(text = stringResource(id = R.string.snapshot_ex))
                 }
                 Button(
                     onClick = {
@@ -311,7 +313,9 @@ private fun JoinMultiChannelView(
                     },
                     enabled = isJoin
                 ) {
-                    Text(text = if (isExJoin) "离开Ex频道" else "加入Ex频道")
+                    Text(text = if (isExJoin) stringResource(id = R.string.leave_ex) else stringResource(
+                        id = R.string.join_ex
+                    ))
                 }
             }
         }
@@ -326,9 +330,9 @@ private fun JoinMultiChannelView(
     if (exWillLeave) {
         var stopMic by rememberSaveable { mutableStateOf(false) }
         AlertDialog(
-            title = { Text("离开选项") },
+            title = { Text(stringResource(id = R.string.leave_option)) },
             text = {
-                SwitchRaw(title = "是否停止录音", checked = stopMic) {
+                SwitchRaw(title = stringResource(id = R.string.stop_recording_or_not), checked = stopMic) {
                     stopMic = it
                 }
             },
@@ -338,12 +342,12 @@ private fun JoinMultiChannelView(
                     exWillLeave = false
                     onExLeaveClick(stopMic)
                 }) {
-                    Text("确定")
+                    Text(stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { exWillLeave = false }) {
-                    Text("取消")
+                    Text(stringResource(id = R.string.cancel))
                 }
             }
         )

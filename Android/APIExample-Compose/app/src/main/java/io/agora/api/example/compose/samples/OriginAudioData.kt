@@ -25,8 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.AudioGrid
 import io.agora.api.example.compose.ui.common.AudioStatsInfo
@@ -193,7 +195,7 @@ private fun OriginAudioDataView(
 
         Spacer(modifier = Modifier.weight(1.0f))
 
-        SwitchRaw(title = "音频回写", enable = isJoined, onCheckedChange = onRewriteOpen)
+        SwitchRaw(title = stringResource(id = R.string.audio_rewrite), enable = isJoined, onCheckedChange = onRewriteOpen)
 
         ChannelNameInput(
             channelName = channelName,

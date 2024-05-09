@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.AudioGrid
 import io.agora.api.example.compose.ui.common.AudioStatsInfo
@@ -326,9 +328,9 @@ private fun VoiceEffectsView(
                         title = "AINS Mode",
                         options = listOf(
                             "Off" to 0,
-                            "均衡降噪模式" to 0,
-                            "强降噪模式" to 1,
-                            "低延时强降噪模式" to 2,
+                            stringResource(id = R.string.ains_mode_0) to 0,
+                            stringResource(id = R.string.ains_mode_1) to 1,
+                            stringResource(id = R.string.ains_mode_2) to 2,
                         )
                     ) { index, option ->
                         rtcEngine?.setAINSMode(index != 0, option.second)

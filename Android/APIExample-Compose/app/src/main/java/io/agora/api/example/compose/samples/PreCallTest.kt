@@ -31,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.VideoCell
 import io.agora.rtc2.Constants
@@ -241,7 +243,7 @@ private fun PreCallTestView(
         }
         Text(
             modifier = Modifier.padding(0.dp, 8.dp),
-            text = "Tip：开始测试后请对着麦克风讲话，讲话声音在${ECHO_TEST_INTERVAL_IN_SECONDS}秒后播放则测试正常。",
+            text = stringResource(id = R.string.audio_echo_pretest_tip, ECHO_TEST_INTERVAL_IN_SECONDS),
             style = MaterialTheme.typography.bodySmall
         )
 

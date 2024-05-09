@@ -21,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SwitchRaw
@@ -304,7 +306,7 @@ private fun LocalVideoTranscodingView(
             remoteRender = { view, id, _ -> remoteRender(view, id) }
         )
         Spacer(modifier = Modifier.weight(1.0f))
-        SwitchRaw(title = "透明背景"){
+        SwitchRaw(title = stringResource(id = R.string.alpha_background)){
             onAlphaBackground(it)
         }
         ChannelNameInput(

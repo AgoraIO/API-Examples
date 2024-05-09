@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SliderRaw
@@ -153,7 +155,7 @@ private fun RhythmPlayerView(
                         rtcEngine?.startRhythmPlayer(URL_UPBEAT, URL_DOWNBEAT, config)
                     }
                 ) {
-                    Text(text = "Play")
+                    Text(text = stringResource(id = R.string.play))
                 }
                 Button(
                     modifier = Modifier
@@ -164,7 +166,7 @@ private fun RhythmPlayerView(
                         onPlayStopClick()
                     }
                 ) {
-                    Text(text = "Stop")
+                    Text(text = stringResource(id = R.string.stop))
                 }
             }
         }

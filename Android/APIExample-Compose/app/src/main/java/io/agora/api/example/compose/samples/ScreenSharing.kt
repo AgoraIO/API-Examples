@@ -20,9 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
@@ -311,14 +313,14 @@ private fun ScreenSharingView(
         Spacer(modifier = Modifier.weight(1.0f))
 
         SwitchRaw(
-            title = "屏幕共享本地预览",
+            title = stringResource(id = R.string.screen_sharing_local_preview),
             checked = isScreenPreview,
             enable = isJoined && isScreenSharing
         ) {
             onScreenPreview(it)
         }
         SwitchRaw(
-            title = "屏幕共享本地音频",
+            title = stringResource(id = R.string.screen_sharing_audio),
             enable = isJoined && isScreenSharing
         ) {
             onScreenAudio(it)

@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import io.agora.api.example.compose.R
 import io.agora.rtc2.IRtcEngineEventHandler
 
 @Composable
@@ -62,8 +64,8 @@ fun ChannelNameInput(
     InputRaw(
         modifier = modifier,
         text = text,
-        btnText = if (isJoined) "Leave" else "Join",
-        label = "Channel Name",
+        btnText = if (isJoined) stringResource(id = R.string.leave) else stringResource(id = R.string.join),
+        label = stringResource(id = R.string.channel_name),
     ) {
         text = it
         if (isJoined) onLeaveClick() else onJoinClick(it)

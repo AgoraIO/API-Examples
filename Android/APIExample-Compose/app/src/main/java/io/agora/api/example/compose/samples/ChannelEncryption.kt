@@ -24,8 +24,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
@@ -274,7 +276,7 @@ private fun ChannelEncryptionView(
             }
         )
         DropdownMenuRaw(
-            title = "加密方式",
+            title = stringResource(id = R.string.encryption_mode),
             options = listOf(
                 "AES_128_XTS" to EncryptionConfig.EncryptionMode.AES_128_XTS,
                 "AES_128_ECB" to EncryptionConfig.EncryptionMode.AES_128_ECB,
@@ -298,7 +300,7 @@ private fun ChannelEncryptionView(
             value = encryptionKey,
             enabled = !isJoined,
             onValueChange = { onEncryptionKeyChanged(it) },
-            label = { Text("加密密钥") },
+            label = { Text(stringResource(id = R.string.encryption_key)) },
             singleLine = true,
             shape = RectangleShape,
             colors = TextFieldDefaults.colors(
