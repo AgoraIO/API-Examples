@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
@@ -285,13 +287,15 @@ private fun HostAcrossChannelView(
             text = "",
             label = "Across Channel Name",
             editable = !isAcrossStarted,
-            btnText = if (isAcrossStarted) "退出" else "加入",
+            btnText = if (isAcrossStarted) stringResource(id = R.string.exit) else stringResource(id = R.string.join),
             enable = isJoined,
             onBtnClick = {
                 onAcrossClick(it, isAcrossStarted)
             },
             secondVisible = true,
-            secondBtnText = if (isAcrossRunning) "暂停" else "恢复",
+            secondBtnText = if (isAcrossRunning) stringResource(id = R.string.pause) else stringResource(
+                id = R.string.resume
+            ),
             secondEnable = isAcrossStarted,
             onSecondBtnClick = {
                 onAcrossRunningClick(isAcrossRunning)

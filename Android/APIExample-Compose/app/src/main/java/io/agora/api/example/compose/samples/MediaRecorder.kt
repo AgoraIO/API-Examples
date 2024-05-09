@@ -26,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.VideoGrid
@@ -264,7 +266,7 @@ fun MediaRecorder() {
                 TextButton(onClick = {
                     recoderResult = ""
                 }) {
-                    Text("确定")
+                    Text(stringResource(id = R.string.confirm))
                 }
             },
             title = { Text(text = "Recorder Result") },
@@ -301,7 +303,9 @@ private fun MediaRecorderView(
                         onRecorderClick(id, isRecording)
                     })
                 {
-                    Text(text = if (!isRecording) "Start Recording" else "Stop Recording")
+                    Text(text = if (!isRecording) stringResource(id = R.string.start_recording) else stringResource(
+                        id = R.string.stop_recording
+                    ))
                 }
             }
         )
@@ -312,7 +316,7 @@ private fun MediaRecorderView(
             onClick = onCameraSwitchClick,
             enabled = isJoined
         ) {
-            Text(text = "Switch Camera")
+            Text(text = stringResource(id = R.string.switch_camera))
         }
         ChannelNameInput(
             channelName = channelName,

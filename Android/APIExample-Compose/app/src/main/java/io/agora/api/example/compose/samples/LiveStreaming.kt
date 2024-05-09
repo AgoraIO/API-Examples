@@ -30,10 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
@@ -395,7 +397,7 @@ private fun LiveStreamingSettingView(
     ) {
         if (role == Constants.CLIENT_ROLE_AUDIENCE) {
             SwitchRaw(
-                title = "开启极速直播",
+                title = stringResource(id = R.string.open_low_latency_live),
                 checked = values["living"] as? Boolean ?: false
             ) { enable ->
                 onValueChanged("living", enable)
@@ -409,7 +411,7 @@ private fun LiveStreamingSettingView(
         if (role == Constants.CLIENT_ROLE_BROADCASTER) {
             Divider(modifier = Modifier.padding(horizontal = 16.dp))
             SwitchRaw(
-                title = "水印",
+                title = stringResource(id = R.string.watermark),
                 checked = values["watermark"] as? Boolean ?: false
             ) { enable ->
                 onValueChanged("watermark", enable)
@@ -430,7 +432,7 @@ private fun LiveStreamingSettingView(
 
         Divider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
-            title = "小流",
+            title = stringResource(id = R.string.low_stream),
             checked = values["stream"] as? Boolean ?: false
         ) { enable ->
             onValueChanged("stream", enable)
@@ -446,11 +448,11 @@ private fun LiveStreamingSettingView(
 
         Divider(modifier = Modifier.padding(horizontal = 16.dp))
         DropdownMenuRaw(
-            title = "编码类型",
+            title = stringResource(id = R.string.encoder_type),
             options = listOf(
-                "自动选择" to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_AUTO,
-                "硬编" to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_HARDWARE,
-                "软编" to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_SOFTWARE,
+                stringResource(id = R.string.encoder_auto) to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_AUTO,
+                stringResource(id = R.string.encoder_hardware) to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_HARDWARE,
+                stringResource(id = R.string.encoder_software) to VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_SOFTWARE,
             ),
             selected = values["encoder"] as? Int ?: 0
         ) { index, option ->
@@ -465,7 +467,7 @@ private fun LiveStreamingSettingView(
 
         Divider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
-            title = "B帧",
+            title = stringResource(id = R.string.b_frame),
             checked = values["BFrame"] as? Boolean ?: false
         ) { enable ->
             onValueChanged("BFrame", enable)
@@ -484,7 +486,7 @@ private fun LiveStreamingSettingView(
 
         Divider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
-            title = "垫片",
+            title = stringResource(id = R.string.video_image),
             checked = values["padding"] as? Boolean ?: false
         ) { enable ->
             onValueChanged("padding", enable)

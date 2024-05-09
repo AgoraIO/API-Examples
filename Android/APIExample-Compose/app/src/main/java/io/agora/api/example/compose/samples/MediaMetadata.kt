@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
@@ -306,8 +308,8 @@ private fun MediaMetadataView(
 
         InputRaw(
             text = "",
-            label = "视频元数据",
-            btnText = "发送",
+            label = stringResource(id = R.string.metadata_video),
+            btnText = stringResource(id = R.string.send),
             enable = isJoined
         ) {
             onVideoMetadataSend(it)

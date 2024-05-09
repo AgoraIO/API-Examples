@@ -26,10 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.AudioGrid
 import io.agora.api.example.compose.ui.common.AudioStatsInfo
@@ -192,7 +194,7 @@ private fun PlayAudioFilesView(
                             .padding(16.dp, 0.dp)
                     ) {
                         Text(
-                            text = "开始",
+                            text = stringResource(id = R.string.start),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -209,7 +211,7 @@ private fun PlayAudioFilesView(
                                 }
                         )
                         Text(
-                            text = "恢复播放",
+                            text = stringResource(id = R.string.resume),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -221,7 +223,7 @@ private fun PlayAudioFilesView(
                                 }
                         )
                         Text(
-                            text = "暂停",
+                            text = stringResource(id = R.string.pause),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -233,7 +235,7 @@ private fun PlayAudioFilesView(
                                 }
                         )
                         Text(
-                            text = "停止",
+                            text = stringResource(id = R.string.stop),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -246,13 +248,13 @@ private fun PlayAudioFilesView(
                         )
                     }
 
-                    SliderRaw(title = "混音音量", value = 1.0f) {
+                    SliderRaw(title = stringResource(id = R.string.audio_mixing_volume), value = 1.0f) {
                         rtcEngine?.adjustAudioMixingVolume((100 * it).toInt())
                     }
-                    SliderRaw(title = "混音播放音量", value = 1.0f) {
+                    SliderRaw(title = stringResource(id = R.string.audio_mixing_playout_volume), value = 1.0f) {
                         rtcEngine?.adjustAudioMixingPlayoutVolume((100 * it).toInt())
                     }
-                    SliderRaw(title = "混音发布音量", value = 1.0f) {
+                    SliderRaw(title = stringResource(id = R.string.audio_mixing_publish_volume), value = 1.0f) {
                         rtcEngine?.adjustAudioMixingPublishVolume((100 * it).toInt())
                     }
                 }
@@ -270,7 +272,7 @@ private fun PlayAudioFilesView(
                             .fillMaxWidth()
                             .padding(16.dp, 0.dp)
                     ) {
-                        Text(text = "开始",
+                        Text(text = stringResource(id = R.string.start),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -288,7 +290,7 @@ private fun PlayAudioFilesView(
                                         true // Sets whether to publish the audio effect.
                                     );
                                 })
-                        Text(text = "恢复播放",
+                        Text(text = stringResource(id = R.string.resume),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -298,7 +300,7 @@ private fun PlayAudioFilesView(
                                 .clickable {
                                     rtcEngine?.resumeEffect(EFFECT_SOUND_ID)
                                 })
-                        Text(text = "暂停",
+                        Text(text = stringResource(id = R.string.pause),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -308,7 +310,7 @@ private fun PlayAudioFilesView(
                                 .clickable {
                                     rtcEngine?.pauseEffect(EFFECT_SOUND_ID)
                                 })
-                        Text(text = "停止",
+                        Text(text = stringResource(id = R.string.stop),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Blue,
                             textAlign = TextAlign.Center,
@@ -320,7 +322,7 @@ private fun PlayAudioFilesView(
                                 })
                     }
 
-                    SliderRaw(title = "音效音量", value = 1.0f) {
+                    SliderRaw(title = stringResource(id = R.string.effects_volume), value = 1.0f) {
                         rtcEngine?.setEffectsVolume((100 * it).toDouble())
                     }
                 }

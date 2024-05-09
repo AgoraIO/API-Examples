@@ -23,9 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
@@ -375,7 +377,7 @@ private fun MediaPlayerView(
                 enabled = isJoined && playerReady,
                 onClick = onPlayClick
             ) {
-                Text(text = "播放")
+                Text(text = stringResource(id = R.string.play))
             }
             Button(
                 modifier = Modifier
@@ -384,7 +386,7 @@ private fun MediaPlayerView(
                 enabled = isJoined && playerReady,
                 onClick = onStopClick
             ) {
-                Text(text = "停止")
+                Text(text = stringResource(id = R.string.stop))
             }
             Button(
                 modifier = Modifier
@@ -393,7 +395,7 @@ private fun MediaPlayerView(
                 enabled = isJoined && playerReady,
                 onClick = onPauseClick
             ) {
-                Text(text = "暂停")
+                Text(text = stringResource(id = R.string.pause))
             }
             Button(
                 modifier = Modifier
@@ -402,7 +404,7 @@ private fun MediaPlayerView(
                 enabled = isJoined && playerReady,
                 onClick = onPushClick
             ) {
-                Text(text = "推送")
+                Text(text = stringResource(id = R.string.publish))
             }
         }
 

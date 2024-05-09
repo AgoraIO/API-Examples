@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
@@ -307,7 +309,7 @@ private fun RTMPStreamingView(
             }
         )
 
-        SwitchRaw(title = "是否转码", checked = transcoding) {
+        SwitchRaw(title = stringResource(id = R.string.transcoding_or_not), checked = transcoding) {
             onTranscoding()
         }
         ChannelNameInput(
@@ -318,8 +320,10 @@ private fun RTMPStreamingView(
         )
         InputRaw(
             text = url,
-            label = "推流地址",
-            btnText = if (pushing) "关闭推流" else "开始推流",
+            label = stringResource(id = R.string.rtmp_url),
+            btnText = if (pushing) stringResource(id = R.string.stop_publish_stream) else stringResource(
+                id = R.string.start_publish_stream
+            ),
             enable = isJoined,
             editable = !pushing
         ) { u ->
