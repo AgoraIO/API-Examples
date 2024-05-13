@@ -29,6 +29,7 @@
     // 声网APP ID。
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
     // 声网APP证书。如果项目没有开启证书鉴权，这个字段留空。
+    // 注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
     ```
 

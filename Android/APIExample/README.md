@@ -29,6 +29,7 @@ To build and run the sample application, get an App Id:
     // Agora APP ID.
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
     // Agora APP Certificate. If the project does not have certificates enabled, leave this field blank.
+    // PS：It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
     ```
 
