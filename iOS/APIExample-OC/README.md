@@ -62,8 +62,8 @@ To build and run the sample application, get an App Id:
       Agora provides App certificate to generate Token. You can deploy and generate a token on your server,
      or use the console to generate a temporary token.
      In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project with the App Certificate enabled,
-     then the APP Certificate can be found in the project detail page.
-     PS: If the project does not have certificates enabled, leave this field blank.
+     then the APP Certificate can be found in the project detail page.If the project does not have certificates enabled, leave this field blank.
+     PS: It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
      */
      static NSString * const Certificate = <#YOUR Certificate#>
         

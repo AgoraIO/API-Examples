@@ -31,6 +31,7 @@
     // 如果你没有打开Token功能，certificate可以直接不填
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
     // 如果你没有打开Token功能或者已经配置了certificate，token可以直接不填
+    // 注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     
     ```
