@@ -56,8 +56,8 @@ pod install
 
     /**
      Agora 提供 App certificate 用以生成 Token。您可以在您的服务器部署并生成 Token，或者使用控制台生成临时的 Token。
-     进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。
-     注意：如果项目没有开启证书鉴权，这个字段留空。
+     进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。如果项目没有开启证书鉴权，这个字段留空。
+     注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
     */
     static var Certificate: String? = <#YOUR Certificate#>
     ```
