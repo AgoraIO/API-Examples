@@ -50,8 +50,6 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
-ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
-
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
@@ -69,75 +67,12 @@ rm ./$unzip_name/rtc/package_size_report.txt
 mkdir ./$unzip_name/rtc/samples
 mkdir ./$unzip_name/rtc/samples/API-example
 
-if [ ! -z "$(echo $sdk_url | grep 'audio')" ] || [ ! -z "$(echo $sdk_url | grep 'VOICE')" ]
-then
-audio_suffix=-Audio
-else
-audio_suffix=
-fi
-echo audio_suffix: $audio_suffix
-
-cp -rf ./Android/APIExample${audio_suffix}/** ./$unzip_name/rtc/samples/API-example
+cp -rf ./Android/${compile_type}/** ./$unzip_name/rtc/samples/API-example
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
-# install android sdk
-which java
-java --version
-source ~/.bashrc
-export ANDROID_HOME=/usr/lib/android_sdk
-echo ANDROID_HOME: $ANDROID_HOME
 
-# compile apk
-cd ./$unzip_name/rtc/samples/API-example
-pwd
+cd ./Android/${compile_type} || exit 1
+./cloud_build.sh || exit 1
 
-## config appId
-sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
-sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
-sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
-rm -f app/src/main/res/values/string_configs.xml-e
-cat app/src/main/res/values/string_configs.xml
-
-
-if [ "$audio_suffix" = "" ]
-then
-## config simple filter
-sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
-mkdir -p agora-simple-filter/src/main/agoraLibs
-cp -r ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
-cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
-curl -o opencv4.zip https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
-unzip opencv4.zip
-mkdir -p agora-simple-filter/src/main/libs
-mv arm64-v8a agora-simple-filter/src/main/libs
-mv armeabi-v7a agora-simple-filter/src/main/libs
-sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
-
-## config agora stream encrypt
-sed -i -e "s#streamEncrypt = false#streamEncrypt = true#g" gradle.properties
-mkdir -p agora-stream-encrypt/src/main/agoraLibs
-cp -r ../../sdk/arm64-v8a agora-stream-encrypt/src/main/agoraLibs/
-cp -r ../../sdk/armeabi-v7a agora-stream-encrypt/src/main/agoraLibs/
-
-## config beauty
-sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
-cd app/src/main
-curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"
-unzip -o vender_faceunity_resources_apiexample.zip
-rm -f vender_faceunity_resources_apiexample.zip
-curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_bytedance_resources_apiexample.zip"
-unzip -o vender_bytedance_resources_apiexample.zip
-rm -f vender_bytedance_resources_apiexample.zip
-curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sensetime_resources_apiexample.zip"
-unzip -o vender_sensetime_resources_apiexample.zip
-rm -f vender_sensetime_resources_apiexample.zip
-cd -
-fi
-
-./gradlew clean || exit 1
-./gradlew :app:assembleRelease || exit 1
-cp app/build/outputs/apk/release/*.apk $WORKSPACE
-ls $WORKSPACE
-cd -
 
