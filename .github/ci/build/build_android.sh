@@ -73,6 +73,12 @@ mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 
 if [ $compile_project = true ]; then
+	# install android sdk
+	which java
+	java --version
+	source ~/.bashrc
+	export ANDROID_HOME=/usr/lib/android_sdk
+	echo ANDROID_HOME: $ANDROID_HOME
 	cd ./$unzip_name/rtc/samples/API-Example || exit 1
 	./cloud_build.sh || exit 1
 fi
