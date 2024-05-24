@@ -123,11 +123,16 @@ cp -r ../../sdk/armeabi-v7a agora-stream-encrypt/src/main/agoraLibs/
 ## config beauty
 sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
 sed -i -e "s#'arm64-v8a', 'x86'#'arm64-v8a'// , 'x86'#g" app/build.gradle
-curl -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_8.7.0_resources.zip"
-mv vender_faceunity_8.7.0_resources.zip app/src/main/assets
-cd app/src/main/assets
-unzip vender_faceunity_8.7.0_resources.zip
-rm -f vender_faceunity_8.7.0_resources.zip
+cd app/src/main
+curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"
+unzip -o vender_faceunity_resources_apiexample.zip
+rm -f vender_faceunity_resources_apiexample.zip
+curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_bytedance_resources_apiexample.zip"
+unzip -o vender_bytedance_resources_apiexample.zip
+rm -f vender_bytedance_resources_apiexample.zip
+curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sensetime_resources_apiexample.zip"
+unzip -o vender_sensetime_resources_apiexample.zip
+rm -f vender_sensetime_resources_apiexample.zip
 cd -
 fi
 
