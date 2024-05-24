@@ -109,9 +109,10 @@ cp -r ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
 cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
 curl -o opencv4.zip https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
 unzip opencv4.zip
-mkdir -p agora-simple-filter/src/main/jniLibs
-mv arm64-v8a agora-simple-filter/src/main/jniLibs
-mv armeabi-v7a agora-simple-filter/src/main/jniLibs
+mkdir -p agora-simple-filter/src/main/libs
+mv arm64-v8a agora-simple-filter/src/main/libs
+mv armeabi-v7a agora-simple-filter/src/main/libs
+sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
 
 ## config agora stream encrypt
 sed -i -e "s#streamEncrypt = false#streamEncrypt = true#g" gradle.properties
@@ -122,7 +123,7 @@ cp -r ../../sdk/armeabi-v7a agora-stream-encrypt/src/main/agoraLibs/
 ## config beauty
 sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
 sed -i -e "s#'arm64-v8a', 'x86'#'arm64-v8a'// , 'x86'#g" app/build.gradle
-python3 ${WORKSPACE}/artifactory_utils.py --action=download_file --file=https://artifactory.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_8.7.0_resources.zip
+curl -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_8.7.0_resources.zip"
 mv vender_faceunity_8.7.0_resources.zip app/src/main/assets
 cd app/src/main/assets
 unzip vender_faceunity_8.7.0_resources.zip
