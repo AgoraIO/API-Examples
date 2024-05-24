@@ -58,7 +58,7 @@ echo zip_name: $zip_name
 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 7za x ./$zip_name -y
 
-unzip_name=`ls -S -d */ | grep Agora`
+unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
 
 rm -rf ./$unzip_name/bin
@@ -68,12 +68,12 @@ mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 
 
-cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example || exit 1
+cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example/ || exit 1
 mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/ || exit 1
-python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile || exit 1
+python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/Podfile || exit 1
 
-7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
+7za a -tzip result.zip -r $unzip_name > log.txt
+mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 if [ $compile_project = true ]; then
 	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/API-Example
