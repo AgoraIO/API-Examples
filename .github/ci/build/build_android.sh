@@ -65,14 +65,14 @@ rm -rf ./$unzip_name/rtc/demo
 rm ./$unzip_name/rtc/commits
 rm ./$unzip_name/rtc/package_size_report.txt
 mkdir ./$unzip_name/rtc/samples
-mkdir ./$unzip_name/rtc/samples/API-example
+mkdir ./$unzip_name/rtc/samples/API-Example
 
-cp -rf ./Android/${compile_type}/** ./$unzip_name/rtc/samples/API-example
+cp -rf ./Android/${compile_type}/** ./$unzip_name/rtc/samples/API-Example || exit 1
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 
-cd ./Android/${compile_type} || exit 1
+cd ./$unzip_name/rtc/samples/API-Example || exit 1
 ./cloud_build.sh || exit 1
 
 
