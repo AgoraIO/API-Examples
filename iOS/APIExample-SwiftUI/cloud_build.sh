@@ -63,7 +63,7 @@ echo APP_PATH: $APP_PATH
 
 #修改Keycenter文件
 sed -i -e "s#APPID\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
-rm -f KEYCENTER_PATH-e
+rm -f ${KEYCENTER_PATH}-e
 
 # Xcode clean
 xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
@@ -92,7 +92,7 @@ xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
-OUTPUT_NAME=${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION.ipa
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").ipa
 mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_NAME
 
 echo OUTPUT_NAME: $OUTPUT_NAME

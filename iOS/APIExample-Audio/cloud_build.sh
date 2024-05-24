@@ -73,7 +73,7 @@ xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
-OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION.ipa
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").ipa
 mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
 
 echo OUTPUT_FILE: $OUTPUT_FILE
