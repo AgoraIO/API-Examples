@@ -3,7 +3,7 @@ CURRENT_PATH=$PWD
 # 获取项目目录
 PROJECT_PATH="$( cd "$1" && pwd  )"
 IS_OBJECTIVE_C=false
-if [ "$ios_direction" = "APIExample-OC" ];then
+if [ "$ios_direction" = "APIExample-OC" ]; then
     IS_OBJECTIVE_C=true
 fi
 
