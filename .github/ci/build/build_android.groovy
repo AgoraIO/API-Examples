@@ -55,7 +55,12 @@ def doPublish(buildVariables) {
           "serverRepo": "SDK_repo"
         ]
     ]
-    archive.archiveFiles(archiveInfos)
+    archiveUrls = archive.archiveFiles(archiveInfos) ?: []
+    archiveUrls = archiveUrls as Set
+    if (archiveUrls) {
+        def content = archiveUrls.join("\n")
+        writeFile(file: 'package_urls', text: content, encoding: "utf-8")
+    }
     sh "rm -rf *.zip *.apk || true"
 }
 

@@ -23,3 +23,12 @@
 -keep class io.agora.**{*;}
 -dontwarn javax.**
 -dontwarn com.google.devtools.build.android.**
+
+# sensetime
+-keep class com.softsugar.**{*;}
+-keep class com.sensetime.**{*;}
+
+# bytedance
+-keep class com.effectsar.**{*;}
+-keep class com.bes.**{*;}
+-keep class com.amazing.**{*;}
