@@ -44,7 +44,7 @@ def doPublish(buildVariables) {
     def archiveInfos = [
         [
           "type": "ARTIFACTORY",
-          "archivePattern": "*.zip",
+          "archivePattern": "*.zip,*.apk",
           "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
           "serverRepo": "SDK_repo"
         ]

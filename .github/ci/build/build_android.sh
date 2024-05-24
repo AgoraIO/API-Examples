@@ -122,7 +122,6 @@ cp -r ../../sdk/armeabi-v7a agora-stream-encrypt/src/main/agoraLibs/
 
 ## config beauty
 sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
-sed -i -e "s#'arm64-v8a', 'x86'#'arm64-v8a'// , 'x86'#g" app/build.gradle
 cd app/src/main
 curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"
 unzip -o vender_faceunity_resources_apiexample.zip
@@ -137,10 +136,8 @@ cd -
 fi
 
 ./gradlew clean || exit 1
-./gradlew :app:assembleDebug || exit 1
-cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
-7za a -tzip result.zip -r *.apk > log.txt
-mv result.zip $WORKSPACE/APIExample_Android${audio_suffix}_$(date "+%y%m%d%H%M")_apk.zip
+./gradlew :app:assembleRelease || exit 1
+cp app/build/outputs/apk/release/*.apk .
 ls $WORKSPACE
 cd -
 
