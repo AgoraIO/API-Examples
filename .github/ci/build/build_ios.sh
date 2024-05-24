@@ -76,6 +76,8 @@ python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/P
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 if [ $compile_project = true ]; then
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/API-Example
+	cd ./$unzip_name/samples/API-Example
+	./cloud_build.sh || exit 1
+	cd -
 fi
 
