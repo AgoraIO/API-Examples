@@ -4,7 +4,8 @@
 ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
 
 ## use open jdk 17
-if [ "${$(uname -s): 0: 4}" = "Linu" ];then
+SYSTEM=$(uname -s)
+if [ "$SYSTEM" = "Linux" ];then
 if [ ! -d "/tmp/jdk-17.0.2" ];then
   curl -O https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
   tar zxf openjdk-17.0.2_linux-x64_bin.tar.gz
