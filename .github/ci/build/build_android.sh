@@ -137,7 +137,7 @@ fi
 
 ./gradlew clean || exit 1
 ./gradlew :app:assembleRelease || exit 1
-cp app/build/outputs/apk/release/*.apk .
+cp app/build/outputs/apk/release/*.apk $WORKSPACE
 ls $WORKSPACE
 cd -
 
