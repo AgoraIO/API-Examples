@@ -17,7 +17,7 @@ else
 fi
 
 # 项目target名
-TARGET_NAME=${PROJECT_PATH##*/}
+TARGET_NAME=$ios_direction
 
 KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
 if [ $IS_OBJECTIVE_C = true ]; then
