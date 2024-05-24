@@ -11,6 +11,7 @@ rm -f app/src/main/res/values/string_configs.xml-e
 
 ## config simple filter
 sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
+rm -f gradle.properties-e
 mkdir -p agora-simple-filter/src/main/agoraLibs
 cp -r ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
 cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
@@ -20,15 +21,18 @@ mkdir -p agora-simple-filter/src/main/libs
 mv arm64-v8a agora-simple-filter/src/main/libs
 mv armeabi-v7a agora-simple-filter/src/main/libs
 sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
+rm -f agora-simple-filter/src/main/cpp/CMakeLists.txt-e
 
 ## config agora stream encrypt
 sed -i -e "s#streamEncrypt = false#streamEncrypt = true#g" gradle.properties
+rm -f gradle.properties-e
 mkdir -p agora-stream-encrypt/src/main/agoraLibs
 cp -r ../../sdk/arm64-v8a agora-stream-encrypt/src/main/agoraLibs/
 cp -r ../../sdk/armeabi-v7a agora-stream-encrypt/src/main/agoraLibs/
 
 ## config beauty
 sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
+rm -f app/build.gradle-e
 cd app/src/main || exit 1
 curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"
 unzip -o vender_faceunity_resources_apiexample.zip
