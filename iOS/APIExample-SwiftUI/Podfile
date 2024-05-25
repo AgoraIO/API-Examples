@@ -7,8 +7,8 @@ target 'APIExample-SwiftUI' do
 #  pod 'CocoaAsyncSocket', '7.6.5'
 #  pod 'ijkplayer', '~> 1.1.3'
 #  pod 'SwiftLint', '~> 0.53.0'
-#  pod 'AgoraRtcEngine_iOS', '4.3.0'
-  pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_iOS', '4.3.2'
+  # pod 'sdk', :path => 'sdk.podspec'
 #    pod 'senseLib', :path => 'sense.podspec'
 #    pod 'bytedEffect', :path => 'bytedEffect.podspec'
 #     pod 'fuLib', :path => 'fu.podspec'
@@ -17,16 +17,16 @@ end
 
 target 'Agora-ScreenShare-Extension' do
   use_frameworks!
-  pod 'sdk', :path => 'sdk.podspec'
-  #   pod 'AgoraRtcEngine_iOS', '4.3.0'
+  # pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_iOS', '4.3.2'
 end
 
 #target 'SimpleFilter' do
 #  use_frameworks!
 #  pod 'sdk', :path => 'sdk.podspec'
-#  #   pod 'AgoraRtcEngine_iOS', '4.3.0'
+#  #   pod 'AgoraRtcEngine_iOS', '4.3.2'
 #end
 
 pre_install do |installer|
-#  system("sh .download_script.sh 4.3.0 true")
+#  system("sh .download_script.sh 4.3.2 true")
 end
