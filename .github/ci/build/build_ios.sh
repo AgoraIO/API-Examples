@@ -67,15 +67,13 @@ rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 
+cp -rf ./iOS/${ios_direction}/** ./$unzip_name/samples/API-Example/ || exit 1
 ls -al ./$unzip_name/samples/API-Example/
-ls -al ./iOS/$ios_direction/
-
-cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example/ || exit 1
-cp -rf ./iOS/$ios_direction/.** ./$unzip_name/samples/API-Example/
+cp -rf ./iOS/${ios_direction}/.** ./$unzip_name/samples/API-Example/
+ls -al ./$unzip_name/samples/API-Example/
 mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/ || exit 1
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/Podfile || exit 1
 
-ls -al ./$unzip_name/samples/API-Example/
 
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
