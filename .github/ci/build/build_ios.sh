@@ -67,6 +67,10 @@ rm ./$unzip_name/package_size_report.txt
 rm -rf ./$unzip_name/samples
 mkdir -p ./$unzip_name/samples/API-Example
 
+git clean -xfd
+git checkout .
+ls -al ./$unzip_name/samples/API-Example/
+ls -al ./iOS/$ios_direction/
 
 cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example/ || exit 1
 cp -rf ./iOS/$ios_direction/.** ./$unzip_name/samples/API-Example/
@@ -83,4 +87,6 @@ if [ $compile_project = true ]; then
 	./cloud_build.sh || exit 1
 	cd -
 fi
+
+rm -rf ./$unzip_name
 
