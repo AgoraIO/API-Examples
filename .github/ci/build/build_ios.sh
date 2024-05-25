@@ -65,7 +65,8 @@ rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 rm -rf ./$unzip_name/samples
-mkdir -p ./$unzip_name/samples/API-Example
+mkdir ./$unzip_name/samples
+mkdir ./$unzip_name/samples/API-Example
 
 git clean -xfd
 git checkout .
