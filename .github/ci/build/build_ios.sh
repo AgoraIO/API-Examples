@@ -69,6 +69,7 @@ mkdir ./$unzip_name/samples/API-Example
 
 
 cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example/ || exit 1
+cp -rf ./iOS/$ios_direction/.** ./$unzip_name/samples/API-Example/
 mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/ || exit 1
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/Podfile || exit 1
 
