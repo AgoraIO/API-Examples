@@ -39,7 +39,7 @@
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
 
-echo is_generate_validate_app: $is_generate_validate_app
+echo ios_direction: $ios_direction
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -64,14 +64,16 @@ echo unzip_name: $unzip_name
 rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
-mkdir ./$unzip_name/samples
-mkdir ./$unzip_name/samples/API-Example
+rm -rf ./$unzip_name/samples
+mkdir -p ./$unzip_name/samples/API-Example
 
 
 cp -rf ./iOS/$ios_direction/** ./$unzip_name/samples/API-Example/ || exit 1
 cp -rf ./iOS/$ios_direction/.** ./$unzip_name/samples/API-Example/
 mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/ || exit 1
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/Podfile || exit 1
+
+ls -al ./$unzip_name/samples/API-Example/
 
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
