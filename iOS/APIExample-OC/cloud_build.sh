@@ -1,6 +1,13 @@
-CURRENT_PATH=$PWD
+#!/usr/bin/env sh
 
 PROJECT_PATH=$PWD
+
+if [ "$WORKSPACE" = "" ]; then
+	WORKSPACE=$PWD
+fi
+if [ "$BUILD_NUMBER" = "" ]; then
+	BUILD_NUMBER=888
+fi
 
 cd ${PROJECT_PATH} && pod install || exit 1
 
@@ -69,7 +76,7 @@ xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -sch
 CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 
 # 归档路径
-ARCHIVE_PATH=${TARGET_NAME}_${BUILD_NUMBER}.xcarchive
+ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # 编译环境
 
@@ -80,6 +87,8 @@ echo PLIST_PATH: $PLIST_PATH
 
 # archive 这边使用的工作区间 也可以使用project
 xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit 1
+
+cd ${WORKSPACE}
 
 # 压缩archive
 7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
@@ -92,6 +101,7 @@ SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").ipa
 mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
 
+rm -rf *.xcarchive
 echo OUTPUT_FILE: $OUTPUT_FILE
 
 
