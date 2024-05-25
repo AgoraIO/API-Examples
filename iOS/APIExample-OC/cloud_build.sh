@@ -102,6 +102,7 @@ OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y
 mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
 
 rm -rf *.xcarchive
+rm -rf *.xcarchive.zip
 echo OUTPUT_FILE: $OUTPUT_FILE
 
 
