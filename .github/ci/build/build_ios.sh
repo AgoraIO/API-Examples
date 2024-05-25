@@ -55,8 +55,8 @@ echo sdk_url: $sdk_url
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
-python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
-7za x ./$zip_name -y
+curl -o $zip_name $sdk_url || exit 1
+7za x ./$zip_name -y > log.txt
 
 unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
@@ -64,12 +64,9 @@ echo unzip_name: $unzip_name
 rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
-rm -rf ./$unzip_name/samples
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 
-git clean -xfd
-git checkout .
 ls -al ./$unzip_name/samples/API-Example/
 ls -al ./iOS/$ios_direction/
 
@@ -88,6 +85,4 @@ if [ $compile_project = true ]; then
 	./cloud_build.sh || exit 1
 	cd -
 fi
-
-rm -rf ./$unzip_name
 
