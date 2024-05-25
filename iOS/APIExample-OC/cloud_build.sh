@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+CURRENT_PATH=$PWD
 
 PROJECT_PATH=$PWD
 

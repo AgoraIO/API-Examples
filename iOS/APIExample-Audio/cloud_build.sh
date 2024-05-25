@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+CURRENT_PATH=$PWD
 
 PROJECT_PATH=$PWD
 
@@ -66,11 +66,14 @@ echo PLIST_PATH: $PLIST_PATH
 xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit 1
 
 # 压缩archive
-7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+ZIP_NAME=${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip
+7za a -tzip $ZIP_NAME "${ARCHIVE_PATH}"
+
+echo ZIP_NAME: $ZIP_NAME
 
 # 签名
 # sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
-sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
+sh export $ZIP_NAME --plist "${PLIST_PATH}"
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").ipa
