@@ -73,7 +73,7 @@ python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/P
 
 
 7za a -tzip result.zip -r $unzip_name > log.txt
-mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
 if [ $compile_project = true ]; then
 	cd ./$unzip_name/samples/API-Example

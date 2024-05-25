@@ -68,7 +68,7 @@ mkdir ./$unzip_name/rtc/samples
 
 cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
 7za a -tzip result.zip -r $unzip_name > log.txt
-mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
 
 if [ $compile_project = true ]; then
