@@ -47,4 +47,8 @@ cd - || exit 1
 
 ./gradlew clean || exit 1
 ./gradlew :app:assembleRelease || exit 1
-cp app/build/outputs/apk/release/*.apk $WORKSPACE
+
+if [ "$WORKSPACE" != "" ]; then
+SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
+cp app/build/outputs/apk/release/*.apk $WORKSPACE/APIExample_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").apk
+fi

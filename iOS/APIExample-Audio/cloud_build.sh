@@ -48,7 +48,7 @@ echo PROJECT_PATH: $PROJECT_PATH
 echo TARGET_NAME: $TARGET_NAME
 echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
-
+å
 #修改Keycenter文件
 sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
 sed -i -e "s#<\#YOUR Certificate\#>#nil#g" $KEYCENTER_PATH
@@ -85,7 +85,7 @@ cd ${WORKSPACE}
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
-OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").ipa
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
 mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
 
 rm -rf *.xcarchive
