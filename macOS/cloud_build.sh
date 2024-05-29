@@ -85,7 +85,7 @@ sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarc
 
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
-OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_$SDK_VERSION_$(date "+%Y%m%d%H%M%S").app.zip
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").app.zip
 mv ${TARGET_NAME}_${BUILD_NUMBER}.app.zip $OUTPUT_FILE
 
 rm -rf *.xcarchive

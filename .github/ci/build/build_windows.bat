@@ -85,7 +85,7 @@ xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-e
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
 dir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
-copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
+copy result.zip %WORKSPACE%\\withAPIExample_%BUILD_NUMBER%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 

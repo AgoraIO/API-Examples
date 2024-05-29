@@ -127,7 +127,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     if (File(localSdkPath).exists()) {
-        implementation(fileTree(localSdkPath).include("*.jar", ".aar"))
+        implementation(fileTree(localSdkPath).include("*.jar", "*.aar"))
     } else {
         implementation(libs.agora.full.sdk)
         implementation(libs.agora.full.screen.sharing)
