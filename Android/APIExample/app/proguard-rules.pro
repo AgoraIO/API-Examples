@@ -32,3 +32,11 @@
 -keep class com.effectsar.**{*;}
 -keep class com.bes.**{*;}
 -keep class com.amazing.**{*;}
+
+# ijkplayer
+-keep class tv.danmaku.ijk.media.player.** {*;}
+-keep class tv.danmaku.ijk.media.player.IjkMediaPlayer{*;}
+-keep class tv.danmaku.ijk.media.player.ffmpeg.FFmpegApi{*;}
+
+# exo
+-keep class com.google.android.exoplayer2.**{*;}
