@@ -29,6 +29,7 @@
 }
 
 - (IBAction)onClickChoseBackgroundColor:(UIButton *)sender {
+    [self.view endEditing:YES];
     PickerView *pickerView = [[PickerView alloc] init];
     NSDictionary *colors = @{
         @"Red".localized: @(0xff0d00ff),
@@ -105,6 +106,12 @@
                                   @"backgroundColor": @(self.backgroundColor)
     };
     [self.navigationController pushViewController:newViewController animated:YES];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    
+    [self.view endEditing:YES];
 }
 
 @end
