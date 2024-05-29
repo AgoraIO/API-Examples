@@ -49,7 +49,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)setAudioProfile:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Audio Profile".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -73,7 +74,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 
 - (IBAction)onClickJoinButton:(id)sender {

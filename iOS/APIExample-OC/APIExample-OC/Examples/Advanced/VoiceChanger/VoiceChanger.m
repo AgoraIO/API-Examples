@@ -114,7 +114,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onVoiceChanger:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Voice Changer".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -144,7 +145,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onStyleTransformation:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Style Transformation".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -169,7 +171,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onRoomAcoustics:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Room Acoustics".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -200,7 +203,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onPitchCorrection:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Pitch Correction".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -223,7 +227,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onVoiceConversion:(UIButton *)sender {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Set Voice Conversion".localized message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
@@ -250,7 +255,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 
 - (IBAction)onTimbreTransformation:(UIButton *)sender {
@@ -282,7 +288,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onAudioEffectsParamUpdated:(UISlider *)sender {
     int param1 = self.audioEffectParam1Slider.isEnabled ? self.audioEffectParam1Slider.value : 0;
@@ -319,7 +326,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onLocalVoiceEqualizationGain:(UISlider *)sender {
     self.equalizationGain = (int)sender.value;
@@ -374,7 +382,8 @@
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)onLocalVoiceReverbValue:(UISlider *)sender {
     int value = (int)sender.value;

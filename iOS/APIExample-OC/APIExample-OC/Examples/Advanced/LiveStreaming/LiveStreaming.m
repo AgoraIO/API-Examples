@@ -56,7 +56,8 @@
         }];
         [alertVC addAction:ok];
         [alertVC addAction:cancel];
-        [self presentViewController:alertVC animated:YES completion:nil];
+//        [self presentViewController:alertVC animated:YES completion:nil];
+        [self presentAlertViewController:alertVC];
     } else {
         self.isFirstFrame = NO;
     }
@@ -89,7 +90,8 @@
     [alertVC addAction:broadcaster];
     [alertVC addAction:audience];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
     
 }
 
