@@ -64,6 +64,7 @@ class LiveStreamingEntry: UIViewController {
     }
     
     @IBAction func doChoseBackgroundColor(_ sender: UIButton) {
+        self.view.endEditing(true)
         let pickerView = PickerView()
         let colors = ["Red".localized: 0xff0d00ff,
                       "Blue".localized: 0x0400ffff,
@@ -106,6 +107,11 @@ class LiveStreamingEntry: UIViewController {
                                      "isPreloadChannel": preloadButton.isSelected,
                                      "backgroundColor": backgroundColor]
         navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        self.view.endEditing(true)
     }
 }
 
