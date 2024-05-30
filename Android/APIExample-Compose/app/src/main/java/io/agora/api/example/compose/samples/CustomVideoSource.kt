@@ -325,7 +325,7 @@ private class ExternalVideoFramePusher(
     }
 
     fun dispose() {
-        videoFileReader.start()
+        videoFileReader.stop()
         textureBufferHelper?.invoke {
             yuvFboProgram?.release()
             yuvFboProgram = null
