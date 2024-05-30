@@ -115,6 +115,12 @@ class LiveStreamingEntry: UIViewController {
     }
 }
 
+
+private let stabilizationModeParams: [[String: AgoraCameraStabilizationMode]] = [["off": .off],
+                                                                                 ["auto": .auto],
+                                                                                 ["level1": .level1],
+                                                                                 ["level2": .level2],
+                                                                                 ["level3": .level3]]
 class LiveStreamingMain: BaseViewController {
     var foregroundVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var backgroundVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
@@ -133,6 +139,7 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var videoImageContainer: UIView!
     @IBOutlet weak var centerStageContainerView: UIView!
     @IBOutlet weak var CameraFocalButton: UIButton!
+    @IBOutlet weak var cameraStabilizationButton: UIButton?
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -174,6 +181,8 @@ class LiveStreamingMain: BaseViewController {
         backgroundVideoContainer.addSubview(backgroundVideo)
         foregroundVideo.bindFrameToSuperviewBounds()
         backgroundVideo.bindFrameToSuperviewBounds()
+        
+        cameraStabilizationButton?.setTitle("\("CameraStabilizationMode".localized) \(stabilizationModeParams.first?.keys.first ?? "")", for: .normal)
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -306,26 +315,26 @@ class LiveStreamingMain: BaseViewController {
     
     @IBAction func onTapCenterStage(_ sender: UISwitch) {
         if agoraKit.isCameraCenterStageSupported() {
-            let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
-                                                                  "level1": .level1,
-                                                                  "level2": .level2,
-                                                                  "level3": .level3]
-            if sender.isOn {
-                let pickerView = PickerView()
-                pickerView.dataArray = params.map({ $0.key }).sorted()
-                AlertManager.show(view: pickerView, alertPostion: .bottom)
-                pickerView.pickerViewSelectedValueClosure = { [weak self] key in
-                    DispatchQueue.global().async {
-                        self?.agoraKit.setCameraStabilizationMode(params[key] ?? .auto)
-                    }
-                }
-            }
             agoraKit.enableCameraCenterStage(sender.isOn)
         } else {
             showAlert(message: "This device does not support Center Stage".localized)
             sender.setOn(false, animated: false)
         }
     }
+    
+    @IBAction func onTapCameraStabilization(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = stabilizationModeParams.map({ $0.keys.first ?? "" })
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self] key in
+            guard let map = stabilizationModeParams.filter({$0.keys.contains(key)}).first else {return}
+            sender.setTitle("\("CameraStabilizationMode".localized) \(key)", for: .normal)
+            DispatchQueue.global().async {
+                self?.agoraKit.setCameraStabilizationMode(map[key] ?? .auto)
+            }
+        }
+    }
+    
     @IBAction func onTapVideoImageSwitch(_ sender: UISwitch) {
         let options = AgoraImageTrackOptions()
         let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
