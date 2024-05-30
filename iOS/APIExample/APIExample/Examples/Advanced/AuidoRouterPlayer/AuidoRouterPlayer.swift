@@ -8,10 +8,16 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
+import AVKit
+
+#if canImport(IJKMediaFramework)
 import IJKMediaFramework
+#elseif canImport(MobileVLCKit)
+import MobileVLCKit
+#endif
 
 enum ThirdPlayerType: String {
-    case ijk = "ijkplayer"
+    case vendor = "thirdPartyPlayer"
     case origin = "avplayer"
 }
 
@@ -24,7 +30,7 @@ class AuidoRouterPlayerEntry: UIViewController {
     @IBOutlet var orientationBtn: UIButton!
     @IBOutlet weak var chosePlayerButton: UIButton!
     var width: Int = 960, height: Int = 540, orientation: AgoraVideoOutputOrientationMode = .adaptative, fps = 15
-    private var playerType: ThirdPlayerType = .ijk
+    private var playerType: ThirdPlayerType = .origin
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +38,10 @@ class AuidoRouterPlayerEntry: UIViewController {
     
     @IBAction func onChosePlayerType(_ sender: UIButton) {
         let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
-        let alert = UIAlertController(title: "Player Type(ijkplayer/avplayer)".localized,
+        let alert = UIAlertController(title: "Player Type(thirdPartyPlayer/avplayer)".localized,
                                       message: nil,
                                       preferredStyle: style)
-        alert.addAction(getPlayerAction(ThirdPlayerType.ijk.rawValue))
+        alert.addAction(getPlayerAction(ThirdPlayerType.vendor.rawValue))
         alert.addAction(getPlayerAction(ThirdPlayerType.origin.rawValue))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
@@ -43,7 +49,7 @@ class AuidoRouterPlayerEntry: UIViewController {
     func getPlayerAction(_ title: String) -> UIAlertAction {
         return UIAlertAction(title: title, style: .default, handler: { [unowned self] _ in
             self.chosePlayerButton.setTitle(title, for: .normal)
-            self.playerType = ThirdPlayerType(rawValue: title) ?? .ijk
+            self.playerType = ThirdPlayerType(rawValue: title) ?? .vendor
         })
     }
     func getResolutionAction(width: Int, height: Int) -> UIAlertAction {
@@ -128,7 +134,8 @@ class AuidoRouterPlayerMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     private let videoString = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4"
-    private lazy var ijkPlayer: IJKAVMoviePlayerController? = {
+    private lazy var vendorPlayer: Any? = {
+#if canImport(IJKMediaFramework)
         let player = IJKAVMoviePlayerController(contentURL: URL(string: videoString))
         player?.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         player?.view.frame = playerView.bounds
@@ -139,7 +146,20 @@ class AuidoRouterPlayerMain: BaseViewController {
         player?.allowsMediaAirPlay = true
         player?.isDanmakuMediaAirPlay = true
         return player
+#elseif canImport(MobileVLCKit)
+        let player = VLCMediaPlayer()
+        if let url = URL(string: videoString) {
+            let media = VLCMedia(url: url)
+            player.media = media
+        }
+        let videoView = UIView(frame: playerView.bounds)
+        player.drawable = videoView
+        player.play()
+        return player
+#endif
+        return nil
     }()
+    
     private lazy var avPlayer: AVPlayerViewController? = {
         guard let url = URL(string: videoString) else { return nil }
         let player = AVPlayer(url: url)
@@ -232,16 +252,21 @@ class AuidoRouterPlayerMain: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let playerType = ThirdPlayerType(rawValue: configs["playerType"] as? String ?? "")
-        if playerType == .ijk {
-            setupIJKPlayer()
+        if playerType == .origin {
+            setupVendorPlayer()
         } else {
             setupAVPlayer()
         }
     }
     
-    private func setupIJKPlayer() {
-        guard let ijkPlayerView = ijkPlayer?.view else { return }
+    private func setupVendorPlayer() {
+#if canImport(IJKMediaFramework)
+        guard let ijkPlayerView = (vendorPlayer as? IJKAVMoviePlayerController)?.view  else { return }
         playerView.addSubview(ijkPlayerView)
+#elseif canImport(MobileVLCKit)
+        guard let vlcPlayerView = (vendorPlayer as? VLCMediaPlayer)?.drawable as? UIView else { return }
+        playerView.addSubview(vlcPlayerView)
+#endif
     }
     
     private func setupAVPlayer() {
@@ -268,7 +293,11 @@ class AuidoRouterPlayerMain: BaseViewController {
         if playerType == .origin {
             avPlayer?.player?.pause()
         } else {
-            ijkPlayer?.shutdown()
+#if canImport(IJKMediaFramework)
+            (vendorPlayer as? IJKAVMoviePlayerController)?.shutdown()
+#elseif canImport(MobileVLCKit)
+            (vendorPlayer as? VLCMediaPlayer)?.stop()
+#endif
         }
     }
 }
