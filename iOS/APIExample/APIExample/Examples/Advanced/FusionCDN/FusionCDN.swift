@@ -25,7 +25,7 @@ enum StreamingMode {
     }
 }
 
-class FusionCDNEntry: UIViewController {
+class FusionCDNEntry: BaseViewController {
     @IBOutlet weak var joinButtonHost: AGButton!
     @IBOutlet weak var joinButtonAudience: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -58,7 +58,8 @@ class FusionCDNEntry: UIViewController {
         alert.addAction(getStreamingMode(.agoraChannel))
         alert.addAction(getStreamingMode(.cdnUrl))
         alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
+//        present(alert, animated: true, completion: nil)
+        presentAlertViewController(alert)
     }
     
     @IBAction func joinAsHost(sender: AGButton) {
