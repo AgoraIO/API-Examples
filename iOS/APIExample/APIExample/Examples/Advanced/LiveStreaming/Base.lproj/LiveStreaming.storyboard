@@ -64,9 +64,22 @@
                                             <action selector="doJoinPressedWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="pdy-Tj-ycl"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ug1-fz-GYz">
+                                        <rect key="frame" x="30" y="235" width="206" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="2n6-ch-vfJ"/>
+                                            <constraint firstAttribute="width" constant="206" id="6sx-zg-CJ4"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="CameraFocal"/>
+                                        <connections>
+                                            <action selector="onTapCameraFocalButton:" destination="O0d-ef-mTa" eventType="touchUpInside" id="hBD-bJ-coG"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="ug1-fz-GYz" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="30" id="0hW-sg-PjQ"/>
                                     <constraint firstItem="1k3-bd-l8R" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="66" id="13Z-tP-Rgb"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="73" id="6R3-Em-K11"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="leading" secondItem="S19-UR-C2c" secondAttribute="trailing" constant="39" id="6WA-Qt-zCy"/>
@@ -74,6 +87,7 @@
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="20" id="Aw7-EV-2aa"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="1k3-bd-l8R" secondAttribute="bottom" constant="25" id="DUD-59-ryB"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37.5" id="Fzh-Ry-Cyf"/>
+                                    <constraint firstItem="ug1-fz-GYz" firstAttribute="top" secondItem="S19-UR-C2c" secondAttribute="bottom" constant="16.5" id="JFo-9k-VHS"/>
                                     <constraint firstItem="Q0N-nV-bez" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="18" id="LHA-IH-a4H"/>
                                     <constraint firstItem="S19-UR-C2c" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="28" id="M4y-zq-16B"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="U0S-YA-fEo"/>
@@ -93,6 +107,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cameraButton" destination="ug1-fz-GYz" id="CHR-ka-b3S"/>
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
                         <outlet property="joinButton" destination="kbN-ZR-nNn" id="kkw-5w-Nnv"/>
                         <outlet property="preloadButton" destination="S19-UR-C2c" id="QYb-aJ-DMZ"/>
@@ -495,7 +510,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
