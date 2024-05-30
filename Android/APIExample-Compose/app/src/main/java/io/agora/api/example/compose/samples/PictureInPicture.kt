@@ -328,7 +328,7 @@ private fun PictureInPicture() {
 }
 
 
-private class PictureInPictureActivity : ComponentActivity() {
+class PictureInPictureActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
