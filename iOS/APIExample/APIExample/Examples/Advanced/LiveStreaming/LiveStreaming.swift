@@ -329,9 +329,7 @@ class LiveStreamingMain: BaseViewController {
         pickerView.pickerViewSelectedValueClosure = { [weak self] key in
             guard let map = stabilizationModeParams.filter({$0.keys.contains(key)}).first else {return}
             sender.setTitle("\("CameraStabilizationMode".localized) \(key)", for: .normal)
-            DispatchQueue.global().async {
-                self?.agoraKit.setCameraStabilizationMode(map[key] ?? .auto)
-            }
+            self?.agoraKit.setCameraStabilizationMode(map[key] ?? .auto)
         }
     }
     
