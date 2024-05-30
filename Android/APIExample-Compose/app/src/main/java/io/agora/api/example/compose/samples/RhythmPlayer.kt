@@ -104,8 +104,8 @@ fun RhythmPlayer() {
             mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
-            mediaOptions.publishRhythmPlayerTrack = true
-            mediaOptions.publishMicrophoneTrack = false
+            mediaOptions.publishRhythmPlayerTrack = isPlaying
+            mediaOptions.publishMicrophoneTrack = true
             mediaOptions.publishCameraTrack = false
             TokenUtils.gen(channelName, 0) {
                 rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
@@ -153,6 +153,11 @@ private fun RhythmPlayerView(
                         .padding(8.dp, 0.dp),
                     onClick = {
                         rtcEngine?.startRhythmPlayer(URL_UPBEAT, URL_DOWNBEAT, config)
+                        if(isJoined){
+                            rtcEngine?.updateChannelMediaOptions(ChannelMediaOptions().apply {
+                                publishRhythmPlayerTrack = true
+                            })
+                        }
                     }
                 ) {
                     Text(text = stringResource(id = R.string.play))
@@ -163,6 +168,11 @@ private fun RhythmPlayerView(
                         .padding(8.dp, 0.dp),
                     onClick = {
                         rtcEngine?.stopRhythmPlayer()
+                        if(isJoined){
+                            rtcEngine?.updateChannelMediaOptions(ChannelMediaOptions().apply {
+                                publishRhythmPlayerTrack = false
+                            })
+                        }
                         onPlayStopClick()
                     }
                 ) {

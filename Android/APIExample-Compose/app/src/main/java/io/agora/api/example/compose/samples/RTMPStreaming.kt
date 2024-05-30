@@ -1,5 +1,7 @@
 package io.agora.api.example.compose.samples
 
+import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,7 +35,6 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
-import io.agora.rtc2.SimulcastStreamConfig
 import io.agora.rtc2.live.LiveTranscoding
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
@@ -43,6 +44,7 @@ fun RTMPStreaming() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val keyboard = LocalSoftwareKeyboardController.current
+    val mainHandler = remember { Handler(context.mainLooper) }
     var isJoined by rememberSaveable { mutableStateOf(false) }
     var localLarge by rememberSaveable { mutableStateOf(true) }
     var channelName by rememberSaveable { mutableStateOf("") }
@@ -149,6 +151,25 @@ fun RTMPStreaming() {
                     super.onClientRoleChanged(oldRole, newRole, newRoleOptions)
                     clientRole = newRole
                 }
+
+                override fun onRtmpStreamingStateChanged(url: String?, state: Int, reason: Int) {
+                    super.onRtmpStreamingStateChanged(url, state, reason)
+                    Log.d("RTMPStreaming", "onRtmpStreamingStateChanged: $url, $state, $reason")
+                    if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
+                        pushing = false
+                    } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
+                        pushing = true
+                    }
+                }
+
+                override fun onRtmpStreamingEvent(url: String?, event: Int) {
+                    super.onRtmpStreamingEvent(url, event)
+                    if (event == Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE) {
+                        mainHandler.post {
+                            Toast.makeText(context, "URL already in use: $url", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
         }).apply {
             engine = this
@@ -161,14 +182,6 @@ fun RTMPStreaming() {
                 )
             )
             enableVideo()
-            setDualStreamMode(
-                Constants.SimulcastStreamMode.ENABLE_SIMULCAST_STREAM,
-                SimulcastStreamConfig(
-                    VideoEncoderConfiguration.VideoDimensions(
-                        100, 100
-                    ), 100, 15
-                )
-            )
         }
     }
     DisposableEffect(lifecycleOwner) {
@@ -224,7 +237,6 @@ fun RTMPStreaming() {
             pushing = !pushing
 
             if (pushing) {
-                rtcEngine?.stopRtmpStream(url)
                 if (transcoding) {
                     rtcEngine?.startRtmpStreamWithTranscoding(url,
                         getRtmpStreamTranscoding(localUid, remoteUid)
@@ -337,25 +349,25 @@ private fun getRtmpStreamTranscoding(
     remoteUid: Int
 ): LiveTranscoding {
     return LiveTranscoding().apply {
-        width = 640
-        height = 360
+        width = 360
+        height = 640
         videoBitrate = 400
         videoFramerate = 15
         addUser(LiveTranscoding.TranscodingUser().apply {
             uid = localUid
             x = 0
             y = 0
-            width = 640
-            height = 180
+            width = 360
+            height = 320
             zOrder = 1
         })
         if (remoteUid != 0) {
             addUser(LiveTranscoding.TranscodingUser().apply {
                 uid = remoteUid
                 x = 0
-                y = 180
-                width = 640
-                height = 180
+                y = 320
+                width = 360
+                height = 320
                 zOrder = 2
             })
         }
