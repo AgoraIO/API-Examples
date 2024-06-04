@@ -509,7 +509,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, cameraFocusDidChangedTo rect: CGRect) {
-        ToastView.show(text: "The camera has changed".localized + " \(rect)")
+        LogUtils.log(message: "The camera has changed".localized + " \(rect)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
