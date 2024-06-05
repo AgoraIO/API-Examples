@@ -47,10 +47,21 @@ def doPublish(buildVariables) {
           "archivePattern": "*.zip",
           "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
           "serverRepo": "SDK_repo"
+        ],
+        [
+          "type": "ARTIFACTORY",
+          "archivePattern": "*.apk",
+          "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
+          "serverRepo": "SDK_repo"
         ]
     ]
-    archive.archiveFiles(archiveInfos)
-    sh "rm -rf *.zip || true"
+    archiveUrls = archive.archiveFiles(archiveInfos) ?: []
+    archiveUrls = archiveUrls as Set
+    if (archiveUrls) {
+        def content = archiveUrls.join("\n")
+        writeFile(file: 'package_urls', text: content, encoding: "utf-8")
+    }
+    sh "rm -rf *.zip *.apk || true"
 }
 
 pipelineLoad(this, "ApiExample", "build", "android", "apiexample_linux")

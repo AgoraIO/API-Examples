@@ -183,3 +183,4 @@
 "Front camera" = "前置";
 "Rear camera" = "后置";
 "The camera has changed:" = "摄像头已改变:";
+"CameraStabilizationMode" = "防抖:";

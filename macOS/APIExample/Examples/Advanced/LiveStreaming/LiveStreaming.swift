@@ -262,20 +262,16 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var centerStage: Picker!
     func initSelectCentetStagePicker() {
         centerStage.isEnabled = agoraKit.isCameraCenterStageSupported()
-        let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
-                                                              "level1": .level1,
-                                                              "level2": .level2,
-                                                              "level3": .level3,
-                                                              "off": .off]
+        let params  = ["off": false, "on": true]
         let datas = params.map { $0.key }.sorted()
         centerStage.label.stringValue = "Center Stage".localized
         centerStage.picker.addItems(withTitles: datas)
         centerStage.onSelectChanged { [weak self] in
             guard let self = self else { return }
-            let index = self.selectRolePicker.indexOfSelectedItem
+            let index = self.centerStage.picker.indexOfSelectedItem
             let key = datas[index]
-            let mode = params[key]
-            self.agoraKit.enableCameraCenterStage(mode != .off)
+            let mode = params[key] ?? false
+            self.agoraKit.enableCameraCenterStage(mode)
         }
     }
     
@@ -736,6 +732,9 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
         LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(reason.rawValue)", level: .info)
+        if state == .encoding {
+            centerStage.isEnabled = agoraKit.isCameraCenterStageSupported()
+        }
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {

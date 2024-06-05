@@ -51,7 +51,8 @@ typedef NS_ENUM(NSInteger, StreamingMode) {
     [alertVC addAction:cdn];
     [alertVC addAction:cancel];
     
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)joinAsHost:(id)sender {
     [self.textField resignFirstResponder];
@@ -477,7 +478,8 @@ CGFloat HEIGHT = 640;
     }
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel".localized style:(UIAlertActionStyleCancel) handler:nil];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
 }
 - (IBAction)setRtcStreaming:(UISwitch *)sender {
     self.isRtcStreaming = sender.isOn;

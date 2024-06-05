@@ -29,6 +29,7 @@
 }
 
 - (IBAction)onClickChoseBackgroundColor:(UIButton *)sender {
+    [self.view endEditing:YES];
     PickerView *pickerView = [[PickerView alloc] init];
     NSDictionary *colors = @{
         @"Red".localized: @(0xff0d00ff),
@@ -56,7 +57,8 @@
         }];
         [alertVC addAction:ok];
         [alertVC addAction:cancel];
-        [self presentViewController:alertVC animated:YES completion:nil];
+//        [self presentViewController:alertVC animated:YES completion:nil];
+        [self presentAlertViewController:alertVC];
     } else {
         self.isFirstFrame = NO;
     }
@@ -89,7 +91,8 @@
     [alertVC addAction:broadcaster];
     [alertVC addAction:audience];
     [alertVC addAction:cancel];
-    [self presentViewController:alertVC animated:YES completion:nil];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+    [self presentAlertViewController:alertVC];
     
 }
 
@@ -103,6 +106,12 @@
                                   @"backgroundColor": @(self.backgroundColor)
     };
     [self.navigationController pushViewController:newViewController animated:YES];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    
+    [self.view endEditing:YES];
 }
 
 @end
