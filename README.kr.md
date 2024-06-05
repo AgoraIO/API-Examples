@@ -13,7 +13,6 @@
 | Android  | Java        | [/Android/APIExample-Audio](/Android/APIExample-Audio)     | [RTC Java Audio SDK](https://docs.agora.io/en/sdks?platform=android)      |
 | iOS      | Swift       | [/iOS/APIExample](/iOS/APIExample)                         | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
 | iOS      | Objective-C | [/iOS/APIExample-OC](/iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
-| iOS      | Swift       | [/iOS/APIExample-Swift](/iOS/APIExample-Swift)             | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
 | iOS      | Swift       | [/iOS/APIExample-Audio](/iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://docs.agora.io/en/sdks?platform=ios)   |
 | macOS    | Swift       | [/macOS](/macOS)                                           | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=macos) |
 | Windows  | C++         | [/windows](/windows)                                       | [RTC C++ Video SDK](https://docs.agora.io/en/sdks?platform=windows)       |
