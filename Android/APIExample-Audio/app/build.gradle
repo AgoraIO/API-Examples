@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
+def agoraSdkVersion = '4.3.2'
 
 android {
     compileSdkVersion 32
@@ -16,10 +17,28 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        myConfig {
+            storeFile new File(rootProject.rootDir.absolutePath + "/keystore.key")
+            storePassword "965606"
+            keyAlias "agora"
+            keyPassword "965606"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -27,6 +46,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
 
     sourceSets {
         main {
@@ -40,6 +61,15 @@ android {
     buildFeatures{
         viewBinding true
     }
+
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                outputFileName = new File(rootProject.name
+                        + "_" + agoraSdkVersion
+                        + "_" + new Date().format("yyyyMMddHHmm") + ".apk")
+            }
+    }
 }
 
 dependencies {
@@ -48,16 +78,15 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.3.1"
         // case 1: full single lib with voice only
-        implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
+        implementation "io.agora.rtc:voice-sdk:${agoraSdkVersion}"
         // case 2: partial libs with voice only
-        // implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
-        // implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
-        // implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
-        // implementation "io.agora.rtc:aiaec:${agora_sdk_version}"
-        // implementation "io.agora.rtc:drm-loader:${agora_sdk_version}"
-        // implementation "io.agora.rtc:drm:${agora_sdk_version}"
+        // implementation "io.agora.rtc:voice-rtc-basic:${agoraSdkVersion}"
+        // implementation "io.agora.rtc:spatial-audio:${agoraSdkVersion}"
+        // implementation "io.agora.rtc:audio-beauty:${agoraSdkVersion}"
+        // implementation "io.agora.rtc:aiaec:${agoraSdkVersion}"
+        // implementation "io.agora.rtc:drm-loader:${agoraSdkVersion}"
+        // implementation "io.agora.rtc:drm:${agoraSdkVersion}"
     }
 
     implementation 'androidx.appcompat:appcompat:1.5.0'

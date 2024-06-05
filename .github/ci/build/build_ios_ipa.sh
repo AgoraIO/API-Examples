@@ -2,6 +2,10 @@ CURRENT_PATH=$PWD
 
 # 获取项目目录
 PROJECT_PATH="$( cd "$1" && pwd  )"
+IS_OBJECTIVE_C=false
+if [ "$ios_direction" = "APIExample-OC" ]; then
+    IS_OBJECTIVE_C=true
+fi
 
 cd ${PROJECT_PATH} && pod install
 
@@ -13,10 +17,10 @@ else
 fi
 
 # 项目target名
-TARGET_NAME=${PROJECT_PATH##*/}
+TARGET_NAME=$ios_direction
 
 KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
-if [ $is_objective_c = true ]; then
+if [ $IS_OBJECTIVE_C = true ]; then
     KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.m"
 fi
 
@@ -31,7 +35,7 @@ PBXPROJ_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcodeproj/project.pbxproj"
 echo PBXPROJ_PATH: $PBXPROJ_PATH
 
 # 主项目工程配置
-if [ $is_objective_c = true ]; then
+if [ $IS_OBJECTIVE_C = true ]; then
     # Debug
     /usr/libexec/PlistBuddy -c "Set :objects:E70ADE062A5D0050009947CF:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
     /usr/libexec/PlistBuddy -c "Set :objects:E70ADE062A5D0050009947CF:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH

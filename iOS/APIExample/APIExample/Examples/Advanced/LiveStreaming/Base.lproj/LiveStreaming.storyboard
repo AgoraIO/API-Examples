@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -42,7 +42,7 @@
                                         </connections>
                                     </switch>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0N-nV-bez">
-                                        <rect key="frame" x="28" y="82" width="119.5" height="40.5"/>
+                                        <rect key="frame" x="28" y="82" width="119.5" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="default color"/>
                                         <connections>
@@ -50,7 +50,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S19-UR-C2c">
-                                        <rect key="frame" x="28" y="184" width="146" height="40.5"/>
+                                        <rect key="frame" x="28" y="184" width="146" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="preload channel"/>
                                         <connections>
@@ -64,9 +64,22 @@
                                             <action selector="doJoinPressedWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="pdy-Tj-ycl"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ug1-fz-GYz">
+                                        <rect key="frame" x="30" y="235" width="206" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="2n6-ch-vfJ"/>
+                                            <constraint firstAttribute="width" constant="206" id="6sx-zg-CJ4"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="CameraFocal"/>
+                                        <connections>
+                                            <action selector="onTapCameraFocalButton:" destination="O0d-ef-mTa" eventType="touchUpInside" id="hBD-bJ-coG"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstItem="ug1-fz-GYz" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="30" id="0hW-sg-PjQ"/>
                                     <constraint firstItem="1k3-bd-l8R" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="66" id="13Z-tP-Rgb"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="73" id="6R3-Em-K11"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="leading" secondItem="S19-UR-C2c" secondAttribute="trailing" constant="39" id="6WA-Qt-zCy"/>
@@ -74,6 +87,7 @@
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="20" id="Aw7-EV-2aa"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="1k3-bd-l8R" secondAttribute="bottom" constant="25" id="DUD-59-ryB"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37.5" id="Fzh-Ry-Cyf"/>
+                                    <constraint firstItem="ug1-fz-GYz" firstAttribute="top" secondItem="S19-UR-C2c" secondAttribute="bottom" constant="16.5" id="JFo-9k-VHS"/>
                                     <constraint firstItem="Q0N-nV-bez" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="18" id="LHA-IH-a4H"/>
                                     <constraint firstItem="S19-UR-C2c" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="28" id="M4y-zq-16B"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="U0S-YA-fEo"/>
@@ -93,6 +107,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cameraButton" destination="ug1-fz-GYz" id="CHR-ka-b3S"/>
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
                         <outlet property="joinButton" destination="kbN-ZR-nNn" id="kkw-5w-Nnv"/>
                         <outlet property="preloadButton" destination="S19-UR-C2c" id="QYb-aJ-DMZ"/>
@@ -129,7 +144,7 @@
                                 </connections>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZm-Rf-imt">
-                                <rect key="frame" x="202" y="427.5" width="124.5" height="40.5"/>
+                                <rect key="frame" x="202" y="433.5" width="124.5" height="34.5"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="CameraFocal"/>
                                 <connections>
@@ -164,7 +179,7 @@
                                 </constraints>
                             </view>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CN0-n0-1Gh" userLabel="B帧">
-                                <rect key="frame" x="21" y="473.5" width="108" height="35"/>
+                                <rect key="frame" x="21" y="479.5" width="108" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="B帧" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3M-Tw-nzd">
                                         <rect key="frame" x="8" y="-2" width="37" height="40"/>
@@ -193,8 +208,19 @@
                                     <constraint firstAttribute="height" constant="35" id="vLT-4S-I2e"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pha-4w-IfR">
+                                <rect key="frame" x="21" y="388" width="372" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="LLi-Kw-ErI"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title=""/>
+                                <connections>
+                                    <action selector="onTapCameraStabilization:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="O5y-yo-44H"/>
+                                </connections>
+                            </button>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v58-rP-HKa" userLabel="CenterStage">
-                                <rect key="frame" x="21" y="428.5" width="170.5" height="35"/>
+                                <rect key="frame" x="21" y="434.5" width="170.5" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="CenterStage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7gz-OE-0O4">
                                         <rect key="frame" x="7" y="-2" width="91.5" height="40"/>
@@ -278,7 +304,7 @@
                                 </constraints>
                             </view>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5U-ta-1hj" userLabel="watermark">
-                                <rect key="frame" x="20" y="518.5" width="108" height="35"/>
+                                <rect key="frame" x="20" y="524.5" width="108" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="水印" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSq-Vu-o9H">
                                         <rect key="frame" x="8" y="-2" width="37" height="40"/>
@@ -333,7 +359,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
-                                <rect key="frame" x="20" y="563.5" width="80" height="40.5"/>
+                                <rect key="frame" x="20" y="569.5" width="80" height="34.5"/>
                                 <color key="backgroundColor" name="btnPanelBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="Xdc-MD-QxT"/>
@@ -403,8 +429,11 @@
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0oI-Iz-1eG"/>
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0za-L8-AHw"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="10" id="1HU-w7-YYi"/>
+                            <constraint firstItem="dZm-Rf-imt" firstAttribute="top" secondItem="pha-4w-IfR" secondAttribute="bottom" constant="10.5" id="66O-Xr-Aml"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="pha-4w-IfR" secondAttribute="trailing" constant="20" id="6oS-82-bFB"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="7Ra-XK-uPS"/>
                             <constraint firstItem="b7R-QN-CCh" firstAttribute="top" secondItem="dZm-Rf-imt" secondAttribute="bottom" constant="7" id="AdA-I4-fg9"/>
+                            <constraint firstItem="v58-rP-HKa" firstAttribute="top" secondItem="pha-4w-IfR" secondAttribute="bottom" constant="11.5" id="Avv-nK-e5T"/>
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="45" id="Fn8-02-ePb"/>
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="10" id="GpK-P5-Dz2"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
@@ -428,8 +457,10 @@
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="41" id="jKl-x3-P12"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
                             <constraint firstItem="v58-rP-HKa" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="rjz-Va-GOW"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="pha-4w-IfR" secondAttribute="trailing" constant="21" id="sLP-Ue-h7l"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="eGT-sd-I3g" secondAttribute="trailing" constant="90" id="t2I-pH-4sJ"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
+                            <constraint firstItem="pha-4w-IfR" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="y5F-EN-Zak"/>
                             <constraint firstItem="eGT-sd-I3g" firstAttribute="leading" secondItem="i5U-ta-1hj" secondAttribute="trailing" constant="13" id="yoA-DT-xju"/>
                         </constraints>
                     </view>
@@ -437,6 +468,7 @@
                         <outlet property="CameraFocalButton" destination="dZm-Rf-imt" id="owk-Ou-NSb"/>
                         <outlet property="bFrameContainer" destination="CN0-n0-1Gh" id="ILN-XR-Efd"/>
                         <outlet property="backgroundVideoContainer" destination="q9v-1n-ZYf" id="ADa-RX-kZg"/>
+                        <outlet property="cameraStabilizationButton" destination="pha-4w-IfR" id="5Q8-iF-7uG"/>
                         <outlet property="centerStageContainerView" destination="v58-rP-HKa" id="JD6-u8-u5n"/>
                         <outlet property="clientRoleToggle" destination="7iE-Y0-bQi" id="xF0-48-qAP"/>
                         <outlet property="clientRoleToggleView" destination="Uwe-Fi-04a" id="oys-Z9-DtO"/>

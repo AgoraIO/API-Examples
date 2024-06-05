@@ -44,10 +44,16 @@ def doPublish(buildVariables) {
           "archivePattern": "*.zip",
           "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
           "serverRepo": "SDK_repo" // ATTENTIONS: Update the artifactoryRepo if needed.
+        ],
+        [
+          "type": "ARTIFACTORY",
+          "archivePattern": "*.ipa",
+          "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
+          "serverRepo": "SDK_repo" // ATTENTIONS: Update the artifactoryRepo if needed.
         ]
     ]
     archive.archiveFiles(archiveInfos)
-    sh "rm -rf *.zip || true"
+    sh "rm -rf *.zip *.ipa || true"
 }
 
 pipelineLoad(this, "ApiExample", "build", "ios", "apiexample_mac")

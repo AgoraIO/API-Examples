@@ -345,7 +345,7 @@ int countSize(int row, int col, int width, int height, int r) {
 		y = r * 2 + 1;
 	return x * y;
 }
-int dataBuffers[1920][1080][2];
+int dataBuffers[1080][1920][2];
 //average filtering algorithm
 void CAverageFilterVideoProcFrameObserver::AverageFiltering(unsigned char * data, int width, int height, int step)
 {

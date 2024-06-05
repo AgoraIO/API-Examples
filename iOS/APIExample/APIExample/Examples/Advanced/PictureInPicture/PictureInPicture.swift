@@ -105,7 +105,7 @@ class PictureInPictureMain: BaseViewController {
             return
         }
         // To enable MPNowPlayingInfoCenter, you need to add the following two private parameters
-        agoraKit.setAudioOptionParams("{\"adm_mix_with_others\":false}")
+        agoraKit.setParameters("{\"adm_mix_with_others\":false}")
         agoraKit.setParameters("{\"che.audio.nonmixable.option\":true}")
         
         // make myself a broadcaster
