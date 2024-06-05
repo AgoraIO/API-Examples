@@ -41,6 +41,17 @@
     [self presentViewController:alertVC animated:YES completion:nil];
 }
 
+- (void)presentAlertViewController:(UIAlertController*)alertVC {
+    
+    // 判断设备类型
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        // iPad 上需要提供位置信息
+        alertVC.popoverPresentationController.sourceView = self.view; // 设置源视图
+        alertVC.popoverPresentationController.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0); // 设置源矩形
+    }
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
 @end
 
 

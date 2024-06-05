@@ -38,7 +38,7 @@
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
 
-echo is_generate_validate_app:$is_generate_validate_app
+echo compile_project:$compile_project
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -54,8 +54,8 @@ echo sdk_url: $sdk_url
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
-python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
-7za x ./$zip_name -y
+curl -o $zip_name $sdk_url || exit 1
+7za x ./$zip_name -y > log.txt
 
 unzip_name=`ls -S -d */ | grep Agora`
 echo unzip_name: $unzip_name
@@ -64,21 +64,20 @@ rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
-mkdir ./$unzip_name/samples/APIExample
-if [ $? -eq 0 ]; then
-    echo "success"
-else
-    echo "failed"
-    exit 1
-fi
-cp -a ./macOS/** ./$unzip_name/samples/APIExample 
+
+
+cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
+ls -al ./$unzip_name/samples/API-Example/
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
 
-
-if [ $is_generate_validate_app = true ]; then
-	./.github/ci/build/build_mac_ipa.sh ./$unzip_name/samples/APIExample
-fi
-
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
+
+if [ $compile_project = true ]; then
+    cd ./$unzip_name/samples/APIExample
+    ./cloud_build.sh || exit 1
+    cd -
+fi
+
+
