@@ -1,0 +1,60 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "APIExample"
+    },
+    {
+      "name": "Internet_reason",
+      "value": "access internet"
+    },
+    {
+      "name": "Write_reason",
+      "value": "write sdcard"
+    },
+    {
+      "name": "Read_reason",
+      "value": "read sdcard"
+    },
+    {
+      "name": "Audio_reason",
+      "value": "access audio"
+    },
+    {
+      "name": "Video_reason",
+      "value": "access video"
+    },
+    {
+      "name": "category_basic",
+      "value": "Basic"
+    },
+    {
+      "name": "item_joinvideochannel",
+      "value": "视频互动直播"
+    },
+    {
+      "name": "category_advance",
+      "value": "Advance"
+    },
+    {
+      "name": "join",
+      "value": "Join"
+    },
+    {
+      "name": "text_input_channel_name",
+      "value": "Please input channel name"
+    },
+    {
+      "name": "leave",
+      "value": "Leave"
+    }
+  ]
+}
