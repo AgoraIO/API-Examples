@@ -6,14 +6,17 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 
-const TAG: string = 'JoinVideoChannel'
+const TAG: string = 'MediaMetadata'
 
 @Entry
 @Component
-struct JoinVideoChannel {
+struct MediaMetadata {
   private rtcEngine: RtcEngine | undefined = undefined;
+  private pendingVideoMetadata: string | undefined = undefined;
+
   @State message: string = 'Hello World';
   @State channelName: string = ''
+  @State videoMetadata: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
   @State remoteUid: number = 0
@@ -53,8 +56,8 @@ struct JoinVideoChannel {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config);
-
     this.rtcEngine.enableVideo()
+
   }
 
   aboutToDisappear(): void {
@@ -75,7 +78,7 @@ struct JoinVideoChannel {
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
       TitleBar({
-        title: $r('app.string.item_joinvideochannel'),
+        title: $r('app.string.item_mediametadata'),
         showBack: true
       }).flexGrow(0)
 
@@ -115,6 +118,28 @@ struct JoinVideoChannel {
       }
       .align(Alignment.TopStart)
       .flexGrow(1)
+
+      Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
+        TextInput({ placeholder: $r('app.string.text_input_video_metadata') })
+          .id("input_video_metadata")
+          .type(InputType.Number)
+          .enableKeyboardOnFocus(false)
+          .onChange((value: string) => {
+            this.videoMetadata = value
+          })
+          .flexGrow(1)
+          .margin({ right: 6 })
+
+        Button($r('app.string.send'))
+          .id('button_to_send')
+          .enabled(this.isJoin)
+          .onClick(() => {
+            this.pendingVideoMetadata = this.videoMetadata
+            focusControl.requestFocus("button_to_send")
+          })
+          .flexGrow(0)
+      }
+      .padding({ left: 12, right: 12, top: 6, bottom: 6 })
 
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
@@ -171,4 +196,6 @@ struct JoinVideoChannel {
     }
     .backgroundColor($r('app.color.background_shallow_grey'))
   }
+
+
 }
