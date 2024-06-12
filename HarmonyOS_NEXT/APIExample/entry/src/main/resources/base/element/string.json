@@ -69,10 +69,6 @@
       "value": "Screenshot"
     },
     {
-      "name": "text_input_channel_name_filter",
-      "value": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{"
-    },
-    {
       "name": "ex_channel_name",
       "value": "ExChannelName"
     },
@@ -83,6 +79,18 @@
     {
       "name": "send",
       "value": "Send"
+    },
+    {
+      "name": "item_customaudiosource",
+      "value": "CustomAudioSource"
+    },
+    {
+      "name": "publish_local_audio",
+      "value": "Publish Local Audio"
+    },
+    {
+      "name": "publish_microphone",
+      "value": "Publish Miccrophone"
     }
   ]
 }
