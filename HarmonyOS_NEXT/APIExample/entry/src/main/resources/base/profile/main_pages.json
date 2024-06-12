@@ -4,6 +4,7 @@
     "pages/basic/JoinVideoChannel",
     "pages/advance/MediaMetadata",
     "pages/advance/JoinMultiChannel",
-    "pages/advance/CustomAudioSource"
+    "pages/advance/CustomAudioSource",
+    "pages/advance/CustomVideoSource"
   ]
 }

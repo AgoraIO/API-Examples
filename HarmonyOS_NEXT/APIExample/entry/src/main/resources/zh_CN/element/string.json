@@ -91,6 +91,10 @@
     {
       "name": "publish_microphone",
       "value": "发布麦克风"
+    },
+    {
+      "name": "item_customvideosource",
+      "value": "自定义视频采集"
     }
   ]
 }
