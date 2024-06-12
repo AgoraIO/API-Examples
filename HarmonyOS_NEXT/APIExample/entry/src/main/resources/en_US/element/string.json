@@ -91,6 +91,10 @@
     {
       "name": "publish_microphone",
       "value": "Publish Miccrophone"
+    },
+    {
+      "name": "item_customvideosource",
+      "value": "CustomVideoSource"
     }
   ]
 }
