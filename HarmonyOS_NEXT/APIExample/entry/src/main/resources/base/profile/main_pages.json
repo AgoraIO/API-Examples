@@ -1,6 +1,8 @@
 {
   "src": [
     "pages/Index",
-    "pages/basic/JoinVideoChannel"
+    "pages/basic/JoinVideoChannel",
+    "pages/advance/MediaMetadata",
+    "pages/advance/JoinMultiChannel"
   ]
 }

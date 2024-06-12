@@ -34,7 +34,7 @@
     },
     {
       "name": "category_basic",
-      "value": "Basic"
+      "value": "基础功能"
     },
     {
       "name": "item_joinvideochannel",
@@ -42,19 +42,43 @@
     },
     {
       "name": "category_advance",
-      "value": "Advance"
+      "value": "高级功能"
     },
     {
       "name": "join",
-      "value": "Join"
+      "value": "加入"
     },
     {
       "name": "text_input_channel_name",
-      "value": "Please input channel name"
+      "value": "请输入频道名"
     },
     {
       "name": "leave",
-      "value": "Leave"
+      "value": "离开"
+    },
+    {
+      "name": "item_mediametadata",
+      "value": "音视频元数据"
+    },
+    {
+      "name": "item_joinmultichannel",
+      "value": "加入多频道"
+    },
+    {
+      "name": "screenshot",
+      "value": "截图"
+    },
+    {
+      "name": "ex_channel_name",
+      "value": "Ex频道名"
+    },
+    {
+      "name": "text_input_video_metadata",
+      "value": "请输入视频元数据"
+    },
+    {
+      "name": "send",
+      "value": "发送"
     }
   ]
 }

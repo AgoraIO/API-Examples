@@ -55,6 +55,34 @@
     {
       "name": "leave",
       "value": "Leave"
+    },
+    {
+      "name": "item_mediametadata",
+      "value": "MediaMetadata"
+    },
+    {
+      "name": "item_joinmultichannel",
+      "value": "JoinMultiChannel"
+    },
+    {
+      "name": "screenshot",
+      "value": "Screenshot"
+    },
+    {
+      "name": "text_input_channel_name_filter",
+      "value": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{"
+    },
+    {
+      "name": "ex_channel_name",
+      "value": "ExChannelName"
+    },
+    {
+      "name": "text_input_video_metadata",
+      "value": "Please input video metadata"
+    },
+    {
+      "name": "send",
+      "value": "Send"
     }
   ]
 }
