@@ -79,6 +79,18 @@
     {
       "name": "send",
       "value": "发送"
+    },
+    {
+      "name": "item_customaudiosource",
+      "value": "自定义音频采集"
+    },
+    {
+      "name": "publish_local_audio",
+      "value": "发布本地音频"
+    },
+    {
+      "name": "publish_microphone",
+      "value": "发布麦克风"
     }
   ]
 }

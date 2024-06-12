@@ -15,6 +15,10 @@
     {
       "name": "background_shallow_grey",
       "value": "#F1F3F5"
+    },
+    {
+      "name": "background_audio_cell",
+      "value": "#EEEEEE"
     }
   ]
 }

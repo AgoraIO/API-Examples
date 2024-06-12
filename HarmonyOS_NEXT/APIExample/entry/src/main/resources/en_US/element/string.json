@@ -79,6 +79,18 @@
     {
       "name": "send",
       "value": "Send"
+    },
+    {
+      "name": "item_customaudiosource",
+      "value": "CustomAudioSource"
+    },
+    {
+      "name": "publish_local_audio",
+      "value": "Publish Local Audio"
+    },
+    {
+      "name": "publish_microphone",
+      "value": "Publish Miccrophone"
     }
   ]
 }

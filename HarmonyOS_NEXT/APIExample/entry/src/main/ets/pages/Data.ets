@@ -17,6 +17,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     {
       title: $r('app.string.item_mediametadata'),
       url: 'pages/advance/MediaMetadata'
+    },
+    {
+      title: $r('app.string.item_customaudiosource'),
+      url: 'pages/advance/CustomAudioSource'
     }
   ]
 
