@@ -23,6 +23,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/CustomAudioSource'
     },
     {
+      title: $r('app.string.item_originvideodata'),
+      url: 'pages/advance/OriginVideoData'
+    },
+    {
       title: $r('app.string.item_customvideosource'),
       url: 'pages/advance/CustomVideoSource'
     }
