@@ -55,6 +55,14 @@
     {
       "name": "leave",
       "value": "Leave"
+    },
+    {
+      "name": "item_joinmultichannel",
+      "value": "加入多频道"
+    },
+    {
+      "name": "ex_channel_name",
+      "value": "Ex频道名"
     }
   ]
 }

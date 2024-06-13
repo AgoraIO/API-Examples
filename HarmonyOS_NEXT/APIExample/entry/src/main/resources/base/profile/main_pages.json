@@ -1,6 +1,7 @@
 {
   "src": [
     "pages/Index",
-    "pages/basic/JoinVideoChannel"
+    "pages/basic/JoinVideoChannel",
+    "pages/advance/JoinMultiChannel"
   ]
 }
