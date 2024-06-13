@@ -55,6 +55,14 @@
     {
       "name": "leave",
       "value": "Leave"
+    },
+    {
+      "name": "item_joinmultichannel",
+      "value": "JoinMultiChannel"
+    },
+    {
+      "name": "ex_channel_name",
+      "value": "ExChannelName"
     }
   ]
 }
