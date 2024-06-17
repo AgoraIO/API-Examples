@@ -132,3 +132,20 @@
 "please input Token!" = "请输入Token";
 "Quick input APPID and Token methods" = "快捷输入APPID和Token方法";
 "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff." = "I: 如果手机和Mac登录的同一个Apple账号, Mac复制后会自动同步到其它相同账号终端, 手机可直接点击输入框粘贴即可.\n\n II: 使用https://cl1p.net/在线剪切板:\n\n1.输入以cl1p.net开头的URL。示例cl1p.net/uqztgjnqcalmd。\n\n2.粘贴任何你想要的东西。\n\n3.在另一台计算机上，输入相同的URL并获取您的东西。";
+
+
+"AGGRESSIVE" = "强降噪模式";
+"BALANCED" = "(默认)均衡降噪模式";
+"ULTRALOWLATENCY" = "低延时强降噪模式";
+
+"Set_Voice_AI_Tuner"="设置AI调音器";
+"AI_Tunner_Mature_Male"="大叔声";
+"AI_Tunner_Fresh_Male"="清新男音";
+"AI_Tunner_Elegant_Female"="御姐音";
+"AI_Tunner_Sweet_Female"="萝莉音";
+"AI_Tunner_Warm_Male_Singing"="暖男歌声";
+"AI_Tunner_Gentle_Female_Singing"="温柔女歌声";
+"AI_Tunner_Husky_Male_Singing"="烟嗓叔音歌声";
+"AI_Tunner_Warm_Elegant_Female_Singing"="温暖御姐歌声";
+"AI_Tunner_Powerful_Male_Singing"="力量男歌声";
+"AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";
