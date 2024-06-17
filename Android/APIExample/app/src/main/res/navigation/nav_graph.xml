@@ -143,6 +143,9 @@
         <action
             android:id="@+id/action_mainFragment_to_face_capture"
             app:destination="@id/faceCapture" />
+        <action
+            android:id="@+id/action_mainFragment_to_transparentrendering"
+            app:destination="@id/transparentRendering" />
     </fragment>
 
     <fragment
@@ -432,4 +435,11 @@
         android:name="io.agora.api.example.examples.advanced.FaceCapture"
         android:label="@string/item_face_capture"
         tools:layout="@layout/fragment_face_capture" />
+
+    <fragment
+        android:id="@+id/transparentRendering"
+        android:name="io.agora.api.example.examples.advanced.TransparentRendering"
+        android:label="@string/item_transparentrendering"
+        tools:layout="@layout/fragment_transparentrendering" />
+
 </navigation>
