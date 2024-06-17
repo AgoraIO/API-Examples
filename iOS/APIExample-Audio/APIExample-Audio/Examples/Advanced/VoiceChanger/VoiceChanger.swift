@@ -11,9 +11,7 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-
-class VoiceChangerEntry : UIViewController
-{
+class VoiceChangerEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "VoiceChanger"
@@ -24,14 +22,16 @@ class VoiceChangerEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
+        // resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {
+            return
+        }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -47,24 +47,28 @@ class VoiceChangerMain: BaseViewController {
     @IBOutlet weak var voiceConversionBtn: UIButton!
     @IBOutlet weak var equalizationFreqBtn: UIButton!
     @IBOutlet weak var reverbKeyBtn: UIButton!
+    @IBOutlet weak var voiceAiTunerBtn: UIButton!
     @IBOutlet weak var reverbValueSlider: UISlider!
     @IBOutlet weak var audioEffectParam1Slider: UISlider!
     @IBOutlet weak var audioEffectParam2Slider: UISlider!
     @IBOutlet weak var audioEffectParam1Label: UILabel!
     @IBOutlet weak var audioEffectParam2Label: UILabel!
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
+    @IBOutlet weak var ainsModeButton: UIButton!
+    
+    var audioViews: [UInt: VideoView] = [:]
     var equalizationFreq: AgoraAudioEqualizationBandFrequency = .band31
+    var aitunerType: AgoraVoiceAITunerType?
     var equalizationGain: Int = 0
     var reverbType: AgoraAudioReverbType = .dryLevel
-    var reverbMap:[AgoraAudioReverbType:Int] = [
-        .dryLevel:0,
-        .wetLevel:0,
-        .roomSize:0,
-        .wetDelay:0,
-        .strength:0
+    var reverbMap: [AgoraAudioReverbType: Int] = [
+        .dryLevel: 0,
+        .wetLevel: 0,
+        .roomSize: 0,
+        .wetDelay: 0,
+        .strength: 0
     ]
-    var currentAudioEffects:AgoraAudioEffectPreset = .off
+    var currentAudioEffects: AgoraAudioEffectPreset = .off
 
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -77,11 +81,12 @@ class VoiceChangerMain: BaseViewController {
         roomAcousticsBtn.setTitle("Off", for: .normal)
         pitchCorrectionBtn.setTitle("Off", for: .normal)
         voiceConversionBtn.setTitle("Off", for: .normal)
+        ainsModeButton.setTitle(AUDIO_AINS_MODE.AINS_MODE_BALANCED.description(), for: .normal)
     }
 
-    func updateAudioEffectsControls(_ effect:AgoraAudioEffectPreset) {
+    func updateAudioEffectsControls(_ effect: AgoraAudioEffectPreset) {
         currentAudioEffects = effect
-        if(effect == .roomAcous3DVoice) {
+        if effect == .roomAcous3DVoice {
             audioEffectParam1Slider.isEnabled = true
             audioEffectParam2Slider.isEnabled = false
             audioEffectParam1Label.text = "Cycle"
@@ -89,7 +94,7 @@ class VoiceChangerMain: BaseViewController {
             audioEffectParam1Slider.minimumValue = 0
             audioEffectParam1Slider.maximumValue = 60
             audioEffectParam1Slider.value = 10
-        } else if(effect == .pitchCorrection) {
+        } else if effect == .pitchCorrection {
             audioEffectParam1Slider.isEnabled = true
             audioEffectParam2Slider.isEnabled = true
             audioEffectParam1Label.text = "Tonic Mode"
@@ -109,74 +114,88 @@ class VoiceChangerMain: BaseViewController {
         }
     }
     
-    func getChatBeautifierAction(_ chatBeautifier:AgoraVoiceBeautifierPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(chatBeautifier.description())", style: .default, handler: {[unowned self] action in
+    func getChatBeautifierAction(_ chatBeautifier: AgoraVoiceBeautifierPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(chatBeautifier.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(.off)
-            //when using this method with setLocalVoiceReverbPreset,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceReverbPreset,
+            // the method called later overrides the one called earlier
             self.agoraKit.setVoiceBeautifierPreset(chatBeautifier)
             self.chatBeautifierBtn.setTitle("\(chatBeautifier.description())", for: .normal)
         })
     }
     
-    func getTimbreTransformationAction(_ timbreTransformation:AgoraVoiceBeautifierPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(timbreTransformation.description())", style: .default, handler: {[unowned self] action in
+    func getTimbreTransformationAction(_ timbreTransformation: AgoraVoiceBeautifierPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(timbreTransformation.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(.off)
-            //when using this method with setLocalVoiceReverbPreset,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceReverbPreset,
+            // the method called later overrides the one called earlier
             self.agoraKit.setVoiceBeautifierPreset(timbreTransformation)
             self.timbreTransformationBtn.setTitle("\(timbreTransformation.description())", for: .normal)
         })
     }
     
-    func getVoiceChangerAction(_ voiceChanger:AgoraAudioEffectPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(voiceChanger.description())", style: .default, handler: {[unowned self] action in
+    func getVoiceChangerAction(_ voiceChanger: AgoraAudioEffectPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(voiceChanger.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(voiceChanger)
-            //when using this method with setLocalVoiceReverbPreset,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceReverbPreset,
+            // the method called later overrides the one called earlier
             self.agoraKit.setAudioEffectPreset(voiceChanger)
             self.voiceChangerBtn.setTitle("\(voiceChanger.description())", for: .normal)
         })
     }
     
-    func getStyleTransformationAction(_ styleTransformation:AgoraAudioEffectPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(styleTransformation.description())", style: .default, handler: {[unowned self] action in
+    func getStyleTransformationAction(_ styleTransformation: AgoraAudioEffectPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(styleTransformation.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(styleTransformation)
-            //when using this method with setLocalVoiceChanger,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceChanger,
+            // the method called later overrides the one called earlier
             self.agoraKit.setAudioEffectPreset(styleTransformation)
             self.styleTransformationBtn.setTitle("\(styleTransformation.description())", for: .normal)
         })
     }
     
-    func getRoomAcousticsAction(_ roomAcoustics:AgoraAudioEffectPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(roomAcoustics.description())", style: .default, handler: {[unowned self] action in
+    func getRoomAcousticsAction(_ roomAcoustics: AgoraAudioEffectPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(roomAcoustics.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(roomAcoustics)
-            //when using this method with setLocalVoiceReverbPreset,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceReverbPreset,
+            // the method called later overrides the one called earlier
             self.agoraKit.setAudioEffectPreset(roomAcoustics)
             self.roomAcousticsBtn.setTitle("\(roomAcoustics.description())", for: .normal)
         })
     }
     
-    func getPitchCorrectionAction(_ pitchCorrection:AgoraAudioEffectPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(pitchCorrection.description())", style: .default, handler: {[unowned self] action in
+    func getPitchCorrectionAction(_ pitchCorrection: AgoraAudioEffectPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(pitchCorrection.description())", 
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(pitchCorrection)
-            //when using this method with setLocalVoiceReverbPreset,
-            //the method called later overrides the one called earlier
+            // when using this method with setLocalVoiceReverbPreset,
+            // the method called later overrides the one called earlier
             self.agoraKit.setAudioEffectPreset(pitchCorrection)
             self.pitchCorrectionBtn.setTitle("\(pitchCorrection.description())", for: .normal)
         })
     }
 
-    func getVoiceConversionAction(_ voiceConversion:AgoraVoiceConversionPreset) -> UIAlertAction{
-        return UIAlertAction(title: "\(voiceConversion.description())", style: .default, handler: {[unowned self] action in
+    func getVoiceConversionAction(_ voiceConversion: AgoraVoiceConversionPreset) -> UIAlertAction {
+        return UIAlertAction(title: "\(voiceConversion.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.resetVoiceChanger()
             self.updateAudioEffectsControls(.off)
             self.agoraKit.setVoiceConversionPreset(voiceConversion)
@@ -184,8 +203,10 @@ class VoiceChangerMain: BaseViewController {
         })
     }
     
-    func getEqualizationFreqAction(_ freq:AgoraAudioEqualizationBandFrequency) -> UIAlertAction {
-        return UIAlertAction(title: "\(freq.description())", style: .default, handler: {[unowned self] action in
+    func getEqualizationFreqAction(_ freq: AgoraAudioEqualizationBandFrequency) -> UIAlertAction {
+        return UIAlertAction(title: "\(freq.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.equalizationFreq = freq
             self.equalizationFreqBtn.setTitle("\(freq.description())", for: .normal)
             LogUtils.log(message: "onLocalVoiceEqualizationGain \(self.equalizationFreq.description()) \(self.equalizationGain)", level: .info)
@@ -193,16 +214,52 @@ class VoiceChangerMain: BaseViewController {
         })
     }
     
-    func getReverbKeyAction(_ reverbType:AgoraAudioReverbType) -> UIAlertAction {
-        return UIAlertAction(title: "\(reverbType.description())", style: .default, handler: {[unowned self] action in
+    func getReverbKeyAction(_ reverbType: AgoraAudioReverbType) -> UIAlertAction {
+        return UIAlertAction(title: "\(reverbType.description())",
+                             style: .default,
+                             handler: { [unowned self] _ in
             self.updateReverbValueRange(reverbKey: reverbType)
             self.reverbKeyBtn.setTitle("\(reverbType.description())", for: .normal)
         })
     }
     
+    func getVoiceAITunerAction(_ type: AgoraVoiceAITunerType?) -> UIAlertAction {
+        let title = "\(type?.description() ?? "Off")"
+        return UIAlertAction(title: title,
+                             style: .default,
+                             handler: { [unowned self] _ in
+            self.updateVoiceAiTuner(type: type)
+            self.voiceAiTunerBtn.setTitle(title, for: .normal)
+        })
+    }
+    
+    func getAINSModeAction(_ ainsMode: AUDIO_AINS_MODE) -> UIAlertAction {
+        return UIAlertAction(title: "\(ainsMode.description())", 
+                             style: .default,
+                             handler: { [unowned self] _ in
+            self.agoraKit.setAINSMode(true, mode: ainsMode)
+            self.ainsModeButton.setTitle("\(ainsMode.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func onTapAINSButton(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set AINS Mode".localized,
+                                      message: nil,
+                                      preferredStyle: style)
+        alert.addAction(getAINSModeAction(.AINS_MODE_BALANCED))
+        alert.addAction(getAINSModeAction(.AINS_MODE_AGGRESSIVE))
+        alert.addAction(getAINSModeAction(.AINS_MODE_ULTRALOWLATENCY))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
     /// callback when voice changer button hit
     @IBAction func onChatBeautifier() {
-        let alert = UIAlertController(title: "Set Chat Beautifier".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Chat Beautifier".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getChatBeautifierAction(.presetOff))
         alert.addAction(getChatBeautifierAction(.presetChatBeautifierFresh))
         alert.addAction(getChatBeautifierAction(.presetChatBeautifierVitality))
@@ -213,7 +270,10 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onTimbreTransformation() {
-        let alert = UIAlertController(title: "Set Timbre Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Timbre Transformation".localized,
+                                      message: nil,
+                                      preferredStyle: style)
         alert.addAction(getTimbreTransformationAction(.presetOff))
         alert.addAction(getTimbreTransformationAction(.timbreTransformationVigorous))
         alert.addAction(getTimbreTransformationAction(.timbreTransformationDeep))
@@ -229,7 +289,8 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onVoiceChanger() {
-        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: style)
         alert.addAction(getVoiceChangerAction(.off))
         alert.addAction(getVoiceChangerAction(.voiceChangerEffectUncle))
         alert.addAction(getVoiceChangerAction(.voiceChangerEffectOldMan))
@@ -244,7 +305,8 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onStyleTransformation() {
-        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: style)
         alert.addAction(getStyleTransformationAction(.off))
         alert.addAction(getStyleTransformationAction(.styleTransformationPopular))
         alert.addAction(getStyleTransformationAction(.styleTransformationRnb))
@@ -254,7 +316,8 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onRoomAcoustics() {
-        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: style)
         alert.addAction(getRoomAcousticsAction(.roomAcousticsKTV))
         alert.addAction(getRoomAcousticsAction(.roomAcousVocalConcer))
         alert.addAction(getRoomAcousticsAction(.roomAcousStudio))
@@ -269,14 +332,16 @@ class VoiceChangerMain: BaseViewController {
 
     /// callback when voice changer button hit
     @IBAction func onPitchCorrection() {
-        let alert = UIAlertController(title: "Set Pitch Correction".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Pitch Correction".localized, message: nil, preferredStyle: style)
         alert.addAction(getPitchCorrectionAction(.pitchCorrection))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
     
     @IBAction func onVoiceConversion(_ sender: Any) {
-        let alert = UIAlertController(title: "Set Voice Conversion".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Voice Conversion".localized, message: nil, preferredStyle: style)
         alert.addAction(getVoiceConversionAction(.off))
         alert.addAction(getVoiceConversionAction(.neutral))
         alert.addAction(getVoiceConversionAction(.sweet))
@@ -293,16 +358,14 @@ class VoiceChangerMain: BaseViewController {
         agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
     }
 
-    @IBAction func onLocalVoicePitch(_ sender:UISlider) {
+    @IBAction func onLocalVoicePitch(_ sender: UISlider) {
         LogUtils.log(message: "onLocalVoicePitch \(Double(sender.value))", level: .info)
         agoraKit.setLocalVoicePitch(Double(sender.value))
     }
-    @IBAction func onVoiceFormantChange(_ sender: UISlider) {
-        agoraKit.setLocalVoiceFormant(Double(sender.value))
-    }
     
-    @IBAction func onLocalVoiceEqualizaitonFreq(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    @IBAction func onLocalVoiceEqualizaitonFreq(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: style)
         alert.addAction(getEqualizationFreqAction(.band31))
         alert.addAction(getEqualizationFreqAction(.band62))
         alert.addAction(getEqualizationFreqAction(.band125))
@@ -317,35 +380,35 @@ class VoiceChangerMain: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func onLocalVoiceEqualizationGain(_ sender:UISlider) {
+    @IBAction func onLocalVoiceEqualizationGain(_ sender: UISlider) {
         equalizationGain = Int(sender.value)
         LogUtils.log(message: "onLocalVoiceEqualizationGain \(equalizationFreq.description()) \(equalizationGain)", level: .info)
         agoraKit.setLocalVoiceEqualizationOf(equalizationFreq, withGain: equalizationGain)
     }
     
-    func updateReverbValueRange(reverbKey:AgoraAudioReverbType) {
-        var min:Float = 0, max:Float = 0
+    func updateReverbValueRange(reverbKey: AgoraAudioReverbType) {
+        var min: Float = 0, max: Float = 0
         switch reverbKey {
         case .dryLevel:
             min = -20
             max = 10
-            break
+            
         case .wetLevel:
             min = -20
             max = 10
-            break
+            
         case .roomSize:
             min = 0
             max = 100
-            break
+            
         case .wetDelay:
             min = 0
             max = 200
-            break
+            
         case .strength:
             min = 0
             max = 100
-            break
+
         default: break
         }
         reverbValueSlider.minimumValue = min
@@ -353,8 +416,18 @@ class VoiceChangerMain: BaseViewController {
         reverbValueSlider.value = Float(reverbMap[reverbType] ?? 0)
     }
     
-    @IBAction func onLocalVoiceReverbKey(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+    func updateVoiceAiTuner(type: AgoraVoiceAITunerType?) {
+        LogUtils.log(message: "onVoiceAITunerAction: \(type?.rawValue ?? -1)", level: .info)
+        if let type = type {
+            agoraKit.enableVoiceAITuner(true, type: type)
+        } else {
+            agoraKit.enableVoiceAITuner(false, type: .matureMale)
+        }
+    }
+    
+    @IBAction func onLocalVoiceReverbKey(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: style)
         alert.addAction(getReverbKeyAction(.dryLevel))
         alert.addAction(getReverbKeyAction(.wetLevel))
         alert.addAction(getReverbKeyAction(.roomSize))
@@ -364,20 +437,42 @@ class VoiceChangerMain: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func onLocalVoiceReverbValue(_ sender:UISlider) {
+    @IBAction func onLocalVoiceReverbValue(_ sender: UISlider) {
         let value = Int(sender.value)
         reverbMap[reverbType] = value
         LogUtils.log(message: "onLocalVoiceReverbValue \(reverbType.description()) \(value)", level: .info)
         agoraKit.setLocalVoiceReverbOf(reverbType, withValue: value)
     }
     
-    override func viewDidLoad(){
+    @IBAction func onVoiceAITunerAction(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set_Voice_AI_Tuner".localized, message: nil, preferredStyle: style)
+        alert.addAction(getVoiceAITunerAction(nil))
+        alert.addAction(getVoiceAITunerAction(.matureMale))
+        alert.addAction(getVoiceAITunerAction(.freshMale))
+        alert.addAction(getVoiceAITunerAction(.elegantFemale))
+        alert.addAction(getVoiceAITunerAction(.sweetFemale))
+        alert.addAction(getVoiceAITunerAction(.warmMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.gentleFemaleSinging))
+        alert.addAction(getVoiceAITunerAction(.huskyMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.warmElegantFemaleSinging))
+        alert.addAction(getVoiceAITunerAction(.powerfulMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.dreamyFemaleSinging))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func onVoiceFormantChange(_ sender: UISlider) {
+        agoraKit.setLocalVoiceFormant(Double(sender.value))
+    }
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        // config.areaCode = GlobalSettings.shared.area.rawValue
         // setup log file path
         let logConfig = AgoraLogConfig()
         logConfig.filePath = LogUtils.sdkLogPath()
@@ -386,6 +481,7 @@ class VoiceChangerMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
+        
         guard let channelName = configs["channelName"] as? String else {return}
         self.title = channelName
         
@@ -393,6 +489,8 @@ class VoiceChangerMain: BaseViewController {
         resetVoiceChanger()
         equalizationFreqBtn.setTitle("\(equalizationFreq.description())", for: .normal)
         reverbKeyBtn.setTitle("\(reverbType.description())", for: .normal)
+        
+        voiceAiTunerBtn.setTitle(aitunerType?.description() ?? "Off", for: .normal)
         
         // Before calling the method, you need to set the profile
         // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)
@@ -419,11 +517,14 @@ class VoiceChangerMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+            let result = self.agoraKit.joinChannel(byToken: token,
+                                                   channelId: channelName,
+                                                   info: nil,
+                                                   uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
                 self.isJoined = true
                 LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-                
-                //set up local audio view, this view will not show video but just a placeholder
+            
+                // set up local audio view, this view will not show video but just a placeholder
                 let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
                 self.audioViews[uid] = view
                 view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -484,7 +585,7 @@ extension VoiceChangerMain: AgoraRtcEngineDelegate {
         isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
 
-        //set up local audio view, this view will not show video but just a placeholder
+        // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
@@ -497,7 +598,7 @@ extension VoiceChangerMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        //set up remote audio view, this view will not show video but just a placeholder
+        // set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
@@ -512,7 +613,7 @@ extension VoiceChangerMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
+        // remove remote audio view
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream2x1(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)

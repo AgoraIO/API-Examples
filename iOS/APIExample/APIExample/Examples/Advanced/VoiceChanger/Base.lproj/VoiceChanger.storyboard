@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -80,7 +80,7 @@
                                         <rect key="frame" x="0.0" y="268.5" width="414" height="545.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qec-yd-UXA" userLabel="root">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="738"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-L4-iOf">
                                                         <rect key="frame" x="10" y="0.0" width="394" height="44"/>
@@ -402,6 +402,40 @@
                                                             <constraint firstItem="LPR-A0-NID" firstAttribute="leading" secondItem="0ym-dC-M2U" secondAttribute="trailing" constant="10" id="nCJ-2s-2Yj"/>
                                                         </constraints>
                                                     </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HyF-Rd-dBl" userLabel="Voice AI Tuner">
+                                                        <rect key="frame" x="0.0" y="738" width="414" height="44"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="745" text="Voice AI Tuner" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U7m-qC-Efb">
+                                                                <rect key="frame" x="20" y="0.0" width="333" height="44"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="44" id="PXy-pX-AF3"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wL9-fx-76f">
+                                                                <rect key="frame" x="348" y="7" width="46" height="30"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="30" id="Lxy-Ai-6cL"/>
+                                                                </constraints>
+                                                                <state key="normal" title="Button"/>
+                                                                <connections>
+                                                                    <action selector="onVoiceAITunerAction:" destination="sN0-wH-bdw" eventType="touchUpInside" id="bx1-WF-mfk"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstItem="U7m-qC-Efb" firstAttribute="trailing" secondItem="wL9-fx-76f" secondAttribute="leading" constant="5" id="0iR-oS-MfW"/>
+                                                            <constraint firstAttribute="height" constant="44" id="CWW-1d-opb"/>
+                                                            <constraint firstAttribute="trailing" secondItem="wL9-fx-76f" secondAttribute="trailing" constant="20" id="GlH-tA-cZ2"/>
+                                                            <constraint firstItem="U7m-qC-Efb" firstAttribute="leading" secondItem="HyF-Rd-dBl" secondAttribute="leading" constant="20" id="Taf-vP-RYs"/>
+                                                            <constraint firstItem="U7m-qC-Efb" firstAttribute="centerY" secondItem="HyF-Rd-dBl" secondAttribute="centerY" id="hrP-q3-Fay"/>
+                                                            <constraint firstItem="wL9-fx-76f" firstAttribute="centerY" secondItem="HyF-Rd-dBl" secondAttribute="centerY" id="nGi-pB-uEp"/>
+                                                            <constraint firstItem="U7m-qC-Efb" firstAttribute="top" secondItem="HyF-Rd-dBl" secondAttribute="top" id="pPT-An-AqW"/>
+                                                        </constraints>
+                                                    </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSv-eF-Xt9">
                                                         <rect key="frame" x="0.0" y="606" width="414" height="44"/>
                                                         <subviews>
@@ -531,8 +565,12 @@
                                                     <constraint firstItem="JIQ-4b-fas" firstAttribute="top" secondItem="7Iu-sL-DRl" secondAttribute="bottom" id="JOp-F6-tFE"/>
                                                     <constraint firstItem="7Iu-sL-DRl" firstAttribute="top" secondItem="ihk-er-xUP" secondAttribute="bottom" constant="-0.5" id="JUh-k4-xR8"/>
                                                     <constraint firstItem="ihk-er-xUP" firstAttribute="centerX" secondItem="Qec-yd-UXA" secondAttribute="centerX" id="LmE-Mk-ZfE"/>
-                                                    <constraint firstAttribute="bottom" secondItem="WGv-dd-Ms5" secondAttribute="bottom" id="MIz-QH-Rmr"/>
+                                                    <constraint firstItem="HyF-Rd-dBl" firstAttribute="top" secondItem="WGv-dd-Ms5" secondAttribute="bottom" id="MIz-QH-Rmr"/>
                                                     <constraint firstItem="g02-yj-XcN" firstAttribute="top" secondItem="QcT-t0-tGm" secondAttribute="bottom" constant="10" id="O5t-tr-a1K"/>
+                                                    <constraint firstItem="HyF-Rd-dBl" firstAttribute="leading" secondItem="WGv-dd-Ms5" secondAttribute="leading" id="ODa-qD-YZz"/>
+                                                    <constraint firstItem="HyF-Rd-dBl" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" id="OEm-gt-bNa"/>
+                                                    <constraint firstAttribute="trailing" secondItem="HyF-Rd-dBl" secondAttribute="trailing" id="OV3-gM-nUA"/>
+                                                    <constraint firstAttribute="bottom" secondItem="HyF-Rd-dBl" secondAttribute="bottom" constant="80" id="OX1-bn-eRU"/>
                                                     <constraint firstItem="EcO-5G-VEw" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" id="Tnc-ih-dbQ"/>
                                                     <constraint firstAttribute="trailing" secondItem="g02-yj-XcN" secondAttribute="trailing" constant="20" id="X0p-JK-3gW"/>
                                                     <constraint firstItem="ypJ-e3-Y3G" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" id="XFk-oQ-vhu"/>
@@ -621,6 +659,7 @@
                         <outlet property="roomAcousticsBtn" destination="zDI-bd-cnc" id="qw4-sV-Cf4"/>
                         <outlet property="styleTransformationBtn" destination="JlT-dt-wGb" id="tZK-MC-0tx"/>
                         <outlet property="timbreTransformationBtn" destination="vr8-dh-GeV" id="rLP-6j-XEL"/>
+                        <outlet property="voiceAiTunerBtn" destination="wL9-fx-76f" id="HCj-ab-pHl"/>
                         <outlet property="voiceChangerBtn" destination="YHG-YI-kRP" id="HiX-sa-Ihy"/>
                         <outlet property="voiceConversionBtn" destination="Fzr-9u-xYR" id="KLY-RP-poY"/>
                     </connections>
