@@ -194,6 +194,7 @@
     <string name="third_party_beauty">此示例演示了如何集成第三方美颜sdk</string>
     <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
     <string name="face_capture_tip">此示例演示如何使用面捕功能获取面捕数据</string>
+    <string name="transparent_rendering">此示例演示如何使用透明渲染功能播放Mp4视频</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -356,4 +357,5 @@
     <string name="camera_focal_urltra_wide">超宽摄像头</string>
     <string name="camera_focal_telephoto">长焦摄像头</string>
     <string name="enter_pip">进入画中画模式</string>
+    <string name="item_transparentrendering">透明渲染</string>
 </resources>

@@ -151,6 +151,7 @@ extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlAINSMode[INFO_LEN];
+extern wchar_t beautyAudioCtrlAITuner[INFO_LEN];
 extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
