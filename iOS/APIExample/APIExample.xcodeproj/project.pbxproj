@@ -134,6 +134,9 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD50252C205BF20050B344 /* TransparentRender.swift */; };
+		DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50272C205CF40050B344 /* TransparentRender.storyboard */; };
+		DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */; };
 		E7163F812964149800EBBD55 /* ARKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7163F7C2964149800EBBD55 /* ARKit.strings */; };
 		E7163F822964149800EBBD55 /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7163F7E2964149800EBBD55 /* ARKit.swift */; };
 		E7163F832964149800EBBD55 /* ARKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7163F7F2964149800EBBD55 /* ARKit.storyboard */; };
@@ -446,6 +449,9 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
+		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
+		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
 		E7163F7D2964149800EBBD55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ARKit.strings"; sourceTree = "<group>"; };
 		E7163F7E2964149800EBBD55 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
 		E7163F802964149800EBBD55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ARKit.storyboard; sourceTree = "<group>"; };
@@ -840,6 +846,7 @@
 		03BEED09251C4446005E78F4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */,
 				8B349FE22681E2CE007247F2 /* agora-logo.png */,
 				576CA80925A9CC3A0091520B /* output.raw */,
 				E7AD0DE029C85FFB00C9A4B0 /* sample.mov */,
@@ -1102,6 +1109,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD50242C205BDF0050B344 /* TransparentRender */,
 				E7883AE32B074746003CCF44 /* FaceCapture */,
 				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
 				E726BFF42A949F70006870E2 /* AuidoRouterPlayer */,
@@ -1153,6 +1161,15 @@
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DDFD50242C205BDF0050B344 /* TransparentRender */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD50252C205BF20050B344 /* TransparentRender.swift */,
+				DDFD50272C205CF40050B344 /* TransparentRender.storyboard */,
+			);
+			path = TransparentRender;
 			sourceTree = "<group>";
 		};
 		E7163F7B2964149800EBBD55 /* ARKit */ = {
@@ -1676,8 +1693,10 @@
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
+				DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
+				DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */,
 				E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
@@ -1871,6 +1890,7 @@
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
 				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
 				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
+				DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */,
 				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
 				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
