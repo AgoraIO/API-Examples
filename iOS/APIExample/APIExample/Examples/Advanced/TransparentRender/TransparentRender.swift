@@ -93,6 +93,9 @@ class TransparentRenderViewController: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         agoraKit.leaveChannel()
+        agoraKit.disableVideo()
+        agoraKit.stopPreview()
+        AgoraRtcEngineKit.destroy()
     }
     
     private func openMedia() {
