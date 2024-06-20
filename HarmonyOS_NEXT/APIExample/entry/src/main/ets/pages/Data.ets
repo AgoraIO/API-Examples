@@ -24,6 +24,6 @@ export const COLLECTION_CATEGORIES: ExampleCategory[] =
     },
     {
       childNodes: ADVANCE_ITEMS,
-      title: $r('app.string.category_advance')
+      title: $r("app.string.category_advanced")
     },
   ]
