@@ -58,6 +58,7 @@ struct JoinVideoChannel {
     }
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
+      ShowToast.longToast("onError " + err + " : " + message)
     }
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
@@ -132,7 +133,6 @@ struct JoinVideoChannel {
       Row() {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
           .id("input_channel_name")
-          .type(InputType.Number)
           .enabled(!this.isJoin)
           .enableKeyboardOnFocus(false)
           .onChange((value: string) => {
@@ -160,6 +160,9 @@ struct JoinVideoChannel {
                 ShowToast.shortToast("Permission leak!")
                 return
               }
+
+              focusControl.requestFocus("button_to_join")
+
               let mediaOption: ChannelMediaOptions = new ChannelMediaOptions();
               mediaOption.publishCameraTrack = true;
               mediaOption.publishMicrophoneTrack = true;
@@ -168,9 +171,13 @@ struct JoinVideoChannel {
               mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
 
-              this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
+              let ret = this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption)
+              if (ret != Constants.ErrorCode.ERR_OK) {
+                ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
+                return
+              }
+
               this.rtcEngine?.startPreview()
-              focusControl.requestFocus("button_to_join")
             })
             .width('20%')
         }

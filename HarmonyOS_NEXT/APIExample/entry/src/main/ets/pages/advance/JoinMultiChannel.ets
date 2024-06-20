@@ -62,6 +62,7 @@ struct JoinMultiChannel {
     }
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
+      ShowToast.longToast("onError " + err + " : " + message)
     }
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
@@ -181,8 +182,7 @@ struct JoinMultiChannel {
             this.mainChannelName = value
             this.exChannelName = value + '-2'
           })
-          .type(InputType.Number)
-          .maxLength(6)
+          .enableKeyboardOnFocus(false)
           .flexGrow(1)
           .margin({ right: 6 })
 
@@ -217,11 +217,14 @@ struct JoinMultiChannel {
               mediaOption.autoSubscribeAudio = true;
               mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
-              this.rtcEngine?.joinChannelWithOptions("", this.mainChannelName, 0, mediaOption);
+              let ret = this.rtcEngine?.joinChannelWithOptions("", this.mainChannelName, 0, mediaOption)
+              if (ret != Constants.ErrorCode.ERR_OK) {
+                ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
+                return
+              }
+
               this.rtcEngine?.startPreview()
-
               this.joinExChannel()
-
               focusControl.requestFocus("button_to_join")
             })
             .flexGrow(0)
@@ -275,6 +278,10 @@ struct JoinMultiChannel {
     exMediaOption.autoSubscribeAudio = true;
     exMediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
     exMediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
-    this.rtcEngine?.joinChannelEx('', this.exRtcConnection, exMediaOption, exEventHandler);
+    let ret = this.rtcEngine?.joinChannelEx('', this.exRtcConnection, exMediaOption, exEventHandler);
+    if (ret != Constants.ErrorCode.ERR_OK) {
+      ShowToast.longToast("joinChannelEx error " + ret + " : " + RtcEngine.getErrorDescription(ret))
+      return
+    }
   }
 }
