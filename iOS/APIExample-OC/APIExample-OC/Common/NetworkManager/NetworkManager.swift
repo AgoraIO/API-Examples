@@ -32,7 +32,7 @@ class NetworkManager: NSObject {
     @objc
     static let shared = NetworkManager()
     private override init() { }
-    private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
+    private let baseUrl = "https://service.agora.io/toolbox-global/v1/token/generate"
     
     @objc
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {

@@ -30,7 +30,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     private init() { }
-    private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
+    private let baseUrl = "https://service.agora.io/toolbox-global/v1/token/generate"
     
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {

@@ -98,7 +98,7 @@ public final class TokenUtils {
         }
 
         Request request = new Request.Builder()
-                .url("https://test-toolbox.bj2.agoralab.co/v1/token/generate")
+                .url("https://service.agora.io/toolbox-global/v1/token/generate")
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(postBody.toString(), null))
                 .build();
