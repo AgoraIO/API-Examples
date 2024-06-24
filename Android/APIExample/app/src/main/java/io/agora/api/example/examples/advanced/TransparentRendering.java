@@ -310,13 +310,13 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
                 //  kAlphaStitchLeft = 3,
                 //  kAlphaStitchRight = 4
                 //};
-                frame.setAlphaStitchMode(4);
+                frame.setAlphaStitchMode(3);
                 engine.pushExternalVideoFrame(frame);
             }
         });
 
         MediaPlayerSource source = new MediaPlayerSource();
-        source.setUrl("/assets/alpha_1280_540_right.mp4");
+        source.setUrl("/assets/yuvj_full_range_alpha_1280_540_left.mp4");
         source.setAutoPlay(true);
         mediaPlayer.openWithMediaSource(source);
         mediaPlayer.setLoopCount(-1);
