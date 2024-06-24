@@ -2717,7 +2717,6 @@
 				MARKETING_VERSION = 4.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ld_classic",
 					"-ObjC",
 					"-l\"stdc++\"",
 					"-framework",
@@ -2789,7 +2788,6 @@
 				MARKETING_VERSION = 4.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ld_classic",
 					"-ObjC",
 					"-l\"stdc++\"",
 					"-framework",
