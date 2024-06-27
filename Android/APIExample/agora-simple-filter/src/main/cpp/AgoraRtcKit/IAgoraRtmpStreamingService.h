@@ -12,7 +12,7 @@
 #include "AgoraRefPtr.h"
 #include "IAgoraService.h"
 #include "NGIAgoraRtcConnection.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -110,7 +110,7 @@ class IRtmpStreamingService : public RefCountInterface {
     *   - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the stream.
     *   - #ERR_ALREADY_IN_USE (19): This streaming URL is already in use. Use a new streaming URL for CDN streaming.
     */
-  virtual int startRtmpStreamWithoutTranscoding(const char* url, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int startRtmpStreamWithoutTranscoding(const char* url, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** Publishes the local stream with transcoding to a specified CDN live RTMP address.  (CDN live only.)
 
@@ -133,7 +133,7 @@ class IRtmpStreamingService : public RefCountInterface {
     *   - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the stream.
     *   - #ERR_ALREADY_IN_USE (19): This streaming URL is already in use. Use a new streaming URL for CDN streaming.
     */
-  virtual int startRtmpStreamWithTranscoding(const char* url, const LiveTranscoding& transcoding, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int startRtmpStreamWithTranscoding(const char* url, const LiveTranscoding& transcoding, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** Update the video layout and audio settings for CDN live. (CDN live only.)
     * @note This method applies to Live Broadcast only.
@@ -144,7 +144,7 @@ class IRtmpStreamingService : public RefCountInterface {
     * - 0: Success.
     * - < 0: Failure.
     */
-  virtual int updateRtmpTranscoding(const LiveTranscoding& transcoding, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int updateRtmpTranscoding(const LiveTranscoding& transcoding, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /** Stop an RTMP stream with transcoding or without transcoding from the CDN. (CDN live only.)
 
     * This method removes the RTMP URL address (added by the \ref IRtcEngine::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding" method
@@ -163,7 +163,7 @@ class IRtmpStreamingService : public RefCountInterface {
     * - 0: Success.
     * - < 0: Failure.
     */
-  virtual int stopRtmpStream(const char* url, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int stopRtmpStream(const char* url, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Registers an RTMP streaming observer.
@@ -172,7 +172,7 @@ class IRtmpStreamingService : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IRtmpStreamingObserver* observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerObserver(IRtmpStreamingObserver* observer, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Releases the RTMP streaming observer created by registerObserver().
    * @param observer The pointer to the RTMP streaming observer that you want to release. See \ref agora::rtc::IRtmpStreamingObserver "IRtmpStreamingObserver".

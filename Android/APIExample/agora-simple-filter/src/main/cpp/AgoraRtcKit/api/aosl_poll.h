@@ -1,21 +1,21 @@
 /*************************************************************
  * Author:	Lionfore Hao (haolianfu@agora.io)
  * Date	 :	May 30th, 2023
- * Module:	AHPL poll functionality definition header file
+ * Module:	AOSL poll functionality definition header file
  *
  *
- * This is a part of the Advanced High Performance Library.
+ * This is a part of the Advanced Operating System Layer.
  * Copyright (C) 2018 ~ 2023 Agora IO
  * All rights reserved.
  *
  *************************************************************/
 
-#ifndef __AHPL_POLL_H__
-#define __AHPL_POLL_H__
+#ifndef __AOSL_POLL_H__
+#define __AOSL_POLL_H__
 
-#include <api/ahpl_types.h>
-#include <api/ahpl_defs.h>
-#include <api/ahpl_ref.h>
+#include <api/aosl_types.h>
+#include <api/aosl_defs.h>
+#include <api/aosl_ref.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,9 +23,9 @@ extern "C" {
 
 
 
-#define AHPL_POLL_ST_NONE 0
-#define AHPL_POLL_ST_SIGNALED 1
-#define AHPL_POLL_ST_DESTROY 2
+#define AOSL_POLL_ST_NONE 0
+#define AOSL_POLL_ST_SIGNALED 1
+#define AOSL_POLL_ST_DESTROY 2
 
 /**
  * Poll the objects specified in refs, return their states.
@@ -37,10 +37,10 @@ extern "C" {
  *                  then wake up immediately regardless min parameter.
  *     timeo: maximum waiting time in milliseconds;
  * Return value:
- *        <0: error occured, and ahpl_errno indicates which error;
+ *        <0: error occured, and aosl_errno indicates which error;
  *       >=0: the signaled refs count before timeout;
  **/
-extern __ahpl_api__ ssize_t ahpl_poll (ahpl_ref_t refs [], size_t count, size_t min, intptr_t timeo);
+extern __aosl_api__ ssize_t aosl_poll (aosl_ref_t refs [], size_t count, size_t min, intptr_t timeo);
 
 
 
@@ -48,4 +48,4 @@ extern __ahpl_api__ ssize_t ahpl_poll (ahpl_ref_t refs [], size_t count, size_t 
 }
 #endif
 
-#endif /* __AHPL_POLL_H__ */
+#endif /* __AOSL_POLL_H__ */
