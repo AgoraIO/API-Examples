@@ -170,7 +170,7 @@ class JoinMultipleChannel: BaseViewController {
         guard isJoined2 else { return }
         let filePath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.absoluteString
         let programPath = filePath?.components(separatedBy: "/")[4] ?? ""
-        let path = "/Users/\(programPath)/Downloads/1.png"
+        let path = "/Users/\(programPath)/Downloads/\(Date()).png"
         let channel2 = AgoraRtcConnection()
         channel2.channelId = channelName2
         channel2.localUid = channel2Uid
