@@ -239,6 +239,7 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         );
+        config.advanceOptions.encodeAlpha = true;
         engine.setVideoEncoderConfiguration(config);
 
         engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
