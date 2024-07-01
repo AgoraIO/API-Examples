@@ -33,31 +33,42 @@
 
 #if defined(AGORARTC_EXPORT)
 #define AGORA_API extern "C" __declspec(dllexport)
+#define AGORA_CPP_API __declspec(dllexport)
 #else
 #define AGORA_API extern "C" __declspec(dllimport)
+#define AGORA_CPP_API __declspec(dllimport)
 #endif  // AGORARTC_EXPORT
 
 #define AGORA_CALL __cdecl
 
 #define __deprecated
 
+#define AGORA_CPP_INTERNAL_API extern
+
 #elif defined(__APPLE__)
 
 #include <TargetConditionals.h>
 
 #define AGORA_API extern "C" __attribute__((visibility("default")))
+#define AGORA_CPP_API __attribute__((visibility("default")))
 #define AGORA_CALL
+
+#define AGORA_CPP_INTERNAL_API __attribute__((visibility("hidden")))
 
 #elif defined(__ANDROID__) || defined(__linux__)
 
 #define AGORA_API extern "C" __attribute__((visibility("default")))
+#define AGORA_CPP_API __attribute__((visibility("default")))
 #define AGORA_CALL
 
 #define __deprecated
 
+#define AGORA_CPP_INTERNAL_API __attribute__((visibility("hidden")))
+
 #else  // !_WIN32 && !__APPLE__ && !(__ANDROID__ || __linux__)
 
 #define AGORA_API extern "C"
+#define AGORA_CPP_API
 #define AGORA_CALL
 
 #define __deprecated
@@ -631,7 +642,7 @@ enum ERROR_CODE_TYPE {
    */
   ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
   /**
-   * 120: Decryption fails. The user may have tried to join the channel with a wrong
+   * 120: MediaStream decryption fails. The user may have tried to join the channel with a wrong
    * password. Check your settings or try rejoining the channel.
    */
   ERR_DECRYPTION_FAILED = 120,
@@ -639,6 +650,11 @@ enum ERROR_CODE_TYPE {
    * 121: The user ID is invalid.
    */
   ERR_INVALID_USER_ID = 121,
+  /**
+   * 122: DataStream decryption fails. The peer may have tried to join the channel with a wrong
+   * password, or did't enable datastream encryption
+   */
+  ERR_DATASTREAM_DECRYPTION_FAILED = 122,
   /**
    * 123: The app is banned by the server.
    */
@@ -850,7 +866,6 @@ enum INTERFACE_ID_TYPE {
   AGORA_IID_RTC_CONNECTION = 7,
   AGORA_IID_SIGNALING_ENGINE = 8,
   AGORA_IID_MEDIA_ENGINE_REGULATOR = 9,
-  AGORA_IID_CLOUD_SPATIAL_AUDIO = 10,
   AGORA_IID_LOCAL_SPATIAL_AUDIO = 11,
   AGORA_IID_STATE_SYNC = 13,
   AGORA_IID_META_SERVICE = 14,
@@ -1163,17 +1178,40 @@ enum VIDEO_CODEC_TYPE {
    */
   VIDEO_CODEC_GENERIC_H264 = 7,
   /**
-    * 12: AV1.
-    */
+   * 12: AV1.
+   * @technical preview
+   */
   VIDEO_CODEC_AV1 = 12,
   /**
-   * 5: VP9.
+   * 13: VP9.
    */
   VIDEO_CODEC_VP9 = 13,
   /**
    * 20: Generic JPEG. This type consumes minimum computing resources and applies to IoT devices.
    */
   VIDEO_CODEC_GENERIC_JPEG = 20,
+};
+
+/**
+ * Camera focal length type.
+ */
+enum CAMERA_FOCAL_LENGTH_TYPE {
+  /**
+   * By default, there are no wide-angle and ultra-wide-angle properties.
+   */
+  CAMERA_FOCAL_LENGTH_DEFAULT = 0,
+  /**
+   * Lens with focal length from 24mm to 35mm.
+   */
+  CAMERA_FOCAL_LENGTH_WIDE_ANGLE = 1,
+  /**
+   * Lens with focal length of less than 24mm.
+   */
+  CAMERA_FOCAL_LENGTH_ULTRA_WIDE = 2,
+  /**
+   * Telephoto lens.
+   */
+  CAMERA_FOCAL_LENGTH_TELEPHOTO = 3,
 };
 
 /**
@@ -1311,6 +1349,10 @@ enum AUDIO_CODEC_TYPE {
    * 12: LPCNET.
    */
   AUDIO_CODEC_LPCNET = 12,
+  /**
+   * 13: Opus codec, supporting 3 to 8 channels audio.
+   */
+  AUDIO_CODEC_OPUSMC = 13,
 };
 
 /**
@@ -1511,13 +1553,38 @@ enum H264PacketizeMode {
  */
 enum VIDEO_STREAM_TYPE {
   /**
-   * 0: The high-quality video stream, which has a higher resolution and bitrate.
+   * 0: The high-quality video stream, which has the highest resolution and bitrate.
    */
   VIDEO_STREAM_HIGH = 0,
   /**
-   * 1: The low-quality video stream, which has a lower resolution and bitrate.
+   * 1: The low-quality video stream, which has the lowest resolution and bitrate.
    */
   VIDEO_STREAM_LOW = 1,
+  /**
+   * 4: The video stream of layer_1, which has a lower resolution and bitrate than VIDEO_STREAM_HIGH.
+   */
+  VIDEO_STREAM_LAYER_1 = 4,
+  /**
+   * 5: The video stream of layer_2, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_1.
+   */
+  VIDEO_STREAM_LAYER_2 = 5,
+  /**
+   * 6: The video stream of layer_3, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_2.
+   */
+  VIDEO_STREAM_LAYER_3 = 6,
+  /**
+   * 7: The video stream of layer_4, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_3.
+   */
+  VIDEO_STREAM_LAYER_4 = 7,
+  /**
+   * 8: The video stream of layer_5, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_4.
+   */
+  VIDEO_STREAM_LAYER_5 = 8,
+  /**
+   * 9: The video stream of layer_6, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_5.
+   */
+  VIDEO_STREAM_LAYER_6 = 9,
+
 };
 
 struct VideoSubscriptionOptions {
@@ -1563,7 +1630,8 @@ struct EncodedVideoFrameInfo {
       trackId(0),
       captureTimeMs(0),
       decodeTimeMs(0),
-      streamType(VIDEO_STREAM_HIGH) {}
+      streamType(VIDEO_STREAM_HIGH),
+      presentationMs(-1) {}
 
   EncodedVideoFrameInfo(const EncodedVideoFrameInfo& rhs)
     : uid(rhs.uid),
@@ -1576,7 +1644,8 @@ struct EncodedVideoFrameInfo {
       trackId(rhs.trackId),
       captureTimeMs(rhs.captureTimeMs),
       decodeTimeMs(rhs.decodeTimeMs),
-      streamType(rhs.streamType) {}
+      streamType(rhs.streamType),
+      presentationMs(rhs.presentationMs) {}
 
   EncodedVideoFrameInfo& operator=(const EncodedVideoFrameInfo& rhs) {
     if (this == &rhs) return *this;
@@ -1591,6 +1660,7 @@ struct EncodedVideoFrameInfo {
     captureTimeMs = rhs.captureTimeMs;
     decodeTimeMs = rhs.decodeTimeMs;
     streamType = rhs.streamType;
+    presentationMs = rhs.presentationMs;
     return *this;
   }
 
@@ -1642,6 +1712,8 @@ struct EncodedVideoFrameInfo {
    */
   VIDEO_STREAM_TYPE streamType;
 
+  // @technical preview
+  int64_t presentationMs;
 };
 
 /**
@@ -1691,17 +1763,27 @@ struct AdvanceOptions {
   */
   COMPRESSION_PREFERENCE compressionPreference;
 
+  /**
+  * Whether to encode and send the alpha data to the remote when alpha data is present.
+  * The default value is false.
+  */
+  bool encodeAlpha;
+
   AdvanceOptions() : encodingPreference(PREFER_AUTO), 
-                     compressionPreference(PREFER_LOW_LATENCY) {}
+                     compressionPreference(PREFER_LOW_LATENCY),
+                     encodeAlpha(false) {}
 
   AdvanceOptions(ENCODING_PREFERENCE encoding_preference, 
-                 COMPRESSION_PREFERENCE compression_preference) : 
+                 COMPRESSION_PREFERENCE compression_preference,
+                 bool encode_alpha) : 
                  encodingPreference(encoding_preference),
-                 compressionPreference(compression_preference) {}
+                 compressionPreference(compression_preference),
+                 encodeAlpha(encode_alpha) {}
 
   bool operator==(const AdvanceOptions& rhs) const {
     return encodingPreference == rhs.encodingPreference && 
-           compressionPreference == rhs.compressionPreference;
+           compressionPreference == rhs.compressionPreference &&
+           encodeAlpha == rhs.encodeAlpha;
   }
 
 };
@@ -1724,6 +1806,17 @@ enum VIDEO_MIRROR_MODE_TYPE {
   VIDEO_MIRROR_MODE_DISABLED = 2,
 };
 
+#if defined(__APPLE__) && TARGET_OS_IOS
+/**
+ * Camera capturer configuration for format type.
+ */
+enum CAMERA_FORMAT_TYPE {
+  /** 0: (Default) NV12. */
+  CAMERA_FORMAT_NV12,
+  /** 1: BGRA. */
+  CAMERA_FORMAT_BGRA,
+};
+#endif
 
 /** Supported codec type bit mask. */
 enum CODEC_CAP_MASK {
@@ -1760,6 +1853,14 @@ struct CodecCapInfo {
   CodecCapLevels codecLevels;
 
   CodecCapInfo(): codecType(VIDEO_CODEC_NONE), codecCapMask(0) {}
+};
+
+/** FocalLengthInfo contains the IDs of the front and rear cameras, along with the wide-angle types. */
+struct FocalLengthInfo {
+  /** The camera direction. */
+  int cameraDirection;
+  /** Camera focal segment type. */
+  CAMERA_FOCAL_LENGTH_TYPE focalLengthType;
 };
 
 /**
@@ -1873,7 +1974,7 @@ struct VideoEncoderConfiguration {
   AdvanceOptions advanceOptions;
 
   VideoEncoderConfiguration(const VideoDimensions& d, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(d),
       frameRate(f),
       bitrate(b),
@@ -1881,9 +1982,9 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(int width, int height, int f, int b, ORIENTATION_MODE m, VIDEO_MIRROR_MODE_TYPE mirror = VIDEO_MIRROR_MODE_DISABLED)
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(width, height),
       frameRate(f),
       bitrate(b),
@@ -1891,7 +1992,7 @@ struct VideoEncoderConfiguration {
       orientationMode(m),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(mirror),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
   VideoEncoderConfiguration(const VideoEncoderConfiguration& config)
     : codecType(config.codecType),
       dimensions(config.dimensions),
@@ -1903,7 +2004,7 @@ struct VideoEncoderConfiguration {
       mirrorMode(config.mirrorMode),
       advanceOptions(config.advanceOptions) {}
   VideoEncoderConfiguration()
-    : codecType(VIDEO_CODEC_H265),
+    : codecType(VIDEO_CODEC_NONE),
       dimensions(FRAME_WIDTH_960, FRAME_HEIGHT_540),
       frameRate(FRAME_RATE_FPS_15),
       bitrate(STANDARD_BITRATE),
@@ -1911,7 +2012,7 @@ struct VideoEncoderConfiguration {
       orientationMode(ORIENTATION_MODE_ADAPTIVE),
       degradationPreference(MAINTAIN_QUALITY),
       mirrorMode(VIDEO_MIRROR_MODE_DISABLED),
-      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY) {}
+      advanceOptions(PREFER_AUTO, PREFER_LOW_LATENCY, false) {}
 
   VideoEncoderConfiguration& operator=(const VideoEncoderConfiguration& rhs) {
     if (this == &rhs) return *this;
@@ -1985,15 +2086,78 @@ struct SimulcastStreamConfig {
    */
   int kBitrate;
   /**
-   * he capture frame rate (fps) of the local video. The default value is 5.
+   * The capture frame rate (fps) of the local video. The default value is 5.
    */
   int framerate;
   SimulcastStreamConfig() : dimensions(160, 120), kBitrate(65), framerate(5) {}
+  SimulcastStreamConfig(const SimulcastStreamConfig& other) : dimensions(other.dimensions), kBitrate(other.kBitrate), framerate(other.framerate) {}
   bool operator==(const SimulcastStreamConfig& rhs) const {
     return dimensions == rhs.dimensions && kBitrate == rhs.kBitrate && framerate == rhs.framerate;
   }
 };
 
+/**
+ * The configuration of the multi-layer video stream.
+ */
+struct SimulcastConfig {
+  /**
+   * The index of multi-layer video stream
+   */
+  enum StreamLayerIndex {
+   /**
+    * 0: video stream index of layer_1
+    */
+   STREAM_LAYER_1 = 0,
+   /**
+    * 1: video stream index of layer_2
+    */
+   STREAM_LAYER_2 = 1,
+   /**
+    * 2: video stream index of layer_3
+    */
+   STREAM_LAYER_3 = 2,
+   /**
+    * 3: video stream index of layer_4
+    */
+   STREAM_LAYER_4 = 3,
+   /**
+    * 4: video stream index of layer_5
+    */
+   STREAM_LAYER_5 = 4,
+   /**
+    * 5: video stream index of layer_6
+    */
+   STREAM_LAYER_6 = 5,
+   /**
+    * 6: video stream index of low
+    */
+   STREAM_LOW = 6,
+   /**
+    * 7: max count of video stream layers
+    */
+   STREAM_LAYER_COUNT_MAX = 7
+  };
+  struct StreamLayerConfig {
+    /**
+     * The video frame dimension. The default value is 0.
+     */
+    VideoDimensions dimensions;
+    /**
+     * The capture frame rate (fps) of the local video. The default value is 0.
+     */
+    int framerate;
+    /**
+     * Whether to enable the corresponding layer of video stream. The default value is false.
+     */
+    bool enable;
+    StreamLayerConfig() : dimensions(0, 0), framerate(0), enable(false) {}
+  };
+
+  /**
+   * The array of StreamLayerConfig, which contains STREAM_LAYER_COUNT_MAX layers of video stream at most.
+   */
+  StreamLayerConfig configs[STREAM_LAYER_COUNT_MAX];
+};
 /**
  * The location of the target area relative to the screen or window. If you do not set this parameter,
  * the SDK selects the whole screen or window.
@@ -2591,6 +2755,10 @@ enum VIDEO_APPLICATION_SCENARIO_TYPE {
    * 1: Meeting Scenario. This scenario is the best QoE practice of meeting application.
    */
   APPLICATION_SCENARIO_MEETING = 1,
+  /**
+   * 2: Video Call Scenario. This scenario is used to optimize the video experience in video application, like 1v1 video call.
+   */
+  APPLICATION_SCENARIO_1V1 = 2,
 };
 
 /**
@@ -2633,6 +2801,27 @@ enum CAPTURE_BRIGHTNESS_LEVEL_TYPE {
   /** 2: The brightness level of the video image is too dark.
    */
   CAPTURE_BRIGHTNESS_LEVEL_DARK = 2,
+};
+
+enum CAMERA_STABILIZATION_MODE {
+  /** The camera stabilization mode is disabled. 
+  */
+  CAMERA_STABILIZATION_MODE_OFF = -1,
+  /** device choose stabilization mode automatically. 
+  */
+  CAMERA_STABILIZATION_MODE_AUTO = 0,
+  /** stabilization mode level 1. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_1 = 1,
+  /** stabilization mode level 2. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_2 = 2,
+  /** stabilization mode level 3. 
+  */
+  CAMERA_STABILIZATION_MODE_LEVEL_3 = 3,
+  /** The maximum level of the camera stabilization mode.
+   */
+  CAMERA_STABILIZATION_MODE_MAX_LEVEL = CAMERA_STABILIZATION_MODE_LEVEL_3,
 };
 
 /**
@@ -2789,6 +2978,16 @@ enum LOCAL_VIDEO_STREAM_REASON {
    */
   LOCAL_VIDEO_STREAM_REASON_DEVICE_INVALID_ID = 10,
   /**
+   * 14: (Android only) Video capture was interrupted, possibly due to the camera being occupied
+   * or some policy reasons such as background termination.
+   */
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_INTERRUPT = 14,
+  /**
+   * 15: (Android only) The device may need to be shut down and restarted to restore camera function, 
+   * or there may be a persistent hardware problem.
+   */
+  LOCAL_VIDEO_STREAM_REASON_DEVICE_FATAL_ERROR = 15,
+  /**
    * 101: The current video capture device is unavailable due to excessive system pressure.
    */
   LOCAL_VIDEO_STREAM_REASON_DEVICE_SYSTEM_PRESSURE = 101,
@@ -2831,7 +3030,7 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_HIDDEN = 25,
   /** 26: (Windows only) The local screen capture window is recovered from its hidden state. */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN = 26,
-  /** 27:(Windows only) The window is recovered from miniminzed */
+  /** 27: (Windows and macOS only) The window is recovered from miniminzed */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_MINIMIZED = 27,
     /** 
    * 28: The screen capture paused.
@@ -2843,6 +3042,8 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_PAUSED = 28,
   /** 29: The screen capture is resumed. */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_RESUMED = 29,
+  /** 30: The shared display has been disconnected */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCONNECTED = 30,
 
 };
 
@@ -2920,6 +3121,14 @@ enum REMOTE_AUDIO_STATE_REASON
    * 7: The remote user leaves the channel.
    */
   REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
+  /**
+   * 8: The local user does not receive any audio packet from remote user.
+   */
+  REMOTE_AUDIO_REASON_NO_PACKET_RECEIVE = 8,
+  /**
+   * 9: The local user receives remote audio packet but fails to play.
+   */
+  REMOTE_AUDIO_REASON_LOCAL_PLAY_FAILED = 9,
 };
 
 /**
@@ -3040,7 +3249,7 @@ enum REMOTE_USER_STATE {
 struct VideoTrackInfo {
   VideoTrackInfo()
   : isLocal(false), ownerUid(0), trackId(0), channelId(OPTIONAL_NULLPTR)
-  , streamType(VIDEO_STREAM_HIGH), codecType(VIDEO_CODEC_H265)
+  , codecType(VIDEO_CODEC_H265)
   , encodedFrameOnly(false), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY)
   , observationPosition(agora::media::base::POSITION_POST_CAPTURER) {}
   /**
@@ -3061,10 +3270,6 @@ struct VideoTrackInfo {
    * The channel ID of the video track.
    */
   const char* channelId;
-  /**
-   * The video stream type: #VIDEO_STREAM_TYPE.
-   */
-  VIDEO_STREAM_TYPE streamType;
   /**
    * The video codec type: #VIDEO_CODEC_TYPE.
    */
@@ -4359,6 +4564,85 @@ struct BeautyOptions {
   BeautyOptions() : lighteningContrastLevel(LIGHTENING_CONTRAST_NORMAL), lighteningLevel(0), smoothnessLevel(0), rednessLevel(0), sharpnessLevel(0) {}
 };
 
+/** Face shape area options. This structure defines options for facial adjustments on different facial areas.
+ *
+ * @technical preview
+ */
+struct FaceShapeAreaOptions {
+  /** The specific facial area to be adjusted.
+    */
+  enum FACE_SHAPE_AREA {
+    /** (Default) Invalid area. */
+    FACE_SHAPE_AREA_NONE = -1,
+    /** Head Scale, reduces the size of head. */
+    FACE_SHAPE_AREA_HEADSCALE = 0,
+    /** Forehead, adjusts the size of forehead. */
+    FACE_SHAPE_AREA_FOREHEAD = 1,
+    /** Face Contour, slims the facial contour. */
+    FACE_SHAPE_AREA_FACECONTOUR = 2,
+    /** Face Length, adjusts the length of face. */
+    FACE_SHAPE_AREA_FACELENGTH = 3,
+    /** Face Width, narrows the width of face. */
+    FACE_SHAPE_AREA_FACEWIDTH = 4,
+    /** Cheekbone, adjusts the size of cheekbone. */
+    FACE_SHAPE_AREA_CHEEKBONE = 5,
+    /** Cheek, adjusts the size of cheek. */
+    FACE_SHAPE_AREA_CHEEK = 6,
+    /** Chin, adjusts the length of chin. */
+    FACE_SHAPE_AREA_CHIN = 7,
+    /** Eye Scale, adjusts the size of eyes. */
+    FACE_SHAPE_AREA_EYESCALE = 8,
+    /** Nose Length, adjusts the length of nose. */
+    FACE_SHAPE_AREA_NOSELENGTH = 9,
+    /** Nose Width, adjusts the width of nose. */
+    FACE_SHAPE_AREA_NOSEWIDTH = 10,
+    /** Mouth Scale, adjusts the size of mouth. */
+    FACE_SHAPE_AREA_MOUTHSCALE = 11,
+  };
+  
+  /** The specific facial area to be adjusted, See #FACE_SHAPE_AREA.
+    */
+  FACE_SHAPE_AREA shapeArea;
+  
+  /** The intensity of the pinching effect applied to the specified facial area.
+   * For the following area values: #FACE_SHAPE_AREA_FOREHEAD, #FACE_SHAPE_AREA_FACELENGTH, #FACE_SHAPE_AREA_CHIN, #FACE_SHAPE_AREA_NOSELENGTH, #FACE_SHAPE_AREA_NOSEWIDTH, #FACE_SHAPE_AREA_MOUTHSCALE, the value ranges from -100 to 100.
+   * The default value is 0. The greater the absolute value, the stronger the intensity applied to the specified facial area, and negative values indicate the opposite direction.
+   * For enumeration values other than the above, the value ranges from 0 to 100. The default value is 0. The greater the value, the stronger the intensity applied to the specified facial area.
+    */
+  int shapeIntensity;
+  
+  FaceShapeAreaOptions(FACE_SHAPE_AREA shapeArea, int areaIntensity) : shapeArea(shapeArea), shapeIntensity(areaIntensity) {}
+
+  FaceShapeAreaOptions() : shapeArea(FACE_SHAPE_AREA_NONE), shapeIntensity(0) {}
+};
+
+/** Face shape beauty options. This structure defines options for facial adjustments of different facial styles.
+ *
+ * @technical preview
+ */
+struct FaceShapeBeautyOptions {
+  /** The face shape style.
+    */
+  enum FACE_SHAPE_BEAUTY_STYLE {
+    /** (Default) Female face shape style. */
+    FACE_SHAPE_BEAUTY_STYLE_FEMALE = 0,
+    /** Male face shape style. */
+    FACE_SHAPE_BEAUTY_STYLE_MALE = 1,
+  };
+  
+  /** The face shape style, See #FACE_SHAPE_BEAUTY_STYLE.
+    */
+  FACE_SHAPE_BEAUTY_STYLE shapeStyle;
+  
+  /** The intensity of the pinching effect applied to the specified facial style. The value ranges from 0 (original) to 100. The default value is 0. The greater the value, the stronger the intensity applied to face pinching.
+    */
+  int styleIntensity;
+  
+  FaceShapeBeautyOptions(FACE_SHAPE_BEAUTY_STYLE shapeStyle, int styleIntensity) : shapeStyle(shapeStyle), styleIntensity(styleIntensity) {}
+
+  FaceShapeBeautyOptions() : shapeStyle(FACE_SHAPE_BEAUTY_STYLE_FEMALE), styleIntensity(50) {}
+};
+
 struct LowlightEnhanceOptions {
   /**
    * The low-light enhancement mode.
@@ -4682,6 +4966,7 @@ enum VOICE_BEAUTIFIER_PRESET {
  * - `ROOM_ACOUSTICS_PHONOGRAPH`
  * - `ROOM_ACOUSTICS_SPACIAL`
  * - `ROOM_ACOUSTICS_ETHEREAL`
+ * - `ROOM_ACOUSTICS_CHORUS`
  * - `VOICE_CHANGER_EFFECT_UNCLE`
  * - `VOICE_CHANGER_EFFECT_OLDMAN`
  * - `VOICE_CHANGER_EFFECT_BOY`
@@ -4743,6 +5028,14 @@ enum AUDIO_EFFECT_PRESET {
    * setting this enumerator.
    */
   ROOM_ACOUSTICS_VIRTUAL_SURROUND_SOUND = 0x02010900,
+  /** The voice effect for chorus.
+   * 
+   * @note: To achieve better audio effect quality, Agora recommends calling \ref
+   * IRtcEngine::setAudioProfile "setAudioProfile" and setting the `profile` parameter to
+   * `AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)` or `AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5)` before
+   * setting this enumerator.
+  */
+  ROOM_ACOUSTICS_CHORUS = 0x02010D00,
   /** A middle-aged man's voice.
    *
    * @note
@@ -4873,6 +5166,41 @@ enum HEADPHONE_EQUALIZER_PRESET {
   /** For in-ear headphones.
    */
   HEADPHONE_EQUALIZER_INEAR = 0x04000002
+};
+
+/** The options for SDK voice AI tuner.
+ */
+enum VOICE_AI_TUNER_TYPE {
+  /** Uncle, deep and magnetic male voice.
+   */
+  VOICE_AI_TUNER_MATURE_MALE,
+  /** Fresh male, refreshing and sweet male voice.
+   */
+  VOICE_AI_TUNER_FRESH_MALE,
+  /** Big sister, deep and charming female voice.
+   */
+  VOICE_AI_TUNER_ELEGANT_FEMALE,
+  /** Lolita, high-pitched and cute female voice.
+   */
+  VOICE_AI_TUNER_SWEET_FEMALE,
+  /** Warm man singing, warm and melodic male voice that is suitable for male lyrical songs.
+   */
+  VOICE_AI_TUNER_WARM_MALE_SINGING,
+  /** Gentle female singing, soft and delicate female voice that is suitable for female lyrical songs.
+   */
+  VOICE_AI_TUNER_GENTLE_FEMALE_SINGING,
+  /** Smoky uncle singing, unique husky male voice that is suitable for rock or blues songs.
+   */
+  VOICE_AI_TUNER_HUSKY_MALE_SINGING,
+  /** Warm big sister singing, warm and mature female voice that is suitable for emotionally powerful songs.
+   */
+  VOICE_AI_TUNER_WARM_ELEGANT_FEMALE_SINGING,
+  /** Forceful male singing, strong and powerful male voice that is suitable for passionate songs.
+   */
+  VOICE_AI_TUNER_POWERFUL_MALE_SINGING,
+  /** Dreamy female singing, dreamlike and soft female voice that is suitable for airy and dream-like songs.
+   */
+  VOICE_AI_TUNER_DREAMY_FEMALE_SINGING,
 };
 
 /**
@@ -5187,6 +5515,10 @@ enum AREA_CODE {
     AREA_CODE_GLOB = (0xFFFFFFFF)
 };
 
+/**
+  Extra region code
+  @technical preview
+*/
 enum AREA_CODE_EX {
     /**
      * Oceania
@@ -5212,6 +5544,10 @@ enum AREA_CODE_EX {
      * United States
      */
     AREA_CODE_US = 0x00000800,
+    /**
+     * Russia
+     */
+    AREA_CODE_RU = 0x00001000,
     /**
      * The global area (except China)
      */
@@ -5530,10 +5866,13 @@ struct EncryptionConfig {
    * In this case, ensure that this parameter is not 0.
    */
   uint8_t encryptionKdfSalt[32];
+    
+  bool datastreamEncryptionEnabled;
 
   EncryptionConfig()
     : encryptionMode(AES_128_GCM2),
-      encryptionKey(OPTIONAL_NULLPTR)
+      encryptionKey(OPTIONAL_NULLPTR),
+      datastreamEncryptionEnabled(false)
   {
     memset(encryptionKdfSalt, 0, sizeof(encryptionKdfSalt));
   }
@@ -5573,13 +5912,21 @@ enum ENCRYPTION_ERROR_TYPE {
      */
     ENCRYPTION_ERROR_INTERNAL_FAILURE = 0,
     /**
-     * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     * 1: MediaStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
      */
     ENCRYPTION_ERROR_DECRYPTION_FAILURE = 1,
     /**
-     * 2: Encryption errors.
+     * 2: MediaStream encryption errors.
      */
     ENCRYPTION_ERROR_ENCRYPTION_FAILURE = 2,
+    /**
+     * 3: DataStream decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_DECRYPTION_FAILURE = 3,
+    /**
+     * 4: DataStream encryption errors.
+     */
+    ENCRYPTION_ERROR_DATASTREAM_ENCRYPTION_FAILURE = 4,
 };
 
 enum UPLOAD_ERROR_REASON
@@ -5621,8 +5968,8 @@ enum STREAM_SUBSCRIBE_STATE {
    *   - Calls `enableLocalAudio(false)` or `enableLocalVideo(false)` to disable the local audio or video capture.
    *   - The role of the remote user is audience.
    * - The local user calls the following methods to stop receiving remote streams:
-   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` or `setDefaultMuteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
-   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` or `setDefaultMuteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
+   *   - Calls `muteRemoteAudioStream(true)`, `muteAllRemoteAudioStreams(true)` to stop receiving the remote audio streams.
+   *   - Calls `muteRemoteVideoStream(true)`, `muteAllRemoteVideoStreams(true)` to stop receiving the remote video streams.
    */
   SUB_STATE_NO_SUBSCRIBED = 1,
   /**
@@ -5713,7 +6060,12 @@ enum EAR_MONITORING_FILTER_TYPE {
   /**
    * 4: Enable noise suppression to the in-ear monitor.
    */
-  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2)
+  EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2),
+  /**
+   * 32768: Enable audio filters by reuse post-processing filter to the in-ear monitor.
+   * This bit is intended to be used in exclusive mode, which means, if this bit is set, all other bits will be disregarded.
+   */
+  EAR_MONITORING_FILTER_REUSE_POST_PROCESSING_FILTER = (1<<15),
 };
 
 /**
@@ -5993,7 +6345,13 @@ struct LocalAccessPointConfiguration {
   /** Local proxy connection, advanced Config info.
    */
   AdvancedConfigInfo advancedConfig;
-  LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst) {}
+  /**
+    * Whether to disable vos-aut:
+    - true: (Default)disable vos-aut.
+    - false: not disable vos-aut
+  */
+  bool disableAut;
+  LocalAccessPointConfiguration() : ipList(NULL), ipListSize(0), domainList(NULL), domainListSize(0), verifyDomainName(NULL), mode(ConnectivityFirst), disableAut(true) {}
 };
 
 /**

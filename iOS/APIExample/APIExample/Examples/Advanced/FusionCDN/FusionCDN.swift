@@ -183,11 +183,10 @@ class FusionCDNHost: BaseViewController {
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming {
             stopRtcStreaming()
-            
+            resetUI()
         } else if cdnStreaming {
             stopRskStreaming()
             resetUI()
-            
         } else {
             switchToRskStreaming()
         }
@@ -245,6 +244,7 @@ class FusionCDNHost: BaseViewController {
         cdnStreaming = false
         rtcSwitcher.isEnabled = true
         agoraKit.stopDirectCdnStreaming()
+        agoraKit.startPreview()
     }
     
     private func resetUI() {

@@ -253,9 +253,9 @@ class AuidoRouterPlayerMain: BaseViewController {
         super.viewDidAppear(animated)
         let playerType = ThirdPlayerType(rawValue: configs["playerType"] as? String ?? "")
         if playerType == .origin {
-            setupVendorPlayer()
-        } else {
             setupAVPlayer()
+        } else {
+            setupVendorPlayer()
         }
     }
     
