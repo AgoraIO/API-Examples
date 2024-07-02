@@ -329,15 +329,16 @@ class CustomVideoSourcePushMulti: BaseViewController {
             return
         }
         NetworkManager.shared.download(urlString: "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4") { response in
+            guard userModel.isJoin else {return}
             let path = response["path"] as? String
             let config = KFDemuxerConfig()
             config.demuxerType = .video
             let asset = AVAsset(url: URL(fileURLWithPath: path ?? ""))
             config.asset = asset
-            let demuxer = KFMP4Demuxer(config: config)
+            guard let demuxer = KFMP4Demuxer(config: config) else {return}
             userModel.customEncodeSource = demuxer
-            demuxer?.startReading()
-            demuxer?.dataCallBack = { [weak self] data, sampleBuffer in
+            demuxer.startReading()
+            demuxer.dataCallBack = { [weak self, weak demuxer] data, sampleBuffer in
                 guard let self = self, let data = data, let sampleBuffer = sampleBuffer else { return }
                 let info = AgoraEncodedVideoFrameInfo()
                 info.frameType = .keyFrame

@@ -81,7 +81,9 @@ class NetworkManager {
                 let locationPath = location!.path
                 let fileManager = FileManager.default
                 try? fileManager.moveItem(atPath: locationPath, toPath: documnets)
-                success?(["fileName": fileName, "path": documnets])
+                DispatchQueue.main.async {
+                    success?(["fileName": fileName, "path": documnets])
+                }
             }
             downloadTask.resume()
         }
