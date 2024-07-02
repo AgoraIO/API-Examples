@@ -244,7 +244,7 @@ class FusionCDNHost: BaseViewController {
         cdnStreaming = false
         rtcSwitcher.isEnabled = true
         agoraKit.stopDirectCdnStreaming()
-        agoraKit.startPreview()
+        agoraKit.stopPreview()
     }
     
     private func resetUI() {
@@ -301,9 +301,9 @@ class FusionCDNHost: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            agoraKit.disableAudio()
+            agoraKit.disableVideo()
             if rtcStreaming {
-                agoraKit.disableAudio()
-                agoraKit.disableVideo()
                 stopRtcStreaming()
             } else if cdnStreaming {
                 stopRskStreaming()
