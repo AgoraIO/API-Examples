@@ -223,3 +223,17 @@
 "Please contact Agora customer service to obtain a face capture certificate" = "请联系声网客服获取面捕证书";
 "Start Video Echo Test" = "开始视频回路测试";
 "Stop Video Echo Test" = "停止视频回路测试";
+
+
+"Voice_AI_Tuner"="AI调音器";
+"Set_Voice_AI_Tuner"="设置AI调音器";
+"AI_Tunner_Mature_Male"="大叔声";
+"AI_Tunner_Fresh_Male"="清新男音";
+"AI_Tunner_Elegant_Female"="御姐音";
+"AI_Tunner_Sweet_Female"="萝莉音";
+"AI_Tunner_Warm_Male_Singing"="暖男歌声";
+"AI_Tunner_Gentle_Female_Singing"="温柔女歌声";
+"AI_Tunner_Husky_Male_Singing"="烟嗓叔音歌声";
+"AI_Tunner_Warm_Elegant_Female_Singing"="温暖御姐歌声";
+"AI_Tunner_Powerful_Male_Singing"="力量男歌声";
+"AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";

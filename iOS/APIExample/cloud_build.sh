@@ -10,7 +10,12 @@ if [ "$BUILD_NUMBER" = "" ]; then
 fi
 
 
-cd ${PROJECT_PATH} && pod install || exit 1
+cd ${PROJECT_PATH} 
+
+#打开第三方播放器配置
+sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
+
+pod install || exit 1
 
 # 打包环境
 CONFIGURATION="Debug"

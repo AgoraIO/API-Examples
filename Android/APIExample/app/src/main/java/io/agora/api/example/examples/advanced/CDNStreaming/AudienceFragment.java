@@ -271,7 +271,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                         /*Display remote video stream*/
                         SurfaceView surfaceView = null;
                         // Create render view by RtcEngine
-                        surfaceView = RtcEngine.CreateRendererView(context);
+                        surfaceView = new SurfaceView(context);
                         surfaceView.setZOrderMediaOverlay(true);
                         surfaceView.setZOrderOnTop(true);
                         ViewGroup view = getAvailableView();
@@ -372,7 +372,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             fl_remote_3.setLayoutParams(new LinearLayout.LayoutParams(0, FrameLayout.LayoutParams.MATCH_PARENT, 0.5f));
             video_row2.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 0, 1));
             // Create render view by RtcEngine
-            SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView surfaceView = new SurfaceView(getContext());
             if (fl_local.getChildCount() > 0) {
                 fl_local.removeAllViews();
             }

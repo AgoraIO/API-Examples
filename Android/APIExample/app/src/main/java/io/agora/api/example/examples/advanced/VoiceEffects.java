@@ -109,7 +109,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     private EditText et_channel;
     private Button join;
     private Spinner audioProfile, audioScenario,
-            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion, ainsMode,
+            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion, ainsMode, voiceAITuner,
             customBandFreq, customReverbKey;
     private ViewGroup _voice3DLayout, _pitchModeLayout, _pitchValueLayout;
     private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue, customVoiceFormant;
@@ -157,6 +157,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchValueOption = view.findViewById(R.id.audio_pitch_value_option);
         voiceConversion = view.findViewById(R.id.audio_voice_conversion);
         ainsMode = view.findViewById(R.id.audio_ains_mode);
+        voiceAITuner = view.findViewById(R.id.voice_ai_tuner);
 
         chatBeautifier.setOnItemSelectedListener(this);
         timbreTransformation.setOnItemSelectedListener(this);
@@ -169,6 +170,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchModeOption.setOnItemSelectedListener(this);
         _pitchValueOption.setOnItemSelectedListener(this);
         ainsMode.setOnItemSelectedListener(this);
+        voiceAITuner.setOnItemSelectedListener(this);
 
         // Customize Voice Effects Layout
         customPitch = view.findViewById(R.id.audio_custom_pitch); // engine.setLocalVoicePitch()
@@ -208,6 +210,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchValueLayout.setVisibility(View.GONE);
         voiceConversion.setEnabled(joined);
         ainsMode.setEnabled(joined);
+        voiceAITuner.setEnabled(joined);
 
         customPitch.setEnabled(joined);
         customBandFreq.setEnabled(joined);
@@ -645,6 +648,12 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 such as sing together online in real time.
              */
             engine.setAINSMode(enable, position - 1);
+        }
+
+        if (parent == voiceAITuner) {
+            boolean enable = position > 0;
+            String item = parent.getSelectedItem().toString();
+            engine.enableVoiceAITuner(enable, enable ? Constants.VOICE_AI_TUNER_TYPE.valueOf(item) : Constants.VOICE_AI_TUNER_TYPE.VOICE_AI_TUNER_MATURE_MALE);
         }
     }
 

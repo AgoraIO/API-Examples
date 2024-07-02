@@ -1,17 +1,17 @@
 /*************************************************************
  * Author:	Lionfore Hao (haolianfu@agora.io)
  * Date	 :	Jul 27th, 2020
- * Module:	AHPL POSIX definitions header file
+ * Module:	AOSL POSIX definitions header file
  *
  *
- * This is a part of the Advanced High Performance Library.
+ * This is a part of the Advanced Operating System Layer.
  * Copyright (C) 2020 Agora IO
  * All rights reserved.
  *
  *************************************************************/
 
-#ifndef __AHPL_TYPES_H__
-#define __AHPL_TYPES_H__
+#ifndef __AOSL_TYPES_H__
+#define __AOSL_TYPES_H__
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -21,7 +21,7 @@
 #include <sys/types.h>
 #endif
 
-#include <api/ahpl_defs.h>
+#include <api/aosl_defs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,21 +41,21 @@ typedef intptr_t ssize_t;
 #endif
 
 
-/* The AHPL timestamp type */
-typedef unsigned long long ahpl_ts_t;
+/* The AOSL timestamp type */
+typedef unsigned long long aosl_ts_t;
 
-/* The proto for a general ahpl var args function with argc & argv. */
-typedef void (*ahpl_argv_f) (uintptr_t argc, uintptr_t argv []);
+/* The proto for a general aosl var args function with argc & argv. */
+typedef void (*aosl_argv_f) (uintptr_t argc, uintptr_t argv []);
 
-/* The proto for a general ahpl object destructor function. */
-typedef ahpl_argv_f ahpl_obj_dtor_t;
+/* The proto for a general aosl object destructor function. */
+typedef aosl_argv_f aosl_obj_dtor_t;
 
 
 #if !defined (_WIN32) && !defined (__kspreadtrum__)
-typedef int ahpl_fd_t;
-#define AHPL_INVALID_FD ((ahpl_fd_t)-1)
+typedef int aosl_fd_t;
+#define AOSL_INVALID_FD ((aosl_fd_t)-1)
 
-static __inline__ int ahpl_fd_invalid (ahpl_fd_t fd)
+static __inline__ int aosl_fd_invalid (aosl_fd_t fd)
 {
 	return (int)(fd < 0);
 }
@@ -71,19 +71,19 @@ static __inline__ int ahpl_fd_invalid (ahpl_fd_t fd)
 #include <winsock2.h>
 #include <windows.h>
 
-typedef HANDLE ahpl_fd_t;
-#define AHPL_INVALID_FD ((ahpl_fd_t)INVALID_HANDLE_VALUE)
+typedef HANDLE aosl_fd_t;
+#define AOSL_INVALID_FD ((aosl_fd_t)INVALID_HANDLE_VALUE)
 #elif defined (__kspreadtrum__)
 #include <DAPS/export/inc/tcpip6/socket_types.h>
 #include <DAPS/export/inc/tcpip6/socket_api.h>
 
-typedef TCPIP_SOCKET_T ahpl_fd_t;
-#define AHPL_INVALID_FD ((ahpl_fd_t)-1)
+typedef TCPIP_SOCKET_T aosl_fd_t;
+#define AOSL_INVALID_FD ((aosl_fd_t)-1)
 #endif
 
-static __inline__ int ahpl_fd_invalid (ahpl_fd_t fd)
+static __inline__ int aosl_fd_invalid (aosl_fd_t fd)
 {
-	return (int)(fd == AHPL_INVALID_FD);
+	return (int)(fd == AOSL_INVALID_FD);
 }
 #endif
 
@@ -93,4 +93,4 @@ static __inline__ int ahpl_fd_invalid (ahpl_fd_t fd)
 #endif
 
 
-#endif /* __AHPL_TYPES_H__ */
+#endif /* __AOSL_TYPES_H__ */

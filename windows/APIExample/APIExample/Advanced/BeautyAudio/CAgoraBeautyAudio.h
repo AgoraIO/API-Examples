@@ -114,6 +114,7 @@ private:
 	CAudioChangeEventHandler m_eventHandler;
 	std::map<CString, std::vector<CString>> m_mapBeauty;
 	std::vector<CString> m_setAINSMode;
+	std::map<CString, VOICE_AI_TUNER_TYPE> m_setAITuner;
 	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
 	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
 	std::map<CString, VOICE_CONVERSION_PRESET>m_setVoiceConversion;
@@ -148,7 +149,9 @@ public:
 
 	CComboBox m_cmbPerverbPreset;
 	CComboBox m_cmbAINSMode;
+	CComboBox m_cmbAITuner;
 	CComboBox m_staAINSMode;
+	CComboBox m_staAITuner;
 	CButton m_btnSetBeautyAudio;
 	CStatic m_staAudioType;
 	afx_msg void OnSelchangeComboAudioChanger();
@@ -159,4 +162,5 @@ public:
 	afx_msg void OnSelchangeComboAudioPerverbPreset();
 	afx_msg void OnNMCustomdrawSliderVoiceFormant(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCbnSelchangeComboAudioAinsMode();
+	afx_msg void OnCbnSelchangeComboAudioAITuner();
 };

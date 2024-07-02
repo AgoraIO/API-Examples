@@ -47,6 +47,8 @@ class VoiceChanger: BaseViewController {
     
     var videos: [VideoView] = []
     
+    var aitunerType: AgoraVoiceAITunerType?
+    
     @IBOutlet weak var container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!
@@ -78,7 +80,8 @@ class VoiceChanger: BaseViewController {
             self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
         }
         
-        selectMicsPicker.onSelectChanged {
+        selectMicsPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -107,7 +110,8 @@ class VoiceChanger: BaseViewController {
         layoutVideos(2)
         selectLayoutPicker.label.stringValue = "Layout".localized
         selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
-        selectLayoutPicker.onSelectChanged {
+        selectLayoutPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if self.isJoined {
                 return
             }
@@ -122,7 +126,8 @@ class VoiceChanger: BaseViewController {
         selectAINSModePicker.isEnabled = isJoined
         selectAINSModePicker.label.stringValue = "AINSMode"
         selectAINSModePicker.picker.addItems(withTitles: ainsMode.map({ $0.description() }))
-        selectAINSModePicker.onSelectChanged {
+        selectAINSModePicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             let index = self.selectAINSModePicker.indexOfSelectedItem
             if index < 0 || index >= self.ainsMode.count { return }
             self.agoraKit.setAINSMode(true, mode: self.ainsMode[index])
@@ -173,7 +178,8 @@ class VoiceChanger: BaseViewController {
         selectChatBeautifierPicker.isEnabled = false
         selectChatBeautifierPicker.label.stringValue = "Chat Beautifier".localized
         selectChatBeautifierPicker.picker.addItems(withTitles: chatBeautifiers.map { $0.description() })
-        selectChatBeautifierPicker.onSelectChanged {
+        selectChatBeautifierPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -199,7 +205,8 @@ class VoiceChanger: BaseViewController {
         selectTimbreTransformationPicker.isEnabled = false
         selectTimbreTransformationPicker.label.stringValue = "Timbre Transformation".localized
         selectTimbreTransformationPicker.picker.addItems(withTitles: timbreTransformations.map { $0.description() })
-        selectTimbreTransformationPicker.onSelectChanged {
+        selectTimbreTransformationPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -225,7 +232,8 @@ class VoiceChanger: BaseViewController {
         selectVoiceChangerPicker.isEnabled = false
         selectVoiceChangerPicker.label.stringValue = "Voice Changer".localized
         selectVoiceChangerPicker.picker.addItems(withTitles: voiceChangers.map { $0.description() })
-        selectVoiceChangerPicker.onSelectChanged {
+        selectVoiceChangerPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -251,7 +259,8 @@ class VoiceChanger: BaseViewController {
         selectStyleTransformationPicker.isEnabled = false
         selectStyleTransformationPicker.label.stringValue = "Style Transformation".localized
         selectStyleTransformationPicker.picker.addItems(withTitles: styleTransformations.map { $0.description() })
-        selectStyleTransformationPicker.onSelectChanged {
+        selectStyleTransformationPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -277,7 +286,8 @@ class VoiceChanger: BaseViewController {
         selectRoomAcousticsPicker.isEnabled = false
         selectRoomAcousticsPicker.label.stringValue = "Room Acoustics".localized
         selectRoomAcousticsPicker.picker.addItems(withTitles: roomAcoustics.map { $0.description() })
-        selectRoomAcousticsPicker.onSelectChanged {
+        selectRoomAcousticsPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
@@ -303,12 +313,43 @@ class VoiceChanger: BaseViewController {
         selectPitchCorrectionPicker.isEnabled = false
         selectPitchCorrectionPicker.label.stringValue = "Pitch Correction".localized
         selectPitchCorrectionPicker.picker.addItems(withTitles: pitchCorrections.map { $0.description() })
-        selectPitchCorrectionPicker.onSelectChanged {
+        selectPitchCorrectionPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
             if !self.isJoined {
                 return
             }
             guard let option = self.selectedPitchCorrection else { return }
             self.updateVoiceChangerOption(sender: self.selectPitchCorrectionPicker.picker, option: option)
+        }
+    }
+    
+    /*
+     --- voice AI Tuner Picker ---
+     */
+    @IBOutlet weak var voiceAITunerPicker: Picker!
+    
+    func initSelectVoiceAITunerPicker() {
+        voiceAITunerPicker.isEnabled = false
+        voiceAITunerPicker.label.stringValue = "Voice_AI_Tuner".localized
+        let items: [AgoraVoiceAITunerType?] = [nil] + (0...9).map { AgoraVoiceAITunerType(rawValue: $0) }
+        let titles = items.map { $0?.description() ?? "Off" }
+        voiceAITunerPicker.picker.addItems(withTitles: titles)
+        voiceAITunerPicker.onSelectChanged {[weak self] in
+            guard let self = self else {return}
+            if !self.isJoined {
+                return
+            }
+            let type = items[self.voiceAITunerPicker.picker.indexOfSelectedItem]
+            self.updateVoiceAiTuner(type: type)
+        }
+    }
+    
+    func updateVoiceAiTuner(type: AgoraVoiceAITunerType?) {
+        LogUtils.log(message: "onVoiceAITunerAction: \(type?.rawValue ?? -1)", level: .info)
+        if let type = type {
+            agoraKit.enableVoiceAITuner(true, type: type)
+        } else {
+            agoraKit.enableVoiceAITuner(false, type: .matureMale)
         }
     }
     
@@ -447,6 +488,7 @@ class VoiceChanger: BaseViewController {
             selectStyleTransformationPicker.isEnabled = isJoined
             selectRoomAcousticsPicker.isEnabled = isJoined
             selectPitchCorrectionPicker.isEnabled = isJoined
+            voiceAITunerPicker.isEnabled = isJoined
             voicePitchSlider.isEnabled = isJoined
             equalization31hzPicker.isEnabled = isJoined
             equalization62hzPicker.isEnabled = isJoined
@@ -492,6 +534,7 @@ class VoiceChanger: BaseViewController {
         initSelectStyleTransformationPicker()
         initSelectRoomAcousticsPicker()
         initSelectPitchCorrectionPicker()
+        initSelectVoiceAITunerPicker()
         initAudioEffectParam1Field()
         initAudioEffectParam2Field()
         initAudioEffectButton()

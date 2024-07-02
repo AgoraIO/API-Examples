@@ -1,21 +1,21 @@
 /*************************************************************
  * Author:	Lionfore Hao (haolianfu@agora.io)
  * Date	 :	Jul 21st, 2018
- * Module:	AHPL common definitions header file
+ * Module:	AOSL common definitions header file
  *
  *
- * This is a part of the Advanced High Performance Library.
+ * This is a part of the Advanced Operating System Layer.
  * Copyright (C) 2018 Agora IO
  * All rights reserved.
  *
  *************************************************************/
 
-#ifndef __AHPL_DEFS_H__
-#define __AHPL_DEFS_H__
+#ifndef __AOSL_DEFS_H__
+#define __AOSL_DEFS_H__
 
 
-#define ahpl_stringify_1(x) #x
-#define ahpl_stringify(x) ahpl_stringify_1(x)
+#define aosl_stringify_1(x) #x
+#define aosl_stringify(x) aosl_stringify_1(x)
 
 
 #ifndef __MAKERCORE_ASSEMBLY__
@@ -42,17 +42,17 @@ extern "C" {
 #endif
 #endif
 
-#define ahpl_rela_addr(type, field) (&((type *)0)->field)
-#define ahpl_base_addr(ptr, type, field) \
+#define aosl_rela_addr(type, field) (&((type *)0)->field)
+#define aosl_base_addr(ptr, type, field) \
 	((type *)((uintptr_t)(ptr) - (uintptr_t)(&((type *)0)->field)))
 
 
-#define ahpl_min(x, y) ((x) < (y) ? (x) : (y))
-#define ahpl_max(x, y) ((x) > (y) ? (x) : (y))
+#define aosl_min(x, y) ((x) < (y) ? (x) : (y))
+#define aosl_max(x, y) ((x) > (y) ? (x) : (y))
 
 
 /* I think 64 args is big enough */
-#define AHPL_VAR_ARGS_MAX 64
+#define AOSL_VAR_ARGS_MAX 64
 
 
 #ifdef BUILD_TARGET_SHARED
@@ -66,17 +66,17 @@ extern "C" {
 #endif
 
 
-#ifndef __ahpl_api__
+#ifndef __aosl_api__
 #if defined (_MSC_VER) && defined (BUILDING_API_IMPL_SOURCE) && defined (BUILD_TARGET_SHARED)
-#define __ahpl_api__ __declspec (dllexport)
+#define __aosl_api__ __declspec (dllexport)
 #elif defined (_MSC_VER) && !defined (BUILDING_API_IMPL_SOURCE)
-#define __ahpl_api__ __declspec (dllimport)
+#define __aosl_api__ __declspec (dllimport)
 #else
-#define __ahpl_api__
+#define __aosl_api__
 #endif
 #endif
 
-#if defined (BUILDING_API_IMPL_SOURCE) || defined (STATIC_LINKING_AHPL)
+#if defined (BUILDING_API_IMPL_SOURCE) || defined (STATIC_LINKING_AOSL)
 
 #if defined (__GNUC__)
 #define __so_api__ __attribute__ ((visibility ("default")))
@@ -99,34 +99,34 @@ extern "C" {
 
 #ifdef __GNUC__
 #ifndef __MACH__
-#define AHPL_DEFINE_BIN(v, f) \
+#define AOSL_DEFINE_BIN(v, f) \
 __asm__ (".section .rodata\n\t" \
 	".globl "#v"_bin_begin\n\t" \
 	".hidden "#v"_bin_begin\n\t" \
 	".align 4\n\t" \
 	#v"_bin_begin:\n\t" \
-	".incbin \"" ahpl_stringify(MAKERCORE_THIS_FILE_DIR/f)"\"\n\t" \
+	".incbin \"" aosl_stringify(MAKERCORE_THIS_FILE_DIR/f)"\"\n\t" \
 	".globl "#v"_bin_end\n\t" \
 	".hidden "#v"_bin_end\n\t" \
 	#v"_bin_end:\n\t" \
 	".previous\n\t")
 #else
-#define AHPL_DEFINE_BIN(v, f) \
+#define AOSL_DEFINE_BIN(v, f) \
 __asm__ (".section __TEXT,__const\n\t" \
 	".globl _"#v"_bin_begin\n\t" \
 	".private_extern _"#v"_bin_begin\n\t" \
 	".align 4\n\t" \
 	"_"#v"_bin_begin:\n\t" \
-	".incbin \"" ahpl_stringify (MAKERCORE_THIS_FILE_DIR/f) "\"\n\t" \
+	".incbin \"" aosl_stringify (MAKERCORE_THIS_FILE_DIR/f) "\"\n\t" \
 	".globl _"#v"_bin_end\n\t" \
 	".private_extern _"#v"_bin_end\n\t" \
 	"_"#v"_bin_end:\n\t" \
 	".previous\n\t")
 #endif
 
-#define AHPL_DECLARE_BIN(v) extern unsigned char v##_bin_begin, v##_bin_end
-#define AHPL_BIN_ADDR(v) ((void *)&v##_bin_begin)
-#define AHPL_BIN_SIZE(v) ((size_t)((unsigned char *)&v##_bin_end - (unsigned char *)&v##_bin_begin))
+#define AOSL_DECLARE_BIN(v) extern unsigned char v##_bin_begin, v##_bin_end
+#define AOSL_BIN_ADDR(v) ((void *)&v##_bin_begin)
+#define AOSL_BIN_SIZE(v) ((size_t)((unsigned char *)&v##_bin_end - (unsigned char *)&v##_bin_begin))
 #endif
 
 
@@ -138,26 +138,26 @@ __asm__ (".section __TEXT,__const\n\t" \
 
 #ifdef __GNUC__
 #ifndef __MACH__
-.macro AHPL_DEFINE_BIN_S v, f
+.macro AOSL_DEFINE_BIN_S v, f
 	.section .rodata
 	.globl \v\()_bin_begin
 	.hidden \v\()_bin_begin
 	.align 4
 	\v\()_bin_begin:
-	.incbin ahpl_stringify (MAKERCORE_THIS_FILE_DIR/\f)
+	.incbin aosl_stringify (MAKERCORE_THIS_FILE_DIR/\f)
 	.globl \v\()_bin_end
 	.hidden \v\()_bin_end
 	\v\()_bin_end:
 	.previous
 .endm
 #else
-.macro AHPL_DEFINE_BIN_S v, f
+.macro AOSL_DEFINE_BIN_S v, f
 	.section __TEXT,__const
 	.globl _\()\v\()_bin_begin
 	.private_extern _\()\v\()_bin_begin
 	.align 4
 	_\()\v\()_bin_begin:
-	.incbin ahpl_stringify (MAKERCORE_THIS_FILE_DIR/\f)
+	.incbin aosl_stringify (MAKERCORE_THIS_FILE_DIR/\f)
 	.globl _\()\v\()_bin_end
 	.private_extern _\()\v\()_bin_end
 	_\()\v\()_bin_end:
@@ -168,4 +168,4 @@ __asm__ (".section __TEXT,__const\n\t" \
 
 #endif /* __MAKERCORE_ASSEMBLY__ */
 
-#endif /* __AHPL_DEFS_H__ */
+#endif /* __AOSL_DEFS_H__ */

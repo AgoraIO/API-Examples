@@ -8,7 +8,7 @@
 #include "IAgoraLog.h"
 #include "AgoraBase.h"
 #include "AgoraOptional.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 class ILocalDataChannel;
@@ -71,6 +71,8 @@ class IRtmService;
 
 namespace base {
 class IServiceObserver;
+class ISyncClient;
+struct SyncConfig;
 
 /**
  * The global configurations for \ref agora::base::IAgoraService "AgoraService".
@@ -144,9 +146,9 @@ struct AgoraServiceConfiguration {
   IServiceObserver* serviceObserver;
 
   /**
-   * Thread priority for SDK common threads
+   * @deprecated Thread priority for SDK common threads
    */
-  Optional<rtc::THREAD_PRIORITY_TYPE> threadPriority;
+  Optional<rtc::THREAD_PRIORITY_TYPE> threadPriority __deprecated;
   /**
    * Whether use egl context in current thread as sdk‘s root egl context 
    * which shared by all egl related modules. eg. camera capture, video renderer.
@@ -286,6 +288,13 @@ struct AudioSessionConfiguration {
    */
   Optional<int> outputNumberOfChannels;
 
+#if defined(WEBRTC_IOS)
+  /**
+   * Initialize the AudioSession with the value for category. (iOS only)
+   */
+  Optional<int> category;
+#endif
+
   void SetAll(const AudioSessionConfiguration& change) {
     SetFrom(&playbackAndRecord, change.playbackAndRecord);
     SetFrom(&chatMode, change.chatMode);
@@ -299,6 +308,9 @@ struct AudioSessionConfiguration {
     SetFrom(&ioBufferDuration, change.ioBufferDuration);
     SetFrom(&inputNumberOfChannels, change.inputNumberOfChannels);
     SetFrom(&outputNumberOfChannels, change.outputNumberOfChannels);
+#if defined(WEBRTC_IOS)
+    SetFrom(&category, change.category);
+#endif
   }
 
   bool operator==(const AudioSessionConfiguration& o) const {
@@ -308,7 +320,12 @@ struct AudioSessionConfiguration {
            allowBluetooth == o.allowBluetooth && allowBluetoothA2DP == o.allowBluetoothA2DP && sampleRate == o.sampleRate &&
            ioBufferDuration == o.ioBufferDuration &&
            inputNumberOfChannels == o.inputNumberOfChannels &&
+#if defined(WEBRTC_IOS)
+           outputNumberOfChannels == o.outputNumberOfChannels &&
+           category == o.category;
+#else
            outputNumberOfChannels == o.outputNumberOfChannels;
+#endif
   }
   bool operator!=(const AudioSessionConfiguration& o) const { return !(*this == o); }
 
@@ -393,7 +410,7 @@ class IAgoraService {
   /**
    * Flush log & cache before exit
    */
-  virtual int atExit(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int atExit(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Releases the \ref agora::base::IAgoraService "AgoraService" object.
@@ -413,7 +430,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setAudioSessionPreset(agora::rtc::AUDIO_SCENARIO_TYPE scenario, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setAudioSessionPreset(agora::rtc::AUDIO_SCENARIO_TYPE scenario, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Customizes the audio session configuration.
@@ -423,7 +440,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setAudioSessionConfiguration(const AudioSessionConfiguration& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setAudioSessionConfiguration(const AudioSessionConfiguration& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the audio session configuration.
@@ -454,7 +471,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLogFile(const char* filePath, unsigned int fileSize, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setLogFile(const char* filePath, unsigned int fileSize, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Sets the SDK log output filter.
    *
@@ -473,7 +490,7 @@ class IAgoraService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setLogFilter(unsigned int filters, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setLogFilter(unsigned int filters, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Creates an \ref agora::rtc::IRtcConnection "RtcConnection" object and returns the pointer.
@@ -635,12 +652,13 @@ class IAgoraService {
    * @param audioSource The pointer to the recording device source. See \ref agora::rtc::IRecordingDeviceSource "IRecordingDeviceSource".
    * @param enableAec Whether enable audio echo cancellation for loopback recording. If loopback
    *                  recording device is a virtual sound card, it should be false, or it should be true.
+   * @param overlap Whether overlap playout signal.
    * @return
    * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalAudioTrack> createRecordingDeviceAudioTrack(
-      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec) = 0;
+      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec, bool overlap) = 0;
 
   /**
    * Creates an audio device manager object and returns the pointer.
@@ -866,9 +884,9 @@ class IAgoraService {
    */
   virtual rtm::IRtmService* createRtmService() = 0;
 
-  virtual int addExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int addExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
-  virtual int removeExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int removeExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Creates an audio device manager and returns the pointer.
@@ -924,7 +942,7 @@ class IAgoraService {
    */
   virtual int enableExtension(
       const char* provider_name, const char* extension_name, const char* track_id = NULL,
-      bool auto_enable_on_track = false, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+      bool auto_enable_on_track = false, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Disable extension.
    * 
@@ -937,7 +955,7 @@ class IAgoraService {
    * - < 0: Failure.
    */
   virtual int disableExtension(
-      const char* provider_name, const char* extension_name, const char* track_id = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+      const char* provider_name, const char* extension_name, const char* track_id = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the IAgoraParameter object.
@@ -956,6 +974,15 @@ class IAgoraService {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<rtc::IConfigCenter> getConfigCenter() = 0;
+
+  /**
+   * Get the \ref agora::rtc::ISyncClient "ISyncClient" object and return the pointer.
+   *
+   * @return
+   * - The pointer to \ref rtc::ISyncClient "ISyncClient": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<base::ISyncClient> createSyncClient(const base::SyncConfig& config) = 0;
       
  protected:
   virtual ~IAgoraService() {}

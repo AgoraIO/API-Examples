@@ -9,7 +9,7 @@
 
 #include "AgoraRefPtr.h"
 #include "AgoraBase.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 namespace agora {
 
 /**
@@ -92,7 +92,7 @@ class ILocalDataChannel : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendDataPacket(const char* packet, size_t length, uint64_t capture_time_ms, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int sendDataPacket(const char* packet, size_t length, uint64_t capture_time_ms, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Send meta data to this data channel before publishing.
    *
@@ -102,7 +102,7 @@ class ILocalDataChannel : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setMetaData(const char* metaData, size_t length, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setMetaData(const char* metaData, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * return configured channel id

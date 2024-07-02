@@ -39,8 +39,7 @@
   * set the video encoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_ENCODER             "engine.video.enable_hw_encoder"
-#define KEY_RTC_VIDEO_HARDWARE_ENCODEING             "che.hardware_encoding"
-#define KEY_RTC_VIDEO_H264_HWENC                     "che.video.h264.hwenc"
+#define KEY_RTC_VIDEO_HARDWARE_ENCODEING             "che.hardware_encoding" // deprecated, please use engine.video.enable_hw_encoder
  /**
   * set the hardware video encoder provider (nv for nvidia or qsv for intel)
   */
@@ -50,7 +49,7 @@
   * set the video decoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_DECODER             "engine.video.enable_hw_decoder"
-#define KEY_RTC_VIDEO_HARDWARE_DECODING              "che.hardware_decoding"
+#define KEY_RTC_VIDEO_HARDWARE_DECODING              "che.hardware_decoding"  // deprecated, please use engine.video.enable_hw_decoder
 
  /**
   * set the hardware video decoder provider (h264_cuvid(default) or h264_qsv)
@@ -115,8 +114,7 @@
 /**
  * set the video codec type, such as "H264", "JPEG"
  */
-#define KEY_RTC_VIDEO_CODEC_TYPE                      "engine.video.codec_type"
-#define KEY_RTC_VIDEO_MINOR_STREAM_CODEC_TYPE         "engine.video.minor_stream_codec_type"
+#define KEY_RTC_VIDEO_MINOR_STREAM_CODEC_INDEX        "engine.video.minor_stream_codec_index"
 #define KEY_RTC_VIDEO_CODEC_INDEX                     "che.video.videoCodecIndex"
 /**
   * only use average QP for quality scaling

@@ -47,6 +47,7 @@ class VoiceChangerMain: BaseViewController {
     @IBOutlet weak var voiceConversionBtn: UIButton!
     @IBOutlet weak var equalizationFreqBtn: UIButton!
     @IBOutlet weak var reverbKeyBtn: UIButton!
+    @IBOutlet weak var voiceAiTunerBtn: UIButton!
     @IBOutlet weak var reverbValueSlider: UISlider!
     @IBOutlet weak var audioEffectParam1Slider: UISlider!
     @IBOutlet weak var audioEffectParam2Slider: UISlider!
@@ -57,6 +58,7 @@ class VoiceChangerMain: BaseViewController {
     
     var audioViews: [UInt: VideoView] = [:]
     var equalizationFreq: AgoraAudioEqualizationBandFrequency = .band31
+    var aitunerType: AgoraVoiceAITunerType?
     var equalizationGain: Int = 0
     var reverbType: AgoraAudioReverbType = .dryLevel
     var reverbMap: [AgoraAudioReverbType: Int] = [
@@ -218,6 +220,16 @@ class VoiceChangerMain: BaseViewController {
                              handler: { [unowned self] _ in
             self.updateReverbValueRange(reverbKey: reverbType)
             self.reverbKeyBtn.setTitle("\(reverbType.description())", for: .normal)
+        })
+    }
+    
+    func getVoiceAITunerAction(_ type: AgoraVoiceAITunerType?) -> UIAlertAction {
+        let title = "\(type?.description() ?? "Off")"
+        return UIAlertAction(title: title,
+                             style: .default,
+                             handler: { [unowned self] _ in
+            self.updateVoiceAiTuner(type: type)
+            self.voiceAiTunerBtn.setTitle(title, for: .normal)
         })
     }
     
@@ -404,6 +416,15 @@ class VoiceChangerMain: BaseViewController {
         reverbValueSlider.value = Float(reverbMap[reverbType] ?? 0)
     }
     
+    func updateVoiceAiTuner(type: AgoraVoiceAITunerType?) {
+        LogUtils.log(message: "onVoiceAITunerAction: \(type?.rawValue ?? -1)", level: .info)
+        if let type = type {
+            agoraKit.enableVoiceAITuner(true, type: type)
+        } else {
+            agoraKit.enableVoiceAITuner(false, type: .matureMale)
+        }
+    }
+    
     @IBAction func onLocalVoiceReverbKey(_ sender: UIButton) {
         let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: style)
@@ -421,6 +442,24 @@ class VoiceChangerMain: BaseViewController {
         reverbMap[reverbType] = value
         LogUtils.log(message: "onLocalVoiceReverbValue \(reverbType.description()) \(value)", level: .info)
         agoraKit.setLocalVoiceReverbOf(reverbType, withValue: value)
+    }
+    
+    @IBAction func onVoiceAITunerAction(_ sender: UIButton) {
+        let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+        let alert = UIAlertController(title: "Set_Voice_AI_Tuner".localized, message: nil, preferredStyle: style)
+        alert.addAction(getVoiceAITunerAction(nil))
+        alert.addAction(getVoiceAITunerAction(.matureMale))
+        alert.addAction(getVoiceAITunerAction(.freshMale))
+        alert.addAction(getVoiceAITunerAction(.elegantFemale))
+        alert.addAction(getVoiceAITunerAction(.sweetFemale))
+        alert.addAction(getVoiceAITunerAction(.warmMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.gentleFemaleSinging))
+        alert.addAction(getVoiceAITunerAction(.huskyMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.warmElegantFemaleSinging))
+        alert.addAction(getVoiceAITunerAction(.powerfulMaleSinging))
+        alert.addAction(getVoiceAITunerAction(.dreamyFemaleSinging))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func onVoiceFormantChange(_ sender: UISlider) {
@@ -450,6 +489,8 @@ class VoiceChangerMain: BaseViewController {
         resetVoiceChanger()
         equalizationFreqBtn.setTitle("\(equalizationFreq.description())", for: .normal)
         reverbKeyBtn.setTitle("\(reverbType.description())", for: .normal)
+        
+        voiceAiTunerBtn.setTitle(aitunerType?.description() ?? "Off", for: .normal)
         
         // Before calling the method, you need to set the profile
         // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -30,47 +30,47 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view id="hic-wN-s1u">
-                                            <rect key="frame" x="0.0" y="-5685" width="314" height="800"/>
+                                            <rect key="frame" x="0.0" y="-5685" width="314" height="900"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <subviews>
                                                 <view id="zUg-Ey-mco" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="732" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="832" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="DVX-MF-ptg" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="589" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="689" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="hc0-KJ-N7W" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="687" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="787" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="ujY-ku-8rS" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="396" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="496" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="d4X-Gu-eyl" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="638" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="738" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="3Nm-rL-zFm" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="491" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="591" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="Jpl-uj-jwG" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="540" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="640" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="LCh-nt-554" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="351" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="451" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="Z2g-Ur-67E" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="442" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="542" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <box fixedFrame="YES" borderType="none" title="Equalization Reverb" translatesAutoresizingMaskIntoConstraints="NO" id="5z4-pq-KKl" userLabel="Equalization Reverb">
-                                                    <rect key="frame" x="17" y="175" width="280" height="65"/>
+                                                    <rect key="frame" x="17" y="275" width="280" height="65"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="WMh-Tv-mOn">
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="52"/>
@@ -101,15 +101,15 @@
                                                     <font key="titleFont" metaFont="cellTitle"/>
                                                 </box>
                                                 <view id="btb-lm-2YL" customClass="Input" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="310" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="410" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="gfT-NA-JXR" customClass="Input" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="270" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="370" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hql-ef-eHp">
-                                                    <rect key="frame" x="20" y="248" width="274" height="32"/>
+                                                    <rect key="frame" x="20" y="348" width="274" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Set Audio Effect Params" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xtr-ei-jBf">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -120,7 +120,7 @@
                                                     </connections>
                                                 </button>
                                                 <box fixedFrame="YES" borderType="none" title="Equalization Band" translatesAutoresizingMaskIntoConstraints="NO" id="bBW-s5-1yz">
-                                                    <rect key="frame" x="17" y="16" width="280" height="90"/>
+                                                    <rect key="frame" x="17" y="116" width="280" height="90"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="fGn-0r-ukl">
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="77"/>
@@ -139,7 +139,7 @@
                                                                                     <action selector="onBand31hz:" target="jAv-ZA-ecf" id="DLF-hQ-XuE"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3LE-W9-VrA">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3LE-W9-VrA">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="31hz" id="8fd-8t-Irz">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -171,7 +171,7 @@
                                                                                     <action selector="onBand62hz:" target="jAv-ZA-ecf" id="EnV-Tu-9Pq"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9oR-xX-dVl">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9oR-xX-dVl">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="62hz" id="UAW-B9-951">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -203,7 +203,7 @@
                                                                                     <action selector="onBand125hz:" target="jAv-ZA-ecf" id="i9I-ub-3HR"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ugk-X7-GZb">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ugk-X7-GZb">
                                                                                 <rect key="frame" x="-2" y="0.0" width="23" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="125hz" id="iEy-1i-vf4">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -235,7 +235,7 @@
                                                                                     <action selector="onBand250hz:" target="jAv-ZA-ecf" id="bzp-k3-q3R"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vjl-Sj-eNg">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vjl-Sj-eNg">
                                                                                 <rect key="frame" x="-2" y="0.0" width="23" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="250hz" id="8JZ-5R-nCU">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -267,7 +267,7 @@
                                                                                     <action selector="onBand500hz:" target="jAv-ZA-ecf" id="Cuy-vk-sBR"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wJO-hi-fWl">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wJO-hi-fWl">
                                                                                 <rect key="frame" x="-2" y="0.0" width="23" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="500hz" id="gNS-nM-8eg">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -299,7 +299,7 @@
                                                                                     <action selector="onBand1khz:" target="jAv-ZA-ecf" id="dcr-nj-dMn"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eSN-jh-gbg">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eSN-jh-gbg">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="1Khz" id="5nb-04-vbe">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -331,7 +331,7 @@
                                                                                     <action selector="onBand2khz:" target="jAv-ZA-ecf" id="qsI-sg-o3V"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UYQ-35-ZGi">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UYQ-35-ZGi">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="2Khz" id="6ME-Zv-Hpv">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -363,7 +363,7 @@
                                                                                     <action selector="onBand4khz:" target="jAv-ZA-ecf" id="HCc-Ej-OvP"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eti-Rm-aCg">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eti-Rm-aCg">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="4Khz" id="fUn-bY-2Ur">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -395,7 +395,7 @@
                                                                                     <action selector="onBand8khz:" target="jAv-ZA-ecf" id="gJo-RK-tYG"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k78-QU-42P">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k78-QU-42P">
                                                                                 <rect key="frame" x="-1" y="0.0" width="20" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="8Khz" id="k68-jy-Jcs">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -427,7 +427,7 @@
                                                                                     <action selector="onBand16khz:" target="jAv-ZA-ecf" id="MFc-Lx-1mF"/>
                                                                                 </connections>
                                                                             </slider>
-                                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fKY-CL-oc3">
+                                                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fKY-CL-oc3">
                                                                                 <rect key="frame" x="-1" y="0.0" width="24" height="8"/>
                                                                                 <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="16Khz" id="ClO-mY-jZW">
                                                                                     <font key="font" size="7" name="HelveticaNeue"/>
@@ -481,7 +481,11 @@
                                                     <font key="titleFont" metaFont="cellTitle"/>
                                                 </box>
                                                 <view id="61n-dy-f1r" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="117" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="217" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="jpc-Nq-fxO" userLabel="Voice AI Tuner" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="34" width="260" height="53"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                             </subviews>
@@ -493,7 +497,7 @@
                                     <rect key="frame" x="-100" y="-100" width="299" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.059602649006622488" horizontal="NO" id="lVm-iY-CEc">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="lVm-iY-CEc">
                                     <rect key="frame" x="298" y="0.0" width="16" height="498"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 </scroller>
@@ -576,6 +580,7 @@
                         <outlet property="selectStyleTransformationPicker" destination="3Nm-rL-zFm" id="YNo-Ga-Rad"/>
                         <outlet property="selectTimbreTransformationPicker" destination="DVX-MF-ptg" id="2as-1K-J9o"/>
                         <outlet property="selectVoiceChangerPicker" destination="Jpl-uj-jwG" id="fzh-as-VQB"/>
+                        <outlet property="voiceAITunerPicker" destination="jpc-Nq-fxO" id="dZA-Je-wWG"/>
                         <outlet property="voicePitchSlider" destination="61n-dy-f1r" id="Xxl-9k-Q8y"/>
                     </connections>
                 </viewController>

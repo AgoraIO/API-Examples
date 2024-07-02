@@ -555,9 +555,13 @@ void FaceCaptureEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_
 	}
 }
 
-void FaceCaptureEventHandler::onExtensionEvent(const char* provider, const char* extension, const char* key, const char* value) 
+void FaceCaptureEventHandler::onExtensionEventWithContext(const ExtensionContext& context, const char* key, const char* value)
 {
 	if (m_hMsgHanlder) {
+
+		const char* provider = context.providerName;
+		const char* extension = context.extensionName;
+
 		PExtensionEvent evnet = new ExtensionEvent();
 		int len = strlen(provider);
 		evnet->provider = new char[len + 1];

@@ -106,7 +106,7 @@ class IExtensionProvider : public RefCountInterface {
   virtual agora_refptr<IVideoSinkBase> createVideoSink(const char* name) {
     return NULL;
   }
-
+  
   virtual void setProperty(const char* key, const char* value) {}
 
  protected:

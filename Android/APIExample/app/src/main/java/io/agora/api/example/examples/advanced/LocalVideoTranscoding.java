@@ -6,7 +6,6 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -472,7 +471,7 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         if (buttonView == switchTransparentBackground) {
             engine.enableVirtualBackground(isChecked,
                     new VirtualBackgroundSource(VirtualBackgroundSource.BACKGROUND_COLOR,
-                            Color.TRANSPARENT, "",
+                            0x00000000, "",
                             VirtualBackgroundSource.BLUR_DEGREE_HIGH),
                     new SegmentationProperty());
         }

@@ -201,6 +201,7 @@
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
     <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
+    <string name="transparent_rendering">This example demonstrates how to use transparent rendering.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -375,4 +376,5 @@
     <string name="camera_focal_urltra_wide">Urltra Wide</string>
     <string name="camera_focal_telephoto">Telephoto</string>
     <string name="enter_pip">Enter picture in picture mode</string>
+    <string name="item_transparentrendering">TransparentRendering</string>
 </resources>

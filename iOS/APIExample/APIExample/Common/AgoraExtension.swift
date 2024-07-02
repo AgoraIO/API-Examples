@@ -225,6 +225,24 @@ extension AUDIO_AINS_MODE {
     }
 }
 
+extension AgoraVoiceAITunerType {
+    func description() -> String {
+        switch self {
+        case .matureMale: return "AI_Tunner_Mature_Male".localized
+        case .freshMale: return "AI_Tunner_Fresh_Male".localized
+        case .elegantFemale: return "AI_Tunner_Elegant_Female".localized
+        case .sweetFemale: return "AI_Tunner_Sweet_Female".localized
+        case .warmMaleSinging: return "AI_Tunner_Warm_Male_Singing".localized
+        case .gentleFemaleSinging: return "AI_Tunner_Gentle_Female_Singing".localized
+        case .huskyMaleSinging: return "AI_Tunner_Husky_Male_Singing".localized
+        case .warmElegantFemaleSinging: return "AI_Tunner_Warm_Elegant_Female_Singing".localized
+        case .powerfulMaleSinging: return "AI_Tunner_Powerful_Male_Singing".localized
+        case .dreamyFemaleSinging: return "AI_Tunner_Dreamy_Female_Singing".localized
+        @unknown default: return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraVoiceConversionPreset {
     func description() -> String {
         switch self {

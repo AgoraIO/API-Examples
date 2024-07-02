@@ -215,16 +215,12 @@
     self.metadata = nil;
     return metadata;
 }
-/// Callback when the local user receives the metadata.
-/// @param data The received metadata.
-/// @param uid The ID of the user who sends the metadata.
-/// @param timestamp The timestamp (ms) of the received metadata.
-- (void)receiveMetadata:(NSData *)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp {
+
+- (void)didMetadataReceived:(AgoraMetadata * _Nonnull)metadata {
     dispatch_async(dispatch_get_main_queue(), ^{
         [LogUtil log: @"metadata received" level:LogLevelInfo];
-        NSString *message = [[NSString alloc] initWithData:data encoding:kCFStringEncodingUTF8];
+        NSString *message = [[NSString alloc] initWithData:metadata.data encoding:kCFStringEncodingUTF8];
         [self showAlertWithTitle:@"Metadata received" message:message];
     });
 }
-
 @end

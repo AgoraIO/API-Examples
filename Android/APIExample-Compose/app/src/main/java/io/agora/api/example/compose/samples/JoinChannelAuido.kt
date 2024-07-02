@@ -52,6 +52,7 @@ fun JoinChannelAudio() {
     var localUid by rememberSaveable { mutableIntStateOf(0) }
     var videoIdList by rememberSaveable { mutableStateOf(listOf<Int>()) }
     val statsMap = remember { mutableStateMapOf(0 to AudioStatsInfo()) }
+    var audioRoute by rememberSaveable { mutableIntStateOf(Constants.AUDIO_ROUTE_SPEAKERPHONE) }
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
@@ -59,6 +60,12 @@ fun JoinChannelAudio() {
             mContext = context
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
+
+                override fun onAudioRouteChanged(routing: Int) {
+                    super.onAudioRouteChanged(routing)
+                    audioRoute = routing
+                }
+
                 override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
                     super.onJoinChannelSuccess(channel, uid, elapsed)
                     isJoined = true
@@ -103,6 +110,7 @@ fun JoinChannelAudio() {
             }
         }).apply {
             enableAudio()
+            setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
         }
     }
     DisposableEffect(lifecycleOwner) {
@@ -120,10 +128,12 @@ fun JoinChannelAudio() {
                 // Permission is granted
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
                 val mediaOptions = ChannelMediaOptions()
-                mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
-                mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+                mediaOptions.publishCameraTrack = false
+                mediaOptions.publishMicrophoneTrack = true
+                mediaOptions.autoSubscribeAudio = true
+                mediaOptions.autoSubscribeVideo = false
                 TokenUtils.gen(channelName, 0) {
-                    rtcEngine.joinChannel("", channelName, 0, mediaOptions)
+                    rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
                 }
 
             } else {
@@ -136,6 +146,7 @@ fun JoinChannelAudio() {
         rtcEngine = rtcEngine,
         videoIdList = videoIdList,
         statsMap = statsMap,
+        audioRoute = audioRoute,
         channelName = channelName,
         isJoined = isJoined,
         onJoinClick = {
@@ -167,6 +178,7 @@ private fun JoinChannelAudioView(
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     rtcEngine: RtcEngine? = null,
     channelName: String = "",
+    audioRoute: Int = Constants.AUDIO_ROUTE_SPEAKERPHONE,
     isJoined: Boolean = false,
     onJoinClick: (String) -> Unit = {},
     onLeaveClick: () -> Unit = {}
@@ -197,9 +209,14 @@ private fun JoinChannelAudioView(
                         "Earphone" to Constants.AUDIO_ROUTE_EARPIECE,
                         "Bluetooth" to Constants.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP
                     ),
-                    selected = 0
+                    selectedValue = audioRoute
                 ) { _, option ->
-                    rtcEngine?.setRouteInCommunicationMode(option.second)
+                    val ret = rtcEngine?.setRouteInCommunicationMode(option.second)
+                    if (ret != Constants.ERR_OK) {
+                        // no in communication mode
+                        val isSpeakerPhone = option.second == Constants.AUDIO_ROUTE_SPEAKERPHONE
+                        rtcEngine?.setEnableSpeakerphone(isSpeakerPhone)
+                    }
                 }
             }
             item {
@@ -267,7 +284,7 @@ private fun JoinChannelAudioView(
                         "Cloud Gaming" to Constants.CHANNEL_PROFILE_CLOUD_GAMING,
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
-                    )
+                    ),
                 ) { _, option ->
                     rtcEngine?.setChannelProfile(option.second)
                 }

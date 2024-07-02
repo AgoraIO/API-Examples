@@ -7,7 +7,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 
@@ -520,7 +520,7 @@ class IChannel {
    * Sets an event handler for IChannel.
    * @param eventHandler The pointer to the event handler of IChannel: IChannelEventHandler.
    */
-  virtual int setEventHandler(IChannelEventHandler *eventHandler, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setEventHandler(IChannelEventHandler *eventHandler, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Joins the current channel.
    *
@@ -530,7 +530,7 @@ class IChannel {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int join(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int join(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Leaves the current channel.
    *
@@ -539,7 +539,7 @@ class IChannel {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int leave(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int leave(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Sends a channel message.
    *
@@ -550,7 +550,7 @@ class IChannel {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendMessage(const IMessage *message, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int sendMessage(const IMessage *message, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Updates the channel attributes.
    *
@@ -561,7 +561,7 @@ class IChannel {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int updateAttributes(IChannelAttributes *attributes, int64_t &requestId, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int updateAttributes(IChannelAttributes *attributes, int64_t &requestId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Removes the channel attributes.
    *
@@ -572,7 +572,7 @@ class IChannel {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int deleteAttributes(IChannelAttributes *attributes, int64_t &requestId, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int deleteAttributes(IChannelAttributes *attributes, int64_t &requestId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Gets the current request ID.
    * @return
@@ -675,14 +675,14 @@ class IRtmService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int login(const char *token, const char *userId, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int login(const char *token, const char *userId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Logs out of the RTM service.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int logout(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int logout(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Sends a peer message to a specified remote user.
    *
@@ -692,7 +692,7 @@ class IRtmService {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendMessageToPeer(const char *peerId, const IMessage *message, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int sendMessageToPeer(const char *peerId, const IMessage *message, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Creates an RTM channel.
    *

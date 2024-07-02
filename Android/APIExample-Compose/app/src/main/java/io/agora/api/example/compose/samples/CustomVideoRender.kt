@@ -285,7 +285,8 @@ class CustomVideoRenderRender(
                     0,
                     0,
                     viewportWidth,
-                    viewportHeight
+                    viewportHeight,
+                    0
                 )
             } catch (exception: NullPointerException) {
                 Log.e(TAG, "skip empty buffer!")

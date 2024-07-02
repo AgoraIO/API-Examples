@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply from: "${rootDir.absolutePath}/git-hooks.gradle"
 apply from: 'vendors.gradle'
 
-def agoraSdkVersion = "4.3.2"
+def agoraSdkVersion = "4.4.0"
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
 

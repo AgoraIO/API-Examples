@@ -30,6 +30,7 @@ import io.agora.api.example.utils.TokenUtils;
 import io.agora.base.VideoFrame;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.ExtensionContext;
 import io.agora.rtc2.IMediaExtensionObserver;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
@@ -317,7 +318,9 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
 
     private final IMediaExtensionObserver iMediaExtensionObserver = new IMediaExtensionObserver() {
         @Override
-        public void onEvent(String provider, String extension, String key, String value) {
+        public void onEventWithContext(ExtensionContext extContext, String key, String value) {
+            String provider = extContext.providerName;
+            String extension = extContext.extensionName;
             Log.i(TAG, String.format(Locale.US, "ExtensionObserver >> onEvent : provider=%s, extension=%s, key=%s, value=%s",
                     provider, extension, key, value));
             if ("agora_video_filters_face_capture".equals(provider)
@@ -343,19 +346,25 @@ public class FaceCapture extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onStarted(String provider, String extension) {
+        public void onStartedWithContext(ExtensionContext extContext) {
+            String provider = extContext.providerName;
+            String extension = extContext.extensionName;
             Log.i(TAG, String.format(Locale.US, "ExtensionObserver >> onStarted : provider=%s, extension=%s",
                     provider, extension));
         }
 
         @Override
-        public void onStopped(String provider, String extension) {
+        public void onStoppedWithContext(ExtensionContext extContext) {
+            String provider = extContext.providerName;
+            String extension = extContext.extensionName;
             Log.i(TAG, String.format(Locale.US, "ExtensionObserver >> onStopped : provider=%s, extension=%s",
                     provider, extension));
         }
 
         @Override
-        public void onError(String provider, String extension, int error, String message) {
+        public void onErrorWithContext(ExtensionContext extContext, int error, String message) {
+            String provider = extContext.providerName;
+            String extension = extContext.extensionName;
             Log.i(TAG, String.format(Locale.US, "ExtensionObserver >> onError : provider=%s, extension=%s, error=%d, message=%s",
                     provider, extension, error, message));
         }

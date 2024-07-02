@@ -89,6 +89,9 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
+/**
+ * The type Voice effects.
+ */
 @Example(
         index = 4,
         group = ADVANCED,
@@ -106,7 +109,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     private EditText et_channel;
     private Button join;
     private Spinner audioProfile, audioScenario,
-            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion, ainsMode,
+            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion, ainsMode, voiceAITuner,
             customBandFreq, customReverbKey;
     private ViewGroup _voice3DLayout, _pitchModeLayout, _pitchValueLayout;
     private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue, customVoiceFormant;
@@ -154,6 +157,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchValueOption = view.findViewById(R.id.audio_pitch_value_option);
         voiceConversion = view.findViewById(R.id.audio_voice_conversion);
         ainsMode = view.findViewById(R.id.audio_ains_mode);
+        voiceAITuner = view.findViewById(R.id.voice_ai_tuner);
 
         chatBeautifier.setOnItemSelectedListener(this);
         timbreTransformation.setOnItemSelectedListener(this);
@@ -166,6 +170,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchModeOption.setOnItemSelectedListener(this);
         _pitchValueOption.setOnItemSelectedListener(this);
         ainsMode.setOnItemSelectedListener(this);
+        voiceAITuner.setOnItemSelectedListener(this);
 
         // Customize Voice Effects Layout
         customPitch = view.findViewById(R.id.audio_custom_pitch); // engine.setLocalVoicePitch()
@@ -205,6 +210,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         _pitchValueLayout.setVisibility(View.GONE);
         voiceConversion.setEnabled(joined);
         ainsMode.setEnabled(joined);
+        voiceAITuner.setEnabled(joined);
 
         customPitch.setEnabled(joined);
         customBandFreq.setEnabled(joined);
@@ -238,30 +244,30 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
-            /**
+            /*
              * The context of Android Activity
              */
             config.mContext = context.getApplicationContext();
-            /**
+            /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getString(R.string.agora_app_id);
-            /** Sets the channel profile of the Agora RtcEngine.
+            /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
              CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
              channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
              an audience can only receive streams.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
+            /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            /**
+            /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
              */
@@ -288,7 +294,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -312,15 +318,14 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
+                ).onGranted(permissions -> {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
             } else {
                 joined = false;
                 resetControlLayoutByJoined();
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -389,7 +394,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
      *                  Users that input the same channel name join the same channel.
      */
     private void joinChannel(String channelId) {
-        /**In the demo, the default is to enter as the anchor.*/
+        /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // audio config
         engine.setAudioProfile(
@@ -397,13 +402,13 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
         );
 
-        /**Please configure accessToken in the string_config file.
+        /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
-            /** Allows a user to join a channel.
+            /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
@@ -588,7 +593,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
             for (Spinner spinner : voiceBeautifierSpinner) {
                 if (spinner != parent) {
-                    if(spinner.getSelectedItemPosition() != 0){
+                    if (spinner.getSelectedItemPosition() != 0) {
                         spinner.setTag("reset");
                         spinner.setSelection(0);
                     }
@@ -605,33 +610,33 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
             for (Spinner spinner : audioEffectSpinner) {
                 if (spinner != parent) {
-                    if(spinner.getSelectedItemPosition() != 0){
+                    if (spinner.getSelectedItemPosition() != 0) {
                         spinner.setTag("reset");
                         spinner.setSelection(0);
                     }
                 }
             }
 
-            _voice3DLayout.setVisibility(audioEffectPreset == ROOM_ACOUSTICS_3D_VOICE ? View.VISIBLE: View.GONE);
+            _voice3DLayout.setVisibility(audioEffectPreset == ROOM_ACOUSTICS_3D_VOICE ? View.VISIBLE : View.GONE);
             _pitchModeLayout.setVisibility(audioEffectPreset == PITCH_CORRECTION ? View.VISIBLE : View.GONE);
             _pitchValueLayout.setVisibility(audioEffectPreset == PITCH_CORRECTION ? View.VISIBLE : View.GONE);
             return;
         }
 
-        if(parent == voiceConversion){
+        if (parent == voiceConversion) {
             String item = parent.getSelectedItem().toString();
             engine.setVoiceConversionPreset(getVoiceConversionValue(item));
             return;
         }
 
 
-        if(parent == _pitchModeOption || parent == _pitchValueOption){
+        if (parent == _pitchModeOption || parent == _pitchValueOption) {
             int effectOption1 = getPitch1Value(_pitchModeOption.getSelectedItem().toString());
             int effectOption2 = getPitch2Value(_pitchValueOption.getSelectedItem().toString());
             engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
         }
 
-        if(parent == ainsMode){
+        if (parent == ainsMode) {
             boolean enable = position > 0;
             /*
             The AI noise suppression modes:
@@ -643,6 +648,12 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 such as sing together online in real time.
              */
             engine.setAINSMode(enable, position - 1);
+        }
+
+        if (parent == voiceAITuner) {
+            boolean enable = position > 0;
+            String item = parent.getSelectedItem().toString();
+            engine.enableVoiceAITuner(enable, enable ? Constants.VOICE_AI_TUNER_TYPE.valueOf(item) : Constants.VOICE_AI_TUNER_TYPE.VOICE_AI_TUNER_MATURE_MALE);
         }
     }
 
@@ -672,7 +683,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 return VOICE_CHANGER_DARTH_VADER;
             case "VOICE_CHANGER_IRON_LADY":
                 return VOICE_CHANGER_IRON_LADY;
-                case "VOICE_CHANGER_SHIN_CHAN":
+            case "VOICE_CHANGER_SHIN_CHAN":
                 return VOICE_CHANGER_SHIN_CHAN;
             case "VOICE_CHANGER_GIRLISH_MAN":
                 return VOICE_CHANGER_GIRLISH_MAN;
@@ -807,11 +818,11 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         if (!fromUser) {
             return;
         }
-        if(seekBar == _voice3DCircle){
+        if (seekBar == _voice3DCircle) {
             int cicle = (int) (1 + 59 * progress * 1.0f / seekBar.getMax());
             // [1,60], 10 default
             engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, cicle, 0);
-        }else if(seekBar == customPitch){
+        } else if (seekBar == customPitch) {
             double pitch = 0.5 + 1.5 * progress * 1.0f / seekBar.getMax();
             // pitch: [0.5,2.0], 1.0 default
             engine.setLocalVoicePitch(pitch);
@@ -827,11 +838,11 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             // AUDIO_REVERB_ROOM_SIZE(2)：[0, 100] dB
             // AUDIO_REVERB_WET_DELAY(3)：Wet signal,  [0, 200] ms
             // AUDIO_REVERB_STRENGTH(4)： [0, 100]
-            if(reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_DRY_LEVEL || reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_LEVEL){
+            if (reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_DRY_LEVEL || reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_LEVEL) {
                 value = (int) (-20 + 30 * progress * 1.0f / seekBar.getMax());
-            }else if(reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_DELAY){
+            } else if (reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_DELAY) {
                 value = (int) (200 * progress * 1.0f / seekBar.getMax());
-            }else {
+            } else {
                 value = (int) (100 * progress * 1.0f / seekBar.getMax());
             }
             engine.setLocalVoiceReverb(reverbKey, value);
