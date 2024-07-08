@@ -6,8 +6,8 @@ import {
   RtcEngineEx,
   VideoCanvas,
   VideoFrame,
-  VIDEO_BUFFER_TYPE,
-  VIDEO_PIXEL_FORMAT
+  VideoBufferType,
+  VideoPixelFormat
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
@@ -115,8 +115,8 @@ struct CustomVideoSource {
           let frameBuffer: Uint8Array = buffer.slice(readStart, readStart + frame_size)
           readStart += frame_size
           let frame: VideoFrame = new VideoFrame(
-            VIDEO_BUFFER_TYPE.VIDEO_BUFFER_RAW_DATA,
-            VIDEO_PIXEL_FORMAT.VIDEO_PIXEL_I420);
+            VideoBufferType.VIDEO_BUFFER_RAW_DATA,
+            VideoPixelFormat.VIDEO_PIXEL_I420);
           frame.buffer = frameBuffer.buffer as ArrayBuffer;
           frame.rotation = 0;
           frame.stride = width;
