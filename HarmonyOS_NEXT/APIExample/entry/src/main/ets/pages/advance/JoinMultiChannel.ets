@@ -215,8 +215,8 @@ struct JoinMultiChannel {
               mediaOption.publishMicrophoneTrack = false;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
               let ret = this.rtcEngine?.joinChannelWithOptions("", this.mainChannelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
                 ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
@@ -276,8 +276,8 @@ struct JoinMultiChannel {
     exMediaOption.publishMicrophoneTrack = true;
     exMediaOption.autoSubscribeVideo = true;
     exMediaOption.autoSubscribeAudio = true;
-    exMediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-    exMediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+    exMediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+    exMediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
     let ret = this.rtcEngine?.joinChannelEx('', this.exRtcConnection, exMediaOption, exEventHandler);
     if (ret != Constants.ErrorCode.ERR_OK) {
       ShowToast.longToast("joinChannelEx error " + ret + " : " + RtcEngine.getErrorDescription(ret))
