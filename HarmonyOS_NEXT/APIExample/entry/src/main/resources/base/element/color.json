@@ -1,5 +1,6 @@
 {
   "color": [
+
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
@@ -19,6 +20,10 @@
     {
       "name": "background_audio_cell",
       "value": "#EEEEEE"
+    },
+    {
+      "name": "background_selector",
+      "value": "#FFFFFF"
     }
   ]
 }
