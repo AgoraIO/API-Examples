@@ -1,6 +1,7 @@
 {
   "src": [
     "pages/Index",
+    "pages/Settings",
     "pages/basic/JoinVideoChannel",
     "pages/advance/MediaMetadata",
     "pages/advance/JoinMultiChannel",

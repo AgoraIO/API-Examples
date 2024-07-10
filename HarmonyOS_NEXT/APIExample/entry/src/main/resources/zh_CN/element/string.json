@@ -99,6 +99,26 @@
     {
       "name": "item_originvideodata",
       "value": "原始视频数据"
+    },
+    {
+      "name": "settings",
+      "value": "设置"
+    },
+    {
+      "name": "resolution",
+      "value": "分辨率"
+    },
+    {
+      "name": "framerate",
+      "value": "FrameRate"
+    },
+    {
+      "name": "orientation",
+      "value": "Orientation"
+    },
+    {
+      "name": "area",
+      "value": "Area"
     }
   ]
 }

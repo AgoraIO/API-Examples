@@ -1,4 +1,5 @@
-import { AudioTrackConfig, ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig } from 'AgoraRtcSdk';
+import { AudioTrackConfig, ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig,
+  VideoEncoderConfiguration } from 'AgoraRtcSdk';
 import { common } from '@kit.AbilityKit';
 import { AppID } from '../../common/KeyCenter';
 import Logger from '../../util/Logger';
@@ -7,6 +8,7 @@ import { TitleBar } from '../../common/TitleBar';
 import ShowToast from '../../util/ShowToast';
 import PermissionHelper from '../../util/PermissionHelper';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { GlobalInfo } from '../Data';
 
 
 const TAG: string = 'CustomAudioSource'
@@ -59,6 +61,11 @@ struct CustomAudioSource {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config);
+    let encoderConfig = new VideoEncoderConfiguration()
+    encoderConfig.dimensions = GlobalInfo.settings.dimensions
+    encoderConfig.frameRate = GlobalInfo.settings.frameRate
+    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode
+    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
 
     let audioTrackConfig = new AudioTrackConfig()
     this.customAudioTrack = this.rtcEngine.createCustomAudioTrack(Constants.AudioTrackType.MIXABLE, audioTrackConfig)

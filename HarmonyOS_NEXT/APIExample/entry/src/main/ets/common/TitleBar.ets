@@ -20,11 +20,12 @@ import router from '@ohos.router'
 export struct TitleBar {
   private title: Resource = $r('app.media.ic_back');
   private showBack: boolean = false;
+  private showSetting: boolean = false;
 
   build() {
     Column() {
       Row() {
-        if(this.showBack){
+        if (this.showBack) {
           Image($r('app.media.ic_back'))
             .width(20)
             .height(20)
@@ -41,6 +42,20 @@ export struct TitleBar {
           .margin({ left: 16 })
           .align(Alignment.Start)
         Blank()
+
+        if (this.showSetting) {
+          Image($r('app.media.ic_settings'))
+            .width(20)
+            .height(20)
+            .margin({ right: 26 })
+            .objectFit(ImageFit.Contain)
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/Settings'
+              })
+            })
+            .id('settingsBtn')
+        }
       }
       .height(56)
       .width('100%')

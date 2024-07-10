@@ -5,6 +5,7 @@ import {
   RtcEngine,
   RtcEngineConfig,
   VideoCanvas,
+  VideoEncoderConfiguration,
   VideoFrame
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
@@ -13,6 +14,7 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
+import { GlobalInfo } from '../Data';
 
 const TAG: string = 'OriginVideoData'
 
@@ -62,7 +64,11 @@ struct OriginVideoData {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config);
-
+    let encoderConfig = new VideoEncoderConfiguration()
+    encoderConfig.dimensions = GlobalInfo.settings.dimensions
+    encoderConfig.frameRate = GlobalInfo.settings.frameRate
+    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode
+    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
     this.rtcEngine.enableVideo()
 
     let videoFrameObserver: IVideoFrameObserver = {
