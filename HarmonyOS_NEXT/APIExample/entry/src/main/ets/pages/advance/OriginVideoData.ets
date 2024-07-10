@@ -70,10 +70,10 @@ struct OriginVideoData {
         return 0
       },
       getVideoFrameProcessMode: () => {
-        return Constants.VideoFrameProcessMode.PROCESS_MODE_READ_ONLY
+        return Constants.VideoFrameProcessMode.READ_ONLY
       },
       getVideoFormatPreference: () => {
-        return Constants.VideoPixelFormat.VIDEO_PIXEL_I420
+        return Constants.VideoPixelFormat.I420
       },
       getRotationApplied: () => {
         return false
@@ -89,7 +89,7 @@ struct OriginVideoData {
         return true
       }
     }
-    this.rtcEngine.registerVideoFrameObserver(videoFrameObserver)
+    // this.rtcEngine.registerVideoFrameObserver(videoFrameObserver)
   }
 
   aboutToDisappear(): void {
@@ -192,8 +192,8 @@ struct OriginVideoData {
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
               this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
               this.rtcEngine?.startPreview()

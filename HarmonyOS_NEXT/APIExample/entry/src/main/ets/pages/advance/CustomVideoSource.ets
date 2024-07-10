@@ -122,7 +122,7 @@ struct CustomVideoSource {
           frame.stride = width;
           frame.height = height;
           frame.timestamp = 0;
-          let ret = this.rtcEngine?.pushExternalVideoFrameEx(frame, this.customVideoTrack)
+          let ret = this.rtcEngine?.pushExternalVideoFrameById(frame, this.customVideoTrack)
           if (ret != 0) {
             Logger.error(TAG, "pushExternalVideoFrameEx failed: " + ret)
           }
@@ -203,7 +203,7 @@ struct CustomVideoSource {
             .id('button_to_leave')
             .onClick(() => {
               this.stopPushVideo()
-              this.rtcEngine?.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM)
+              this.rtcEngine?.stopPreview(Constants.VideoSourceType.CUSTOM)
               this.rtcEngine?.leaveChannel()
               focusControl.requestFocus("button_to_leave")
             })
@@ -229,13 +229,13 @@ struct CustomVideoSource {
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
               this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
 
               this.startPushVideo()
-              this.rtcEngine?.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM)
+              this.rtcEngine?.startPreview(Constants.VideoSourceType.CUSTOM)
               focusControl.requestFocus("button_to_join")
             })
             .flexGrow(0)

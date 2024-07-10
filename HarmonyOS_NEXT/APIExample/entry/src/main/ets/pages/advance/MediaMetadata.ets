@@ -182,8 +182,8 @@ struct MediaMetadata {
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
               this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
               this.rtcEngine?.startPreview()

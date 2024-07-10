@@ -61,7 +61,7 @@ struct CustomAudioSource {
     this.rtcEngine = RtcEngine.create(config);
 
     let audioTrackConfig = new AudioTrackConfig()
-    this.customAudioTrack = this.rtcEngine.createCustomAudioTrack(Constants.AudioTrackType.AUDIO_TRACK_MIXABLE, audioTrackConfig)
+    this.customAudioTrack = this.rtcEngine.createCustomAudioTrack(Constants.AudioTrackType.MIXABLE, audioTrackConfig)
   }
 
   aboutToDisappear(): void {
@@ -301,8 +301,8 @@ struct CustomAudioSource {
               mediaOption.publishCustomAudioTrackId = this.customAudioTrack
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
               this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
               focusControl.requestFocus("button_to_join")

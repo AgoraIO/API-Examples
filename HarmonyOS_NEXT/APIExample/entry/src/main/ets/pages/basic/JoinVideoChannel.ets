@@ -160,8 +160,8 @@ struct JoinVideoChannel {
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
-              mediaOption.channelProfile = Constants.ChannelProfile.CHANNEL_PROFILE_LIVE_BROADCASTING;
-              mediaOption.clientRoleType = Constants.ClientRole.CLIENT_ROLE_BROADCASTER;
+              mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
+              mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
               let ret = this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
