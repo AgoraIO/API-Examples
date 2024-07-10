@@ -29,7 +29,7 @@ export struct CommonItemSelect {
       Select(this.selectOption)
         .id(this.testId)
         .value(this.selects[this.selectIndex])
-        .backgroundColor($r('app.color.background_shallow_grey'))
+        .backgroundColor($r('app.color.background_selector'))
         .borderRadius(19)
         .constraintSize({ minWidth: 150 })
         .selected(this.selectIndex)

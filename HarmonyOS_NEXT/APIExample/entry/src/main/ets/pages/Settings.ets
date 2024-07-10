@@ -97,5 +97,6 @@ struct Settings {
         // Text("SDK Version:" + RtcEngine.getSdkVersion())
       }
     }
+    .backgroundColor($r('app.color.background_shallow_grey'))
   }
 }
