@@ -1,4 +1,5 @@
-import { ExampleCategory, ExampleItem } from '../model/DataType'
+import { OrientationMode, VideoDimensions } from 'AgoraRtcSdk'
+import { ExampleCategory, ExampleItem, SettingsInfo } from '../model/DataType'
 
 export const BASIC_ITEMS: ExampleItem[] =
   [
@@ -43,3 +44,11 @@ export const COLLECTION_CATEGORIES: ExampleCategory[] =
       title: $r("app.string.category_advanced")
     },
   ]
+
+export class GlobalInfo {
+  static settings: SettingsInfo = {
+    dimensions: new VideoDimensions(960, 540),
+    frameRate: 15,
+    orientationMode: OrientationMode.ORIENTATION_MODE_ADAPTIVE
+  }
+}

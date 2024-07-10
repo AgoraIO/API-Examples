@@ -6,7 +6,8 @@ import {
   RtcEngine,
   RtcEngineConfig,
   RtcEngineEx,
-  VideoCanvas
+  VideoCanvas,
+  VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar'
 import Logger from '../../util/Logger';
@@ -14,6 +15,7 @@ import { common } from '@kit.AbilityKit';
 import { AppID } from '../../common/KeyCenter';
 import ShowToast from '../../util/ShowToast';
 import PermissionHelper from '../../util/PermissionHelper';
+import { GlobalInfo } from '../Data';
 
 const TAG = 'JoinMultiChannel'
 
@@ -67,6 +69,11 @@ struct JoinMultiChannel {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config) as RtcEngineEx;
+    let encoderConfig = new VideoEncoderConfiguration()
+    encoderConfig.dimensions = GlobalInfo.settings.dimensions
+    encoderConfig.frameRate = GlobalInfo.settings.frameRate
+    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode
+    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
     this.rtcEngine.enableVideo()
   }
 

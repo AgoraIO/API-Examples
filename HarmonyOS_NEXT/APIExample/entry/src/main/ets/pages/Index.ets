@@ -19,7 +19,10 @@ struct Index {
 
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
-      TitleBar({ title: $r('app.string.app_name') })
+      TitleBar({
+        title: $r('app.string.app_name'),
+        showSetting: true
+      })
         .flexGrow(0)
 
       Column(){

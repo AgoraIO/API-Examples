@@ -7,7 +7,8 @@ import {
   VideoCanvas,
   VideoFrame,
   VideoBufferType,
-  VideoPixelFormat
+  VideoPixelFormat,
+  VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
@@ -16,6 +17,7 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { GlobalInfo } from '../Data';
 
 const TAG: string = 'CustomVideoSource'
 
@@ -67,6 +69,11 @@ struct CustomVideoSource {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config) as RtcEngineEx;
+    let encoderConfig = new VideoEncoderConfiguration()
+    encoderConfig.dimensions = GlobalInfo.settings.dimensions
+    encoderConfig.frameRate = GlobalInfo.settings.frameRate
+    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode
+    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
 
     this.rtcEngine.enableVideo()
 

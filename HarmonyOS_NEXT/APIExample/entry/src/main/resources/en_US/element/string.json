@@ -99,6 +99,26 @@
     {
       "name": "item_originvideodata",
       "value": "OriginVideoData"
+    },
+    {
+      "name": "settings",
+      "value": "Settings"
+    },
+    {
+      "name": "resolution",
+      "value": "Resolution"
+    },
+    {
+      "name": "framerate",
+      "value": "FrameRate"
+    },
+    {
+      "name": "orientation",
+      "value": "Orientation"
+    },
+    {
+      "name": "area",
+      "value": "Area"
     }
   ]
 }
