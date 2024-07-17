@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,9 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -85,10 +88,12 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
     private Spinner sp_player_stream, sp_publish_stream;
     private List<MediaStreamInfo> mediaStreamInfoList;
     private int playerStreamIndex, publishStreamIndex;
+    private TextView local_video_info;
 
     private boolean joined = false;
     private SeekBar progressBar;
     private long playerDuration = 0;
+    private final Map<String, String> videoInfoMap = new LinkedHashMap<>();
 
     private static final String SAMPLE_MOVIE_URL = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
 
@@ -166,6 +171,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
         stop = view.findViewById(R.id.stop);
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
+        local_video_info = view.findViewById(R.id.local_video_info);
         ll_streams = view.findViewById(R.id.ll_streams);
         sp_publish_stream = view.findViewById(R.id.sp_publish_stream);
         sp_player_stream = view.findViewById(R.id.sp_player_stream);
@@ -251,6 +257,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
                 mediaPlayer.stop();
                 open.setEnabled(false);
                 setMediaPlayerViewEnable(false);
+                cleanVideoInfo();
             }
         } else if (v.getId() == R.id.open) {
             String url = et_url.getText().toString();
@@ -558,6 +565,30 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
         engine = null;
     }
 
+    private void updateVideoInfo(String key, String value) {
+        runOnUIThread(() -> {
+            videoInfoMap.put(key, value);
+            StringBuilder sb = new StringBuilder();
+            int size = videoInfoMap.size();
+            int index = 0;
+            for (Map.Entry<String, String> entry : videoInfoMap.entrySet()) {
+                sb.append(entry.getKey()).append(" : ").append(entry.getValue());
+                if (index < size - 1) {
+                    sb.append("\n");
+                }
+                index++;
+            }
+            local_video_info.setText(sb.toString());
+        });
+    }
+
+    private void cleanVideoInfo() {
+        runOnUIThread(() -> {
+            videoInfoMap.clear();
+            local_video_info.setText("");
+        });
+    }
+
     private void setMediaPlayerViewEnable(boolean enable) {
         runOnUIThread(() -> {
             play.setEnabled(enable);
@@ -637,7 +668,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
 
     @Override
     public void onPlayBufferUpdated(long l) {
-
+        updateVideoInfo("PlayBuffer", String.valueOf(l));
     }
 
     @Override
@@ -667,7 +698,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, A
 
     @Override
     public void onPlayerPlaybackStats(PlayerPlaybackStats stats) {
-
+        updateVideoInfo("Fps", String.valueOf(stats.getVideoFps()));
+        updateVideoInfo("videoBitrateInKbps", String.valueOf(stats.getVideoBitrate()));
+        updateVideoInfo("audioBitrateInKbps", String.valueOf(stats.getAudioBitrate()));
+        updateVideoInfo("totalBitrateInKbps", String.valueOf(stats.getTotalBitrate()));
     }
 
     @Override
