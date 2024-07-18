@@ -110,15 +110,23 @@
     },
     {
       "name": "framerate",
-      "value": "FrameRate"
+      "value": "帧率"
     },
     {
       "name": "orientation",
-      "value": "Orientation"
+      "value": "方向"
     },
     {
       "name": "area",
-      "value": "Area"
+      "value": "区域"
+    },
+    {
+      "name": "item_originaudiosource",
+      "value": "原始音频数据"
+    },
+    {
+      "name": "item_joinaudiochannel",
+      "value": "音频互动直播"
     }
   ]
 }

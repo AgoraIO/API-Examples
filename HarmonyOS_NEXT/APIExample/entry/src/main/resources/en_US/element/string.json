@@ -119,6 +119,14 @@
     {
       "name": "area",
       "value": "Area"
+    },
+    {
+      "name": "item_originaudiosource",
+      "value": "OriginAudioSource"
+    },
+    {
+      "name": "item_joinaudiochannel",
+      "value": "JoinAudioChannel"
     }
   ]
 }

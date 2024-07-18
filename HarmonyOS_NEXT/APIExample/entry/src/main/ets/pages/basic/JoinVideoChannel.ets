@@ -6,7 +6,6 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
-import { settings } from '@kit.BasicServicesKit';
 import { GlobalInfo } from '../Data';
 
 const TAG: string = 'JoinVideoChannel'
