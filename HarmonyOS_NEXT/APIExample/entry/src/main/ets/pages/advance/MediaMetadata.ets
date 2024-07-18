@@ -1,5 +1,12 @@
-import { ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig, VideoCanvas,
-  VideoEncoderConfiguration } from 'AgoraRtcSdk';
+import {
+    ChannelMediaOptions,
+    Constants,
+    IMetadataObserver,
+    RtcEngine,
+    RtcEngineConfig,
+    VideoCanvas,
+    VideoEncoderConfiguration
+} from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -7,6 +14,7 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
+import { util } from '@kit.ArkTS';
 
 const TAG: string = 'MediaMetadata'
 
@@ -15,7 +23,7 @@ const TAG: string = 'MediaMetadata'
 struct MediaMetadata {
   private rtcEngine: RtcEngine | undefined = undefined;
   private pendingVideoMetadata: string | undefined = undefined;
-
+  private metadataObserver: IMetadataObserver | undefined = undefined;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State videoMetadata: string = ''
@@ -65,6 +73,29 @@ struct MediaMetadata {
     this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
     this.rtcEngine.enableVideo()
 
+    this.metadataObserver = {}
+    this.metadataObserver.getMaxMetadataSize = () => {
+      return 1024
+    }
+    this.metadataObserver.onReadyToSendMetadata = (timeStampMs: bigint, sourceType: Constants.VideoSourceType) => {
+      if (this.pendingVideoMetadata != null) {
+        let str = this.pendingVideoMetadata
+        this.pendingVideoMetadata = ""
+        let buf = new ArrayBuffer(str.length * 2)
+        let bufView = new Uint8Array(buf)
+        for (let i = 0; i < str.length; i++) {
+          bufView[i] = str.charCodeAt(i)
+        }
+        return buf
+      }
+      return new ArrayBuffer(0)
+    }
+    this.metadataObserver.onMetadataReceived = (buffer: ArrayBuffer, uid: number, timeStampMs: bigint) => {
+      let decoder = util.TextDecoder.create('utf-8');
+      let stringData = decoder.decodeWithStream(new Uint8Array(buffer));
+      ShowToast.shortToast("received: " + stringData)
+    }
+    this.rtcEngine.registerMediaMetadataObserver(this.metadataObserver, 0)
   }
 
   aboutToDisappear(): void {
@@ -146,7 +177,12 @@ struct MediaMetadata {
           })
           .flexGrow(0)
       }
-      .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 6,
+        bottom: 6
+      })
 
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
@@ -199,10 +235,13 @@ struct MediaMetadata {
             .flexGrow(0)
         }
       }
-      .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 6,
+        bottom: 6
+      })
     }
     .backgroundColor($r('app.color.background_shallow_grey'))
   }
-
-
 }

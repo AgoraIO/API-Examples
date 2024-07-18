@@ -6,6 +6,10 @@ export const BASIC_ITEMS: ExampleItem[] =
     {
       title: $r('app.string.item_joinvideochannel'),
       url: 'pages/basic/JoinVideoChannel'
+    },
+    {
+      title: $r('app.string.item_joinaudiochannel'),
+      url: 'pages/basic/JoinAudioChannel'
     }
   ]
 
@@ -24,13 +28,17 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/CustomAudioSource'
     },
     {
-      title: $r('app.string.item_originvideodata'),
-      url: 'pages/advance/OriginVideoData'
+      title: $r('app.string.item_originaudiosource'),
+      url: 'pages/advance/OriginAudioData'
     },
     {
       title: $r('app.string.item_customvideosource'),
       url: 'pages/advance/CustomVideoSource'
-    }
+    },
+    {
+      title: $r('app.string.item_originvideodata'),
+      url: 'pages/advance/OriginVideoData'
+    },
   ]
 
 export const COLLECTION_CATEGORIES: ExampleCategory[] =
