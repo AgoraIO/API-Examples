@@ -3935,6 +3935,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
+   *  - -8(ERR_INVALID_STATE): The current status is invalid, only allowed to be called when the connection is disconnected.
    */
   virtual int setChannelProfile(CHANNEL_PROFILE_TYPE profile) = 0;
 
@@ -3983,6 +3984,7 @@ class IRtcEngine : public agora::base::IEngineBase {
     *  - -1(ERR_FAILED): A general error occurs (no specified reason).
     *  - -2(ERR_INALID_ARGUMENT): The parameter is invalid.
     *  - -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
+    *  - -8(ERR_INVALID_STATE): The channel profile is not `LIVE_BROADCASTING`.
     */
   virtual int setClientRole(CLIENT_ROLE_TYPE role, const ClientRoleOptions& options) = 0;
 

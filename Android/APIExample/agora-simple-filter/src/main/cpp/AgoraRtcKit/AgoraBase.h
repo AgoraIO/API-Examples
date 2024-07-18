@@ -4317,12 +4317,14 @@ enum CLIENT_ROLE_CHANGE_FAILED_REASON {
   CLIENT_ROLE_CHANGE_FAILED_NOT_AUTHORIZED = 2,
   /**
    * 3: The operation of changing role is timeout.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT = 3,
+  CLIENT_ROLE_CHANGE_FAILED_REQUEST_TIME_OUT __deprecated = 3,
   /**
    * 4: The operation of changing role is interrupted since we lost connection with agora service.
+   * @deprecated This reason is deprecated.
    */
-  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED = 4,
+  CLIENT_ROLE_CHANGE_FAILED_CONNECTION_FAILED __deprecated = 4,
 };
 
 /**

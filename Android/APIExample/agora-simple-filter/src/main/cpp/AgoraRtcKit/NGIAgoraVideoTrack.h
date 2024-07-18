@@ -527,13 +527,17 @@ struct RemoteVideoTrackStats {
    decoder vender id, VideoCodecVenderId
   */
   uint32_t decoder_vender_id;
+  /**
+   The decoder codec type of the remote video track
+  */
+  uint32_t decoder_type;
 
   RemoteVideoTrackStats() : uid(0), delay(0), width(0), height(0),
                             receivedBitrate(0), decoderInputFrameRate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
                             frameLossRate(0), packetLossRate(0), rxStreamType(VIDEO_STREAM_HIGH),
                             totalFrozenTime(0), frozenRate(0), received_bytes(0), totalDecodedFrames(0), avSyncTimeMs(0),
                             downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0),
-                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0) {}
+                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0), decoder_type(0) {}
 };
 
 /**

@@ -62,6 +62,7 @@ class ISyncClientObserver {
   virtual void onCollectionEvent(const char* previousJson, const char* curJson, const char* collection, const char* docName,
                                  const CollectionEvent* events, int eventSize) = 0;
   virtual void onDatabaseEvent(const char* databaseName, SyncClientError error) = 0;
+  virtual void onDataException(const char* databaseName, const char* collectionName) = 0;
   virtual ~ISyncClientObserver() {};
 };
 
@@ -74,7 +75,9 @@ struct SyncConfig {
   uint32_t shakehand_interval;
   /* connection timeout in seconds */
   uint32_t connection_timeout;
-  SyncConfig() : appId(OPTIONAL_NULLPTR), shakehand_interval(1), connection_timeout(10) {}
+  /* compact interval in seconds */
+  uint32_t compact_interval;
+  SyncConfig() : shakehand_interval(1), connection_timeout(10), compact_interval(3600 * 1000) {}
 };
 
 class ISyncClient : public RefCountInterface {

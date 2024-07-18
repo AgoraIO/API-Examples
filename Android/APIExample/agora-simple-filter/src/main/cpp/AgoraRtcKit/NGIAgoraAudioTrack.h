@@ -402,6 +402,21 @@ class ILocalAudioTrack : public IAudioTrack {
    */
   virtual int unregisterTrackObserver(ILocalAudioTrackObserver* observer) = 0;
 
+  /** set Max buffered audio frame number 
+   *
+   * @param number : the buffer number set，unit is 10ms 
+   *
+   */
+  virtual void setMaxBufferedAudioFrameNumber(int number) = 0;
+
+  /** clear sender buffer
+   *
+   * @return
+   * - >= 0: Frame number in sender buffer.
+   * - < 0: Failure.
+   */
+  virtual int ClearSenderBuffer() = 0;
+
  protected:
   ~ILocalAudioTrack() {}
 };
