@@ -223,9 +223,6 @@ class CustomVideoRender: BaseViewController {
                 }
             })
         } else {
-            if let customRender = videos[1].videocanvas {
-                customRender.stopRender()
-            }
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 sender.isEnabled = true
                 LogUtils.log(message: "Left channel", level: .info)

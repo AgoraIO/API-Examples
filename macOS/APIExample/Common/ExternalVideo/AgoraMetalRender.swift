@@ -121,9 +121,12 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         }
         guard let pixelBuffer = videoFrame.pixelBuffer else { return false }
         
-        DispatchQueue.main.sync(execute: {
-            self.videoFrame = pixelBuffer;
-        })
+        let res = semaphore.wait(timeout: .now() + 0.1)
+        guard res == DispatchTimeoutResult.success else {
+            return true
+        }
+        self.videoFrame = pixelBuffer
+        semaphore.signal()
 #endif
         return true
     }
