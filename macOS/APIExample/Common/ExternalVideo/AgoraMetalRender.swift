@@ -81,7 +81,7 @@ class AgoraMetalRender: NSView {
 #endif
     }
     
-    func stopRender(uid: UInt) {
+    func stopRender() {
         userId = 0
 #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
         metalView.delegate = nil

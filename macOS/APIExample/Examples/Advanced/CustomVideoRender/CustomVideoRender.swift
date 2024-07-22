@@ -178,11 +178,13 @@ class CustomVideoRender: BaseViewController {
         AgoraRtcEngineKit.destroy()
     }
     
-    @IBAction func onJoinPressed(_ sender:Any) {
+    @IBAction func onJoinPressed(_ sender:NSButton) {
+        sender.isEnabled = false
         if !isJoined {
             // check configuration
             let channel = channelField.stringValue
             if channel.isEmpty {
+                sender.isEnabled = true
                 return
             }
             
@@ -209,6 +211,7 @@ class CustomVideoRender: BaseViewController {
             option.publishCameraTrack = true
             option.publishMicrophoneTrack = true
             NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                sender.isEnabled = true
                 let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     self.isJoined = false
@@ -220,7 +223,11 @@ class CustomVideoRender: BaseViewController {
                 }
             })
         } else {
+            if let customRender = videos[1].videocanvas {
+                customRender.stopRender()
+            }
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                sender.isEnabled = true
                 LogUtils.log(message: "Left channel", level: .info)
                 self.videos[0].uid = nil
                 self.isJoined = false
@@ -313,7 +320,7 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
 //        }
         
         if let customRender = videos[1].videocanvas {
-            customRender.stopRender(uid: uid)
+            customRender.stopRender()
         }
     }
 }
