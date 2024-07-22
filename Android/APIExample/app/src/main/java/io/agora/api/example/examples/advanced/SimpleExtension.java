@@ -485,16 +485,22 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onStartedWithContext(ExtensionContext extContext) {
-
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onStartedWithContext vendor: " + vendor + "  extension: " + extension );
     }
 
     @Override
     public void onStoppedWithContext(ExtensionContext extContext) {
-
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onStoppedWithContext vendor: " + vendor + "  extension: " + extension);
     }
 
     @Override
     public void onErrorWithContext(ExtensionContext extContext, int i, String s2) {
-
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onErrorWithContext vendor: " + vendor + "  extension: " + extension + "  code: " + i + "  msg: " + s2);
     }
 }
