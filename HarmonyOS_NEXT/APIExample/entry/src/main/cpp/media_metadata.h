@@ -37,5 +37,6 @@ private:
     napi_env env_;
     napi_ref wrapper_;
     unsigned char* pendingData_ = nullptr;
+    int pendingDataSize_ = 0;
 };
 #endif // APIEXAMPLE_MEDIA_METADATA_H
