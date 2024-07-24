@@ -10,14 +10,15 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
-import RawDataNapi from 'librawdataprocessing.so';
+import { OriginAudioData } from 'librawdataprocessing.so';
 
 const TAG: string = 'OriginAudioData'
 
 @Entry
 @Component
-struct OriginAudioData {
+struct OriginAudioDataWrap {
   private rtcEngine: RtcEngine | undefined = undefined;
+  private native: OriginAudioData | undefined = undefined;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
@@ -63,8 +64,8 @@ struct OriginAudioData {
     this.rtcEngine = RtcEngine.create(config)
 
     this.rtcEngine.enableAudio()
-    RawDataNapi.setNativeEngineHandle(this.rtcEngine!.getNativeHandle())
-    RawDataNapi.enableAudioFrameObserver(true)
+    this.native = new OriginAudioData(this.rtcEngine.getNativeHandle());
+    this.native.enable(true);
   }
 
   aboutToDisappear(): void {
@@ -72,8 +73,6 @@ struct OriginAudioData {
       if (this.isJoin) {
         this.rtcEngine.leaveChannel();
       }
-      RawDataNapi.enableAudioFrameObserver(false)
-      RawDataNapi.unsetNativeEngineHandle()
       Logger.info(TAG, "destroy begin")
       RtcEngine.destroy().then(() => {
         Logger.info(TAG, "destroy done")

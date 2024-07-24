@@ -1,12 +1,9 @@
 import {
-  ChannelMediaOptions,
-  Constants,
-  IVideoFrameObserver,
-  RtcEngine,
-  RtcEngineConfig,
-  VideoCanvas,
-  VideoEncoderConfiguration,
-  VideoFrame
+    ChannelMediaOptions,
+    Constants, RtcEngine,
+    RtcEngineConfig,
+    VideoCanvas,
+    VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
@@ -15,15 +12,16 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
+import { OriginVideoData } from 'librawdataprocessing.so';
 
 const TAG: string = 'OriginVideoData'
 
 
 @Entry
 @Component
-struct OriginVideoData {
+struct OriginVideoDataWrap {
   private rtcEngine: RtcEngine | undefined = undefined;
-  private takeSnapshot = false
+  private native: OriginVideoData | undefined = undefined;
   @State channelName: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
@@ -71,31 +69,8 @@ struct OriginVideoData {
     this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
     this.rtcEngine.enableVideo()
 
-    let videoFrameObserver: IVideoFrameObserver = {
-      getObservedFramePosition: () => {
-        return 0
-      },
-      getVideoFrameProcessMode: () => {
-        return Constants.VideoFrameProcessMode.READ_ONLY
-      },
-      getVideoFormatPreference: () => {
-        return Constants.VideoPixelFormat.I420
-      },
-      getRotationApplied: () => {
-        return false
-      },
-      getMirrorApplied: () => {
-        return false
-      },
-      onCaptureVideoFrame: (sourceType: Constants.VideoSourceType, videoFrame: VideoFrame) => {
-        if(this.takeSnapshot){
-          this.takeSnapshot = false
-
-        }
-        return true
-      }
-    }
-    // this.rtcEngine.registerVideoFrameObserver(videoFrameObserver)
+    this.native = new OriginVideoData(this.rtcEngine.getNativeHandle());
+    this.native.enable(true)
   }
 
   aboutToDisappear(): void {
