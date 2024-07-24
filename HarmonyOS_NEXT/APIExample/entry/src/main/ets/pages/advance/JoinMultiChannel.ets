@@ -1,21 +1,22 @@
 import {
-  ChannelMediaOptions,
-  Constants,
-  IRtcEngineEventHandler,
-  RtcConnection,
-  RtcEngine,
-  RtcEngineConfig,
-  RtcEngineEx,
-  VideoCanvas,
-  VideoEncoderConfiguration
+    ChannelMediaOptions,
+    Constants,
+    IRtcEngineEventHandler,
+    RtcConnection,
+    RtcEngine,
+    RtcEngineConfig,
+    RtcEngineEx,
+    VideoCanvas,
+    VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
-import { TitleBar } from '../../common/TitleBar'
+import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import { common } from '@kit.AbilityKit';
 import { AppID } from '../../common/KeyCenter';
 import ShowToast from '../../util/ShowToast';
 import PermissionHelper from '../../util/PermissionHelper';
 import { GlobalInfo } from '../Data';
+import { TokenUtils } from '../../util/TokenUtils';
 
 const TAG = 'JoinMultiChannel'
 
@@ -224,7 +225,8 @@ struct JoinMultiChannel {
               mediaOption.autoSubscribeAudio = true;
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
-              let ret = this.rtcEngine?.joinChannelWithOptions("", this.mainChannelName, 0, mediaOption)
+              let token = await TokenUtils.genRtcToken(this.mainChannelName, "")
+              let ret = this.rtcEngine?.joinChannelWithOptions(token, this.mainChannelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
                 ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
                 return
@@ -255,7 +257,7 @@ struct JoinMultiChannel {
     }
   }
 
-  private joinExChannel() {
+  private async joinExChannel() {
     this.exLocalUid = Math.round(Math.random() * 1000) + 10000;
     this.exRtcConnection.localUid = this.exLocalUid
     this.exRtcConnection.channelId = this.exChannelName
@@ -285,7 +287,8 @@ struct JoinMultiChannel {
     exMediaOption.autoSubscribeAudio = true;
     exMediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
     exMediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
-    let ret = this.rtcEngine?.joinChannelEx('', this.exRtcConnection, exMediaOption, exEventHandler);
+    let token = await TokenUtils.genRtcToken(this.exRtcConnection.channelId, this.exRtcConnection.localUid.toString())
+    let ret = this.rtcEngine?.joinChannelEx(token, this.exRtcConnection, exMediaOption, exEventHandler);
     if (ret != Constants.ErrorCode.ERR_OK) {
       ShowToast.longToast("joinChannelEx error " + ret + " : " + RtcEngine.getErrorDescription(ret))
       return

@@ -8,12 +8,14 @@
 
 #include "origin_audio_data.h"
 #include "origin_video_data.h"
+#include "media_metadata.h"
 
 
 EXTERN_C_START
 static napi_value Init(napi_env env, napi_value exports) {
     OriginAudioData::Init(env, exports);
     OriginVideoData::Init(env, exports);
+    MediaMetadata::Init(env, exports);
     return exports;
 }
 EXTERN_C_END

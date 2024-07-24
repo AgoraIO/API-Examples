@@ -1,8 +1,6 @@
 import {
     ChannelMediaOptions,
-    Constants,
-    IMetadataObserver,
-    RtcEngine,
+    Constants, RtcEngine,
     RtcEngineConfig,
     VideoCanvas,
     VideoEncoderConfiguration
@@ -14,16 +12,16 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
-import { util } from '@kit.ArkTS';
+import { TokenUtils } from '../../util/TokenUtils';
+import { MediaMetadata } from 'librawdataprocessing.so';
 
 const TAG: string = 'MediaMetadata'
 
 @Entry
 @Component
-struct MediaMetadata {
+struct MediaMetadataWrap {
   private rtcEngine: RtcEngine | undefined = undefined;
-  private pendingVideoMetadata: string | undefined = undefined;
-  private metadataObserver: IMetadataObserver | undefined = undefined;
+  private native: MediaMetadata | undefined = undefined;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State videoMetadata: string = ''
@@ -73,29 +71,8 @@ struct MediaMetadata {
     this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
     this.rtcEngine.enableVideo()
 
-    this.metadataObserver = {}
-    this.metadataObserver.getMaxMetadataSize = () => {
-      return 1024
-    }
-    this.metadataObserver.onReadyToSendMetadata = (timeStampMs: bigint, sourceType: Constants.VideoSourceType) => {
-      if (this.pendingVideoMetadata != null) {
-        let str = this.pendingVideoMetadata
-        this.pendingVideoMetadata = ""
-        let buf = new ArrayBuffer(str.length * 2)
-        let bufView = new Uint8Array(buf)
-        for (let i = 0; i < str.length; i++) {
-          bufView[i] = str.charCodeAt(i)
-        }
-        return buf
-      }
-      return new ArrayBuffer(0)
-    }
-    this.metadataObserver.onMetadataReceived = (buffer: ArrayBuffer, uid: number, timeStampMs: bigint) => {
-      let decoder = util.TextDecoder.create('utf-8');
-      let stringData = decoder.decodeWithStream(new Uint8Array(buffer));
-      ShowToast.shortToast("received: " + stringData)
-    }
-    this.rtcEngine.registerMediaMetadataObserver(this.metadataObserver, 0)
+    this.native = new MediaMetadata(this.rtcEngine.getNativeHandle());
+    this.native.enable(true)
   }
 
   aboutToDisappear(): void {
@@ -172,7 +149,7 @@ struct MediaMetadata {
           .id('button_to_send')
           .enabled(this.isJoin)
           .onClick(() => {
-            this.pendingVideoMetadata = this.videoMetadata
+            this.native?.send(this.videoMetadata)
             focusControl.requestFocus("button_to_send")
           })
           .flexGrow(0)
@@ -228,7 +205,8 @@ struct MediaMetadata {
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
-              this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
+              let token = await TokenUtils.genRtcToken(this.channelName, "")
+              this.rtcEngine?.joinChannelWithOptions(token, this.channelName, 0, mediaOption);
               this.rtcEngine?.startPreview()
               focusControl.requestFocus("button_to_join")
             })
