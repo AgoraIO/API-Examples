@@ -21,7 +21,7 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     },
     {
       title: $r('app.string.item_mediametadata'),
-      url: 'pages/advance/MediaMetadata'
+      url: 'pages/advance/MediaMetadataWrap'
     },
     {
       title: $r('app.string.item_customaudiosource'),

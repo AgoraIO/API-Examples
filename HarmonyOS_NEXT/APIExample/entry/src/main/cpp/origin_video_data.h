@@ -25,6 +25,8 @@ private:
     explicit OriginVideoData();
     ~OriginVideoData();
 
+    void SaveI420Buffer(const uint8_t *buf, int width, int height, std::string filename);
+
     static napi_value New(napi_env env, napi_callback_info info);
     static napi_value Enable(napi_env env, napi_callback_info info);
     static napi_value TakeSnapshot(napi_env env, napi_callback_info info);

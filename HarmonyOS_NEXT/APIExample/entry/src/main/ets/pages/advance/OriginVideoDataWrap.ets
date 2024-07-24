@@ -89,7 +89,7 @@ struct OriginVideoDataWrap {
   }
 
   build() {
-    Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
+    Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.End, justifyContent: FlexAlign.Start }) {
       TitleBar({
         title: $r('app.string.item_originvideodata'),
         showBack: true
@@ -131,7 +131,14 @@ struct OriginVideoDataWrap {
       }
       .align(Alignment.TopStart)
       .flexGrow(1)
-
+      Button($r('app.string.screenshot'))
+        .id('button_screenshot')
+        .enabled(this.isJoin)
+        .onClick(() => {
+          this.native?.takeSnapshot();
+        })
+        .margin(12)
+        .flexGrow(0)
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
           .id("input_channel_name")

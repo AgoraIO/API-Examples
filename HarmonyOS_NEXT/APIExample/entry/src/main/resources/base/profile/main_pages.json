@@ -4,7 +4,7 @@
     "pages/Settings",
     "pages/basic/JoinVideoChannel",
     "pages/basic/JoinAudioChannel",
-    "pages/advance/MediaMetadata",
+    "pages/advance/MediaMetadataWrap",
     "pages/advance/JoinMultiChannel",
     "pages/advance/CustomAudioSource",
     "pages/advance/CustomVideoSource",

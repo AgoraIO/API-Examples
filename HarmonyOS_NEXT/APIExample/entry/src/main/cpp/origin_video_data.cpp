@@ -14,8 +14,29 @@ OriginVideoData::~OriginVideoData() { napi_delete_reference(env_, wrapper_); }
 
 
 bool OriginVideoData::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE sourceType, VideoFrame &videoFrame) {
-    AG_INFO("OriginVideoData::onCaptureVideoFrame called");
+    if (takeSnapshot_) {
+        uint8_t *buffer = videoFrame.yBuffer;
+        // real path: /data/app/el2/100/base/io.agora.hmos.apiexample/haps/entry/files/capture.i420
+        // play file: ffplay -f rawvideo -pixel_format yuv420p -video_size 1280x720 /Users/xcz/Downloads/capture.i420
+        SaveI420Buffer(buffer, videoFrame.width, videoFrame.height,
+                       "/data/storage/el2/base/haps/entry/files/capture.i420");
+        takeSnapshot_ = false;
+    }
     return true;
+}
+
+void OriginVideoData::SaveI420Buffer(const uint8_t *buf, int width, int height, std::string filename) {
+    AG_INFO("OriginVideoData::SaveI420Buffer takeSnapshot -- width=%{public}d, height=%{public}d, filename=%{public}s", width, height,
+            filename.c_str());
+
+    FILE *dump_file_ = fopen(filename.c_str(), "w");
+    if (!dump_file_) {
+        return;
+    }
+    int size = width * height * 3 / 2;
+    fwrite(buf, sizeof(uint8_t), size, dump_file_);
+    fflush(dump_file_);
+    fclose(dump_file_);
 }
 
 OriginVideoData::VIDEO_FRAME_PROCESS_MODE OriginVideoData::getVideoFrameProcessMode() { return PROCESS_MODE_READ_ONLY; }
@@ -35,10 +56,11 @@ void OriginVideoData::Destructor(napi_env env, void *nativeObject, [[maybe_unuse
 napi_value OriginVideoData::Init(napi_env env, napi_value exports) {
     napi_property_descriptor properties[] = {
         {"enable", nullptr, Enable, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"takeSnapshot", nullptr, TakeSnapshot, nullptr, nullptr, nullptr, napi_default, nullptr},
     };
 
     napi_value cons;
-    assert(napi_define_class(env, "OriginVideoData", NAPI_AUTO_LENGTH, New, nullptr, 1, properties, &cons) == napi_ok);
+    assert(napi_define_class(env, "OriginVideoData", NAPI_AUTO_LENGTH, New, nullptr, 2, properties, &cons) == napi_ok);
 
     assert(napi_create_reference(env, cons, 1, &g_origin_video_data_ref) == napi_ok);
     assert(napi_set_named_property(env, exports, "OriginVideoData", cons) == napi_ok);

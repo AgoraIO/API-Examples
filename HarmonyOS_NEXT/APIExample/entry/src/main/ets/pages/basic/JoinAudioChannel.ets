@@ -10,6 +10,7 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
+import { TokenUtils } from '../../util/TokenUtils';
 
 const TAG: string = 'JoinAudioChannel'
 
@@ -210,7 +211,7 @@ struct JoinAudioChannel {
               mediaOption.autoSubscribeAudio = true;
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
-
+              let token = await TokenUtils.genRtcToken(this.channelName, "")
               let ret = this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
                 ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
