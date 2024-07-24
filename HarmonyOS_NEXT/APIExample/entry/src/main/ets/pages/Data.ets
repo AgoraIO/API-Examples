@@ -29,7 +29,7 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     },
     {
       title: $r('app.string.item_originaudiosource'),
-      url: 'pages/advance/OriginAudioData'
+      url: 'pages/advance/OriginAudioDataWrap'
     },
     {
       title: $r('app.string.item_customvideosource'),
@@ -37,7 +37,7 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     },
     {
       title: $r('app.string.item_originvideodata'),
-      url: 'pages/advance/OriginVideoData'
+      url: 'pages/advance/OriginVideoDataWrap'
     },
   ]
 

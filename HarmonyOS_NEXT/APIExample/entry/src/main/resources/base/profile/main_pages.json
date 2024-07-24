@@ -8,7 +8,7 @@
     "pages/advance/JoinMultiChannel",
     "pages/advance/CustomAudioSource",
     "pages/advance/CustomVideoSource",
-    "pages/advance/OriginVideoData",
-    "pages/advance/OriginAudioData"
+    "pages/advance/OriginVideoDataWrap",
+    "pages/advance/OriginAudioDataWrap"
   ]
 }

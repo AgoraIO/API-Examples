@@ -19,6 +19,8 @@ set_target_properties(agora_rtc_sdk PROPERTIES IMPORTED_LOCATION ${AGORA_LIB_PAT
 add_library(rawdataprocessing SHARED
                 napi_init.cpp
                 audio_render.cpp
+                origin_audio_data.cpp
+                origin_video_data.cpp
             )
 target_link_libraries(rawdataprocessing PUBLIC
                     agora_rtc_sdk
