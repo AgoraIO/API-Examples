@@ -14,17 +14,19 @@ MediaMetadata::~MediaMetadata() { napi_delete_reference(env_, wrapper_); }
 
 bool MediaMetadata::onReadyToSendMetadata(Metadata &metadata, agora::rtc::VIDEO_SOURCE_TYPE source_type) {
     if(pendingData_){
-        memcpy(metadata.buffer, pendingData_,  DEFAULT_METADATA_SIZE_IN_BYTE);
+        memcpy(metadata.buffer, pendingData_, pendingDataSize_);
+        metadata.size = pendingDataSize_;
+        AG_INFO("MediaMetadata::onReadyToSendMetadata send -- data=%{public}s, size=%{public}d", pendingData_, pendingDataSize_);
         delete [] pendingData_;
         pendingData_ = nullptr;
-        AG_INFO("MediaMetadata::onReadyToSendMetadata send");
+        pendingDataSize_ = 0;
         return true;
     }
     return false;
 }
 
 void MediaMetadata::onMetadataReceived(const Metadata &metadata) {
-    AG_INFO("MediaMetadata::onMetadataReceived called");
+    AG_INFO("MediaMetadata::onMetadataReceived -- data=%{public}s", metadata.buffer);
 }
 
 void MediaMetadata::Destructor(napi_env env, void *nativeObject, [[maybe_unused]] void *finalize_hint) {
@@ -136,6 +138,7 @@ napi_value MediaMetadata::Send(napi_env env, napi_callback_info info) {
     }
     memset(obj->pendingData_, 0, DEFAULT_METADATA_SIZE_IN_BYTE);
     memcpy(obj->pendingData_, buf, size);
+    obj->pendingDataSize_ = size;
 
 
     napi_value num;
