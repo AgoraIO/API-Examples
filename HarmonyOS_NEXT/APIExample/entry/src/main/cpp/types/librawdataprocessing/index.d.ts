@@ -3,6 +3,11 @@ export class OriginAudioData {
   enable: (enable:boolean) => number;
 }
 
+export class CustomAudioRender {
+  constructor(arg: bigint);
+  enable: (enable:boolean) => number;
+}
+
 export class OriginVideoData {
   constructor(arg: bigint);
   enable: (enable:boolean) => number;

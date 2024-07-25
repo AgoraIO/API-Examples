@@ -1,14 +1,6 @@
 import {
-  ChannelMediaOptions,
-  Constants,
-  RtcEngine,
-  RtcEngineConfig,
-  RtcEngineEx,
-  VideoBufferType,
-  VideoCanvas,
-  VideoEncoderConfiguration,
-  VideoFrame,
-  VideoPixelFormat
+    ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig, VideoCanvas,
+    VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
@@ -16,19 +8,16 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
 import { GlobalInfo } from '../Data';
 
-const TAG: string = 'CustomVideoSource'
+const TAG: string = 'JoinVideoChannelToken'
 
 @Entry
 @Component
-struct CustomVideoSource {
-  private rtcEngine: RtcEngineEx | undefined = undefined;
-  private pushingVideoFrame = false
-  private intervalVideoNum = -1;
-  private customVideoTrack = -1;
-  @State message: string = 'Hello World';
+struct JoinVideoChannelToken {
+  private rtcEngine: RtcEngine | undefined = undefined;
+  private appId: string = AppID;
+  private token: string = ''
   @State channelName: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
@@ -36,121 +25,75 @@ struct CustomVideoSource {
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
+  }
+
+  private initRtcEngine(appId: string) {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
-    config.mAppId = AppID;
+    config.mAppId = appId;
     config.mEventHandler = {};
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
       if (this.remoteUid == 0) {
-        this.remoteUid = uid
+        this.remoteUid = uid;
       }
     };
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
-      Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason)
+      Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason);
       if (this.remoteUid == uid) {
-        this.remoteUid = 0
+        this.remoteUid = 0;
       }
     };
     config.mEventHandler.onJoinChannelSuccess = (cid: string, uid: number, elapsed: number) => {
       Logger.info(TAG, "mEventHandler.onJoinChannelSuccess: " + uid);
-      this.isJoin = true
-      this.localUid = uid
-    }
+      this.isJoin = true;
+      this.localUid = uid;
+    };
     config.mEventHandler.onLeaveChannel = () => {
       Logger.info(TAG, "mEventHandler.onLeaveChannel");
-      this.isJoin = false
-      this.localUid = 0
-      this.remoteUid = 0
-    }
+      this.isJoin = false;
+      this.localUid = 0;
+      this.remoteUid = 0;
+    };
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
-    }
+      ShowToast.longToast("onError " + err + " : " + message);
+    };
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
-    this.rtcEngine = RtcEngine.create(config) as RtcEngineEx;
-    let encoderConfig = new VideoEncoderConfiguration()
-    encoderConfig.dimensions = GlobalInfo.settings.dimensions
-    encoderConfig.frameRate = GlobalInfo.settings.frameRate
-    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode
-    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig)
+    this.rtcEngine = RtcEngine.create(config);
 
-    this.rtcEngine.enableVideo()
-
-    this.customVideoTrack = this.rtcEngine.createCustomVideoTrack()
+    let encoderConfig = new VideoEncoderConfiguration();
+    encoderConfig.dimensions = GlobalInfo.settings.dimensions;
+    encoderConfig.frameRate = GlobalInfo.settings.frameRate;
+    encoderConfig.orientationMode = GlobalInfo.settings.orientationMode;
+    this.rtcEngine.setVideoEncoderConfiguration(encoderConfig);
+    this.rtcEngine.enableVideo();
   }
 
   aboutToDisappear(): void {
+    this.destroyRtcEngine();
+  }
+
+  private destroyRtcEngine() {
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
         this.rtcEngine.stopPreview();
         this.rtcEngine.leaveChannel();
       }
-      this.stopPushVideo()
-      this.rtcEngine.destroyCustomVideoTrack(this.customVideoTrack)
-      this.customVideoTrack = -1
-      Logger.info(TAG, "destroy begin")
+      Logger.info(TAG, "destroy begin");
       RtcEngine.destroy().then(() => {
-        Logger.info(TAG, "destroy done")
+        Logger.info(TAG, "destroy done");
       });
-      Logger.info(TAG, "destroy end")
+      Logger.info(TAG, "destroy end");
       this.rtcEngine = undefined;
-    }
-  }
-
-  async startPushVideo() {
-    let file_name = 'sample.yuv'
-    let width = 320
-    let height = 180
-    let frame_size = width * height / 2 * 3
-    let frame_rate = 15
-    let frame_interval_ms = 1000 / frame_rate
-
-    getContext(this)
-      .resourceManager
-      .getRawFileContent(file_name)
-      .then((buffer) => {
-        this.pushingVideoFrame = true
-        let readStart = 0
-        this.intervalVideoNum = setInterval(() => {
-          if (!this.pushingVideoFrame) {
-            return
-          }
-          if (readStart == buffer.byteLength) {
-            readStart = 0
-          }
-          let frameBuffer: Uint8Array = buffer.slice(readStart, readStart + frame_size)
-          readStart += frame_size
-          let frame: VideoFrame = new VideoFrame(
-            VideoBufferType.VIDEO_BUFFER_RAW_DATA,
-            VideoPixelFormat.VIDEO_PIXEL_I420);
-          frame.buffer = frameBuffer.buffer as ArrayBuffer;
-          frame.rotation = 0;
-          frame.stride = width;
-          frame.height = height;
-          frame.timestamp = 0;
-          let ret = this.rtcEngine?.pushExternalVideoFrameById(frame, this.customVideoTrack)
-          if (ret != 0) {
-            Logger.error(TAG, "pushExternalVideoFrameEx failed: " + ret)
-          }
-        }, frame_interval_ms)
-      })
-      .catch((reason: BusinessError) => {
-        Logger.error(TAG, "push video called failed : " + reason)
-      })
-  }
-
-  async stopPushVideo() {
-    this.pushingVideoFrame = false
-    if (this.intervalVideoNum != -1) {
-      clearInterval(this.intervalVideoNum)
     }
   }
 
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
       TitleBar({
-        title: $r('app.string.item_customvideosource'),
+        title: $r('app.string.item_joinvideochanneltoken'),
         showBack: true
       }).flexGrow(0)
 
@@ -166,8 +109,6 @@ struct CustomVideoSource {
               localCanvas.uid = this.localUid;
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
               localCanvas.mirrorMode = 0;
-              // TODO set source type
-              // localCanvas.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM
               this.rtcEngine?.setupLocalVideo(localCanvas);
             }).width('50%')
           }
@@ -193,11 +134,33 @@ struct CustomVideoSource {
       .align(Alignment.TopStart)
       .flexGrow(1)
 
+      TextInput({ placeholder: $r('app.string.app_id'), text: this.appId })
+        .id("input_app_id")
+        .enabled(!this.isJoin)
+        .maxLines(1)
+        .enableKeyboardOnFocus(false)
+        .onChange((value: string) => {
+          this.appId = value
+        })
+        .flexGrow(0)
+        .margin({ left: 12, right: 12, top: 6, bottom: 6 })
+
+      TextInput({ placeholder: $r('app.string.token'), text: this.token })
+        .id("input_token")
+        .enabled(!this.isJoin)
+        .maxLines(1)
+        .enableKeyboardOnFocus(false)
+        .onChange((value: string) => {
+          this.token = value
+        })
+        .flexGrow(0)
+        .margin({ left: 12, right: 12, top: 6, bottom: 6 })
+
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
-        TextInput({ placeholder: $r('app.string.text_input_channel_name') })
+        TextInput({ placeholder: $r('app.string.text_input_channel_name'), text: this.channelName })
           .id("input_channel_name")
-          .type(InputType.Number)
           .enabled(!this.isJoin)
+          .maxLines(1)
           .enableKeyboardOnFocus(false)
           .onChange((value: string) => {
             this.channelName = value
@@ -209,9 +172,9 @@ struct CustomVideoSource {
           Button($r('app.string.leave'))
             .id('button_to_leave')
             .onClick(() => {
-              this.stopPushVideo()
-              this.rtcEngine?.stopPreview(Constants.VideoSourceType.CUSTOM)
+              this.rtcEngine?.stopPreview()
               this.rtcEngine?.leaveChannel()
+              this.destroyRtcEngine();
               focusControl.requestFocus("button_to_leave")
             })
             .flexGrow(0)
@@ -230,20 +193,25 @@ struct CustomVideoSource {
                 ShowToast.shortToast("Permission leak!")
                 return
               }
+
+              this.initRtcEngine(this.appId)
+              focusControl.requestFocus("button_to_join")
+
               let mediaOption: ChannelMediaOptions = new ChannelMediaOptions();
-              mediaOption.publishCustomVideoTrack = true
-              mediaOption.customVideoTrackId = this.customVideoTrack
+              mediaOption.publishCameraTrack = true;
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
-              this.rtcEngine?.joinChannelWithOptions("", this.channelName, 0, mediaOption);
+              let ret = this.rtcEngine?.joinChannelWithOptions(this.token, this.channelName, 0, mediaOption)
+              if (ret != Constants.ErrorCode.ERR_OK) {
+                ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
+                return
+              }
 
-              this.startPushVideo()
-              this.rtcEngine?.startPreview(Constants.VideoSourceType.CUSTOM)
-              focusControl.requestFocus("button_to_join")
+              this.rtcEngine?.startPreview()
             })
             .flexGrow(0)
         }

@@ -2,13 +2,17 @@
   "src": [
     "pages/Index",
     "pages/Settings",
+    "pages/basic/JoinVideoChannelToken",
     "pages/basic/JoinVideoChannel",
     "pages/basic/JoinAudioChannel",
+    "pages/advance/LiveStreaming",
     "pages/advance/MediaMetadataWrap",
     "pages/advance/JoinMultiChannel",
     "pages/advance/CustomAudioSource",
     "pages/advance/CustomVideoSource",
     "pages/advance/OriginVideoDataWrap",
-    "pages/advance/OriginAudioDataWrap"
+    "pages/advance/OriginAudioDataWrap",
+    "pages/advance/CustomAudioRenderWrap",
+    "pages/advance/ScreenSharing"
   ]
 }

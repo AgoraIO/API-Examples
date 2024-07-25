@@ -10,15 +10,15 @@ import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
-import { OriginAudioData } from 'librawdataprocessing.so';
+import { CustomAudioRender } from 'librawdataprocessing.so';
 
-const TAG: string = 'OriginAudioData'
+const TAG: string = 'CustomAudioRenderWrap'
 
 @Entry
 @Component
-struct OriginAudioDataWrap {
+struct CustomAudioRenderWrap {
   private rtcEngine: RtcEngine | undefined = undefined;
-  private native: OriginAudioData | undefined = undefined;
+  private native: CustomAudioRender | undefined = undefined;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
@@ -64,7 +64,7 @@ struct OriginAudioDataWrap {
     this.rtcEngine = RtcEngine.create(config)
 
     this.rtcEngine.enableAudio()
-    this.native = new OriginAudioData(this.rtcEngine.getNativeHandle());
+    this.native = new CustomAudioRender(this.rtcEngine.getNativeHandle());
     this.native.enable(true);
   }
 
@@ -85,7 +85,7 @@ struct OriginAudioDataWrap {
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
       TitleBar({
-        title: $r('app.string.item_originaudiosource'),
+        title: $r('app.string.item_customaudiorender'),
         showBack: true
       }).flexGrow(0)
 

@@ -22,6 +22,7 @@ add_library(rawdataprocessing SHARED
                 origin_audio_data.cpp
                 origin_video_data.cpp
                 media_metadata.cpp
+                custom_audio_render.cpp
             )
 target_link_libraries(rawdataprocessing PUBLIC
                     agora_rtc_sdk

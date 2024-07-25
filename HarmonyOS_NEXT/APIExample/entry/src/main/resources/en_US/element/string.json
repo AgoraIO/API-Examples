@@ -127,6 +127,46 @@
     {
       "name": "item_joinaudiochannel",
       "value": "JoinAudioChannel"
+    },
+    {
+      "name": "app_id",
+      "value": "App ID"
+    },
+    {
+      "name": "token",
+      "value": "Token"
+    },
+    {
+      "name": "item_joinvideochanneltoken",
+      "value": "JoinVideoChannelWithToken"
+    },
+    {
+      "name": "item_livestreaming",
+      "value": "LiveStreaming"
+    },
+    {
+      "name": "start_linking",
+      "value": "StartLinking"
+    },
+    {
+      "name": "stop_linking",
+      "value": "StopLinking"
+    },
+    {
+      "name": "low_stream",
+      "value": "LowStream"
+    },
+    {
+      "name": "low_legacy_living",
+      "value": "LowLegacyLiving"
+    },
+    {
+      "name": "item_customaudiorender",
+      "value": "CustomAudioRender"
+    },
+    {
+      "name": "item_screensharing",
+      "value": "ScreenSharing"
     }
   ]
 }
