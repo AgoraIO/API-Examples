@@ -127,6 +127,46 @@
     {
       "name": "item_joinaudiochannel",
       "value": "音频互动直播"
+    },
+    {
+      "name": "app_id",
+      "value": "App ID"
+    },
+    {
+      "name": "token",
+      "value": "Token"
+    },
+    {
+      "name": "item_joinvideochanneltoken",
+      "value": "视频互动直播(Token验证)"
+    },
+    {
+      "name": "item_livestreaming",
+      "value": "RTC实时直播"
+    },
+    {
+      "name": "start_linking",
+      "value": "开始连麦"
+    },
+    {
+      "name": "stop_linking",
+      "value": "停止连麦"
+    },
+    {
+      "name": "low_stream",
+      "value": "小流"
+    },
+    {
+      "name": "low_legacy_living",
+      "value": "极速直播"
+    },
+    {
+      "name": "item_customaudiorender",
+      "value": "自定义音频渲染"
+    },
+    {
+      "name": "item_screensharing",
+      "value": "屏幕共享"
     }
   ]
 }

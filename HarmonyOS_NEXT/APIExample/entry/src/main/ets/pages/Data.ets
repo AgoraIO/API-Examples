@@ -4,6 +4,10 @@ import { ExampleCategory, ExampleItem, SettingsInfo } from '../model/DataType'
 export const BASIC_ITEMS: ExampleItem[] =
   [
     {
+      title: $r('app.string.item_joinvideochanneltoken'),
+      url: 'pages/basic/JoinVideoChannelToken'
+    },
+    {
       title: $r('app.string.item_joinvideochannel'),
       url: 'pages/basic/JoinVideoChannel'
     },
@@ -15,6 +19,10 @@ export const BASIC_ITEMS: ExampleItem[] =
 
 export const ADVANCE_ITEMS: ExampleItem[] =
   [
+    {
+      title: $r('app.string.item_livestreaming'),
+      url: 'pages/advance/LiveStreaming'
+    },
     {
       title: $r('app.string.item_joinmultichannel'),
       url: 'pages/advance/JoinMultiChannel'
@@ -28,6 +36,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/CustomAudioSource'
     },
     {
+      title: $r('app.string.item_customaudiorender'),
+      url: 'pages/advance/CustomAudioRenderWrap'
+    },
+    {
       title: $r('app.string.item_originaudiosource'),
       url: 'pages/advance/OriginAudioDataWrap'
     },
@@ -38,6 +50,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     {
       title: $r('app.string.item_originvideodata'),
       url: 'pages/advance/OriginVideoDataWrap'
+    },
+    {
+      title: $r('app.string.item_screensharing'),
+      url: 'pages/advance/ScreenSharing'
     },
   ]
 
