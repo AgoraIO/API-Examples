@@ -167,6 +167,46 @@
     {
       "name": "item_screensharing",
       "value": "屏幕共享"
+    },
+    {
+      "name": "publish_screen_audio",
+      "value": "屏幕共享本地音频"
+    },
+    {
+      "name": "publish_audio_volume",
+      "value": "发布音量"
+    },
+    {
+      "name": "item_rtmpstreaming",
+      "value": "旁路推流CDN"
+    },
+    {
+      "name": "transcoding",
+      "value": "转码"
+    },
+    {
+      "name": "text_input_url",
+      "value": "链接地址"
+    },
+    {
+      "name": "stop_push",
+      "value": "停止推流"
+    },
+    {
+      "name": "push",
+      "value": "推流"
+    },
+    {
+      "name": "item_channelencryption",
+      "value": "媒体流加密"
+    },
+    {
+      "name": "encryption_mode",
+      "value": "加密模式"
+    },
+    {
+      "name": "encryption_key",
+      "value": "加密密钥"
     }
   ]
 }

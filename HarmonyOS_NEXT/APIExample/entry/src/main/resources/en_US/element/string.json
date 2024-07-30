@@ -38,7 +38,7 @@
     },
     {
       "name": "item_joinvideochannel",
-      "value": "视频互动直播"
+      "value": "JoinVideoChannel"
     },
     {
       "name": "category_advanced",
@@ -167,6 +167,46 @@
     {
       "name": "item_screensharing",
       "value": "ScreenSharing"
+    },
+    {
+      "name": "publish_screen_audio",
+      "value": "PublishScreenAudio"
+    },
+    {
+      "name": "publish_audio_volume",
+      "value": "Publish Audio Volume"
+    },
+    {
+      "name": "item_rtmpstreaming",
+      "value": "RTMPStreaming"
+    },
+    {
+      "name": "transcoding",
+      "value": "Transcoding"
+    },
+    {
+      "name": "text_input_url",
+      "value": "URL"
+    },
+    {
+      "name": "stop_push",
+      "value": "StopPush"
+    },
+    {
+      "name": "push",
+      "value": "Push"
+    },
+    {
+      "name": "item_channelencryption",
+      "value": "ChannelEncryption"
+    },
+    {
+      "name": "encryption_mode",
+      "value": "EncryptionMode"
+    },
+    {
+      "name": "encryption_key",
+      "value": "EncryptionKey"
     }
   ]
 }
