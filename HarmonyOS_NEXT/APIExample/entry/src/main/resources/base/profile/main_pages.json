@@ -13,6 +13,8 @@
     "pages/advance/OriginVideoDataWrap",
     "pages/advance/OriginAudioDataWrap",
     "pages/advance/CustomAudioRenderWrap",
-    "pages/advance/ScreenSharing"
+    "pages/advance/ScreenSharing",
+    "pages/advance/RTMPStreaming",
+    "pages/advance/ChannelEncryption"
   ]
 }
