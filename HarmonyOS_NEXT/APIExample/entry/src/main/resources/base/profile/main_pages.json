@@ -15,6 +15,10 @@
     "pages/advance/CustomAudioRenderWrap",
     "pages/advance/ScreenSharing",
     "pages/advance/RTMPStreaming",
-    "pages/advance/ChannelEncryption"
+    "pages/advance/ChannelEncryption",
+    "pages/advance/PlayAudioFiles",
+    "pages/advance/PreCallTest",
+    "pages/advance/MediaRecorder"
+
   ]
 }

@@ -207,6 +207,70 @@
     {
       "name": "encryption_key",
       "value": "EncryptionKey"
+    },
+    {
+      "name": "item_playaudiofiles",
+      "value": "PlayAudioFiles"
+    },
+    {
+      "name": "audio_mixing",
+      "value": "AudioMixing"
+    },
+    {
+      "name": "start",
+      "value": "Start"
+    },
+    {
+      "name": "resume",
+      "value": "Resume"
+    },
+    {
+      "name": "pause",
+      "value": "Pause"
+    },
+    {
+      "name": "stop",
+      "value": "Stop"
+    },
+    {
+      "name": "audio_effect",
+      "value": "Audio Effect"
+    },
+    {
+      "name": "volume",
+      "value": "Volume"
+    },
+    {
+      "name": "play_volume",
+      "value": "Play Volume"
+    },
+    {
+      "name": "publish_volume",
+      "value": "Publish Volume"
+    },
+    {
+      "name": "item_precalltest",
+      "value": "PreCallTest"
+    },
+    {
+      "name": "testing",
+      "value": "Testing..."
+    },
+    {
+      "name": "item_mediarecorder",
+      "value": "MediaRecorder"
+    },
+    {
+      "name": "start_recording",
+      "value": "Start Recording"
+    },
+    {
+      "name": "stop_recording",
+      "value": "Stop Recording"
+    },
+    {
+      "name": "confirm",
+      "value": "Confirm"
     }
   ]
 }
