@@ -24,6 +24,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/LiveStreaming'
     },
     {
+      title: $r('app.string.item_rtmpstreaming'),
+      url: 'pages/advance/RTMPStreaming'
+    },
+    {
       title: $r('app.string.item_joinmultichannel'),
       url: 'pages/advance/JoinMultiChannel'
     },
@@ -52,8 +56,24 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/OriginVideoDataWrap'
     },
     {
+      title: $r('app.string.item_channelencryption'),
+      url: 'pages/advance/ChannelEncryption'
+    },
+    {
       title: $r('app.string.item_screensharing'),
       url: 'pages/advance/ScreenSharing'
+    },
+    {
+      title: $r('app.string.item_playaudiofiles'),
+      url: 'pages/advance/PlayAudioFiles'
+    },
+    {
+      title: $r('app.string.item_precalltest'),
+      url: 'pages/advance/PreCallTest'
+    },
+    {
+      title: $r('app.string.item_mediarecorder'),
+      url: 'pages/advance/MediaRecorder'
     },
   ]
 

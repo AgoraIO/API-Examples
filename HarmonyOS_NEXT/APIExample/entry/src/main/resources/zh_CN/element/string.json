@@ -207,6 +207,70 @@
     {
       "name": "encryption_key",
       "value": "加密密钥"
+    },
+    {
+      "name": "item_playaudiofiles",
+      "value": "音频文件混音"
+    },
+    {
+      "name": "audio_mixing",
+      "value": "混音"
+    },
+    {
+      "name": "audio_effect",
+      "value": "音效"
+    },
+    {
+      "name": "start",
+      "value": "开始"
+    },
+    {
+      "name": "resume",
+      "value": "恢复"
+    },
+    {
+      "name": "pause",
+      "value": "暂停"
+    },
+    {
+      "name": "stop",
+      "value": "停止"
+    },
+    {
+      "name": "volume",
+      "value": "总音量"
+    },
+    {
+      "name": "play_volume",
+      "value": "播放音量"
+    },
+    {
+      "name": "publish_volume",
+      "value": "发布音量"
+    },
+    {
+      "name": "item_precalltest",
+      "value": "通话前质量检测"
+    },
+    {
+      "name": "testing",
+      "value": "Testing..."
+    },
+    {
+      "name": "item_mediarecorder",
+      "value": "本地/远端录制"
+    },
+    {
+      "name": "start_recording",
+      "value": "开始录制"
+    },
+    {
+      "name": "stop_recording",
+      "value": "停止录制"
+    },
+    {
+      "name": "confirm",
+      "value": "确定"
     }
   ]
 }
