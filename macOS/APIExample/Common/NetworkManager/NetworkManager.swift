@@ -78,11 +78,11 @@ class NetworkManager {
         }
         DispatchQueue.global().async {
             let downloadTask = session.downloadTask(with: request) { location, response, error in
-                guard let location = location, error == nil else {
+                guard error == nil, let locationPath = location?.path else {
                     failure?(error?.localizedDescription ?? "download fail")
                     return
                 }
-                let locationPath = location.path
+                
                 let fileManager = FileManager.default
                 try? fileManager.moveItem(atPath: locationPath, toPath: documnets)
                 DispatchQueue.main.async {

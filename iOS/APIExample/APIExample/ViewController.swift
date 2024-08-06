@@ -70,7 +70,7 @@ class ViewController: AGViewController {
                      controller: "KtvCopyrightMusic"),
             MenuItem(name: "Third Beautify".localized, storyboard: "ThirdBeautify", controller: ""),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
-            MenuItem(name: "Audio Router(Third Party Player)".localized, storyboard: "AuidoRouterPlayer", controller: ""),
+            MenuItem(name: "Audio Router(Third Party Player)".localized, storyboard: "AudioRouterPlayer", controller: ""),
             MenuItem(name: "Audio Waveform".localized, storyboard: "AudioWaveform", controller: ""),
             MenuItem(name: "Face Capture".localized, storyboard: "FaceCapture", controller: ""),
             MenuItem(name: "Transparent_Render".localized, storyboard: "TransparentRender", controller: "")

@@ -21,10 +21,10 @@ enum ThirdPlayerType: String {
     case origin = "avplayer"
 }
 
-class AuidoRouterPlayerEntry: UIViewController {
+class AudioRouterPlayerEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    let identifier = "AuidoRouterPlayer"
+    let identifier = "AudioRouterPlayer"
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
@@ -127,7 +127,7 @@ class AuidoRouterPlayerEntry: UIViewController {
     }
 }
 
-class AuidoRouterPlayerMain: BaseViewController {
+class AudioRouterPlayerMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var speakerSwitch: UISwitch!
@@ -302,7 +302,7 @@ class AuidoRouterPlayerMain: BaseViewController {
     }
 }
 
-extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
+extension AudioRouterPlayerMain: AVPlayerViewControllerDelegate {
     func playerViewController(_ playerViewController: AVPlayerViewController,
                               willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         // The system pauses when returning from full screen, we need to 'resume' manually.
@@ -313,7 +313,7 @@ extension AuidoRouterPlayerMain: AVPlayerViewControllerDelegate {
 }
 
 /// agora rtc engine delegate events
-extension AuidoRouterPlayerMain: AgoraRtcEngineDelegate {
+extension AudioRouterPlayerMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
