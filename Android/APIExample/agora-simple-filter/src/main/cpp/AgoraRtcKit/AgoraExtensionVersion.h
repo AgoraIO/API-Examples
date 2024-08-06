@@ -58,6 +58,7 @@ class IExtensionProvider;
 class IExtensionProviderV2;
 class IExtensionProviderV3;
 class IAudioFilter;
+class IAudioFilterV2;
 class IExtensionVideoFilter;
 class IScreenCaptureSource;
 
@@ -82,6 +83,13 @@ template <>
 struct ExtensionInterfaceVersion<IAudioFilter> {
   static ExtensionVersion Version() {
     return ExtensionVersion(1, 0, 0);
+  }
+};
+
+template <>
+struct ExtensionInterfaceVersion<IAudioFilterV2> {
+  static ExtensionVersion Version() {
+    return BUMP_MAJOR_VERSION(ExtensionInterfaceVersion<IAudioFilter>::Version());
   }
 };
 

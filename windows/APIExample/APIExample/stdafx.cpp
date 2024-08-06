@@ -115,6 +115,7 @@ wchar_t beautyAudioCtrlPreSet[INFO_LEN] = { 0 };
 wchar_t beautyAudioCtrlParam1[INFO_LEN] = { 0 };
 wchar_t beautyAudioCtrlParam2[INFO_LEN] = { 0 };
 wchar_t beautyAudioCtrlAINSMode[INFO_LEN] = { 0 };
+wchar_t beautyAudioCtrlAITuner[INFO_LEN] = { 0 };
 
 
 //set audio profile
@@ -726,6 +727,7 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param1")));
 	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param2")));
 	_tcscpy_s(beautyAudioCtrlAINSMode, INFO_LEN, Str(_T("BeautyAudio.Ctrl.AINSMode")));
+	_tcscpy_s(beautyAudioCtrlAITuner, INFO_LEN, Str(_T("BeautyAudio.Ctrl.AITuner")));
 	
  
    

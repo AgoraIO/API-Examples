@@ -9,7 +9,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
-#include <api/ahpl_ref.h>
+#include <api/aosl_ref.h>
 
 #ifndef OPTIONAL_OVERRIDE
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
@@ -25,6 +25,65 @@ class IVideoFilter;
 class IVideoEncodedFrameObserver;
 class IMediaPacketReceiver;
 class IVideoSinkBase;
+
+enum StreamLayerIndexInternal {
+   STREAM_LAYER_1 = 1,
+   STREAM_LAYER_2 = 2,
+   STREAM_LAYER_3 = 3,
+   STREAM_LAYER_4 = 4,
+   STREAM_LAYER_5 = 5,
+   STREAM_LAYER_6 = 6,
+   STREAM_LOW = 7,
+   STREAM_LAYER_COUNT_MAX = 8
+  };
+
+struct StreamLayerConfigInternal {
+  VideoDimensions dimensions;
+  int framerate;
+  int bitrate_kbps;
+  bool enable;
+  StreamLayerConfigInternal() : dimensions(0, 0), framerate(0), bitrate_kbps(STANDARD_BITRATE), enable(false) {}
+  StreamLayerConfigInternal(const StreamLayerConfigInternal& other) : dimensions(other.dimensions), framerate(other.framerate), bitrate_kbps(other.bitrate_kbps), enable(other.enable) {}
+  bool operator==(const StreamLayerConfigInternal& rhs) const {
+    return dimensions == rhs.dimensions && bitrate_kbps == rhs.bitrate_kbps && framerate == rhs.framerate && enable == rhs.enable;
+  }
+
+  StreamLayerConfigInternal& operator=(const SimulcastConfig::StreamLayerConfig& slc) {
+    dimensions = slc.dimensions;
+    framerate = slc.framerate;
+    enable = slc.enable;
+    return *this;
+  }
+
+  void reset() {
+    dimensions.width = 0;
+    dimensions.height = 0;
+    framerate = 0;
+    bitrate_kbps = STANDARD_BITRATE;
+    enable = false;
+  }
+};
+
+struct SimulcastConfigInternal {
+   StreamLayerConfigInternal simulcastlayerConfigs[STREAM_LAYER_COUNT_MAX];
+  
+  void reset() {
+    for (int i = STREAM_LAYER_1; i < STREAM_LAYER_COUNT_MAX; i++) {
+      simulcastlayerConfigs[i].reset();
+    }
+  }
+  
+  bool operator==(const SimulcastConfigInternal& rhs) const {
+    for (int i = 0; i < STREAM_LAYER_COUNT_MAX; i++) {
+      if (simulcastlayerConfigs[i] == rhs.simulcastlayerConfigs[i]) {
+        continue;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+};
 
 enum VideoTrackType {
   LOCAL_VIDEO_TRACK,
@@ -56,7 +115,7 @@ class IVideoTrack : public RefCountInterface {
    */
   virtual bool addVideoFilter(
       agora_refptr<IVideoFilter> filter, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_CAPTURER,
-      const char* id = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+      const char* id = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Removes the video filter added by `addVideoFilter` from the video track.
@@ -70,7 +129,7 @@ class IVideoTrack : public RefCountInterface {
    */
   virtual bool removeVideoFilter(
       agora_refptr<IVideoFilter> filter, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_CAPTURER,
-      const char* id = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+      const char* id = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Whether a video filter exists
@@ -95,7 +154,7 @@ class IVideoTrack : public RefCountInterface {
    * - `true`: The video renderer is added successfully.
    * - `false`: The video renderer fails to be added.
    */
-  virtual bool addRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual bool addRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Removes the video renderer added by `addRenderer` from the video track.
    *
@@ -105,7 +164,7 @@ class IVideoTrack : public RefCountInterface {
    * - `true`: The video renderer is removed successfully.
    * - `false`: The video renderer fails to be removed.
    */
-  virtual bool removeRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual bool removeRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Get the track type of the video track
    * @return
@@ -121,7 +180,7 @@ class IVideoTrack : public RefCountInterface {
    * - 0: success
    * - <0: failure
    */
-  virtual int enableVideoFilter(const char* id, bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) { return -1; }
+  virtual int enableVideoFilter(const char* id, bool enable, aosl_ref_t ares = AOSL_REF_INVALID) { return -1; }
 
   /**
    * set the properties of the specified video filter
@@ -132,7 +191,7 @@ class IVideoTrack : public RefCountInterface {
    * - 0: success
    * - <0: failure
    */
-  virtual int setFilterProperty(const char* id, const char* key, const char* json_value, ahpl_ref_t ares = AHPL_REF_INVALID) { return -1; }
+  virtual int setFilterProperty(const char* id, const char* key, const char* json_value, aosl_ref_t ares = AOSL_REF_INVALID) { return -1; }
 
   /**
    * get the properties of the specified video filter
@@ -143,12 +202,18 @@ class IVideoTrack : public RefCountInterface {
    * - 0: success
    * - <0: failure
    */
-  virtual int getFilterProperty(const char* id, const char* key, char* json_value, size_t buf_size, ahpl_ref_t ares = AHPL_REF_INVALID) { return -1; }
+  virtual int getFilterProperty(const char* id, const char* key, char* json_value, size_t buf_size, aosl_ref_t ares = AOSL_REF_INVALID) { return -1; }
 
  protected:
   ~IVideoTrack() {}
 };
 
+struct SimulcastStreamProfile {
+  int width;
+  int height;
+  int framerate;
+  int bitrate;
+};
 /**
  * The statistics of the local video track.
  */
@@ -255,6 +320,8 @@ struct LocalVideoTrackStats {
   /** The brightness level of the video image captured by the local camera. See #CAPTURE_BRIGHTNESS_LEVEL_TYPE.
    */
   CAPTURE_BRIGHTNESS_LEVEL_TYPE capture_brightness_level;
+  
+  SimulcastStreamProfile simulcast_stream_profile[STREAM_LAYER_COUNT_MAX];
 
   LocalVideoTrackStats() : number_of_streams(0),
                            bytes_major_stream(0),
@@ -307,7 +374,7 @@ class ILocalVideoTrack : public IVideoTrack {
    * - `true`: Enable the local video track.
    * - `false`: Disable the local video track.
    */
-  virtual int setEnabled(bool enable, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setEnabled(bool enable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Sets the video encoder configuration.
@@ -325,7 +392,7 @@ class ILocalVideoTrack : public IVideoTrack {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setVideoEncoderConfiguration(const VideoEncoderConfiguration& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setVideoEncoderConfiguration(const VideoEncoderConfiguration& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set simulcast stream mode, enable, disable or auto enable
@@ -336,7 +403,7 @@ class ILocalVideoTrack : public IVideoTrack {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastConfigInternal& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the state of the local video stream.
@@ -388,6 +455,9 @@ struct RemoteVideoTrackStats {
     * The bitrate (Kbps) received in the reported interval.
     */
   int receivedBitrate;
+  /** The decoder input frame rate (fps) of the remote video track.
+   */
+  int decoderInputFrameRate;
   /** The decoder output frame rate (fps) of the remote video track.
    */
   int decoderOutputFrameRate;
@@ -457,13 +527,17 @@ struct RemoteVideoTrackStats {
    decoder vender id, VideoCodecVenderId
   */
   uint32_t decoder_vender_id;
+  /**
+   The decoder codec type of the remote video track
+  */
+  uint32_t decoder_type;
 
   RemoteVideoTrackStats() : uid(0), delay(0), width(0), height(0),
-                            receivedBitrate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
+                            receivedBitrate(0), decoderInputFrameRate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
                             frameLossRate(0), packetLossRate(0), rxStreamType(VIDEO_STREAM_HIGH),
                             totalFrozenTime(0), frozenRate(0), received_bytes(0), totalDecodedFrames(0), avSyncTimeMs(0),
                             downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0),
-                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0) {}
+                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0), decoder_type(0) {}
 };
 
 /**
@@ -504,7 +578,7 @@ class IRemoteVideoTrack : public IVideoTrack {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Releases the \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
    * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
@@ -526,7 +600,7 @@ class IRemoteVideoTrack : public IVideoTrack {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerMediaPacketReceiver(IMediaPacketReceiver* videoReceiver, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerMediaPacketReceiver(IMediaPacketReceiver* videoReceiver, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Releases the \ref agora::rtc::IMediaPacketReceiver "IMediaPacketReceiver" object.
    * @param videoReceiver The pointer to the `IMediaPacketReceiver` object.

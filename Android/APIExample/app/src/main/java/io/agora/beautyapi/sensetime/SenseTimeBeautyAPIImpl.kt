@@ -40,7 +40,6 @@ import io.agora.base.VideoFrame.I420Buffer
 import io.agora.base.VideoFrame.SourceType
 import io.agora.base.VideoFrame.TextureBuffer
 import io.agora.base.internal.video.RendererCommon
-import io.agora.base.internal.video.YuvConverter
 import io.agora.base.internal.video.YuvHelper
 import io.agora.beautyapi.sensetime.utils.LogUtils
 import io.agora.beautyapi.sensetime.utils.StatsHelper
@@ -633,8 +632,6 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
 
     private fun getNV21Buffer(videoFrame: VideoFrame) : ByteArray? {
         val buffer = videoFrame.buffer
-        YuvConverter.setEnablePboOpt(true)
-        YuvConverter.setEnableConvertPerLog(true)
         val i420Buffer = buffer as? I420Buffer ?: buffer.toI420()
         val width = i420Buffer.width
         val height = i420Buffer.height

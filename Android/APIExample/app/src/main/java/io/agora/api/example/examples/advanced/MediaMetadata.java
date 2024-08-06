@@ -41,6 +41,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
+import io.agora.rtc2.video.AgoraMetadata;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -327,13 +328,10 @@ public class MediaMetadata extends BaseFragment implements View.OnClickListener 
             return toBeSend;
         }
 
-        /**Occurs when the local user receives the metadata.
-         * @param buffer The received metadata.
-         * @param uid The ID of the user who sent the metadata.
-         * @param timeStampMs The timestamp (ms) of the received metadata.*/
+        /**Occurs when the local user receives the metadata.*/
         @Override
-        public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs) {
-            String data = new String(buffer, Charset.forName("UTF-8"));
+        public void onMetadataReceived(AgoraMetadata metadata) {
+            String data = new String(metadata.data, Charset.forName("UTF-8"));
             handler.post(new Runnable() {
                 @Override
                 public void run() {
