@@ -18,7 +18,8 @@
     "pages/advance/ChannelEncryption",
     "pages/advance/PlayAudioFiles",
     "pages/advance/PreCallTest",
-    "pages/advance/MediaRecorder"
+    "pages/advance/MediaRecorder",
+    "pages/advance/LocalVideoTranscoding"
 
   ]
 }

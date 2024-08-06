@@ -28,7 +28,9 @@
         "startWindowIcon": "$media:startIcon",
         "startWindowBackground": "$color:start_window_background",
         "launchType": "singleton",
+        "orientation": "auto_rotation",
         "exported": true,
+        "backgroundModes": ["audioRecording"],
         "skills": [
           {
             "entities": [
@@ -94,6 +96,9 @@
           ],
           "when":"inuse"
         }
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING"
       }
     ]
   }
