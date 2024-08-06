@@ -570,7 +570,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             try {
                 drawer.drawYuv(yuvUploader.getYuvTextures(), 0,
                         RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix), lastI420Frame.getRotatedWidth(),
-                        lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight);
+                        lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight, 0);
             } catch (NullPointerException exception) {
                 Log.e(TAG, "skip empty buffer!");
             }

@@ -272,11 +272,14 @@ extension VideoMetadataMain: AgoraMediaMetadataDelegate, AgoraMediaMetadataDataS
         return metadata
     }
     
-    /// Callback when the local user receives the metadata.
-    /// @param data The received metadata.
-    /// @param uid The ID of the user who sends the metadata.
-    /// @param timestamp The timestamp (ms) of the received metadata.
-    func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
+    /** Occurs when the local user receives the metadata.
+     *
+     * @param metadata The received metadata. See \ref AgoraMetadata.
+     */
+    func didMetadataReceived(_ metadata: AgoraMetadata) {
+        let data = metadata.data
+        let uid = metadata.uid
+        let timestamp = metadata.timestamp
         DispatchQueue.main.async {
             LogUtils.log(message: "metadata received", level: .info)
             let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
