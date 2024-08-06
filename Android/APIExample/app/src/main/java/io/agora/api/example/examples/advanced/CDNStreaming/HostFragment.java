@@ -170,7 +170,7 @@ public class HostFragment extends BaseFragment {
 
     private void setupEngineConfig(Context context) {
         // setup local video to render local camera preview
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
@@ -336,7 +336,7 @@ public class HostFragment extends BaseFragment {
                         /*Display remote video stream*/
                         SurfaceView surfaceView = null;
                         // Create render view by RtcEngine
-                        surfaceView = RtcEngine.CreateRendererView(context);
+                        surfaceView = new SurfaceView(context);
                         surfaceView.setZOrderMediaOverlay(true);
                         ViewGroup view = getAvailableView();
                         remoteViews.put(uid, view);

@@ -30,7 +30,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     private init() { }
-    private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
+    private let baseUrl = "https://service.agora.io/toolbox-global/v1/token/generate"
     
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
@@ -78,10 +78,16 @@ class NetworkManager {
         }
         DispatchQueue.global().async {
             let downloadTask = session.downloadTask(with: request) { location, response, error in
-                let locationPath = location!.path
+                guard error == nil, let locationPath = location?.path else {
+                    failure?(error?.localizedDescription ?? "download fail")
+                    return
+                }
+                
                 let fileManager = FileManager.default
                 try? fileManager.moveItem(atPath: locationPath, toPath: documnets)
-                success?(["fileName": fileName, "path": documnets])
+                DispatchQueue.main.async {
+                    success?(["fileName": fileName, "path": documnets])
+                }
             }
             downloadTask.resume()
         }

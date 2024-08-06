@@ -329,6 +329,29 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Voice AI Tuner"
+                    android:textColor="@android:color/black" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/voice_ai_tuner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:entries="@array/voice_ai_tuner"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

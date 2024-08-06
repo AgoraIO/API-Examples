@@ -278,4 +278,18 @@
         <item>AINS_MODE_ULTRALOWLATENCY</item>
     </string-array>
 
+    <string-array name="voice_ai_tuner">
+        <item>OFF</item>
+        <item>VOICE_AI_TUNER_MATURE_MALE</item>
+        <item>VOICE_AI_TUNER_FRESH_MALE</item>
+        <item>VOICE_AI_TUNER_ELEGANT_FEMALE</item>
+        <item>VOICE_AI_TUNER_SWEET_FEMALE</item>
+        <item>VOICE_AI_TUNER_WARM_MALE_SINGING</item>
+        <item>VOICE_AI_TUNER_GENTLE_FEMALE_SINGING</item>
+        <item>VOICE_AI_TUNER_HUSKY_MALE_SINGING</item>
+        <item>VOICE_AI_TUNER_WARM_ELEGANT_FEMALE_SINGING</item>
+        <item>VOICE_AI_TUNER_POWERFUL_MALE_SINGING</item>
+        <item>VOICE_AI_TUNER_DREAMY_FEMALE_SINGING</item>
+    </string-array>
+
 </resources>

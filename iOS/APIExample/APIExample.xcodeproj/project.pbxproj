@@ -134,6 +134,9 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD50252C205BF20050B344 /* TransparentRender.swift */; };
+		DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50272C205CF40050B344 /* TransparentRender.storyboard */; };
+		DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */; };
 		E7163F812964149800EBBD55 /* ARKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7163F7C2964149800EBBD55 /* ARKit.strings */; };
 		E7163F822964149800EBBD55 /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7163F7E2964149800EBBD55 /* ARKit.swift */; };
 		E7163F832964149800EBBD55 /* ARKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7163F7F2964149800EBBD55 /* ARKit.storyboard */; };
@@ -142,9 +145,9 @@
 		E72055EA28F943520030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055E928F943520030E6D1 /* Util.swift */; };
 		E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */; };
 		E721600F28D3314B006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721600E28D3314B006431BD /* AlertManager.swift */; };
-		E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */; };
-		E726BFFB2A949F70006870E2 /* AuidoRouterPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */; };
-		E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */; };
+		E726BFFA2A949F70006870E2 /* AudioRouterPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF52A949F70006870E2 /* AudioRouterPlayer.strings */; };
+		E726BFFB2A949F70006870E2 /* AudioRouterPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726BFF72A949F70006870E2 /* AudioRouterPlayer.swift */; };
+		E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726BFF82A949F70006870E2 /* AudioRouterPlayer.storyboard */; };
 		E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */ = {isa = PBXBuildFile; fileRef = E726BFFE2A96FD3A006870E2 /* AudioWaveform.strings */; };
 		E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */; };
 		E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726C0022A96FD3A006870E2 /* AudioWaveform.swift */; };
@@ -446,6 +449,9 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
+		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
+		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
 		E7163F7D2964149800EBBD55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ARKit.strings"; sourceTree = "<group>"; };
 		E7163F7E2964149800EBBD55 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
 		E7163F802964149800EBBD55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ARKit.storyboard; sourceTree = "<group>"; };
@@ -454,9 +460,9 @@
 		E72055E928F943520030E6D1 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KtvCopyrightMusic.swift; sourceTree = "<group>"; };
 		E721600E28D3314B006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
-		E726BFF62A949F70006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AuidoRouterPlayer.strings"; sourceTree = "<group>"; };
-		E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuidoRouterPlayer.swift; sourceTree = "<group>"; };
-		E726BFF92A949F70006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AuidoRouterPlayer.storyboard; sourceTree = "<group>"; };
+		E726BFF62A949F70006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioRouterPlayer.strings"; sourceTree = "<group>"; };
+		E726BFF72A949F70006870E2 /* AudioRouterPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRouterPlayer.swift; sourceTree = "<group>"; };
+		E726BFF92A949F70006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioRouterPlayer.storyboard; sourceTree = "<group>"; };
 		E726BFFF2A96FD3A006870E2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioWaveform.strings"; sourceTree = "<group>"; };
 		E726C0012A96FD3A006870E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioWaveform.storyboard; sourceTree = "<group>"; };
 		E726C0022A96FD3A006870E2 /* AudioWaveform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveform.swift; sourceTree = "<group>"; };
@@ -840,6 +846,7 @@
 		03BEED09251C4446005E78F4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */,
 				8B349FE22681E2CE007247F2 /* agora-logo.png */,
 				576CA80925A9CC3A0091520B /* output.raw */,
 				E7AD0DE029C85FFB00C9A4B0 /* sample.mov */,
@@ -1102,9 +1109,10 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD50242C205BDF0050B344 /* TransparentRender */,
 				E7883AE32B074746003CCF44 /* FaceCapture */,
 				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
-				E726BFF42A949F70006870E2 /* AuidoRouterPlayer */,
+				E726BFF42A949F70006870E2 /* AudioRouterPlayer */,
 				E7163F7B2964149800EBBD55 /* ARKit */,
 				E7A49CE829029E0000F06DD4 /* ThirdBeautify */,
 				E7A49CB229011E7500F06DD4 /* MutliCamera */,
@@ -1155,6 +1163,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DDFD50242C205BDF0050B344 /* TransparentRender */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD50252C205BF20050B344 /* TransparentRender.swift */,
+				DDFD50272C205CF40050B344 /* TransparentRender.storyboard */,
+			);
+			path = TransparentRender;
+			sourceTree = "<group>";
+		};
 		E7163F7B2964149800EBBD55 /* ARKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -1182,14 +1199,14 @@
 			path = KtvCopyrightMusic;
 			sourceTree = "<group>";
 		};
-		E726BFF42A949F70006870E2 /* AuidoRouterPlayer */ = {
+		E726BFF42A949F70006870E2 /* AudioRouterPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */,
-				E726BFF72A949F70006870E2 /* AuidoRouterPlayer.swift */,
-				E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */,
+				E726BFF52A949F70006870E2 /* AudioRouterPlayer.strings */,
+				E726BFF72A949F70006870E2 /* AudioRouterPlayer.swift */,
+				E726BFF82A949F70006870E2 /* AudioRouterPlayer.storyboard */,
 			);
-			path = AuidoRouterPlayer;
+			path = AudioRouterPlayer;
 			sourceTree = "<group>";
 		};
 		E726BFFD2A96FD3A006870E2 /* AudioWaveform */ = {
@@ -1622,7 +1639,7 @@
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
 				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
-				E726BFFC2A949F70006870E2 /* AuidoRouterPlayer.storyboard in Resources */,
+				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
@@ -1676,9 +1693,11 @@
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
+				DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
-				E726BFFA2A949F70006870E2 /* AuidoRouterPlayer.strings in Resources */,
+				DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */,
+				E726BFFA2A949F70006870E2 /* AudioRouterPlayer.strings in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
@@ -1817,7 +1836,7 @@
 			files = (
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
-				E726BFFB2A949F70006870E2 /* AuidoRouterPlayer.swift in Sources */,
+				E726BFFB2A949F70006870E2 /* AudioRouterPlayer.swift in Sources */,
 				E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */,
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
 				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
@@ -1871,6 +1890,7 @@
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
 				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
 				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
+				DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */,
 				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
 				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
@@ -2282,20 +2302,20 @@
 			name = ARKit.storyboard;
 			sourceTree = "<group>";
 		};
-		E726BFF52A949F70006870E2 /* AuidoRouterPlayer.strings */ = {
+		E726BFF52A949F70006870E2 /* AudioRouterPlayer.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E726BFF62A949F70006870E2 /* zh-Hans */,
 			);
-			name = AuidoRouterPlayer.strings;
+			name = AudioRouterPlayer.strings;
 			sourceTree = "<group>";
 		};
-		E726BFF82A949F70006870E2 /* AuidoRouterPlayer.storyboard */ = {
+		E726BFF82A949F70006870E2 /* AudioRouterPlayer.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E726BFF92A949F70006870E2 /* Base */,
 			);
-			name = AuidoRouterPlayer.storyboard;
+			name = AudioRouterPlayer.storyboard;
 			sourceTree = "<group>";
 		};
 		E726BFFE2A96FD3A006870E2 /* AudioWaveform.strings */ = {
@@ -2497,10 +2517,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APIExample",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2534,10 +2551,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APIExample",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2693,10 +2707,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APIExample",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2767,10 +2778,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APIExample",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
