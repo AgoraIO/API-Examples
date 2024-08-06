@@ -74,6 +74,9 @@ export const ADVANCE_ITEMS: ExampleItem[] =
     {
       title: $r('app.string.item_mediarecorder'),
       url: 'pages/advance/MediaRecorder'
+    },{
+      title: $r('app.string.item_localvideotranscoding'),
+      url: 'pages/advance/LocalVideoTranscoding'
     },
   ]
 
