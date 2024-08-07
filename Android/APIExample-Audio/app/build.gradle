@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
-def agoraSdkVersion = '4.4.0'
+def agoraSdkVersion = '4.4.1'
 
 android {
     compileSdkVersion 32
