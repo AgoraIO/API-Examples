@@ -275,6 +275,22 @@
     {
       "name": "item_localvideotranscoding",
       "value": "本地合图"
+    },
+    {
+      "name": "Background_reason",
+      "value": "Access background"
+    },
+    {
+      "name": "text_input_target_channel_name",
+      "value": "目标频道"
+    },
+    {
+      "name": "item_hostcrosschannel",
+      "value": "跨频道连麦"
+    },
+    {
+      "name": "switch_camera",
+      "value": "切换摄像头"
     }
   ]
 }

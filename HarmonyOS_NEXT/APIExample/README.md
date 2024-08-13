@@ -32,7 +32,9 @@ To build and run the sample application, get an App Id:
     export const AppCertificate: String = YOUR APP CERTIFICATE
     ```
 
-You are all set. Now connect your Android device and run the project.
+6. Download the har package from the [official website](https://doc.shengwang.cn/doc/rtc/harmonyos/resources#%E4%B8%8B%E8%BD%BD-sdk) and copy it to `HarmonyOS_NEXT/APIExample/entry/libs/AgoraRtcSdk.har`
+
+You are all set. Now connect your HarmonyOS NEXT device and run the project.
 
 ## Contact Us
 

@@ -275,6 +275,22 @@
     {
       "name": "item_localvideotranscoding",
       "value": "LocalVideoTranscoding"
+    },
+    {
+      "name": "Background_reason",
+      "value": "Access background"
+    },
+    {
+      "name": "text_input_target_channel_name",
+      "value": "Target Channel Name"
+    },
+    {
+      "name": "item_hostcrosschannel",
+      "value": "HostCrossChannel"
+    },
+    {
+      "name": "switch_camera",
+      "value": "SwitchCamera"
     }
   ]
 }
