@@ -20,15 +20,5 @@ end
 target 'Agora-ScreenShare-Extension' do
   use_frameworks!
 #  pod 'sdk', :path => 'sdk.podspec'
-  pod 'AgoraRtcEngine_iOS', '4.3.1'
-end
-
-target 'SimpleFilter' do
-  use_frameworks!
-#  pod 'sdk', :path => 'sdk.podspec'
-  pod 'AgoraRtcEngine_iOS', '4.3.1'
-end
-
-pre_install do |installer|
-#  system("sh .download_script.sh 4.3.1 true")
-end
+  pod 'AgoraRtcEngine_iOS', '4.3.1'
+

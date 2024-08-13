@@ -22,6 +22,7 @@
 "Custom Video Source(Push)" = "视频自采集(Push)";
 "Custom Video Source(Multi)" = "多路视频自采集";
 "Custom Video Render" = "视频自渲染(Metal)";
+"Picture In Picture" = "画中画（iOS 15支持）";
 "Quick Switch Channel" = "快速切换频道";
 "Join Multiple Channels" = "加入多频道";
 "Stream Encryption" = "音视频流加密";
@@ -243,3 +244,7 @@
 "Create Video Track(Encode)" = "创建采集Track(编码)";
 "Create VideoTrack" = "创建采集Track";
 "Push PCM" = "播放PCM";
+"PIP SDK Render" = "画中画SDK 渲染";
+"PIP Custom Render" = "画中画自渲染";
+"PIP Button Title" = "画中画";
+"PIP Size Button Title" = "修改尺寸";

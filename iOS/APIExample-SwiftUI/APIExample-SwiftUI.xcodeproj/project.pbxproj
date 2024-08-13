@@ -100,6 +100,18 @@
 		E73F251B2BB6B22B0000B523 /* ScreenShareRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F25192BB6B22B0000B523 /* ScreenShareRTC.swift */; };
 		E73F251C2BB6B22B0000B523 /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F251A2BB6B22B0000B523 /* ScreenShare.swift */; };
 		E79DFB622BBA545300904B08 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DFB612BBA545300904B08 /* PickerView.swift */; };
+		F70DE4EA2C69A89900FFC922 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70DE4E92C69A89900FFC922 /* Accelerate.framework */; };
+		F70DE4EB2C69A8A700FFC922 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F24162BA83D710000B523 /* GlobalSettings.swift */; };
+		F70DE4EC2C69A8B000FFC922 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F241F2BA83D710000B523 /* KeyCenter.swift */; };
+		F70DE4ED2C69A8BE00FFC922 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73F24692BA851870000B523 /* JSONObject.swift */; };
+		F70DE4F22C69DEBA00FFC922 /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE4F12C69DEBA00FFC922 /* PictureInPicture.swift */; };
+		F70DE4F42C69EB7D00FFC922 /* CustomRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE4F32C69EB7D00FFC922 /* CustomRenderExample.swift */; };
+		F70DE4F72C69EBB800FFC922 /* CustomRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE4F62C69EBB800FFC922 /* CustomRenderRTC.swift */; };
+		F70DE4F92C6A3FB600FFC922 /* PIPDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE4F82C6A3FB600FFC922 /* PIPDisplayView.swift */; };
+		F70DE5372C6B6DC900FFC922 /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE5362C6B6DC900FFC922 /* PixelBufferRenderView.swift */; };
+		F70DE53A2C6B885D00FFC922 /* SDKRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */; };
+		F70DE53C2C6B88C100FFC922 /* SDKRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */; };
+		F70DE53E2C6B926000FFC922 /* CustomRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +269,15 @@
 		E79DFB632BBA66F300904B08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		EBC8877FFEE7ACACB6F106A1 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		F61D2B6D1FFBA82BA5DEB050 /* Pods_APIExample_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F70DE4E92C69A89900FFC922 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		F70DE4F12C69DEBA00FFC922 /* PictureInPicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
+		F70DE4F32C69EB7D00FFC922 /* CustomRenderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRenderExample.swift; sourceTree = "<group>"; };
+		F70DE4F62C69EBB800FFC922 /* CustomRenderRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRenderRTC.swift; sourceTree = "<group>"; };
+		F70DE4F82C6A3FB600FFC922 /* PIPDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIPDisplayView.swift; sourceTree = "<group>"; };
+		F70DE5362C6B6DC900FFC922 /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
+		F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderExample.swift; sourceTree = "<group>"; };
+		F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderRTC.swift; sourceTree = "<group>"; };
+		F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRenderViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +293,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70DE4EA2C69A89900FFC922 /* Accelerate.framework in Frameworks */,
 				E73F250B2BB6AE380000B523 /* ReplayKit.framework in Frameworks */,
 				5A11DE6F153605EB11D454ED /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */,
 			);
@@ -283,6 +305,7 @@
 		4448089DF7A4E80BE341494B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F70DE4E92C69A89900FFC922 /* Accelerate.framework */,
 				F61D2B6D1FFBA82BA5DEB050 /* Pods_APIExample_SwiftUI.framework */,
 				E73F250A2BB6AE380000B523 /* ReplayKit.framework */,
 				572570FC536B263012B36507 /* Pods_Agora_ScreenShare_Extension.framework */,
@@ -414,6 +437,7 @@
 		E73F240E2BA82D4B0000B523 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F70DE4EE2C69ACD900FFC922 /* PictureInPicture */,
 				E71D54792BCE1EB900656537 /* QuickSwitchChannel */,
 				E71D54742BCD337A00656537 /* JoinMultiChannel */,
 				E71D546F2BCD270800656537 /* StreamEncryption */,
@@ -726,6 +750,37 @@
 			path = ScreenShare;
 			sourceTree = "<group>";
 		};
+		F70DE4EE2C69ACD900FFC922 /* PictureInPicture */ = {
+			isa = PBXGroup;
+			children = (
+				F70DE5382C6B877100FFC922 /* SDKRender */,
+				F70DE4F52C69EB9B00FFC922 /* CustomRender */,
+				F70DE4F12C69DEBA00FFC922 /* PictureInPicture.swift */,
+				F70DE4F82C6A3FB600FFC922 /* PIPDisplayView.swift */,
+				F70DE5362C6B6DC900FFC922 /* PixelBufferRenderView.swift */,
+			);
+			path = PictureInPicture;
+			sourceTree = "<group>";
+		};
+		F70DE4F52C69EB9B00FFC922 /* CustomRender */ = {
+			isa = PBXGroup;
+			children = (
+				F70DE4F32C69EB7D00FFC922 /* CustomRenderExample.swift */,
+				F70DE4F62C69EBB800FFC922 /* CustomRenderRTC.swift */,
+				F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */,
+			);
+			path = CustomRender;
+			sourceTree = "<group>";
+		};
+		F70DE5382C6B877100FFC922 /* SDKRender */ = {
+			isa = PBXGroup;
+			children = (
+				F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */,
+				F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */,
+			);
+			path = SDKRender;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -737,9 +792,9 @@
 				E73F23F82BA82C440000B523 /* Sources */,
 				E73F23F92BA82C440000B523 /* Frameworks */,
 				E73F23FA2BA82C440000B523 /* Resources */,
-				5523247B1D8DD4721DEA05B7 /* [CP] Embed Pods Frameworks */,
 				E73F25162BB6AE380000B523 /* Embed Foundation Extensions */,
 				E76515642BCFA6B4004E3821 /* Embed Frameworks */,
+				DCBCA8263F819E9E0D3BFFB6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -858,23 +913,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5523247B1D8DD4721DEA05B7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A1668C8A394A5C56301A3B07 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -897,6 +935,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DCBCA8263F819E9E0D3BFFB6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -905,6 +960,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E73F24832BA851870000B523 /* AgoraMetalShader.metal in Sources */,
+				F70DE5372C6B6DC900FFC922 /* PixelBufferRenderView.swift in Sources */,
 				E73F247B2BA851870000B523 /* UIView+CSshortFrame.m in Sources */,
 				E73F24022BA82C440000B523 /* ContentView.swift in Sources */,
 				E73F24852BA851870000B523 /* AgoraYUVImageSourcePush.m in Sources */,
@@ -914,15 +970,19 @@
 				E73F24782BA851870000B523 /* AudioWriteToFile.m in Sources */,
 				E73F24A82BAAB69C0000B523 /* JoinChannelVideoToken.swift in Sources */,
 				E73F24792BA851870000B523 /* AgoraPcmSourcePush.swift in Sources */,
+				F70DE4F22C69DEBA00FFC922 /* PictureInPicture.swift in Sources */,
+				F70DE4F92C6A3FB600FFC922 /* PIPDisplayView.swift in Sources */,
 				E73F24A92BAAB69C0000B523 /* JoinChannelVideoTokenRTC.swift in Sources */,
 				E71D54772BCD337A00656537 /* JoinMultiChannel.swift in Sources */,
 				E73F247A2BA851870000B523 /* UIColor+CSRGB.m in Sources */,
+				F70DE53E2C6B926000FFC922 /* CustomRenderViewModel.swift in Sources */,
 				E73F251B2BB6B22B0000B523 /* ScreenShareRTC.swift in Sources */,
 				E73F24772BA851870000B523 /* ZSNBoxingView.m in Sources */,
 				E73F24B32BAD63A90000B523 /* LogUtil.swift in Sources */,
 				E71D54682BCD075700656537 /* PrecallTestRTC.swift in Sources */,
 				E73F24862BA851870000B523 /* AgoraCustomEncryption.mm in Sources */,
 				E71D547D2BCE1EB900656537 /* QuickSwitchChannel.swift in Sources */,
+				F70DE4F72C69EBB800FFC922 /* CustomRenderRTC.swift in Sources */,
 				E73F249E2BA9888D0000B523 /* JoinChannelAudio.swift in Sources */,
 				E73F24252BA83D710000B523 /* GlobalSettings.swift in Sources */,
 				E73F24B82BAD85710000B523 /* FaceCapture.swift in Sources */,
@@ -931,6 +991,7 @@
 				E73F24F02BB6645C0000B523 /* RhythmPlayer.swift in Sources */,
 				E73F24882BA851870000B523 /* NetworkManager.swift in Sources */,
 				E73F24AD2BAAC6E70000B523 /* JoinChannelVideoRecorder.swift in Sources */,
+				F70DE53A2C6B885D00FFC922 /* SDKRenderExample.swift in Sources */,
 				E73F24DA2BB2783C0000B523 /* SpatialAudio.swift in Sources */,
 				E73F24DB2BB2783C0000B523 /* SpatialAudioRTC.swift in Sources */,
 				E73F24E62BB519600000B523 /* CreateDataStream.swift in Sources */,
@@ -966,6 +1027,8 @@
 				E71D54782BCD337A00656537 /* JoinMultiChannelRTC.swift in Sources */,
 				E73F24B12BAAD65A0000B523 /* SettingsView.swift in Sources */,
 				E73F24D52BB26F4C0000B523 /* ContentInspectRTC.swift in Sources */,
+				F70DE4F42C69EB7D00FFC922 /* CustomRenderExample.swift in Sources */,
+				F70DE53C2C6B88C100FFC922 /* SDKRenderRTC.swift in Sources */,
 				E73F24A22BA9A27B0000B523 /* JoinChannelVideoRTC.swift in Sources */,
 				E73F24342BA83DD60000B523 /* VideoView.swift in Sources */,
 				E73F24922BA938320000B523 /* VideoUIView.swift in Sources */,
@@ -988,6 +1051,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70DE4ED2C69A8BE00FFC922 /* JSONObject.swift in Sources */,
+				F70DE4EC2C69A8B000FFC922 /* KeyCenter.swift in Sources */,
+				F70DE4EB2C69A8A700FFC922 /* GlobalSettings.swift in Sources */,
 				E73F250E2BB6AE380000B523 /* SampleHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1132,7 +1198,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1169,7 +1235,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1202,7 +1268,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
@@ -1230,7 +1296,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
