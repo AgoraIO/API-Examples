@@ -1,4 +1,4 @@
-import { Constants, OrientationMode, RtcEngine, VideoDimensions, VideoEncoderConfiguration } from 'AgoraRtcSdk'
+import { OrientationMode, RtcEngine, VideoDimensions } from 'AgoraRtcSdk'
 import { TitleBar } from '../common/TitleBar'
 import { CommonItemSelect } from '../common/Widgets'
 import { GlobalInfo } from './Data'
@@ -17,7 +17,7 @@ struct Settings {
   private dimensionStrList: ResourceStr[] = []
   private dimensionSelectedIndex = 0
   private frameRateList: number[] = [
-    15, 24, 30
+    15, 24, 30, 60
   ]
   private frameRateStrList: ResourceStr[] = []
   private frameRateSelectedIndex = 0
@@ -94,7 +94,10 @@ struct Settings {
 
         Divider().margin({ left: 20, right: 20 })
 
-        // Text("SDK Version:" + RtcEngine.getSdkVersion())
+        Text("SDK Version:" + RtcEngine.getSdkVersion())
+          .width('100%')
+          .textAlign(TextAlign.End)
+          .padding({top: 12, right: 26})
       }
     }
     .backgroundColor($r('app.color.background_shallow_grey'))

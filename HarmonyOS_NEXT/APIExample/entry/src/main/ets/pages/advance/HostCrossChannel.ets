@@ -1,10 +1,9 @@
 import {
   ChannelMediaOptions,
+  ChannelMediaRelayConfiguration,
   Constants,
-  LocalVideoStats,
   RtcEngine,
   RtcEngineConfig,
-  ScreenCaptureParameters,
   VideoCanvas,
   VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
@@ -12,23 +11,24 @@ import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
+import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
 import { TokenUtils } from '../../util/TokenUtils';
 
-const TAG: string = 'ScreenSharing'
+const TAG: string = 'JoinVideoChannel'
 
 @Entry
 @Component
-struct ScreenSharing {
+struct HostCrossChannel {
   private rtcEngine: RtcEngine | undefined = undefined;
-  private captureConfig: ScreenCaptureParameters = new ScreenCaptureParameters();
   @State channelName: string = ''
   @State isJoin: boolean = false
-  @State localUid: number = -1
-  @State remoteUid: number = -1
-  @State pushingScreenAudio: boolean = true
-  @State pushingScreenAudioVolume: number = 100
+  @State localUid: number = 0
+  @State remoteUid: number = 0
+  @State relayChannelName: string = ''
+  @State isRelayStart: boolean = false
+  @State isRelayPause: boolean = false
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -38,14 +38,14 @@ struct ScreenSharing {
     config.mEventHandler = {};
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
-      if (this.remoteUid == -1) {
+      if (this.remoteUid == 0) {
         this.remoteUid = uid
       }
     };
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
       Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason)
       if (this.remoteUid == uid) {
-        this.remoteUid = -1
+        this.remoteUid = 0
       }
     };
     config.mEventHandler.onJoinChannelSuccess = (cid: string, uid: number, elapsed: number) => {
@@ -56,27 +56,25 @@ struct ScreenSharing {
     config.mEventHandler.onLeaveChannel = () => {
       Logger.info(TAG, "mEventHandler.onLeaveChannel");
       this.isJoin = false
-      this.localUid = -1
-      this.remoteUid = -1
-    }
-    config.mEventHandler.onLocalVideoStats = (source: Constants.VideoSourceType, stats: LocalVideoStats) => {
-      Logger.info(TAG, "mEventHandler.onLocalVideoStats: source=" + source
-        + " stats.captureFrameRate=" + stats.captureFrameRate
-        + ", stats.encoderOutputFrameRate=" + stats.encoderOutputFrameRate
-        + ", stats.rendererOutputFrameRate=" + stats.rendererOutputFrameRate);
+      this.localUid = 0
+      this.remoteUid = 0
     }
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
       ShowToast.longToast("onError " + err + " : " + message)
     }
-    config.mEventHandler.onLocalVideoStateChanged =
-      (source: Constants.VideoSourceType, state: Constants.LocalVideoStreamState,
-        error: Constants.LocalVideoStreamReason) => {
-        Logger.info(TAG,
-          "mEventHandler.onLocalVideoStateChanged: source=" + source + ", state " + state + ", error=" + error);
+    config.mEventHandler.onChannelMediaRelayStateChanged = (state: number, code: number) => {
+      Logger.info(TAG, "mEventHandler.onChannelMediaRelayStateChanged: state=" + state + " code=" + code);
+      if (code == 0) {
+        if (state == 2) {
+          // RELAY_STATE_RUNNING
+          this.isRelayStart = true
+        } else {
+          this.isRelayStart = false
+        }
+      } else {
+        ShowToast.longToast("onChannelMediaRelayStateChanged error >> " + code + " : " + code)
       }
-    config.mEventHandler.onPermissionError = (permission: Constants.PermissionType) => {
-      Logger.info(TAG, "mEventHandler.onPermissionError: permission=" + permission);
     }
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
@@ -93,7 +91,6 @@ struct ScreenSharing {
   aboutToDisappear(): void {
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
-        this.rtcEngine?.stopScreenCapture()
         this.rtcEngine.stopPreview();
         this.rtcEngine.leaveChannel();
       }
@@ -107,15 +104,15 @@ struct ScreenSharing {
   }
 
   build() {
-    Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
+    Column() {
       TitleBar({
-        title: $r('app.string.item_screensharing'),
+        title: $r('app.string.item_hostcrosschannel'),
         showBack: true
-      }).flexGrow(0)
+      })
 
       Column() {
         Row() {
-          if (this.localUid != -1) {
+          if (this.localUid != 0) {
             XComponent({
               id: 'preview_local',
               type: 'surface',
@@ -125,12 +122,11 @@ struct ScreenSharing {
               localCanvas.uid = this.localUid;
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
               localCanvas.mirrorMode = 0;
-              localCanvas.sourceType = Constants.VideoSourceType.SCREEN_PRIMARY
               this.rtcEngine?.setupLocalVideo(localCanvas);
             }).width('50%')
           }
 
-          if (this.remoteUid != -1) {
+          if (this.remoteUid != 0) {
             XComponent({
               id: 'preview_remote',
               type: 'surface',
@@ -149,57 +145,65 @@ struct ScreenSharing {
         .width('100%')
       }
       .align(Alignment.TopStart)
-      .flexGrow(1)
+      .layoutWeight(1.0)
 
-      Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Start, justifyContent: FlexAlign.Start }) {
-        Text($r('app.string.publish_screen_audio'))
-          .flexGrow(1)
-
-        Toggle({ type: ToggleType.Switch, isOn: this.pushingScreenAudio })
-          .onChange((isOn) => {
-            this.pushingScreenAudio = isOn
-
-            let option = this.captureConfig
-            option.captureAudio = isOn
-            option.audioParams.sampleRate = 16000;
-            option.audioParams.channels = 2;
-            this.rtcEngine?.updateScreenCaptureParameters(option)
-          })
-          .flexGrow(0)
-      }
-      .padding({
-        left: 12,
-        right: 12,
-        top: 6,
-        bottom: 6
-      })
-      .flexGrow(0)
 
       Row() {
-        Text($r('app.string.publish_audio_volume'))
-        Slider({
-          value: this.pushingScreenAudioVolume,
-          min: 0,
-          max: 100,
-          style: SliderStyle.OutSet
-        }).enabled(this.pushingScreenAudio)
-          .onChange((value: number) => {
-            this.pushingScreenAudioVolume = value
-            let option = this.captureConfig
-            option.audioParams.captureSignalVolume = value
-            this.rtcEngine?.updateScreenCaptureParameters(option)
-          }).layoutWeight(1)
+        TextInput({ placeholder: $r('app.string.text_input_target_channel_name') })
+          .id("input_target_channel_name")
+          .enabled(!this.isRelayStart)
+          .enableKeyboardOnFocus(false)
+          .onChange((value: string) => {
+            this.relayChannelName = value
+          })
+          .layoutWeight(1.0)
+          .margin({ right: 6 })
+
+        // Button(this.isRelayPause ? $r('app.string.resume') : $r('app.string.pause'))
+        //   .id('button_to_pause_relay')
+        //   .enabled(this.isRelayJoin)
+        //   .onClick(async () => {
+        //     focusControl.requestFocus("button_to_pause_relay")
+        //     if (this.isRelayPause) {
+        //       this.rtcEngine?.resumeAllChannelMediaRelay()
+        //     } else {
+        //       this.rtcEngine?.pauseAllChannelMediaRelay()
+        //     }
+        //   })
+
+        Button(this.isRelayStart ? $r('app.string.stop') : $r('app.string.start'))
+          .id('button_to_join_relay')
+          .enabled(this.isJoin)
+          .onClick(async () => {
+            focusControl.requestFocus("button_to_join_relay")
+            if (this.isRelayStart) {
+              this.rtcEngine?.stopChannelMediaRelay()
+            } else {
+              if (this.relayChannelName == "") {
+                ShowToast.shortToast("The target channel name is empty!")
+                return
+              }
+              let config = new ChannelMediaRelayConfiguration()
+              config.srcInfo.channelName = this.channelName
+              config.srcInfo.uid = this.localUid
+              config.srcInfo.token = await TokenUtils.genRtcToken(this.channelName, '')
+              config.destInfos[this.relayChannelName] = {
+                channelName: this.relayChannelName,
+                uid: 999,
+                token: await TokenUtils.genRtcToken(this.relayChannelName, '999')
+              }
+              this.rtcEngine?.startOrUpdateChannelMediaRelay(config)
+            }
+          })
       }
-      .alignItems(VerticalAlign.Center)
       .padding({
         left: 12,
         right: 12,
         top: 6,
         bottom: 6
       })
-      .flexGrow(0)
 
-      Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
+      Row() {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
           .id("input_channel_name")
           .enabled(!this.isJoin)
@@ -207,15 +211,16 @@ struct ScreenSharing {
           .onChange((value: string) => {
             this.channelName = value
           })
-          .flexGrow(1)
+          .layoutWeight(1.0)
           .margin({ right: 6 })
 
         Button(this.isJoin ? $r('app.string.leave') : $r('app.string.join'))
           .id('button_to_join')
           .onClick(async () => {
+
             focusControl.requestFocus("button_to_join")
+
             if (this.isJoin) {
-              this.rtcEngine?.stopScreenCapture()
               this.rtcEngine?.stopPreview()
               this.rtcEngine?.leaveChannel()
             } else {
@@ -223,24 +228,18 @@ struct ScreenSharing {
                 ShowToast.shortToast("The channel name is empty!")
                 return
               }
+              if (!(await PermissionHelper.checkPermissions(
+                getContext(this) as common.UIAbilityContext,
+                ['ohos.permission.MICROPHONE', 'ohos.permission.CAMERA']
+              ))) {
+                ShowToast.shortToast("Permission leak!")
+                return
+              }
 
-              let captureConfig: ScreenCaptureParameters = this.captureConfig;
-              captureConfig.videoParams.dimensions.width = GlobalInfo.settings.dimensions.width
-              captureConfig.videoParams.dimensions.height = GlobalInfo.settings.dimensions.height
-              captureConfig.videoParams.frameRate = GlobalInfo.settings.frameRate
-              captureConfig.captureAudio = this.pushingScreenAudio
-              captureConfig.audioParams.sampleRate = 44100
-              captureConfig.audioParams.channels = 2
-              captureConfig.audioParams.captureSignalVolume = this.pushingScreenAudioVolume
-              this.rtcEngine?.startScreenCapture(captureConfig)
-              this.rtcEngine?.startPreview(Constants.VideoSourceType.SCREEN_PRIMARY)
-              this.localUid = 0
 
               let mediaOption: ChannelMediaOptions = new ChannelMediaOptions();
-              mediaOption.publishCameraTrack = false;
-              mediaOption.publishScreenCaptureVideo = true;
-              mediaOption.publishScreenCaptureAudio = true;
-              mediaOption.publishMicrophoneTrack = false;
+              mediaOption.publishCameraTrack = true;
+              mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
@@ -249,12 +248,14 @@ struct ScreenSharing {
               let token = await TokenUtils.genRtcToken(this.channelName, "")
               let ret = this.rtcEngine?.joinChannelWithOptions(token, this.channelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
-                ShowToast.longToast("joinChannelWithOptions error " + ret)
+                ShowToast.longToast("joinChannelWithOptions error " + ret + " : " +
+                RtcEngine.getErrorDescription(ret))
                 return
               }
+
+              this.rtcEngine?.startPreview()
             }
           })
-          .flexGrow(0)
       }
       .padding({
         left: 12,

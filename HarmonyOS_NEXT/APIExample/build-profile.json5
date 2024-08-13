@@ -1,19 +1,6 @@
 {
   "app": {
     "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "storePassword": "0000001AFF29DB3BEECB8DFBCB654F4C6508B4014EF1F24FF2EC288A518577ECF1AB218F7E3E2C89130B",
-          "certpath": "/Users/xcz/Workspaces/DevEcoStudioProjects/apiexample.cer",
-          "keyAlias": "apiexample",
-          "keyPassword": "0000001A8B816C41577C05ECEC8B7FF34ECB08629228D14936A048DA498A2225ED4BD6385F64C79D2F69",
-          "profile": "/Users/xcz/Workspaces/DevEcoStudioProjects/apiexampleDebug.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/xcz/Workspaces/DevEcoStudioProjects/apiexample.p12"
-        }
-      }
     ],
     "products": [
       {

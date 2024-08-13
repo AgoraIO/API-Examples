@@ -19,7 +19,8 @@
     "pages/advance/PlayAudioFiles",
     "pages/advance/PreCallTest",
     "pages/advance/MediaRecorder",
-    "pages/advance/LocalVideoTranscoding"
+    "pages/advance/LocalVideoTranscoding",
+    "pages/advance/HostCrossChannel"
 
   ]
 }

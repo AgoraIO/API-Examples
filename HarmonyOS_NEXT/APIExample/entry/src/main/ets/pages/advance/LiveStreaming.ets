@@ -205,6 +205,14 @@ struct LiveStreaming {
               focusControl.requestFocus("button_to_linking")
             })
             .flexGrow(0)
+
+          Button($r('app.string.switch_camera'))
+            .id('button_to_switch_camera')
+            .enabled(this.isJoin)
+            .onClick(() => {
+              this.rtcEngine?.switchCamera()
+            })
+            .margin({ left: 12 })
         }
         .width('100%')
         .height('100%')
