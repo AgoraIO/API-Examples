@@ -112,6 +112,7 @@
 		F70DE53A2C6B885D00FFC922 /* SDKRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */; };
 		F70DE53C2C6B88C100FFC922 /* SDKRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */; };
 		F70DE53E2C6B926000FFC922 /* CustomRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */; };
+		F70DE5402C6C57AA00FFC922 /* SDKRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53F2C6C57AA00FFC922 /* SDKRenderViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -278,6 +279,7 @@
 		F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderExample.swift; sourceTree = "<group>"; };
 		F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderRTC.swift; sourceTree = "<group>"; };
 		F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRenderViewModel.swift; sourceTree = "<group>"; };
+		F70DE53F2C6C57AA00FFC922 /* SDKRenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -753,11 +755,10 @@
 		F70DE4EE2C69ACD900FFC922 /* PictureInPicture */ = {
 			isa = PBXGroup;
 			children = (
+				F70DE5412C6CAA6800FFC922 /* PIPCommon */,
 				F70DE5382C6B877100FFC922 /* SDKRender */,
 				F70DE4F52C69EB9B00FFC922 /* CustomRender */,
 				F70DE4F12C69DEBA00FFC922 /* PictureInPicture.swift */,
-				F70DE4F82C6A3FB600FFC922 /* PIPDisplayView.swift */,
-				F70DE5362C6B6DC900FFC922 /* PixelBufferRenderView.swift */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
@@ -777,8 +778,18 @@
 			children = (
 				F70DE5392C6B885D00FFC922 /* SDKRenderExample.swift */,
 				F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */,
+				F70DE53F2C6C57AA00FFC922 /* SDKRenderViewModel.swift */,
 			);
 			path = SDKRender;
+			sourceTree = "<group>";
+		};
+		F70DE5412C6CAA6800FFC922 /* PIPCommon */ = {
+			isa = PBXGroup;
+			children = (
+				F70DE5362C6B6DC900FFC922 /* PixelBufferRenderView.swift */,
+				F70DE4F82C6A3FB600FFC922 /* PIPDisplayView.swift */,
+			);
+			path = PIPCommon;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -970,6 +981,7 @@
 				E73F24782BA851870000B523 /* AudioWriteToFile.m in Sources */,
 				E73F24A82BAAB69C0000B523 /* JoinChannelVideoToken.swift in Sources */,
 				E73F24792BA851870000B523 /* AgoraPcmSourcePush.swift in Sources */,
+				F70DE5402C6C57AA00FFC922 /* SDKRenderViewModel.swift in Sources */,
 				F70DE4F22C69DEBA00FFC922 /* PictureInPicture.swift in Sources */,
 				F70DE4F92C6A3FB600FFC922 /* PIPDisplayView.swift in Sources */,
 				E73F24A92BAAB69C0000B523 /* JoinChannelVideoTokenRTC.swift in Sources */,

@@ -8,78 +8,66 @@
 import Foundation
 import AgoraRtcKit
 
-class CustomRenderRTC: NSObject, ObservableObject {
-    private var uid: UInt = 0
+protocol CustomRenderRTCProtocol {
+    /**
+        @param   rtcEngine
+                     rtcrtcEngine
+        @abstract    Set the self-rendering rtc manager Settings
+     */
+    func setupRtcEngine(rtcEngine: AgoraRtcEngineKit)
     
+    /**
+        @param   localView
+                    local render view
+        @abstract   set local render view
+     */
+    func setLocalView(localView: PixelBufferRenderView)
+    
+    /**
+        @param  renderView
+                     renderView
+        @abstract    This method is used to add video views. Internally, the view is wrapped as a Canvas, and the uid is bound and thrown to the RTC SDK for rendering
+     */
+    func addRemoteRenderView(renderView: PixelBufferRenderView)
+    
+    /**
+        @param  renderView
+                     renderView
+        @abstract    delete a remote video stream view
+     */
+    func removeRemoteRenderView(renderView: PixelBufferRenderView)
+}
+
+/**
+    @class      SDKRenderRTC
+    @abstract   RTC management class, handle RTC connection, video view data management (view based on PixelBufferRenderView self-rendering), channel management
+ */
+class CustomRenderRTC: NSObject, ObservableObject , CustomRenderRTCProtocol{
     var videoFrameDelegte: AgoraVideoFrameDelegate?
     
-    var rtcEngineDelegate: AgoraRtcEngineDelegate? {
-        didSet {
-            if let delegte = rtcEngineDelegate {
-                self.rtcEngine.delegate = delegte
-            }
-        }
-    }
-
+    private var uid: UInt = 0
     private weak var localView: PixelBufferRenderView?
-    
     private lazy var remoteRenderViews: NSHashTable = {
         let table = NSHashTable<PixelBufferRenderView>(options: .weakMemory)
         return table
     }()
-    
-    private lazy var rtcConfig: AgoraRtcEngineConfig = {
-       let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
-        config.areaCode = .global
-        config.channelProfile = .liveBroadcasting
-        return config
-    }()
 
-    private lazy var rtcEngine: AgoraRtcEngineKit = {
-        let engine = AgoraRtcEngineKit.sharedEngine(with: rtcConfig, delegate: nil)
-        engine.setClientRole(.broadcaster)
-        engine.enableAudio()
-        engine.enableVideo()
-        engine.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: CGSize(width: 960, height: 540),
-                                                                           frameRate: .fps15,
-                                                                           bitrate: AgoraVideoBitrateStandard,
-                                                                           orientationMode: .fixedPortrait,
-                                                                           mirrorMode: .auto))
-
-        return engine
-    }()
-    
-    public func setupRtcEngine(token: String, channelName: String, userId: UInt, clientRoleType: AgoraClientRole, localView: PixelBufferRenderView) {
+    func setLocalView(localView: PixelBufferRenderView) {
         self.localView = localView
-        
-        rtcEngine.setDefaultAudioRouteToSpeakerphone(true)
-        rtcEngine.setVideoFrameDelegate(self)
-        let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = true
-        option.publishMicrophoneTrack = true
-        option.clientRoleType = clientRoleType
-        self.rtcEngine.joinChannel(byToken: token, channelId: channelName, uid: userId, mediaOptions: option)
     }
     
-    public func addRenderView(renderView: PixelBufferRenderView) {
+    func setupRtcEngine(rtcEngine: AgoraRtcEngineKit) {
+        rtcEngine.setVideoFrameDelegate(self)
+    }
+    
+    func addRemoteRenderView(renderView: PixelBufferRenderView) {
         remoteRenderViews.add(renderView)
     }
         
-    public func removeRenderView(renderView: PixelBufferRenderView) {
+    func removeRemoteRenderView(renderView: PixelBufferRenderView) {
         renderView.clean()
         
         remoteRenderViews.remove(renderView)
-    }
-
-    func disable() {
-        rtcEngine.disableAudio()
-        rtcEngine.disableVideo()
-    }
-    
-    func leave() {
-        rtcEngine.stopPreview()
-        rtcEngine.leaveChannel(nil)
     }
 }
 
@@ -93,11 +81,11 @@ extension CustomRenderRTC: AgoraVideoFrameDelegate {
     }
 
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
-        //远端流多视图自渲染，找到对应的view进行绘制
         if let view = remoteRenderViews.allObjects.first(where: { $0.uid == uid }) {
             view.renderFromVideoFrameData(videoData: videoFrame)
         }
         
         return self.videoFrameDelegte?.onRenderVideoFrame?(videoFrame, uid: uid, channelId: channelId) ?? true
     }
+
 }

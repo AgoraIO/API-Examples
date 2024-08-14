@@ -1,21 +1,22 @@
 //
-//  CustomRenderExampleViewModel.swift
+//  SDKRenderViewModel.swift
 //  APIExample-SwiftUI
 //
-//  Created by qinhui on 2024/8/13.
+//  Created by qinhui on 2024/8/14.
 //
 
 import Foundation
 
 /**
-    @class      CustomRenderViewModel（
+    @class      SDKRenderViewModel（
     @abstract   This type has nothing to do with PIP and only simulates the implementation of rtc services for service reference and can be modified according to the service
  */
-class CustomRenderViewModel: NSObject, ObservableObject {
-    @Published var remoteRenderViews: [PixelBufferCustomRenderView] = []
+class SDKRenderViewModel: NSObject, ObservableObject {
     private var isJoined = false
-    var customRenderRtc: CustomRenderRTC
+    var sdkRenderRtc: SDKRenderRTC
     var configs: [String: Any]
+    
+    @Published var remoteRenderViews: [VideoView] = []
     
     private lazy var rtcConfig: AgoraRtcEngineConfig = {
        let config = AgoraRtcEngineConfig()
@@ -40,26 +41,26 @@ class CustomRenderViewModel: NSObject, ObservableObject {
     }()
     
     init(configs: [String: Any]) {
-        self.customRenderRtc = CustomRenderRTC()
+        self.sdkRenderRtc = SDKRenderRTC()
         self.configs = configs
         super.init()
     }
     
-    func setupRtcEngine(localView: PixelBufferRenderView) {
+    func setupRtcEngine(localView: VideoUIView) {
         guard let channelName = configs["channelName"] as? String else { return }
         let uid = UInt.random(in: 1..<100000)
-        self.rtcEngine.setDefaultAudioRouteToSpeakerphone(true)
-
-        self.customRenderRtc.setupRtcEngine(rtcEngine: self.rtcEngine)
-        self.customRenderRtc.setLocalView(localView: localView)
+        rtcEngine.setDefaultAudioRouteToSpeakerphone(true)
         
+        sdkRenderRtc.setupRtcEngine(rtcEngine: rtcEngine)
+        sdkRenderRtc.setLocalView(localView: localView)
+
         NetworkManager.shared.generateToken(channelName: channelName, success: { [weak self] token in
             guard let self = self else { return }
+            
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
             option.publishMicrophoneTrack = true
             option.clientRoleType = .broadcaster
-            
             self.rtcEngine.joinChannel(byToken: token, channelId: channelName, uid: uid, mediaOptions: option)
         })
     }
@@ -73,28 +74,28 @@ class CustomRenderViewModel: NSObject, ObservableObject {
         }
     }
     
-    func addRenderView(renderView: PixelBufferCustomRenderView) {
+    func addRenderView(renderView: VideoView) {
         remoteRenderViews.append(renderView)
         
-        customRenderRtc.addRemoteRenderView(renderView: renderView.videoView)
+        sdkRenderRtc.addRemoteRenderView(renderView: renderView.videoView)
     }
     
-    func removeRenderView(renderView: PixelBufferCustomRenderView) {
+    func removeRenderView(renderView: VideoView) {
         if let index = remoteRenderViews.firstIndex(where: { $0.videoView.uid == renderView.videoView.uid }) {
             remoteRenderViews.remove(at: index)
         }
         
-        customRenderRtc.removeRemoteRenderView(renderView: renderView.videoView)
+        sdkRenderRtc.removeRemoteRenderView(renderView: renderView.videoView)
     }
 }
 
-extension CustomRenderViewModel: AgoraRtcEngineDelegate {
+extension SDKRenderViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        let renderView = PixelBufferCustomRenderView()
+        let renderView = VideoView()
         renderView.videoView.uid = uid
         self.addRenderView(renderView: renderView)
     }

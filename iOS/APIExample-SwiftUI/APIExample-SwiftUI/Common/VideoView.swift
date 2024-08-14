@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct VideoView: UIViewRepresentable {
+struct VideoView: UIViewRepresentable, Identifiable {
     @State var type: StreamType = .local
     @State var audioOnly: Bool = false
     let videoView = VideoUIView()
+    let id = UUID()
         
     func makeUIView(context: Context) -> UIView {
         return videoView

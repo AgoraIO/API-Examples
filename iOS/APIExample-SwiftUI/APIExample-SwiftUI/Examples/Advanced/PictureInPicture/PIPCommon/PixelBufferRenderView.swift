@@ -8,7 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct PixelBufferCustomRenderView: UIViewRepresentable {
+/**
+ @struct     PixelBufferCustomRenderView
+ @abstract   SwiftUI bridge view, rendering view
+ */
+struct PixelBufferCustomRenderView: UIViewRepresentable, Identifiable {
+    let id = UUID()
     let videoView = PixelBufferRenderView()
         
     func makeUIView(context: Context) -> UIView {
@@ -21,6 +26,10 @@ struct PixelBufferCustomRenderView: UIViewRepresentable {
     }
 }
 
+/**
+ @class      PixelBufferRenderView
+ @abstract   Render view, support PixelBuffer, YUV
+ */
 class PixelBufferRenderView: UIView {
     var uid: UInt = 0
     private var videoWidth: Int32 = 0
@@ -28,6 +37,8 @@ class PixelBufferRenderView: UIView {
 
     lazy var displayLayer: AVSampleBufferDisplayLayer = {
         let layer = AVSampleBufferDisplayLayer()
+        layer.videoGravity = .resizeAspectFill
+
         return layer
     }()
 
@@ -119,7 +130,7 @@ class PixelBufferRenderView: UIView {
             self.layoutDisplayer()
         }
 
-        // 创建 CMVideoFormatDescription
+        // create CMVideoFormatDescription
         var videoInfo: CMVideoFormatDescription?
         let status = CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault,
                                                                   imageBuffer: pixelBuffer,
@@ -129,13 +140,13 @@ class PixelBufferRenderView: UIView {
             return
         }
 
-        // 创建 CMSampleTimingInfo
+        // create CMSampleTimingInfo
         var timingInfo = CMSampleTimingInfo()
         timingInfo.duration = CMTime.zero
         timingInfo.decodeTimeStamp = CMTime.invalid
         timingInfo.presentationTimeStamp = CMTime(seconds: CACurrentMediaTime(), preferredTimescale: 1000)
 
-        // 创建 CMSampleBuffer
+        // create CMSampleBuffer
         var sampleBuffer: CMSampleBuffer?
         let sampleBufferStatus = CMSampleBufferCreateReadyWithImageBuffer(allocator: kCFAllocatorDefault,
                                                                           imageBuffer: pixelBuffer,
@@ -147,7 +158,6 @@ class PixelBufferRenderView: UIView {
             return
         }
 
-        // 将样本缓冲区排队到显示层
         self.displayLayer.enqueue(sampleBuffer)
         CMSampleBufferInvalidate(sampleBuffer)
     }

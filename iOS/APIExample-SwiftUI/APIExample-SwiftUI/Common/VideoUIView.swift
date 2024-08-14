@@ -27,7 +27,8 @@ enum StreamType {
     }
 }
 
-class VideoUIView: UIView {
+class VideoUIView: UIView, Identifiable {
+    let id = UUID()
     lazy var videoView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false

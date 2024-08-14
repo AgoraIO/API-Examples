@@ -19,7 +19,8 @@ struct PipItem: Identifiable {
 
 struct PictureInPictureEntry: View {
     var items: [PipItem] = [
-        PipItem(name: "PIP Custom Render".localized, type: .customRender)
+        PipItem(name: "PIP Custom Render", type: .customRender),
+        PipItem(name: "PIP RTC SDK Render", type: .sdkRender)
     ]
     
     var body: some View {
@@ -45,17 +46,24 @@ struct PictureInPictureJoinEntry: View {
     var body: some View {
         VStack {
             Spacer()
-            TextField("Enter channel name".localized, text: $channelName).textFieldStyle(.roundedBorder).padding()
+            TextField("Enter channel name", text: $channelName).textFieldStyle(.roundedBorder).padding()
             Button {
                 configs = ["channelName": channelName]
                 self.isActive = true
             } label: {
-                Text("Join".localized)
+                Text("Join Channel")
             }.disabled(channelName.isEmpty)
             Spacer()
-            NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
-                EmptyView()
+            if pipType == .sdkRender {
+                NavigationLink(destination: sdkRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+                    EmptyView()
+                }
+            } else {
+                NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+                    EmptyView()
+                }
             }
+            
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -65,8 +73,8 @@ struct PictureInPictureJoinEntry: View {
         return CustomRenderExample(configs: configs)
     }
     
-    private func sdkRenderView() {
-        
+    private func sdkRenderView() -> SDKRenderExample{
+        return SDKRenderExample(configs: configs)
     }
     
 }
