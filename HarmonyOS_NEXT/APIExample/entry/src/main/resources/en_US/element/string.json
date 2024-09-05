@@ -291,6 +291,62 @@
     {
       "name": "switch_camera",
       "value": "SwitchCamera"
+    },
+    {
+      "name": "close_microphone",
+      "value": "CloseMicophone"
+    },
+    {
+      "name": "audio_router",
+      "value": "Audio Route"
+    },
+    {
+      "name": "inear_monitor",
+      "value": "InEar Monitor"
+    },
+    {
+      "name": "inear_monitor_vol",
+      "value": "InEar Monitor Vol"
+    },
+    {
+      "name": "playout_vol",
+      "value": "Playout Vol"
+    },
+    {
+      "name": "scenario",
+      "value": "Scenario"
+    },
+    {
+      "name": "audio_profile",
+      "value": "Audio Profile"
+    },
+    {
+      "name": "channel_profile",
+      "value": "Channel Profile"
+    },
+    {
+      "name": "audio_route_speakerphone",
+      "value": "speakerphone"
+    },
+    {
+      "name": "audio_route_earpiece",
+      "value": "earpiece"
+    },
+    {
+      "name": "audio_route_headset",
+      "value": "headset"
+    },
+    {
+      "name": "audio_route_headset_bluetooth",
+      "value": "bluetooth headset"
+    },
+    {
+      "name": "recording_vol",
+      "value": "Recording Vol"
+    },
+    {
+      "name": "open_microphone",
+      "value": "Open Microphone"
     }
   ]
 }
