@@ -291,6 +291,62 @@
     {
       "name": "switch_camera",
       "value": "切换摄像头"
+    },
+    {
+      "name": "close_microphone",
+      "value": "关闭麦克风"
+    },
+    {
+      "name": "audio_router",
+      "value": "Audio Route"
+    },
+    {
+      "name": "inear_monitor",
+      "value": "InEar Monitor"
+    },
+    {
+      "name": "inear_monitor_vol",
+      "value": "InEar Monitor Vol"
+    },
+    {
+      "name": "playout_vol",
+      "value": "Playout Vol"
+    },
+    {
+      "name": "scenario",
+      "value": "Scenario"
+    },
+    {
+      "name": "audio_profile",
+      "value": "Audio Profile"
+    },
+    {
+      "name": "channel_profile",
+      "value": "Channel Profile"
+    },
+    {
+      "name": "audio_route_speakerphone",
+      "value": "扬声器"
+    },
+    {
+      "name": "audio_route_earpiece",
+      "value": "听筒"
+    },
+    {
+      "name": "audio_route_headset",
+      "value": "耳机"
+    },
+    {
+      "name": "audio_route_headset_bluetooth",
+      "value": "蓝牙耳机"
+    },
+    {
+      "name": "recording_vol",
+      "value": "Recording Vol"
+    },
+    {
+      "name": "open_microphone",
+      "value": "打开麦克风"
     }
   ]
 }
