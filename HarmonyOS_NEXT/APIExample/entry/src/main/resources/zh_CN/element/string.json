@@ -347,6 +347,10 @@
     {
       "name": "open_microphone",
       "value": "打开麦克风"
+    },
+    {
+      "name": "click_select_router",
+      "value": "点击选择路由"
     }
   ]
 }

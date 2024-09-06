@@ -30,7 +30,7 @@
         "launchType": "singleton",
         "orientation": "auto_rotation",
         "exported": true,
-        "backgroundModes": ["audioRecording"],
+        "backgroundModes": ["audioRecording","audioPlayback"],
         "skills": [
           {
             "entities": [

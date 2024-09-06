@@ -347,6 +347,10 @@
     {
       "name": "open_microphone",
       "value": "Open Microphone"
+    },
+    {
+      "name": "click_select_router",
+      "value": "Click Select Router"
     }
   ]
 }
