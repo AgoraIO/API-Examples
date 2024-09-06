@@ -17,21 +17,28 @@ import {
 import {
   AudioConfigHelper,
   AUDIO_PROFILE,
-  AUDIO_ROUTE,
   AUDIO_SCENARIO,
   CHANNEL_PROFILE
 } from '../../util/AudioConfigContant';
 import { JSON } from '@kit.ArkTS';
 import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { AVCastPicker } from '@kit.AVSessionKit';
+import { audio } from '@kit.AudioKit';
+import image from '@ohos.multimedia.image';
 
 const TAG: string = 'JoinAudioChannel'
 
+/**
+ * 鸿蒙系统不支持音频设备api切换 请参看网址 https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/using-switch-call-devices-V5
+ * 本场景是通过AVCastPicker选择实现的
+ */
 @Entry
 @Component
 struct JoinAudioChannel {
   private context = getContext(this) as common.UIAbilityContext;
   private rtcEngine: RtcEngine | undefined = undefined;
+  private audioRoutingManager = audio.getAudioManager().getRoutingManager();
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
@@ -39,33 +46,20 @@ struct JoinAudioChannel {
   @State remoteUidList: number[] = []
   @State isMicophotoOpen: boolean = false
   @State isEarMonitorChecked: boolean = false
-  @State routeSelectIndex: number = 0
   private channelProfileType = Constants.ChannelProfile.COMMUNICATION
   private audioScenarioType = Constants.AudioScenarioType.DEFAULT
   private audioProfileType = Constants.AudioProfileType.DEFAULT
+
+  @Builder
+  customPickerBuilder(): void {
+    Image($r('app.media.ic_connect'))
+      .width('100%')
+      .height('100%')
+      // .fillColor(Color.Blue)
+  }
   handleMicospeakerClick = () => {
     this.isMicophotoOpen = !this.isMicophotoOpen
     this.rtcEngine?.muteLocalAudioStream(!this.isMicophotoOpen);
-  }
-  onAudioRouteSelect: OnSelectListener = (index: number, text: string) => {
-    Logger.info(TAG, `onAudioRouteSelect index ${index}  text ${text}`)
-    this.routeSelectIndex = index
-    const isCommunication = this.channelProfileType == Constants.ChannelProfile.COMMUNICATION;
-    //todo
-    if (isCommunication) {
-      // const ret = this.rtcEngine.setRouteInCommunicationMode(this.audioRouteType);
-      // ShowToast.shortToast(`setRouteInCommunicationMode route=${this.audioRouteType}    ret=${ret}`)
-    } else {
-      let isSpeakerPhone = false
-      const type = AudioConfigHelper.getAudioRouteType(this.routeSelectIndex)
-      if (type == Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE) {
-        isSpeakerPhone = false;
-      } else if (type == Constants.AudioRouteTypes.AUDIO_ROUTE_SPEAKERPHONE) {
-        isSpeakerPhone = true;
-      }
-      // const ret = this.rtcEngine?.setEnableSpeakerphone(isSpeakerPhone);
-      // ShowToast.shortToast(`setEnableSpeakerphone enable==${isSpeakerPhone}    ret=${ret}`)
-    }
   }
   onInEarMonitorCheck: OnCheckListener = (isCheck: boolean) => {
     this.isEarMonitorChecked = isCheck
@@ -106,7 +100,6 @@ struct JoinAudioChannel {
   }
 
   startServiceTask() {
-
     let wantAgentInfo: wantAgent.WantAgentInfo = {
       wants: [
         {
@@ -189,11 +182,22 @@ struct JoinAudioChannel {
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config) as RtcEngineEx
-
     this.rtcEngine.enableAudio()
+    const retAudio = this.rtcEngine.enableAudioVolumeIndication(1000, 3, true)
+    Logger.info(TAG, `enableAudioVolumeIndication retAudio ${retAudio}`)
+
+    //注册路由监听
+    this.audioRoutingManager.on('preferOutputDeviceChangeForRendererInfo', {
+      usage: audio.StreamUsage.STREAM_USAGE_VOICE_COMMUNICATION, rendererFlags: 0
+    }, (desc: audio.AudioDeviceDescriptors) => {
+      //https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-audio-V5#devicetype
+      //这个回调不是很及时
+      Logger.info(TAG, `路由切换  设备类型 : ${desc[0].deviceType}`);
+    });
   }
 
   aboutToDisappear(): void {
+    this.audioRoutingManager.off('preferOutputDeviceChangeForRendererInfo')
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
         this.rtcEngine.leaveChannel();
@@ -304,17 +308,28 @@ struct JoinAudioChannel {
       .align(Alignment.TopStart)
 
       Column({ space: 5 }) {
-        Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
-        $r('app.string.close_microphone'))
-          .onClick(this.handleMicospeakerClick)
-          .enabled(this.isJoin)
+        Row() {
+          Text('鸿蒙音频输出设备切换的API')
+          Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
+          $r('app.string.close_microphone'))
+            .onClick(this.handleMicospeakerClick)
+            .enabled(this.isJoin)
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.SpaceBetween)
 
-        AudioChannelSpinner({
-          name: $r('app.string.audio_router'),
-          items: AUDIO_ROUTE,
-          selectIndex: this.routeSelectIndex,
-          onSelect: this.onAudioRouteSelect
-        })
+        Row() {
+          Text($r('app.string.audio_router'))
+          AVCastPicker({
+            normalColor: Color.Red,
+            customPicker: () => this.customPickerBuilder()
+          })
+            .width(40)
+            .height(40)
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.SpaceBetween)
+
         AudioChannelToggle({
           isEnable: this.isJoin,
           name: $r('app.string.inear_monitor'),
@@ -375,7 +390,6 @@ struct JoinAudioChannel {
           Button($r('app.string.leave'))
             .id('button_to_leave')
             .onClick(() => {
-              this.routeSelectIndex = 0
               this.rtcEngine?.stopPreview()
               this.rtcEngine?.leaveChannel()
               focusControl.requestFocus("button_to_leave")
