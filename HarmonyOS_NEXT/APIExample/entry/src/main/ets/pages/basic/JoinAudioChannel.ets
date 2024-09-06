@@ -4,7 +4,7 @@ import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
 import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
-import { common } from '@kit.AbilityKit';
+import { common, WantAgent, wantAgent } from '@kit.AbilityKit';
 import { TokenUtils } from '../../util/TokenUtils';
 import {
   AudioChannelSlider,
@@ -21,30 +21,31 @@ import {
   AUDIO_SCENARIO,
   CHANNEL_PROFILE
 } from '../../util/AudioConfigContant';
-import { faceDetector } from '@kit.CoreVisionKit';
 import { JSON } from '@kit.ArkTS';
+import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 const TAG: string = 'JoinAudioChannel'
 
 @Entry
 @Component
 struct JoinAudioChannel {
+  private context = getContext(this) as common.UIAbilityContext;
   private rtcEngine: RtcEngine | undefined = undefined;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
   @State remoteUidList: number[] = []
-  @State isMicophotoOpen: boolean = true
+  @State isMicophotoOpen: boolean = false
   @State isEarMonitorChecked: boolean = false
   @State routeSelectIndex: number = 0
   private channelProfileType = Constants.ChannelProfile.COMMUNICATION
   private audioScenarioType = Constants.AudioScenarioType.DEFAULT
   private audioProfileType = Constants.AudioProfileType.DEFAULT
   handleMicospeakerClick = () => {
-    if (this.isMicophotoOpen != null) {
-      this.isMicophotoOpen = !this.isMicophotoOpen
-    }
+    this.isMicophotoOpen = !this.isMicophotoOpen
+    this.rtcEngine?.muteLocalAudioStream(!this.isMicophotoOpen);
   }
   onAudioRouteSelect: OnSelectListener = (index: number, text: string) => {
     Logger.info(TAG, `onAudioRouteSelect index ${index}  text ${text}`)
@@ -104,6 +105,48 @@ struct JoinAudioChannel {
     this.channelProfileType = AudioConfigHelper.getChannelProfileType(text)
   }
 
+  startServiceTask() {
+
+    let wantAgentInfo: wantAgent.WantAgentInfo = {
+      wants: [
+        {
+          bundleName: this.context.abilityInfo.bundleName,
+          abilityName: this.context.abilityInfo.name
+        }
+      ],
+      actionType: wantAgent.OperationType.START_ABILITY,
+      requestCode: 0,
+      actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
+    };
+    wantAgent.getWantAgent(wantAgentInfo).then((wantAgentObj: WantAgent) => {
+      backgroundTaskManager.startBackgroundRunning(this.context,
+        backgroundTaskManager.BackgroundMode.AUDIO_RECORDING, wantAgentObj).then(() => {
+        console.info(`Succeeded in operationing startBackgroundRunning.`);
+        Logger.info(TAG, '录音服务启动成功 ...')
+      }).catch((err: BusinessError) => {
+        Logger.error(TAG, `录音服务启动失败. Code is ${err.code}, message is ${err.message}`);
+      });
+    });
+  }
+
+  stopServiceTask() {
+    backgroundTaskManager.stopBackgroundRunning(this.context).then(() => {
+      Logger.info(TAG, '停止服务成功。。。')
+    }).catch((err: BusinessError) => {
+      Logger.info(TAG, `停止服务失败. Code is ${err.code}, message is ${err.message}`);
+    });
+  }
+
+  onPageShow(): void {
+    this.stopServiceTask()
+  }
+
+  onPageHide(): void {
+    if (this.isJoin) {
+      this.startServiceTask()
+    }
+  }
+
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
     let config: RtcEngineConfig = new RtcEngineConfig();
@@ -136,7 +179,7 @@ struct JoinAudioChannel {
       Logger.info(TAG, "mEventHandler.onLeaveChannel");
       this.isJoin = false
       this.localUid = 0
-      this.isMicophotoOpen = true
+      this.isMicophotoOpen = false
       this.remoteUidList = []
     }
     config.mEventHandler.onError = (err: number, message: string) => {
