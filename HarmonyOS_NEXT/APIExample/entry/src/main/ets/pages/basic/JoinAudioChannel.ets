@@ -1,4 +1,4 @@
-import { ChannelMediaOptions, Constants, RtcEngine,RtcEngineEx, RtcEngineConfig, AudioVolumeInfo } from 'AgoraRtcSdk';
+import { ChannelMediaOptions, Constants, RtcEngine, RtcEngineEx, RtcEngineConfig, AudioVolumeInfo } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -47,13 +47,30 @@ struct JoinAudioChannel {
     }
   }
   onAudioRouteSelect: OnSelectListener = (index: number, text: string) => {
-    console.info(`onAudioRouteSelect index ${index}  text ${text}`)
+    Logger.info(TAG, `onAudioRouteSelect index ${index}  text ${text}`)
+    this.routeSelectIndex = index
+    const isCommunication = this.channelProfileType == Constants.ChannelProfile.COMMUNICATION;
+    //todo
+    if (isCommunication) {
+      // const ret = this.rtcEngine.setRouteInCommunicationMode(this.audioRouteType);
+      // ShowToast.shortToast(`setRouteInCommunicationMode route=${this.audioRouteType}    ret=${ret}`)
+    } else {
+      let isSpeakerPhone = false
+      const type = AudioConfigHelper.getAudioRouteType(this.routeSelectIndex)
+      if (type == Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE) {
+        isSpeakerPhone = false;
+      } else if (type == Constants.AudioRouteTypes.AUDIO_ROUTE_SPEAKERPHONE) {
+        isSpeakerPhone = true;
+      }
+      // const ret = this.rtcEngine?.setEnableSpeakerphone(isSpeakerPhone);
+      // ShowToast.shortToast(`setEnableSpeakerphone enable==${isSpeakerPhone}    ret=${ret}`)
+    }
   }
   onInEarMonitorCheck: OnCheckListener = (isCheck: boolean) => {
     this.isEarMonitorChecked = isCheck
   }
   onInEarMonitorVolSlide: OnSliderListener = (progress: number) => {
-    console.info(`onInEarMonitorVolSlide progress:${progress}`)
+    Logger.info(TAG, `onInEarMonitorVolSlide progress:${progress}`)
     if (progress == 0) {
       this.rtcEngine?.enableInEarMonitoring(false, 1)
     } else {
@@ -62,32 +79,28 @@ struct JoinAudioChannel {
     }
   }
   onPlayoutVolSlide: OnSliderListener = (progress: number) => {
-    console.info(`onPlayoutVolSlide progress:${progress}`)
+    Logger.info(TAG, `onPlayoutVolSlide progress:${progress}`)
     this.rtcEngine?.adjustPlaybackSignalVolume(progress);
   }
   onRecordingVolSlide: OnSliderListener = (progress: number) => {
-    console.info(`onRecordingVolSlide progress:${progress}`)
+    Logger.info(TAG, `onRecordingVolSlide progress:${progress}`)
     this.rtcEngine?.adjustRecordingSignalVolume(progress);
   }
   onScenarioSelect: OnSelectListener = (index: number, text: string) => {
-    console.info(`onScenarioSelect index ${index}  text ${text}`)
+    Logger.info(TAG, `onScenarioSelect index ${index}  text ${text}`)
     this.audioScenarioType = AudioConfigHelper.getAudioScenarioType(text)
     this.rtcEngine?.setAudioScenario(this.audioScenarioType)
   }
   onAudioProfileSelect: OnSelectListener = (index: number, text: string) => {
-    console.info(`onAudioProfileSelect index ${index}  text ${text}}`)
+    Logger.info(TAG, `onAudioProfileSelect index ${index}  text ${text}}`)
     if (!this.isJoin) {
       return
     }
     this.audioProfileType = AudioConfigHelper.getAudioProfileType(text)
     this.rtcEngine?.setAudioProfile(this.audioProfileType)
-    const isCommunication = AudioConfigHelper.CHANNEL_PROFILE_COMMUNICATION == text;
-    //todo
-    // this.rtcEngine?.setEnableSpeakerphone()
-    // this.rtcEngine?.setRouteInCommunicationMode()
   }
   onChannelProfileSelect: OnSelectListener = (index: number, text: string) => {
-    console.info(`onChannelProfileSelect index ${index}  text ${text}}`)
+    Logger.info(TAG, `onChannelProfileSelect index ${index}  text ${text}}`)
     this.channelProfileType = AudioConfigHelper.getChannelProfileType(text)
   }
 
@@ -248,25 +261,10 @@ struct JoinAudioChannel {
       .align(Alignment.TopStart)
 
       Column({ space: 5 }) {
-        Row() {
-          Button('更改状态').onClick(() => {
-            if (this.localUid <= 0) {
-              this.localUid = 1
-              this.isJoin = true
-            } else {
-              this.localUid = 0
-              this.isJoin = false
-            }
-          })
-
-          Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
-          $r('app.string.close_microphone'))
-            .onClick(this.handleMicospeakerClick)
-            .enabled(this.isJoin)
-
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
+        Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
+        $r('app.string.close_microphone'))
+          .onClick(this.handleMicospeakerClick)
+          .enabled(this.isJoin)
 
         AudioChannelSpinner({
           name: $r('app.string.audio_router'),

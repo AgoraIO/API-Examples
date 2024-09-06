@@ -12,9 +12,30 @@ export class AudioConfigHelper {
   public static readonly AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO = 'MUSIC_HIGH_QUALITY_STEREO'
   public static readonly CHANNEL_PROFILE_COMMUNICATION = 'COMMUNICATION'
   public static readonly CHANNEL_PROFILE_LIVE_BROADCASTING = 'LIVE_BROADCASTING'
+
   // public static readonly CHANNEL_PROFILE_GAME = 'GAME'
   // public static readonly CHANNEL_PROFILE_CLOUD_GAMING = 'CLOUD_GAMING'
   // public static readonly CHANNEL_PROFILE_COMMUNICATION_1v1 = 'COMMUNICATION_1v1'
+
+  public static getAudioRouteType(position: number) {
+    let type = Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE
+    switch (position) {
+      case 0:
+        type = Constants.AudioRouteTypes.AUDIO_ROUTE_SPEAKERPHONE
+        break
+      case 1:
+        type = Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE
+        break
+      case 2:
+        type = Constants.AudioRouteTypes.AUDIO_ROUTE_HEADSET
+        break
+      case 3:
+        type = Constants.AudioRouteTypes.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP
+        break
+    }
+    return type
+
+  }
 
   public static getChannelProfileType(channelProfile: string) {
     let type = Constants.ChannelProfile.COMMUNICATION
@@ -22,15 +43,6 @@ export class AudioConfigHelper {
       case AudioConfigHelper.CHANNEL_PROFILE_LIVE_BROADCASTING:
         type = Constants.ChannelProfile.LIVE_BROADCASTING
         break
-      // case AudioConfigHelper.CHANNEL_PROFILE_GAME:
-      //   type = Constants.ChannelProfile.LIVE_BROADCASTING
-      //   break
-      // case AudioConfigHelper.CHANNEL_PROFILE_CLOUD_GAMING:
-      //   type = Constants.ChannelProfile.LIVE_BROADCASTING
-      //   break
-      // case AudioConfigHelper.CHANNEL_PROFILE_COMMUNICATION_1v1:
-      //   type = Constants.ChannelProfile.LIVE_BROADCASTING
-      //   break
     }
     return type
   }
@@ -94,8 +106,5 @@ export const AUDIO_PROFILE = [
 
 export const CHANNEL_PROFILE = [
   AudioConfigHelper.CHANNEL_PROFILE_COMMUNICATION,
-  AudioConfigHelper.CHANNEL_PROFILE_LIVE_BROADCASTING,
-  // AudioConfigHelper.CHANNEL_PROFILE_GAME,
-  // AudioConfigHelper.CHANNEL_PROFILE_CLOUD_GAMING,
-  // AudioConfigHelper.CHANNEL_PROFILE_COMMUNICATION_1v1
+  AudioConfigHelper.CHANNEL_PROFILE_LIVE_BROADCASTING
 ]
