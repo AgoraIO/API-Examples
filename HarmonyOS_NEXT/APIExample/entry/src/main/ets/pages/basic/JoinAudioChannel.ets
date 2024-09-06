@@ -49,7 +49,10 @@ struct JoinAudioChannel {
   private channelProfileType = Constants.ChannelProfile.COMMUNICATION
   private audioScenarioType = Constants.AudioScenarioType.DEFAULT
   private audioProfileType = Constants.AudioProfileType.DEFAULT
-
+  private routerChangeListener = (desc: audio.AudioDeviceDescriptors) => {
+    //https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-audio-V5#devicetype
+    Logger.info(TAG, `路由切换  设备类型 : ${desc[0].deviceType}`);
+  }
   @Builder
   customPickerBuilder(): void {
     Image($r('app.media.ic_connect'))
@@ -189,15 +192,11 @@ struct JoinAudioChannel {
     //注册路由监听
     this.audioRoutingManager.on('preferOutputDeviceChangeForRendererInfo', {
       usage: audio.StreamUsage.STREAM_USAGE_VOICE_COMMUNICATION, rendererFlags: 0
-    }, (desc: audio.AudioDeviceDescriptors) => {
-      //https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/js-apis-audio-V5#devicetype
-      //这个回调不是很及时
-      Logger.info(TAG, `路由切换  设备类型 : ${desc[0].deviceType}`);
-    });
+    }, this.routerChangeListener);
   }
 
   aboutToDisappear(): void {
-    this.audioRoutingManager.off('preferOutputDeviceChangeForRendererInfo')
+    this.audioRoutingManager.off('preferOutputDeviceChangeForRendererInfo',this.routerChangeListener)
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
         this.rtcEngine.leaveChannel();
@@ -309,7 +308,7 @@ struct JoinAudioChannel {
 
       Column({ space: 5 }) {
         Row() {
-          Text('鸿蒙音频输出设备切换的API')
+          Text('')
           Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
           $r('app.string.close_microphone'))
             .onClick(this.handleMicospeakerClick)
