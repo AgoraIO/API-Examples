@@ -25,7 +25,6 @@ import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { AVCastPicker } from '@kit.AVSessionKit';
 import { audio } from '@kit.AudioKit';
-import image from '@ohos.multimedia.image';
 
 const TAG: string = 'JoinAudioChannel'
 
@@ -150,7 +149,7 @@ struct JoinAudioChannel {
     config.mAppId = AppID;
     config.mEventHandler = {};
     config.mEventHandler.onAudioVolumeIndication = (speakers: Array<AudioVolumeInfo>, totalVolume: number) => {
-      Logger.info(`totalVolume:${totalVolume}    speakers:${JSON.stringify(speakers)}`)
+      Logger.info(TAG,`onAudioVolumeIndication totalVolume:${totalVolume}    speakers:${JSON.stringify(speakers)}`)
     }
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
