@@ -183,7 +183,7 @@ struct JoinAudioChannel {
     }
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
-    this.rtcEngine = RtcEngine.create(config) as RtcEngineEx
+    this.rtcEngine = RtcEngine.create(config)
     this.rtcEngine.enableAudio()
     const retAudio = this.rtcEngine.enableAudioVolumeIndication(1000, 3, true)
     Logger.info(TAG, `enableAudioVolumeIndication retAudio ${retAudio}`)
