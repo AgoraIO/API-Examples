@@ -45,6 +45,8 @@ class MediaChannelRelayMain: BaseViewController {
     @IBOutlet weak var resumeButton: UIButton!
     @IBOutlet weak var relayChannelField: UITextField!
     var agoraKit: AgoraRtcEngineKit!
+    // configure source info, channel name defaults to current, and uid defaults to local
+    let mediaRelayconfig = AgoraChannelMediaRelayConfiguration()
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -128,6 +130,7 @@ class MediaChannelRelayMain: BaseViewController {
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
+            self.mediaRelayconfig.sourceInfo = AgoraChannelMediaRelayInfo(token: token)
         })
     }
     
@@ -140,15 +143,12 @@ class MediaChannelRelayMain: BaseViewController {
             self.showAlert(message: "Destination channel name is empty")
             return
         }
+        
         NetworkManager.shared.generateToken(channelName: destinationChannelName) { token in
-            // configure source info, channel name defaults to current, and uid defaults to local
-            let config = AgoraChannelMediaRelayConfiguration()
-            config.sourceInfo = AgoraChannelMediaRelayInfo(token: token)
-            
             // configure target channel info
             let destinationInfo = AgoraChannelMediaRelayInfo(token: token)
-            config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-            self.agoraKit.startOrUpdateChannelMediaRelay(config)
+            self.mediaRelayconfig.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
+            self.agoraKit.startOrUpdateChannelMediaRelay(self.mediaRelayconfig)
         }
     }
     
