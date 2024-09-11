@@ -255,6 +255,9 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
 
+   //transparent bg
+   m_vecAdvanced.push_back(TransparentBackground);
+
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -603,6 +606,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	else if (selectedText.Compare(advancedMediaRecorder) == 0) {
 		m_pmediaRecorderDlg->InitAgora();
 		m_pmediaRecorderDlg->ShowWindow(SW_SHOW);
+	}
+	else if (selectedText.Compare(TransparentBackground) == 0) {
+		MessageBox(_T("TransparentBackground"));
 	}
 	
 	//Sleep(500);
