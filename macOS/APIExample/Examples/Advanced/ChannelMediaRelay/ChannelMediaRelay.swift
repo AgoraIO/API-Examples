@@ -15,6 +15,8 @@ class ChannelMediaRelay: BaseViewController {
     @IBOutlet weak var Container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!
+    // configure source info, channel name defaults to current, and uid defaults to local
+    let mediaRelayconfig = AgoraChannelMediaRelayConfiguration()
     
     /**
      --- Channel TextField ---
@@ -58,15 +60,15 @@ class ChannelMediaRelay: BaseViewController {
                 self.showAlert(message: "Destination channel name is empty")
                 return
             }
-            // configure source info, channel name defaults to current, and uid defaults to local
-            let config = AgoraChannelMediaRelayConfiguration()
-            config.sourceInfo = AgoraChannelMediaRelayInfo(token: nil)
+        
             isProcessing = true
-            // configure target channel info
-            let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
-            config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-            agoraKit.startOrUpdateChannelMediaRelay(config)
-            pauseRelayButton.isEnabled = true
+            NetworkManager.shared.generateToken(channelName: destinationChannelName) { token in
+                // configure target channel info
+                let destinationInfo = AgoraChannelMediaRelayInfo(token: token)
+                self.mediaRelayconfig.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
+                self.agoraKit.startOrUpdateChannelMediaRelay(self.mediaRelayconfig)
+                self.pauseRelayButton.isEnabled = true
+            }
         } else {
             isProcessing = true
             isPauseRelaying = false
@@ -211,6 +213,7 @@ class ChannelMediaRelay: BaseViewController {
                     // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
+                self.mediaRelayconfig.sourceInfo = AgoraChannelMediaRelayInfo(token: token)
             })
         } else {
             isProcessing = true
