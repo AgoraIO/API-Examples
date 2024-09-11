@@ -295,6 +295,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
     <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h" />
+    <ClInclude Include="Advanced\TransparentBg\TransparentBgDialog.h" />
     <ClInclude Include="AGVideoTestWnd.h" />
     <ClInclude Include="AGVideoWnd.h" />
     <ClInclude Include="APIExample.h" />
@@ -347,6 +348,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
     <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp" />
+    <ClCompile Include="Advanced\TransparentBg\TransparentBgDialog.cpp" />
     <ClCompile Include="AGVideoTestWnd.cpp" />
     <ClCompile Include="AGVideoWnd.cpp" />
     <ClCompile Include="APIExample.cpp" />

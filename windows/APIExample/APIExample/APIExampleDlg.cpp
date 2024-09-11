@@ -385,6 +385,12 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiVideoSourceTracks = new MultiVideoSourceTracks(&m_staMainArea);
    m_pMultiVideoSourceTracks->Create(MultiVideoSourceTracks::IDD);
    m_pMultiVideoSourceTracks->MoveWindow(&rcWnd);
+
+   // transparent bg
+   m_TransparentDlg = new CTransparentBgDlg(&m_staMainArea);
+   m_TransparentDlg->Create(CTransparentBgDlg::IDD);
+   m_TransparentDlg->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -608,7 +614,8 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pmediaRecorderDlg->ShowWindow(SW_SHOW);
 	}
 	else if (selectedText.Compare(TransparentBackground) == 0) {
-		MessageBox(_T("TransparentBackground"));
+		m_TransparentDlg->InitAgora();
+		m_TransparentDlg->ShowWindow(SW_SHOW);
 	}
 	
 	//Sleep(500);
@@ -714,6 +721,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMediaRecorder) == 0) {
 		m_pmediaRecorderDlg->UnInitAgora();
 		m_pmediaRecorderDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(TransparentBackground) == 0) {
+		m_TransparentDlg->UnInitAgora();
+		m_TransparentDlg->ShowWindow(SW_HIDE);
 	}
 	//Sleep(500);
 }

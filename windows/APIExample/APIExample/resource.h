@@ -45,6 +45,7 @@
 #define IDD_DIALOG_MULTI_VIDEO_SOURCE_TRACKS 162
 #define IDD_DIALOG_FACE_CAPTURE         163
 #define IDD_DIALOG_JOINCHANNELVIDEOBYTOKEN 164
+#define IDD_DIALOG_TRANSPARENT_BG       165
 #define IDB_BITMAP_LOCAL                168
 #define IDB_BITMAP_REMOTE               170
 #define IDB_BITMAP_SPEAKER              171
@@ -401,7 +402,9 @@
 #define IDC_EDIT_TOKEN                  1150
 #define IDC_EDIT_METADATA_INFO          1150
 #define IDC_STATIC_TOKEN                1151
+#define IDC_STATIC_VIDEO_LEFT           1151
 #define IDC_USER_ID                     1152
+#define IDC_STATIC_VIDEO_RIGHT          1152
 #define IDC_EDIT_USER_ID                1153
 #define IDC_BUTTON_ADD_CROSS_CHANNEL    1154
 #define IDC_CROSS_CHANNEL_LIST          1155
@@ -423,9 +426,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        173
+#define _APS_NEXT_RESOURCE_VALUE        175
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1151
+#define _APS_NEXT_CONTROL_VALUE         1153
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
