@@ -112,6 +112,9 @@
     <Filter Include="Advanced\Metadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\TransparentBg">
+      <UniqueIdentifier>{2a74c488-9982-4577-8594-8320c71beb6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h">
       <Filter>Advanced\Metadata</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\TransparentBg\TransparentBgDialog.h">
+      <Filter>Advanced\TransparentBg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -403,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp">
       <Filter>Advanced\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\TransparentBg\TransparentBgDialog.cpp">
+      <Filter>Advanced\TransparentBg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
