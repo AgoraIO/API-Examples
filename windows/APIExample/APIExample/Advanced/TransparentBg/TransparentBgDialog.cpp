@@ -174,12 +174,24 @@ void CTransparentBgDlg::onFrame(const VideoFrame *frame)
 {
     if (m_rtcEngine)
     {
-        //    int nSize = videoFrame.height * videoFrame.width;
-        // //set UV to 128 to mask color information
-        // memset(videoFrame.uBuffer, 128, nSize / 4);
-        // memset(videoFrame.vBuffer, 128, nSize / 4);
 
-        //     mediaEngine->pushVideoFrame(frame);
+        // 创建ExternalVideoFrame对象
+        agora::media::base::ExternalVideoFrame externalFrame;
+        externalFrame.alphaStitchMode = ALPHA_STITCH_LEFT;
+        externalFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
+        externalFrame.format = agora::media::base::VIDEO_PIXEL_I420;
+        externalFrame.stride = frame->width;
+        externalFrame.height = frame->height;
+        externalFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
+
+        int bufferSize = frame->yStride * frame->height + frame->uStride * (frame->height >> 1) + frame->vStride * (frame->height >> 1);
+        externalFrame.buffer = new uint8_t[bufferSize];
+        memcpy(externalFrame.buffer, frame->yBuffer, frame->yStride * frame->height);
+        memcpy((uint8_t *)externalFrame.buffer + frame->yStride * frame->height, frame->uBuffer, frame->uStride * (frame->height >> 1));
+        memcpy((uint8_t *)externalFrame.buffer + frame->yStride * frame->height + frame->uStride * (frame->height >> 1), frame->vBuffer, frame->vStride * (frame->height / 2));
+        mediaEngine->pushVideoFrame(&externalFrame);
+        // 释放缓冲区
+        delete[] externalFrame.buffer;
 
         // CString strInfo;
         // strInfo.Format(_T("height ret: %d"), frame->height);
@@ -324,7 +336,7 @@ void CTransparentBgDlg::UnInitAgora()
         m_rtcEngine->disableVideo();
         if (m_mediaPlayer)
         {
-
+            //  m_mediaPlayer->registerPlayerSourceObserver(nullptr);
             m_mediaPlayer->Release();
             m_mediaPlayer = nullptr;
         }
@@ -485,6 +497,7 @@ void CTransparentBgDlg::OnBnClickedButtonJoinchannel()
         }
 
         VideoCanvas canvas;
+        canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
         canvas.sourceType = VIDEO_SOURCE_CUSTOM;
         canvas.enableAlphaMask = true;
         canvas.renderMode = media::base::RENDER_MODE_FIT;
