@@ -94,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -267,6 +267,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractMediaPlayerSourceObserver.h" />
     <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h" />
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
@@ -320,6 +321,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="YUVReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractMediaPlayerSourceObserver.cpp" />
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
@@ -397,6 +399,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <CopyFileToFolders Include="sample.yuv">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="res\wave2.bin" />
     <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
@@ -420,6 +423,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <Media Include="res\ID_TEST_AUDIO.wav" />
+    <Media Include="res\yuvj_full_range_alpha_1280_540_left.mp4" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
