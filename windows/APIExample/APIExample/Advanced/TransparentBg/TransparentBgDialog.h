@@ -59,7 +59,7 @@ private:
 	bool report = true;
 };
 
-class CTransparentBgDlg : public CDialogEx, media::base::IVideoFrameObserver,AbstractMediaPlayerSourceObserver
+class CTransparentBgDlg : public CDialogEx, media::base::IVideoFrameObserver, AbstractMediaPlayerSourceObserver
 {
 	DECLARE_DYNAMIC(CTransparentBgDlg)
 
@@ -79,6 +79,8 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV support
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG *pMsg);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -90,26 +92,14 @@ public:
 	afx_msg LRESULT onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnBnClickedButtonJoinchannel();
 
 private:
 	void InitCtrlText();
 	int JoinChannel(const char *channel);
 	int LeaveChannel();
-	IRtcEngine *m_rtcEngine = nullptr;
-	agora_refptr<IMediaPlayer> m_mediaPlayer = nullptr;
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	CTransparentBgEventHandler m_eventHandler;
-	//agora::media::base::ExternalVideoFrame m_videoFrame;
-	bool m_joinChannel = false;
-	bool m_initialize = false;
-	int m_uid = 1001;
-	int m_remoteId = 0;
-
-public:
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG *pMsg);
-
-	afx_msg void OnBnClickedButtonJoinchannel();
+	void InvalidateVideo();
 
 private:
 	CStatic m_staticChannelName;
@@ -120,6 +110,14 @@ private:
 	CStatic m_staticVideoRight;
 	CListBox m_listInfo;
 
-public:
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	IRtcEngine *m_rtcEngine = nullptr;
+	agora_refptr<IMediaPlayer> m_mediaPlayer = nullptr;
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	CTransparentBgEventHandler m_eventHandler;
+	// agora::media::base::ExternalVideoFrame m_videoFrame;
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	int m_uid = 1001;
+	int m_remoteId = 0;
+
 };

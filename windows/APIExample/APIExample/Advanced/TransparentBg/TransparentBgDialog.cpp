@@ -90,9 +90,6 @@ END_MESSAGE_MAP()
 BOOL CTransparentBgDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-
-    m_listInfo.ResetContent();
-    InitCtrlText();
     return TRUE;
 }
 
@@ -102,7 +99,10 @@ void CTransparentBgDlg::InitCtrlText()
     m_staticChannelName.SetWindowText(commonCtrlChannel);
     m_bnJoinChannel.SetWindowText(commonCtrlJoinChannel);
     m_editChannel.SetWindowText(_T(""));
+}
 
+void CTransparentBgDlg::InvalidateVideo()
+{
     m_staticVideo.Invalidate();
     m_staticVideoLeft.Invalidate();
     m_staticVideoRight.Invalidate();
@@ -377,6 +377,7 @@ LRESULT CTransparentBgDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     // notify parent window
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
+    InvalidateVideo();
     return 0;
 }
 
@@ -415,6 +416,7 @@ LRESULT CTransparentBgDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
         strInfo.Format(TEXT("%u offline, reason:%d"), remoteUid, lParam);
         m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     }
+    InvalidateVideo();
     return 0;
 }
 
@@ -431,13 +433,13 @@ LRESULT CTransparentBgDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 {
     LocalAudioStats *stats = (LocalAudioStats *)wParam;
 
-    // m_videoWnds[0].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
+   CString strInfo = _T("===onLocalAudioStats===");
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-    if (stats)
-    {
-        delete stats;
-        stats = nullptr;
-    }
+	strInfo.Format(_T("numChannels:%u"), stats->numChannels);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+	strInfo.Format(_T("sentSampleRate:%u"), stats->sentSampleRate);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     return 0;
 }
 
@@ -445,19 +447,13 @@ LRESULT CTransparentBgDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam)
 {
     RemoteAudioStats *stats = (RemoteAudioStats *)wParam;
 
-    /*for (int i = 0; i < VIDEO_COUNT; i++)
-    {
-        if (m_videoWnds[i].GetUID() == stats->uid) {
-            m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
-            break;
-        }
-    }*/
+    CString strInfo = _T("===onRemoteAudioStats===");
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-    if (stats)
-    {
-        delete stats;
-        stats = nullptr;
-    }
+	strInfo.Format(_T("uid:%u"), stats->uid);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+	strInfo.Format(_T("quality:%d"), stats->quality);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     return 0;
 }
 
@@ -465,12 +461,18 @@ LRESULT CTransparentBgDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 {
     LocalVideoStats *stats = (LocalVideoStats *)wParam;
 
-    /*m_videoWnds[0].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight, stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+    CString strInfo = _T("===onLocalVideoStats===");
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-    if (stats) {
-        delete stats;
-        stats = nullptr;
-    }*/
+	strInfo.Format(_T("uid:%u"), stats->uid);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+	strInfo.Format(_T("sentBitrate:%d"), stats->sentBitrate);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+	
+	strInfo.Format(_T("sentFrameRate:%d"), stats->sentFrameRate);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+	strInfo.Format(_T("encoderOutputFrameRate:%d"), stats->encoderOutputFrameRate);
+	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
     return 0;
 }
@@ -478,8 +480,20 @@ LRESULT CTransparentBgDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 LRESULT CTransparentBgDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam)
 {
     RemoteVideoStats *stats = (RemoteVideoStats *)wParam;
-    //	CString strInfo = _T("===onRemoteVideoStats===");
-    //    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    CString strInfo = _T("===onRemoteVideoStats===");
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("uid:%u"), stats->uid);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("delay:%d"), stats->delay);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+
+    strInfo.Format(_T("width:%d"), stats->width);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("height:%d"), stats->height);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+
+    strInfo.Format(_T("receivedBitrate:%d"), stats->receivedBitrate);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     return 0;
 }
 
@@ -528,6 +542,7 @@ void CTransparentBgDlg::OnBnClickedButtonJoinchannel()
         if (0 == ret)
         {
             InitCtrlText();
+            InvalidateVideo();
             StopPlay();
         }
         else
@@ -545,12 +560,11 @@ void CTransparentBgDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
     if (bShow)
     {
-        // resume
         m_listInfo.ResetContent();
     }
     else
     {
-        // pause
         InitCtrlText();
+        InvalidateVideo();
     }
 }
