@@ -99,7 +99,7 @@ private:
 	agora_refptr<IMediaPlayer> m_mediaPlayer = nullptr;
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	CTransparentBgEventHandler m_eventHandler;
-	agora::media::base::ExternalVideoFrame m_videoFrame;
+	//agora::media::base::ExternalVideoFrame m_videoFrame;
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	int m_uid = 1001;
