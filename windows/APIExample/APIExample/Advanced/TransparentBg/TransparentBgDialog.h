@@ -8,6 +8,20 @@
 #include "AbstractMediaPlayerSourceObserver.h"
 using namespace agora::media::base;
 
+#define _IsWindowsVistaOrGreater()                             \
+	_IsWindowsVersionOrGreater(HIBYTE(0x0600), LOBYTE(0x0600), \
+							   0) // _WIN32_WINNT_VISTA
+#define _IsWindows8OrGreater()                                 \
+	_IsWindowsVersionOrGreater(HIBYTE(0x0602), LOBYTE(0x0602), \
+							   0) // _WIN32_WINNT_WIN8
+#define _IsWindows8Point1OrGreater()                           \
+	_IsWindowsVersionOrGreater(HIBYTE(0x0603), LOBYTE(0x0603), \
+							   0) // _WIN32_WINNT_WINBLUE
+#define _IsWindows10OrGreater()         \
+	_IsWindowsVersionOrGreater(         \
+		HIBYTE(0x0A00), LOBYTE(0x0A00), \
+		0) // _WIN32_WINNT_WINTHRESHOLD / _WIN32_WINNT_WIN10
+
 class CTransparentBgEventHandler : public IRtcEngineEventHandler
 {
 public:
@@ -100,8 +114,11 @@ private:
 	int JoinChannel(const char *channel);
 	int LeaveChannel();
 	void InvalidateVideo();
+	static BOOL _IsWindowsVersionOrGreater(WORD major, WORD minor, WORD);
+	void enable_alpha_composition(void *hwnd);
+	void ShowTransparentWindow();
+	void HideTransparentWindow();
 
-private:
 	CStatic m_staticChannelName;
 	CButton m_bnJoinChannel;
 	CEdit m_editChannel;
@@ -119,5 +136,5 @@ private:
 	bool m_initialize = false;
 	int m_uid = 1001;
 	int m_remoteId = 0;
-
+	HWND hWnd = NULL;
 };
