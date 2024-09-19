@@ -86,11 +86,116 @@ ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CTransparentBgDlg::OnBnClickedButtonJoinc
 ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
+BOOL CTransparentBgDlg::_IsWindowsVersionOrGreater(WORD major, WORD minor, WORD)
+{
+    typedef LONG(WINAPI * PFN_RtlVerifyVersionInfo)(OSVERSIONINFOEXW *, ULONG, ULONGLONG);
+    static PFN_RtlVerifyVersionInfo RtlVerifyVersionInfoFn = NULL;
+    if (RtlVerifyVersionInfoFn == NULL)
+        if (HMODULE ntdllModule = ::GetModuleHandleA("ntdll.dll"))
+            RtlVerifyVersionInfoFn = (PFN_RtlVerifyVersionInfo)GetProcAddress(
+                ntdllModule, "RtlVerifyVersionInfo");
+    if (RtlVerifyVersionInfoFn == NULL)
+        return FALSE;
+    RTL_OSVERSIONINFOEXW versionInfo = {};
+    ULONGLONG conditionMask = 0;
+    versionInfo.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOEXW);
+    versionInfo.dwMajorVersion = major;
+    versionInfo.dwMinorVersion = minor;
+    VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
+    VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
+    return (RtlVerifyVersionInfoFn(&versionInfo,
+                                   VER_MAJORVERSION | VER_MINORVERSION,
+                                   conditionMask) == 0)
+               ? TRUE
+               : FALSE;
+}
+
+void CTransparentBgDlg::enable_alpha_composition(void *hwnd)
+{
+    if (!_IsWindowsVistaOrGreater())
+    {
+        return;
+    }
+    BOOL composition;
+    if (FAILED(::DwmIsCompositionEnabled(&composition)) || !composition)
+        return;
+    BOOL opaque;
+    DWORD color;
+    if (_IsWindows8OrGreater() ||
+        (SUCCEEDED(::DwmGetColorizationColor(&color, &opaque)) && !opaque))
+    {
+        HRGN region = ::CreateRectRgn(0, 0, -1, -1);
+        DWM_BLURBEHIND bb = {};
+        bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+        bb.hRgnBlur = region;
+        bb.fEnable = TRUE;
+        ::DwmEnableBlurBehindWindow((HWND)hwnd, &bb);
+        ::DeleteObject(region);
+    }
+    else
+    {
+        DWM_BLURBEHIND bb = {};
+        bb.dwFlags = DWM_BB_ENABLE;
+        ::DwmEnableBlurBehindWindow((HWND)hwnd, &bb);
+    }
+}
+
 // CTransparentBgDlg message handlers
 BOOL CTransparentBgDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
+    CString className("TransparentWindowClass");
+    WNDCLASS wndcls = {};
+    HINSTANCE hInst = AfxGetInstanceHandle();
+    if (!(::GetClassInfo(hInst, className, &wndcls)))
+    {
+        wndcls.style = CS_HREDRAW | CS_VREDRAW;
+        wndcls.lpfnWndProc = ::DefWindowProc;
+        wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
+        wndcls.hInstance = hInst;
+        wndcls.hIcon = NULL;
+        wndcls.hCursor = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
+        wndcls.hbrBackground = NULL;
+        wndcls.lpszMenuName = NULL;
+        wndcls.lpszClassName = className;
+        if (AfxRegisterClass(&wndcls))
+        {
+            hWnd = CreateWindowEx(
+                0,                                                                     // 扩展窗口样式
+                className,                                                             // 窗口类名
+                _T("透明窗口"),                                                        // 窗口标题
+                WS_OVERLAPPEDWINDOW & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_SYSMENU, // 窗口样式
+                CW_USEDEFAULT, CW_USEDEFAULT,                                          // 窗口位置
+                800, 600,                                                              // 窗口大小
+                this->GetSafeHwnd(),                                                   // 父窗口句柄
+                NULL,                                                                  // 菜单句柄
+                AfxGetInstanceHandle(),                                                // 应用程序实例句柄
+                NULL                                                                   // 窗口创建数据
+            );
+            if (hWnd)
+            {
+                enable_alpha_composition(hWnd);
+            }
+        }
+    }
     return TRUE;
+}
+
+void CTransparentBgDlg::ShowTransparentWindow()
+{
+    if (hWnd)
+    {
+        ::ShowWindow(hWnd, SW_SHOW); // 显示窗口
+        UpdateWindow();              // 更新窗口
+    }
+}
+void CTransparentBgDlg::HideTransparentWindow()
+{
+    if (hWnd)
+    {
+        ::ShowWindow(hWnd, SW_HIDE); // 隐藏窗口
+        UpdateWindow();              // 更新窗口
+    }
 }
 
 // set control text from config.
@@ -346,6 +451,14 @@ void CTransparentBgDlg::UnInitAgora()
             m_rtcEngine->release(true);
         }
         m_rtcEngine = NULL;
+
+        // if (hWnd)
+        // {
+
+        //     ::DestroyWindow(hWnd);
+        //     hWnd = NULL;
+        // }
+        HideTransparentWindow();
     }
 }
 
@@ -396,9 +509,11 @@ LRESULT CTransparentBgDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     VideoCanvas canvas;
     canvas.enableAlphaMask = true;
     canvas.uid = m_remoteId;
-    canvas.view = m_staticVideoRight.GetSafeHwnd();
+    // canvas.view = m_staticVideoRight.GetSafeHwnd();
+    canvas.view = hWnd;
     canvas.renderMode = media::base::RENDER_MODE_FIT;
     m_rtcEngine->setupRemoteVideo(canvas);
+    ShowTransparentWindow();
     return 0;
 }
 
@@ -412,6 +527,7 @@ LRESULT CTransparentBgDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
         canvas.uid = remoteUid;
         canvas.view = NULL;
         m_rtcEngine->setupRemoteVideo(canvas);
+        HideTransparentWindow();
         CString strInfo;
         strInfo.Format(TEXT("%u offline, reason:%d"), remoteUid, lParam);
         m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
@@ -433,13 +549,13 @@ LRESULT CTransparentBgDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 {
     LocalAudioStats *stats = (LocalAudioStats *)wParam;
 
-   CString strInfo = _T("===onLocalAudioStats===");
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    CString strInfo = _T("===onLocalAudioStats===");
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-	strInfo.Format(_T("numChannels:%u"), stats->numChannels);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
-	strInfo.Format(_T("sentSampleRate:%u"), stats->sentSampleRate);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("numChannels:%u"), stats->numChannels);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("sentSampleRate:%u"), stats->sentSampleRate);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     return 0;
 }
 
@@ -448,12 +564,12 @@ LRESULT CTransparentBgDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam)
     RemoteAudioStats *stats = (RemoteAudioStats *)wParam;
 
     CString strInfo = _T("===onRemoteAudioStats===");
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-	strInfo.Format(_T("uid:%u"), stats->uid);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
-	strInfo.Format(_T("quality:%d"), stats->quality);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("uid:%u"), stats->uid);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("quality:%d"), stats->quality);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
     return 0;
 }
 
@@ -462,17 +578,17 @@ LRESULT CTransparentBgDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
     LocalVideoStats *stats = (LocalVideoStats *)wParam;
 
     CString strInfo = _T("===onLocalVideoStats===");
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
-	strInfo.Format(_T("uid:%u"), stats->uid);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
-	strInfo.Format(_T("sentBitrate:%d"), stats->sentBitrate);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
-	
-	strInfo.Format(_T("sentFrameRate:%d"), stats->sentFrameRate);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
-	strInfo.Format(_T("encoderOutputFrameRate:%d"), stats->encoderOutputFrameRate);
-	m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("uid:%u"), stats->uid);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("sentBitrate:%d"), stats->sentBitrate);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+
+    strInfo.Format(_T("sentFrameRate:%d"), stats->sentFrameRate);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
+    strInfo.Format(_T("encoderOutputFrameRate:%d"), stats->encoderOutputFrameRate);
+    m_listInfo.InsertString(m_listInfo.GetCount(), strInfo);
 
     return 0;
 }
@@ -539,6 +655,7 @@ void CTransparentBgDlg::OnBnClickedButtonJoinchannel()
     else
     {
         int ret = LeaveChannel();
+        HideTransparentWindow();
         if (0 == ret)
         {
             InitCtrlText();
