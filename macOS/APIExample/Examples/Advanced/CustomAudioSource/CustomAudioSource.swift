@@ -214,7 +214,7 @@ class CustomAudioSource: BaseViewController {
             isProcessing = true
             
             let option = AgoraRtcChannelMediaOptions()
-            option.publishMicrophoneTrack = true
+            option.publishMicrophoneTrack = false
             option.publishCustomAudioTrack = true
             option.publishCameraTrack = false
             option.publishCustomAudioTrackId = Int(trackId)
