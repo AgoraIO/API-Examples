@@ -134,14 +134,6 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
-		DD4E2A9E2CA2821D00EDE110 /* CustomViewPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */; };
-		DD4E2A9F2CA2821D00EDE110 /* CustomViewPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */; };
-		DD4E2AA02CA2821D00EDE110 /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */; };
-		DD4E2AA12CA2821D00EDE110 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */; };
-		DD4E2AA22CA2821D00EDE110 /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */; };
-		DD4E2AA32CA2821D00EDE110 /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */; };
-		DD4E2AA42CA2821D00EDE110 /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */; };
-		DD4E2AA62CA282CF00EDE110 /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */; };
 		DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD50252C205BF20050B344 /* TransparentRender.swift */; };
 		DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50272C205CF40050B344 /* TransparentRender.storyboard */; };
 		DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */; };
@@ -232,6 +224,15 @@
 		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
+		F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */; };
+		F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CE2CA295D7007813BB /* ChannelViewController.swift */; };
+		F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */; };
+		F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */; };
+		F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */; };
+		F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */; };
+		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
+		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
+		F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = F728B9DF2CA29625007813BB /* PictureInPicture.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -455,14 +456,6 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
-		DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPService.swift; sourceTree = "<group>"; };
-		DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPViewController.swift; sourceTree = "<group>"; };
-		DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPBaseViewController.swift; sourceTree = "<group>"; };
-		DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
-		DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
-		DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
-		DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
-		DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
 		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
 		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
 		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
@@ -594,6 +587,15 @@
 		E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
+		F728B9CE2CA295D7007813BB /* ChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
+		F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPService.swift; sourceTree = "<group>"; };
+		F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPViewController.swift; sourceTree = "<group>"; };
+		F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPBaseViewController.swift; sourceTree = "<group>"; };
+		F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
+		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
+		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
+		F728B9DF2CA29625007813BB /* PictureInPicture.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = PictureInPicture.strings; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1175,25 +1177,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		DD4E2A972CA2821D00EDE110 /* CustomViewPIPViewController */ = {
-			isa = PBXGroup;
-			children = (
-				DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */,
-				DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */,
-			);
-			path = CustomViewPIPViewController;
-			sourceTree = "<group>";
-		};
-		DD4E2A9D2CA2821D00EDE110 /* PixelBufferPIPViewController */ = {
-			isa = PBXGroup;
-			children = (
-				DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */,
-				DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */,
-				DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */,
-			);
-			path = PixelBufferPIPViewController;
-			sourceTree = "<group>";
-		};
 		DDFD50242C205BDF0050B344 /* TransparentRender */ = {
 			isa = PBXGroup;
 			children = (
@@ -1253,12 +1236,13 @@
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
 			isa = PBXGroup;
 			children = (
-				DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */,
-				DD4E2A972CA2821D00EDE110 /* CustomViewPIPViewController */,
-				DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */,
-				DD4E2A9D2CA2821D00EDE110 /* PixelBufferPIPViewController */,
+				F728B9CE2CA295D7007813BB /* ChannelViewController.swift */,
+				F728B9D12CA295D7007813BB /* CustomViewPIPViewController */,
+				F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */,
+				F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */,
+				F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */,
 				E728B84428B5FFCB00674A4A /* PictureInPicture.swift */,
-				DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */,
+				F728B9DF2CA29625007813BB /* PictureInPicture.strings */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
@@ -1501,6 +1485,25 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		F728B9D12CA295D7007813BB /* CustomViewPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */,
+				F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */,
+			);
+			path = CustomViewPIPViewController;
+			sourceTree = "<group>";
+		};
+		F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */,
+				F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */,
+				F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */,
+			);
+			path = PixelBufferPIPViewController;
+			sourceTree = "<group>";
+		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1672,11 +1675,11 @@
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
+				F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */,
 				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
-				DD4E2AA62CA282CF00EDE110 /* PictureInPicture.storyboard in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
@@ -1736,6 +1739,7 @@
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
 				E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+				F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1874,6 +1878,7 @@
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
 				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
 				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
+				F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */,
 				E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */,
@@ -1896,7 +1901,6 @@
 				E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */,
 				E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
-				DD4E2AA02CA2821D00EDE110 /* PIPBaseViewController.swift in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
 				E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
@@ -1908,30 +1912,31 @@
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */,
 				E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */,
+				F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				8B5E5B50274CB68E0040E97D /* RhythmPlayer.swift in Sources */,
 				E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
+				F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */,
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
-				DD4E2AA22CA2821D00EDE110 /* PixelBufferPIPService.swift in Sources */,
 				E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */,
 				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
 				E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */,
-				DD4E2A9E2CA2821D00EDE110 /* CustomViewPIPService.swift in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
 				E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
 				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
+				F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */,
 				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
 				DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */,
 				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
 				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
+				F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */,
 				E721600F28D3314B006431BD /* AlertManager.swift in Sources */,
-				DD4E2AA32CA2821D00EDE110 /* PixelBufferPIPViewController.swift in Sources */,
 				E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				E7163F822964149800EBBD55 /* ARKit.swift in Sources */,
@@ -1975,16 +1980,15 @@
 				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
+				F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
-				DD4E2AA12CA2821D00EDE110 /* ChannelViewController.swift in Sources */,
 				E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
-				DD4E2A9F2CA2821D00EDE110 /* CustomViewPIPViewController.swift in Sources */,
 				E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */,
 				03414B5325546C7200AB114D /* AgoraYUVImageSourcePush.m in Sources */,
-				DD4E2AA42CA2821D00EDE110 /* PixelBufferRenderView.swift in Sources */,
+				F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 				67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */,
 			);
@@ -2538,8 +2542,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2572,8 +2576,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2726,10 +2730,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2798,9 +2802,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2865,11 +2869,11 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2902,11 +2906,11 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
