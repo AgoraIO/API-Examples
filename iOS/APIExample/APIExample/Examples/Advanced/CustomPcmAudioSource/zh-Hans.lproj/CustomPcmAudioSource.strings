@@ -6,7 +6,10 @@
 "Cwr-m3-kGh.text" = "麦克风";
 
 /* Class = "UILabel"; text = "Push PCM"; ObjectID = "Dbo-LJ-5lv"; */
-"Dbo-LJ-5lv.text" = "播放 PCM";
+"Dbo-LJ-5lv.text" = "发布本地音频";
+
+/* Class = "UILabel"; text = "Push Microphone"; ObjectID = "3Sp-t2-4ZJ"; */
+"3Sp-t2-4ZJ.text" = "发布麦克风";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "SdL-FU-6ht"; */
 "SdL-FU-6ht.placeholder" = "输入频道名";
