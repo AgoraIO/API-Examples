@@ -134,6 +134,14 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		DD4E2A9E2CA2821D00EDE110 /* CustomViewPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */; };
+		DD4E2A9F2CA2821D00EDE110 /* CustomViewPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */; };
+		DD4E2AA02CA2821D00EDE110 /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */; };
+		DD4E2AA12CA2821D00EDE110 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */; };
+		DD4E2AA22CA2821D00EDE110 /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */; };
+		DD4E2AA32CA2821D00EDE110 /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */; };
+		DD4E2AA42CA2821D00EDE110 /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */; };
+		DD4E2AA62CA282CF00EDE110 /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */; };
 		DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD50252C205BF20050B344 /* TransparentRender.swift */; };
 		DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50272C205CF40050B344 /* TransparentRender.storyboard */; };
 		DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */; };
@@ -152,9 +160,7 @@
 		E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */; };
 		E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726C0022A96FD3A006870E2 /* AudioWaveform.swift */; };
 		E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */ = {isa = PBXBuildFile; fileRef = E726C0062A96FF15006870E2 /* ZSNBoxingView.m */; };
-		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
-		E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */; };
 		E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = E728B84B28B6015800674A4A /* AgoraPictureInPictureController.m */; };
 		E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E728B84E28B601A300674A4A /* AgoraSampleBufferRender.m */; };
 		E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E728B85028B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib */; };
@@ -449,6 +455,14 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPService.swift; sourceTree = "<group>"; };
+		DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPViewController.swift; sourceTree = "<group>"; };
+		DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPBaseViewController.swift; sourceTree = "<group>"; };
+		DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
+		DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
+		DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
+		DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
+		DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
 		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
 		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
 		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
@@ -468,9 +482,7 @@
 		E726C0022A96FD3A006870E2 /* AudioWaveform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveform.swift; sourceTree = "<group>"; };
 		E726C0062A96FF15006870E2 /* ZSNBoxingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSNBoxingView.m; sourceTree = "<group>"; };
 		E726C0072A96FF15006870E2 /* ZSNBoxingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSNBoxingView.h; sourceTree = "<group>"; };
-		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
-		E728B84628B5FFCB00674A4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PictureInPicture.storyboard; sourceTree = "<group>"; };
 		E728B84A28B6015800674A4A /* AgoraPictureInPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraPictureInPictureController.h; sourceTree = "<group>"; };
 		E728B84B28B6015800674A4A /* AgoraPictureInPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraPictureInPictureController.m; sourceTree = "<group>"; };
 		E728B84D28B601A300674A4A /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
@@ -1163,6 +1175,25 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DD4E2A972CA2821D00EDE110 /* CustomViewPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DD4E2A952CA2821D00EDE110 /* CustomViewPIPService.swift */,
+				DD4E2A962CA2821D00EDE110 /* CustomViewPIPViewController.swift */,
+			);
+			path = CustomViewPIPViewController;
+			sourceTree = "<group>";
+		};
+		DD4E2A9D2CA2821D00EDE110 /* PixelBufferPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DD4E2A9A2CA2821D00EDE110 /* PixelBufferPIPService.swift */,
+				DD4E2A9B2CA2821D00EDE110 /* PixelBufferPIPViewController.swift */,
+				DD4E2A9C2CA2821D00EDE110 /* PixelBufferRenderView.swift */,
+			);
+			path = PixelBufferPIPViewController;
+			sourceTree = "<group>";
+		};
 		DDFD50242C205BDF0050B344 /* TransparentRender */ = {
 			isa = PBXGroup;
 			children = (
@@ -1222,9 +1253,12 @@
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
 			isa = PBXGroup;
 			children = (
-				E728B84228B5FFCB00674A4A /* PictureInPicture.strings */,
+				DD4E2A992CA2821D00EDE110 /* ChannelViewController.swift */,
+				DD4E2A972CA2821D00EDE110 /* CustomViewPIPViewController */,
+				DD4E2A982CA2821D00EDE110 /* PIPBaseViewController.swift */,
+				DD4E2A9D2CA2821D00EDE110 /* PixelBufferPIPViewController */,
 				E728B84428B5FFCB00674A4A /* PictureInPicture.swift */,
-				E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */,
+				DD4E2AA52CA282CF00EDE110 /* PictureInPicture.storyboard */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
@@ -1642,9 +1676,9 @@
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
+				DD4E2AA62CA282CF00EDE110 /* PictureInPicture.storyboard in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
-				E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */,
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
 				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
 				E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */,
@@ -1654,7 +1688,6 @@
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				E7163F8A29651D8900EBBD55 /* AR.scnassets in Resources */,
 				E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */,
-				E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */,
@@ -1863,6 +1896,7 @@
 				E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */,
 				E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
+				DD4E2AA02CA2821D00EDE110 /* PIPBaseViewController.swift in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
 				E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
@@ -1879,12 +1913,14 @@
 				E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
+				DD4E2AA22CA2821D00EDE110 /* PixelBufferPIPService.swift in Sources */,
 				E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */,
 				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
 				E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */,
+				DD4E2A9E2CA2821D00EDE110 /* CustomViewPIPService.swift in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
 				E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
@@ -1895,6 +1931,7 @@
 				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
 				E721600F28D3314B006431BD /* AlertManager.swift in Sources */,
+				DD4E2AA32CA2821D00EDE110 /* PixelBufferPIPViewController.swift in Sources */,
 				E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				E7163F822964149800EBBD55 /* ARKit.swift in Sources */,
@@ -1941,10 +1978,13 @@
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
+				DD4E2AA12CA2821D00EDE110 /* ChannelViewController.swift in Sources */,
 				E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
+				DD4E2A9F2CA2821D00EDE110 /* CustomViewPIPViewController.swift in Sources */,
 				E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */,
 				03414B5325546C7200AB114D /* AgoraYUVImageSourcePush.m in Sources */,
+				DD4E2AA42CA2821D00EDE110 /* PixelBufferRenderView.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 				67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */,
 			);
@@ -2332,22 +2372,6 @@
 				E726C0012A96FD3A006870E2 /* Base */,
 			);
 			name = AudioWaveform.storyboard;
-			sourceTree = "<group>";
-		};
-		E728B84228B5FFCB00674A4A /* PictureInPicture.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E728B84328B5FFCB00674A4A /* zh-Hans */,
-			);
-			name = PictureInPicture.strings;
-			sourceTree = "<group>";
-		};
-		E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E728B84628B5FFCB00674A4A /* Base */,
-			);
-			name = PictureInPicture.storyboard;
 			sourceTree = "<group>";
 		};
 		E728B85328B86B0700674A4A /* CustomVideoSourcePushMulti.strings */ = {
