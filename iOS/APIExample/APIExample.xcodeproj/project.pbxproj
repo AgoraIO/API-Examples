@@ -152,9 +152,7 @@
 		E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E726C0002A96FD3A006870E2 /* AudioWaveform.storyboard */; };
 		E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E726C0022A96FD3A006870E2 /* AudioWaveform.swift */; };
 		E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */ = {isa = PBXBuildFile; fileRef = E726C0062A96FF15006870E2 /* ZSNBoxingView.m */; };
-		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
-		E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */; };
 		E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = E728B84B28B6015800674A4A /* AgoraPictureInPictureController.m */; };
 		E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E728B84E28B601A300674A4A /* AgoraSampleBufferRender.m */; };
 		E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E728B85028B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib */; };
@@ -226,6 +224,15 @@
 		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
+		F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */; };
+		F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CE2CA295D7007813BB /* ChannelViewController.swift */; };
+		F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */; };
+		F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */; };
+		F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */; };
+		F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */; };
+		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
+		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
+		F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = F728B9DF2CA29625007813BB /* PictureInPicture.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -468,9 +475,7 @@
 		E726C0022A96FD3A006870E2 /* AudioWaveform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveform.swift; sourceTree = "<group>"; };
 		E726C0062A96FF15006870E2 /* ZSNBoxingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSNBoxingView.m; sourceTree = "<group>"; };
 		E726C0072A96FF15006870E2 /* ZSNBoxingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSNBoxingView.h; sourceTree = "<group>"; };
-		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
-		E728B84628B5FFCB00674A4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PictureInPicture.storyboard; sourceTree = "<group>"; };
 		E728B84A28B6015800674A4A /* AgoraPictureInPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraPictureInPictureController.h; sourceTree = "<group>"; };
 		E728B84B28B6015800674A4A /* AgoraPictureInPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraPictureInPictureController.m; sourceTree = "<group>"; };
 		E728B84D28B601A300674A4A /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
@@ -582,6 +587,15 @@
 		E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
+		F728B9CE2CA295D7007813BB /* ChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
+		F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPService.swift; sourceTree = "<group>"; };
+		F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPViewController.swift; sourceTree = "<group>"; };
+		F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPBaseViewController.swift; sourceTree = "<group>"; };
+		F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
+		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
+		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
+		F728B9DF2CA29625007813BB /* PictureInPicture.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = PictureInPicture.strings; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1222,9 +1236,13 @@
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
 			isa = PBXGroup;
 			children = (
-				E728B84228B5FFCB00674A4A /* PictureInPicture.strings */,
+				F728B9CE2CA295D7007813BB /* ChannelViewController.swift */,
+				F728B9D12CA295D7007813BB /* CustomViewPIPViewController */,
+				F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */,
+				F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */,
+				F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */,
 				E728B84428B5FFCB00674A4A /* PictureInPicture.swift */,
-				E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */,
+				F728B9DF2CA29625007813BB /* PictureInPicture.strings */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
@@ -1467,6 +1485,25 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		F728B9D12CA295D7007813BB /* CustomViewPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */,
+				F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */,
+			);
+			path = CustomViewPIPViewController;
+			sourceTree = "<group>";
+		};
+		F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */,
+				F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */,
+				F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */,
+			);
+			path = PixelBufferPIPViewController;
+			sourceTree = "<group>";
+		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1638,13 +1675,13 @@
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
+				F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */,
 				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
-				E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */,
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
 				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
 				E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */,
@@ -1654,7 +1691,6 @@
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				E7163F8A29651D8900EBBD55 /* AR.scnassets in Resources */,
 				E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */,
-				E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */,
@@ -1703,6 +1739,7 @@
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
 				E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+				F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1841,6 +1878,7 @@
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
 				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
 				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
+				F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */,
 				E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */,
@@ -1874,10 +1912,12 @@
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */,
 				E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */,
+				F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				8B5E5B50274CB68E0040E97D /* RhythmPlayer.swift in Sources */,
 				E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
+				F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */,
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
 				E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */,
 				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
@@ -1889,11 +1929,13 @@
 				E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
 				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
+				F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */,
 				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
 				DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */,
 				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
 				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
+				F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */,
 				E721600F28D3314B006431BD /* AlertManager.swift in Sources */,
 				E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
@@ -1938,6 +1980,7 @@
 				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
+				F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
@@ -1945,6 +1988,7 @@
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */,
 				03414B5325546C7200AB114D /* AgoraYUVImageSourcePush.m in Sources */,
+				F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 				67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */,
 			);
@@ -2334,22 +2378,6 @@
 			name = AudioWaveform.storyboard;
 			sourceTree = "<group>";
 		};
-		E728B84228B5FFCB00674A4A /* PictureInPicture.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E728B84328B5FFCB00674A4A /* zh-Hans */,
-			);
-			name = PictureInPicture.strings;
-			sourceTree = "<group>";
-		};
-		E728B84528B5FFCB00674A4A /* PictureInPicture.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E728B84628B5FFCB00674A4A /* Base */,
-			);
-			name = PictureInPicture.storyboard;
-			sourceTree = "<group>";
-		};
 		E728B85328B86B0700674A4A /* CustomVideoSourcePushMulti.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2514,8 +2542,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2548,8 +2576,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2702,10 +2730,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2774,9 +2802,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2841,11 +2869,11 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2878,11 +2906,11 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
