@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "CConfig.h"
+
 wchar_t commonGroupDoc[INFO_LEN]		= { 0 };
 wchar_t commonDocumentWebsite[INFO_LEN] = { 0 };
 wchar_t commonFAQWebsite[INFO_LEN]		= { 0 };
@@ -317,6 +318,11 @@ wchar_t localVideoTranscodingVirtualBg[INFO_LEN] = { 0 };
 wchar_t advancedMetadataVideo[INFO_LEN] = { 0 };
 wchar_t advancedMetadataAudio[INFO_LEN] = { 0 };
 wchar_t advancedMetadataSend[INFO_LEN] = { 0 };
+
+
+//transparent backgroud
+wchar_t TransparentBackground[INFO_LEN] = { 0 };
+
 
 std::string cs2utf8(CString str)
 {
@@ -766,6 +772,10 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedMetadataVideo, INFO_LEN, Str(_T("Metadata.Video")));
 	_tcscpy_s(advancedMetadataAudio, INFO_LEN, Str(_T("Metadata.Audio")));
 	_tcscpy_s(advancedMetadataSend, INFO_LEN, Str(_T("Metadata.Send")));
+
+        //transparent bg
+        _tcscpy_s(TransparentBackground, INFO_LEN, Str(_T("TransparentBackground")));
+
 
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
