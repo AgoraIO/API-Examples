@@ -1,6 +1,10 @@
 import {
-    ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig, VideoCanvas,
-    VideoEncoderConfiguration
+  ChannelMediaOptions,
+  Constants,
+  RtcEngine,
+  RtcEngineConfig,
+  VideoCanvas,
+  VideoEncoderConfiguration
 } from 'AgoraRtcSdk';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
@@ -32,12 +36,25 @@ struct JoinVideoChannelToken {
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = appId;
     config.mEventHandler = {};
+    config.mEventHandler.onRequestToken = () => {
+      Logger.info(TAG, "onRequestToken ...");
+    }
+    config.mEventHandler.onTokenPrivilegeWillExpire = async (oldToken: string) => {
+      Logger.info(TAG, `onTokenPrivilegeWillExpire oldToken = ${oldToken}`);
+      //请求服务端重新生产token
+      // this.token = getTokenFromServer()
+      // this.rtcEngine?.renewToken(this.token)
+    }
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
       if (this.remoteUid == 0) {
         this.remoteUid = uid;
       }
     };
+    config.mEventHandler.onConnectionStateChanged =
+      (state: Constants.ConnectionState, reason: Constants.ConnectionChangedReason) => {
+        Logger.info(TAG, `onConnectionStateChanged state=${state}    reason=${reason}`);
+      }
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
       Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason);
       if (this.remoteUid == uid) {
@@ -143,7 +160,12 @@ struct JoinVideoChannelToken {
           this.appId = value
         })
         .flexGrow(0)
-        .margin({ left: 12, right: 12, top: 6, bottom: 6 })
+        .margin({
+          left: 12,
+          right: 12,
+          top: 6,
+          bottom: 6
+        })
 
       TextInput({ placeholder: $r('app.string.token'), text: this.token })
         .id("input_token")
@@ -154,7 +176,12 @@ struct JoinVideoChannelToken {
           this.token = value
         })
         .flexGrow(0)
-        .margin({ left: 12, right: 12, top: 6, bottom: 6 })
+        .margin({
+          left: 12,
+          right: 12,
+          top: 6,
+          bottom: 6
+        })
 
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name'), text: this.channelName })
@@ -210,13 +237,17 @@ struct JoinVideoChannelToken {
                 ShowToast.longToast("joinChannelWithOptions error " + ret + " : " + RtcEngine.getErrorDescription(ret))
                 return
               }
-
               this.rtcEngine?.startPreview()
             })
             .flexGrow(0)
         }
       }
-      .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 6,
+        bottom: 6
+      })
     }
     .backgroundColor($r('app.color.background_shallow_grey'))
   }
