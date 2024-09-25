@@ -165,18 +165,20 @@ class CustomAudioRenderMain: BaseViewController {
     
     private func startPullAudio() {
         DispatchQueue.global().async {
-            let pullMs: TimeInterval = 10
+            let pullMs: TimeInterval = 100
             let lengthInByte = sampleRate / 1000 * 2 * channels * UInt(pullMs)
             let pointer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(lengthInByte))
+            var deltaMs: TimeInterval = 0
             while self.isJoined {
                 let date = Date()
                 memset(pointer, 0, Int(lengthInByte))
                 let ret = self.agoraKit.pullPlaybackAudioFrameRawData(pointer, lengthInByte: lengthInByte)
                 self.player.playPCMData(pcmData: pointer, count: lengthInByte)
                 let cost = -date.timeIntervalSinceNow * 1000
-                // multiply 0.4 to make sure thread process time is less than pullMs
-                usleep(UInt32(max((pullMs * 1000 - cost) * 0.4, 0)))
-//                print("pullPlaybackAudioFrameRawData: \(ret) lengthInByte: \(lengthInByte) cost: \(-date.timeIntervalSinceNow * 1000) ms")
+                usleep(UInt32(max((pullMs - cost - deltaMs) * 1000, 0)))
+                // add deltaMs to ensure that the thread processing time is less than pullMs, as thread sleep may not be accurate
+                deltaMs = max((-date.timeIntervalSinceNow * 1000) - pullMs, 0) * 2
+//                print("pullPlaybackAudioFrameRawData: \(ret) lengthInByte: \(lengthInByte) cost: \(-date.timeIntervalSinceNow * 1000)  ms, deltaMs: \(deltaMs) ms")
             }
             pointer.deallocate()
         }
