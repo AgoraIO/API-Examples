@@ -52,7 +52,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
-    let sampleRate: UInt = 44100, channel: UInt = 1, bitPerSample = 16, samples = 441 * 10
+    let sampleRate: UInt = 44100, channel: UInt = 2, bitPerSample = 16, samples = 441 * 10
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -10,6 +10,58 @@ import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
 
+private let bitsPerSample: UInt = 16
+private let samples: UInt = 441 * 10
+private let sampleRate: UInt = 44100
+private let channels: UInt = 2
+
+class PCMPlayer {
+    private var audioEngine: AVAudioEngine
+    private var playerNode: AVAudioPlayerNode
+    private var sampleRate: Double
+    private var channels: AVAudioChannelCount
+
+    init(sampleRate: Double, channels: AVAudioChannelCount) {
+        self.sampleRate = sampleRate
+        self.channels = channels
+        
+        audioEngine = AVAudioEngine()
+        playerNode = AVAudioPlayerNode()
+        
+        audioEngine.attach(playerNode)
+        
+        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels)
+        audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: format)
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("Audio Engine failed to start: \(error)")
+        }
+    }
+    
+    func playPCMData(pcmData: UnsafeMutablePointer<UInt8>, count: UInt) {
+        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels),
+              let audioBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count / 4)), // 16位立体声每帧4字节
+              let channelData = audioBuffer.floatChannelData else {
+            return
+        }
+        
+        audioBuffer.frameLength = AVAudioFrameCount(count / 4)
+        
+        for frame in 0..<Int(audioBuffer.frameLength) {
+            let leftSample = Int16(pcmData[frame * 4]) | (Int16(pcmData[frame * 4 + 1]) << 8)
+            let rightSample = Int16(pcmData[frame * 4 + 2]) | (Int16(pcmData[frame * 4 + 3]) << 8)
+            
+            channelData[0][frame] = Float(leftSample) / Float(Int16.max)
+            channelData[1][frame] = Float(rightSample) / Float(Int16.max)
+        }
+        
+        playerNode.scheduleBuffer(audioBuffer, completionHandler: nil)
+        playerNode.play()
+    }
+}
+
 class CustomAudioRenderEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -37,7 +89,6 @@ class CustomAudioRenderEntry: UIViewController {
 
 class CustomAudioRenderMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    var exAudio: ExternalAudio = ExternalAudio.shared()
 
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt: VideoView] = [:]
@@ -45,10 +96,10 @@ class CustomAudioRenderMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
+    lazy var player = PCMPlayer(sampleRate: Double(sampleRate), channels: AVAudioChannelCount(channels))
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let sampleRate: UInt = 44100, channel: UInt = 1
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -71,15 +122,6 @@ class CustomAudioRenderMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit,
-                                   sampleRate: UInt32(sampleRate),
-                                   channels: UInt32(channel),
-                                   trackId: 1,
-                                   audioCRMode: .sdkCaptureExterRender,
-                                   ioType: .remoteIO)
-        agoraKit.setParameters("{\"che.audio.external_render\": true}")
-        agoraKit.setParameters("{\"che.audio.keep.audiosession\": true}")
-        
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -88,9 +130,13 @@ class CustomAudioRenderMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = true
-        option.clientRoleType = GlobalSettings.shared.getUserRole()
+        option.publishMicrophoneTrack = false
+        option.autoSubscribeAudio = true
+        option.autoSubscribeVideo = false
+        option.channelProfile = .liveBroadcasting
+        option.clientRoleType = .broadcaster //GlobalSettings.shared.getUserRole()
         
+        agoraKit.enableExternalAudioSink(true, sampleRate: sampleRate, channels: channels)
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -108,13 +154,35 @@ class CustomAudioRenderMain: BaseViewController {
             // leave channel when exiting the view
             if isJoined {
                 agoraKit.disableAudio()
+                agoraKit.enableExternalAudioSink(false, sampleRate: sampleRate, channels: channels)
+                isJoined = false
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
         }
     }
+    
+    private func startPullAudio() {
+        DispatchQueue.global().async {
+            let pullMs: TimeInterval = 10
+            let lengthInByte = sampleRate / 1000 * 2 * channels * UInt(pullMs)
+            let pointer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(lengthInByte))
+            while self.isJoined {
+                let date = Date()
+                memset(pointer, 0, Int(lengthInByte))
+                let ret = self.agoraKit.pullPlaybackAudioFrameRawData(pointer, lengthInByte: lengthInByte)
+                self.player.playPCMData(pcmData: pointer, count: lengthInByte)
+                let cost = -date.timeIntervalSinceNow * 1000
+                // multiply 0.4 to make sure thread process time is less than pullMs
+                usleep(UInt32(max((pullMs * 1000 - cost) * 0.4, 0)))
+//                print("pullPlaybackAudioFrameRawData: \(ret) lengthInByte: \(lengthInByte) cost: \(-date.timeIntervalSinceNow * 1000) ms")
+            }
+            pointer.deallocate()
+        }
+    }
 }
+
 
 /// agora rtc engine delegate events
 extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
@@ -148,6 +216,7 @@ extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
         self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        startPullAudio()
     }
 
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
