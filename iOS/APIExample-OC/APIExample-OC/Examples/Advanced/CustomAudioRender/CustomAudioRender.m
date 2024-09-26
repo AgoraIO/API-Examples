@@ -137,6 +137,7 @@ const NSUInteger channels = 2;
     [super viewDidDisappear:animated];
     [self.agoraKit disableAudio];
     [self.agoraKit leaveChannel:nil];
+    [self.agoraKit enableExternalAudioSink:NO sampleRate:sampleRate channels:channels];
     [AgoraRtcEngineKit destroy];
     self.isJoined = NO;
 }
