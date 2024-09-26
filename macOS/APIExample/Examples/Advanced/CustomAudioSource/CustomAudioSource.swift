@@ -164,7 +164,7 @@ class CustomAudioSource: BaseViewController {
         agoraKit.updateChannel(with: mediaOption)
     }
     
-    let sampleRate:UInt = 44100, audioChannel:UInt = 1, bitPerSample = 16, samples = 441 * 10
+    let sampleRate:UInt = 44100, audioChannel:UInt = 2, bitPerSample = 16, samples = 441 * 10
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
@@ -336,7 +336,7 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
 extension CustomAudioSource: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
         agoraKit.pushExternalAudioFrameRawData(data,
-                                               samples: samples,
+                                               samples: samples*Int(audioChannel),
                                                sampleRate: Int(sampleRate),
                                                channels: Int(audioChannel),
                                                trackId: Int(trackId),
