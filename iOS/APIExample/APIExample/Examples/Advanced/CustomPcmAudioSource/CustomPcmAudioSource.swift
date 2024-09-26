@@ -96,6 +96,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
+        option.autoSubscribeVideo = false
         option.publishCameraTrack = false
         option.publishMicrophoneTrack = false
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
