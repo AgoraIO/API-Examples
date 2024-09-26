@@ -87,7 +87,7 @@ class CustomAudioRenderMain: BaseViewController {
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = false
         option.channelProfile = .liveBroadcasting
-        option.clientRoleType = .broadcaster //GlobalSettings.shared.getUserRole()
+        option.clientRoleType = .broadcaster
         
         agoraKit.enableExternalAudioSink(true, sampleRate: sampleRate, channels: channels)
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
