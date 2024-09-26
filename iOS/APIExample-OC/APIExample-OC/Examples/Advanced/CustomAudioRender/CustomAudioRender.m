@@ -10,7 +10,13 @@
 #import <AgoraRtcKit/AgoraRtcKit.h>
 #import "VideoView.h"
 #import "APIExample_OC-swift.h"
-#import "ExternalAudio.h"
+#import "AgoraPCMPlayer.h"
+
+
+const NSUInteger bitsPerSample = 16;
+const NSUInteger samples = 441 * 10;
+const NSUInteger sampleRate = 44100;
+const NSUInteger channels = 2;
 
 @interface CustomAudioRenderEntry ()
 @property (weak, nonatomic) IBOutlet UITextField *textField;
@@ -40,17 +46,19 @@
 @property (nonatomic, strong)VideoView *localView;
 @property (nonatomic, strong)VideoView *remoteView;
 @property (nonatomic, strong)AgoraRtcEngineKit *agoraKit;
-@property (nonatomic, strong)ExternalAudio *exAudio;
+@property (nonatomic, strong)AgoraPCMPlayer *player;
+@property (assign, atomic) BOOL isJoined;
 
 @end
 
 @implementation CustomAudioRender
 
-- (ExternalAudio *)exAudio {
-    if (_exAudio == nil) {
-        _exAudio = [ExternalAudio sharedExternalAudio];
+- (AgoraPCMPlayer*)player {
+    if (_player == nil) {
+        _player = [[AgoraPCMPlayer alloc] initWithSampleRate:sampleRate channels:channels];
     }
-    return _exAudio;
+    
+    return _player;
 }
 
 - (VideoView *)localView {
@@ -84,21 +92,8 @@
     self.agoraKit = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
     
     NSString *channelName = [self.configs objectForKey:@"channelName"];
-    // make myself a broadcaster
-    [self.agoraKit setClientRole:(AgoraClientRoleBroadcaster)];
     // enable video module and set up video encoding configs
     [self.agoraKit enableAudio];
-    
-    AgoraVideoEncoderConfiguration *encoderConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(960, 540)
-                                                                                               frameRate:(AgoraVideoFrameRateFps15)
-                                                                                                 bitrate:15
-                                                                                         orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
-                                                                                              mirrorMode:(AgoraVideoMirrorModeAuto)];
-    [self.agoraKit setVideoEncoderConfiguration:encoderConfig];
-    
-    [self.exAudio setupExternalAudioWithAgoraKit:self.agoraKit sampleRate:44100 channels:1 audioCRMode:(AudioCRModeExterCaptureExterRender) IOType:(IOUnitTypeRemoteIO)];
-    [self.agoraKit setParameters:@"{\"che.audio.external_render\": true}"];
-    [self.agoraKit setParameters:@"{\"che.audio.keep.audiosession\": true}"];
     
     // set up local video to render your local camera preview
     AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
@@ -118,11 +113,13 @@
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
+    options.publishMicrophoneTrack = NO;
+    options.publishCameraTrack = NO;
     options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = NO;
-    options.publishMicrophoneTrack = YES;
-    options.publishCameraTrack = NO;
     options.clientRoleType = AgoraClientRoleBroadcaster;
+    
+    [self.agoraKit enableExternalAudioSink:YES sampleRate:sampleRate channels:channels];
     
     [[NetworkManager shared] generateTokenWithChannelName:channelName uid:0 success:^(NSString * _Nullable token) {
         int result = [self.agoraKit joinChannelByToken:token channelId:channelName uid:0 mediaOptions:options joinSuccess:nil];
@@ -141,6 +138,34 @@
     [self.agoraKit disableAudio];
     [self.agoraKit leaveChannel:nil];
     [AgoraRtcEngineKit destroy];
+    self.isJoined = NO;
+}
+
+- (void)startPullAudio {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSTimeInterval pullMs = 100;
+        NSUInteger lengthInByte = (sampleRate / 1000) * 2 * channels * (NSUInteger)pullMs;
+        
+        UInt8 *pointer = (UInt8 *)malloc(lengthInByte);
+        NSTimeInterval deltaMs = 0;
+        
+        while (self.isJoined) {
+            NSDate *date = [NSDate date];
+            memset(pointer, 0, lengthInByte);
+            
+            NSInteger ret = [self.agoraKit pullPlaybackAudioFrameRawData:pointer lengthInByte:lengthInByte];
+            [self.player playPCMData:pointer count:lengthInByte];
+            
+            NSTimeInterval cost = -[date timeIntervalSinceNow] * 1000;
+            usleep((useconds_t)MAX((pullMs - cost - deltaMs) * 1000, 0));
+            
+            // Add deltaMs to ensure that the thread processing time is less than pullMs
+            deltaMs = MAX((- [date timeIntervalSinceNow] * 1000) - pullMs, 0) * 2;
+            // NSLog(@"pullPlaybackAudioFrameRawData: %ld lengthInByte: %lu cost: %f ms, deltaMs: %f ms", ret, (unsigned long)lengthInByte, -[date timeIntervalSinceNow] * 1000, deltaMs);
+        }
+        
+        free(pointer);
+    });
 }
 
 /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -156,6 +181,8 @@
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinChannel:(NSString *)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
     [LogUtil log:[NSString stringWithFormat:@"Join %@ with uid %lu elapsed %ldms", channel, uid, elapsed] level:(LogLevelDebug)];
     self.localView.uid = uid;
+    [self startPullAudio];
+    self.isJoined = YES;
 }
 
 /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
