@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		749177BD2429C778B3C6D520 /* Pods_APIExample_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D931C433C0CD269F3C3323D /* Pods_APIExample_OC.framework */; };
 		961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */; };
 		C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
+		DD8A1F7F2CA50749001CEC51 /* AgoraPCMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F7E2CA50749001CEC51 /* AgoraPCMPlayer.m */; };
 		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
 		E70ADDF72A5D004F009947CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF62A5D004F009947CF /* ViewController.m */; };
 		E70ADDFA2A5D004F009947CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDF82A5D004F009947CF /* Main.storyboard */; };
@@ -179,6 +180,8 @@
 		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
 		D5882D286343E06CF635A5E6 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		DD8A1F7D2CA50749001CEC51 /* AgoraPCMPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraPCMPlayer.h; sourceTree = "<group>"; };
+		DD8A1F7E2CA50749001CEC51 /* AgoraPCMPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraPCMPlayer.m; sourceTree = "<group>"; };
 		E22416FC36DE1212EE1E1760 /* Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScrrenShare-Extension-OC/Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
 		E70ADDEC2A5D004F009947CF /* APIExample-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70ADDEF2A5D004F009947CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -677,6 +680,8 @@
 				E70ADEE42A6A71FE009947CF /* ExternalAudio.mm */,
 				E70ADEDB2A6A2D7D009947CF /* AgoraPCMSourcePush.h */,
 				E70ADEDC2A6A2D7D009947CF /* AgoraPCMSourcePush.m */,
+				DD8A1F7D2CA50749001CEC51 /* AgoraPCMPlayer.h */,
+				DD8A1F7E2CA50749001CEC51 /* AgoraPCMPlayer.m */,
 			);
 			path = ExternalAudio;
 			sourceTree = "<group>";
@@ -1283,6 +1288,7 @@
 				E70ADEF42A6A72C6009947CF /* AudioWriteToFile.m in Sources */,
 				E72F62002A7796A200C963D2 /* SpatialAudioActionSheet.swift in Sources */,
 				E72F61A52A710AB200C963D2 /* MediaPlayer.m in Sources */,
+				DD8A1F7F2CA50749001CEC51 /* AgoraPCMPlayer.m in Sources */,
 				E7361F6B2A6E6B9F00925BD6 /* SimpleFilter.m in Sources */,
 				E72F618D2A70F8AF00C963D2 /* AgoraCustomEncryption.mm in Sources */,
 				E72F62042A77A63D00C963D2 /* ContentInspect.m in Sources */,
@@ -1589,7 +1595,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-OC/APIExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1630,7 +1636,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-OC/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
