@@ -66,9 +66,6 @@ class CustomAudioRenderMain: BaseViewController {
         
         guard let channelName = configs["channelName"] as? String else {return}
         
-        // make myself a broadcaster
-        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
-        
         // disable video module
         agoraKit.disableVideo()
         agoraKit.enableAudio()
