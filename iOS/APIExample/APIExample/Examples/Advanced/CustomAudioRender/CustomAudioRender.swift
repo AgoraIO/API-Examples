@@ -15,53 +15,6 @@ private let samples: UInt = 441 * 10
 private let sampleRate: UInt = 44100
 private let channels: UInt = 2
 
-class PCMPlayer {
-    private var audioEngine: AVAudioEngine
-    private var playerNode: AVAudioPlayerNode
-    private var sampleRate: Double
-    private var channels: AVAudioChannelCount
-
-    init(sampleRate: Double, channels: AVAudioChannelCount) {
-        self.sampleRate = sampleRate
-        self.channels = channels
-        
-        audioEngine = AVAudioEngine()
-        playerNode = AVAudioPlayerNode()
-        
-        audioEngine.attach(playerNode)
-        
-        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels)
-        audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: format)
-        
-        do {
-            try audioEngine.start()
-        } catch {
-            print("Audio Engine failed to start: \(error)")
-        }
-    }
-    
-    func playPCMData(pcmData: UnsafeMutablePointer<UInt8>, count: UInt) {
-        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels),
-              let audioBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count / 4)), // 16位立体声每帧4字节
-              let channelData = audioBuffer.floatChannelData else {
-            return
-        }
-        
-        audioBuffer.frameLength = AVAudioFrameCount(count / 4)
-        
-        for frame in 0..<Int(audioBuffer.frameLength) {
-            let leftSample = Int16(pcmData[frame * 4]) | (Int16(pcmData[frame * 4 + 1]) << 8)
-            let rightSample = Int16(pcmData[frame * 4 + 2]) | (Int16(pcmData[frame * 4 + 3]) << 8)
-            
-            channelData[0][frame] = Float(leftSample) / Float(Int16.max)
-            channelData[1][frame] = Float(rightSample) / Float(Int16.max)
-        }
-        
-        playerNode.scheduleBuffer(audioBuffer, completionHandler: nil)
-        playerNode.play()
-    }
-}
-
 class CustomAudioRenderEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -96,7 +49,7 @@ class CustomAudioRenderMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    lazy var player = PCMPlayer(sampleRate: Double(sampleRate), channels: AVAudioChannelCount(channels))
+    lazy var player = AgoraPCMPlayer(sampleRate: Double(sampleRate), channels: AVAudioChannelCount(channels))
 
     override func viewDidLoad() {
         super.viewDidLoad()
