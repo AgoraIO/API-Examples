@@ -6,6 +6,9 @@
   Copyright © 2020 Agora Corp. All rights reserved.
 */
 "Join" = "加入频道";
+"anti shake" = "防抖";
+"Enter channel name" = "输入频道名";
+"Default background Color" = "默认背景色";
 "Join a channel (Token)" = "实时视频通话/直播(Token验证)";
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
@@ -37,6 +40,7 @@
 "Media Channel Relay" = "跨频道流转发";
 "Set Resolution" = "设置视频分辨率";
 "Set Fps" = "设置视频帧率";
+"B Fps" = "B帧";
 "Set Orientation" = "设置视频朝向";
 "Set Chat Beautifier" = "设置语聊美声";
 "Set Timbre Transformation" = "设置音色变换";
@@ -132,6 +136,7 @@
 "Video Sexy" = "视频性感";
 "Video Porn" = "视频色情";
 "SwitchCamera" = "切换摄像头";
+"screenshot" = "截图";
 "remote user has not joined, and cannot take a screenshot" = "远端用户未加入, 无法截图";
 "Screenshot successful" = "截图成功";
 "Picture In Picture(require iOS15)" = "画中画(iOS15支持)";
@@ -208,6 +213,9 @@
 "Resume" = "恢复";
 "Stop" = "停止";
 "Play" = "播放";
+"software" = "软编";
+"hardware" = "硬编";
+"auto" = "自动";
 "Beats per Minute" = "每分钟节拍数";
 "Beats per Measure" = "每小节节拍数";
 "Image" = "图片";
@@ -248,3 +256,12 @@
 "PIP Custom Render" = "画中画自渲染";
 "PIP Button Title" = "画中画";
 "PIP Size Button Title" = "修改尺寸";
+"Camera Selected" = "相机对焦";
+"Water Mark" = "水印";
+"Gasket push flow" = "垫片推流";
+"Simulcast Stream Title" = "大小流";
+"Opened State" = "已开启";
+"Default State" = "默认：大流";
+"Code Type" = "编码方式";
+"Fast Live" = "极速直播";
+"Link Stream" = "连麦";

@@ -113,6 +113,9 @@
 		F70DE53C2C6B88C100FFC922 /* SDKRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */; };
 		F70DE53E2C6B926000FFC922 /* CustomRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */; };
 		F70DE5402C6C57AA00FFC922 /* SDKRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DE53F2C6C57AA00FFC922 /* SDKRenderViewModel.swift */; };
+		F728B9F12CA3FAFE007813BB /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F02CA3FAFE007813BB /* LiveStreaming.swift */; };
+		F728B9F32CA3FB12007813BB /* LiveStreamingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F22CA3FB12007813BB /* LiveStreamingRTC.swift */; };
+		F728B9F62CA42ED7007813BB /* PickerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F52CA42ED7007813BB /* PickerSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -280,6 +283,9 @@
 		F70DE53B2C6B88C100FFC922 /* SDKRenderRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderRTC.swift; sourceTree = "<group>"; };
 		F70DE53D2C6B926000FFC922 /* CustomRenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRenderViewModel.swift; sourceTree = "<group>"; };
 		F70DE53F2C6C57AA00FFC922 /* SDKRenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRenderViewModel.swift; sourceTree = "<group>"; };
+		F728B9F02CA3FAFE007813BB /* LiveStreaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
+		F728B9F22CA3FB12007813BB /* LiveStreamingRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingRTC.swift; sourceTree = "<group>"; };
+		F728B9F52CA42ED7007813BB /* PickerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -439,6 +445,7 @@
 		E73F240E2BA82D4B0000B523 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F728B9EF2CA3FA17007813BB /* LiveStreaming */,
 				F70DE4EE2C69ACD900FFC922 /* PictureInPicture */,
 				E71D54792BCE1EB900656537 /* QuickSwitchChannel */,
 				E71D54742BCD337A00656537 /* JoinMultiChannel */,
@@ -465,6 +472,7 @@
 		E73F240F2BA82D5E0000B523 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				F728B9F42CA42EAE007813BB /* View */,
 				E73F24AF2BAAD6360000B523 /* Settings */,
 				E73F246A2BA851870000B523 /* ARKit */,
 				E73F24632BA851870000B523 /* CustomEncryption */,
@@ -792,6 +800,23 @@
 			path = PIPCommon;
 			sourceTree = "<group>";
 		};
+		F728B9EF2CA3FA17007813BB /* LiveStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9F02CA3FAFE007813BB /* LiveStreaming.swift */,
+				F728B9F22CA3FB12007813BB /* LiveStreamingRTC.swift */,
+			);
+			path = LiveStreaming;
+			sourceTree = "<group>";
+		};
+		F728B9F42CA42EAE007813BB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9F52CA42ED7007813BB /* PickerSheetView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -998,6 +1023,7 @@
 				E73F249E2BA9888D0000B523 /* JoinChannelAudio.swift in Sources */,
 				E73F24252BA83D710000B523 /* GlobalSettings.swift in Sources */,
 				E73F24B82BAD85710000B523 /* FaceCapture.swift in Sources */,
+				F728B9F32CA3FB12007813BB /* LiveStreamingRTC.swift in Sources */,
 				E71D54722BCD270800656537 /* StreamEncryptionRTC.swift in Sources */,
 				E73F248D2BA851870000B523 /* KFMP4Demuxer.m in Sources */,
 				E73F24F02BB6645C0000B523 /* RhythmPlayer.swift in Sources */,
@@ -1006,6 +1032,7 @@
 				F70DE53A2C6B885D00FFC922 /* SDKRenderExample.swift in Sources */,
 				E73F24DA2BB2783C0000B523 /* SpatialAudio.swift in Sources */,
 				E73F24DB2BB2783C0000B523 /* SpatialAudioRTC.swift in Sources */,
+				F728B9F62CA42ED7007813BB /* PickerSheetView.swift in Sources */,
 				E73F24E62BB519600000B523 /* CreateDataStream.swift in Sources */,
 				E73F24D02BB17B670000B523 /* MutliCamera.swift in Sources */,
 				E73F24892BA851870000B523 /* JSONObject.swift in Sources */,
@@ -1025,6 +1052,7 @@
 				E71D546E2BCD176B00656537 /* AudioMixing.swift in Sources */,
 				E73F24AE2BAAC6E70000B523 /* JoinChannelVideoRecorderRTC.swift in Sources */,
 				E79DFB622BBA545300904B08 /* PickerView.swift in Sources */,
+				F728B9F12CA3FAFE007813BB /* LiveStreaming.swift in Sources */,
 				E73F242E2BA83D710000B523 /* KeyCenter.swift in Sources */,
 				E73F24822BA851870000B523 /* AgoraScreenShareSourcePush.m in Sources */,
 				E73F24F12BB6645C0000B523 /* RhythmPlayerRTC.swift in Sources */,
@@ -1207,10 +1235,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1230,6 +1258,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1244,10 +1273,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1267,6 +1296,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1278,9 +1308,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBC8877FFEE7ACACB6F106A1 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
@@ -1294,6 +1324,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
@@ -1306,9 +1337,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8CC7EDC4E0A91FEAD503BDAB /* Pods-Agora-ScreenShare-Extension.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
@@ -1322,6 +1353,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";

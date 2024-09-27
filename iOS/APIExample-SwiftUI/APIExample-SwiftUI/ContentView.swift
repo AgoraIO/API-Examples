@@ -36,6 +36,8 @@ struct ContentView: View {
                      view: AnyView(JoinChannelVideoRecorderEntry()))
         ]),
         MenuSection(name: "Anvanced", rows: [
+            MenuItem(name: "Live Streaming".localized,
+                     view: AnyView(LiveStreamingEntry())),
             MenuItem(name: "Picture In Picture".localized,
                      view: AnyView(PictureInPictureEntry())),
             MenuItem(name: "Quick Switch Channel".localized,
