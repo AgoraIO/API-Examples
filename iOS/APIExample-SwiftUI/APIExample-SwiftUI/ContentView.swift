@@ -48,6 +48,8 @@ struct ContentView: View {
                      view: AnyView(RawVideoDataEntry())),
             MenuItem(name: "Local Video Transcoding".localized,
                      view: AnyView(LocalVideoTranscodingEntry())),
+            MenuItem(name: "Voice Changer".localized,
+                     view: AnyView(VoiceChangerEntry())),
             MenuItem(name: "Picture In Picture".localized,
                      view: AnyView(PictureInPictureEntry())),
             MenuItem(name: "Quick Switch Channel".localized,
