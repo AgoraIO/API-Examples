@@ -9,7 +9,7 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -231,10 +231,8 @@ enum RTMP_CONNECTION_STATE {
 struct RtmpConnectionConfiguration {
   RtmpStreamingAudioConfiguration audioConfig;
   RtmpStreamingVideoConfiguration videoConfig;
-  bool enableWriteFlvFile;
   bool audioOnly;
-  RtmpConnectionConfiguration() : enableWriteFlvFile(false), 
-                                  audioOnly(false) {}
+  RtmpConnectionConfiguration() : audioOnly(false) {}
 };
 
 /**
@@ -339,7 +337,7 @@ class IRtmpConnection : public RefCountInterface {
    *   - ERR_INVALID_ARGUMENT: The passed in argument is invalid.
    *   - ERR_INVALID_STATE: The current connection state is not STATE_DISCONNECTED(3).
    */
-  virtual int connect(const char* url, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int connect(const char* url, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Disconnects from the RTMP server.
@@ -348,7 +346,7 @@ class IRtmpConnection : public RefCountInterface {
    * STATE_DISCONNECTED(4). You will be notified with the callback
    * \ref onDisconnected "onDisconnected".
    */
-  virtual int disconnect(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int disconnect(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the current connection information.
@@ -376,7 +374,7 @@ class IRtmpConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IRtmpConnectionObserver* observer, void(*safeDeleter)(IRtmpConnectionObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerObserver(IRtmpConnectionObserver* observer, void(*safeDeleter)(IRtmpConnectionObserver*) = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Releases the registered IRtmpConnectionObserver object.

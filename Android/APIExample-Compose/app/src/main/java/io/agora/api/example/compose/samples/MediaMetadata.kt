@@ -37,6 +37,7 @@ import io.agora.rtc2.IMetadataObserver
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
+import io.agora.rtc2.video.AgoraMetadata
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
@@ -170,8 +171,8 @@ fun MediaMetadata() {
                     return data
                 }
 
-                override fun onMetadataReceived(buffer: ByteArray?, uid: Int, timeStampMs: Long) {
-                    receivedMetadata = buffer?.toString(Charsets.UTF_8) ?: ""
+                override fun onMetadataReceived(metadata: AgoraMetadata) {
+                    receivedMetadata = metadata.data?.toString(Charsets.UTF_8) ?: ""
                 }
 
             }, IMetadataObserver.VIDEO_METADATA)

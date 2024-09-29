@@ -9,7 +9,7 @@
 
 #include "AgoraBase.h"
 #include "time_utils.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -212,7 +212,7 @@ class IRtcConnection : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument that you pass is invalid.
    *   - -8(ERR_INVALID_STATE): The current connection state is not CONNECTION_STATE_DISCONNECTED(1).
    */
-  virtual int connect(const char* token, const char* channelId, user_id_t userId, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int connect(const char* token, const char* channelId, user_id_t userId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Connects to an Agora channel.
@@ -225,7 +225,7 @@ class IRtcConnection : public RefCountInterface {
    * The SDK also triggers `onConnected` or `onDisconnected` to notify you of the state change.
    * @param settings The settings of connecting. 
    */
-  virtual int connect(const TConnectSettings& settings, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int connect(const TConnectSettings& settings, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Disconnects from the Agora channel.
@@ -238,7 +238,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int disconnect(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int disconnect(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Starts the last-mile network probe test.
@@ -267,7 +267,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int startLastmileProbeTest(const LastmileProbeConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int startLastmileProbeTest(const LastmileProbeConfig& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Stops the last-mile network probe test.
@@ -275,7 +275,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int stopLastmileProbeTest(ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int stopLastmileProbeTest(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Renews the token.
@@ -286,7 +286,7 @@ class IRtcConnection : public RefCountInterface {
    *
    * @param token The pointer to the new token.
    */
-  virtual int renewToken(const char* token, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int renewToken(const char* token, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the connection information.
@@ -340,7 +340,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerObserver(IRtcConnectionObserver* observer, void(*safeDeleter)(IRtcConnectionObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerObserver(IRtcConnectionObserver* observer, void(*safeDeleter)(IRtcConnectionObserver*) = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Releases the registered IRtcConnectionObserver object.
@@ -361,7 +361,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerNetworkObserver(INetworkObserver* observer, void(*safeDeleter)(INetworkObserver*) = NULL, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int registerNetworkObserver(INetworkObserver* observer, void(*safeDeleter)(INetworkObserver*) = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Releases the registered INetworkObserver object.
@@ -437,7 +437,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendStreamMessage(int streamId, const char* data, size_t length, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int sendStreamMessage(int streamId, const char* data, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** Enables/Disables the built-in encryption.
    *
@@ -457,7 +457,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int enableEncryption(bool enabled, const EncryptionConfig& config, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int enableEncryption(bool enabled, const EncryptionConfig& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Reports a custom event to Agora.
@@ -472,7 +472,7 @@ class IRtcConnection : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int sendCustomReportMessage(const char* id, const char* category, const char* event, const char* label, int value, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int sendCustomReportMessage(const char* id, const char* category, const char* event, const char* label, int value, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /** Gets the user information by user account, which is in string format.
    *
    * @param userAccount The user account of the user.

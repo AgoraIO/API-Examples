@@ -158,7 +158,7 @@ public:
 	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 
 
-	virtual void onExtensionEvent(const char* provider, const char* extension, const char* key, const char* value) override;
+	virtual void onExtensionEventWithContext(const ExtensionContext& context, const char* key, const char* value) override;
 private:
 	HWND m_hMsgHanlder;
 };

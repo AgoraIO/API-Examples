@@ -35,6 +35,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.ExtensionContext;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
@@ -476,22 +477,30 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
 
 
     @Override
-    public void onEvent(String vendor, String extension, String key, String value) {
+    public void onEventWithContext(ExtensionContext extContext, String key, String value) {
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
         Log.i(TAG, "onEvent vendor: " + vendor + "  extension: " + extension + "  key: " + key + "  value: " + value);
     }
 
     @Override
-    public void onStarted(String s, String s1) {
-
+    public void onStartedWithContext(ExtensionContext extContext) {
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onStartedWithContext vendor: " + vendor + "  extension: " + extension );
     }
 
     @Override
-    public void onStopped(String s, String s1) {
-
+    public void onStoppedWithContext(ExtensionContext extContext) {
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onStoppedWithContext vendor: " + vendor + "  extension: " + extension);
     }
 
     @Override
-    public void onError(String s, String s1, int i, String s2) {
-
+    public void onErrorWithContext(ExtensionContext extContext, int i, String s2) {
+        String vendor = extContext.providerName;
+        String extension = extContext.extensionName;
+        Log.i(TAG, "onErrorWithContext vendor: " + vendor + "  extension: " + extension + "  code: " + i + "  msg: " + s2);
     }
 }
