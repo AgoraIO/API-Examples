@@ -35,6 +35,32 @@ static const unsigned int DEFAULT_CONNECTION_ID = 0;
 static const unsigned int DUMMY_CONNECTION_ID = (std::numeric_limits<unsigned int>::max)();
 
 struct EncodedVideoFrameInfo;
+/**
+* The definition of extension context types.
+**/
+struct ExtensionContext {
+    /** 
+     * Whether the uid is valid.
+     * - true: The uid is valid.
+     * - false: The uid is invalid.
+     */
+    bool isValid;
+    /** 
+     * The ID of the user.
+     * A uid of 0 indicates the local user, and a uid greater than 0 represents a remote user.
+     */
+    uid_t uid;
+    /** 
+     * The provider name of the current extension.
+     */
+    const char *providerName;
+    /** 
+     * The extension name of the current extension.
+     */
+    const char *extensionName;
+    ExtensionContext():isValid(false), uid(0), providerName(NULL), extensionName(NULL) {}
+};
+
 
 /**
 * Video source types definition.
@@ -88,6 +114,9 @@ enum VIDEO_SOURCE_TYPE {
   /** Video for fourth screen sharing.
    */
   VIDEO_SOURCE_SCREEN_FOURTH = 14,
+  /** Video for voice drive.
+  */
+ VIDEO_SOURCE_SPEECH_DRIVEN = 15,
 
   VIDEO_SOURCE_UNKNOWN = 100
 };
@@ -122,9 +151,9 @@ enum AudioRoute
    */
   ROUTE_LOUDSPEAKER = 4,
   /**
-   * The Bluetooth Headset via HFP.
+   * The Bluetooth Device via HFP.
    */
-  ROUTE_HEADSETBLUETOOTH = 5,
+  ROUTE_BLUETOOTH_DEVICE_HFP = 5,
   /**
    * The USB.
    */
@@ -142,9 +171,9 @@ enum AudioRoute
    */
   ROUTE_AIRPLAY = 9,
   /**
-   * The Bluetooth Speaker via A2DP.
+   * The Bluetooth Device via A2DP.
    */
-  ROUTE_BLUETOOTH_SPEAKER = 10,
+  ROUTE_BLUETOOTH_DEVICE_A2DP = 10,
 };
 
 /**
@@ -242,6 +271,10 @@ enum MEDIA_SOURCE_TYPE {
    * 12: Video for transcoded.
    */
   TRANSCODED_VIDEO_SOURCE = 12,
+  /**
+   * 13: Video for voice drive.
+   */
+  SPEECH_DRIVEN_VIDEO_SOURCE = 13,
   /**
    * 100: Internal Usage only.
    */
@@ -395,24 +428,31 @@ struct AudioPcmFrame {
   rtc::BYTES_PER_SAMPLE bytes_per_sample;
   /** The audio frame data. */
   int16_t data_[kMaxDataSizeSamples];
+  
+  /** 
+   *  @technical preview
+   *  data_[kMaxDataSizeSamples] is real stereo data 
+   */
+  bool is_stereo_;
 
   AudioPcmFrame& operator=(const AudioPcmFrame& src) {
-    if(this == &src) {
+    if (this == &src) {
       return *this;
     }
 
-    this->capture_timestamp = src.capture_timestamp;
-    this->samples_per_channel_ = src.samples_per_channel_;
-    this->sample_rate_hz_ = src.sample_rate_hz_;
-    this->bytes_per_sample = src.bytes_per_sample;
-    this->num_channels_ = src.num_channels_;
+    capture_timestamp = src.capture_timestamp;
+    samples_per_channel_ = src.samples_per_channel_;
+    sample_rate_hz_ = src.sample_rate_hz_;
+    bytes_per_sample = src.bytes_per_sample;
+    num_channels_ = src.num_channels_;
+    is_stereo_ = src.is_stereo_;
 
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
       length = kMaxDataSizeSamples;
     }
 
-    memcpy(this->data_, src.data_, length * sizeof(int16_t));
+    memcpy(data_, src.data_, length * sizeof(int16_t));
 
     return *this;
   }
@@ -422,7 +462,8 @@ struct AudioPcmFrame {
         samples_per_channel_(0),
         sample_rate_hz_(0),
         num_channels_(0),
-        bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE) {
+        bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE),
+        is_stereo_(false) {
     memset(data_, 0, sizeof(data_));
   }
 
@@ -431,7 +472,8 @@ struct AudioPcmFrame {
         samples_per_channel_(src.samples_per_channel_),
         sample_rate_hz_(src.sample_rate_hz_),
         num_channels_(src.num_channels_),
-        bytes_per_sample(src.bytes_per_sample) {
+        bytes_per_sample(src.bytes_per_sample),
+        is_stereo_(src.is_stereo_) {
     size_t length = src.samples_per_channel_ * src.num_channels_;
     if (length > kMaxDataSizeSamples) {
       length = kMaxDataSizeSamples;
@@ -503,6 +545,10 @@ enum VIDEO_PIXEL_FORMAT {
   */
   VIDEO_CVPIXEL_BGRA = 14,
   /**
+  15: pixel format for iOS CVPixelBuffer P010(10bit NV12)
+  */
+  VIDEO_CVPIXEL_P010 = 15,
+  /**
    * 16: I422.
    */
   VIDEO_PIXEL_I422 = 16,
@@ -510,6 +556,11 @@ enum VIDEO_PIXEL_FORMAT {
    * 17: ID3D11Texture2D, only support DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_NV12 texture format
    */
   VIDEO_TEXTURE_ID3D11TEXTURE2D = 17,
+  /**
+   * 18: I010. 10bit I420 data.
+   * @technical preview
+   */
+  VIDEO_PIXEL_I010 = 18,
 };
 
 /**
@@ -565,6 +616,191 @@ class IVideoFrameMetaInfo {
     virtual const char* getMetaInfoStr(META_INFO_KEY key) const = 0;
 };
 
+struct ColorSpace {
+  enum PrimaryID {
+    // The indices are equal to the values specified in T-REC H.273 Table 2.
+    PRIMARYID_BT709 = 1,
+    PRIMARYID_UNSPECIFIED = 2,
+    PRIMARYID_BT470M = 4,
+    PRIMARYID_BT470BG = 5,
+    PRIMARYID_SMPTE170M = 6,  // Identical to BT601
+    PRIMARYID_SMPTE240M = 7,
+    PRIMARYID_FILM = 8,
+    PRIMARYID_BT2020 = 9,
+    PRIMARYID_SMPTEST428 = 10,
+    PRIMARYID_SMPTEST431 = 11,
+    PRIMARYID_SMPTEST432 = 12,
+    PRIMARYID_JEDECP22 = 22,  // Identical to EBU3213-E
+  };
+
+  enum RangeID {
+    // The indices are equal to the values specified at
+    // https://www.webmproject.org/docs/container/#colour for the element Range.
+    RANGEID_INVALID = 0,
+    // Limited Rec. 709 color range with RGB values ranging from 16 to 235.
+    RANGEID_LIMITED = 1,
+    // Full RGB color range with RGB valees from 0 to 255.
+    RANGEID_FULL = 2,
+    // Range is defined by MatrixCoefficients/TransferCharacteristics.
+    RANGEID_DERIVED = 3,
+  };
+
+  enum MatrixID {
+    // The indices are equal to the values specified in T-REC H.273 Table 4.
+    MATRIXID_RGB = 0,
+    MATRIXID_BT709 = 1,
+    MATRIXID_UNSPECIFIED = 2,
+    MATRIXID_FCC = 4,
+    MATRIXID_BT470BG = 5,
+    MATRIXID_SMPTE170M = 6,
+    MATRIXID_SMPTE240M = 7,
+    MATRIXID_YCOCG = 8,
+    MATRIXID_BT2020_NCL = 9,
+    MATRIXID_BT2020_CL = 10,
+    MATRIXID_SMPTE2085 = 11,
+    MATRIXID_CDNCLS = 12,
+    MATRIXID_CDCLS = 13,
+    MATRIXID_BT2100_ICTCP = 14,
+  };
+
+  enum TransferID {
+    // The indices are equal to the values specified in T-REC H.273 Table 3.
+    TRANSFERID_BT709 = 1,
+    TRANSFERID_UNSPECIFIED = 2,
+    TRANSFERID_GAMMA22 = 4,
+    TRANSFERID_GAMMA28 = 5,
+    TRANSFERID_SMPTE170M = 6,
+    TRANSFERID_SMPTE240M = 7,
+    TRANSFERID_LINEAR = 8,
+    TRANSFERID_LOG = 9,
+    TRANSFERID_LOG_SQRT = 10,
+    TRANSFERID_IEC61966_2_4 = 11,
+    TRANSFERID_BT1361_ECG = 12,
+    TRANSFERID_IEC61966_2_1 = 13,
+    TRANSFERID_BT2020_10 = 14,
+    TRANSFERID_BT2020_12 = 15,
+    TRANSFERID_SMPTEST2084 = 16,
+    TRANSFERID_SMPTEST428 = 17,
+    TRANSFERID_ARIB_STD_B67 = 18,
+  };
+
+  PrimaryID primaries;
+  TransferID transfer;
+  MatrixID matrix;
+  RangeID range;
+
+  ColorSpace()
+      : primaries(PRIMARYID_UNSPECIFIED), transfer(TRANSFERID_UNSPECIFIED),
+        matrix(MATRIXID_UNSPECIFIED), range(RANGEID_INVALID) {}
+
+  bool validate() const {
+    return primaries != PRIMARYID_UNSPECIFIED || transfer != TRANSFERID_UNSPECIFIED ||
+           matrix != MATRIXID_UNSPECIFIED ||
+           range != RANGEID_INVALID;
+  }
+};
+
+/**
+ * The definition of the Hdr10MetadataInfo struct.
+ */
+struct Hdr10MetadataInfo {
+   /**
+   * The x coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t redPrimaryX;
+   /**
+   * The y coordinates of the red value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t redPrimaryY;
+   /**
+   * The x coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t greenPrimaryX;
+   /**
+   * The y coordinates of the green value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t greenPrimaryY;
+   /**
+   * The x coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t bluePrimaryX;
+   /**
+   * The y coordinates of the blue value in the CIE1931 color space. The values need to normalized to 50,000.
+   */
+  uint16_t bluePrimaryY;
+   /**
+   * The x coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+   */
+  uint16_t whitePointX;
+   /**
+   * The y coordinates of the white point in the CIE1931 color space.The values need to normalized to 50,000.
+   */
+  uint16_t whitePointY;
+   /**
+   * The maximum number of nits of the display used to master the content. The values need to normalized to 10,000.
+   */
+  unsigned int maxMasteringLuminance;
+   /**
+   * The minimum number of nits of the display used to master the content. The values need to normalized to 10,000.
+   */
+  unsigned int minMasteringLuminance;
+   /**
+   * The maximum content light level (MaxCLL). This is the nit value corresponding to the brightest pixel used anywhere in the content.
+   */
+  uint16_t maxContentLightLevel;
+   /**
+   * The maximum frame average light level (MaxFALL). This is the nit value corresponding to the average luminance of the frame which has the brightest average luminance anywhere in the content.
+   */
+  uint16_t maxFrameAverageLightLevel;
+
+  Hdr10MetadataInfo()
+      : redPrimaryX(0),
+        redPrimaryY(0),
+        greenPrimaryX(0),
+        greenPrimaryY(0),
+        bluePrimaryX(0),
+        bluePrimaryY(0),
+        whitePointX(0),
+        whitePointY(0),
+        maxMasteringLuminance(0),
+        minMasteringLuminance(0),
+        maxContentLightLevel(0),
+        maxFrameAverageLightLevel(0){}
+
+  bool validate() const {
+    return maxContentLightLevel >= 0 && maxContentLightLevel <= 20000 &&
+           maxFrameAverageLightLevel >= 0 &&
+           maxFrameAverageLightLevel <= 20000;
+  }
+};
+
+/**
+ *  The relative position between alphabuffer and the frame.
+ */
+enum ALPHA_STITCH_MODE {
+  /**
+   * 0: Normal frame without alphabuffer stitched
+   */
+  NO_ALPHA_STITCH = 0,
+  /**
+   * 1: Alphabuffer is above the frame
+   */
+  ALPHA_STITCH_UP = 1,
+  /**
+   * 2: Alphabuffer is below the frame
+   */
+  ALPHA_STITCH_BELOW = 2,
+  /**
+   * 3: Alphabuffer is on the left of frame
+   */
+  ALPHA_STITCH_LEFT = 3,
+  /**
+   * 4: Alphabuffer is on the right of frame
+   */
+  ALPHA_STITCH_RIGHT = 4,
+};
+
+
 /**
  * The definition of the ExternalVideoFrame struct.
  */
@@ -584,11 +820,14 @@ struct ExternalVideoFrame {
         eglContext(NULL),
         eglType(EGL_CONTEXT10),
         textureId(0),
-        metadata_buffer(NULL),
-        metadata_size(0),
+        fenceObject(0),
+        metadataBuffer(NULL),
+        metadataSize(0),
         alphaBuffer(NULL),
-        d3d11_texture_2d(NULL),
-        texture_slice_index(0){}
+        fillAlphaBuffer(false),
+        alphaStitchMode(NO_ALPHA_STITCH),
+        d3d11Texture2d(NULL),
+        textureSliceIndex(0){}
 
    /**
    * The EGL context type.
@@ -691,6 +930,11 @@ struct ExternalVideoFrame {
    */
   int textureId;
   /**
+   * [Texture related parameter] The fence object related to the textureId parameter, indicating the synchronization status of the video data in Texture format.
+   * The default value is 0
+   */
+  long long fenceObject; 
+  /**
    * [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
    */
   float matrix[16];
@@ -698,28 +942,53 @@ struct ExternalVideoFrame {
    * [Texture related parameter] The MetaData buffer.
    *  The default value is NULL
    */
-  uint8_t* metadata_buffer;
+  uint8_t* metadataBuffer;
   /**
    * [Texture related parameter] The MetaData size.
    *  The default value is 0
    */
-  int metadata_size;
+  int metadataSize;
   /**
-   *  Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame.
-   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).
-   *  The default value is NULL
+   *  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
+   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground.
+   *  The default value is NULL.
    */
   uint8_t* alphaBuffer;
+  /**
+   *  [For bgra or rgba only] Extract alphaBuffer from bgra or rgba data. Set it true if you do not explicitly specify the alphabuffer.
+   *  The default value is false
+   */
+  bool fillAlphaBuffer;
+  /**
+   *  The relative position between alphabuffer and the frame.
+   *  0: Normal frame;
+   *  1: Alphabuffer is above the frame;
+   *  2: Alphabuffer is below the frame;
+   *  3: Alphabuffer is on the left of frame;
+   *  4: Alphabuffer is on the right of frame;
+   *  The default value is 0.
+   */
+  ALPHA_STITCH_MODE alphaStitchMode;
 
   /**
    * [For Windows only] The pointer of ID3D11Texture2D used by the video frame.
    */
-  void *d3d11_texture_2d;
+  void *d3d11Texture2d;
 
   /**
    * [For Windows only] The index of ID3D11Texture2D array used by the video frame.
    */
-  int texture_slice_index;
+  int textureSliceIndex;
+
+  /**
+   * metadata info used for hdr video data
+   */
+  Hdr10MetadataInfo hdr10MetadataInfo;
+
+   /**
+   * The ColorSpace of the video frame.
+   */
+  ColorSpace colorSpace;
 };
 
 /**
@@ -745,6 +1014,7 @@ struct VideoFrame {
   textureId(0),
   d3d11Texture2d(NULL),
   alphaBuffer(NULL),
+  alphaStitchMode(NO_ALPHA_STITCH),
   pixelBuffer(NULL),
   metaInfo(NULL){
     memset(matrix, 0, sizeof(matrix));
@@ -827,11 +1097,21 @@ struct VideoFrame {
    */
   float matrix[16];
   /**
-   *  Indicates the output data of the portrait segmentation algorithm, which is consistent with the size of the video frame.
-   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground (portrait).
-   *  The default value is NULL
+   *  Indicates the alpha channel of current frame, which is consistent with the dimension of the video frame.
+   *  The value range of each pixel is [0,255], where 0 represents the background; 255 represents the foreground.
+   *  The default value is NULL.
    */
   uint8_t* alphaBuffer;
+  /**
+   *  The relative position between alphabuffer and the frame.
+   *  0: Normal frame;
+   *  1: Alphabuffer is above the frame;
+   *  2: Alphabuffer is below the frame;
+   *  3: Alphabuffer is on the left of frame;
+   *  4: Alphabuffer is on the right of frame;
+   *  The default value is 0.
+   */
+  ALPHA_STITCH_MODE alphaStitchMode;
   /**
    *The type of CVPixelBufferRef, for iOS and macOS only.
    */
@@ -840,6 +1120,16 @@ struct VideoFrame {
    *  The pointer to IVideoFrameMetaInfo, which is the interface to get metainfo contents from VideoFrame. 
    */
   IVideoFrameMetaInfo* metaInfo;
+
+  /**
+   * metadata info used for hdr video data
+   */
+  Hdr10MetadataInfo hdr10MetadataInfo;
+
+  /**
+   * The ColorSpace of the video frame
+   */
+  ColorSpace colorSpace;
 };
 
 /**
@@ -981,6 +1271,10 @@ class IAudioFrameObserverBase {
      * The number of the audio track.
      */
     int audioTrackNumber;
+    /**
+     * RTP timestamp of the first sample in the audio frame
+     */
+    uint32_t rtpTimestamp;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
                    samplesPerChannel(0),
@@ -991,7 +1285,8 @@ class IAudioFrameObserverBase {
                    renderTimeMs(0),
                    avsync_type(0),
                    presentationMs(0),
-                   audioTrackNumber(0) {}
+                   audioTrackNumber(0),
+                   rtpTimestamp(0) {}
   };
 
   enum AUDIO_FRAME_POSITION {
@@ -1609,6 +1904,21 @@ struct MediaRecorderConfiguration {
   MediaRecorderConfiguration() : storagePath(NULL), containerFormat(FORMAT_MP4), streamType(STREAM_TYPE_BOTH), maxDurationMs(120000), recorderInfoUpdateInterval(0) {}
   MediaRecorderConfiguration(const char* path, MediaRecorderContainerFormat format, MediaRecorderStreamType type, int duration, int interval) : storagePath(path), containerFormat(format), streamType(type), maxDurationMs(duration), recorderInfoUpdateInterval(interval) {}
 };
+
+class IFaceInfoObserver {
+public:
+   /**
+    * Occurs when the face info is received.
+    * @param outFaceInfo The output face info.
+    * @return
+    * - true: The face info is valid.
+    * - false: The face info is invalid.
+   */
+   virtual bool onFaceInfo(const char* outFaceInfo) = 0;
+  
+   virtual ~IFaceInfoObserver() {}
+};
+
 /**
  * Information for the recording file.
  *

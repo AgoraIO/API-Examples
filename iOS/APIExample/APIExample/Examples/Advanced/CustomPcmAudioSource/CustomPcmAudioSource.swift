@@ -142,7 +142,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
         agoraKit.pushExternalAudioFrameRawData(data,
-                                               samples: samples,
+                                               samples: samples*Int(channel),
                                                sampleRate: Int(sampleRate),
                                                channels: Int(channel),
                                                trackId: Int(trackId),

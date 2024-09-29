@@ -83,6 +83,8 @@ class PictureInPictureMain: BaseViewController {
                                                                           contentViewController: callViewController))
         pipController?.canStartPictureInPictureAutomaticallyFromInline = true
         pipController?.delegate = self
+        //iOS 15 workaround
+        pipController?.setValue(1, forKey: "controlsStyle")
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()

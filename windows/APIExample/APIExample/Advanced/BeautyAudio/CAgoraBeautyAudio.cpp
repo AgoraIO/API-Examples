@@ -28,6 +28,7 @@ void CAgoraBeautyAudio::InitCtrlText()
 	m_staParam1.SetWindowText(beautyAudioCtrlParam1);
 	m_staParam2.SetWindowText(beautyAudioCtrlParam2);
 	m_staAINSMode.SetWindowText(beautyAudioCtrlAINSMode);
+	m_staAITuner.SetWindowText(beautyAudioCtrlAITuner);
 }
 
 
@@ -143,6 +144,14 @@ void CAgoraBeautyAudio::ResumeStatus()
 	}
 	m_cmbAINSMode.SetCurSel(0);
 
+	m_cmbAITuner.ResetContent();
+	nIndex = 0;
+	for (auto& str : m_setAITuner)
+	{
+		m_cmbAITuner.InsertString(nIndex++, str.first);
+	}
+	m_cmbAITuner.SetCurSel(0);
+
 }
 
 void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
@@ -160,7 +169,9 @@ void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_TYPE, m_staAudioType);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_PERVERB_PRESET, m_cmbPerverbPreset);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_AINS_MODE, m_cmbAINSMode);
+	DDX_Control(pDX, IDC_COMBO_AUDIO_AI_TUNER, m_cmbAITuner);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_AINS_MODE, m_staAINSMode);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_AI_TUNER, m_staAITuner);
 	DDX_Control(pDX, IDC_STATIC_PARAM1, m_staParam1);
 	DDX_Control(pDX, IDC_STATIC_PARAM2, m_staParam2);
 	DDX_Control(pDX, IDC_EDIT_PARAM1, m_edtParam1);
@@ -184,6 +195,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOICE_FORMANT, &CAgoraBeautyAudio::OnNMCustomdrawSliderVoiceFormant)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_AINS_MODE, &CAgoraBeautyAudio::OnCbnSelchangeComboAudioAinsMode)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_AI_TUNER, &CAgoraBeautyAudio::OnCbnSelchangeComboAudioAITuner)
 END_MESSAGE_MAP()
 
 
@@ -267,6 +279,18 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 	m_setAINSMode.push_back(_T("AINS_MODE_BALANCED"));
 	m_setAINSMode.push_back(_T("AINS_MODE_AGGRESSIVE"));
 	m_setAINSMode.push_back(_T("AINS_MODE_ULTRALOWLATENCY"));
+
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_OFF"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_MATURE_MALE));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_MATURE_MALE"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_MATURE_MALE));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_FRESH_MALE"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_FRESH_MALE));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_ELEGANT_FEMALE"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_ELEGANT_FEMALE));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_SWEET_FEMALE"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_SWEET_FEMALE));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_WARM_MALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_WARM_MALE_SINGING));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_GENTLE_FEMALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_GENTLE_FEMALE_SINGING));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_HUSKY_MALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_HUSKY_MALE_SINGING));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_WARM_ELEGANT_FEMALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_WARM_ELEGANT_FEMALE_SINGING));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_POWERFUL_MALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_POWERFUL_MALE_SINGING));
+	m_setAITuner.insert(std::make_pair(_T("AI_TUNER_DREAMY_FEMALE_SINGING"), VOICE_AI_TUNER_TYPE::VOICE_AI_TUNER_DREAMY_FEMALE_SINGING));
 	
 
 	m_setChanger.insert(std::make_pair(_T("AUDIO_EFFECT_OFF"), AUDIO_EFFECT_OFF));
@@ -700,5 +724,32 @@ void CAgoraBeautyAudio::OnCbnSelchangeComboAudioAinsMode()
 	}else if (position == 2) {
 		mode = AUDIO_AINS_MODE::AINS_MODE_ULTRALOWLATENCY;
 	}
-	m_rtcEngine->setAINSMode(enable, mode);
+
+	CString str;
+	m_cmbAINSMode.GetWindowText(str);
+
+	int ret = m_rtcEngine->setAINSMode(enable, mode);
+
+	str.Format(_T("setAINSMode enable=%d,ret=%d,type=%s"), enable, ret, str);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
+}
+
+
+void CAgoraBeautyAudio::OnCbnSelchangeComboAudioAITuner()
+{
+	if (!m_rtcEngine) {
+		return;
+	}
+	int position = m_cmbAITuner.GetCurSel();
+	boolean enable = position > 0;
+
+	CString str;
+	m_cmbAITuner.GetWindowText(str);
+
+	VOICE_AI_TUNER_TYPE type = m_setAITuner[str];
+	
+	int ret = m_rtcEngine->enableVoiceAITuner(enable, type);
+
+	str.Format(_T("enableVoiceAITuner enable=%d,ret=%d,type=%s"), enable, ret, str);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
 }

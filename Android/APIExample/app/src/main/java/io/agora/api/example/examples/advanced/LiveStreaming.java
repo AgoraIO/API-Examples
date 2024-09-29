@@ -207,8 +207,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 CAMERA_DIRECTION direction = CAMERA_DIRECTION.CAMERA_FRONT;
                 if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
                     direction = CAMERA_DIRECTION.CAMERA_REAR;
-                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRA.getValue()) {
-                    direction = CAMERA_DIRECTION.CAMERA_EXTRA;
+                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRAL.getValue()) {
+                    direction = CAMERA_DIRECTION.CAMERA_EXTRAL;
                 }
                 CAMERA_FOCAL_LENGTH_TYPE focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
                 if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
@@ -321,7 +321,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 String cameraDirection = getString(R.string.camera_front);
                 if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
                     cameraDirection = getString(R.string.camera_rear);
-                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRA.getValue()) {
+                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRAL.getValue()) {
                     cameraDirection = getString(R.string.camera_extral);
                 }
                 String focalLength = getString(R.string.camera_focal_default);
@@ -582,9 +582,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     }
 
     private void enableLowStream(boolean enable) {
-        engine.setRemoteDefaultVideoStreamType(enable ? Constants.VIDEO_STREAM_LOW : Constants.VIDEO_STREAM_HIGH);
+        engine.setRemoteDefaultVideoStreamType(enable ? Constants.VideoStreamType.VIDEO_STREAM_LOW : Constants.VideoStreamType.VIDEO_STREAM_HIGH);
         if (remoteUid != 0) {
-            engine.setRemoteVideoStreamType(remoteUid, enable ? Constants.VIDEO_STREAM_LOW : Constants.VIDEO_STREAM_HIGH);
+            engine.setRemoteVideoStreamType(remoteUid, enable ? Constants.VideoStreamType.VIDEO_STREAM_LOW : Constants.VideoStreamType.VIDEO_STREAM_HIGH);
         }
     }
 
