@@ -116,6 +116,17 @@
 		F728B9F12CA3FAFE007813BB /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F02CA3FAFE007813BB /* LiveStreaming.swift */; };
 		F728B9F32CA3FB12007813BB /* LiveStreamingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F22CA3FB12007813BB /* LiveStreamingRTC.swift */; };
 		F728B9F62CA42ED7007813BB /* PickerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9F52CA42ED7007813BB /* PickerSheetView.swift */; };
+		F728B9FB2CA6638D007813BB /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9FA2CA6638D007813BB /* VideoMetadata.swift */; };
+		F728B9FD2CA6639E007813BB /* VideoMetaDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9FC2CA6639E007813BB /* VideoMetaDataRTC.swift */; };
+		F728BA022CA6A732007813BB /* CustomPCMAudioSourceRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA012CA6A732007813BB /* CustomPCMAudioSourceRTC.swift */; };
+		F728BA042CA6A741007813BB /* CustomPCMAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA032CA6A741007813BB /* CustomPCMAudioSource.swift */; };
+		F728BA062CA6AB71007813BB /* output.pcm in Resources */ = {isa = PBXBuildFile; fileRef = F728BA052CA6AB42007813BB /* output.pcm */; };
+		F728BA092CA6C1EF007813BB /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA082CA6C1EF007813BB /* RawAudioData.swift */; };
+		F728BA0B2CA6C1FB007813BB /* RawAudioDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA0A2CA6C1FB007813BB /* RawAudioDataRTC.swift */; };
+		F728BA0E2CA6D5DC007813BB /* RawVideoDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA0D2CA6D5DC007813BB /* RawVideoDataRTC.swift */; };
+		F728BA102CA6D5E9007813BB /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA0F2CA6D5E9007813BB /* RawVideoData.swift */; };
+		F728BA132CA9074B007813BB /* LocalVideoTranscoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA122CA9074B007813BB /* LocalVideoTranscoding.swift */; };
+		F728BA152CA9075D007813BB /* LocalVideoTranscodingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA142CA9075D007813BB /* LocalVideoTranscodingRTC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -286,6 +297,17 @@
 		F728B9F02CA3FAFE007813BB /* LiveStreaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		F728B9F22CA3FB12007813BB /* LiveStreamingRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingRTC.swift; sourceTree = "<group>"; };
 		F728B9F52CA42ED7007813BB /* PickerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSheetView.swift; sourceTree = "<group>"; };
+		F728B9FA2CA6638D007813BB /* VideoMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
+		F728B9FC2CA6639E007813BB /* VideoMetaDataRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMetaDataRTC.swift; sourceTree = "<group>"; };
+		F728BA012CA6A732007813BB /* CustomPCMAudioSourceRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPCMAudioSourceRTC.swift; sourceTree = "<group>"; };
+		F728BA032CA6A741007813BB /* CustomPCMAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPCMAudioSource.swift; sourceTree = "<group>"; };
+		F728BA052CA6AB42007813BB /* output.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.pcm; sourceTree = "<group>"; };
+		F728BA082CA6C1EF007813BB /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
+		F728BA0A2CA6C1FB007813BB /* RawAudioDataRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioDataRTC.swift; sourceTree = "<group>"; };
+		F728BA0D2CA6D5DC007813BB /* RawVideoDataRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoDataRTC.swift; sourceTree = "<group>"; };
+		F728BA0F2CA6D5E9007813BB /* RawVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
+		F728BA122CA9074B007813BB /* LocalVideoTranscoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscoding.swift; sourceTree = "<group>"; };
+		F728BA142CA9075D007813BB /* LocalVideoTranscodingRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscodingRTC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -436,6 +458,7 @@
 		E73F240D2BA82D430000B523 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				F728BA052CA6AB42007813BB /* output.pcm */,
 				E73F24392BA84B7C0000B523 /* Basic */,
 				E73F240E2BA82D4B0000B523 /* Advanced */,
 			);
@@ -445,6 +468,11 @@
 		E73F240E2BA82D4B0000B523 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F728BA112CA90732007813BB /* LocalVideoTranscoding */,
+				F728BA0C2CA6D5CE007813BB /* RawVideoData */,
+				F728BA072CA6C1D6007813BB /* RawAudioData */,
+				F728BA002CA6A706007813BB /* CustomPCMAudioSource */,
+				F728B9F92CA66367007813BB /* VideoMetadata */,
 				F728B9EF2CA3FA17007813BB /* LiveStreaming */,
 				F70DE4EE2C69ACD900FFC922 /* PictureInPicture */,
 				E71D54792BCE1EB900656537 /* QuickSwitchChannel */,
@@ -817,6 +845,51 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		F728B9F92CA66367007813BB /* VideoMetadata */ = {
+			isa = PBXGroup;
+			children = (
+				F728B9FA2CA6638D007813BB /* VideoMetadata.swift */,
+				F728B9FC2CA6639E007813BB /* VideoMetaDataRTC.swift */,
+			);
+			path = VideoMetadata;
+			sourceTree = "<group>";
+		};
+		F728BA002CA6A706007813BB /* CustomPCMAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				F728BA012CA6A732007813BB /* CustomPCMAudioSourceRTC.swift */,
+				F728BA032CA6A741007813BB /* CustomPCMAudioSource.swift */,
+			);
+			path = CustomPCMAudioSource;
+			sourceTree = "<group>";
+		};
+		F728BA072CA6C1D6007813BB /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				F728BA082CA6C1EF007813BB /* RawAudioData.swift */,
+				F728BA0A2CA6C1FB007813BB /* RawAudioDataRTC.swift */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
+		F728BA0C2CA6D5CE007813BB /* RawVideoData */ = {
+			isa = PBXGroup;
+			children = (
+				F728BA0D2CA6D5DC007813BB /* RawVideoDataRTC.swift */,
+				F728BA0F2CA6D5E9007813BB /* RawVideoData.swift */,
+			);
+			path = RawVideoData;
+			sourceTree = "<group>";
+		};
+		F728BA112CA90732007813BB /* LocalVideoTranscoding */ = {
+			isa = PBXGroup;
+			children = (
+				F728BA122CA9074B007813BB /* LocalVideoTranscoding.swift */,
+				F728BA142CA9075D007813BB /* LocalVideoTranscodingRTC.swift */,
+			);
+			path = LocalVideoTranscoding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -903,6 +976,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F728BA062CA6AB71007813BB /* output.pcm in Resources */,
 				E73F24FE2BB6A2D30000B523 /* frames0.yuv in Resources */,
 				E73F25042BB6A2D30000B523 /* sample.yuv in Resources */,
 				E73F24C92BB161180000B523 /* AR.scnassets in Resources */,
@@ -1001,6 +1075,7 @@
 				E73F24022BA82C440000B523 /* ContentView.swift in Sources */,
 				E73F24852BA851870000B523 /* AgoraYUVImageSourcePush.m in Sources */,
 				E71D54642BCCD14800656537 /* MediaPlayer.swift in Sources */,
+				F728BA152CA9075D007813BB /* LocalVideoTranscodingRTC.swift in Sources */,
 				E73F24D62BB26F4C0000B523 /* ContentInspect.swift in Sources */,
 				E73F24D12BB17B670000B523 /* MutliCameraRTC.swift in Sources */,
 				E73F24782BA851870000B523 /* AudioWriteToFile.m in Sources */,
@@ -1013,6 +1088,7 @@
 				E71D54772BCD337A00656537 /* JoinMultiChannel.swift in Sources */,
 				E73F247A2BA851870000B523 /* UIColor+CSRGB.m in Sources */,
 				F70DE53E2C6B926000FFC922 /* CustomRenderViewModel.swift in Sources */,
+				F728B9FB2CA6638D007813BB /* VideoMetadata.swift in Sources */,
 				E73F251B2BB6B22B0000B523 /* ScreenShareRTC.swift in Sources */,
 				E73F24772BA851870000B523 /* ZSNBoxingView.m in Sources */,
 				E73F24B32BAD63A90000B523 /* LogUtil.swift in Sources */,
@@ -1023,12 +1099,14 @@
 				E73F249E2BA9888D0000B523 /* JoinChannelAudio.swift in Sources */,
 				E73F24252BA83D710000B523 /* GlobalSettings.swift in Sources */,
 				E73F24B82BAD85710000B523 /* FaceCapture.swift in Sources */,
+				F728BA042CA6A741007813BB /* CustomPCMAudioSource.swift in Sources */,
 				F728B9F32CA3FB12007813BB /* LiveStreamingRTC.swift in Sources */,
 				E71D54722BCD270800656537 /* StreamEncryptionRTC.swift in Sources */,
 				E73F248D2BA851870000B523 /* KFMP4Demuxer.m in Sources */,
 				E73F24F02BB6645C0000B523 /* RhythmPlayer.swift in Sources */,
 				E73F24882BA851870000B523 /* NetworkManager.swift in Sources */,
 				E73F24AD2BAAC6E70000B523 /* JoinChannelVideoRecorder.swift in Sources */,
+				F728BA022CA6A732007813BB /* CustomPCMAudioSourceRTC.swift in Sources */,
 				F70DE53A2C6B885D00FFC922 /* SDKRenderExample.swift in Sources */,
 				E73F24DA2BB2783C0000B523 /* SpatialAudio.swift in Sources */,
 				E73F24DB2BB2783C0000B523 /* SpatialAudioRTC.swift in Sources */,
@@ -1037,6 +1115,7 @@
 				E73F24D02BB17B670000B523 /* MutliCamera.swift in Sources */,
 				E73F24892BA851870000B523 /* JSONObject.swift in Sources */,
 				E73F248E2BA851870000B523 /* MediaUtils.m in Sources */,
+				F728BA092CA6C1EF007813BB /* RawAudioData.swift in Sources */,
 				E73F248F2BA851870000B523 /* Util.swift in Sources */,
 				E71D54732BCD270800656537 /* StreamEncryption.swift in Sources */,
 				E73F24E72BB519600000B523 /* CreateDataStreamRTC.swift in Sources */,
@@ -1065,14 +1144,18 @@
 				E73F247D2BA851870000B523 /* AudioController.m in Sources */,
 				E73F24CC2BB177B80000B523 /* KtvCopyrightMusic.swift in Sources */,
 				E71D54782BCD337A00656537 /* JoinMultiChannelRTC.swift in Sources */,
+				F728BA0B2CA6C1FB007813BB /* RawAudioDataRTC.swift in Sources */,
 				E73F24B12BAAD65A0000B523 /* SettingsView.swift in Sources */,
 				E73F24D52BB26F4C0000B523 /* ContentInspectRTC.swift in Sources */,
 				F70DE4F42C69EB7D00FFC922 /* CustomRenderExample.swift in Sources */,
 				F70DE53C2C6B88C100FFC922 /* SDKRenderRTC.swift in Sources */,
+				F728BA102CA6D5E9007813BB /* RawVideoData.swift in Sources */,
 				E73F24A22BA9A27B0000B523 /* JoinChannelVideoRTC.swift in Sources */,
+				F728B9FD2CA6639E007813BB /* VideoMetaDataRTC.swift in Sources */,
 				E73F24342BA83DD60000B523 /* VideoView.swift in Sources */,
 				E73F24922BA938320000B523 /* VideoUIView.swift in Sources */,
 				E73F24872BA851870000B523 /* ToastView.swift in Sources */,
+				F728BA0E2CA6D5DC007813BB /* RawVideoDataRTC.swift in Sources */,
 				E73F247E2BA851870000B523 /* AgoraPictureInPictureController.m in Sources */,
 				E73F24302BA83D710000B523 /* StatisticsInfo.swift in Sources */,
 				E73F24E12BB512840000B523 /* MediaChannelRelay.swift in Sources */,
@@ -1083,6 +1166,7 @@
 				E73F24C52BB152450000B523 /* ARKitRTC.swift in Sources */,
 				E73F247C2BA851870000B523 /* ExternalAudio.mm in Sources */,
 				E73F24BC2BAD89920000B523 /* AudioWaveformRTC.swift in Sources */,
+				F728BA132CA9074B007813BB /* LocalVideoTranscoding.swift in Sources */,
 				E73F251C2BB6B22B0000B523 /* ScreenShare.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1235,10 +1319,12 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1259,6 +1345,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1273,10 +1360,12 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1297,6 +1386,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1308,9 +1398,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBC8877FFEE7ACACB6F106A1 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
@@ -1325,6 +1417,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
@@ -1337,9 +1430,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8CC7EDC4E0A91FEAD503BDAB /* Pods-Agora-ScreenShare-Extension.release.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
@@ -1354,6 +1449,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";

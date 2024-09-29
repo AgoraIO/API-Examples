@@ -21,17 +21,9 @@ struct LiveStreamingEntry: View {
     @State private var cameraOptions: [AgoraFocalLengthInfo] = []
     @State private var configs: [String: Any] = [:]
     @State var selectedColor: BackgroundColors = .Red
+    @ObservedObject private var liveStreamRTCKit = LiveStreamingRTC()
+    @Environment(\.presentationMode) var presentationMode
 
-    var agoraKit: AgoraRtcEngineKit = {
-        let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
-        config.channelProfile = .liveBroadcasting
-        let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
-        Util.configPrivatization(agoraKit: kit)
-        kit.setLogFile(LogUtils.sdkLogPath())
-        return kit
-    }()
-    
     var body: some View {
         VStack {
             Spacer()
@@ -85,7 +77,7 @@ struct LiveStreamingEntry: View {
                                 let config = AgoraCameraCapturerConfiguration()
                                 config.cameraFocalLengthType = camera.value
                                 config.cameraDirection = camera.key.contains("Front camera".localized) ? .front : .rear
-                                self.agoraKit.setCameraCapturerConfiguration(config)
+                                liveStreamRTCKit.agoraKit.setCameraCapturerConfiguration(config)
                                 break
                             }
                         }
@@ -115,7 +107,7 @@ struct LiveStreamingEntry: View {
             .disabled(channelName.isEmpty)
             
             Spacer()
-            NavigationLink(destination: LiveStreaming(configs: configs)
+            NavigationLink(destination: LiveStreaming(liveStreamRTCKit: liveStreamRTCKit, configs: configs)
                             .navigationTitle(channelName)
                             .navigationBarTitleDisplayMode(.inline),
                            isActive: $channelButtonIsActive) {
@@ -127,19 +119,27 @@ struct LiveStreamingEntry: View {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         })
         .onAppear(perform: {
-            guard let infos = agoraKit.queryCameraFocalLengthCapability() else { return }
+            guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else { return }
             let params = infos.flatMap({ $0.value })
             let keys = params.map({ $0.key })
             cameraOptions = infos
             
             selectedCamertOption = keys.first ?? ""
         })
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            liveStreamRTCKit.onDestory()
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.left") // 自定义返回按钮图标
+            }
+        })
         .navigationBarTitleDisplayMode(.inline)
     }
     
     func prepareConfig() {
         configs["role"] = self.role
-        configs["engine"] = agoraKit
         configs["isFirstFrame"] = firstFrameToggleIsOn
         configs["channelName"] = channelName
         configs["isPreloadChannel"] = preloadIsOn
@@ -150,7 +150,7 @@ struct LiveStreamingEntry: View {
 }
 
 struct LiveStreaming: View {
-    @ObservedObject private var liveStreamRTCKit = LiveStreamingRTC()
+    var liveStreamRTCKit: LiveStreamingRTC
     @State var configs: [String: Any] = [:]
     @State var selectStabilizationMode: AntiShakeLevel = .off
     @State var selectEncodingType: CodeType = .auto
@@ -160,7 +160,6 @@ struct LiveStreaming: View {
     @State var gasketPushFlow: Bool = false
     @State var showCenterStageAlert: Bool = false
     @State var simulcastStreamState: Bool = false
-    @State var simulcastStream: AgoraSimulcastStreamMode = .enableSimulcastStream
     @State private var selectedCamertOption = ""
     @State private var cameraOptions: [AgoraFocalLengthInfo] = []
     @State private var cameraSheetIsShow = false
@@ -401,10 +400,8 @@ struct LiveStreaming: View {
         }
         .onAppear {
             liveStreamRTCKit.setupRTC(configs: configs, localView: backgroundView.videoView, remoteView: foregroundView.videoView)
-            guard let agoraKit = liveStreamRTCKit.agoraKit else { return }
-            guard let infos = agoraKit.queryCameraFocalLengthCapability() else { return }
+            guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else { return }
             
-            let params = infos.flatMap({ $0.value })
             cameraOptions = infos
             
             if let cameraKey = configs["cameraKey"] as? String {
@@ -523,6 +520,3 @@ enum CodeType: String, CaseIterable, Identifiable {
     }
 }
 
-#Preview {
-    LiveStreaming()
-}

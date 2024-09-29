@@ -10,48 +10,52 @@ import Combine
 import AgoraRtcKit
 
 class LiveStreamingRTC: NSObject, ObservableObject {
-    var agoraKit: AgoraRtcEngineKit!
     @Published var role: AgoraClientRole = .broadcaster
     @Published var showUltraLowEntry: Bool = false
     @Published var showLinkStreamEntry: Bool = false
-   
+    var agoraKit: AgoraRtcEngineKit!
+    
     private var isJoined: Bool = false
-    private weak var foregroundView: VideoUIView!
-    private weak var backgroundView: VideoUIView!
+    private var foregroundView: VideoUIView?
+    private var backgroundView: VideoUIView?
     private var configs: [String: Any]!
     var isUltraLowLatencyOn: Bool = false
     var isLocalVideoForeground = false {
         didSet {
             if isLocalVideoForeground {
-                backgroundView.setPlaceholder(text: "Local Host".localized)
-                foregroundView.setPlaceholder(text: "Remote Host".localized)
+                backgroundView?.setPlaceholder(text: "Local Host".localized)
+                foregroundView?.setPlaceholder(text: "Remote Host".localized)
             } else {
-                backgroundView.setPlaceholder(text: "Remote Host".localized)
-                foregroundView.setPlaceholder(text: "Local Host".localized)
+                backgroundView?.setPlaceholder(text: "Remote Host".localized)
+                foregroundView?.setPlaceholder(text: "Local Host".localized)
             }
         }
     }
-    
+        
     deinit {
-        print("")
+        print("sss")
     }
     
     @Published var remoteUid: UInt? {
         didSet {
-            foregroundView.isHidden = !(role == .broadcaster && remoteUid != nil)
+            foregroundView?.isHidden = !(role == .broadcaster && remoteUid != nil)
         }
+    }
+    
+    override init() {
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.channelProfile = .liveBroadcasting
+        let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
+        Util.configPrivatization(agoraKit: kit)
+        kit.setLogFile(LogUtils.sdkLogPath())
+        agoraKit = kit
     }
     
     func setupRTC(configs: [String: Any],
                   localView: VideoUIView,
                   remoteView: VideoUIView) {
-        
-        guard let engine = configs["engine"] as? AgoraRtcEngineKit else {
-            return
-        }
         self.configs = configs
-        
-        self.agoraKit = engine
         self.backgroundView = localView
         self.foregroundView = remoteView
         
@@ -85,7 +89,8 @@ class LiveStreamingRTC: NSObject, ObservableObject {
         option.publishCameraTrack = role == .broadcaster
         option.publishMicrophoneTrack = role == .broadcaster
         option.clientRoleType = role
-        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+        NetworkManager.shared.generateToken(channelName: channelName, success: { [weak self] token in
+            guard let self = self else { return }
             let preloadChannel = configs["isPreloadChannel"] as? Bool
             if preloadChannel == true {
                 self.agoraKit.preloadChannel(byToken: token,
@@ -168,12 +173,12 @@ class LiveStreamingRTC: NSObject, ObservableObject {
         agoraKit.setClientRole(.audience, options: options)
     }
     
-    func localVideoCanvas() -> UIView {
-        return isLocalVideoForeground ? foregroundView.videoView : backgroundView.videoView
+    func localVideoCanvas() -> UIView? {
+        return isLocalVideoForeground ? foregroundView?.videoView : backgroundView?.videoView
     }
 
-    func remoteVideoCanvas() -> UIView {
-        return isLocalVideoForeground ? backgroundView.videoView : foregroundView.videoView
+    func remoteVideoCanvas() -> UIView? {
+        return isLocalVideoForeground ? backgroundView?.videoView : foregroundView?.videoView
     }
     
     func onDestory() {
@@ -249,7 +254,7 @@ extension LiveStreamingRTC: AgoraRtcEngineDelegate {
     ///
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
-        foregroundView.statsInfo?.updateUid(uid: uid)
+        foregroundView?.statsInfo?.updateUid(uid: uid)
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -257,7 +262,7 @@ extension LiveStreamingRTC: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        backgroundView.statsInfo?.updateRemoteUid(remoteUid: uid)
+        backgroundView?.statsInfo?.updateRemoteUid(remoteUid: uid)
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         // record remote uid
@@ -303,31 +308,32 @@ extension LiveStreamingRTC: AgoraRtcEngineDelegate {
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
-        foregroundView.statsInfo?.updateChannelStats(stats)
+        foregroundView?.statsInfo?.updateChannelStats(stats)
     }
     
     /// Reports the statistics of the uploading local audio streams once every two seconds.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
-        foregroundView.statsInfo?.updateLocalAudioStats(stats)
+        foregroundView?.statsInfo?.updateLocalAudioStats(stats)
     }
     
     /// Reports the statistics of the video stream from each remote user/host.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
-        backgroundView.statsInfo?.updateVideoStats(stats)
+        backgroundView?.statsInfo?.updateVideoStats(stats)
     }
     
     /// Reports the statistics of the audio stream from each remote user/host.
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        backgroundView.statsInfo?.updateAudioStats(stats)
+        backgroundView?.statsInfo?.updateAudioStats(stats)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit,
                    videoRenderingTracingResultOfUid uid: UInt,
                    currentEvent: AgoraMediaTraceEvent,
                    tracingInfo: AgoraVideoRenderingTracingInfo) {
-        backgroundView.statsInfo?.updateFirstFrameInfo(tracingInfo)
+        backgroundView?.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
 }
+
