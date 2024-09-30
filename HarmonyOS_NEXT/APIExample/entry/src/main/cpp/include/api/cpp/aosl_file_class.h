@@ -234,9 +234,9 @@ private:
 #endif /* C++11 */
 
 public:
-	int co_read (aosl_data_t d_ret, aosl_data_t d_buf)
+	int co_read (aosl_data_t d_ret, aosl_data_t d_buf, uintptr_t buf_off = 0)
 	{
-		return aosl_co_file_read (fd, d_ret, d_buf);
+		return aosl_co_file_read (fd, d_ret, d_buf, buf_off);
 	}
 
 	int co_write (aosl_data_t d_ret, aosl_data_t d_buf)

@@ -2,6 +2,7 @@
 #define __AOSL_XDUMP_H__
 
 #include <api/aosl_defs.h>
+#include <api/aosl_types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +11,8 @@ extern "C" {
 
 /**
  * xdump callback info about crash:
+ *   @module_ver: the module version
+ *   @module_name: the module name
  *   @log_file: the full path of log_file
  *   @type: the dump type:
  *          0: crash
@@ -20,11 +23,14 @@ extern "C" {
 #define AOSL_XDUMP_CRASH 0
 #define AOSL_XDUMP_DEAD 1
 typedef struct {
+    uintptr_t module_ver;
+    const char *module_name;
     const char *log_file;
 	int type;
     void *crash_at;
     void *ld_begin;
     void *ld_end;
+    int q_flags;
 } xdump_info_t;
 typedef void (*xdump_cb_t)(const xdump_info_t *log_file);
 

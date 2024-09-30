@@ -6,7 +6,6 @@ header-y += aosl_mpq_timer_lambda.h
 header-y += aosl_ref_class.h
 header-y += aosl_task_class.h
 header-y += aosl_thread_class.h
-header-y += aosl_usage_class.h
 header-y += aosl_kobj_class.h
 header-y += aosl_value_class.h
 header-y += aosl_data_class.h

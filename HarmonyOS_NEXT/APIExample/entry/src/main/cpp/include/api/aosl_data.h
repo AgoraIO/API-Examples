@@ -30,15 +30,46 @@ typedef enum {
     aosl_dt_vbuf,
 } aosl_dt_t;
 
+/* data destructor */
+typedef void (*aosl_data_dtor_t) (void *ptr, size_t len);
+
 /**
  * Create an data object with the specified parameters.
  * Parameters:
  *          len: the data length;
+ *         dtor: the data buffer destructor function:
+ *               you may want to free some members or call
+ *               the C++ destructor function here;
  * Return value:
  *     non-NULL: the data object pointer;
  *         NULL: failed with aosl_errno set;
  **/
-extern __aosl_api__ aosl_data_t aosl_data_create (size_t len);
+extern __aosl_api__ aosl_data_t aosl_data_create (size_t len, aosl_data_dtor_t dtor);
+
+/* user defined data free function */
+typedef void (*aosl_data_user_free_t) (void *ptr, size_t len);
+
+/**
+ * Create an data object from the user data buffer pointer.
+ * Parameters:
+ *          ptr: the data pointer;
+ *          len: the data length;
+ *         dtor: the data buffer free function:
+ *               1. A libc 'free' like function
+ *                  We will take the ownership of the memory pointed by
+ *                  ptr, and will invoke the specified destructor when
+ *                  finished using.
+ *               2. An empty function like void myfree (void *ptr, size_t len) {}
+ *                  If the memory pointed by ptr is a long life cycle
+ *                  memory but does not need to be freed at all, like
+ *                  a global data segment based memory, then you can
+ *                  pass an empty function pointer as the dtor arg.
+ *
+ * Return value:
+ *     non-NULL: the data object pointer;
+ *         NULL: failed with aosl_errno set;
+ **/
+extern __aosl_api__ aosl_data_t aosl_data_user_create (void *ptr, size_t len, aosl_data_user_free_t dtor);
 
 /**
  * Get the data object type.
@@ -69,6 +100,15 @@ extern __aosl_api__ int aosl_data_get (aosl_data_t d);
  *         if the usage count is zero.
  **/
 extern __aosl_api__ int aosl_data_put (aosl_data_t d);
+
+/**
+ * Get the data object usage count.
+ * Parameters:
+ *         data: the data object;
+ * Return value:
+ *         the current usage count;
+ **/
+extern __aosl_api__ int aosl_data_usage (aosl_data_t d);
 
 /**
  * Get the data pointer of a data object.

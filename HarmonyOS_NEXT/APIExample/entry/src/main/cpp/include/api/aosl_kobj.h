@@ -398,11 +398,9 @@ typedef struct {
  *              argc: the various args count, passed when registering;
  *              argv: the various args vector, passed as various args when registering;
  * Return value:
- *            0: successfully;
- *           <0: failed with aosl_errno set accordingly.
+ *            None.
  **/
 typedef void (*aosl_kobj_notify_t) (aosl_refobj_t robj, const char *dirpath, const char *name, void *notif_data, uintptr_t argc, uintptr_t argv []);
-typedef void (*aosl_kobj_notify_dtor_t) (uintptr_t argc, uintptr_t argv []);
 
 /**
  * Register a notification of the kobject specified by dfd + name for monitoring changes.
@@ -410,7 +408,7 @@ typedef void (*aosl_kobj_notify_dtor_t) (uintptr_t argc, uintptr_t argv []);
  *               dfd: the opened fd of directory, AOSL_KFD_INVALID for root or pwd:
  *                    1. if the name starts with a '/', then directory is root;
  *                    2. if the name does not start with a '/', then directory is pwd;
- *              name: the directory name;
+ *              name: the object name;
  *             touch: 0: notify only when changed; !0: notify anyway;
  *               qid: the mpq you want the target function to be invoked in, must be valid;
  *               ref: specify a ref object just like the queue operation of an mpq;
@@ -424,7 +422,7 @@ typedef void (*aosl_kobj_notify_dtor_t) (uintptr_t argc, uintptr_t argv []);
  *           NULL: failed with aosl_errno set accordingly.
  *       The return value only used for unregister, no other usage.
  **/
-extern __aosl_api__ void *aosl_kobj_notify_register (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, ...);
+extern __aosl_api__ void *aosl_kobj_notify_register (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, ...);
 
 /**
  * Register a notification of the kobject specified by dfd + name for monitoring changes.
@@ -432,7 +430,7 @@ extern __aosl_api__ void *aosl_kobj_notify_register (aosl_kfd_t dfd, const char 
  *               dfd: the opened fd of directory, AOSL_KFD_INVALID for root or pwd:
  *                    1. if the name starts with a '/', then directory is root;
  *                    2. if the name does not start with a '/', then directory is pwd;
- *              name: the directory name;
+ *              name: the object name;
  *             touch: 0: notify only when changed; !0: notify anyway;
  *               qid: the mpq you want the target function to be invoked in, must be valid;
  *               ref: specify a ref object just like the queue operation of an mpq;
@@ -447,7 +445,7 @@ extern __aosl_api__ void *aosl_kobj_notify_register (aosl_kfd_t dfd, const char 
  *           NULL: failed with aosl_errno set accordingly.
  *       The return value only used for unregister, no other usage.
  **/
-extern __aosl_api__ void *aosl_kobj_notify_register_args (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, va_list args);
+extern __aosl_api__ void *aosl_kobj_notify_register_args (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, va_list args);
 
 /**
  * Register a notification of the kobject specified by dfd + name for monitoring changes.
@@ -455,7 +453,7 @@ extern __aosl_api__ void *aosl_kobj_notify_register_args (aosl_kfd_t dfd, const 
  *               dfd: the opened fd of directory, AOSL_KFD_INVALID for root or pwd:
  *                    1. if the name starts with a '/', then directory is root;
  *                    2. if the name does not start with a '/', then directory is pwd;
- *              name: the directory name;
+ *              name: the object name;
  *             touch: 0: notify only when changed; !0: notify anyway;
  *               qid: the mpq you want the target function to be invoked in, must be valid;
  *               ref: specify a ref object just like the queue operation of an mpq;
@@ -470,15 +468,15 @@ extern __aosl_api__ void *aosl_kobj_notify_register_args (aosl_kfd_t dfd, const 
  *           NULL: failed with aosl_errno set accordingly.
  *       The return value only used for unregister, no other usage.
  **/
-extern __aosl_api__ void *aosl_kobj_notify_register_argv (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, uintptr_t argv []);
+extern __aosl_api__ void *aosl_kobj_notify_register_argv (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, uintptr_t argv []);
 
 /**
- * Unregister a notification of the kobject specified by dfd + name for monitoring changes.
+ * Unregister a notification of the kobject specified by dfd + name.
  * Parameters:
  *               dfd: the opened fd of directory, AOSL_KFD_INVALID for root or pwd:
  *                    1. if the name starts with a '/', then directory is root;
  *                    2. if the name does not start with a '/', then directory is pwd;
- *              name: the directory name;
+ *              name: the object name;
  *            handle: the handle returned by above register functions;
  * Return value:
  *            0: successfully;
