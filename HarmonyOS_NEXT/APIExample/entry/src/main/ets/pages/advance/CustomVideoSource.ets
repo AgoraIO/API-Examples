@@ -122,11 +122,11 @@ struct CustomVideoSource {
           let frameBuffer: Uint8Array = buffer.slice(readStart, readStart + frame_size)
           readStart += frame_size
           let frame: VideoFrame = new VideoFrame(
-            VideoBufferType.VIDEO_BUFFER_RAW_DATA,
+            VideoBufferType.RAW_DATA,
             VideoPixelFormat.VIDEO_PIXEL_I420);
           frame.buffer = frameBuffer.buffer as ArrayBuffer;
           frame.rotation = 0;
-          frame.stride = width;
+          frame.yStride = width;
           frame.height = height;
           frame.timestamp = 0;
           let ret = this.rtcEngine?.pushExternalVideoFrameById(frame, this.customVideoTrack)
@@ -159,7 +159,7 @@ struct CustomVideoSource {
           if (this.localUid != 0) {
             XComponent({
               id: 'preview_local',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_local");
@@ -167,7 +167,7 @@ struct CustomVideoSource {
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
               localCanvas.mirrorMode = 0;
               // TODO set source type
-              // localCanvas.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM
+              localCanvas.sourceType = Constants.VideoSourceType.CUSTOM
               this.rtcEngine?.setupLocalVideo(localCanvas);
             }).width('50%')
           }
@@ -175,7 +175,7 @@ struct CustomVideoSource {
           if (this.remoteUid != 0) {
             XComponent({
               id: 'preview_remote',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_remote");
