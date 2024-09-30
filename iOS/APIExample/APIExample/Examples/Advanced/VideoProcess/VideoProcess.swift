@@ -547,10 +547,10 @@ extension VideoProcessMain {
             if type == "slider" {
                 let value = makeupList[i]["value"] as? [Float] ?? []
                 let sliderView = UISlider()
-                sliderView.value = makeupParams[key] as? Float ?? 0
                 label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
                 sliderView.minimumValue = value.first ?? 0
                 sliderView.maximumValue = value.last ?? 1
+                sliderView.value = makeupParams[key] as? Float ?? 0
                 sliderView.addTarget(self, action: #selector(makeupSliderAction(_:)), for: .valueChanged)
                 valueView = sliderView
             } else if type == "switch" {
@@ -779,10 +779,10 @@ extension VideoProcessMain {
             if type == "slider" {
                 let value = makeupList[i]["value"] as? [Float] ?? []
                 let sliderView = UISlider()
-                sliderView.value = beautyShapeParames[key] ?? 0
                 label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
                 sliderView.minimumValue = value.first ?? 0
                 sliderView.maximumValue = value.last ?? 100
+                sliderView.value = beautyShapeParames[key] ?? 0
                 sliderView.addTarget(self, action: #selector(beautyShapeSliderAction(_:)), for: .valueChanged)
                 valueView = sliderView
             } else if type == "switch" {
