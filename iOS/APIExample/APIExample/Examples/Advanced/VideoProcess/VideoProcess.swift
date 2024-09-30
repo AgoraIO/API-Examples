@@ -852,12 +852,12 @@ extension VideoProcessMain {
     
     @objc func beautyShapeSwitchAction(_ view: UISwitch) {
         enableFaceShape = view.isOn
-        updateMakeup()
+        updateFaceShape()
     }
     
     @objc func beautyShapeSegmentAction(_ view: UISegmentedControl) {
         faceshapeOption.shapeStyle = AgoraFaceShapeStyle(rawValue: UInt(view.selectedSegmentIndex)) ?? .female
-        updateMakeup()
+        updateFaceShape()
     }
     
     private func updateFaceShape() {
