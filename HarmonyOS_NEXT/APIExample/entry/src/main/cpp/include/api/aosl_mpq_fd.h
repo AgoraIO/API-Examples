@@ -112,10 +112,44 @@ extern __aosl_api__ int aosl_mpq_enable_fd (aosl_fd_t fd);
 
 extern __aosl_api__ ssize_t aosl_write (aosl_fd_t fd, const void *buf, size_t len);
 
-#define AOSL_MPQ_FD_IN 0x1
-#define AOSL_MPQ_FD_OUT 0x2
+#define AOSL_FD_EVM_SET 0 /* fd event mask set */
+#define AOSL_FD_EVM_ADD 1 /* fd event mask add */
+#define AOSL_FD_EVM_DEL 2 /* fd event mask del */
 
-extern __aosl_api__ int aosl_mpq_modify_fd (aosl_fd_t fd, int eventmask);
+#define AOSL_FD_EV_I 0x1 /* fd event input */
+#define AOSL_FD_EV_O 0x2 /* fd event output */
+
+/**
+ * Modify the fd listening event mask.
+ * Parameters:
+ *           fd: the fd you want to modify event mask
+ *         ctrl: one of AOSL_FD_EVM_SET, AOSL_FD_EVM_ADD or AOSL_FD_EVM_DEL
+ *               for setting, adding or deleting event mask respectively
+ *    eventmask: bitmask of AOSL_FD_EV_I and AOSL_FD_EV_O
+ * Return value:
+ *    <0: error occured, and aosl_errno indicates which error;
+ *     0: call successful, and '*arg' is value of the N-th argument;
+ * Remarks:
+ *    This function is used for flow control normally, if we do not
+ *    want to receive data from fd now, then we can remove the bit
+ *    AOSL_FD_EV_I from the event mask, and add it again later
+ *    when needed.
+ **/
+extern __aosl_api__ int aosl_fd_evm_ctrl (aosl_fd_t fd, int ctrl, int eventmask);
+
+/**
+ * Clear the fd error.
+ * Parameters:
+ *    fd: the fd you want to clear error
+ * Return value:
+ *    <0: error occured, and aosl_errno indicates which error;
+ *     0: call successful, and '*arg' is value of the N-th argument;
+ * Remarks:
+ *    The fd errors are also edge triggered, so if some error is not real
+ *    error in fact, you must clear the error manually, otherwise the fd
+ *    would be in an incorrect state and could not work normally.
+ **/
+extern __aosl_api__ int aosl_fd_clear_err (aosl_fd_t fd);
 
 /**
  * Get the N-th argument of the mpq attached fd.
@@ -131,9 +165,6 @@ extern __aosl_api__ int aosl_mpq_fd_arg (aosl_fd_t fd, uintptr_t n, uintptr_t *a
 
 extern __aosl_api__ int aosl_mpq_disable_fd (aosl_fd_t fd);
 extern __aosl_api__ int aosl_mpq_del_fd (aosl_fd_t fd);
-extern __aosl_api__ int aosl_fd_clear_err (aosl_fd_t fd);
-extern __aosl_api__ int aosl_fd_no_auto_disable (aosl_fd_t fd);
-extern __aosl_api__ int aosl_fd_ignore_err (aosl_fd_t fd, int err);
 extern __aosl_api__ int aosl_close (aosl_fd_t fd);
 
 
@@ -144,11 +175,12 @@ extern __aosl_api__ int aosl_close (aosl_fd_t fd);
  *   d_ret: the data object for holding return value, the
  *          length must >= sizeof (ssize_t);
  *   d_buf: the buffer for holding the read data;
+ * buf_off: the buffer offset for holding the read data;
  * Return value:
  *      <0: failed with aosl_errno set;
  *       0: async read issued successfully;
  **/
-extern __aosl_api__ int aosl_co_read (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf);
+extern __aosl_api__ int aosl_co_read (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, uintptr_t buf_off);
 
 /**
  * The I/O device write function which supports coroutine.

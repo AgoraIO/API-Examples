@@ -41,7 +41,7 @@ class IMediaRelayService : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
    *   - -5(ERR_REFUSED): The request is rejected.
    */
-  virtual int stopChannelMediaRelay() = 0;
+  virtual int stopChannelMediaRelay(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** pause the channels for media stream relay.
    * @return
@@ -51,7 +51,7 @@ class IMediaRelayService : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
    *   - -5(ERR_REFUSED): The request is rejected.
    */
-  virtual int pauseAllChannelMediaRelay() = 0;
+  virtual int pauseAllChannelMediaRelay(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** resume the channels for media stream relay.
    * @return
@@ -61,7 +61,7 @@ class IMediaRelayService : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
    *   - -5(ERR_REFUSED): The request is rejected.
    */
-  virtual int resumeAllChannelMediaRelay() = 0;
+  virtual int resumeAllChannelMediaRelay(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   
   virtual void registerEventHandler(IMediaRelayObserver* eventObserver, void(*safeDeleter)(IMediaRelayObserver*) = NULL) = 0;
   virtual void unregisterEventHandler(IMediaRelayObserver* eventObserver) = 0;

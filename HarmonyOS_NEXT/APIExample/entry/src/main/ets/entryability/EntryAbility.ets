@@ -44,7 +44,7 @@ export default class EntryAbility extends UIAbility {
     }
 
     windowStage.loadContent('pages/Index', (err, data) => {
-      if (err) {
+      if (err.code) {
         Logger.error(TAG, `Failed to load the content. Cause: ${JSON.stringify(err)}`)
         return
       }

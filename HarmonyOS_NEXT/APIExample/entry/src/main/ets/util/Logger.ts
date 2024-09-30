@@ -42,4 +42,4 @@ class Logger {
   }
 }
 
-export default new Logger('APIExample')
+export default new Logger('AppTag')

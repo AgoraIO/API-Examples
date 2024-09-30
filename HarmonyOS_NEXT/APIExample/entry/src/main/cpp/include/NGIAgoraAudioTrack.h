@@ -104,11 +104,12 @@ class IAudioTrack : public RefCountInterface {
    * By adding an audio filter, you can apply various audio effects to the audio, for example, voice change.
    * @param filter A pointer to the audio filter. See \ref agora::rtc::IAudioFilter "IAudioFilter".
    * @param position The position of the audio filter. See \ref agora::rtc::IAudioTrack::AudioFilterPosition "AudioFilterPosition".
+   * @param extContext The context of current filter. See \ref agora::rtc::ExtensionContext "ExtensionContext".
    * @return
    * - `true`: Success.
    * - `false`: Failure.
    */
-  virtual bool addAudioFilter(agora_refptr<IAudioFilter> filter, AudioFilterPosition position, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual bool addAudioFilter(agora_refptr<IAudioFilter> filter, AudioFilterPosition position, ExtensionContext *extContext = NULL, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Removes the audio filter added by callling `addAudioFilter`.
    *
@@ -401,6 +402,21 @@ class ILocalAudioTrack : public IAudioTrack {
    */
   virtual int unregisterTrackObserver(ILocalAudioTrackObserver* observer) = 0;
 
+  /** set Max buffered audio frame number 
+   *
+   * @param number : the buffer number set，unit is 10ms 
+   *
+   */
+  virtual void setMaxBufferedAudioFrameNumber(int number) = 0;
+
+  /** clear sender buffer
+   *
+   * @return
+   * - >= 0: Frame number in sender buffer.
+   * - < 0: Failure.
+   */
+  virtual int ClearSenderBuffer() = 0;
+
  protected:
   ~ILocalAudioTrack() {}
 };
@@ -536,6 +552,14 @@ struct RemoteAudioTrackStats {
    */
   uint16_t frozen_time_200_ms;
   /**
+   *  The full time of 80 ms frozen in 2 seconds
+   */
+  uint16_t full_frozen_time_80_ms;
+  /**
+   *  The full time of 200 ms frozen in 2 seconds
+   */
+  uint16_t full_frozen_time_200_ms;
+  /**
    *  The estimate delay
    */
   uint32_t delay_estimate_ms;
@@ -617,6 +641,8 @@ struct RemoteAudioTrackStats {
     frozen_time_80_ms(0),
     frozen_count_200_ms(0),
     frozen_time_200_ms(0),
+    full_frozen_time_80_ms(0),
+    full_frozen_time_200_ms(0),
     delay_estimate_ms(0),
     mos_value(0),
     frozen_rate_by_custom_plc_count(0),
@@ -711,6 +737,43 @@ class IRemoteAudioTrack : public IAudioTrack {
    */
   virtual int setRemoteVoicePosition(float pan, float gain, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
+  /** Sets the volume of each audio decoded channel
+
+   @param decoded_index The channel index of the remote user. The value ranges from 0 to 100:
+   @param volume The channel index of the remote user. The value ranges from 0 to 100.
+   - 0: mute the channel.
+   - 100: keep the origin volume of the channel.
+
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int adjustDecodedAudioVolume(int decoded_index, int volume, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
+  /** mute remote stream from timestamp
+   
+   @note
+   - unmuteRemoteFromTimestamp should be called after muteRemoteFromTimestamp, othewise this stream will be muted all time
+
+   @param timestamp The rtp timestamp of start mute
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int muteRemoteFromTimestamp(uint32_t timestamp) = 0;
+  
+  /** unmute remote stream from timestamp
+   
+   @note
+   - unmuteRemoteFromTimestamp should be called after muteRemoteFromTimestamp, othewise this stream will be muted all time
+
+   @param timestamp The rtp timestamp of start unmute
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int unmuteRemoteFromTimestamp(uint32_t timestamp) = 0;
+  
   /** set percentage of audio acceleration during poor network
    
    @note

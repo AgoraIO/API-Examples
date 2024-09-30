@@ -409,18 +409,49 @@ extern __aosl_api__ int aosl_mpq_last_costs (aosl_ts_t *load_p, aosl_ts_t *idle_
  */
 extern __aosl_api__ int aosl_mpq_exec_counters (uint64_t *funcs_count_p, uint64_t *timers_count_p, uint64_t *fds_count_p);
 
+
+typedef struct {
+    uint32_t fw_avg; /* function average wait time */
+    uint32_t fw_worst; /* function worst wait time */
+    uint32_t fe_avg; /* function average exec time */
+    uint32_t fe_worst; /* function worst exec time */
+    uint32_t f_count; /* executed functions count */
+} aosl_ftimes_t;
+
+/**
+ * Get the average & worst function wait & execution times of this mpq
+ * Parameters:
+ *          qid: the mpq id
+ *       ftimes: the variable address for saving the function times
+ *        reset: whether reset the counters, 0 for not clear, other values clear
+ * Return value:
+ *       <0: indicates error, check aosl_errno for detail
+ *        0: the average function execution time was saved to *fe_*_p
+ */
+extern __aosl_api__ int aosl_mpq_ftimes (aosl_mpq_t qid, aosl_ftimes_t *ftimes, int reset);
+
 /**
  * Get the average & worst function wait time of this mpq
  * Parameters:
  *          qid: the mpq id
- *     fw_avg_p: the variable for saving the average function wait time
- *   fw_worst_p: the variable for saving the worst function wait time
+ *     fw_avg_p: the variable address for saving the average function wait time
+ *   fw_worst_p: the variable address for saving the worst function wait time
  *        reset: whether reset the counters, 0 for not clear, other values clear
  * Return value:
  *       <0: indicates error, check aosl_errno for detail
- *        0: the average function wait time was saved to *fwtime_p
+ *        0: the average function wait time was saved to *fw_*_p
  */
 extern __aosl_api__ int aosl_mpq_fwtime (aosl_mpq_t qid, uint32_t *fw_avg_p, uint32_t *fw_worst_p, int reset);
+
+/**
+ * Get the name of the current running mpq
+ * Parameters:
+ *         None.
+ * Return value:
+ *     non-NULL: the running mpq name;
+ *         NULL: the running thread is not an mpq thread;
+ */
+extern __aosl_api__ const char *aosl_mpq_this_name (void);
 
 /**
  * Invoking this function will enter the infinite run loop of current thread's multiplex queue.

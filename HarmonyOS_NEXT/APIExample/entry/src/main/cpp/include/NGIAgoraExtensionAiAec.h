@@ -17,10 +17,10 @@ namespace rtc {
 class AiEchoCancellationExtension : public RefCountInterface {
  public:
   virtual ~AiEchoCancellationExtension() {};
-  
-  virtual int ProcessAiNlpFrame(float* input, float* output) = 0;
-  virtual int ClearHiddenState(float scale_factor = 0.0) = 0;
-  virtual void Version(char ver[MAX_VERSION_LEN]) = 0;
+  virtual int Init(const char* weight_raw_buffer, size_t raw_buffer_bytes) = 0;
+  virtual int ProcessAiNlpFrame(const float* linear,  const float* nearin, const float* far_ref, float* out_mask) = 0;
+  virtual int ClearHiddenState(float scale_factor = 0.0,int clear_lpsbuffer_nframe = 0) = 0;
+  virtual const char* GetLibVersion(int mode = 0) = 0;
 };
 
 }  // namespace rtc

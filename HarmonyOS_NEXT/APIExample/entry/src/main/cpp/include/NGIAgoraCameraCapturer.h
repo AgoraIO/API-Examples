@@ -32,6 +32,10 @@ class ICameraCapturer : public RefCountInterface {
      * The camera source is the front camera.
      */
     CAMERA_FRONT,
+    /**
+     * The camera source is the extra camera.
+     */
+    CAMERA_EXTRA,
   };
 
   /**
@@ -369,6 +373,13 @@ class ICameraCapturer : public RefCountInterface {
    * </ul>
    */
   virtual int setCameraAutoExposureFaceModeEnabled(bool enabled, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
+  /**
+   * set camera stabilization mode.If open stabilization mode, fov will be smaller and capture latency will be longer.
+   *
+   * @param mode specifies the camera stabilization mode.
+   */
+  virtual int setCameraStabilizationMode(CAMERA_STABILIZATION_MODE mode) = 0;
 #endif
   
 #elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__) && !defined (__OHOS__)) || \
@@ -408,6 +419,27 @@ class ICameraCapturer : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int initWithDeviceName(const char* deviceName) = 0;
+#endif
+
+#if defined(__APPLE__)
+  /**
+   * Checks whether the center stage is supported. Use this method after starting the camera.
+   *
+   * @return
+   * - true: The center stage is supported.
+   * - false: The center stage is not supported.
+   */
+  virtual bool isCenterStageSupported() = 0;
+  
+  /** Enables the camera Center Stage.
+   * @param enabled enable Center Stage:
+   * - true: Enable Center Stage.
+   * - false: Disable Center Stage.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableCenterStage(bool enabled) = 0;
 #endif
 
   /**
