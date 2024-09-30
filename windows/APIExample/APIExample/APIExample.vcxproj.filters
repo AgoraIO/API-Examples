@@ -112,6 +112,9 @@
     <Filter Include="Advanced\Metadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\TransparentBg">
+      <UniqueIdentifier>{2a74c488-9982-4577-8594-8320c71beb6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -264,6 +267,12 @@
     <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h">
       <Filter>Advanced\Metadata</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\TransparentBg\TransparentBgDialog.h">
+      <Filter>Advanced\TransparentBg</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMediaPlayerSourceObserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -404,6 +413,12 @@
     <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp">
       <Filter>Advanced\Metadata</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\TransparentBg\TransparentBgDialog.cpp">
+      <Filter>Advanced\TransparentBg</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractMediaPlayerSourceObserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -418,6 +433,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="en.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\wave2.bin">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -440,6 +458,9 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\ID_TEST_AUDIO.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\yuvj_full_range_alpha_1280_540_left.mp4">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>
