@@ -133,9 +133,13 @@ struct PlayAudioFiles {
         Text($r('app.string.audio_mixing')).padding({ top: 6, bottom: 6 })
         Divider()
         Row() {
-          Button($r('app.string.start')).layoutWeight(1).fontColor(Color.Blue).buttonStyle(ButtonStyleMode.NORMAL).onClick(() => {
-            this.rtcEngine?.startAudioMixing("https://webdemo.agora.io/audiomixing.mp3", false, -1, 0)
-          })
+          Button($r('app.string.start'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .onClick(() => {
+              this.rtcEngine?.startAudioMixing("https://webdemo.agora.io/audiomixing.mp3", false, -1, 0)
+            })
           Button($r('app.string.resume'))
             .layoutWeight(1)
             .fontColor(Color.Blue)
@@ -143,9 +147,13 @@ struct PlayAudioFiles {
             .onClick(() => {
               this.rtcEngine?.resumeAudioMixing()
             })
-          Button($r('app.string.pause')).layoutWeight(1).fontColor(Color.Blue).buttonStyle(ButtonStyleMode.NORMAL).onClick(() => {
-            this.rtcEngine?.pauseAudioMixing()
-          })
+          Button($r('app.string.pause'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .onClick(() => {
+              this.rtcEngine?.pauseAudioMixing()
+            })
           Button($r('app.string.stop'))
             .layoutWeight(1)
             .fontColor(Color.Blue)
@@ -176,33 +184,47 @@ struct PlayAudioFiles {
           })
         }.alignItems(VerticalAlign.Center)
 
-        Text($r('app.string.audio_effect')).padding({ top: 12, bottom: 6 })
-        Divider()
-        Row() {
-          Button($r('app.string.start')).layoutWeight(1).fontColor(Color.Blue).buttonStyle(ButtonStyleMode.NORMAL).onClick(() => {
-            this.rtcEngine?.playEffect(0, "https://webdemo.agora.io/ding.mp3", -1, 1, 0.0, 100, true, 0)
-          })
-          Button($r('app.string.resume'))
-            .layoutWeight(1)
-            .fontColor(Color.Blue)
-            .buttonStyle(ButtonStyleMode.NORMAL)
-            .onClick(() => {
+        //todo
+        if (false) {
+          Text($r('app.string.audio_effect')).padding({ top: 12, bottom: 6 })
+          Divider()
+          Row() {
+            Button($r('app.string.start'))
+              .layoutWeight(1)
+              .fontColor(Color.Blue)
+              .buttonStyle(ButtonStyleMode.NORMAL)
+              .onClick(() => {
+                this.rtcEngine?.playEffect(0, "https://webdemo.agora.io/ding.mp3", -1, 1, 0.0, 100, true, 0)
+              })
+            Button($r('app.string.resume'))
+              .layoutWeight(1)
+              .fontColor(Color.Blue)
+              .buttonStyle(ButtonStyleMode.NORMAL)
+              .onClick(() => {
+
+              })
+            Button($r('app.string.pause'))
+              .layoutWeight(1)
+              .fontColor(Color.Blue)
+              .buttonStyle(ButtonStyleMode.NORMAL)
+              .onClick(() => {
+
+              })
+            Button($r('app.string.stop'))
+              .layoutWeight(1)
+              .fontColor(Color.Blue)
+              .buttonStyle(ButtonStyleMode.NORMAL)
+              .onClick(() => {
+
+              })
+          }.alignItems(VerticalAlign.Center).padding({ top: 12, bottom: 6 })
+          Row() {
+            Text($r('app.string.volume')).layoutWeight(1)
+            Slider({ value: 100 }).layoutWeight(1.5).onChange((value) => {
 
             })
-          Button($r('app.string.pause')).layoutWeight(1).fontColor(Color.Blue).buttonStyle(ButtonStyleMode.NORMAL).onClick(() => {
-
-          })
-          Button($r('app.string.stop')).layoutWeight(1).fontColor(Color.Blue).buttonStyle(ButtonStyleMode.NORMAL).onClick(() => {
-
-          })
-        }.alignItems(VerticalAlign.Center).padding({ top: 12, bottom: 6 })
-
-        Row() {
-          Text($r('app.string.volume')).layoutWeight(1)
-          Slider({ value: 100 }).layoutWeight(1.5).onChange((value) => {
-
-          })
-        }.alignItems(VerticalAlign.Center)
+          }.alignItems(VerticalAlign.Center)
+        }
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(3)
