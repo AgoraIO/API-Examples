@@ -37,3 +37,9 @@
 
 /* Class = "NSTextFieldCell"; title = "平滑"; ObjectID = "sFK-pV-vaj"; */
 "sFK-pV-vaj.title" = "Smoothing";
+
+/* Class = "NSButton"; normalTitle = "Face Shape"; ObjectID = "dgR-te-sBu"; */
+"dgR-te-sBu.title" = "Face Shape";
+
+/* Class = "NSButton"; normalTitle = "Make Up"; ObjectID = "1Yz-ti-WjV"; */
+"1Yz-ti-WjV.title" = "Make Up";

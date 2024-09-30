@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -29,34 +29,34 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view id="hlG-Vr-gPO">
-                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <rect key="frame" x="310" y="0.0" width="314" height="550"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <view id="Umi-Rd-77k" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="480" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="jHK-UU-E1C" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="379" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="431" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="hcG-z6-b03" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="330" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="382" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="Pvr-Dh-TRD" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="118" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="170" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="yxJ-ha-sZW">
-                                                    <rect key="frame" x="247" y="144" width="42" height="25"/>
+                                                    <rect key="frame" x="247" y="196" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
                                                         <action selector="onVirtualBackgroundSwitchChange:" target="YjT-yy-DnJ" id="BbM-a4-DHa"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tfD-Mx-JLt">
-                                                    <rect key="frame" x="25" y="293" width="145" height="16"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tfD-Mx-JLt">
+                                                    <rect key="frame" x="25" y="345" width="145" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Low light Enhancement" id="11E-tR-tFb">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -65,14 +65,14 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="s5G-UI-ajb">
-                                                    <rect key="frame" x="247" y="288" width="42" height="25"/>
+                                                    <rect key="frame" x="247" y="340" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
                                                         <action selector="onLowLightEnhanceSwitchChange:" target="YjT-yy-DnJ" id="E4o-Me-1zm"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyg-0j-eKc">
-                                                    <rect key="frame" x="25" y="267" width="92" height="16"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyg-0j-eKc">
+                                                    <rect key="frame" x="25" y="319" width="92" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Video Denoise" id="plA-5C-vDg">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -81,14 +81,14 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="DAG-s9-jDA">
-                                                    <rect key="frame" x="247" y="258" width="42" height="25"/>
+                                                    <rect key="frame" x="247" y="310" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
                                                         <action selector="onVideoDenoiseSwitchChange:" target="YjT-yy-DnJ" id="K2W-LN-GKb"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nsa-tn-cxc">
-                                                    <rect key="frame" x="25" y="240" width="123" height="16"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nsa-tn-cxc">
+                                                    <rect key="frame" x="25" y="292" width="123" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Color Enhancement" id="97m-MF-3to">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -97,22 +97,22 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="r1H-iU-LgJ">
-                                                    <rect key="frame" x="247" y="226" width="42" height="25"/>
+                                                    <rect key="frame" x="247" y="278" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
                                                         <action selector="onColorEnhanceSwitchChange:" target="YjT-yy-DnJ" id="xfB-V3-tJF"/>
                                                     </connections>
                                                 </switch>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uyO-Pb-8fn">
-                                                    <rect key="frame" x="25" y="178" width="110" height="28"/>
+                                                    <rect key="frame" x="25" y="230" width="110" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="NTk-sR-SZ8"/>
                                                     <connections>
                                                         <action selector="onStrengthSliderChange:" target="YjT-yy-DnJ" id="MJv-ZA-rT9"/>
                                                     </connections>
                                                 </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GqI-5d-v3Q">
-                                                    <rect key="frame" x="25" y="205" width="50" height="14"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GqI-5d-v3Q">
+                                                    <rect key="frame" x="25" y="257" width="50" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Strength" id="7PH-4u-nrD">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -121,15 +121,15 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6C8-sL-7IG">
-                                                    <rect key="frame" x="179" y="178" width="110" height="28"/>
+                                                    <rect key="frame" x="179" y="230" width="110" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="TkV-BM-ppw"/>
                                                     <connections>
                                                         <action selector="onSkinProtectSliderChange:" target="YjT-yy-DnJ" id="8Ox-hf-9pl"/>
                                                     </connections>
                                                 </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fjc-0Y-3zf">
-                                                    <rect key="frame" x="179" y="205" width="68" height="14"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fjc-0Y-3zf">
+                                                    <rect key="frame" x="179" y="257" width="68" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Skin Protect" id="ozL-f1-AXZ">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -137,8 +137,8 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Myo-CH-bMb">
-                                                    <rect key="frame" x="25" y="89" width="65" height="16"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Myo-CH-bMb">
+                                                    <rect key="frame" x="25" y="141" width="65" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="美颜" id="4WO-Em-0Qq">
                                                         <font key="font" metaFont="system"/>
@@ -147,14 +147,14 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="mX5-uW-t5j">
-                                                    <rect key="frame" x="247" y="84" width="42" height="25"/>
+                                                    <rect key="frame" x="247" y="136" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <connections>
                                                         <action selector="onBeautySliderChange:" target="YjT-yy-DnJ" id="Q6b-SS-tqz"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMt-Xx-uRi">
-                                                    <rect key="frame" x="25" y="67" width="56" height="11"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMt-Xx-uRi">
+                                                    <rect key="frame" x="25" y="119" width="56" height="11"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="美白" id="q1I-U0-llK">
                                                         <font key="font" metaFont="miniSystem"/>
@@ -163,15 +163,15 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lJY-gA-foR">
-                                                    <rect key="frame" x="25" y="41" width="110" height="28"/>
+                                                    <rect key="frame" x="25" y="93" width="110" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="i6K-fG-fJN"/>
                                                     <connections>
                                                         <action selector="onWhiteningSliderChange:" target="YjT-yy-DnJ" id="r13-2K-DfY"/>
                                                     </connections>
                                                 </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mme-7l-6MK">
-                                                    <rect key="frame" x="181" y="66" width="66" height="11"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mme-7l-6MK">
+                                                    <rect key="frame" x="181" y="118" width="66" height="11"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="红润" id="85x-Bt-HuU">
                                                         <font key="font" metaFont="miniSystem"/>
@@ -180,15 +180,15 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SOF-1e-Gxf">
-                                                    <rect key="frame" x="179" y="41" width="110" height="28"/>
+                                                    <rect key="frame" x="179" y="93" width="110" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="LPL-Bo-Gcx"/>
                                                     <connections>
                                                         <action selector="onRuddySliderChange:" target="YjT-yy-DnJ" id="6WP-Td-haS"/>
                                                     </connections>
                                                 </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FUw-CH-spw">
-                                                    <rect key="frame" x="25" y="28" width="65" height="11"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FUw-CH-spw">
+                                                    <rect key="frame" x="25" y="80" width="65" height="11"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="锐利" id="ZOR-gO-Ji2">
                                                         <font key="font" metaFont="miniSystem"/>
@@ -196,8 +196,8 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-Ze-G4S">
-                                                    <rect key="frame" x="181" y="28" width="66" height="11"/>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-Ze-G4S">
+                                                    <rect key="frame" x="181" y="80" width="66" height="11"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="平滑" id="sFK-pV-vaj">
                                                         <font key="font" metaFont="miniSystem"/>
@@ -206,7 +206,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lO8-8h-6vM">
-                                                    <rect key="frame" x="25" y="3" width="110" height="28"/>
+                                                    <rect key="frame" x="25" y="55" width="110" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="aWO-OE-TVO"/>
                                                     <connections>
@@ -214,13 +214,35 @@
                                                     </connections>
                                                 </slider>
                                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9kx-WR-1dm">
-                                                    <rect key="frame" x="179" y="3" width="117" height="28"/>
+                                                    <rect key="frame" x="179" y="55" width="117" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="hWm-Mb-Sr2"/>
                                                     <connections>
                                                         <action selector="onSmoothingSliderChange:" target="YjT-yy-DnJ" id="Qd6-4B-B8z"/>
                                                     </connections>
                                                 </slider>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xlG-JP-yRs" userLabel="Make Up">
+                                                    <rect key="frame" x="34" y="4" width="75" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Yz-ti-WjV">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onShowMakeUpAction:" target="YjT-yy-DnJ" id="71o-ea-DSp"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VqK-om-PAw" userLabel="Face Shape">
+                                                    <rect key="frame" x="174" y="4" width="75" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dgR-te-sBu">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onShowFaceShapeAction:" target="YjT-yy-DnJ" id="SkK-75-gMn"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </subviews>
@@ -230,7 +252,7 @@
                                     <rect key="frame" x="0.0" y="585" width="300" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="i73-2c-dtd">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="i73-2c-dtd">
                                     <rect key="frame" x="298" y="0.0" width="16" height="498"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
