@@ -1,6 +1,8 @@
 package io.agora.api.example.examples.basic;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
+import static io.agora.rtc2.Constants.AudioSourceType.AUDIO_SOURCE_MICROPHONE;
+import static io.agora.rtc2.Constants.AudioSourceType.AUDIO_SOURCE_REMOTE_CHANNEL;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -18,13 +20,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -34,12 +39,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 import io.agora.api.example.MainActivity;
 import io.agora.api.example.MainApplication;
@@ -48,12 +51,17 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.LeaveChannelOptions;
+import io.agora.rtc2.LocalAudioMixerConfiguration;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 /**
@@ -78,10 +86,17 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     private Button mute, join;
     private SeekBar record, playout, inear;
     private Switch inEarSwitch;
-    private RtcEngine engine;
+    private LinearLayout exllContainer;
+    private EditText exEtChannel;
+    private Switch exSwitch;
+    private RtcEngineEx engine;
     private int myUid;
     private boolean joined = false;
     private AudioSeatManager audioSeatManager;
+
+    private String channelId = "";
+    private String exChannelName = "";
+    private RtcConnection rtcConnection2 = new RtcConnection();
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -214,6 +229,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
 
         if (savedInstanceState != null) {
             joined = savedInstanceState.getBoolean("joined");
+            setExChannelState();
             if (joined) {
                 myUid = savedInstanceState.getInt("myUid");
                 ArrayList<Integer> seatRemoteUidList = savedInstanceState.getIntegerArrayList("seatRemoteUidList");
@@ -230,6 +246,36 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     audioSeatManager.upRemoteSeat(uid);
                 }
             }
+        }
+
+        exllContainer = view.findViewById(R.id.ll_join2);
+        exEtChannel = view.findViewById(R.id.et_channel2);
+        exSwitch = view.findViewById(R.id.btn_audio_mixer);
+        exSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                exChannelName = exEtChannel.getText().toString();
+                if (TextUtils.isEmpty(exChannelName)) {
+                    exSwitch.setChecked(false);
+                    showShortToast(getString(R.string.dest_channel_empty));
+                    return;
+                }
+                if (isChecked) {
+                    joinSecondChannelAndStartAudioMixer();
+                } else {
+                    leaveSecondChannelAndStopAudioMixer();
+                }
+            }
+        });
+    }
+
+    private void setExChannelState() {
+        exSwitch.setEnabled(joined);
+        if (!joined) {
+            exSwitch.setChecked(false);
+            exChannelName = "";
+            rtcConnection2.channelId = "";
+            rtcConnection2.localUid = -1;
         }
     }
 
@@ -265,7 +311,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()));
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
-            engine = RtcEngine.create(config);
+            engine = (RtcEngineEx) RtcEngine.create(config);
             /*
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
@@ -371,26 +417,22 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
-                String channelId = et_channel.getText().toString();
+                channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    audioProfileInput.setEnabled(false);
-                    channelProfileInput.setEnabled(false);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                    audioProfileInput.setEnabled(false);
-                    channelProfileInput.setEnabled(false);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                            audioProfileInput.setEnabled(false);
+                            channelProfileInput.setEnabled(false);
+                        }
+                    }
+                });
             } else {
                 joined = false;
+                setExChannelState();
                 /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -428,6 +470,46 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             /*Turn off / on the microphone, stop / start local audio collection and push streaming.*/
             engine.muteLocalAudioStream(mute.isActivated());
         }
+    }
+
+    private void joinSecondChannelAndStartAudioMixer() {
+        ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+        mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        mediaOptions.publishMicrophoneTrack = false;
+        mediaOptions.publishMixedAudioTrack = true;
+        mediaOptions.enableAudioRecordingOrPlayout = false;
+        mediaOptions.autoSubscribeAudio = false;
+        rtcConnection2.channelId = exChannelName;
+        rtcConnection2.localUid = new Random().nextInt(512) + 512;
+        Log.d(TAG, "joinSecondChannelAndStartAudioMixer: " + rtcConnection2.channelId + " " + rtcConnection2.localUid);
+        TokenUtils.gen(requireContext(), rtcConnection2.channelId, rtcConnection2.localUid, new TokenUtils.OnTokenGenCallback<String>() {
+            @Override
+            public void onTokenGen(String token) {
+                int res = engine.joinChannelEx(token, rtcConnection2, mediaOptions, null);
+                if (res != Constants.ERR_OK) {
+                    showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                } else {
+                    LocalAudioMixerConfiguration config = new LocalAudioMixerConfiguration();
+                    config.syncWithLocalMic = false;
+                    config.mixedAudioStreams.clear();
+                    LocalAudioMixerConfiguration.MixedAudioStream remoteStream = new LocalAudioMixerConfiguration.MixedAudioStream();
+                    remoteStream.sourceType = AUDIO_SOURCE_REMOTE_CHANNEL;
+                    remoteStream.channelId = channelId;
+                    config.mixedAudioStreams.add(remoteStream);
+
+                    LocalAudioMixerConfiguration.MixedAudioStream remoteStream2 = new LocalAudioMixerConfiguration.MixedAudioStream();
+                    remoteStream2.sourceType = AUDIO_SOURCE_MICROPHONE;
+                    remoteStream2.channelId = channelId;
+                    config.mixedAudioStreams.add(remoteStream2);
+                    engine.startLocalAudioMixer(config);
+                }
+            }
+        });
+    }
+
+    private void leaveSecondChannelAndStopAudioMixer() {
+        engine.stopAudioMixing();
+        engine.leaveChannelEx(rtcConnection2, new LeaveChannelOptions());
     }
 
     /**
@@ -524,6 +606,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             myUid = uid;
             joined = true;
             runOnUIThread(() -> {
+                setExChannelState();
                 mute.setEnabled(true);
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
