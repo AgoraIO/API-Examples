@@ -636,7 +636,7 @@ extension VideoProcessMain {
     }
     
     private func updateMakeup() {
-        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: .prettyPrinted),
+        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: []),
               let jsonString = String(data: json, encoding: .utf8) else {
             print("updateMakeup fail")
             return

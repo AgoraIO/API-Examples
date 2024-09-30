@@ -726,10 +726,10 @@ extension VideoProcess {
             if type == "slider" {
                 let value = makeupList[i]["value"] as? [Float] ?? []
                 let sliderView = NSSlider()
-                sliderView.doubleValue = Double(makeupParams[key] as? Float ?? 0)
                 label.stringValue = String(format: "%@[%.3f]", label.stringValue, sliderView.doubleValue)
                 sliderView.minValue = Double(value.first ?? 0)
                 sliderView.maxValue = Double(value.last ?? 1)
+                sliderView.doubleValue = Double(makeupParams[key] as? Double ?? 0)
                 sliderView.target = self
                 sliderView.action = #selector(makeupSliderAction(_:))
                 valueView = sliderView
@@ -797,7 +797,7 @@ extension VideoProcess {
     }
     
     private func updateMakeup() {
-        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: .prettyPrinted),
+        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: []),
               let jsonString = String(data: json, encoding: .utf8) else {
             print("updateMakeup fail")
             return
