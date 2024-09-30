@@ -125,7 +125,7 @@ struct ChannelEncryption {
         if (this.localUid != -1) {
           XComponent({
             id: 'preview_local',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_local");
@@ -139,7 +139,7 @@ struct ChannelEncryption {
         if (this.remoteUid != -1) {
           XComponent({
             id: 'preview_remote',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_remote");
@@ -219,7 +219,7 @@ struct ChannelEncryption {
               config.encryptionMode = this.encryptionModeOptions[this.encryptionModeSelectIndex]
               config.encryptionKey = this.encryptionKey
               let base64 = new util.Base64Helper();
-              config.encryptionKdfSalt = base64.decodeSync("NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0=", util.Type.BASIC)
+              config.encryptionKdfSalt = base64.decodeSync("NiIeJ08AbtcQVjvV+oOEvF/4Dz5dy1CIwa805C8J2w0=", util.Type.BASIC).buffer as ArrayBuffer
               this.rtcEngine?.enableEncryption(true, config)
 
               let mediaOption: ChannelMediaOptions = new ChannelMediaOptions();

@@ -19,6 +19,10 @@ import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
 import { TokenUtils } from '../../util/TokenUtils';
 import { LengthMetrics } from '@kit.ArkUI';
+import { TranscodingVideoStream } from 'AgoraRtcSdk';
+import { JSON } from '@kit.ArkTS';
+import { camera } from '@kit.CameraKit';
+import { VideoDimensions } from 'AgoraRtcSdk';
 
 const TAG: string = 'LocalVideoTranscoding'
 
@@ -65,6 +69,15 @@ struct LocalVideoTranscoding {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
       ShowToast.longToast("onError " + err + " : " + message)
     }
+    config.mEventHandler.onLocalVideoTranscoderError = (stream:TranscodingVideoStream,  error:Constants.VideoTranscoderError)  => {
+      Logger.info(TAG, "mEventHandler.onLocalVideoTranscoderError stream "+JSON.stringify(stream) + " error: "+error);
+      ShowToast.longToast("onLocalVideoTranscoderError " + error )
+    }
+
+    config.mEventHandler.onTranscodingUpdated = () => {
+      Logger.info(TAG, "mEventHandler.onTranscodingUpdated");
+    }
+
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config);
@@ -119,12 +132,12 @@ struct LocalVideoTranscoding {
         if (this.localUid != -1) {
           XComponent({
             id: 'preview_local',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_local");
             localCanvas.uid = this.localUid;
-            localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
+            localCanvas.renderMode = VideoCanvas.RENDER_MODE_FIT;
             localCanvas.mirrorMode = 0;
             localCanvas.sourceType = Constants.VideoSourceType.TRANSCODED
             this.rtcEngine?.setupLocalVideo(localCanvas);
@@ -134,13 +147,14 @@ struct LocalVideoTranscoding {
         if (this.remoteUid != -1) {
           XComponent({
             id: 'preview_remote',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_remote");
             localCanvas.uid = this.remoteUid;
             localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
             localCanvas.mirrorMode = 0;
+            localCanvas.sourceType = Constants.VideoSourceType.TRANSCODED;
             this.rtcEngine?.setupRemoteVideo(localCanvas);
           }).width('30%').height('30%').margin({ top: 12, right: 12 })
         }
@@ -176,8 +190,8 @@ struct LocalVideoTranscoding {
               }
 
 
-              let width = 720;
-              let height = 1280;
+              let width = 960;
+              let height = 540;
 
               let screenConfig = new ScreenCaptureParameters()
               this.rtcEngine?.startScreenCapture(screenConfig)
@@ -187,16 +201,21 @@ struct LocalVideoTranscoding {
 
               let config = new LocalTranscoderConfiguration()
               config.transcodingVideoStreams = new Array(2)
+              config.videoOutputConfiguration.dimensions = new VideoDimensions(width,height)
+              config.transcodingVideoStreams[0]  = new TranscodingVideoStream();
               config.transcodingVideoStreams[0].sourceType = Constants.VideoSourceType.SCREEN_PRIMARY
-              config.transcodingVideoStreams[0].width = width
+              config.transcodingVideoStreams[0].width = width/2
               config.transcodingVideoStreams[0].height = height
+              config.transcodingVideoStreams[0].x = 0
+              config.transcodingVideoStreams[0].y = 0
               config.transcodingVideoStreams[0].zOrder = 1
 
+              config.transcodingVideoStreams[1]  = new TranscodingVideoStream()
               config.transcodingVideoStreams[1].sourceType = Constants.VideoSourceType.CAMERA_PRIMARY
-              config.transcodingVideoStreams[1].width = width / 2
-              config.transcodingVideoStreams[1].height = height / 2
-              config.transcodingVideoStreams[1].x = 0
-              config.transcodingVideoStreams[1].y = height / 2
+              config.transcodingVideoStreams[1].width = width/2
+              config.transcodingVideoStreams[1].height = height
+              config.transcodingVideoStreams[1].x = width/2
+              config.transcodingVideoStreams[1].y = 0
               config.transcodingVideoStreams[1].zOrder = 2
               config.transcodingVideoStreams[1].mirror = true
 
@@ -213,7 +232,7 @@ struct LocalVideoTranscoding {
               mediaOption.channelProfile = Constants.ChannelProfile.LIVE_BROADCASTING;
               mediaOption.clientRoleType = Constants.ClientRole.BROADCASTER;
 
-              let token = await TokenUtils.genRtcToken(this.channelName, "")
+              let token = ""
               let ret = this.rtcEngine?.joinChannelWithOptions(token, this.channelName, 0, mediaOption)
               if (ret != Constants.ErrorCode.ERR_OK) {
                 ShowToast.longToast("joinChannelWithOptions error " + ret + " : " +

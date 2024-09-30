@@ -42,14 +42,16 @@ struct RTMPStreaming {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
       if (this.remoteUid == -1) {
         this.remoteUid = uid
-        this.transcodingParameters.transcodingUsers[uid] = {
-          uid: uid,
-          x: 0,
-          y: this.transcodingParameters.height / 2,
-          width: this.transcodingParameters.width,
-          height: this.transcodingParameters.height / 2,
-          zOrder: 1
-        }
+        let user = new TranscodingUser();
+        user.uid = uid;
+        user.x = 0;
+        user.y = this.transcodingParameters.height / 2;
+        user.width =  this.transcodingParameters.width;
+        user.height =  this.transcodingParameters.height / 2;
+        user.zOrder = 1;
+        user.alpha = 1.0
+        user.audioChannel = 2;
+        this.transcodingParameters.transcodingUsers.set(uid,user)
       }
     };
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
@@ -62,14 +64,17 @@ struct RTMPStreaming {
     config.mEventHandler.onJoinChannelSuccess = (cid: string, uid: number, elapsed: number) => {
       Logger.info(TAG, "mEventHandler.onJoinChannelSuccess: " + uid);
       this.transcodingParameters.transcodingUsers = new Map<number, TranscodingUser>();
-      this.transcodingParameters.transcodingUsers[uid] = {
+      let localUser:TranscodingUser = {
         uid: uid,
         x: 0,
         y: 0,
         width: this.transcodingParameters.width,
         height: this.transcodingParameters.height / 2,
-        zOrder: 1
+        zOrder: 1,
+        alpha:1.0,
+        audioChannel:2,
       }
+      this.transcodingParameters.transcodingUsers.set(uid,localUser)
       this.isJoin = true
       this.localUid = uid
     }
@@ -130,7 +135,7 @@ struct RTMPStreaming {
         if (this.localUid != -1) {
           XComponent({
             id: 'preview_local',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_local");
@@ -144,7 +149,7 @@ struct RTMPStreaming {
         if (this.remoteUid != -1) {
           XComponent({
             id: 'preview_remote',
-            type: 'surface',
+            type: XComponentType.SURFACE,
             libraryname: Constants.AGORA_LIB_NAME,
           }).onLoad(() => {
             let localCanvas = new VideoCanvas("preview_remote");
