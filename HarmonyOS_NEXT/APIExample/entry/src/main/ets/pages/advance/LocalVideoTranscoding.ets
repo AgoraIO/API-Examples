@@ -194,6 +194,7 @@ struct LocalVideoTranscoding {
               let height = GlobalInfo.settings.dimensions.width
 
               let screenConfig = new ScreenCaptureParameters()
+              screenConfig.videoParams.dimensions = new VideoDimensions(width,height)
               this.rtcEngine?.startScreenCapture(screenConfig)
 
               let cameraConfig = new CameraCapturerConfiguration()
