@@ -72,6 +72,20 @@ extern __aosl_api__ int aosl_thrd_getname (aosl_thrdid_t thrd, char *namebuf, si
  **/
 extern __aosl_api__ int aosl_get_thread_times (aosl_osthrd_t thrd, int *running, uint64_t *system_us, uint64_t *user_us);
 
+/**
+ * Get the mpq thread flags.
+ * Parameters:
+ *       thrd: the retrieving thread id
+ *             Linux: the thread tid
+ *             XNU: the mach thread id, type is mach_port_t
+ *             Windows: the Windows thread id, type is DWORD
+ *    q_flags: the mpq flags
+ * Return Value:
+ *          0: success
+ *         <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_thrd_getflags (aosl_thrdid_t thrd_id, int *q_flags);
+
 typedef uintptr_t aosl_tls_key_t;
 
 extern __aosl_api__ int aosl_tls_key_create (aosl_tls_key_t *key, void (*dtor) (void *));

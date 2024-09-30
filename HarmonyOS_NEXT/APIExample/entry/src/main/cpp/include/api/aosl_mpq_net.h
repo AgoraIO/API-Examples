@@ -240,12 +240,13 @@ extern __aosl_api__ int aosl_co_accept (aosl_fd_t fd, aosl_data_t d_ret, aosl_da
  *   d_ret: the data object for holding return value, the
  *          length must >= sizeof (ssize_t);
  *   d_buf: the buffer for holding the read data;
+ * buf_off: the buffer offset for holding the read data;
  *   flags: the flags same as recv syscall;
  * Return value:
  *      <0: failed with aosl_errno set;
  *       0: async read issued successfully;
  **/
-extern __aosl_api__ int aosl_co_recv (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, int flags);
+extern __aosl_api__ int aosl_co_recv (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, uintptr_t buf_off, int flags);
 
 /**
  * The socket recv function which supports coroutine.
@@ -254,6 +255,7 @@ extern __aosl_api__ int aosl_co_recv (aosl_fd_t fd, aosl_data_t d_ret, aosl_data
  *   d_ret: the data object for holding return value, the
  *          length must >= sizeof (ssize_t);
  *   d_buf: the buffer for holding the read data;
+ * buf_off: the buffer offset for holding the read data;
  *   flags: the flags same as recvfrom syscall;
  *  d_addr: the data object for holding the remote address,
  *          the len must >= sizeof (aosl_sk_addr_and_len_t);
@@ -261,7 +263,7 @@ extern __aosl_api__ int aosl_co_recv (aosl_fd_t fd, aosl_data_t d_ret, aosl_data
  *      <0: failed with aosl_errno set;
  *       0: async read issued successfully;
  **/
-extern __aosl_api__ int aosl_co_recvfrom (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, int flags, aosl_data_t d_addr);
+extern __aosl_api__ int aosl_co_recvfrom (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, uintptr_t buf_off, int flags, aosl_data_t d_addr);
 
 /**
  * The socket connect function which supports coroutine.

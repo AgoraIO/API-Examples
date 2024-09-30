@@ -70,7 +70,7 @@ class IMediaNodeFactory : public RefCountInterface {
    */
   virtual agora_refptr<ICameraCapturer> createCameraCapturer() = 0;
 
-#if !defined(__ANDROID__) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
+#if !defined(__ANDROID__) && !(defined(__APPLE__) && TARGET_OS_IPHONE) && !defined(__OHOS__)
   /**
    * Creates a screen capturer.
    *
@@ -218,7 +218,7 @@ class IMediaNodeFactory : public RefCountInterface {
    */
   virtual agora_refptr<IMediaPacketSender> createMediaPacketSender() = 0;
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
   /**
    * Creates screen capture source extension with given provider&extension names
    * @param provider_name provider name string.

@@ -115,6 +115,21 @@ extern __aosl_api__ int aosl_ref_write_args (aosl_ref_t ref, aosl_ref_func_t f, 
 extern __aosl_api__ int aosl_ref_write_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
+ * Hold the ref object and set it unsafe, then invoke the specified callback function.
+ * Parameter:
+ *            ref: the ref object id;
+ *              f: the callback function;
+ *           argc: the args count
+ *            ...: variable args
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_ref_unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
+extern __aosl_api__ int aosl_ref_unsafe_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
+extern __aosl_api__ int aosl_ref_unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
+
+/**
  * Hold the ref object and set it maystall, then invoke the specified callback function.
  * Parameter:
  *            ref: the ref object id;
@@ -167,6 +182,21 @@ extern __aosl_api__ aosl_ref_t aosl_refobj_id (aosl_refobj_t robj);
 extern __aosl_api__ int aosl_refobj_read (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_refobj_read_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args);
 extern __aosl_api__ int aosl_refobj_read_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
+
+/**
+ * Make sure set the ref object specified by robj unsafe, then invoke the specified callback function.
+ * Parameter:
+ *           robj: the ref object itself;
+ *              f: the callback function;
+ *           argc: the args count
+ *            ...: variable args
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_refobj_unsafe (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...);
+extern __aosl_api__ int aosl_refobj_unsafe_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args);
+extern __aosl_api__ int aosl_refobj_unsafe_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
  * Make sure set the ref object specified by robj maystall, then invoke the specified callback function.

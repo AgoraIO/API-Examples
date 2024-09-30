@@ -138,26 +138,26 @@ public:
 			return aosl_ref_write_argv (ref (), f, argc, argv);
 		}
 
-		int maystall (aosl_ref_func_t f, uintptr_t argc, ...)
+		int unsafe (aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_maystall_args (ref (), f, argc, args);
+			err = aosl_ref_unsafe_args (ref (), f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		int maystall_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
+		int unsafe_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_maystall_args (ref (), f, argc, args);
+			return aosl_ref_unsafe_args (ref (), f, argc, args);
 		}
 
-		int maystall_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		int unsafe_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_maystall_argv (ref (), f, argc, argv);
+			return aosl_ref_unsafe_argv (ref (), f, argc, argv);
 		}
 
 		/* The static version of member functions */
@@ -227,26 +227,26 @@ public:
 			return aosl_ref_write_argv (ref, f, argc, argv);
 		}
 
-		static int maystall (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+		static int unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_maystall_args (ref, f, argc, args);
+			err = aosl_ref_unsafe_args (ref, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		static int maystall_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+		static int unsafe_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_maystall_args (ref, f, argc, args);
+			return aosl_ref_unsafe_args (ref, f, argc, args);
 		}
 
-		static int maystall_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		static int unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_maystall_argv (ref, f, argc, argv);
+			return aosl_ref_unsafe_argv (ref, f, argc, argv);
 		}
 
 		static int read (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
@@ -271,26 +271,26 @@ public:
 			return aosl_refobj_read_argv (robj, f, argc, argv);
 		}
 
-		static int maystall (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
+		static int unsafe (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_refobj_maystall_args (robj, f, argc, args);
+			err = aosl_refobj_unsafe_args (robj, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		static int maystall_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args)
+		static int unsafe_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_refobj_maystall_args (robj, f, argc, args);
+			return aosl_refobj_unsafe_args (robj, f, argc, args);
 		}
 
-		static int maystall_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		static int unsafe_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_refobj_maystall_argv (robj, f, argc, argv);
+			return aosl_refobj_unsafe_argv (robj, f, argc, argv);
 		}
 
 		/* set the living scope ref object of this ref object */
@@ -519,10 +519,10 @@ public:
 			return aosl_ref_t_oop::write (____ref_f, 1, &lambda_obj);
 		}
 
-		int maystall (aosl_ref_lambda_f &&lambda_f)
+		int unsafe (aosl_ref_lambda_f &&lambda_f)
 		{
 			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::maystall (____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (____ref_f, 1, &lambda_obj);
 		}
 
 		static int hold (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
@@ -543,10 +543,10 @@ public:
 			return aosl_ref_t_oop::write (ref, ____ref_f, 1, &lambda_obj);
 		}
 
-		static int maystall (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+		static int unsafe (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
 		{
 			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::maystall (ref, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (ref, ____ref_f, 1, &lambda_obj);
 		}
 
 		static int read (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
@@ -555,10 +555,10 @@ public:
 			return aosl_ref_t_oop::read (robj, ____ref_f, 1, &lambda_obj);
 		}
 
-		static int maystall (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+		static int unsafe (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
 		{
 			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::maystall (robj, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (robj, ____ref_f, 1, &lambda_obj);
 		}
 
 	private:
@@ -1083,13 +1083,35 @@ public:
 		return refoop->write_argv (f, argc, argv);
 	}
 
+	int unsafe (aosl_ref_func_t f, uintptr_t argc, ...)
+	{
+		va_list args;
+		int err;
+
+		va_start (args, argc);
+		err = refoop->unsafe_args (f, argc, args);
+		va_end (args);
+
+		return err;
+	}
+
+	int unsafe_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
+	{
+		return refoop->unsafe_args (f, argc, args);
+	}
+
+	int unsafe_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	{
+		return refoop->unsafe_argv (f, argc, argv);
+	}
+
 	int maystall (aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = refoop->maystall_args (f, argc, args);
+		err = refoop->unsafe_args (f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1097,12 +1119,12 @@ public:
 
 	int maystall_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return refoop->maystall_args (f, argc, args);
+		return refoop->unsafe_args (f, argc, args);
 	}
 
 	int maystall_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return refoop->maystall_argv (f, argc, argv);
+		return refoop->unsafe_argv (f, argc, argv);
 	}
 
 	/* The static version of member functions */
@@ -1172,13 +1194,35 @@ public:
 		return aosl_ref_t_oop::write_argv (ref, f, argc, argv);
 	}
 
+	static int unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+	{
+		va_list args;
+		int err;
+
+		va_start (args, argc);
+		err = aosl_ref_t_oop::unsafe_args (ref, f, argc, args);
+		va_end (args);
+
+		return err;
+	}
+
+	static int unsafe_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+	{
+		return aosl_ref_t_oop::unsafe_args (ref, f, argc, args);
+	}
+
+	static int unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	{
+		return aosl_ref_t_oop::unsafe_argv (ref, f, argc, argv);
+	}
+
 	static int maystall (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = aosl_ref_t_oop::maystall_args (ref, f, argc, args);
+		err = aosl_ref_t_oop::unsafe_args (ref, f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1186,12 +1230,12 @@ public:
 
 	static int maystall_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return aosl_ref_t_oop::maystall_args (ref, f, argc, args);
+		return aosl_ref_t_oop::unsafe_args (ref, f, argc, args);
 	}
 
 	static int maystall_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return aosl_ref_t_oop::maystall_argv (ref, f, argc, argv);
+		return aosl_ref_t_oop::unsafe_argv (ref, f, argc, argv);
 	}
 
 	static int read (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
@@ -1216,13 +1260,35 @@ public:
 		return aosl_ref_t_oop::read_argv (robj, f, argc, argv);
 	}
 
+	static int unsafe (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
+	{
+		va_list args;
+		int err;
+
+		va_start (args, argc);
+		err = aosl_ref_t_oop::unsafe_args (robj, f, argc, args);
+		va_end (args);
+
+		return err;
+	}
+
+	static int unsafe_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args)
+	{
+		return aosl_ref_t_oop::unsafe_args (robj, f, argc, args);
+	}
+
+	static int unsafe_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	{
+		return aosl_ref_t_oop::unsafe_argv (robj, f, argc, argv);
+	}
+
 	static int maystall (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = aosl_ref_t_oop::maystall_args (robj, f, argc, args);
+		err = aosl_ref_t_oop::unsafe_args (robj, f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1230,12 +1296,12 @@ public:
 
 	static int maystall_args (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return aosl_ref_t_oop::maystall_args (robj, f, argc, args);
+		return aosl_ref_t_oop::unsafe_args (robj, f, argc, args);
 	}
 
 	static int maystall_argv (aosl_refobj_t robj, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return aosl_ref_t_oop::maystall_argv (robj, f, argc, argv);
+		return aosl_ref_t_oop::unsafe_argv (robj, f, argc, argv);
 	}
 
 	static aosl_ref_class *from_refobj (aosl_refobj_t robj)
@@ -1492,9 +1558,14 @@ public:
 		return refoop->write (std::move (lambda_f));
 	}
 
+	int unsafe (aosl_ref_lambda_f &&lambda_f)
+	{
+		return refoop->unsafe (std::move (lambda_f));
+	}
+
 	int maystall (aosl_ref_lambda_f &&lambda_f)
 	{
-		return refoop->maystall (std::move (lambda_f));
+		return refoop->unsafe (std::move (lambda_f));
 	}
 
 	static int hold (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
@@ -1512,9 +1583,14 @@ public:
 		return aosl_ref_t_oop::write (ref, std::move (lambda_f));
 	}
 
+	static int unsafe (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	{
+		return aosl_ref_t_oop::unsafe (ref, std::move (lambda_f));
+	}
+
 	static int maystall (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
 	{
-		return aosl_ref_t_oop::maystall (ref, std::move (lambda_f));
+		return aosl_ref_t_oop::unsafe (ref, std::move (lambda_f));
 	}
 
 	static int read (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
@@ -1522,9 +1598,14 @@ public:
 		return aosl_ref_t_oop::read (robj, std::move (lambda_f));
 	}
 
+	static int unsafe (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+	{
+		return aosl_ref_t_oop::unsafe (robj, std::move (lambda_f));
+	}
+
 	static int maystall (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
 	{
-		return aosl_ref_t_oop::maystall (robj, std::move (lambda_f));
+		return aosl_ref_t_oop::unsafe (robj, std::move (lambda_f));
 	}
 
 #ifdef __AOSL_MPQ_H__
@@ -1844,25 +1925,25 @@ inline bool operator != (intptr_t _null, const aosl_ref_unique_ptr<T_ref_cls> &p
 
 #if (__cplusplus >= 201103) || defined (_MSC_VER)
 template<typename T_ref_cls>
-inline bool operator == (const aosl_ref_unique_ptr<T_ref_cls> &ptr, nullptr_t)
+inline bool operator == (const aosl_ref_unique_ptr<T_ref_cls> &ptr, std::nullptr_t)
 {
 	return !ptr;
 }
 
 template<typename T_ref_cls>
-inline bool operator != (const aosl_ref_unique_ptr<T_ref_cls> &ptr, nullptr_t)
+inline bool operator != (const aosl_ref_unique_ptr<T_ref_cls> &ptr, std::nullptr_t)
 {
 	return ptr;
 }
 
 template<typename T_ref_cls>
-inline bool operator == (nullptr_t, const aosl_ref_unique_ptr<T_ref_cls> &ptr)
+inline bool operator == (std::nullptr_t, const aosl_ref_unique_ptr<T_ref_cls> &ptr)
 {
 	return !ptr;
 }
 
 template<typename T_ref_cls>
-inline bool operator != (nullptr_t, const aosl_ref_unique_ptr<T_ref_cls> &ptr)
+inline bool operator != (std::nullptr_t, const aosl_ref_unique_ptr<T_ref_cls> &ptr)
 {
 	return ptr;
 }

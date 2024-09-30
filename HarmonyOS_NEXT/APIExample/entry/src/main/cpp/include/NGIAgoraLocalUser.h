@@ -41,6 +41,7 @@ struct LocalVideoTrackStats;
 struct RemoteVideoTrackStats;
 class IMediaPacketReceiver;
 class IVideoSinkBase;
+
 /**
  * The ILocalUser class defines the behavior and state of a local user.
  *
@@ -811,6 +812,8 @@ class ILocalUser {
 
   virtual int getHighPriorityUserList(std::vector<uid_t>& vipList, int& option) = 0;
 
+  virtual int setRemoteSubscribeFallbackOption(int option, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
   /**
     * Sets the blocklist of subscribe remote stream audio.
     *
@@ -1158,6 +1161,17 @@ class ILocalUser {
    * - < 0: Failure.
    */
   virtual int takeDataChannelSnapshot(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  /**
+   * send audio metadata
+   *
+   * @param metadata The pointer of metadata
+   * @param length Size of metadata
+   * @return
+   * - 0: success
+   * - <0: failure
+   * @technical preview 
+  */
+  virtual int sendAudioMetadata(const char* metadata, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 };
 
 /**
@@ -1493,6 +1507,20 @@ class ILocalUserObserver {
    * @param rotation Rotation [0 to 360).
    */
   virtual void onVideoSizeChanged(user_id_t userId, int width, int height, int rotation) = 0;
+
+  /**
+   * The audio metadata received.
+   *
+   * @param userId ID of the remote user.
+   * @param metadata The pointer of metadata
+   * @param length Size of metadata
+   * @technical preview 
+   */
+  virtual void onAudioMetadataReceived(user_id_t userId, const char* metadata, size_t length) {
+    (void)userId;
+    (void)metadata;
+    (void)length;
+  }
 
   /**
    * The media information of a specified user.

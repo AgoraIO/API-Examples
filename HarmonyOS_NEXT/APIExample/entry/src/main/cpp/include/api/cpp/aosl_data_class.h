@@ -15,6 +15,7 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <api/aosl_types.h>
 #include <api/aosl_defs.h>
@@ -26,26 +27,30 @@ protected:
 	aosl_data_t d;
 
 public:
-	aosl_data_class ()
+	aosl_data_class (void)
 	{
 		d = NULL;
 	}
 
 	aosl_data_class (const aosl_data_class &src)
 	{
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+		if (this != &src) {
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 	}
 
 	aosl_data_class &operator = (const aosl_data_class &src)
 	{
-		if (d != NULL)
-			aosl_data_put (d);
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
 
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 
 		return *this;
 	}
@@ -53,13 +58,6 @@ public:
 	operator aosl_data_t () const
 	{
 		return d;
-	}
-
-	aosl_data_t detach ()
-	{
-		aosl_data_t data = d;
-		d = NULL;
-		return data;
 	}
 
 	void *ptr () const
@@ -87,17 +85,22 @@ public:
 #if (__cplusplus >= 201103) || defined (_MSC_VER)
 	aosl_data_class (aosl_data_class &&src)
 	{
-		d = src.d;
-		src.d = NULL;
+		if (this != &src) {
+			d = src.d;
+			src.d = NULL;
+		}
 	}
 
 	aosl_data_class &operator = (aosl_data_class &&src)
 	{
-		if (d != NULL)
-			aosl_data_put (d);
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
 
-		d = src.d;
-		src.d = NULL;
+			d = src.d;
+			src.d = NULL;
+		}
+
 		return *this;
 	}
 #endif /* C++11 */
@@ -105,36 +108,58 @@ public:
 
 class aosl_data_buf: public aosl_data_class {
 public:
+	aosl_data_buf (void)
+	{
+	}
+
 	aosl_data_buf (size_t sz)
 	{
-		if (sz > 0) {
-			d = aosl_data_create (sz);
-			if (d == NULL)
-				abort ();
-		}
+		d = aosl_data_create (sz, NULL);
+		if (d == NULL)
+			abort ();
 	}
 
 	aosl_data_buf (const void *src, size_t len)
 	{
-		if (len > 0) {
-			d = aosl_data_create (len);
-			if (d == NULL)
-				abort ();
+		d = aosl_data_create (len, NULL);
+		if (d == NULL)
+			abort ();
 
+		if (len > 0)
 			memcpy (ptr (), src, len);
-		}
+	}
+
+	aosl_data_buf (void *ptr, size_t len, aosl_data_user_free_t dtor)
+	{
+		d = aosl_data_user_create (ptr, len, dtor);
+		if (d == NULL)
+			abort ();
 	}
 
 	aosl_data_buf (const char *str)
 	{
 		if (str != NULL) {
 			size_t str_l = strlen (str);
-			d = aosl_data_create (str_l + 1);
+			d = aosl_data_create (str_l + 1, NULL);
 			if (d == NULL)
 				abort ();
 
 			memcpy (ptr (), str, str_l + 1);
 		}
+	}
+
+	aosl_data_buf (char *str, aosl_data_user_free_t dtor)
+	{
+		size_t len;
+		if (str != NULL) {
+			len = strlen (str) + 1;
+		} else {
+			len = 0;
+		}
+
+		d = aosl_data_user_create (str, len, dtor);
+		if (d == NULL)
+			abort ();
 	}
 
 	aosl_data_buf (aosl_data_t src)
@@ -146,9 +171,11 @@ public:
 
 	aosl_data_buf (const aosl_data_buf &src)
 	{
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+		if (this != &src) {
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 	}
 
 	aosl_data_buf &operator = (const char *str)
@@ -160,7 +187,7 @@ public:
 
 		if (str != NULL) {
 			size_t str_l = strlen (str);
-			d = aosl_data_create (str_l + 1);
+			d = aosl_data_create (str_l + 1, NULL);
 			if (d == NULL)
 				abort ();
 
@@ -184,12 +211,14 @@ public:
 
 	aosl_data_buf &operator = (const aosl_data_buf &src)
 	{
-		if (d != NULL)
-			aosl_data_put (d);
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
 
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 
 		return *this;
 	}
@@ -212,66 +241,151 @@ public:
 		return (unsigned char *)ptr ();
 	}
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
-	aosl_data_buf (aosl_data_buf &&src)
-	{
-		d = src.d;
-		src.d = NULL;
-	}
-
-	aosl_data_buf &operator = (aosl_data_buf &&src)
+	void attach (aosl_data_t src)
 	{
 		if (d != NULL)
 			aosl_data_put (d);
 
-		d = src.d;
-		src.d = NULL;
+		d = src;
+	}
+
+	aosl_data_t detach ()
+	{
+		aosl_data_t data = d;
+		d = NULL;
+		return data;
+	}
+
+#if (__cplusplus >= 201103) || defined (_MSC_VER)
+	aosl_data_buf (aosl_data_buf &&src)
+	{
+		if (this != &src) {
+			d = src.d;
+			src.d = NULL;
+		}
+	}
+
+	aosl_data_buf &operator = (aosl_data_buf &&src)
+	{
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
+
+			d = src.d;
+			src.d = NULL;
+		}
+
 		return *this;
 	}
 #endif /* C++11 */
 };
 
+/**
+ * This class is only used in the constructor of aosl_data_var
+ * to differentiate constructor with variadic args, do not use
+ * it in any other scenario.
+ **/
+template<typename T>
+class aosl_data_arg {
+private:
+	const T var;
+
+public:
+	aosl_data_arg (T arg): var (arg) {}
+	operator T ()
+	{
+		return var;
+	}
+};
+
 template<typename T>
 class aosl_data_var: public aosl_data_class {
 public:
-	aosl_data_var ()
+	aosl_data_var (void)
 	{
-		d = aosl_data_create (sizeof (T));
+		d = aosl_data_create (sizeof (T), __data_var_dtor);
 		if (d == NULL)
 			abort ();
+
+		new (aosl_data_ptr_get (d)) T;
 	}
 
-	aosl_data_var (size_t nelems)
+	/**
+	 * We prefer to using this kind of special class arg rather
+	 * than naked aosl_data_t just for differentiating from the
+	 * constructor with variadic args.
+	 **/
+	aosl_data_var (aosl_data_arg<aosl_data_t> src_arg)
 	{
-		if (nelems == 0)
+		aosl_data_t src = src_arg;
+		if (src == NULL)
 			abort ();
 
-		d = aosl_data_create (sizeof (T) * nelems);
+		/* The prerequisite is that the src must be a valid T data */
+		if (aosl_data_len (src) < sizeof (T))
+			abort ();
+
+		aosl_data_get (src);
+		d = src;
+	}
+
+	/**
+	 * We prefer to using this kind of special class arg rather
+	 * than naked size_t.
+	 **/
+	aosl_data_var (aosl_data_arg<size_t> nelems)
+	{
+		size_t count = nelems;
+		if (count == 0)
+			abort ();
+
+		d = aosl_data_create (sizeof (T) * count, __data_var_dtor);
 		if (d == NULL)
 			abort ();
+
+		new (aosl_data_ptr_get (d)) T [count];
 	}
+
+#if (__cplusplus >= 201103) || defined (_MSC_VER)
+	template <typename... Targs>
+	aosl_data_var (Targs... args)
+	{
+		d = aosl_data_create (sizeof (T), __data_var_dtor);
+		if (d == NULL)
+			abort ();
+
+		new (aosl_data_ptr_get (d)) T (args...);
+	}
+#endif
 
 	aosl_data_var (const aosl_data_var &src)
 	{
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+		if (this != &src) {
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 	}
 
 	aosl_data_var &operator = (const aosl_data_var &src)
 	{
-		if (d != NULL)
-			aosl_data_put (d);
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
 
-		d = src.d;
-		if (d != NULL)
-			aosl_data_get (d);
+			d = src.d;
+			if (d != NULL)
+				aosl_data_get (d);
+		}
 
 		return *this;
 	}
 
 	aosl_data_var &operator = (const T &v)
 	{
+		if (d == NULL)
+			abort ();
+
 		*(T *)aosl_data_ptr_get (d) = v;
 		return *this;
 	}
@@ -290,6 +404,14 @@ public:
 			abort ();
 
 		return *(T *)aosl_data_ptr_get (d);
+	}
+
+	T *operator -> () const
+	{
+		if (d == NULL)
+			abort ();
+
+		return (T *)aosl_data_ptr_get (d);
 	}
 
 	T operator [] (size_t i) const
@@ -324,20 +446,37 @@ public:
 		return arr [i];
 	}
 
+private:
+	static void __data_var_dtor (void *ptr, size_t len)
+	{
+		size_t n = len / sizeof (T);
+		T *o = (T *)ptr;
+		T *e = o + n;
+		while (e > o) {
+			e--;
+			e->~T ();
+		}
+	}
+
 #if (__cplusplus >= 201103) || defined (_MSC_VER)
 	aosl_data_var (aosl_data_var &&src)
 	{
-		d = src.d;
-		src.d = NULL;
+		if (this != &src) {
+			d = src.d;
+			src.d = NULL;
+		}
 	}
 
 	aosl_data_var &operator = (aosl_data_var &&src)
 	{
-		if (d != NULL)
-			aosl_data_put (d);
+		if (this != &src) {
+			if (d != NULL)
+				aosl_data_put (d);
 
-		d = src.d;
-		src.d = NULL;
+			d = src.d;
+			src.d = NULL;
+		}
+
 		return *this;
 	}
 #endif /* C++11 */

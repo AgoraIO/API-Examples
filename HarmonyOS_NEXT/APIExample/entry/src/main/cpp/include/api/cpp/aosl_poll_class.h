@@ -35,18 +35,17 @@ private:
 	std::vector<const aosl_ares_class *> signaled_refs;
 
 public:
-	int add (const aosl_ares_class &tail)
+	void add (const aosl_ares_class &tail)
 	{
 		poll_refs [tail.ref ()] = &tail;
-		return 0;
 	}
 
 #if (__cplusplus >= 201103) || defined (_MSC_VER)
 	template <class T, class ...Targs>
-	int add (const T &head, const Targs&... rest)
+	void add (const T &head, const Targs&... rest)
 	{
 		poll_refs [head.ref ()] = &head;
-		return add (rest...);
+		add (rest...);
 	}
 
 	/* constructor with variable args */
@@ -56,6 +55,13 @@ public:
 		add (args...);
 	}
 #endif /* C++11 */
+
+	aosl_poll_class (const aosl_ares_class * const areses [], size_t count)
+	{
+		size_t i;
+		for (i = 0; i < count; i++)
+			add (*areses [i]);
+	}
 
 	/* poll the constructed async results */
 	int poll (size_t min, intptr_t timeo)

@@ -28,7 +28,7 @@ extern "C" {
 extern __aosl_api__ JavaVM *aosl_java_vm ();
 extern __aosl_api__ int aosl_set_java_vm (JavaVM *jvm);
 
-extern __aosl_api__ JNIEnv *aosl_this_jni_env ();
+extern __aosl_api__ JNIEnv *aosl_this_jni_env (int *attached_p);
 
 /**
  * Set Java Application Context.
@@ -44,6 +44,7 @@ extern __aosl_api__ JNIEnv *aosl_this_jni_env ();
  **/
 extern __aosl_api__ int aosl_java_set_context (jobject ctxt);
 
+extern __aosl_api__ void aosl_thread_java_detach ();
 
 
 #ifdef __cplusplus
