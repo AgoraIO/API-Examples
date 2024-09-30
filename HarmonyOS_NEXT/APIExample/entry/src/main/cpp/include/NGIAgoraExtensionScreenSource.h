@@ -83,8 +83,11 @@ class IScreenCaptureSource : public RefCountInterface {
     uint32_t display_id;
     view_t window_id;
 
+    // Mac only
+    bool disable_avf;
+
     VideoCaptureConfig()
-      : type(CaptureScreen), screen_rect(), region_offset(), display_id(0), window_id(NULL) { }
+      : type(CaptureScreen), screen_rect(), region_offset(), display_id(0), window_id(NULL), disable_avf(false) { }
   };
 #endif
 
@@ -95,6 +98,7 @@ class IScreenCaptureSource : public RefCountInterface {
     int icon_height;
     bool include_screen;
     bool unfiltered;
+    bool unskip_system_window;
   };
   
   enum CaptureMode {

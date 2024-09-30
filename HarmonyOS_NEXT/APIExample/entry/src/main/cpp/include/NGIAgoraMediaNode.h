@@ -140,6 +140,32 @@ class IAudioFilter : public IAudioFilterBase {
   ~IAudioFilter() {}
 };
 
+class IAudioFilterV2 : public IAudioFilter {
+public:
+    class Control : public RefCountInterface {
+     public:
+      /**
+       * @brief Post an event and notify the end users.
+       * @param key '\0' ended string that describes the key of the event
+       * @param value '\0' ended string that describes the value of the event
+       */
+      virtual int postEvent(const char* key, const char* value) = 0;
+      /**
+       * @brief print log to the SDK.
+       * @param level Log level @ref agora::commons::LOG_LEVEL
+       * @param format log formatter string
+       * @param ... variadic arguments
+       */
+      virtual void printLog(commons::LOG_LEVEL level, const char* format, ...) = 0;
+    };
+public:
+    /**
+       * @brief AgoraSDK set IAudioFilterV2::Control to filter 
+       * @param control IAudioFilterV2::Control
+       */
+    virtual void setExtensionControl(agora::agora_refptr<IAudioFilterV2::Control> control) = 0;
+};
+
 /**
  * The `IVideoFilterBase` class is the base class for video filters. You can use this class to implement your own filter
  * and add the filter to a video track.
@@ -365,6 +391,64 @@ class IExtensionVideoFilter : public IVideoFilter {
   }
 };
 
+class ILipSyncFilter : public RefCountInterface {
+ public:
+  enum ProcessResult {
+    kSuccess, // Video frame data is successfully processed
+    kBypass,  // Video frame data should bypass the current filter and flow to its successsors
+    kDrop, // Video Frame data should be discarded
+  };
+  
+  class Control : public RefCountInterface {
+   public:
+    /**
+     * @brief Post an event and notify the end users.
+     * @param key '\0' ended string that describes the key of the event
+     * @param value '\0' ended string that describes the value of the event
+     */
+    virtual int postEvent(const char* key, const char* value) = 0;
+    /**
+     * @brief print log to the SDK.
+     * @param level Log level @ref agora::commons::LOG_LEVEL
+     * @param format log formatter string
+     * @param ... variadic arguments
+     */
+    virtual void printLog(commons::LOG_LEVEL level, const char* format, ...) = 0;
+    /**
+     * @brief Ask SDK to disable the current filter if a fatal error is detected
+     * @param error error code
+     * @param msg error message
+     */
+    virtual void disableMe(int error, const char* msg) = 0;
+    /**
+     * @brief report counter to the SDK.
+     * @param counter_id counter id
+     * @param value counter value
+     */
+    virtual void ReportCounter(int32_t counter_id, int32_t value) = 0;
+    /**
+     * @brief get stats to the SDK.
+     * @param counter_id counter id
+     */
+    virtual int GetStats(int32_t counter_id) = 0;
+  };
+  
+  virtual int start(agora::agora_refptr<Control> control) = 0;
+  
+  virtual int stop() = 0;
+  
+  virtual int setProperty(const char* key, const void* buf, size_t buf_size) { return -1; }
+    /**
+         * Convert the audio frame to face info.
+         * @param inAudioFrame The reference to the audio frame that you want to convert.
+       * @param outFaceInfo The reference to the face info.
+       * @return see @ref ProcessResult
+    */
+  virtual ProcessResult convertAudioFrameToFaceInfo(const agora::media::base::AudioPcmFrame& inAudioFrame, char* outFaceInfo) {
+    return kBypass;
+  }
+};
+
 /**
  * The `IVideoSinkBase` class is the base class for the custom video sink.
  */
@@ -434,10 +518,10 @@ class IVideoSinkBase : public RefCountInterface {
 class IMediaExtensionObserver : public RefCountInterface {
 public:
   virtual ~IMediaExtensionObserver() {}
-  virtual void onEvent(const char* provider, const char* extension, const char* key, const char* json_value) {}
-  virtual void onExtensionStopped(const char* provider, const char* extension) {}
-  virtual void onExtensionStarted(const char* provider, const char* extension) {}
-  virtual void onExtensionError(const char* provider, const char* extension, int error, const char* message) {}
+  virtual void onEventWithContext(const ExtensionContext& context, const char* key, const char* json_value) {}
+  virtual void onExtensionStoppedWithContext(const ExtensionContext& context) {}
+  virtual void onExtensionStartedWithContext(const ExtensionContext& context) {}
+  virtual void onExtensionErrorWithContext(const ExtensionContext& context, int error, const char* message) {}
 };
 
 /**

@@ -38,6 +38,11 @@ struct AudioDeviceInfo {
    */
   char deviceName[kAdmMaxDeviceNameSize];
   /**
+   * The type name of the device. such as Built-in, USB, HDMI, etc. The maximum size is 128 bytes. The default value is 0.
+   * @note This member applies to macOS only.
+   */
+  char deviceTypeName[kAdmMaxDeviceNameSize];
+  /**
    * The ID of the device. The maximum size is 128 bytes. The default value is 0.
    */
   char deviceId[kAdmMaxGuidSize];
@@ -57,6 +62,7 @@ struct AudioDeviceInfo {
   AudioDeviceInfo() : isCurrentSelected(false),
                       isPlayoutDevice(true) {
     memset(deviceName, 0, sizeof(deviceName));
+    memset(deviceTypeName, 0, sizeof(deviceTypeName));
     memset(deviceId, 0, sizeof(deviceId));
   }
 };

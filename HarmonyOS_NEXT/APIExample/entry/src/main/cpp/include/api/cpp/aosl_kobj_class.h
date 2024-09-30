@@ -42,7 +42,7 @@ private:
 #endif
 
 public:
-	static void *notify_register (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, ...)
+	static void *notify_register (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, ...)
 	{
 		va_list args;
 		void *err;
@@ -53,12 +53,12 @@ public:
 		return err;
 	}
 
-	static void *notify_register_args (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, va_list args)
+	static void *notify_register_args (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, va_list args)
 	{
 		return aosl_kobj_notify_register_args (dfd, name, touch, qid, ref, f_name, f, dtor, argc, args);
 	}
 
-	static void *notify_register_argv (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_kobj_notify_dtor_t dtor, uintptr_t argc, uintptr_t argv [])
+	static void *notify_register_argv (aosl_kfd_t dfd, const char *name, int touch, aosl_mpq_t qid, aosl_ref_t ref, const char *f_name, aosl_kobj_notify_t f, aosl_obj_dtor_t dtor, uintptr_t argc, uintptr_t argv [])
 	{
 		return aosl_kobj_notify_register_argv (dfd, name, touch, qid, ref, f_name, f, dtor, argc, argv);
 	}

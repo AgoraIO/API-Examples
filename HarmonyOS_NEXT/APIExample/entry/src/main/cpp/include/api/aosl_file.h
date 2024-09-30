@@ -227,11 +227,12 @@ extern __aosl_api__ int aosl_file_alseek_argv (aosl_fd_t fd, off_t offset, int w
  *   d_ret: the data object for holding return value, the
  *          length must >= sizeof (ssize_t);
  *   d_buf: the buffer for holding the read data;
+ * buf_off: the buffer offset for holding the read data;
  * Return value:
  *      <0: failed with aosl_errno set;
  *       0: async read issued successfully;
  **/
-extern __aosl_api__ int aosl_co_file_read (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf);
+extern __aosl_api__ int aosl_co_file_read (aosl_fd_t fd, aosl_data_t d_ret, aosl_data_t d_buf, uintptr_t buf_off);
 
 /**
  * The regular file write function which supports coroutine.

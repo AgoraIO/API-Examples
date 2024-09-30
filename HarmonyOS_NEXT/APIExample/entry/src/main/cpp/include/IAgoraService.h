@@ -71,6 +71,8 @@ class IRtmService;
 
 namespace base {
 class IServiceObserver;
+class ISyncClient;
+struct SyncConfig;
 
 /**
  * The global configurations for \ref agora::base::IAgoraService "AgoraService".
@@ -286,6 +288,13 @@ struct AudioSessionConfiguration {
    */
   Optional<int> outputNumberOfChannels;
 
+#if defined(WEBRTC_IOS)
+  /**
+   * Initialize the AudioSession with the value for category. (iOS only)
+   */
+  Optional<int> category;
+#endif
+
   void SetAll(const AudioSessionConfiguration& change) {
     SetFrom(&playbackAndRecord, change.playbackAndRecord);
     SetFrom(&chatMode, change.chatMode);
@@ -299,6 +308,9 @@ struct AudioSessionConfiguration {
     SetFrom(&ioBufferDuration, change.ioBufferDuration);
     SetFrom(&inputNumberOfChannels, change.inputNumberOfChannels);
     SetFrom(&outputNumberOfChannels, change.outputNumberOfChannels);
+#if defined(WEBRTC_IOS)
+    SetFrom(&category, change.category);
+#endif
   }
 
   bool operator==(const AudioSessionConfiguration& o) const {
@@ -308,7 +320,12 @@ struct AudioSessionConfiguration {
            allowBluetooth == o.allowBluetooth && allowBluetoothA2DP == o.allowBluetoothA2DP && sampleRate == o.sampleRate &&
            ioBufferDuration == o.ioBufferDuration &&
            inputNumberOfChannels == o.inputNumberOfChannels &&
+#if defined(WEBRTC_IOS)
+           outputNumberOfChannels == o.outputNumberOfChannels &&
+           category == o.category;
+#else
            outputNumberOfChannels == o.outputNumberOfChannels;
+#endif
   }
   bool operator!=(const AudioSessionConfiguration& o) const { return !(*this == o); }
 
@@ -635,12 +652,13 @@ class IAgoraService {
    * @param audioSource The pointer to the recording device source. See \ref agora::rtc::IRecordingDeviceSource "IRecordingDeviceSource".
    * @param enableAec Whether enable audio echo cancellation for loopback recording. If loopback
    *                  recording device is a virtual sound card, it should be false, or it should be true.
+   * @param overlap Whether overlap playout signal.
    * @return
    * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalAudioTrack> createRecordingDeviceAudioTrack(
-      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec) = 0;
+      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec, bool overlap) = 0;
 
   /**
    * Creates an audio device manager object and returns the pointer.
@@ -956,6 +974,32 @@ class IAgoraService {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<rtc::IConfigCenter> getConfigCenter() = 0;
+
+  /**
+   * Get the \ref agora::rtc::ISyncClient "ISyncClient" object and return the pointer.
+   *
+   * @return
+   * - The pointer to \ref rtc::ISyncClient "ISyncClient": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<base::ISyncClient> createSyncClient(const base::SyncConfig& config) = 0;
+
+  /**
+   * Set the logWriter for the sdk log.
+   * @param logWriter the log writer 
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int32_t setLogWriter(agora::commons::ILogWriter* logWriter) = 0;
+
+  /**
+   * Release logWriter for the sdk log.
+   * @return
+   * -The pointer to \ref agora::commons::ILogWriter
+   * - A null pointer: Failure.
+   */
+  virtual agora::commons::ILogWriter* releaseLogWriter() = 0;
       
  protected:
   virtual ~IAgoraService() {}

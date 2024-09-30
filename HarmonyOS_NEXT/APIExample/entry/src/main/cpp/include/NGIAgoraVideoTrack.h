@@ -26,6 +26,65 @@ class IVideoEncodedFrameObserver;
 class IMediaPacketReceiver;
 class IVideoSinkBase;
 
+enum StreamLayerIndexInternal {
+   STREAM_LAYER_1 = 1,
+   STREAM_LAYER_2 = 2,
+   STREAM_LAYER_3 = 3,
+   STREAM_LAYER_4 = 4,
+   STREAM_LAYER_5 = 5,
+   STREAM_LAYER_6 = 6,
+   STREAM_LOW = 7,
+   STREAM_LAYER_COUNT_MAX = 8
+  };
+
+struct StreamLayerConfigInternal {
+  VideoDimensions dimensions;
+  int framerate;
+  int bitrate_kbps;
+  bool enable;
+  StreamLayerConfigInternal() : dimensions(0, 0), framerate(0), bitrate_kbps(STANDARD_BITRATE), enable(false) {}
+  StreamLayerConfigInternal(const StreamLayerConfigInternal& other) : dimensions(other.dimensions), framerate(other.framerate), bitrate_kbps(other.bitrate_kbps), enable(other.enable) {}
+  bool operator==(const StreamLayerConfigInternal& rhs) const {
+    return dimensions == rhs.dimensions && bitrate_kbps == rhs.bitrate_kbps && framerate == rhs.framerate && enable == rhs.enable;
+  }
+
+  StreamLayerConfigInternal& operator=(const SimulcastConfig::StreamLayerConfig& slc) {
+    dimensions = slc.dimensions;
+    framerate = slc.framerate;
+    enable = slc.enable;
+    return *this;
+  }
+
+  void reset() {
+    dimensions.width = 0;
+    dimensions.height = 0;
+    framerate = 0;
+    bitrate_kbps = STANDARD_BITRATE;
+    enable = false;
+  }
+};
+
+struct SimulcastConfigInternal {
+   StreamLayerConfigInternal simulcastlayerConfigs[STREAM_LAYER_COUNT_MAX];
+  
+  void reset() {
+    for (int i = STREAM_LAYER_1; i < STREAM_LAYER_COUNT_MAX; i++) {
+      simulcastlayerConfigs[i].reset();
+    }
+  }
+  
+  bool operator==(const SimulcastConfigInternal& rhs) const {
+    for (int i = 0; i < STREAM_LAYER_COUNT_MAX; i++) {
+      if (simulcastlayerConfigs[i] == rhs.simulcastlayerConfigs[i]) {
+        continue;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+
 enum VideoTrackType {
   LOCAL_VIDEO_TRACK,
   REMOTE_VIDEO_TRACK,
@@ -149,6 +208,12 @@ class IVideoTrack : public RefCountInterface {
   ~IVideoTrack() {}
 };
 
+struct SimulcastStreamProfile {
+  int width;
+  int height;
+  int framerate;
+  int bitrate;
+};
 /**
  * The statistics of the local video track.
  */
@@ -255,6 +320,8 @@ struct LocalVideoTrackStats {
   /** The brightness level of the video image captured by the local camera. See #CAPTURE_BRIGHTNESS_LEVEL_TYPE.
    */
   CAPTURE_BRIGHTNESS_LEVEL_TYPE capture_brightness_level;
+  
+  SimulcastStreamProfile simulcast_stream_profile[STREAM_LAYER_COUNT_MAX];
 
   LocalVideoTrackStats() : number_of_streams(0),
                            bytes_major_stream(0),
@@ -336,7 +403,7 @@ class ILocalVideoTrack : public IVideoTrack {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastConfigInternal& config, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Gets the state of the local video stream.
@@ -388,6 +455,9 @@ struct RemoteVideoTrackStats {
     * The bitrate (Kbps) received in the reported interval.
     */
   int receivedBitrate;
+  /** The decoder input frame rate (fps) of the remote video track.
+   */
+  int decoderInputFrameRate;
   /** The decoder output frame rate (fps) of the remote video track.
    */
   int decoderOutputFrameRate;
@@ -457,13 +527,17 @@ struct RemoteVideoTrackStats {
    decoder vender id, VideoCodecVenderId
   */
   uint32_t decoder_vender_id;
+  /**
+   The decoder codec type of the remote video track
+  */
+  uint32_t decoder_type;
 
   RemoteVideoTrackStats() : uid(0), delay(0), width(0), height(0),
-                            receivedBitrate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
+                            receivedBitrate(0), decoderInputFrameRate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
                             frameLossRate(0), packetLossRate(0), rxStreamType(VIDEO_STREAM_HIGH),
                             totalFrozenTime(0), frozenRate(0), received_bytes(0), totalDecodedFrames(0), avSyncTimeMs(0),
                             downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0),
-                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0) {}
+                            publishDuration(0), vqa_mos(0), vqa_avg_cost_ms(0), decoder_vender_id(0), decoder_type(0) {}
 };
 
 /**
