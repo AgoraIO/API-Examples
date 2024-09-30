@@ -38,6 +38,7 @@
 @interface CustomPcmAudioSource ()<AgoraRtcEngineDelegate, AgoraPcmSourceDelegate>
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UISwitch *pushPcmSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *pushMicrophoneSwitch;
 @property (nonatomic, strong)VideoView *localView;
 @property (nonatomic, strong)VideoView *remoteView;
 @property (nonatomic, strong)AgoraRtcEngineKit *agoraKit;
@@ -72,7 +73,7 @@
     [self.containerView layoutStream:@[self.localView, self.remoteView]];
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"output.raw" ofType:nil];
-    self.pcmSourcePush = [[AgoraPCMSourcePush alloc] initWithDelegate:self filePath:filePath sampleRate:44100 channelsPerFrame:1 bitPerSamples:16 samples:441 * 10];
+    self.pcmSourcePush = [[AgoraPCMSourcePush alloc] initWithDelegate:self filePath:filePath sampleRate:44100 channelsPerFrame:2 bitPerSamples:16 samples:441 * 10];
     
     // set up agora instance when view loaded
     AgoraRtcEngineConfig *config = [[AgoraRtcEngineConfig alloc] init];
@@ -82,17 +83,8 @@
     self.agoraKit = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
     
     NSString *channelName = [self.configs objectForKey:@"channelName"];
-    // make myself a broadcaster
-    [self.agoraKit setClientRole:(AgoraClientRoleBroadcaster)];
     // enable video module and set up video encoding configs
     [self.agoraKit enableAudio];
-    
-    AgoraVideoEncoderConfiguration *encoderConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(960, 540)
-                                                                                               frameRate:(AgoraVideoFrameRateFps15)
-                                                                                                 bitrate:15
-                                                                                         orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
-                                                                                              mirrorMode:(AgoraVideoMirrorModeAuto)];
-    [self.agoraKit setVideoEncoderConfiguration:encoderConfig];
     
     AgoraAudioTrackConfig *trackConfig = [[AgoraAudioTrackConfig alloc] init];
     trackConfig.enableLocalPlayback = YES;
@@ -117,12 +109,9 @@
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
-    options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = NO;
-    options.publishMicrophoneTrack = YES;
+    options.publishMicrophoneTrack = NO;
     options.publishCameraTrack = NO;
-    options.publishCustomAudioTrack = YES;
-    options.publishCustomAudioTrackId = self.trackId;
     options.clientRoleType = AgoraClientRoleBroadcaster;
     
     [[NetworkManager shared] generateTokenWithChannelName:channelName uid:0 success:^(NSString * _Nullable token) {
@@ -144,6 +133,13 @@
     }
     AgoraRtcChannelMediaOptions *mediaOption = [[AgoraRtcChannelMediaOptions alloc] init];
     mediaOption.publishCustomAudioTrack = sender.isOn;
+    mediaOption.publishCustomAudioTrackId = self.trackId;
+    [self.agoraKit updateChannelWithMediaOptions:mediaOption];
+}
+
+- (IBAction)pushMicrophone:(UISwitch*)sender {
+    AgoraRtcChannelMediaOptions *mediaOption = [[AgoraRtcChannelMediaOptions alloc] init];
+    mediaOption.publishMicrophoneTrack = sender.isOn;
     [self.agoraKit updateChannelWithMediaOptions:mediaOption];
 }
 
@@ -159,9 +155,9 @@
 // AgoraPcmSourcePushDelegate
 - (void)onAudioFrame:(void *)data {
     [self.agoraKit pushExternalAudioFrameRawData:data
-                                         samples:441 * 10
+                                         samples:441 * 10 * 2
                                       sampleRate:44100
-                                        channels:1
+                                        channels:2
                                          trackId:self.trackId
                                        timestamp:0];
 }

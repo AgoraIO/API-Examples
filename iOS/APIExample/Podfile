@@ -13,6 +13,8 @@ target 'APIExample' do
 #  pod 'MobileVLCKit', '3.5.1'
   pod 'SwiftLint', '~> 0.53.0'
   pod 'AgoraRtcEngine_iOS', '4.4.0'
+  pod 'SnapKit', '~> 5.7.0'
+
 #  pod 'sdk', :path => 'sdk.podspec'
 #    pod 'senseLib', :path => 'sense.podspec'
 #    pod 'bytedEffect', :path => 'bytedEffect.podspec'
