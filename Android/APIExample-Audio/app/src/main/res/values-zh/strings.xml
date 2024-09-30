@@ -32,7 +32,7 @@
     <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_raw_audio">原始音频数据</string>
     <string name="item_spatial_sound">空间音效</string>
-
+    <string name="permission">请授予权限</string>
     <string name="audiorouter_palyer">此示例演示在使用RTC通话中音频路由对第三方播放器的影响。</string>
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelaudioByToken">此示例演示了如何使用SDK加入带Token的频道进行纯语音通话的功能。</string>
