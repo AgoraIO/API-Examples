@@ -21,5 +21,7 @@
 "dZm-Rf-imt.normalTitle" = "相机对焦";
 "ug1-fz-GYz.normalTitle" = "相机对焦";
 
-"tOf-AP-HSe.placeholder"="本地渲染帧率(1-60)，默认15";
-"UFF-wU-Wze.placeholder"="远端渲染帧率(1-60)，默认15";
+"ZB2-jf-zOV.normalTitle" = "视频业务场景";
+
+"tOf-AP-HSe.placeholder" = "本地渲染帧率(1-60)，默认15";
+"UFF-wU-Wze.placeholder" = "远端渲染帧率(1-60)，默认15";

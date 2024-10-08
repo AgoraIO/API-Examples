@@ -185,6 +185,11 @@
 "The camera has changed:" = "摄像头已改变:";
 "CameraStabilizationMode" = "防抖:";
 
+"General"="通用场景";
+"Meeting"="会议场景";
+"1v1"="1v1 视频通话";
+"Live Show"="秀场直播";
+
 "Set_Voice_AI_Tuner"="设置AI调音器";
 "AI_Tunner_Mature_Male"="大叔声";
 "AI_Tunner_Fresh_Male"="清新男音";

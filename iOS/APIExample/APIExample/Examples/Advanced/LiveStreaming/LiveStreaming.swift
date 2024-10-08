@@ -14,6 +14,7 @@ class LiveStreamingEntry: UIViewController {
     @IBOutlet weak var preloadButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var cameraButton: UIButton?
+    @IBOutlet weak var videoScenarioButton: UIButton?
     let identifier = "LiveStreaming"
     var role: AgoraClientRole = .broadcaster
     private var isFirstFrame: Bool = false
@@ -127,6 +128,24 @@ class LiveStreamingEntry: UIViewController {
             sender.setTitle(key, for: .normal)
             self.agoraKit.setCameraCapturerConfiguration(config)
             self.cameraKey = key
+        }
+    }
+    
+    @IBAction func onTapVideoScenarioButton(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = [
+            AgoraApplicationScenarioType.applicationGeneralScenario.description(),
+            AgoraApplicationScenarioType.applicationMeetingScenario.description(),
+            AgoraApplicationScenarioType.application1V1Scenario.description(),
+            AgoraApplicationScenarioType.applicationLiveShowScenario.description()
+        ]
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
+            guard let self = self else { return }
+            let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
+            let type = AgoraApplicationScenarioType(rawValue: idx) ?? .applicationGeneralScenario
+            self.agoraKit.setVideoScenario(type)
+            self.videoScenarioButton?.setTitle(key, for: .normal)
         }
     }
     
