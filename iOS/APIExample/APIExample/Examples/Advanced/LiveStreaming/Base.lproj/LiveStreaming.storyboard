@@ -318,16 +318,14 @@
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5U-ta-1hj" userLabel="watermark">
                                 <rect key="frame" x="20" y="524.5" width="108" height="35"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="水印" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSq-Vu-o9H">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="水印" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSq-Vu-o9H">
                                         <rect key="frame" x="8" y="-2" width="37" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" name="btnPanelForeground"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-rd-5hC">
-                                        <rect key="frame" x="53" y="2" width="49" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-rd-5hC">
+                                        <rect key="frame" x="53" y="2" width="51" height="31"/>
                                         <connections>
                                             <action selector="onTapWatermarkSwitch:" destination="jxp-ZN-2yG" eventType="valueChanged" id="KnA-tb-0qI"/>
                                         </connections>
@@ -335,12 +333,16 @@
                                 </subviews>
                                 <color key="backgroundColor" name="btnPanelBackground"/>
                                 <constraints>
+                                    <constraint firstItem="dpb-rd-5hC" firstAttribute="centerY" secondItem="i5U-ta-1hj" secondAttribute="centerY" id="B66-bx-sex"/>
+                                    <constraint firstItem="dpb-rd-5hC" firstAttribute="leading" secondItem="nSq-Vu-o9H" secondAttribute="trailing" constant="8" symbolic="YES" id="Pbf-Mg-Qrk"/>
+                                    <constraint firstItem="dpb-rd-5hC" firstAttribute="centerY" secondItem="nSq-Vu-o9H" secondAttribute="centerY" id="Rmf-dG-Yo9"/>
+                                    <constraint firstAttribute="trailing" secondItem="dpb-rd-5hC" secondAttribute="trailing" constant="6" id="YTX-EX-a9o"/>
                                     <constraint firstAttribute="height" constant="35" id="YY8-rd-73l"/>
                                     <constraint firstAttribute="width" constant="108" id="hUe-Ww-F49"/>
                                 </constraints>
                             </view>
                             <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sOi-ZR-6Oj" userLabel="dualStream">
-                                <rect key="frame" x="141" y="551" width="146" height="55"/>
+                                <rect key="frame" x="229" y="551" width="146" height="55"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="大小流" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auZ-cF-RlC">
                                         <rect key="frame" x="8" y="6" width="51" height="27"/>
@@ -371,13 +373,13 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
-                                <rect key="frame" x="20" y="569.5" width="80" height="34.5"/>
+                                <rect key="frame" x="20" y="569.5" width="93.5" height="34.5"/>
                                 <color key="backgroundColor" name="btnPanelBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="Xdc-MD-QxT"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="截图" cornerStyle="fixed">
+                                <buttonConfiguration key="configuration" style="plain" title="本地截图" cornerStyle="fixed">
                                     <backgroundConfiguration key="background" cornerRadius="5">
                                         <color key="backgroundColor" name="btnPanelBackground"/>
                                         <color key="strokeColor" name="btnPanelBackground"/>
@@ -385,7 +387,27 @@
                                     <color key="baseForegroundColor" name="btnPanelForeground"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="kRb-DS-stE"/>
+                                    <action selector="onTakeLocalSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="GB4-SP-Qs4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lpn-6Z-VV3">
+                                <rect key="frame" x="127" y="569" width="93.5" height="35"/>
+                                <color key="backgroundColor" name="btnPanelBackground"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="EJL-Hg-zEY"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="VAQ-sf-npV"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="gUE-ju-pS0"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="远端截图" cornerStyle="fixed">
+                                    <backgroundConfiguration key="background" cornerRadius="5">
+                                        <color key="backgroundColor" name="btnPanelBackground"/>
+                                        <color key="strokeColor" name="btnPanelBackground"/>
+                                    </backgroundConfiguration>
+                                    <color key="baseForegroundColor" name="btnPanelForeground"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="ez8-p0-3uz"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wts-5Z-p7a" userLabel="UltraLowLatency">
@@ -467,6 +489,7 @@
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="45" id="Fn8-02-ePb"/>
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="10" id="GpK-P5-Dz2"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
+                            <constraint firstItem="lpn-6Z-VV3" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="13.5" id="JOL-0B-Kgk"/>
                             <constraint firstItem="dZm-Rf-imt" firstAttribute="leading" secondItem="v58-rP-HKa" secondAttribute="trailing" constant="10.5" id="LaR-vk-DTf"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="LsZ-af-6Wt"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="UFF-wU-Wze" secondAttribute="trailing" constant="-323" id="M4O-C8-oP4"/>
@@ -486,10 +509,11 @@
                             <constraint firstItem="CN0-n0-1Gh" firstAttribute="top" secondItem="v58-rP-HKa" secondAttribute="bottom" constant="10" id="iRF-aj-uoa"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="eGT-sd-I3g" secondAttribute="bottom" constant="3" id="ixF-7d-I3g"/>
-                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="41" id="jKl-x3-P12"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
                             <constraint firstItem="v58-rP-HKa" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="rjz-Va-GOW"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="pha-4w-IfR" secondAttribute="trailing" constant="21" id="sLP-Ue-h7l"/>
+                            <constraint firstItem="lpn-6Z-VV3" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="9.5" id="stx-ZD-gMQ"/>
+                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="lpn-6Z-VV3" secondAttribute="trailing" constant="8.5" id="svH-es-NYs"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="eGT-sd-I3g" secondAttribute="trailing" constant="90" id="t2I-pH-4sJ"/>
                             <constraint firstItem="tOf-AP-HSe" firstAttribute="top" secondItem="UFF-wU-Wze" secondAttribute="bottom" constant="12" id="tAF-9V-ijT"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>

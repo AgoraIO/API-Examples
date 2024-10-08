@@ -144,7 +144,8 @@ class LiveStreamingEntry: UIViewController {
             guard let self = self else { return }
             let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
             let type = AgoraApplicationScenarioType(rawValue: idx) ?? .applicationGeneralScenario
-            self.agoraKit.setVideoScenario(type)
+            let ret = self.agoraKit.setVideoScenario(type)
+            print("setVideoScenario[\(type.rawValue)] ret = \(ret)")
             self.videoScenarioButton?.setTitle(key, for: .normal)
         }
     }
@@ -457,6 +458,29 @@ class LiveStreamingMain: BaseViewController {
         let path = NSTemporaryDirectory().appending("1.png")
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
         showAlert(title: "Screenshot successful".localized, message: path)
+    }
+    
+    @IBAction func onTakeLocalSnapshot(_ sender: Any) {
+        let pickerView = PickerView()
+        let values: [AgoraVideoModulePosition] = [
+//            .postCapture,
+            .preRenderer,
+            .preEncoder,
+            .postCaptureOrigin
+        ]
+        pickerView.dataArray = values.map({ $0.description()})
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
+            guard let self = self else { return }
+            let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
+            let position = values[idx]
+            let config = AgoraSnapshotConfig()
+            config.position = position
+            config.filePath = NSTemporaryDirectory().appending("local_\(position.rawValue).png")
+            let ret = agoraKit.takeSnapshotWithConfig(0, config: config)
+            print("takeSnapshot ret: \(ret) path: \(config.filePath ?? "")")
+            showAlert(title: "Screenshot successful".localized, message: config.filePath ?? "")
+        }
     }
     @IBAction func onTapForegroundVideo(_ sender: UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground

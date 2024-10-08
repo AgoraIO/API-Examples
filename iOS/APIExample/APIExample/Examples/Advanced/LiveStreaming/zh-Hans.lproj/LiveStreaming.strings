@@ -9,7 +9,8 @@
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";
-"w4q-aT-JBc.normalTitle" = "截图";
+"w4q-aT-JBc.normalTitle" = "本地截图";
+"lpn-6Z-VV3.normalTitle" = "远端截图";
 
 "ohV-am-Acd.text" = "首帧出图";
 
