@@ -65,15 +65,23 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ug1-fz-GYz">
-                                        <rect key="frame" x="30" y="235" width="206" height="35"/>
+                                        <rect key="frame" x="30" y="235" width="166" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="2n6-ch-vfJ"/>
-                                            <constraint firstAttribute="width" constant="206" id="6sx-zg-CJ4"/>
+                                            <constraint firstAttribute="width" constant="166" id="6sx-zg-CJ4"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="CameraFocal"/>
                                         <connections>
                                             <action selector="onTapCameraFocalButton:" destination="O0d-ef-mTa" eventType="touchUpInside" id="hBD-bJ-coG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZB2-jf-zOV">
+                                        <rect key="frame" x="179" y="235" width="139" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Video Scenario"/>
+                                        <connections>
+                                            <action selector="onTapVideoScenarioButton:" destination="O0d-ef-mTa" eventType="touchUpInside" id="fzb-4V-MzB"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -88,11 +96,14 @@
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="1k3-bd-l8R" secondAttribute="bottom" constant="25" id="DUD-59-ryB"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37.5" id="Fzh-Ry-Cyf"/>
                                     <constraint firstItem="ug1-fz-GYz" firstAttribute="top" secondItem="S19-UR-C2c" secondAttribute="bottom" constant="16.5" id="JFo-9k-VHS"/>
+                                    <constraint firstItem="ZB2-jf-zOV" firstAttribute="leading" secondItem="ug1-fz-GYz" secondAttribute="trailing" constant="-17" id="KKl-wt-AVW"/>
                                     <constraint firstItem="Q0N-nV-bez" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="18" id="LHA-IH-a4H"/>
                                     <constraint firstItem="S19-UR-C2c" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="28" id="M4y-zq-16B"/>
                                     <constraint firstItem="ohV-am-Acd" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="37" id="U0S-YA-fEo"/>
                                     <constraint firstItem="S19-UR-C2c" firstAttribute="top" secondItem="ohV-am-Acd" secondAttribute="bottom" constant="30" id="ahx-nB-ru9"/>
                                     <constraint firstAttribute="height" constant="288" id="c9y-rL-vhW"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZB2-jf-zOV" secondAttribute="trailing" constant="56" id="gQY-kQ-9xZ"/>
+                                    <constraint firstItem="ZB2-jf-zOV" firstAttribute="top" secondItem="kbN-ZR-nNn" secondAttribute="bottom" constant="19" id="tPJ-oY-5p4"/>
                                     <constraint firstItem="Q0N-nV-bez" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="28" id="ysb-57-hko"/>
                                     <constraint firstAttribute="trailing" secondItem="GWc-L5-fZV" secondAttribute="trailing" constant="37.5" id="ze4-ah-O7j"/>
                                 </constraints>
@@ -111,7 +122,7 @@
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
                         <outlet property="joinButton" destination="kbN-ZR-nNn" id="kkw-5w-Nnv"/>
                         <outlet property="preloadButton" destination="S19-UR-C2c" id="QYb-aJ-DMZ"/>
-                        <outlet property="remoteRenderTextField" destination="UFF-wU-Wze" id="B5J-LR-LVs"/>
+                        <outlet property="videoScenarioButton" destination="ZB2-jf-zOV" id="Jwg-OE-njn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DXe-2A-qSu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
