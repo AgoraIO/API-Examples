@@ -177,6 +177,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var centerStageContainerView: UIView!
     @IBOutlet weak var CameraFocalButton: UIButton!
     @IBOutlet weak var cameraStabilizationButton: UIButton?
+    @IBOutlet weak var localRenderTextField: UITextField?
+    @IBOutlet weak var remoteRenderTextField: UITextField?
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -218,6 +220,9 @@ class LiveStreamingMain: BaseViewController {
         backgroundVideoContainer.addSubview(backgroundVideo)
         foregroundVideo.bindFrameToSuperviewBounds()
         backgroundVideo.bindFrameToSuperviewBounds()
+        
+        localRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        remoteRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         let modeKey = stabilizationModeParams.first?.keys.first ?? ""
         cameraStabilizationButton?.setTitle("\("CameraStabilizationMode".localized) \(modeKey)", for: .normal)
@@ -492,6 +497,24 @@ class LiveStreamingMain: BaseViewController {
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
+        }
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if let text = textField.text, let number = Int(text) {
+            if number > 60 {
+                textField.text = "60"
+            } else if number == 0 {
+                textField.text = ""
+            }
+        } else {
+            textField.text = ""
+        }
+         
+        if textField == localRenderTextField {
+            agoraKit.setLocalRenderTargetFps(.camera, targetFps: Int32(textField.text ?? "") ?? 15)
+        } else {
+            agoraKit.setRemoteRenderTargetFps(Int32(textField.text ?? "") ?? 15)
         }
     }
 }
