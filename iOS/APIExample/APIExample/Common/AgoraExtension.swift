@@ -339,3 +339,15 @@ extension AgoraApplicationScenarioType {
         }
     }
 }
+
+extension AgoraVideoModulePosition {
+    func description() -> String {
+        switch self {
+        case .postCapture: return "Post Capture".localized
+        case .preRenderer: return "PreRenderer".localized
+        case .preEncoder: return "PreEncoder".localized
+        case .postCaptureOrigin: return "Post Capture Origin".localized
+        @unknown default: return ""
+        }
+    }
+}
