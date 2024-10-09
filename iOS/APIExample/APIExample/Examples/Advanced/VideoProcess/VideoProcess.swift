@@ -44,6 +44,8 @@ class VideoProcessMain: BaseViewController {
     @IBOutlet weak var smoothSlider: UISlider!
     @IBOutlet weak var strengthSlider: UISlider!
     @IBOutlet weak var skinProtectSlider: UISlider!
+    @IBOutlet weak var whiteningSlider: UISlider?
+    @IBOutlet weak var beautyScrollView: UIScrollView?
 
     var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -54,6 +56,7 @@ class VideoProcessMain: BaseViewController {
     var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
+    var whintening = 0.5
     
     private var makeupParams = [String: Any]()
     private var enableFaceShape: Bool = false
@@ -63,6 +66,10 @@ class VideoProcessMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        if let beautyScrollView = beautyScrollView {
+            beautyScrollView.contentSize = CGSize(width: 800, height: beautyScrollView.frame.size.height)
+        }
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -172,17 +179,18 @@ class VideoProcessMain: BaseViewController {
         smoothSlider.value = beautifyOption.smoothnessLevel
         strengthSlider.value = Float(strength)
         skinProtectSlider.value = Float(skinProtect)
+        whiteningSlider?.value = Float(whintening)
     }
     
     @IBAction func onChangeBeauty(_ sender: UISwitch) {
-        if sender.isOn {
-            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
-                agoraKit.setBeautyEffectOptions(true, options: beautifyOption)
-            } else {
-                ToastView.show(text: "The feature is unavailable in the device!")
-            }
-        } else {
-            agoraKit.setBeautyEffectOptions(false, options: beautifyOption)
+        guard agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) else {
+            ToastView.show(text: "The feature is unavailable in the device!")
+            return
+        }
+            
+        agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
+        if let slider = whiteningSlider {
+            onWhinteningSlider(slider)
         }
     }
 
@@ -241,6 +249,15 @@ class VideoProcessMain: BaseViewController {
         options.strengthLevel = Float(strength)
         options.skinProtectLevel = Float(skinProtect)
         agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: options)
+    }
+    
+    @IBAction func onWhinteningSlider(_ sender: UISlider) {
+        let options = AgoraFilterEffectOptions()
+        options.path = "built_in_whiten_filter"
+        options.strength = sender.value
+        whintening = Double(sender.value)
+        let ret = agoraKit.setFilterEffectOptions(beautySwitch.isOn, options: options)
+        print("onWhinteningSlider: \(ret), \(options.strength)")
     }
     
     @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
