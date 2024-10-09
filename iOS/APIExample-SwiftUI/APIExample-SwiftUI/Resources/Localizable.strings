@@ -15,6 +15,7 @@
 "Local or remote recording" = "本地/远端录制";
 "Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
+"Transcoding" = "转码";
 "Media Injection" = "流媒体注入";
 "Video Metadata" = "SEI消息";
 "Voice Changer" = "美声/音效";
@@ -270,3 +271,5 @@
 "Pitch Correction" = "高音修正";
 "Tonic Mode" = "主音模式";
 "Tonic Pitch" = "主音音高";
+"Voice Conversion" = "语音转换";
+"Voice Formant" = "语音共振峰";

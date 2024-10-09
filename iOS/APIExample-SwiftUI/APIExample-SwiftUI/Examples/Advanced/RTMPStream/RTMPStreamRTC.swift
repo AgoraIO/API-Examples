@@ -1,24 +1,34 @@
 //
-//  VoiceChangerRTC.swift
+//  RTMStreamRTC.swift
 //  APIExample-SwiftUI
 //
-//  Created by qinhui on 2024/9/29.
+//  Created by qinhui on 2024/10/8.
 //
 
 import Foundation
 import AgoraRtcKit
 
-class VoiceChangerRTC: NSObject, ObservableObject {
+class RTMPStreamRTC: NSObject, ObservableObject {
+    @Published var transcodingState = true
+    @Published var isJoined = false
+    @Published var isPublished: Bool = false
+    @Published var rtmpUrl: String = "rtmp://push.webdemo.agoraio.cn/lbhd/test"
+
     var agoraKit: AgoraRtcEngineKit!
-    private var isJoined: Bool = false
     private var localView: VideoUIView?
     private var remoteView: VideoUIView?
+    private var remoteUid: UInt?
+    private var transcoding = AgoraLiveTranscoding.default()
+    private let CANVAS_WIDTH = 640
+    private let CANVAS_HEIGHT = 480
+
     
     func setupRTC(configs: [String: Any],
                   localView: VideoUIView,
                   remoteView: VideoUIView) {
         self.localView = localView
         self.remoteView = remoteView
+        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -27,25 +37,35 @@ class VoiceChangerRTC: NSObject, ObservableObject {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
-        
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-        // get channel name from configs
+        
         guard let channelName = configs["channelName"] as? String else {return}
-        let fps = GlobalSettings.shared.getFps()
-        let resolution = GlobalSettings.shared.getResolution()
-        let orientation = GlobalSettings.shared.getOrientation()
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
+        
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
+            .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation, mirrorMode: .auto))
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
         
-//        setupCanvasView(view: localView.videoView)
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localView.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
+        // you have to call startPreview to see local video
+        agoraKit.startPreview()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -60,6 +80,7 @@ class VoiceChangerRTC: NSObject, ObservableObject {
         option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
+        
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -67,27 +88,17 @@ class VoiceChangerRTC: NSObject, ObservableObject {
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                LogUtils.log(message: "joinChannel call failed: \(result), please check your params", level: .error)
             }
         })
     }
-    
-    private func setupCanvasView(view: UIView?) {
-         // set up local video to render your local camera preview
-         let videoCanvas = AgoraRtcVideoCanvas()
-         videoCanvas.uid = 0
-         // the view to be binded
-         videoCanvas.view = view
-         videoCanvas.renderMode = .hidden
-         agoraKit.setupLocalVideo(videoCanvas)
-         // you have to call startPreview to see local video
-         agoraKit.startPreview()
-     }
     
     func onDestory() {
         agoraKit.disableAudio()
         agoraKit.disableVideo()
         if isJoined {
+            if isPublished {
+                agoraKit.stopRtmpStream(rtmpUrl)
+            }
             agoraKit.stopPreview()
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -95,10 +106,42 @@ class VoiceChangerRTC: NSObject, ObservableObject {
         }
         AgoraRtcEngineKit.destroy()
     }
+    
+    func onPublish() {
+        if rtmpUrl.isEmpty {
+            return
+        }
+        
+        if isPublished {
+            // stop rtmp streaming
+            agoraKit.stopRtmpStream(rtmpUrl)
+        } else {
+            // check whether we need to enable transcoding
+            let transcodingEnabled = transcodingState
+            if transcodingEnabled {
+                // we will use transcoding to composite multiple hosts' video
+                // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
+                transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
+                agoraKit.startRtmpStream(withTranscoding: rtmpUrl, transcoding: transcoding)
+                
+                if let remoteUid = remoteUid {
+                    // add new user onto the canvas
+                    let user = AgoraLiveTranscodingUser()
+                    user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+                    user.uid = remoteUid
+                    self.transcoding.add(user)
+                    // remember you need to call setLiveTranscoding again if you changed the layout
+                    agoraKit.updateRtmpTranscoding(transcoding)
+                }
+                
+            } else {
+                agoraKit.startRtmpStreamWithoutTranscoding(rtmpUrl)
+            }
+        }
+    }
 }
 
-// agora rtc engine delegate events
-extension VoiceChangerRTC: AgoraRtcEngineDelegate {
+extension RTMPStreamRTC: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -116,14 +159,19 @@ extension VoiceChangerRTC: AgoraRtcEngineDelegate {
     /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(message: "error: \(errorCode)", level: .error)
-//        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        LogUtils.log(message: "error: \(errorCode.description)", level: .error)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
-        localView?.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        
+        // add transcoding user so the video stream will be involved
+        // in future RTMP Stream
+        let user = AgoraLiveTranscodingUser()
+        user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+        user.uid = uid
+        self.transcoding.add(user)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -131,8 +179,8 @@ extension VoiceChangerRTC: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        remoteView?.uid = uid
-        // Only one remote video view is available for this
+        
+        // only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -141,6 +189,12 @@ extension VoiceChangerRTC: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteView?.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // remove preivous user from the canvas
+        if let existingUid = remoteUid {
+            transcoding.removeUser(existingUid)
+        }
+        remoteUid = uid
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -148,8 +202,8 @@ extension VoiceChangerRTC: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        remoteView?.uid = 0
+        LogUtils.log(message: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
+        
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
@@ -159,10 +213,42 @@ extension VoiceChangerRTC: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // check whether we have enabled transcoding
+        let transcodingEnabled = transcodingState
+        if transcodingEnabled {
+            // remove user from canvas if current cohost left channel
+            if let existingUid = remoteUid {
+                transcoding.removeUser(existingUid)
+            }
+            remoteUid = nil
+            agoraKit.updateRtmpTranscoding(transcoding)
+        }
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionState, reason: AgoraConnectionChangedReason) {
-        LogUtils.log(message: "Connection state changed: \(state) \(reason)", level: .info)
+    /// callback for state of rtmp streaming, for both good and bad state
+    /// @param url rtmp streaming url
+    /// @param state state of rtmp streaming
+    /// @param reason
+    func rtcEngine(_ engine: AgoraRtcEngineKit,
+                   rtmpStreamingChangedToState url: String,
+                   state: AgoraRtmpStreamingState,
+                   reason: AgoraRtmpStreamingReason) {
+        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(reason.rawValue)", level: .info)
+        if state == .running {
+            isPublished = true
+            ToastView.show(text: "RTMP Publish Success")
+        } else if state == .failure {
+            ToastView.show(text: "RTMP Publish Failed: \(reason.rawValue)")
+        } else if state == .idle {
+            isPublished = false
+            ToastView.show(text: "RTMP Publish Stopped")
+        }
+    }
+    
+    /// callback when live transcoding is properly updated
+    func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
+        LogUtils.log(message: "live transcoding updated", level: .info)
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.

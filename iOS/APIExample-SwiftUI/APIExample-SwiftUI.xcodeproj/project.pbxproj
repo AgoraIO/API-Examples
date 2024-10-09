@@ -127,10 +127,10 @@
 		F728BA102CA6D5E9007813BB /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA0F2CA6D5E9007813BB /* RawVideoData.swift */; };
 		F728BA132CA9074B007813BB /* LocalVideoTranscoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA122CA9074B007813BB /* LocalVideoTranscoding.swift */; };
 		F728BA152CA9075D007813BB /* LocalVideoTranscodingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA142CA9075D007813BB /* LocalVideoTranscodingRTC.swift */; };
-		F728BA1B2CA93B29007813BB /* FusionCDNRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA1A2CA93B29007813BB /* FusionCDNRTC.swift */; };
-		F728BA1D2CA93B34007813BB /* FusionCDN.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA1C2CA93B34007813BB /* FusionCDN.swift */; };
 		F728BA202CA93EEF007813BB /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA1F2CA93EEF007813BB /* VoiceChanger.swift */; };
 		F728BA222CA93EF9007813BB /* VoiceChangerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA212CA93EF9007813BB /* VoiceChangerRTC.swift */; };
+		F728BA2E2CB53E04007813BB /* RTMPStreamRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA2D2CB53E04007813BB /* RTMPStreamRTC.swift */; };
+		F728BA302CB53E13007813BB /* RTMPStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA2F2CB53E13007813BB /* RTMPStream.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -312,10 +312,10 @@
 		F728BA0F2CA6D5E9007813BB /* RawVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
 		F728BA122CA9074B007813BB /* LocalVideoTranscoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscoding.swift; sourceTree = "<group>"; };
 		F728BA142CA9075D007813BB /* LocalVideoTranscodingRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscodingRTC.swift; sourceTree = "<group>"; };
-		F728BA1A2CA93B29007813BB /* FusionCDNRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FusionCDNRTC.swift; sourceTree = "<group>"; };
-		F728BA1C2CA93B34007813BB /* FusionCDN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FusionCDN.swift; sourceTree = "<group>"; };
 		F728BA1F2CA93EEF007813BB /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		F728BA212CA93EF9007813BB /* VoiceChangerRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChangerRTC.swift; sourceTree = "<group>"; };
+		F728BA2D2CB53E04007813BB /* RTMPStreamRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPStreamRTC.swift; sourceTree = "<group>"; };
+		F728BA2F2CB53E13007813BB /* RTMPStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPStream.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,7 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				F728BA1E2CA93EDA007813BB /* VoiceChanger */,
-				F728BA162CA9398E007813BB /* FusionCDN */,
+				F728BA162CA9398E007813BB /* RTMPStream */,
 				F728BA112CA90732007813BB /* LocalVideoTranscoding */,
 				F728BA0C2CA6D5CE007813BB /* RawVideoData */,
 				F728BA072CA6C1D6007813BB /* RawAudioData */,
@@ -900,13 +900,13 @@
 			path = LocalVideoTranscoding;
 			sourceTree = "<group>";
 		};
-		F728BA162CA9398E007813BB /* FusionCDN */ = {
+		F728BA162CA9398E007813BB /* RTMPStream */ = {
 			isa = PBXGroup;
 			children = (
-				F728BA1A2CA93B29007813BB /* FusionCDNRTC.swift */,
-				F728BA1C2CA93B34007813BB /* FusionCDN.swift */,
+				F728BA2D2CB53E04007813BB /* RTMPStreamRTC.swift */,
+				F728BA2F2CB53E13007813BB /* RTMPStream.swift */,
 			);
-			path = FusionCDN;
+			path = RTMPStream;
 			sourceTree = "<group>";
 		};
 		F728BA1E2CA93EDA007813BB /* VoiceChanger */ = {
@@ -1100,8 +1100,8 @@
 				E73F24832BA851870000B523 /* AgoraMetalShader.metal in Sources */,
 				F70DE5372C6B6DC900FFC922 /* PixelBufferRenderView.swift in Sources */,
 				E73F247B2BA851870000B523 /* UIView+CSshortFrame.m in Sources */,
-				F728BA1B2CA93B29007813BB /* FusionCDNRTC.swift in Sources */,
 				E73F24022BA82C440000B523 /* ContentView.swift in Sources */,
+				F728BA302CB53E13007813BB /* RTMPStream.swift in Sources */,
 				E73F24852BA851870000B523 /* AgoraYUVImageSourcePush.m in Sources */,
 				E71D54642BCCD14800656537 /* MediaPlayer.swift in Sources */,
 				F728BA152CA9075D007813BB /* LocalVideoTranscodingRTC.swift in Sources */,
@@ -1149,6 +1149,7 @@
 				E71D54732BCD270800656537 /* StreamEncryption.swift in Sources */,
 				E73F24E72BB519600000B523 /* CreateDataStreamRTC.swift in Sources */,
 				E71D54692BCD075700656537 /* PrecallTest.swift in Sources */,
+				F728BA2E2CB53E04007813BB /* RTMPStreamRTC.swift in Sources */,
 				E73F24BD2BAD89920000B523 /* AudioWaveform.swift in Sources */,
 				E73F24002BA82C440000B523 /* APIExample_SwiftUIApp.swift in Sources */,
 				E73F24F62BB66F5F0000B523 /* VideoProcess.swift in Sources */,
@@ -1196,7 +1197,6 @@
 				E73F24A02BA997E30000B523 /* JoinChannelVideo.swift in Sources */,
 				E73F24C52BB152450000B523 /* ARKitRTC.swift in Sources */,
 				E73F247C2BA851870000B523 /* ExternalAudio.mm in Sources */,
-				F728BA1D2CA93B34007813BB /* FusionCDN.swift in Sources */,
 				E73F24BC2BAD89920000B523 /* AudioWaveformRTC.swift in Sources */,
 				F728BA132CA9074B007813BB /* LocalVideoTranscoding.swift in Sources */,
 				E73F251C2BB6B22B0000B523 /* ScreenShare.swift in Sources */,
