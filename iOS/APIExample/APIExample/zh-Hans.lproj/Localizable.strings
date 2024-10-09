@@ -32,6 +32,7 @@
 "Precall Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";
+"Local Composite Graph" = "本地合图";
 "Super Resolution" = "超级分辨率";
 "Media Channel Relay" = "跨频道流转发";
 "Set Resolution" = "设置视频分辨率";

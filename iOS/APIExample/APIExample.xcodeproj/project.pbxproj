@@ -134,6 +134,9 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		DD6ED7F12CB69FFB007B3B5D /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */; };
+		DD6ED7F22CB69FFB007B3B5D /* LocalCompositeGraph.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD6ED7EE2CB69FFB007B3B5D /* LocalCompositeGraph.strings */; };
+		DD6ED7F32CB69FFB007B3B5D /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6ED7EF2CB69FFB007B3B5D /* LocalCompositeGraph.swift */; };
 		DD8A1F7C2CA5048D001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F7B2CA5048D001CEC51 /* AgoraPCMPlayer.swift */; };
 		DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD50252C205BF20050B344 /* TransparentRender.swift */; };
 		DDFD50282C205CF40050B344 /* TransparentRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDFD50272C205CF40050B344 /* TransparentRender.storyboard */; };
@@ -457,6 +460,9 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		DD6ED7EB2CB69FFB007B3B5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
+		DD6ED7ED2CB69FFB007B3B5D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalCompositeGraph.strings"; sourceTree = "<group>"; };
+		DD6ED7EF2CB69FFB007B3B5D /* LocalCompositeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraph.swift; sourceTree = "<group>"; };
 		DD8A1F7B2CA5048D001CEC51 /* AgoraPCMPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraPCMPlayer.swift; sourceTree = "<group>"; };
 		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
 		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
@@ -1156,6 +1162,7 @@
 				034C625C2524A06800296ECF /* VoiceChanger */,
 				038576772521E568003C369A /* MediaChannelRelay */,
 				0339BE9225203293007D4FDD /* ScreenShare */,
+				DD6ED7F02CB69FFB007B3B5D /* LocalCompositeGraph */,
 				0339BE6E251EF074007D4FDD /* MediaPlayer */,
 				03BEED00251C35A4005E78F4 /* AudioMixing */,
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
@@ -1178,6 +1185,16 @@
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DD6ED7F02CB69FFB007B3B5D /* LocalCompositeGraph */ = {
+			isa = PBXGroup;
+			children = (
+				DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */,
+				DD6ED7EE2CB69FFB007B3B5D /* LocalCompositeGraph.strings */,
+				DD6ED7EF2CB69FFB007B3B5D /* LocalCompositeGraph.swift */,
+			);
+			path = LocalCompositeGraph;
 			sourceTree = "<group>";
 		};
 		DDFD50242C205BDF0050B344 /* TransparentRender */ = {
@@ -1719,6 +1736,7 @@
 				E7163F832964149800EBBD55 /* ARKit.storyboard in Resources */,
 				8BA5459526AFEC8D00ED4295 /* SimpleFilter.storyboard in Resources */,
 				E7163F812964149800EBBD55 /* ARKit.strings in Resources */,
+				DD6ED7F12CB69FFB007B3B5D /* LocalCompositeGraph.storyboard in Resources */,
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
 				8BA5459426AFEC8D00ED4295 /* SimpleFilter.strings in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
@@ -1729,6 +1747,7 @@
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */,
 				E726C0042A96FD3A006870E2 /* AudioWaveform.storyboard in Resources */,
+				DD6ED7F22CB69FFB007B3B5D /* LocalCompositeGraph.strings in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
@@ -1874,6 +1893,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD6ED7F32CB69FFB007B3B5D /* LocalCompositeGraph.swift in Sources */,
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
 				E726BFFB2A949F70006870E2 /* AudioRouterPlayer.swift in Sources */,
@@ -2332,6 +2352,22 @@
 				A7CA48C324553CF600507435 /* Base */,
 			);
 			name = Popover.storyboard;
+			sourceTree = "<group>";
+		};
+		DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD6ED7EB2CB69FFB007B3B5D /* Base */,
+			);
+			name = LocalCompositeGraph.storyboard;
+			sourceTree = "<group>";
+		};
+		DD6ED7EE2CB69FFB007B3B5D /* LocalCompositeGraph.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD6ED7ED2CB69FFB007B3B5D /* zh-Hans */,
+			);
+			name = LocalCompositeGraph.strings;
 			sourceTree = "<group>";
 		};
 		E7163F7C2964149800EBBD55 /* ARKit.strings */ = {
