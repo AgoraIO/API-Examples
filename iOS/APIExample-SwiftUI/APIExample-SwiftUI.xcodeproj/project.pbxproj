@@ -131,6 +131,8 @@
 		F728BA222CA93EF9007813BB /* VoiceChangerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA212CA93EF9007813BB /* VoiceChangerRTC.swift */; };
 		F728BA2E2CB53E04007813BB /* RTMPStreamRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA2D2CB53E04007813BB /* RTMPStreamRTC.swift */; };
 		F728BA302CB53E13007813BB /* RTMPStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA2F2CB53E13007813BB /* RTMPStream.swift */; };
+		F728BA352CB6576F007813BB /* CustomAudioRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA342CB6576F007813BB /* CustomAudioRenderRTC.swift */; };
+		F728BA372CB6577E007813BB /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728BA362CB6577E007813BB /* CustomAudioRender.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -316,6 +318,8 @@
 		F728BA212CA93EF9007813BB /* VoiceChangerRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChangerRTC.swift; sourceTree = "<group>"; };
 		F728BA2D2CB53E04007813BB /* RTMPStreamRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPStreamRTC.swift; sourceTree = "<group>"; };
 		F728BA2F2CB53E13007813BB /* RTMPStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPStream.swift; sourceTree = "<group>"; };
+		F728BA342CB6576F007813BB /* CustomAudioRenderRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAudioRenderRTC.swift; sourceTree = "<group>"; };
+		F728BA362CB6577E007813BB /* CustomAudioRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -476,6 +480,7 @@
 		E73F240E2BA82D4B0000B523 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F728BA332CB65703007813BB /* CustomAudioRender */,
 				F728BA1E2CA93EDA007813BB /* VoiceChanger */,
 				F728BA162CA9398E007813BB /* RTMPStream */,
 				F728BA112CA90732007813BB /* LocalVideoTranscoding */,
@@ -918,6 +923,15 @@
 			path = VoiceChanger;
 			sourceTree = "<group>";
 		};
+		F728BA332CB65703007813BB /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				F728BA342CB6576F007813BB /* CustomAudioRenderRTC.swift */,
+				F728BA362CB6577E007813BB /* CustomAudioRender.swift */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1132,6 +1146,7 @@
 				F728B9F32CA3FB12007813BB /* LiveStreamingRTC.swift in Sources */,
 				E71D54722BCD270800656537 /* StreamEncryptionRTC.swift in Sources */,
 				E73F248D2BA851870000B523 /* KFMP4Demuxer.m in Sources */,
+				F728BA352CB6576F007813BB /* CustomAudioRenderRTC.swift in Sources */,
 				E73F24F02BB6645C0000B523 /* RhythmPlayer.swift in Sources */,
 				E73F24882BA851870000B523 /* NetworkManager.swift in Sources */,
 				E73F24AD2BAAC6E70000B523 /* JoinChannelVideoRecorder.swift in Sources */,
@@ -1160,6 +1175,7 @@
 				E73F248A2BA851870000B523 /* ARVideoRenderer.swift in Sources */,
 				E71D547C2BCE1EB900656537 /* QuickSwitchChannelRTC.swift in Sources */,
 				E71D546E2BCD176B00656537 /* AudioMixing.swift in Sources */,
+				F728BA372CB6577E007813BB /* CustomAudioRender.swift in Sources */,
 				E73F24AE2BAAC6E70000B523 /* JoinChannelVideoRecorderRTC.swift in Sources */,
 				E79DFB622BBA545300904B08 /* PickerView.swift in Sources */,
 				F728B9F12CA3FAFE007813BB /* LiveStreaming.swift in Sources */,

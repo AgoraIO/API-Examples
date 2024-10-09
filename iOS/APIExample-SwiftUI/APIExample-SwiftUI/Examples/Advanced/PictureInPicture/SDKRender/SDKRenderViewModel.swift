@@ -72,6 +72,7 @@ class SDKRenderViewModel: NSObject, ObservableObject {
             rtcEngine.stopPreview()
             rtcEngine.leaveChannel(nil)
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     func addRenderView(renderView: VideoView) {

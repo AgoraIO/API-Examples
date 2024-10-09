@@ -58,6 +58,12 @@ class LiveStreamingRTC: NSObject, ObservableObject {
         self.configs = configs
         self.backgroundView = localView
         self.foregroundView = remoteView
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.channelProfile = .liveBroadcasting
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        Util.configPrivatization(agoraKit: agoraKit)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         if let isFirstFrame = configs["isFirstFrame"] as? Bool, isFirstFrame == true {
             agoraKit.enableInstantMediaRendering()
@@ -70,7 +76,6 @@ class LiveStreamingRTC: NSObject, ObservableObject {
         showUltraLowEntry = role == .audience
         showLinkStreamEntry = role == .audience
         
-        self.agoraKit.addDelegate(self)
         updateClientRole(role)
         
         // enable video module and set up video encoding configs

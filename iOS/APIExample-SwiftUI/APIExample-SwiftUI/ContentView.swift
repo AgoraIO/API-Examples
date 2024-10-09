@@ -52,6 +52,8 @@ struct ContentView: View {
                      view: AnyView(VoiceChangerEntry())),
             MenuItem(name: "RTMP Streaming".localized,
                      view: AnyView(RTMPStreamEntry())),
+            MenuItem(name: "Custom Audio Render".localized,
+                     view: AnyView(CustomAudioRenderEntry())),
             MenuItem(name: "Picture In Picture".localized,
                      view: AnyView(PictureInPictureEntry())),
             MenuItem(name: "Quick Switch Channel".localized,
