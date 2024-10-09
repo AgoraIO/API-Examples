@@ -33,7 +33,10 @@
 "plA-5C-vDg.title" = "Video Denoise";
 
 /* Class = "NSTextFieldCell"; title = "美白"; ObjectID = "q1I-U0-llK"; */
-"q1I-U0-llK.title" = "Whitening";
+"q1I-U0-llK.title" = "Lightening";
 
 /* Class = "NSTextFieldCell"; title = "平滑"; ObjectID = "sFK-pV-vaj"; */
 "sFK-pV-vaj.title" = "Smoothing";
+
+
+"AAl-Un-v63.title" = "Whitening";
