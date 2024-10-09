@@ -72,3 +72,6 @@
 
 /* Class = "UIButton"; normalTitle = "Make Up"; ObjectID = "FVk-N0-Zza"; */
 "FVk-N0-Zza.normalTitle" = "美妆";
+
+/* Class = "UILabel"; text = "Whitening"; ObjectID = "nVP-eV-sen"; */
+"nVP-eV-sen.text" = "提亮";
