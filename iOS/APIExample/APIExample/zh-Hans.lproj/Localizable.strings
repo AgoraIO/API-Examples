@@ -188,6 +188,9 @@
 "The camera has changed:" = "摄像头已改变:";
 "CameraStabilizationMode" = "防抖:";
 
+"Start Audio Mixing" = "开启音频转发";
+"Stop Audio Mixing" = "停止音频转发";
+
 "General"="通用场景";
 "Meeting"="会议场景";
 "1v1"="1v1 视频通话";
