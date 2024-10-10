@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="259.66666666666669" width="335" height="138"/>
+                                <rect key="frame" x="20" y="262.33333333333331" width="335" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
                                         <rect key="frame" x="33.666666666666657" y="20" width="268" height="34"/>
@@ -45,16 +45,16 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QIl-UK-Ssb">
-                                <rect key="frame" x="60" y="259.66666666666669" width="255" height="0.0"/>
+                                <rect key="frame" x="60" y="262.33333333333331" width="255" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNh-a6-nSk" userLabel="Audio Scenario">
-                                <rect key="frame" x="53.666666666666657" y="181.66666666666666" width="268" height="44"/>
+                                <rect key="frame" x="53.666666666666657" y="184.33333333333334" width="268" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Scenario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0E-5B-IED" userLabel="Audio Scenario">
-                                        <rect key="frame" x="0.0" y="11.666666666666687" width="114.66666666666667" height="20.666666666666671"/>
+                                        <rect key="frame" x="0.0" y="11.666666666666659" width="114.66666666666667" height="20.666666666666671"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="videoPlaceholder"/>
                                         <nil key="highlightedColor"/>
@@ -76,10 +76,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rn1-Lz-WLl" userLabel="Audio Profile">
-                                <rect key="frame" x="53.666666666666657" y="225.66666666666666" width="268" height="43.999999999999972"/>
+                                <rect key="frame" x="53.666666666666657" y="228.33333333333334" width="268" height="44.000000000000028"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUn-XK-AS2">
-                                        <rect key="frame" x="0.0" y="11.666666666666687" width="97" height="20.666666666666671"/>
+                                        <rect key="frame" x="0.0" y="11.666666666666659" width="97" height="20.666666666666671"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="videoPlaceholder"/>
                                         <nil key="highlightedColor"/>
@@ -138,11 +138,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44.000000000000028" width="375" height="441.66666666666674"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="438"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpO-Je-BwP" userLabel="adjustRecordingSignalVolume">
-                                <rect key="frame" x="0.0" y="578.33333333333337" width="375" height="48"/>
+                                <rect key="frame" x="0.0" y="578.66666666666663" width="375" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="K3u-bf-uaw">
                                         <rect key="frame" x="240.66666666666666" y="9" width="116.33333333333334" height="31"/>
@@ -169,7 +169,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rjn-1J-hHR" userLabel="adjustPlaybackSignalVolume">
-                                <rect key="frame" x="0.0" y="626.33333333333337" width="375" height="48"/>
+                                <rect key="frame" x="0.0" y="626.66666666666663" width="375" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="sCB-IW-Q8u">
                                         <rect key="frame" x="240.66666666666666" y="9" width="116.33333333333334" height="31"/>
@@ -196,7 +196,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GY1-XL-g0X" userLabel="inEarMonitoring">
-                                <rect key="frame" x="0.0" y="674.33333333333337" width="375" height="48"/>
+                                <rect key="frame" x="0.0" y="674.66666666666663" width="375" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="InEar Monitoring" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iru-5f-bbo">
                                         <rect key="frame" x="20.000000000000007" y="16" width="99.666666666666686" height="16"/>
@@ -205,7 +205,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YmM-iU-Elh">
-                                        <rect key="frame" x="306" y="8.6666666666666288" width="51" height="31"/>
+                                        <rect key="frame" x="306" y="8.3333333333332575" width="51" height="31"/>
                                         <connections>
                                             <action selector="toggleInEarMonitoring:" destination="jxp-ZN-2yG" eventType="valueChanged" id="qPp-Rs-p1u"/>
                                         </connections>
@@ -222,7 +222,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pHj-Bj-PTD" userLabel="inEarMonitoringVolume">
-                                <rect key="frame" x="0.0" y="722.33333333333337" width="375" height="48"/>
+                                <rect key="frame" x="0.0" y="722.66666666666663" width="375" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="4fm-rd-x2n">
                                         <rect key="frame" x="240.66666666666666" y="9" width="116.33333333333334" height="31"/>
@@ -251,38 +251,70 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G65-cd-JJr">
-                                <rect key="frame" x="16" y="525.66666666666663" width="343" height="52.666666666666629"/>
+                                <rect key="frame" x="16" y="528" width="343" height="50.666666666666629"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Scenario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sL-pn-gKs">
-                                        <rect key="frame" x="0.0" y="17.333333333333371" width="103.33333333333333" height="18"/>
+                                        <rect key="frame" x="0.0" y="16.333333333333371" width="103.33333333333333" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZSJ-cf-f63" userLabel="Scenario Btn">
-                                        <rect key="frame" x="268" y="11" width="67" height="31"/>
+                                        <rect key="frame" x="273.33333333333331" y="11.333333333333371" width="61.666666666666686" height="28"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Button">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="setAudioScenario:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="MYk-BJ-Maa"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="ZSJ-cf-f63" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8sL-pn-gKs" secondAttribute="trailing" constant="8" symbolic="YES" id="BXm-eX-eqv"/>
                                     <constraint firstItem="ZSJ-cf-f63" firstAttribute="centerY" secondItem="G65-cd-JJr" secondAttribute="centerY" id="Dcj-i2-D2f"/>
+                                    <constraint firstItem="8sL-pn-gKs" firstAttribute="top" secondItem="G65-cd-JJr" secondAttribute="top" constant="16.333333333333371" id="Ero-Ex-5vX"/>
                                     <constraint firstItem="8sL-pn-gKs" firstAttribute="leading" secondItem="G65-cd-JJr" secondAttribute="leading" id="GkH-Qb-yns"/>
                                     <constraint firstItem="8sL-pn-gKs" firstAttribute="centerY" secondItem="G65-cd-JJr" secondAttribute="centerY" id="PDl-N6-LCv"/>
+                                    <constraint firstItem="ZSJ-cf-f63" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8sL-pn-gKs" secondAttribute="trailing" constant="8" symbolic="YES" id="fqY-Vj-8ax"/>
                                     <constraint firstAttribute="trailing" secondItem="ZSJ-cf-f63" secondAttribute="trailing" constant="8" id="pTe-7F-m1a"/>
+                                    <constraint firstItem="ZSJ-cf-f63" firstAttribute="top" secondItem="G65-cd-JJr" secondAttribute="top" constant="11.333333333333371" id="udl-ah-OmP"/>
                                 </constraints>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Relay Channel" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C45-aE-S4p">
+                                <rect key="frame" x="16.000000000000007" y="489.33333333333331" width="119.66666666666669" height="33.999999999999943"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="119.66666666666669" id="Num-Jq-yBo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="jxp-ZN-2yG" id="pf8-ro-UKO"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QU9-AY-IUX">
+                                <rect key="frame" x="260" y="489.33333333333331" width="99" height="27.999999999999943"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="6nk-26-0za"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="99" id="f0s-9l-gmF"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Start">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="dvI-H0-w0B"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="QU9-AY-IUX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="C45-aE-S4p" secondAttribute="trailing" constant="8" symbolic="YES" id="8jh-6B-79J"/>
+                            <constraint firstItem="C45-aE-S4p" firstAttribute="leading" secondItem="G65-cd-JJr" secondAttribute="leading" id="AKw-Nj-QXP"/>
                             <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="40" id="Dbq-8W-sYk"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="Ejx-3p-Tir"/>
                             <constraint firstItem="GY1-XL-g0X" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="FTe-hM-YV2"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="G65-cd-JJr" secondAttribute="trailing" constant="16" id="GM6-m7-x7E"/>
+                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="C45-aE-S4p" secondAttribute="bottom" constant="4.6666666666667425" id="H3q-eX-rO8"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="top" secondItem="G65-cd-JJr" secondAttribute="bottom" id="LUB-ux-44R"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="NTD-qH-KTr"/>
                             <constraint firstItem="GY1-XL-g0X" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="Y4R-ov-Xa8"/>
@@ -294,19 +326,26 @@
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="width" secondItem="sSr-Z8-XSr" secondAttribute="width" id="h6G-jt-mkC"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="hfz-wu-F5K"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
+                            <constraint firstAttribute="bottom" secondItem="C45-aE-S4p" secondAttribute="bottom" constant="289" id="hrT-tk-tIO"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="bottom" constant="7.6666666666666288" id="iqU-0k-VdA"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
+                            <constraint firstItem="C45-aE-S4p" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="1.3333333333332575" id="mJb-jm-z4Q"/>
+                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="ZdT-KJ-IC4" secondAttribute="top" constant="527.66666666666674" id="vk2-V2-Fwe"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="bottom" secondItem="Rjn-1J-hHR" secondAttribute="top" id="wKd-Na-ieb"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
+                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="QU9-AY-IUX" secondAttribute="bottom" constant="10.666666666666742" id="wgx-RR-Ugv"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="QU9-AY-IUX" secondAttribute="trailing" constant="16" id="yui-1P-5Z7"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
                         <outlet property="inEarMonitoringSwitch" destination="YmM-iU-Elh" id="9YK-ii-fCV"/>
                         <outlet property="inEarMonitoringVolumeSlider" destination="4fm-rd-x2n" id="aex-M3-Ju1"/>
+                        <outlet property="mixedButton" destination="QU9-AY-IUX" id="Tgy-nI-8ir"/>
                         <outlet property="playbackVolumeSlider" destination="sCB-IW-Q8u" id="i9a-mF-ZgI"/>
                         <outlet property="recordingVolumeSlider" destination="K3u-bf-uaw" id="fcW-SS-Rut"/>
+                        <outlet property="relayChannelTextField" destination="C45-aE-S4p" id="JjB-03-4Nx"/>
                         <outlet property="scenarioBtn" destination="ZSJ-cf-f63" id="OBj-Kc-QlZ"/>
                     </connections>
                 </viewController>
