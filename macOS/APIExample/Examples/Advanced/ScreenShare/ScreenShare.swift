@@ -262,7 +262,6 @@ class ScreenShare: BaseViewController {
                 mediaOptions.publishCameraTrack = false
                 mediaOptions.publishScreenTrack = true
                 agoraKit.updateChannel(with: mediaOptions)
-                agoraKit.startPreview()
                 setupLocalPreview(isScreenSharing: true)
             }
         } else {

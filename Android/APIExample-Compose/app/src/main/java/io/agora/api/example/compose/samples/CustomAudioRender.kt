@@ -205,7 +205,7 @@ fun CustomAudioRender() {
 
 
 @Composable
-fun CustomAudioRenderView(
+private fun CustomAudioRenderView(
     videoIdList: List<Int>,
     statsMap: Map<Int, AudioStatsInfo> = mapOf(),
     channelName: String = "",

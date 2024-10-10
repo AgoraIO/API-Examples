@@ -224,7 +224,7 @@ fun SendDataStream() {
 }
 
 @Composable
-fun SendDataStreamView(
+private fun SendDataStreamView(
     rtcEngine: RtcEngine?,
     channelName: String,
     isJoined: Boolean,

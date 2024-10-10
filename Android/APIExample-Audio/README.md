@@ -31,6 +31,7 @@ To build and run the sample application, get an App Id:
     // assign token and certificate to null if you have not enabled app certificate
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
     // assign token and certificate to null if you have not enabled app certificate or you have set the certificate above.
+    // PS：It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
 

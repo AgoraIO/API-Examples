@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.InputRaw
@@ -35,6 +37,7 @@ import io.agora.rtc2.IMetadataObserver
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
+import io.agora.rtc2.video.AgoraMetadata
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
@@ -168,8 +171,8 @@ fun MediaMetadata() {
                     return data
                 }
 
-                override fun onMetadataReceived(buffer: ByteArray?, uid: Int, timeStampMs: Long) {
-                    receivedMetadata = buffer?.toString(Charsets.UTF_8) ?: ""
+                override fun onMetadataReceived(metadata: AgoraMetadata) {
+                    receivedMetadata = metadata.data?.toString(Charsets.UTF_8) ?: ""
                 }
 
             }, IMetadataObserver.VIDEO_METADATA)
@@ -256,7 +259,7 @@ fun MediaMetadata() {
 
 
 @Composable
-fun MediaMetadataView(
+private fun MediaMetadataView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -306,8 +309,8 @@ fun MediaMetadataView(
 
         InputRaw(
             text = "",
-            label = "视频元数据",
-            btnText = "发送",
+            label = stringResource(id = R.string.metadata_video),
+            btnText = stringResource(id = R.string.send),
             enable = isJoined
         ) {
             onVideoMetadataSend(it)

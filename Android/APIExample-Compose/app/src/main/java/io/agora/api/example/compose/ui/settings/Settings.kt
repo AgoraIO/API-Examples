@@ -19,9 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.APIExampleScaffold
 import io.agora.api.example.compose.ui.common.DropdownMenuRaw
@@ -32,7 +34,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration
 @Composable
 fun Settings(onBackClick: () -> Unit) {
     APIExampleScaffold(
-        topBarTitle = "Settings",
+        topBarTitle = stringResource(id = R.string.settings),
         showBackNavigationIcon = true,
         onBackClick = onBackClick
     ) { paddingValues ->
@@ -69,7 +71,7 @@ fun Settings(onBackClick: () -> Unit) {
                     VideoEncoderConfiguration.VD_3840x2160,
                 )
                 DropdownMenuRaw(
-                    title = "Dimension",
+                    title = stringResource(id = R.string.resolution),
                     options = dimensions.map {
                         it.toText() to it
                     },
@@ -89,7 +91,7 @@ fun Settings(onBackClick: () -> Unit) {
                     VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_60,
                 )
                 DropdownMenuRaw(
-                    title = "FrameRate",
+                    title = stringResource(id = R.string.frame_rate),
                     options = frameRates.map { it.toText()  to it},
                     selectedValue = SettingPreferences.getVideoFrameRate(),
                 ) { _, option ->
@@ -103,7 +105,7 @@ fun Settings(onBackClick: () -> Unit) {
                     VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT,
                 )
                 DropdownMenuRaw(
-                    title = "Orientation",
+                    title = stringResource(id = R.string.orientation),
                     options = orientationMode.map { it.toText() to it},
                     selectedValue = SettingPreferences.getOrientationMode(),
                 ) { _, option ->
@@ -113,7 +115,7 @@ fun Settings(onBackClick: () -> Unit) {
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))
 
                 DropdownMenuRaw(
-                    title = "Area",
+                    title = stringResource(id = R.string.area),
                     options = listOf(
                         "Glob" to RtcEngineConfig.AreaCode.AREA_CODE_GLOB,
                         "China" to RtcEngineConfig.AreaCode.AREA_CODE_CN,

@@ -8,7 +8,7 @@
 
 #include "AgoraBase.h"
 #include "AgoraRefPtr.h"
-#include <api/cpp/ahpl_ares_class.h>
+#include <api/cpp/aosl_ares_class.h>
 
 namespace agora {
 namespace rtc {
@@ -91,7 +91,7 @@ class IScreenCapturer : public RefCountInterface {
    * - < 0: Failure.
    *   - ERR_NOT_READY: No screen or window is being shared.
    */
-  virtual int setContentHint(VIDEO_CONTENT_HINT contentHint, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setContentHint(VIDEO_CONTENT_HINT contentHint, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Updates the screen capture region.
@@ -103,19 +103,19 @@ class IScreenCapturer : public RefCountInterface {
    * - < 0: Failure.
    *   - No screen or window is being shared.
    */
-  virtual int updateScreenCaptureRegion(const Rectangle& regionRect, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int updateScreenCaptureRegion(const Rectangle& regionRect, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set orientation of the captured screen image
    * @param VIDEO_ORIENTATION orientaion of the device 0(by default), 90, 180, 270
    */
-  virtual int setScreenOrientation(VIDEO_ORIENTATION orientation, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setScreenOrientation(VIDEO_ORIENTATION orientation, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set frame rate of the screen capture source
    * @param rate frame rate (in fps)
    */
-  virtual int setFrameRate(int rate, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setFrameRate(int rate, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
 #if defined(__ANDROID__)
   /**
@@ -155,7 +155,7 @@ class IScreenCapturer2 : public RefCountInterface {
    * - < 0: Failure.
    *   - ERR_INVALID_ARGUMENT if data is null.
    */
-  virtual int setScreenCaptureDimensions(const VideoDimensions& dimensions, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setScreenCaptureDimensions(const VideoDimensions& dimensions, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Updates the screen capture region.
@@ -167,13 +167,13 @@ class IScreenCapturer2 : public RefCountInterface {
    * - < 0: Failure.
    *   - No screen or window is being shared.
    */
-  virtual int updateScreenCaptureRegion(const Rectangle& regionRect, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int updateScreenCaptureRegion(const Rectangle& regionRect, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set frame rate of the screen capture source
    * @param rate frame rate (in fps)
    */
-  virtual int setFrameRate(int rate, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setFrameRate(int rate, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set channels and sample rate of screen audio capturing
@@ -183,7 +183,7 @@ class IScreenCapturer2 : public RefCountInterface {
    * - 0: Sucess.
    * - < 0: Failure
    */
-  virtual int setAudioRecordConfig(int channels, int sampleRate, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setAudioRecordConfig(int channels, int sampleRate, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Set volume of screen audio capturing
@@ -192,7 +192,7 @@ class IScreenCapturer2 : public RefCountInterface {
    * - 0: Sucess.
    * - < 0: Failure
    */
-  virtual int setAudioVolume(uint32_t volume, ahpl_ref_t ares = AHPL_REF_INVALID) = 0;
+  virtual int setAudioVolume(uint32_t volume, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
  protected:
   virtual ~IScreenCapturer2() {}

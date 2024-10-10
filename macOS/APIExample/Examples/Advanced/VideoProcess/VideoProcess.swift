@@ -30,10 +30,11 @@ class VideoProcess: BaseViewController {
     @IBOutlet weak var skinProtectLabel: NSTextField!
     
     @IBOutlet weak var beautySwitch: NSSwitch!
-    @IBOutlet weak var whiteningSlider: NSSlider!
+    @IBOutlet weak var lightenSlider: NSSlider!
     @IBOutlet weak var ruddySlider: NSSlider!
     @IBOutlet weak var sharpSlider: NSSlider!
     @IBOutlet weak var smoothingSlider: NSSlider!
+    @IBOutlet weak var whiteningSlider: NSSlider?
     
     var videos: [VideoView] = []
     let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
@@ -42,6 +43,7 @@ class VideoProcess: BaseViewController {
     var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
+    var whintening = 0.5
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -95,7 +97,7 @@ class VideoProcess: BaseViewController {
         strenghtLabel.stringValue = "Strength".localized
         skinProtectLabel.stringValue = "Skin Protect".localized
         
-        whiteningSlider.floatValue = beautifyOption.lighteningLevel
+        lightenSlider.floatValue = beautifyOption.lighteningLevel
         ruddySlider.floatValue = beautifyOption.rednessLevel
         sharpSlider.floatValue = beautifyOption.sharpnessLevel
         smoothingSlider.floatValue = beautifyOption.smoothnessLevel
@@ -220,7 +222,7 @@ class VideoProcess: BaseViewController {
         }
     }
     
-    @IBAction func onWhiteningSliderChange(_ sender: NSSlider) {
+    @IBAction func onLightenSliderChange(_ sender: NSSlider) {
         beautifyOption.lighteningLevel = sender.floatValue
         agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
     }
@@ -238,6 +240,15 @@ class VideoProcess: BaseViewController {
     @IBAction func onSmoothingSliderChange(_ sender: NSSlider) {
         beautifyOption.smoothnessLevel = sender.floatValue
         agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
+    }
+    
+    @IBAction func onWhinteningSliderChange(_ sender: NSSlider) {
+        let options = AgoraFilterEffectOptions()
+        options.path = "built_in_whiten_filter"
+        options.strength = sender.floatValue
+        whintening = sender.doubleValue
+        let ret = agoraKit.setFilterEffectOptions(beautySwitch.state == .on, options: options)
+        print("onWhinteningSlider: \(ret), \(options.strength)")
     }
     
     @IBAction func onVirtualBackgroundSwitchChange(_ sender: NSSwitch) {

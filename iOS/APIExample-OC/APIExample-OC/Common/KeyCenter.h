@@ -31,12 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
  Agora provides App certificate to generate Token. You can deploy and generate a token on your server,
  or use the console to generate a temporary token.
  In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project with the App Certificate enabled,
- then the APP Certificate can be found in the project detail page.
- PS: If the project does not have certificates enabled, leave this field blank.
+ then the APP Certificate can be found in the project detail page.If the project does not have certificates enabled, leave this field blank.
+ PS: It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
  声网APP证书
  Agora 提供 App certificate 用以生成 Token。您可以在您的服务器部署并生成 Token，或者使用控制台生成临时的 Token。
- 进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。
- 注意：如果项目没有开启证书鉴权，这个字段留空。
+ 进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。如果项目没有开启证书鉴权，这个字段留空。
+ 注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
  */
 + (nullable NSString *)Certificate;
 

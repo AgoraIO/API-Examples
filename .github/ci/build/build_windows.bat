@@ -38,6 +38,7 @@ REM pr: output test.zip to workspace dir
 REM others: Rename the zip package name yourself, But need copy it to workspace dir
 REM ##################################
 
+echo compile_project: %compile_project%
 echo Package_Publish: %Package_Publish%
 echo is_tag_fetch: %is_tag_fetch%
 echo arch: %arch%
@@ -84,15 +85,11 @@ xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-e
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
 dir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
-copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
+copy result.zip %WORKSPACE%\\withAPIExample_%BUILD_NUMBER%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
+if %compile_project% EQU false goto FINAL
 cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
-echo "compile start..."
-call installThirdParty.bat
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
-7z a -tzip result.zip -r Release
-copy result.zip %WORKSPACE%\\APIExample_windows_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_Release_exe.zip
-del /F result.zip
-echo "compile done."
+call cloud_build.bat
+:FINAL

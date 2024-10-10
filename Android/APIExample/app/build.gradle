@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply from: "${rootDir.absolutePath}/git-hooks.gradle"
 apply from: 'vendors.gradle'
 
-def agoraSdkVersion = "4.3.1"
+def agoraSdkVersion = "4.4.1"
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
 
@@ -24,10 +24,28 @@ android {
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
     }
 
+    signingConfigs {
+        myConfig {
+            storeFile new File(rootProject.rootDir.absolutePath + "/keystore.key")
+            storePassword "965606"
+            keyAlias "agora"
+            keyPassword "965606"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 

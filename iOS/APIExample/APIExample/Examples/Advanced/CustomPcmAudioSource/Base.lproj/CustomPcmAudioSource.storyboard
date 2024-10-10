@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lC2-dZ-ofF">
-                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <rect key="frame" x="20" y="295" width="374" height="138"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SdL-FU-6ht" userLabel="channelName">
                                         <rect key="frame" x="37.5" y="20" width="299" height="34"/>
@@ -70,7 +70,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a0t-ZI-lHz" userLabel="pcm">
-                                <rect key="frame" x="0.0" y="632" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="633" width="414" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push PCM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbo-LJ-5lv">
                                         <rect key="frame" x="20" y="16" width="62.5" height="16"/>
@@ -90,19 +90,41 @@
                                     <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="a0t-ZI-lHz" secondAttribute="centerY" id="1ke-Ze-5Yg"/>
                                     <constraint firstAttribute="trailing" secondItem="dV6-q6-Gqm" secondAttribute="trailing" constant="20" id="BwJ-mH-gcE"/>
                                     <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="Dbo-LJ-5lv" secondAttribute="centerY" id="Tce-t9-8sl"/>
+                                    <constraint firstItem="dV6-q6-Gqm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Dbo-LJ-5lv" secondAttribute="trailing" constant="8" symbolic="YES" id="bdQ-Sc-Zh4"/>
                                     <constraint firstAttribute="height" constant="48" id="gMu-3X-Ejl"/>
                                     <constraint firstItem="Dbo-LJ-5lv" firstAttribute="leading" secondItem="a0t-ZI-lHz" secondAttribute="leading" constant="20" id="ykF-lp-vEa"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aN-r3-OBp" userLabel="mic">
-                                <rect key="frame" x="0.0" y="680" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="681" width="414" height="48"/>
+                                <subviews>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2th-LX-ugB">
+                                        <rect key="frame" x="345" y="8" width="51" height="32"/>
+                                        <connections>
+                                            <action selector="pushMicrophone:" destination="wEj-TK-x0n" eventType="valueChanged" id="SQ0-gC-2Cf"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Microphone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Sp-t2-4ZJ" userLabel="Push Microphone">
+                                        <rect key="frame" x="19" y="15" width="106" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="2K6-1p-G5S"/>
+                                    <constraint firstAttribute="trailing" secondItem="2th-LX-ugB" secondAttribute="trailing" constant="20" id="4ah-Fm-UGP"/>
+                                    <constraint firstItem="3Sp-t2-4ZJ" firstAttribute="centerY" secondItem="2th-LX-ugB" secondAttribute="centerY" id="FNf-GW-5sM"/>
+                                    <constraint firstItem="3Sp-t2-4ZJ" firstAttribute="top" secondItem="6aN-r3-OBp" secondAttribute="top" constant="15" id="N4p-jC-NET"/>
+                                    <constraint firstItem="2th-LX-ugB" firstAttribute="top" secondItem="6aN-r3-OBp" secondAttribute="topMargin" id="NFK-L9-gNC"/>
+                                    <constraint firstItem="2th-LX-ugB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3Sp-t2-4ZJ" secondAttribute="trailing" constant="8" symbolic="YES" id="Zi2-Tk-iuF"/>
+                                    <constraint firstItem="2th-LX-ugB" firstAttribute="centerY" secondItem="6aN-r3-OBp" secondAttribute="centerY" id="ePY-DC-OMx"/>
+                                    <constraint firstItem="3Sp-t2-4ZJ" firstAttribute="leading" secondItem="6aN-r3-OBp" secondAttribute="leading" constant="19" id="r6z-OE-ha4"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyj-wd-Iae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="540"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="537"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -123,6 +145,7 @@
                     </view>
                     <connections>
                         <outlet property="container" destination="Dyj-wd-Iae" id="YY7-wi-33p"/>
+                        <outlet property="pushMicrophoneSwitch" destination="2th-LX-ugB" id="T0r-uv-ZMs"/>
                         <outlet property="pushPcmSwitch" destination="dV6-q6-Gqm" id="9b8-1h-vN4"/>
                     </connections>
                 </viewController>

@@ -151,6 +151,7 @@ extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlAINSMode[INFO_LEN];
+extern wchar_t beautyAudioCtrlAITuner[INFO_LEN];
 extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
@@ -347,3 +348,6 @@ extern wchar_t localVideoTranscodingVirtualBg[INFO_LEN];
 extern wchar_t advancedMetadataVideo[INFO_LEN];
 extern wchar_t advancedMetadataAudio[INFO_LEN];
 extern wchar_t advancedMetadataSend[INFO_LEN];
+
+//transparent background
+extern wchar_t TransparentBackground[INFO_LEN];

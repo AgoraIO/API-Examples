@@ -19,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.RadioGroup
@@ -201,7 +203,7 @@ fun VideoProcessExtension() {
 }
 
 @Composable
-fun VideoProcessExtensionView(
+private fun VideoProcessExtensionView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -235,24 +237,24 @@ fun VideoProcessExtensionView(
                 val beautyOptions = remember { BeautyOptions() }
                 var isOpen by remember { mutableStateOf(false) }
                 Column {
-                    SwitchRaw(title = "美颜", checked = isOpen) {
+                    SwitchRaw(title = stringResource(id = R.string.beauty_face), checked = isOpen) {
                         isOpen = it
                         rtcEngine?.setBeautyEffectOptions(isOpen, beautyOptions)
                     }
                     Column(modifier = Modifier.padding(16.dp, 0.dp)) {
-                        SliderRaw(title = "美白", value = beautyOptions.lighteningLevel) {
+                        SliderRaw(title = stringResource(id = R.string.beauty_lightening), value = beautyOptions.lighteningLevel) {
                             beautyOptions.lighteningLevel = it
                             rtcEngine?.setBeautyEffectOptions(isOpen, beautyOptions)
                         }
-                        SliderRaw(title = "红润", value = beautyOptions.rednessLevel) {
+                        SliderRaw(title = stringResource(id = R.string.beauty_redness), value = beautyOptions.rednessLevel) {
                             beautyOptions.rednessLevel = it
                             rtcEngine?.setBeautyEffectOptions(isOpen, beautyOptions)
                         }
-                        SliderRaw(title = "锐利", value = beautyOptions.sharpnessLevel) {
+                        SliderRaw(title = stringResource(id = R.string.beauty_sharpness), value = beautyOptions.sharpnessLevel) {
                             beautyOptions.sharpnessLevel = it
                             rtcEngine?.setBeautyEffectOptions(isOpen, beautyOptions)
                         }
-                        SliderRaw(title = "平滑", value = beautyOptions.smoothnessLevel) {
+                        SliderRaw(title = stringResource(id = R.string.beauty_smoothness), value = beautyOptions.smoothnessLevel) {
                             beautyOptions.smoothnessLevel = it
                             rtcEngine?.setBeautyEffectOptions(isOpen, beautyOptions)
                         }
@@ -260,7 +262,7 @@ fun VideoProcessExtensionView(
                 }
             }
             item {
-                SwitchRaw(title = "暗光增强") {
+                SwitchRaw(title = stringResource(id = R.string.low_light_enhance)) {
                     val options = LowLightEnhanceOptions()
                     options.lowlightEnhanceLevel =
                         LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST
@@ -272,17 +274,17 @@ fun VideoProcessExtensionView(
                 val colorEnhanceOptions = remember { ColorEnhanceOptions() }
                 var isOpen by remember { mutableStateOf(false) }
                 Column {
-                    SwitchRaw(title = "色彩增强", checked = isOpen) {
+                    SwitchRaw(title = stringResource(id = R.string.color_enhance), checked = isOpen) {
                         isOpen = it
                         rtcEngine?.setColorEnhanceOptions(isOpen, colorEnhanceOptions)
                     }
                     Column(modifier = Modifier.padding(16.dp, 0.dp)) {
-                        SliderRaw(title = "强度", value = colorEnhanceOptions.strengthLevel) {
+                        SliderRaw(title = stringResource(id = R.string.strength), value = colorEnhanceOptions.strengthLevel) {
                             colorEnhanceOptions.strengthLevel = it
                             rtcEngine?.setColorEnhanceOptions(isOpen, colorEnhanceOptions)
                         }
                         SliderRaw(
-                            title = "肤色保护",
+                            title = stringResource(id = R.string.skin_protect),
                             value = colorEnhanceOptions.skinProtectLevel
                         ) {
                             colorEnhanceOptions.skinProtectLevel = it
@@ -292,7 +294,7 @@ fun VideoProcessExtensionView(
                 }
             }
             item {
-                SwitchRaw(title = "视频降噪") {
+                SwitchRaw(title = stringResource(id = R.string.video_denoiser)) {
                     val options = VideoDenoiserOptions()
                     options.denoiserLevel = VideoDenoiserOptions.VIDEO_DENOISER_LEVEL_HIGH_QUALITY
                     options.denoiserMode = VideoDenoiserOptions.VIDEO_DENOISER_AUTO
@@ -309,16 +311,16 @@ fun VideoProcessExtensionView(
                 val segproperty = remember { SegmentationProperty() }
 
                 Column {
-                    SwitchRaw(title = "虚拟背景", checked = isOpen) {
+                    SwitchRaw(title = stringResource(id = R.string.virtual_background), checked = isOpen) {
                         isOpen = it
                         rtcEngine?.enableVirtualBackground(isOpen, backgroundSource, segproperty)
                     }
                     RadioGroup(
                         options = listOf(
-                            "图片" to VirtualBackgroundSource.BACKGROUND_IMG,
-                            "颜色" to VirtualBackgroundSource.BACKGROUND_COLOR,
-                            "毛玻璃" to VirtualBackgroundSource.BACKGROUND_BLUR,
-                            "视频" to VirtualBackgroundSource.BACKGROUND_VIDEO,
+                            stringResource(id = R.string.picture) to VirtualBackgroundSource.BACKGROUND_IMG,
+                            stringResource(id = R.string.color) to VirtualBackgroundSource.BACKGROUND_COLOR,
+                            stringResource(id = R.string.blur) to VirtualBackgroundSource.BACKGROUND_BLUR,
+                            stringResource(id = R.string.video) to VirtualBackgroundSource.BACKGROUND_VIDEO,
                         ),
                         selectedValue = backgroundSource.backgroundSourceType
                     ) { _, option ->
@@ -357,7 +359,7 @@ fun VideoProcessExtensionView(
 
 @Preview
 @Composable
-fun VideoProcessExtensionViewPreview() {
+private fun VideoProcessExtensionViewPreview() {
     VideoProcessExtensionView(channelName = "", isJoined = true, onJoinClick = {}) {
 
     }

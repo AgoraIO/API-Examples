@@ -25,7 +25,7 @@ enum StreamingMode {
     }
 }
 
-class FusionCDNEntry: UIViewController {
+class FusionCDNEntry: BaseViewController {
     @IBOutlet weak var joinButtonHost: AGButton!
     @IBOutlet weak var joinButtonAudience: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -58,7 +58,8 @@ class FusionCDNEntry: UIViewController {
         alert.addAction(getStreamingMode(.agoraChannel))
         alert.addAction(getStreamingMode(.cdnUrl))
         alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
+//        present(alert, animated: true, completion: nil)
+        presentAlertViewController(alert)
     }
     
     @IBAction func joinAsHost(sender: AGButton) {
@@ -182,11 +183,10 @@ class FusionCDNHost: BaseViewController {
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming {
             stopRtcStreaming()
-            
+            resetUI()
         } else if cdnStreaming {
             stopRskStreaming()
             resetUI()
-            
         } else {
             switchToRskStreaming()
         }
@@ -244,6 +244,7 @@ class FusionCDNHost: BaseViewController {
         cdnStreaming = false
         rtcSwitcher.isEnabled = true
         agoraKit.stopDirectCdnStreaming()
+        agoraKit.stopPreview()
     }
     
     private func resetUI() {
@@ -300,9 +301,9 @@ class FusionCDNHost: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            agoraKit.disableAudio()
+            agoraKit.disableVideo()
             if rtcStreaming {
-                agoraKit.disableAudio()
-                agoraKit.disableVideo()
                 stopRtcStreaming()
             } else if cdnStreaming {
                 stopRskStreaming()

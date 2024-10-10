@@ -66,3 +66,12 @@
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "xcq-px-Ijl"; */
 "xcq-px-Ijl.normalTitle" = "加入";
+
+/* Class = "UIButton"; normalTitle = "Face Shape"; ObjectID = "8Rv-nY-rrP"; */
+"8Rv-nY-rrP.normalTitle" = "美型";
+
+/* Class = "UIButton"; normalTitle = "Make Up"; ObjectID = "FVk-N0-Zza"; */
+"FVk-N0-Zza.normalTitle" = "美妆";
+
+/* Class = "UILabel"; text = "Whitening"; ObjectID = "nVP-eV-sen"; */
+"nVP-eV-sen.text" = "提亮";
