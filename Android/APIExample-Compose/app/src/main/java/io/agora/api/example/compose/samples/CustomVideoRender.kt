@@ -278,13 +278,15 @@ class CustomVideoRenderRender(
             try {
                 drawer.drawYuv(
                     yuvUploader.yuvTextures,
+                    0,
                     RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix),
                     frame.rotatedWidth,
                     frame.rotatedHeight,
                     0,
                     0,
                     viewportWidth,
-                    viewportHeight
+                    viewportHeight,
+                    0
                 )
             } catch (exception: NullPointerException) {
                 Log.e(TAG, "skip empty buffer!")

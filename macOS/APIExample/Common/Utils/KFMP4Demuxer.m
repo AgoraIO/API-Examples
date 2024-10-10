@@ -57,6 +57,7 @@
 @implementation KFMP4Demuxer
 #pragma mark - LifeCycle
 - (instancetype)initWithConfig:(KFDemuxerConfig *)config {
+    NSLog(@"KFMP4Demuxer init");
     self = [super init];
     if (self) {
         _config = config;
@@ -72,6 +73,7 @@
 }
 
 - (void)dealloc {
+    NSLog(@"KFMP4Demuxer dealloc");
     // 清理状态机。
     if (self.demuxerStatus == KFMP4DemuxerStatusRunning) {
         self.demuxerStatus = KFMP4DemuxerStatusCancelled;
@@ -105,26 +107,27 @@
 - (void)startReading {
     __weak typeof(self) weakSelf = self;
     dispatch_async(_demuxerQueue, ^{
-        dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
+        __strong typeof(self) strongSelf = weakSelf;
+        dispatch_semaphore_wait(strongSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
         
         // 在第一次开始读数据时，创建解封装器实例。
-        if (!weakSelf.demuxReader) {
+        if (!strongSelf.demuxReader) {
             NSError *error;
-            [weakSelf _setupDemuxReader:&error];
-            weakSelf.audioEOF = !weakSelf.hasAudioTrack;
-            weakSelf.videoEOF = !weakSelf.hasVideoTrack;
-            weakSelf.demuxerStatus = error ? KFMP4DemuxerStatusFailed : KFMP4DemuxerStatusRunning;
-            dispatch_semaphore_signal(weakSelf.demuxerSemaphore);
+            [strongSelf _setupDemuxReader:&error];
+            strongSelf.audioEOF = !strongSelf.hasAudioTrack;
+            strongSelf.videoEOF = !strongSelf.hasVideoTrack;
+            strongSelf.demuxerStatus = error ? KFMP4DemuxerStatusFailed : KFMP4DemuxerStatusRunning;
+            dispatch_semaphore_signal(strongSelf.demuxerSemaphore);
             if (error == nil) {
                 // Demuxer 启动成功后，就可以从它里面获取解封装后的数据了。
-                [weakSelf fetchAndSaveDemuxedData];
+                [strongSelf fetchAndSaveDemuxedData];
             } else {
                 NSLog(@"KFMP4Demuxer error: %zi %@", error.code, error.localizedDescription);
             }
             return;
         }
 
-        dispatch_semaphore_signal(weakSelf.demuxerSemaphore);
+        dispatch_semaphore_signal(strongSelf.demuxerSemaphore);
     });
 }
 
@@ -132,16 +135,17 @@
     __weak typeof(self) weakSelf = self;
     if (self.demuxerQueue == nil) { return; }
     dispatch_async(_demuxerQueue, ^{
-        if (weakSelf.demuxerSemaphore == nil) { return; }
-        dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
+        __strong typeof(self) strongSelf = weakSelf;
+        if (strongSelf.demuxerSemaphore == nil) { return; }
+        dispatch_semaphore_wait(strongSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
         
         // 取消读数据。
-        if (weakSelf.demuxReader && weakSelf.demuxReader.status == AVAssetReaderStatusReading) {
-            [weakSelf.demuxReader cancelReading];
+        if (strongSelf.demuxReader && strongSelf.demuxReader.status == AVAssetReaderStatusReading) {
+            [strongSelf.demuxReader cancelReading];
         }
-        weakSelf.demuxerStatus = KFMP4DemuxerStatusCancelled;
+        strongSelf.demuxerStatus = KFMP4DemuxerStatusCancelled;
         
-        dispatch_semaphore_signal(weakSelf.demuxerSemaphore);
+        dispatch_semaphore_signal(strongSelf.demuxerSemaphore);
     });
 }
 
@@ -455,9 +459,10 @@
     // 异步加载下一份采样数据。
     __weak typeof(self) weakSelf = self;
     dispatch_async(_demuxerQueue, ^{
-        dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
-        [weakSelf _loadNextSampleBuffer];
-        dispatch_semaphore_signal(weakSelf.demuxerSemaphore);
+        __strong typeof(self) strongSelf = weakSelf;
+        dispatch_semaphore_wait(strongSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
+        [strongSelf _loadNextSampleBuffer];
+        dispatch_semaphore_signal(strongSelf.demuxerSemaphore);
     });
 }
 

@@ -41,16 +41,18 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var audioViews: [UInt: VideoView] = [:]
     @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
+    @IBOutlet weak var pushMicrophoneSwitch: UISwitch!
     private var trackId: Int32 = 0
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             pushPcmSwitch.isEnabled = isJoined
+            pushMicrophoneSwitch.isEnabled = pushPcmSwitch.isEnabled
         }
     }
     
-    let sampleRate: UInt = 44100, channel: UInt = 1, bitPerSample = 16, samples = 441 * 10
+    let sampleRate: UInt = 44100, channel: UInt = 2, bitPerSample = 16, samples = 441 * 10
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,11 +96,9 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
+        option.autoSubscribeVideo = false
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.publishCustomAudioTrackId = Int(trackId)
-        option.clientRoleType = GlobalSettings.shared.getUserRole()
+        option.publishMicrophoneTrack = false
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -135,6 +135,13 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
         let mediaOption = AgoraRtcChannelMediaOptions()
         mediaOption.publishCustomAudioTrack = sender.isOn
+        mediaOption.publishCustomAudioTrackId = Int(trackId)
+        agoraKit.updateChannel(with: mediaOption)
+    }
+    
+    @IBAction func pushMicrophone(_ sender: UISwitch) {
+        let mediaOption = AgoraRtcChannelMediaOptions()
+        mediaOption.publishMicrophoneTrack = sender.isOn
         agoraKit.updateChannel(with: mediaOption)
     }
 }
@@ -142,7 +149,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
         agoraKit.pushExternalAudioFrameRawData(data,
-                                               samples: samples,
+                                               samples: samples*Int(channel),
                                                sampleRate: Int(sampleRate),
                                                channels: Int(channel),
                                                trackId: Int(trackId),

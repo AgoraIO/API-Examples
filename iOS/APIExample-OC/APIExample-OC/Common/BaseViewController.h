@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
                    message: (NSString *)message
              textAlignment: (NSTextAlignment)alignment;
 
+- (void)presentAlertViewController:(UIAlertController*)alertVC;
 @end
 
 // 布局模块

@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.SliderRaw
@@ -102,8 +104,8 @@ fun RhythmPlayer() {
             mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
-            mediaOptions.publishRhythmPlayerTrack = true
-            mediaOptions.publishMicrophoneTrack = false
+            mediaOptions.publishRhythmPlayerTrack = isPlaying
+            mediaOptions.publishMicrophoneTrack = true
             mediaOptions.publishCameraTrack = false
             TokenUtils.gen(channelName, 0) {
                 rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
@@ -115,7 +117,7 @@ fun RhythmPlayer() {
 }
 
 @Composable
-fun RhythmPlayerView(
+private fun RhythmPlayerView(
     rtcEngine: RtcEngine? = null,
     channelName: String,
     isJoined: Boolean,
@@ -151,9 +153,14 @@ fun RhythmPlayerView(
                         .padding(8.dp, 0.dp),
                     onClick = {
                         rtcEngine?.startRhythmPlayer(URL_UPBEAT, URL_DOWNBEAT, config)
+                        if(isJoined){
+                            rtcEngine?.updateChannelMediaOptions(ChannelMediaOptions().apply {
+                                publishRhythmPlayerTrack = true
+                            })
+                        }
                     }
                 ) {
-                    Text(text = "Play")
+                    Text(text = stringResource(id = R.string.play))
                 }
                 Button(
                     modifier = Modifier
@@ -161,10 +168,15 @@ fun RhythmPlayerView(
                         .padding(8.dp, 0.dp),
                     onClick = {
                         rtcEngine?.stopRhythmPlayer()
+                        if(isJoined){
+                            rtcEngine?.updateChannelMediaOptions(ChannelMediaOptions().apply {
+                                publishRhythmPlayerTrack = false
+                            })
+                        }
                         onPlayStopClick()
                     }
                 ) {
-                    Text(text = "Stop")
+                    Text(text = stringResource(id = R.string.stop))
                 }
             }
         }

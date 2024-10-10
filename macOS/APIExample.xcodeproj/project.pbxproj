@@ -91,6 +91,7 @@
 		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD8A1F922CA55AA4001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */; };
 		E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */; };
 		E702C1E828B4DB4800D7C7ED /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */; };
 		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
@@ -271,6 +272,7 @@
 		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPCMPlayer.swift; sourceTree = "<group>"; };
 		E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
 		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 		0336A1BB25034F4600D61B7F /* ExternalAudio */ = {
 			isa = PBXGroup;
 			children = (
+				DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */,
 				0336A1BC25034F4600D61B7F /* AudioOptions.h */,
 				0336A1C325034F4700D61B7F /* AudioWriteToFile.h */,
 				0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */,
@@ -1192,6 +1195,7 @@
 				E7883AE22B046CB8003CCF44 /* FaceCapture.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
 				E779025B2A482CFC008791AD /* KFMP4Demuxer.m in Sources */,
+				DD8A1F922CA55AA4001CEC51 /* AgoraPCMPlayer.swift in Sources */,
 				033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */,
 				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
 				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,

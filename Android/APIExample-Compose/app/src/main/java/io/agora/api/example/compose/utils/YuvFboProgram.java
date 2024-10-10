@@ -96,7 +96,7 @@ public class YuvFboProgram {
         matrix.preTranslate(0.5f, 0.5f);
         matrix.preScale(1f, -1f); // I420-frames are upside down
         matrix.preTranslate(-0.5f, -0.5f);
-        glRectDrawer.drawYuv(yuvUploader.getYuvTextures(), RendererCommon.convertMatrixFromAndroidGraphicsMatrix(matrix), width, height, 0, 0, width, height);
+        glRectDrawer.drawYuv(yuvUploader.getYuvTextures(), 0, RendererCommon.convertMatrixFromAndroidGraphicsMatrix(matrix), width, height, 0, 0, width, height, 0);
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         GLES20.glFlush();

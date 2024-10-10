@@ -2,6 +2,8 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.CLIENT_ROLE_AUDIENCE;
+import static io.agora.rtc2.video.CameraCapturerConfiguration.CAMERA_DIRECTION;
+import static io.agora.rtc2.video.CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
@@ -202,9 +204,22 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 AgoraFocalLengthInfo info = agoraFocalLengthInfos[position];
+                CAMERA_DIRECTION direction = CAMERA_DIRECTION.CAMERA_FRONT;
+                if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
+                    direction = CAMERA_DIRECTION.CAMERA_REAR;
+                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRAL.getValue()) {
+                    direction = CAMERA_DIRECTION.CAMERA_EXTRAL;
+                }
+                CAMERA_FOCAL_LENGTH_TYPE focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
+                if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
+                    focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE;
+                } else if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE.getValue()) {
+                    focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE;
+                } else if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
+                    focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO;
+                }
                 CameraCapturerConfiguration config = new CameraCapturerConfiguration(
-                        getCameraDirection(info),
-                        getFocalLengthType(info)
+                        direction, focalLengthType
                 );
                 int ret = engine.setCameraCapturerConfiguration(
                         config
@@ -302,24 +317,21 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             agoraFocalLengthInfos = engine.queryCameraFocalLengthCapability();
             ArrayList<String> strings = new ArrayList<>();
-            for (int i = 0; i < agoraFocalLengthInfos.length; i++) {
-                AgoraFocalLengthInfo info = agoraFocalLengthInfos[i];
-
+            for (AgoraFocalLengthInfo info : agoraFocalLengthInfos) {
                 String cameraDirection = getString(R.string.camera_front);
-                if (getCameraDirection(info) == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR) {
+                if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
                     cameraDirection = getString(R.string.camera_rear);
-                } else if (getCameraDirection(info) == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA) {
+                } else if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_EXTRAL.getValue()) {
                     cameraDirection = getString(R.string.camera_extral);
                 }
                 String focalLength = getString(R.string.camera_focal_default);
-                if (getFocalLengthType(info) == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE) {
+                if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
                     focalLength = getString(R.string.camera_focal_wide_angle);
-                } else if (getFocalLengthType(info) == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE) {
+                } else if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE.getValue()) {
                     focalLength = getString(R.string.camera_focal_urltra_wide);
-                } else if (getFocalLengthType(info) == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO) {
+                } else if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
                     focalLength = getString(R.string.camera_focal_telephoto);
                 }
-
                 strings.add(String.format(Locale.US, "[%s] %s", cameraDirection, focalLength));
             }
             mSettingBinding.spCamera.setAdapter(new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, strings));
@@ -327,58 +339,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             requireActivity().onBackPressed();
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Get the camera direction from the AgoraFocalLengthInfo
-     *
-     * @param info AgoraFocalLengthInfo
-     * @return Camera direction
-     */
-    private static CameraCapturerConfiguration.CAMERA_DIRECTION getCameraDirection(AgoraFocalLengthInfo info) {
-        try {
-            String string = info.toString();
-            String[] split = string.split("cameraDirection");
-            String substring = split[1].substring(1, 2);
-            int cameraDirection = Integer.parseInt(substring);
-            if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
-            } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR;
-            } else if (cameraDirection == CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_EXTRA;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "getCameraDirection error=" + e.getMessage());
-        }
-        return CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
-    }
-
-    /**
-     * Get the focal length type from the AgoraFocalLengthInfo
-     *
-     * @param info AgoraFocalLengthInfo
-     * @return Focal length type
-     */
-    private static CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE getFocalLengthType(AgoraFocalLengthInfo info) {
-        try {
-            String string = info.toString();
-            String[] split = string.split("focalLengthType");
-            String substring = split[1].substring(1, 2);
-            int focalLength = Integer.parseInt(substring);
-            if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
-            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_WIDE_ANGLE;
-            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_ULTRA_WIDE;
-            } else if (focalLength == CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
-                return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "getFocalLengthType error=" + e.getMessage());
-        }
-        return CameraCapturerConfiguration.CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_DEFAULT;
     }
 
 
@@ -622,9 +582,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     }
 
     private void enableLowStream(boolean enable) {
-        engine.setRemoteDefaultVideoStreamType(enable ? Constants.VIDEO_STREAM_LOW : Constants.VIDEO_STREAM_HIGH);
+        engine.setRemoteDefaultVideoStreamType(enable ? Constants.VideoStreamType.VIDEO_STREAM_LOW : Constants.VideoStreamType.VIDEO_STREAM_HIGH);
         if (remoteUid != 0) {
-            engine.setRemoteVideoStreamType(remoteUid, enable ? Constants.VIDEO_STREAM_LOW : Constants.VIDEO_STREAM_HIGH);
+            engine.setRemoteVideoStreamType(remoteUid, enable ? Constants.VideoStreamType.VIDEO_STREAM_LOW : Constants.VideoStreamType.VIDEO_STREAM_HIGH);
         }
     }
 

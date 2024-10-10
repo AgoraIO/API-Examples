@@ -14,7 +14,7 @@ enum ThirdBeautifyType: String {
     case bytedEffect = "BytedEffect"
 }
 
-class ThirdBeautifyEntry: UIViewController {
+class ThirdBeautifyEntry: BaseViewController {
 
     @IBOutlet weak var channelTextField: UITextField!
     
@@ -47,7 +47,8 @@ class ThirdBeautifyEntry: UIViewController {
         actionSheetVC.addAction(fu)
         actionSheetVC.addAction(bytedEffect)
         actionSheetVC.addAction(cancel)
-        present(actionSheetVC, animated: true, completion: nil)
+//        present(actionSheetVC, animated: true, completion: nil)
+        presentAlertViewController(actionSheetVC)
     }
     
     private func jumpHandler(type: ThirdBeautifyType) {

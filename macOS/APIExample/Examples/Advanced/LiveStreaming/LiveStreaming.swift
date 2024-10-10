@@ -262,20 +262,16 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var centerStage: Picker!
     func initSelectCentetStagePicker() {
         centerStage.isEnabled = agoraKit.isCameraCenterStageSupported()
-        let params: [String: AgoraCameraStabilizationMode] = ["auto": .auto,
-                                                              "level1": .level1,
-                                                              "level2": .level2,
-                                                              "level3": .level3,
-                                                              "off": .off]
+        let params  = ["off": false, "on": true]
         let datas = params.map { $0.key }.sorted()
         centerStage.label.stringValue = "Center Stage".localized
         centerStage.picker.addItems(withTitles: datas)
         centerStage.onSelectChanged { [weak self] in
             guard let self = self else { return }
-            let index = self.selectRolePicker.indexOfSelectedItem
+            let index = self.centerStage.picker.indexOfSelectedItem
             let key = datas[index]
-            let mode = params[key]
-            self.agoraKit.enableCameraCenterStage(mode != .off)
+            let mode = params[key] ?? false
+            self.agoraKit.enableCameraCenterStage(mode)
         }
     }
     
@@ -326,7 +322,7 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
-        scrollView.documentView?.setFrameSize(CGSizeMake(314, 645))
+        scrollView.documentView?.setFrameSize(CGSizeMake(314, 720))
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
@@ -492,6 +488,14 @@ class LiveStreamingMain: BaseViewController {
         functionVC?.clickEncoderSegmentSwitch = { [weak self] s in
             self?.onTapEncoderSegment(s)
         }
+        
+        functionVC?.onChangeLocalRenderFps = { [weak self] fps in
+            self?.agoraKit.setLocalRenderTargetFps(.camera, targetFps: fps)
+        }
+        
+        functionVC?.onChangeRemoteRenderFps = { [weak self] fps in
+            self?.agoraKit.setRemoteRenderTargetFps(fps)
+        }
     }
     
     private func onTakeSnapshot() {
@@ -572,6 +576,8 @@ class LiveStreamingMain: BaseViewController {
         encoderConfig.advancedVideoOptions = advancedOptions
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
+    
+    
 }
 
 class LiveStreamingRTCFunctionVC: BaseViewController {
@@ -582,6 +588,8 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     var clickVideoImageSwitch: ((NSSwitch) -> Void)?
     var clickBFrameSwitch: ((NSSwitch) -> Void)?
     var clickEncoderSegmentSwitch: ((NSSegmentedControl) -> Void)?
+    var onChangeRemoteRenderFps: ((Int32)->())?
+    var onChangeLocalRenderFps: ((Int32)->())?
     @IBOutlet weak var snapShot: NSButton!
     @IBAction func onTakeSnapshot(_ sender: Any) {
         clickTakeSnapshotClosure?()
@@ -616,6 +624,33 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     @IBOutlet weak var encoderSegment: NSSegmentedControl!
     @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
         clickEncoderSegmentSwitch?(sender)
+    }
+    
+    // lcoal render fps editor
+    @IBOutlet weak var localRenderTextField: NSTextField?
+    
+    // remote render fps editor
+    @IBOutlet weak var remoteRenderTextField: NSTextField?
+}
+
+extension LiveStreamingRTCFunctionVC: NSTextFieldDelegate {
+    func controlTextDidChange(_ obj: Notification) {
+        guard let textField = obj.object as? NSTextField else {return}
+        if let number = Int(textField.stringValue) {
+            if number > 60 {
+                textField.stringValue = "60"
+            } else if number == 0 {
+                textField.stringValue = ""
+            }
+        } else {
+            textField.stringValue = ""
+        }
+         
+        if textField == localRenderTextField {
+            self.onChangeLocalRenderFps?(Int32(textField.stringValue) ?? 15)
+        } else {
+            self.onChangeRemoteRenderFps?(Int32(textField.stringValue) ?? 15)
+        }
     }
 }
 
@@ -736,6 +771,9 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
         LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(reason.rawValue)", level: .info)
+        if state == .encoding {
+            centerStage.isEnabled = agoraKit.isCameraCenterStageSupported()
+        }
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {

@@ -225,6 +225,24 @@ extension AUDIO_AINS_MODE {
     }
 }
 
+extension AgoraVoiceAITunerType {
+    func description() -> String {
+        switch self {
+        case .matureMale: return "AI_Tunner_Mature_Male".localized
+        case .freshMale: return "AI_Tunner_Fresh_Male".localized
+        case .elegantFemale: return "AI_Tunner_Elegant_Female".localized
+        case .sweetFemale: return "AI_Tunner_Sweet_Female".localized
+        case .warmMaleSinging: return "AI_Tunner_Warm_Male_Singing".localized
+        case .gentleFemaleSinging: return "AI_Tunner_Gentle_Female_Singing".localized
+        case .huskyMaleSinging: return "AI_Tunner_Husky_Male_Singing".localized
+        case .warmElegantFemaleSinging: return "AI_Tunner_Warm_Elegant_Female_Singing".localized
+        case .powerfulMaleSinging: return "AI_Tunner_Powerful_Male_Singing".localized
+        case .dreamyFemaleSinging: return "AI_Tunner_Dreamy_Female_Singing".localized
+        @unknown default: return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraVoiceConversionPreset {
     func description() -> String {
         switch self {
@@ -299,13 +317,37 @@ extension Date {
 
 extension AgoraFocalLengthInfo {
     var value: [String: AgoraFocalLength] {
-        let title = cameraDirection == 0 ? "Front camera".localized + " - " : "Rear camera".localized + " - "
+        let title = cameraDirection == 1 ? "Front camera".localized + " - " : "Rear camera".localized + " - "
         switch focalLengthType {
         case .default: return [title + "Default".localized: focalLengthType]
         case .wide: return [title + "Wide".localized: focalLengthType]
         case .ultraWide: return [title + "Length Wide".localized: focalLengthType]
         case .telephoto: return [title + "Telephoto".localized: focalLengthType]
         @unknown default: return [title + "Default".localized: focalLengthType]
+        }
+    }
+}
+
+extension AgoraApplicationScenarioType {
+    func description() -> String {
+        switch self {
+        case .applicationGeneralScenario: return "General".localized
+        case .applicationMeetingScenario: return "Meeting".localized
+        case .application1V1Scenario: return "1v1".localized
+        case .applicationLiveShowScenario: return "Live Show".localized
+        @unknown default: return ""
+        }
+    }
+}
+
+extension AgoraVideoModulePosition {
+    func description() -> String {
+        switch self {
+        case .postCapture: return "Post Capture".localized
+        case .preRenderer: return "PreRenderer".localized
+        case .preEncoder: return "PreEncoder".localized
+        case .postCaptureOrigin: return "Post Capture Origin".localized
+        @unknown default: return ""
         }
     }
 }

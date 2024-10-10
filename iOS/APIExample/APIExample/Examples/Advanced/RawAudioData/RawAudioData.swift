@@ -40,7 +40,7 @@ class RawAudioDataViewController: BaseViewController {
         // Audio4 is required to send Audio Meta Data.
         agoraKit.setParameters("{\"rtc.use_audio4\":true}")
         
-        // Setup raw auido data frame observer
+        // Setup raw audio data frame observer
         agoraKit.setAudioFrameDelegate(self)
         agoraKit.enableAudio()
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
