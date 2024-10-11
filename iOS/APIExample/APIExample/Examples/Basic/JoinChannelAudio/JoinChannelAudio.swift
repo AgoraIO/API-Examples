@@ -267,13 +267,20 @@ class JoinChannelAudioMain: BaseViewController {
                 guard let self = self, self.mixedButton?.isSelected == true else {return}
                 self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: nil, mediaOptions: exOpt) { _, _, _ in
                     print("join[\(mixerChannelName)] success: \(uid)")
-                    // add audio mixer
+                    
+                    // add remote audio
+                    let remoteStream = AgoraMixedAudioStream()
+                    remoteStream.sourceType = .remoteChannel
+                    remoteStream.channelId = channelName
+                    
+                    // add local audio
+                    let localStream = AgoraMixedAudioStream()
+                    localStream.sourceType = .microphone
+                    
+                    // mix audio to target channel
                     let audioMixConfig = AgoraLocalAudioMixerConfiguration()
                     audioMixConfig.syncWithLocalMic = false
-                    let audioInputStream = AgoraMixedAudioStream()
-                    audioInputStream.sourceType = .remoteChannel
-                    audioInputStream.channelId = channelName
-                    audioMixConfig.audioInputStreams = [audioInputStream]
+                    audioMixConfig.audioInputStreams = [remoteStream, localStream]
                     let ret = self.agoraKit.startLocalAudioMixer(audioMixConfig)
                     print("startLocalAudioMixer: \(ret)")
                 }
