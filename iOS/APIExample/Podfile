@@ -2,8 +2,16 @@
 # platform :ios, '9.0'
 
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+
+def common_pods
+  pod 'AgoraRtcEngine_iOS', '4.5.0'
+#  pod 'sdk', :path => 'sdk.podspec'
+end
+  
 target 'APIExample' do
   use_frameworks!
+  
+  common_pods
   
   pod 'Floaty', '~> 4.2.0'
   pod 'AGEVideoLayout', '~> 1.0.2'
@@ -12,10 +20,8 @@ target 'APIExample' do
 #  pod 'ijkplayer', '~> 1.1.3'
 #  pod 'MobileVLCKit', '3.5.1'
   pod 'SwiftLint', '~> 0.53.0'
-  pod 'AgoraRtcEngine_iOS', '4.4.0'
   pod 'SnapKit', '~> 5.7.0'
 
-#  pod 'sdk', :path => 'sdk.podspec'
 #    pod 'senseLib', :path => 'sense.podspec'
 #    pod 'bytedEffect', :path => 'bytedEffect.podspec'
 #     pod 'fuLib', :path => 'fu.podspec'
@@ -23,14 +29,13 @@ end
 
 target 'Agora-ScreenShare-Extension' do
   use_frameworks!
-#  pod 'sdk', :path => 'sdk.podspec'
-  pod 'AgoraRtcEngine_iOS', '4.4.0'
+  
+  common_pods
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-#  pod 'sdk', :path => 'sdk.podspec'
-  pod 'AgoraRtcEngine_iOS', '4.4.0'
+  common_pods
 end
 
 pre_install do |installer|
