@@ -237,3 +237,6 @@
 "AI_Tunner_Warm_Elegant_Female_Singing"="温暖御姐歌声";
 "AI_Tunner_Powerful_Male_Singing"="力量男歌声";
 "AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";
+
+"Start Audio Mixing" = "开启音频转发";
+"Stop Audio Mixing" = "停止音频转发";
