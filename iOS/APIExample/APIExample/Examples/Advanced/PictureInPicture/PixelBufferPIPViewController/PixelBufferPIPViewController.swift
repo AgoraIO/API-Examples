@@ -67,7 +67,7 @@ class PixelBufferPIPViewController: PIPBaseViewController {
         return view
     }()
     
-    private lazy var displayViews: NSHashTable = {
+    private lazy var displayViews: NSHashTable<PixelBufferRenderView> = {
         let table = NSHashTable<PixelBufferRenderView>(options: .weakMemory, capacity: 4)
         table.add(self.topLeftView)
         table.add(self.topRightView)
