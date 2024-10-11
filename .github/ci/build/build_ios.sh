@@ -38,7 +38,8 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
-
+xcode_version=$(xcodebuild -version | grep Xcode | awk '{print $2}')
+echo "Xcode Version: $xcode_version"
 echo ios_direction: $ios_direction
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
