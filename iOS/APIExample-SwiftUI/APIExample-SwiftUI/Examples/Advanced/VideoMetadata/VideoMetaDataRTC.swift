@@ -196,6 +196,17 @@ extension VideoMetaDataRTC: AgoraRtcEngineDelegate {
 }
 
 extension VideoMetaDataRTC: AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSource {
+    func didMetadataReceived(_ metadata: AgoraMetadata) {
+        DispatchQueue.main.async {
+            LogUtils.log(message: "metadata received", level: .info)
+            self.receivedMsg = String(data: metadata.data, encoding: .utf8) ?? ""
+            self.showAlert = true
+//            let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     func metadataMaxSize() -> Int {
         // the data to send should not exceed this size
         return MAX_META_LENGTH
@@ -221,19 +232,5 @@ extension VideoMetaDataRTC: AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSo
         self.metadata = nil
         return metadata
     }
-    
-    /// Callback when the local user receives the metadata.
-    /// @param data The received metadata.
-    /// @param uid The ID of the user who sends the metadata.
-    /// @param timestamp The timestamp (ms) of the received metadata.
-    func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
-        DispatchQueue.main.async {
-            LogUtils.log(message: "metadata received", level: .info)
-            self.receivedMsg = String(data: data, encoding: .utf8) ?? ""
-            self.showAlert = true
-//            let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
-        }
-    }
+
 }

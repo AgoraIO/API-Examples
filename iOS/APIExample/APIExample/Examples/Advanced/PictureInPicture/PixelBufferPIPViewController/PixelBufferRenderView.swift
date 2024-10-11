@@ -148,7 +148,7 @@ class PixelBufferRenderView: UIView {
     }
     
     private func layoutDisplayer() {
-        guard videoWidth > 0, videoHeight > 0, !CGSizeEqualToSize(self.frame.size, CGSize.zero) else {
+        guard videoWidth > 0, videoHeight > 0, !self.frame.size.equalTo(CGSize.zero) else {
             return
         }
 
