@@ -285,7 +285,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="119.66666666666669" id="Num-Jq-yBo"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="jxp-ZN-2yG" id="pf8-ro-UKO"/>
                                 </connections>
