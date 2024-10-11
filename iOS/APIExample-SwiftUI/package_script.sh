@@ -1,4 +1,6 @@
-
+xcode_version=$(xcodebuild -version)
+echo "Xcode Version Information:"
+echo "$xcode_version"
 
 http_proxy=http://10.10.114.51:1080 https_proxy=http://10.10.114.51:1080 pod install --repo-update
 if [ $? -eq 0 ]; then
