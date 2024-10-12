@@ -20,6 +20,6 @@ struct KtvCopyrightMusic: View {
     }
 }
 
-#Preview {
-    KtvCopyrightMusic()
-}
+//#Preview {
+//    KtvCopyrightMusic()
+//}

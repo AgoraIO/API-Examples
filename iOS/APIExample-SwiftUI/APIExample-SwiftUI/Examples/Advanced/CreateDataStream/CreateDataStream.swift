@@ -32,9 +32,9 @@ struct CreateDataStreamEntry: View {
     }
 }
 
-#Preview {
-    CreateDataStreamEntry()
-}
+//#Preview {
+//    CreateDataStreamEntry()
+//}
 
 struct CreateDataStream: View {
     @State var configs: [String: Any] = [:]
@@ -82,6 +82,6 @@ struct CreateDataStream: View {
     }
 }
 
-#Preview {
-    CreateDataStream(configs: [:])
-}
+//#Preview {
+//    CreateDataStream(configs: [:])
+//}

@@ -90,74 +90,74 @@ class ViewModel: ObservableObject {
     }
 }
 
-struct SettingsView: View {
-    @ObservedObject var viewModel = ViewModel()
-    
-    var body: some View {
-        List {
-            ForEach(viewModel.items) { section in
-                Section(section.name) {
-                    ForEach(section.settingsModel, id: \.id) { item in
-                        let binding = bindindItem(item: item)
-                        
-                        switch item.type {
-                        case .text:
-                            HStack {
-                                Text(item.label)
-                                Spacer()
-                                Text(item.value)
-                            }
-                        case .select:
-                            HStack {
-                                Text(item.label)
-                                Spacer()
-                                Button(item.value) {
-                                    item.isShowDialog = true
-                                    viewModel.objectWillChange.send()
-                                }
-                                .confirmationDialog(item.label, isPresented: binding.isShowDialog, titleVisibility: .visible) {
-                                    ForEach(item.settingItem?.options ?? []) { option in
-                                        Button(option.label) {
-                                            GlobalSettings.shared.cache[item.key] = option.value
-                                            item.value = option.label
-                                        }
-                                    }
-                                }
-                            }
-                        case .toggle:
-                            HStack {
-                                Text(item.label)
-                                Spacer()
-                                Toggle("", isOn: binding.isOn)
-                                    .onChange(of: item.isOn) { value in
-                                        GlobalSettings.shared.cache[item.key] = value
-                                    }
-                            }
-                        case .input:
-                            HStack {
-                                Text(item.label)
-                                Spacer()
-                                TextField(item.placeHolder ?? "", text: binding.value)
-                                    .textFieldStyle(.roundedBorder)
-                                    .onChange(of: item.value) { text in
-                                        GlobalSettings.shared.cache[item.key] = text
-                                    }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("Settings")
-    }
-    
-    private func bindindItem(item: SettingsModel) -> Binding<SettingsModel> {
-        let index = viewModel.items.firstIndex(where: { $0.settingsModel.contains(where: { $0.id == item.id } )}) ?? 0
-        let subIndex = viewModel.items[index].settingsModel.firstIndex(where: { $0.id == item.id }) ?? 0
-        return $viewModel.items[index].settingsModel[subIndex]
-    }
-}
+//struct SettingsView: View {
+//    @ObservedObject var viewModel = ViewModel()
+//    
+//    var body: some View {
+//        List {
+//            ForEach(viewModel.items) { section in
+//                Section(section.name) {
+//                    ForEach(section.settingsModel, id: \.id) { item in
+//                        let binding = bindindItem(item: item)
+//                        
+//                        switch item.type {
+//                        case .text:
+//                            HStack {
+//                                Text(item.label)
+//                                Spacer()
+//                                Text(item.value)
+//                            }
+//                        case .select:
+//                            HStack {
+//                                Text(item.label)
+//                                Spacer()
+//                                Button(item.value) {
+//                                    item.isShowDialog = true
+//                                    viewModel.objectWillChange.send()
+//                                }
+//                                .confirmationDialog(item.label, isPresented: binding.isShowDialog, titleVisibility: .visible) {
+//                                    ForEach(item.settingItem?.options ?? []) { option in
+//                                        Button(option.label) {
+//                                            GlobalSettings.shared.cache[item.key] = option.value
+//                                            item.value = option.label
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        case .toggle:
+//                            HStack {
+//                                Text(item.label)
+//                                Spacer()
+//                                Toggle("", isOn: binding.isOn)
+//                                    .onChange(of: item.isOn) { value in
+//                                        GlobalSettings.shared.cache[item.key] = value
+//                                    }
+//                            }
+//                        case .input:
+//                            HStack {
+//                                Text(item.label)
+//                                Spacer()
+//                                TextField(item.placeHolder ?? "", text: binding.value)
+//                                    .textFieldStyle(.roundedBorder)
+//                                    .onChange(of: item.value) { text in
+//                                        GlobalSettings.shared.cache[item.key] = text
+//                                    }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        .navigationTitle("Settings")
+//    }
+//    
+//    private func bindindItem(item: SettingsModel) -> Binding<SettingsModel> {
+//        let index = viewModel.items.firstIndex(where: { $0.settingsModel.contains(where: { $0.id == item.id } )}) ?? 0
+//        let subIndex = viewModel.items[index].settingsModel.firstIndex(where: { $0.id == item.id }) ?? 0
+//        return $viewModel.items[index].settingsModel[subIndex]
+//    }
+//}
 
-#Preview {
-    SettingsView()
-}
+//#Preview {
+//    SettingsView()
+//}

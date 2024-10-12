@@ -74,9 +74,9 @@ struct PrecallTest: View {
     }
 }
 
-#Preview {
-    PrecallTest(configs: [:])
-}
+//#Preview {
+//    PrecallTest(configs: [:])
+//}
 
 
 struct ActivityIndicator: UIViewRepresentable {

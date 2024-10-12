@@ -60,9 +60,9 @@ struct StreamEncryptionEntry: View {
     }
 }
 
-#Preview {
-    StreamEncryptionEntry()
-}
+//#Preview {
+//    StreamEncryptionEntry()
+//}
 
 struct StreamEncryption: View {
     @State var configs: [String: Any] = [:]
@@ -92,6 +92,6 @@ struct StreamEncryption: View {
     }
 }
 
-#Preview {
-    StreamEncryption(configs: [:])
-}
+//#Preview {
+//    StreamEncryption(configs: [:])
+//}
