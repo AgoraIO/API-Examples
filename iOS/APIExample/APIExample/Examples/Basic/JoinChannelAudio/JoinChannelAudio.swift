@@ -89,11 +89,15 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var inEarMonitoringSwitch: UISwitch!
     @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
     @IBOutlet weak var scenarioBtn: UIButton!
+    @IBOutlet weak var mixedButton: UIButton?
+    @IBOutlet weak var relayChannelTextField: UITextField?
         
     var audioViews: [UInt: VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
+    
+    private var mixerUid: UInt = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,6 +106,9 @@ class JoinChannelAudioMain: BaseViewController {
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else { return }
+        
+        mixedButton?.setTitle("Start Audio Mixing".localized, for: .normal)
+        mixedButton?.setTitle("Stop Audio Mixing".localized, for: .selected)
         
         scenarioBtn.setTitle("\(audioScenario.description())", for: .normal)
 
@@ -237,6 +244,52 @@ class JoinChannelAudioMain: BaseViewController {
         print("setInEarMonitoringVolume \(value)")
         agoraKit.setInEarMonitoringVolume(value)
     }
+    
+    @IBAction func onAudioMixing(_ sender: UIButton) {
+        guard let channelName = configs["channelName"] as? String,
+              mixerUid > 0,
+              let mixerChannelName = relayChannelTextField?.text,
+              mixerChannelName.isEmpty == false else {return}
+        sender.isSelected.toggle()
+        
+        let uid = mixerUid
+        let connection = AgoraRtcConnection(channelId: mixerChannelName, localUid: Int(uid))
+        if sender.isSelected {
+            let exOpt = AgoraRtcChannelMediaOptions()
+            exOpt.clientRoleType = .broadcaster
+            exOpt.publishMicrophoneTrack = false
+            exOpt.publishMixedAudioTrack = true
+            exOpt.enableAudioRecordingOrPlayout = false
+            exOpt.autoSubscribeAudio = false
+            exOpt.channelProfile = .liveBroadcasting
+            
+            NetworkManager.shared.generateToken(channelName: mixerChannelName, uid: uid) {[weak self] token in
+                guard let self = self, self.mixedButton?.isSelected == true else {return}
+                self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: nil, mediaOptions: exOpt) { _, _, _ in
+                    print("join[\(mixerChannelName)] success: \(uid)")
+                    
+                    // add remote audio
+                    let remoteStream = AgoraMixedAudioStream()
+                    remoteStream.sourceType = .remoteChannel
+                    remoteStream.channelId = channelName
+                    
+                    // add local audio
+                    let localStream = AgoraMixedAudioStream()
+                    localStream.sourceType = .microphone
+                    
+                    // mix audio to target channel
+                    let audioMixConfig = AgoraLocalAudioMixerConfiguration()
+                    audioMixConfig.syncWithLocalMic = false
+                    audioMixConfig.audioInputStreams = [remoteStream, localStream]
+                    let ret = self.agoraKit.startLocalAudioMixer(audioMixConfig)
+                    print("startLocalAudioMixer: \(ret)")
+                }
+            }
+        } else {
+            agoraKit.stopLocalAudioMixer()
+            agoraKit.leaveChannelEx(connection)
+        }
+    }
 }
 
 /// agora rtc engine delegate events
@@ -265,7 +318,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        
+        mixerUid = uid + 1
         // set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .local, audioOnly: true)
         self.audioViews[0] = view
@@ -328,5 +381,12 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
+    }
+}
+
+extension JoinChannelAudioMain: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

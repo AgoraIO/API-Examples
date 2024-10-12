@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,6 +58,7 @@
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
+		DD8A1F812CA54F90001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F802CA54F90001CEC51 /* AgoraPCMPlayer.swift */; };
 		E70EE9E728F6A6FF00EE9E7F /* JoinChannelAudioToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E228F6A6FF00EE9E7F /* JoinChannelAudioToken.strings */; };
 		E70EE9E828F6A6FF00EE9E7F /* JoinChannelAudioToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */; };
 		E70EE9E928F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */; };
@@ -184,6 +185,7 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		DD8A1F802CA54F90001CEC51 /* AgoraPCMPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPCMPlayer.swift; sourceTree = "<group>"; };
 		E70EE9E328F6A6FF00EE9E7F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudioToken.strings"; sourceTree = "<group>"; };
 		E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudioToken.swift; sourceTree = "<group>"; };
 		E70EE9E628F6A6FF00EE9E7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudioToken.storyboard; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 		03DF1D8424CFC29700DF7151 /* ExternalAudio */ = {
 			isa = PBXGroup;
 			children = (
+				DD8A1F802CA54F90001CEC51 /* AgoraPCMPlayer.swift */,
 				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
 				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
 				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
@@ -689,6 +692,7 @@
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
+				DD8A1F812CA54F90001CEC51 /* AgoraPCMPlayer.swift in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				E72055EC28F94C400030E6D1 /* Util.swift in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
@@ -982,12 +986,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JDPG69R49Z;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1038,7 +1040,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples.audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AgoraLab2020;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1056,11 +1057,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JDPG69R49Z;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1111,7 +1110,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples.audio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AgoraLab2020;
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

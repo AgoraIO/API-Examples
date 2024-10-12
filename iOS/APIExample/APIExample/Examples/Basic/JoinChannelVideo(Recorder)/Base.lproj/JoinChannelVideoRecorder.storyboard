@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -76,17 +76,32 @@
                                     <constraint firstAttribute="width" secondItem="bLu-sF-1q0" secondAttribute="height" multiplier="16:9" id="Inp-ZV-hqi"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vu7-G0-QbZ">
+                                <rect key="frame" x="28" y="755" width="205" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="205" id="UQ9-CK-bTv"/>
+                                    <constraint firstAttribute="height" constant="35" id="tqA-zf-VHn"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Leave"/>
+                                <connections>
+                                    <action selector="onJoinOrLeaveWithSender:" destination="p70-sh-D1h" eventType="touchUpInside" id="Li9-zH-czY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="f4j-hu-9mE" firstAttribute="trailing" secondItem="bLu-sF-1q0" secondAttribute="trailing" id="FL8-6w-T28"/>
+                            <constraint firstItem="f4j-hu-9mE" firstAttribute="bottom" secondItem="vu7-G0-QbZ" secondAttribute="bottom" constant="72" id="GGR-jE-JRu"/>
+                            <constraint firstItem="vu7-G0-QbZ" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" constant="28" id="glu-eq-B6p"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="qnE-dw-lXn"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="wEO-sQ-bsY"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="container" destination="bLu-sF-1q0" id="ljr-4v-SFl"/>
+                        <outlet property="joinOrLeaveButton" destination="vu7-G0-QbZ" id="BDv-WU-tYA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
