@@ -237,3 +237,63 @@
 "AI_Tunner_Warm_Elegant_Female_Singing"="温暖御姐歌声";
 "AI_Tunner_Powerful_Male_Singing"="力量男歌声";
 "AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";
+
+"Start Audio Mixing" = "开启音频转发";
+"Stop Audio Mixing" = "停止音频转发";
+
+"Makeup_enable_mu" = "美妆开关";
+"Makeup_browStyle" = "眉毛类型";
+"Makeup_browColor" = "眉毛颜色";
+"Makeup_browStrength" = "眉毛强度";
+"Makeup_lashStyle" = "眼睫毛类型";
+"Makeup_lashColor" = "眼睫毛颜色";
+"Makeup_lashStrength" = "眼睫毛强度";
+"Makeup_shadowStyle" = "眼影类型";
+"Makeup_shadowColor" = "眼影颜色";
+"Makeup_shadowStrength" = "眼影强度";
+"Makeup_pupilStyle" = "瞳孔类型";
+"Makeup_pupilColor" = "瞳孔颜色";
+"Makeup_pupilStrength" = "瞳孔强度";
+"Makeup_blushStyle" = "腮红类型";
+"Makeup_blushColor" = "腮红颜色";
+"Makeup_blushStrength" = "腮红强度";
+"Makeup_lipStyle" = "唇彩类型";
+"Makeup_lipColor" = "唇彩颜色";
+"Makeup_lipStrength" = "唇彩强度";
+
+"Makeup_browStyle_value1"="关闭";
+"Makeup_browStyle_value2"="类型1";
+"Makeup_browStyle_value3"="类型2";
+
+"Makeup_browColor_value1"="无";
+"Makeup_browColor_value2"="黑色";
+"Makeup_browColor_value3"="棕色";
+
+"Makeup_blushColor_value1"="无";
+"Makeup_blushColor_value2"="1号色";
+"Makeup_blushColor_value3"="2号色";
+"Makeup_blushColor_value4"="3号色";
+"Makeup_blushColor_value5"="4号色";
+"Makeup_blushColor_value6"="5号色";
+
+
+
+
+"face_shape_enable"="美型开关";
+"face_shape_gender"="性别";
+"face_shape_gender_male"="男性";
+"face_shape_gender_female"="女性";
+"face_shape_intensity"="强度";
+
+"face_shape_area_head_scale"="头部比例";
+"face_shape_area_forehead"="额头";
+"face_shape_area_face_contour"="脸型轮廓";
+"face_shape_area_face_length"="脸长";
+"face_shape_area_face_width"="脸宽";
+"face_shape_area_cheek_bone"="颧骨";
+"face_shape_area_cheek"="脸颊";
+"face_shape_area_chin"="下巴";
+"face_shape_area_eye_scale"="眼睛比例";
+"face_shape_area_nose_length"="鼻子长度";
+"face_shape_area_nose_width"="鼻子宽度";
+"face_shape_area_mouth_scale"="嘴巴比例";

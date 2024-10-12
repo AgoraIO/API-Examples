@@ -564,10 +564,10 @@ extension VideoProcessMain {
             if type == "slider" {
                 let value = makeupList[i]["value"] as? [Float] ?? []
                 let sliderView = UISlider()
-                sliderView.value = makeupParams[key] as? Float ?? 0
                 label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
                 sliderView.minimumValue = value.first ?? 0
                 sliderView.maximumValue = value.last ?? 1
+                sliderView.value = makeupParams[key] as? Float ?? 0
                 sliderView.addTarget(self, action: #selector(makeupSliderAction(_:)), for: .valueChanged)
                 valueView = sliderView
             } else if type == "switch" {
@@ -653,7 +653,7 @@ extension VideoProcessMain {
     }
     
     private func updateMakeup() {
-        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: .prettyPrinted),
+        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: []),
               let jsonString = String(data: json, encoding: .utf8) else {
             print("updateMakeup fail")
             return
@@ -796,10 +796,10 @@ extension VideoProcessMain {
             if type == "slider" {
                 let value = makeupList[i]["value"] as? [Float] ?? []
                 let sliderView = UISlider()
-                sliderView.value = beautyShapeParames[key] ?? 0
                 label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
                 sliderView.minimumValue = value.first ?? 0
                 sliderView.maximumValue = value.last ?? 100
+                sliderView.value = beautyShapeParames[key] ?? 0
                 sliderView.addTarget(self, action: #selector(beautyShapeSliderAction(_:)), for: .valueChanged)
                 valueView = sliderView
             } else if type == "switch" {

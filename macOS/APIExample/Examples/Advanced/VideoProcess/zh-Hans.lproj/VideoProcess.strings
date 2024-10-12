@@ -39,3 +39,9 @@
 "sFK-pV-vaj.title" = "平滑";
 
 "AAl-Un-v63.title" = "提亮";
+
+/* Class = "NSButtonCell"; normalTitle = "Face Shape"; ObjectID = "9VS-Ox-yEZ"; */
+"9VS-Ox-yEZ.title" = "美型";
+
+/* Class = "NSButtonCell"; normalTitle = "Make Up"; ObjectID = "8aS-7m-YP7"; */
+"8aS-7m-YP7.title" = "美妆";

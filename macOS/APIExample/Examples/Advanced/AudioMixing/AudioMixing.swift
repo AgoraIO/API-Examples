@@ -358,6 +358,7 @@ class AudioMixing: BaseViewController {
 
         initChannelField()
         initJoinChannelButton()
+        loadALDTest()
     }
     
     override func viewWillBeRemovedFromSplitView() {
@@ -521,6 +522,12 @@ class AudioMixing: BaseViewController {
     @IBAction func onStopLoopBackRecording(_ sender:NSButton){
         guard let micName = selectedMicrophone?.deviceName else {return}
         self.agoraKit.enableLoopbackRecording(false, deviceName: micName)
+    }
+    
+    private func loadALDTest() {
+        let ret1 = agoraKit.enableLoopbackRecording(true, deviceName: "AgoraALD")
+        let ret2 = agoraKit.enableLoopbackRecording(false, deviceName: "AgoraALD")
+        print("loadALDTest: \(ret1) \(ret2)")
     }
     
     func layoutVideos(_ count: Int) {
