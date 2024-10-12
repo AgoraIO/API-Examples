@@ -11,6 +11,7 @@ import AGEVideoLayout
 
 class JoinChannelAudioMain: BaseViewController {
     
+    private var mixerUid: UInt = 0
     var agoraKit: AgoraRtcEngineKit!
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
@@ -250,6 +251,18 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var localUserSpeaking: NSTextField!
     @IBOutlet weak var activeSpeaker: NSTextField!
     
+    
+    @IBOutlet weak var mixedButton: NSButton?
+    @IBOutlet weak var relayChannelTextField: NSTextField?
+    
+    func updateMixedButton() {
+        if mixedButton?.state == .on {
+            mixedButton?.title = "Stop Audio Mixing".localized
+        } else {
+            mixedButton?.title = "Start Audio Mixing".localized
+        }
+    }
+    
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
@@ -292,6 +305,7 @@ class JoinChannelAudioMain: BaseViewController {
         initDevicePlayoutVolumeSlider()
         initSdkPlaybackVolumeSlider()
         initFirstUserPlaybackVolumeSlider()
+        updateMixedButton()
 
         initChannelField()
         initJoinChannelButton()
@@ -385,6 +399,53 @@ class JoinChannelAudioMain: BaseViewController {
         }
     }
     
+    @IBAction func onAudioMixing(_ sender: NSButton) {
+        let channelName = channelField.stringValue
+        guard channelName.isEmpty == false,
+              mixerUid > 0,
+              let mixerChannelName = relayChannelTextField?.stringValue,
+              mixerChannelName.isEmpty == false else {return}
+        updateMixedButton()
+        
+        let uid = mixerUid
+        let connection = AgoraRtcConnection(channelId: mixerChannelName, localUid: Int(uid))
+        if sender.state == .on {
+            let exOpt = AgoraRtcChannelMediaOptions()
+            exOpt.clientRoleType = .broadcaster
+            exOpt.publishMicrophoneTrack = false
+            exOpt.publishMixedAudioTrack = true
+            exOpt.enableAudioRecordingOrPlayout = false
+            exOpt.autoSubscribeAudio = false
+            exOpt.channelProfile = .liveBroadcasting
+            
+            NetworkManager.shared.generateToken(channelName: mixerChannelName, uid: uid) {[weak self] token in
+                guard let self = self, self.mixedButton?.state == .on else {return}
+                self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: nil, mediaOptions: exOpt) { _, _, _ in
+                    print("join[\(mixerChannelName)] success: \(uid)")
+                    
+                    // add remote audio
+                    let remoteStream = AgoraMixedAudioStream()
+                    remoteStream.sourceType = .remoteChannel
+                    remoteStream.channelId = channelName
+                    
+                    // add local audio
+                    let localStream = AgoraMixedAudioStream()
+                    localStream.sourceType = .microphone
+                    
+                    // mix audio to target channel
+                    let audioMixConfig = AgoraLocalAudioMixerConfiguration()
+                    audioMixConfig.syncWithLocalMic = false
+                    audioMixConfig.audioInputStreams = [remoteStream, localStream]
+                    let ret = self.agoraKit.startLocalAudioMixer(audioMixConfig)
+                    print("startLocalAudioMixer: \(ret)")
+                }
+            }
+        } else {
+            agoraKit.stopLocalAudioMixer()
+            agoraKit.leaveChannelEx(connection)
+        }
+    }
+    
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
@@ -424,6 +485,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isProcessing = false
         isJoined = true
+        mixerUid = uid + 1
         let localVideo = videos[0]
         localVideo.uid = uid
         let config = AgoraAudioRecordingConfiguration()
