@@ -477,9 +477,9 @@ class LiveStreamingMain: BaseViewController {
             let config = AgoraSnapshotConfig()
             config.position = position
             config.filePath = NSTemporaryDirectory().appending("local_\(position.rawValue).png")
-            let ret = agoraKit.takeSnapshotWithConfig(0, config: config)
+            let ret = self.agoraKit.takeSnapshotWithConfig(0, config: config)
             print("takeSnapshot ret: \(ret) path: \(config.filePath ?? "")")
-            showAlert(title: "Screenshot successful".localized, message: config.filePath ?? "")
+            self.showAlert(title: "Screenshot successful".localized, message: config.filePath ?? "")
         }
     }
     @IBAction func onTapForegroundVideo(_ sender: UIGestureRecognizer) {
