@@ -151,6 +151,17 @@
 * 使用MeidaPlayerExtensions 向AgoraRtc Engine的频道推流。
 * 使用IMediaPlayerObserver来处理MeidaPlayer的回调事件。例如（打开，播放）
 
+### 透明背景
+
+* 加入频道，发送视频流,接受视频流；
+* 渲染的时候配置canvas属性enableAlphaMask = true；
+
+### 极速直播URL拉流
+
+* 初始化Rte,Player,并注册相关回调；
+* 初始化成功后,可以调用媒体相关的方法,比如play,pause等；
+* 在播放器回调方法里面处理异常情况；
+
 ## 联系我们
 
 - 如果你遇到了困难，可以先参阅[常见问题](https://docs.agora.io/cn/faq)
