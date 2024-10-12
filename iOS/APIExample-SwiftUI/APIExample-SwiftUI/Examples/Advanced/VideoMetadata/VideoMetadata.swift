@@ -70,6 +70,6 @@ struct VideoMetadata: View {
     }
 }
 
-#Preview {
-    VideoMetadata()
-}
+//#Preview {
+//    VideoMetadata()
+//}

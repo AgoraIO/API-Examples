@@ -32,9 +32,9 @@ struct JoinChannelVideoEntry: View {
     }
 }
 
-#Preview {
-    JoinChannelVideoEntry()
-}
+//#Preview {
+//    JoinChannelVideoEntry()
+//}
 
 struct JoinChannelVideo: View {
     @State var configs: [String: Any] = [:]
@@ -64,6 +64,6 @@ struct JoinChannelVideo: View {
     }
 }
 
-#Preview {
-    JoinChannelVideo(configs: [:])
-}
+//#Preview {
+//    JoinChannelVideo(configs: [:])
+//}

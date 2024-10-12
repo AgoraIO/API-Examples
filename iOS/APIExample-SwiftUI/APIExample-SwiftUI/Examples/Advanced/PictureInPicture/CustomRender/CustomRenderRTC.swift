@@ -47,7 +47,7 @@ class CustomRenderRTC: NSObject, ObservableObject , CustomRenderRTCProtocol{
     
     private var uid: UInt = 0
     private weak var localView: PixelBufferRenderView?
-    private lazy var remoteRenderViews: NSHashTable = {
+    private lazy var remoteRenderViews: NSHashTable<PixelBufferRenderView> = {
         let table = NSHashTable<PixelBufferRenderView>(options: .weakMemory)
         return table
     }()

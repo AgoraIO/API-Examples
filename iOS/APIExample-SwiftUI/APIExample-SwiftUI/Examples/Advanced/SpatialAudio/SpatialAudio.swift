@@ -32,9 +32,9 @@ struct SpatialAudioEntry: View {
     }
 }
 
-#Preview {
-    SpatialAudioEntry()
-}
+//#Preview {
+//    SpatialAudioEntry()
+//}
 
 struct SpatialAudio: View {
     @State var configs: [String: Any] = [:]
@@ -63,6 +63,9 @@ struct SpatialAudio: View {
                 Text("Move the red icon to experience the 3D audio effect".localized).padding(.vertical, 30)
                 HStack {
                     ZStack {
+                        GeometryReader {_ in
+                            
+                        }
                         GeometryReader { g in
                             Color.yellow.onAppear(perform: {
                                 attenuationFrame = g.frame(in: .named("OuterV"))
@@ -75,7 +78,11 @@ struct SpatialAudio: View {
                                         isShowVoice1.toggle()
                                     }
                                 }, label: {
+#if os(iOS) && swift(>=5.7)
                                     Image(.spatialSound2)
+#else
+                                    Image("spatial_sound2")
+#endif
                                 }).padding().onAppear {
                                     agoraKit.setupVoice1Frame(frame: g.frame(in: .named("OuterV")))
                                 }
@@ -96,7 +103,11 @@ struct SpatialAudio: View {
                                         isShowVoice2.toggle()
                                     }
                                 }, label: {
+#if os(iOS) && swift(>=5.7)
                                     Image(.spatialSound2)
+#else
+                                    Image("spatial_sound2")
+#endif
                                 }).padding().onAppear {
                                     agoraKit.setupVoice2Frame(frame: g.frame(in: .named("OuterV")))
                                 }
@@ -106,6 +117,7 @@ struct SpatialAudio: View {
                 }
                 Spacer()
                 GeometryReader { g in
+#if os(iOS) && swift(>=5.7)
                     Image(.spatialSelf)
                         .position(position)
                         .gesture(
@@ -113,6 +125,23 @@ struct SpatialAudio: View {
                                 .onChanged { value in
                                     let frame = g.frame(in: .named("OuterV")).origin
                                     let point = CGPointMake(value.location.x + frame.x, value.location.y + frame.y)
+
+                                    position = value.location
+                                    selfFrame = CGRect(origin: point, size: CGSize(width: 61, height: 47))
+                                    agoraKit.updatePosition(frame: selfFrame)
+                                }
+                        ).onAppear {
+                            let rect = g.frame(in: .named("OuterV"))
+                            selfFrame = rect
+                        }.zIndex(2.0)
+#else
+                    Image("spatial_self")
+                        .position(position)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    let frame = g.frame(in: .named("OuterV")).origin
+                                    let point = CGPoint(x: value.location.x + frame.x, y: value.location.y + frame.y)
                                                                     
                                     position = value.location
                                     selfFrame = CGRect(origin: point, size: CGSize(width: 61, height: 47))
@@ -122,32 +151,47 @@ struct SpatialAudio: View {
                             let rect = g.frame(in: .named("OuterV"))
                             selfFrame = rect
                         }.zIndex(2.0)
-                }.frame(width: 61, height: 47)
+#endif
+                }
+                .frame(width: 61, height: 47)
 
                 Spacer()
                 HStack {
-                    HStack {
-                        Image(.spatialRemote)
-                        Text("\(agoraKit.remoteUser1)")
+                    GeometryReader { g in
+                        HStack {
+    #if os(iOS) && swift(>=5.7)
+                            Image(.spatialRemote)
+    #else
+                            Image("spatial_remote")
+    #endif
+                            Text("\(agoraKit.remoteUser1)")
+                        }
+                        .opacity(agoraKit.remoteUser1 == 0 ? 0.0 : 1.0)
+                        .background(.clear)
+                        .onAppear {
+                            let frame = g.frame(in: .named("OuterV"))
+                            agoraKit.remoteUser2Frame = frame
+                        }
                     }
-                    .opacity(agoraKit.remoteUser1 == 0 ? 0.0 : 1.0)
-                    .background(GeometryReader { g -> Color in
-                        let frame = g.frame(in: .named("OuterV"))
-                        agoraKit.remoteUser1Frame = frame
-                        return Color.clear
-                    })
+                    
                     Spacer()
-                    HStack {
-                        Image(.spatialRemote)
-                        Text("\(agoraKit.remoteUser2)")
+                    GeometryReader { g in
+                        HStack {
+    #if os(iOS) && swift(>=5.7)
+                            Image(.spatialRemote)
+    #else
+                            Image("spatial_remote")
+    #endif
+                            Text("\(agoraKit.remoteUser2)")
+                        }
+                        .onAppear {
+                            let frame = g.frame(in: .named("OuterV"))
+                            agoraKit.remoteUser2Frame = frame
+                        }
+                        .opacity(agoraKit.remoteUser2 == 0 ? 0.0 : 1.0)
                     }
-                    .opacity(agoraKit.remoteUser2 == 0 ? 0.0 : 1.0)
-                    .background(GeometryReader { g -> Color in
-                        let frame = g.frame(in: .named("OuterV"))
-                        agoraKit.remoteUser2Frame = frame
-                        return Color.clear
-                    })
-                }.padding(EdgeInsets(top: 0, leading: 50, bottom: 30, trailing: 50))
+                }
+                .padding(EdgeInsets(top: 0, leading: 50, bottom: 30, trailing: 50))
                 
                 HStack {
                     Spacer()
@@ -259,6 +303,6 @@ struct ActionSheetView: View {
     }
 }
 
-#Preview {
-    SpatialAudio(configs: [:])
-}
+//#Preview {
+//    SpatialAudio(configs: [:])
+//}
