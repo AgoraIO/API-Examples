@@ -327,3 +327,27 @@ extension AgoraFocalLengthInfo {
         }
     }
 }
+
+extension AgoraApplicationScenarioType {
+    func description() -> String {
+        switch self {
+        case .applicationGeneralScenario: return "General".localized
+        case .applicationMeetingScenario: return "Meeting".localized
+        case .application1V1Scenario: return "1v1".localized
+        case .applicationLiveShowScenario: return "Live Show".localized
+        @unknown default: return ""
+        }
+    }
+}
+
+extension AgoraVideoModulePosition {
+    func description() -> String {
+        switch self {
+        case .postCapture: return "Post Capture".localized
+        case .preRenderer: return "PreRenderer".localized
+        case .preEncoder: return "PreEncoder".localized
+        case .postCaptureOrigin: return "Post Capture Origin".localized
+        @unknown default: return ""
+        }
+    }
+}

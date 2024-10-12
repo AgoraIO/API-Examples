@@ -8,8 +8,26 @@
 import UIKit
 import AVFoundation
 
-let cl_screenWidht = UIScreen.main.bounds.width
-let cl_screenHeight = UIScreen.main.bounds.height
+extension UIScreen {
+    static var currentScreenSize: CGSize {
+        // Get the main window's available size
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+            return CGSize.zero
+        }
+        
+        // Calculate available width and height
+        let bounds = window.bounds
+        let insets = window.safeAreaInsets
+        
+        let width = bounds.width - insets.left - insets.right
+        let height = bounds.height - insets.top - insets.bottom
+        
+        return CGSize(width: width, height: height)
+    }
+}
+
+let cl_screenWidht = UIScreen.currentScreenSize.width
+let cl_screenHeight = UIScreen.currentScreenSize.height
 class AlertManager: NSObject {
     private struct AlertViewCache {
         var view: UIView?

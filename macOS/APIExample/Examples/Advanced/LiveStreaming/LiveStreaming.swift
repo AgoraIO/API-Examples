@@ -322,7 +322,7 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
-        scrollView.documentView?.setFrameSize(CGSizeMake(314, 645))
+        scrollView.documentView?.setFrameSize(CGSizeMake(314, 720))
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
@@ -488,6 +488,14 @@ class LiveStreamingMain: BaseViewController {
         functionVC?.clickEncoderSegmentSwitch = { [weak self] s in
             self?.onTapEncoderSegment(s)
         }
+        
+        functionVC?.onChangeLocalRenderFps = { [weak self] fps in
+            self?.agoraKit.setLocalRenderTargetFps(.camera, targetFps: fps)
+        }
+        
+        functionVC?.onChangeRemoteRenderFps = { [weak self] fps in
+            self?.agoraKit.setRemoteRenderTargetFps(fps)
+        }
     }
     
     private func onTakeSnapshot() {
@@ -568,6 +576,8 @@ class LiveStreamingMain: BaseViewController {
         encoderConfig.advancedVideoOptions = advancedOptions
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
+    
+    
 }
 
 class LiveStreamingRTCFunctionVC: BaseViewController {
@@ -578,6 +588,8 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     var clickVideoImageSwitch: ((NSSwitch) -> Void)?
     var clickBFrameSwitch: ((NSSwitch) -> Void)?
     var clickEncoderSegmentSwitch: ((NSSegmentedControl) -> Void)?
+    var onChangeRemoteRenderFps: ((Int32)->())?
+    var onChangeLocalRenderFps: ((Int32)->())?
     @IBOutlet weak var snapShot: NSButton!
     @IBAction func onTakeSnapshot(_ sender: Any) {
         clickTakeSnapshotClosure?()
@@ -612,6 +624,33 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     @IBOutlet weak var encoderSegment: NSSegmentedControl!
     @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
         clickEncoderSegmentSwitch?(sender)
+    }
+    
+    // lcoal render fps editor
+    @IBOutlet weak var localRenderTextField: NSTextField?
+    
+    // remote render fps editor
+    @IBOutlet weak var remoteRenderTextField: NSTextField?
+}
+
+extension LiveStreamingRTCFunctionVC: NSTextFieldDelegate {
+    func controlTextDidChange(_ obj: Notification) {
+        guard let textField = obj.object as? NSTextField else {return}
+        if let number = Int(textField.stringValue) {
+            if number > 60 {
+                textField.stringValue = "60"
+            } else if number == 0 {
+                textField.stringValue = ""
+            }
+        } else {
+            textField.stringValue = ""
+        }
+         
+        if textField == localRenderTextField {
+            self.onChangeLocalRenderFps?(Int32(textField.stringValue) ?? 15)
+        } else {
+            self.onChangeRemoteRenderFps?(Int32(textField.stringValue) ?? 15)
+        }
     }
 }
 

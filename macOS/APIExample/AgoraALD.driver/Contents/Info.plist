@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>22G120</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AgoraALD</string>
+	<key>CFBundleIdentifier</key>
+	<string>io.agora.audioloopback</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>AgoraALD</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.1</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFPlugInFactories</key>
+	<dict>
+		<key>99A15A8B-DA3C-42C3-BD5D-D035A0C2488B</key>
+		<string>AgoraALD_Create</string>
+	</dict>
+	<key>CFPlugInTypes</key>
+	<dict>
+		<key>443ABAB8-E7B3-491A-B985-BEB9187030DB</key>
+		<array>
+			<string>99A15A8B-DA3C-42C3-BD5D-D035A0C2488B</string>
+		</array>
+	</dict>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string></string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
+	<key>DTPlatformVersion</key>
+	<string>14.2</string>
+	<key>DTSDKBuild</key>
+	<string>23C53</string>
+	<key>DTSDKName</key>
+	<string>macosx14.2</string>
+	<key>DTXcode</key>
+	<string>1520</string>
+	<key>DTXcodeBuild</key>
+	<string>15C500b</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.10</string>
+</dict>
+</plist>

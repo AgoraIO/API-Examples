@@ -51,7 +51,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
-    let sampleRate:UInt = 44100, channel:UInt = 1, bitPerSample = 16, samples = 441 * 10
+    let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
     override func viewDidLoad(){
         super.viewDidLoad()
         
@@ -96,7 +96,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
+        option.publishMicrophoneTrack = false
         option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
