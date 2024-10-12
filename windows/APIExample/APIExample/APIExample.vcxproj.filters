@@ -273,6 +273,12 @@
     <ClInclude Include="AbstractMediaPlayerSourceObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\RtePlayer\RtePlayerDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\Beauty\CDlgBeautyEx.h">
+      <Filter>Advanced\Beauty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -418,6 +424,12 @@
     </ClCompile>
     <ClCompile Include="AbstractMediaPlayerSourceObserver.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\RtePlayer\RtePlayerDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty\CDlgBeautyEx.cpp">
+      <Filter>Advanced\Beauty</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

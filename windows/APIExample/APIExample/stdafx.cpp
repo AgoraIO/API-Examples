@@ -323,6 +323,9 @@ wchar_t advancedMetadataSend[INFO_LEN] = { 0 };
 //transparent backgroud
 wchar_t TransparentBackground[INFO_LEN] = { 0 };
 
+wchar_t RteUrlPlayer[INFO_LEN] = { 0 };
+
+wchar_t VideoEnhance[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -773,8 +776,11 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedMetadataAudio, INFO_LEN, Str(_T("Metadata.Audio")));
 	_tcscpy_s(advancedMetadataSend, INFO_LEN, Str(_T("Metadata.Send")));
 
-        //transparent bg
-        _tcscpy_s(TransparentBackground, INFO_LEN, Str(_T("TransparentBackground")));
+    //transparent bg
+    _tcscpy_s(TransparentBackground, INFO_LEN, Str(_T("TransparentBackground")));
+     //RteUrlPlayer
+    _tcscpy_s(RteUrlPlayer, INFO_LEN, Str(_T("RteUrlPlayer")));
+	_tcscpy_s(VideoEnhance, INFO_LEN, Str(_T("VideoEnhance")));
 
 
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
