@@ -351,3 +351,8 @@ extern wchar_t advancedMetadataSend[INFO_LEN];
 
 //transparent background
 extern wchar_t TransparentBackground[INFO_LEN];
+
+extern wchar_t RteUrlPlayer[INFO_LEN];
+extern wchar_t VideoEnhance[INFO_LEN];
+
+

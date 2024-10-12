@@ -161,16 +161,16 @@ BOOL CTransparentBgDlg::OnInitDialog()
         if (AfxRegisterClass(&wndcls))
         {
             hWnd = CreateWindowEx(
-                0,                                                                     // 扩展窗口样式
-                className,                                                             // 窗口类名
-                _T("透明窗口"),                                                        // 窗口标题
-                WS_OVERLAPPEDWINDOW & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_SYSMENU, // 窗口样式
-                CW_USEDEFAULT, CW_USEDEFAULT,                                          // 窗口位置
-                800, 600,                                                              // 窗口大小
-                this->GetSafeHwnd(),                                                   // 父窗口句柄
-                NULL,                                                                  // 菜单句柄
-                AfxGetInstanceHandle(),                                                // 应用程序实例句柄
-                NULL                                                                   // 窗口创建数据
+                0,
+                className,
+                _T("Transparent Windows"),
+                WS_OVERLAPPEDWINDOW & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_SYSMENU,
+                CW_USEDEFAULT, CW_USEDEFAULT,
+                800, 600,
+                this->GetSafeHwnd(),
+                NULL,
+                AfxGetInstanceHandle(),
+                NULL
             );
             if (hWnd)
             {
@@ -185,16 +185,16 @@ void CTransparentBgDlg::ShowTransparentWindow()
 {
     if (hWnd)
     {
-        ::ShowWindow(hWnd, SW_SHOW); // 显示窗口
-        UpdateWindow();              // 更新窗口
+        ::ShowWindow(hWnd, SW_SHOW);
+        UpdateWindow();
     }
 }
 void CTransparentBgDlg::HideTransparentWindow()
 {
     if (hWnd)
     {
-        ::ShowWindow(hWnd, SW_HIDE); // 隐藏窗口
-        UpdateWindow();              // 更新窗口
+        ::ShowWindow(hWnd, SW_HIDE);
+        UpdateWindow();
     }
 }
 
@@ -279,8 +279,6 @@ void CTransparentBgDlg::onFrame(const VideoFrame *frame)
 {
     if (m_rtcEngine)
     {
-
-        // 创建ExternalVideoFrame对象
         agora::media::base::ExternalVideoFrame externalFrame;
         externalFrame.alphaStitchMode = ALPHA_STITCH_LEFT;
         externalFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
@@ -295,7 +293,6 @@ void CTransparentBgDlg::onFrame(const VideoFrame *frame)
         memcpy((uint8_t *)externalFrame.buffer + frame->yStride * frame->height, frame->uBuffer, frame->uStride * (frame->height >> 1));
         memcpy((uint8_t *)externalFrame.buffer + frame->yStride * frame->height + frame->uStride * (frame->height >> 1), frame->vBuffer, frame->vStride * (frame->height / 2));
         mediaEngine->pushVideoFrame(&externalFrame);
-        // 释放缓冲区
         delete[] externalFrame.buffer;
 
         // CString strInfo;
@@ -622,7 +619,7 @@ void CTransparentBgDlg::OnBnClickedButtonJoinchannel()
         m_editChannel.GetWindowText(strChannelName);
         if (strChannelName.IsEmpty())
         {
-            MessageBox(_T("频道号不能为空"));
+            MessageBox(_T("channel name is empty"));
             return;
         }
 
