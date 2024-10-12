@@ -28,7 +28,7 @@ struct PictureInPictureEntry: View {
             ForEach(items) { item in
                 NavigationLink(destination: {
                     let entry = PictureInPictureJoinEntry(pipType: item.type)
-                    return entry.navigationTitle(item.name)
+                    entry.navigationTitle(item.name)
                 }) {
                     Text(item.name)
                 }
@@ -79,6 +79,6 @@ struct PictureInPictureJoinEntry: View {
     
 }
 
-#Preview {
-    PictureInPictureJoinEntry(pipType: .customRender)
-}
+//#Preview {
+//    PictureInPictureJoinEntry(pipType: .customRender)
+//}

@@ -174,232 +174,250 @@ struct VoiceChanger: View {
     var remoteView = VideoView(type: .remote,
                                audioOnly: true)
     
+    var voiceBeautifierViews: some View {
+        Group {
+            Text("Voice Beautifier & Effects Preset")
+                .font(.system(size: 15, weight: .bold))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Set Chat Beautifier".localized)
+                Picker("", selection: $selectedChatBeautifier) {
+                    ForEach(chatBeautifierCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedChatBeautifier) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setVoiceBeautifierPreset(newValue)
+                        resetAllSelectors(except: "ChatBeautifier")
+                        updateAudioEffectsControls(.off)
+                    }
+                }
+            }
+
+            HStack {
+                Text("Set Timbre Transformation".localized)
+                Picker("", selection: $selectedTimbreTransformation) {
+                    ForEach(timbreTransformationCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedTimbreTransformation) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setVoiceBeautifierPreset(newValue)
+                        resetAllSelectors(except: "TimbreTransformation")
+                        updateAudioEffectsControls(.off)
+                    }
+                }
+            }
+
+            HStack {
+                Text("Set Voice Changer".localized)
+                Picker("", selection: $selectedVoiceChanger) {
+                    ForEach(voiceChangerCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedVoiceChanger) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
+                        resetAllSelectors(except: "VoiceChanger")
+                        updateAudioEffectsControls(newValue)
+                    }
+                }
+            }
+
+            HStack {
+                Text("Set Style Transformation".localized)
+                Picker("", selection: $selectedStyleTransformation) {
+                    ForEach(styleTransformationCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedStyleTransformation) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
+                        resetAllSelectors(except: "StyleTransformation")
+                        updateAudioEffectsControls(newValue)
+                    }
+                }
+            }
+
+            HStack {
+                Text("Set Room Acoustics".localized)
+                Picker("", selection: $selectedRoomAcoustics) {
+                    ForEach(roomAcousticsCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedRoomAcoustics) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
+                        resetAllSelectors(except: "RoomAcoustics")
+                        updateAudioEffectsControls(newValue)
+                    }
+                }
+            }
+
+            HStack {
+                Text("Pitch Correction".localized)
+                Picker("", selection: $selectedPitchCorrection) {
+                    ForEach(pitchCorrectionCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedPitchCorrection) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
+                        resetAllSelectors(except: "PitchCorrection")
+                        updateAudioEffectsControls(newValue)
+                    }
+                }
+            }
+            
+            HStack {
+                Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Mode".localized)
+                    .foregroundStyle(tonicModeEnable ? .black : .gray)
+                Slider(value: $tonicModeValue, in: tonicModeValueSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
+                    }
+                }
+                .tint(tonicModeEnable ? .blue : .gray)
+                .disabled(!tonicModeEnable)
+
+                Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Pitch".localized)
+                    .foregroundStyle(tonicModeEnable ? .black : .gray)
+                Slider(value: $tonicPitchValue, in: tonicPitchValueSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
+                    }
+                }
+                .tint(tonicModeEnable ? .blue : .gray)
+                .disabled(!tonicPitchEnable)
+            }
+
+            HStack {
+                Text("Voice Conversion".localized)
+                Picker("", selection: $selectedVoiceConversion) {
+                    ForEach(voiceConversionCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedVoiceConversion) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setVoiceConversionPreset(newValue)
+                        resetAllSelectors(except: "VoiceConversion")
+                        updateAudioEffectsControls(.off)
+                    }
+                }
+            }
+
+            VStack {
+                Text("Voice Formant".localized)
+                Slider(value: $voiceFormantValue, in: voiceFormantValueSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setLocalVoiceFormant(Double(voiceFormantValue))
+                    }
+                }
+            }
+        }
+    }
+    
+    var voiceEffectViews: some View {
+        Group {
+            Text("Customize Voice Effects".localized)
+                .font(.system(size: 15, weight: .bold))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Pitch".localized)
+                Slider(value: $pitchValue, in: pitchValueSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setLocalVoicePitch(Double(pitchValue))
+                    }
+                }
+            }
+
+            HStack {
+                Text("BandFreq".localized)
+                Picker("", selection: $selectedVoiceEqualizationFreq) {
+                    ForEach(voiceEqualizationFreqCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedVoiceEqualizationFreq) { newValue in
+                    voiceChangerRTC.agoraKit.setLocalVoiceEqualizationOf(selectedVoiceEqualizationFreq, withGain: Int(bandGainValue))
+                }
+            }
+
+            HStack {
+                Text("BandGain".localized)
+                Slider(value: $bandGainValue, in: bandGainSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setLocalVoiceEqualizationOf(selectedVoiceEqualizationFreq, withGain: Int(bandGainValue))
+                    }
+                }
+            }
+
+            HStack {
+                Text("ReverbKey".localized)
+                Picker("", selection: $selectedReverbKay) {
+                    ForEach(reverbKeyCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedReverbKay) { newValue in
+                    updateReverbValueRange(reverbKey: newValue)
+                }
+            }
+
+            HStack {
+                Text("ReverbValue".localized)
+                Slider(value: $reverbValue, in: reverbValueSliderRange) { isEditing in
+                    if !isEditing {
+                        voiceChangerRTC.agoraKit.setLocalVoiceReverbOf(selectedReverbKay, withValue: Int(reverbValue))
+                    }
+                }
+            }
+        }
+    }
+    
+    var anisModelViews: some View {
+        Group {
+            HStack {
+                Text("AINSModel".localized)
+                Picker("", selection: $selectedAinsModel) {
+                    ForEach(ainsModelCases) { e in
+                        Text(e.description()).tag(e)
+                    }
+                }
+                .onChange(of: selectedAinsModel) { newValue in
+                    if shouldPreset {
+                        voiceChangerRTC.agoraKit.setAINSMode(true, mode: newValue)
+                        resetAllSelectors(except: "AINSModel")
+                        updateAudioEffectsControls(.off)
+                    }
+                }
+            }
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 localView
+                    .background(.gray)
                 remoteView
+                    .background(.gray)
             }
             .frame(maxHeight: 200)
             .padding(.bottom, 50)
             
             ScrollView {
                 VStack(alignment: .leading) {
-                    HStack {
-                        Text("AINSModel".localized)
-                        Picker("", selection: $selectedAinsModel) {
-                            ForEach(ainsModelCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedAinsModel) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setAINSMode(true, mode: newValue)
-                                resetAllSelectors(except: "AINSModel")
-                                updateAudioEffectsControls(.off)
-                            }
-                        }
-                    }
-                    Text("Voice Beautifier & Effects Preset")
-                        .font(.system(size: 15, weight: .bold))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
-                        Text("Set Chat Beautifier".localized)
-                        Picker("", selection: $selectedChatBeautifier) {
-                            ForEach(chatBeautifierCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedChatBeautifier) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setVoiceBeautifierPreset(newValue)
-                                resetAllSelectors(except: "ChatBeautifier")
-                                updateAudioEffectsControls(.off)
-                            }
-                        }
-                    }
-
-                    HStack {
-                        Text("Set Timbre Transformation".localized)
-                        Picker("", selection: $selectedTimbreTransformation) {
-                            ForEach(timbreTransformationCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedTimbreTransformation) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setVoiceBeautifierPreset(newValue)
-                                resetAllSelectors(except: "TimbreTransformation")
-                                updateAudioEffectsControls(.off)
-                            }
-                        }
-                    }
-
-                    HStack {
-                        Text("Set Voice Changer".localized)
-                        Picker("", selection: $selectedVoiceChanger) {
-                            ForEach(voiceChangerCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedVoiceChanger) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
-                                resetAllSelectors(except: "VoiceChanger")
-                                updateAudioEffectsControls(newValue)
-                            }
-                        }
-                    }
-
-                    HStack {
-                        Text("Set Style Transformation".localized)
-                        Picker("", selection: $selectedStyleTransformation) {
-                            ForEach(styleTransformationCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedStyleTransformation) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
-                                resetAllSelectors(except: "StyleTransformation")
-                                updateAudioEffectsControls(newValue)
-                            }
-                        }
-                    }
-
-                    HStack {
-                        Text("Set Room Acoustics".localized)
-                        Picker("", selection: $selectedRoomAcoustics) {
-                            ForEach(roomAcousticsCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedRoomAcoustics) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
-                                resetAllSelectors(except: "RoomAcoustics")
-                                updateAudioEffectsControls(newValue)
-                            }
-                        }
-                    }
-
-                    HStack {
-                        Text("Pitch Correction".localized)
-                        Picker("", selection: $selectedPitchCorrection) {
-                            ForEach(pitchCorrectionCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedPitchCorrection) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setAudioEffectPreset(newValue)
-                                resetAllSelectors(except: "PitchCorrection")
-                                updateAudioEffectsControls(newValue)
-                            }
-                        }
-                    }
-                    
-                    HStack {
-                        Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Mode".localized)
-                            .foregroundStyle(tonicModeEnable ? .black : .gray)
-                        Slider(value: $tonicModeValue, in: tonicModeValueSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
-                            }
-                        }
-                        .tint(tonicModeEnable ? .blue : .gray)
-                        .disabled(!tonicModeEnable)
-                        
-                        Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Pitch".localized)
-                            .foregroundStyle(tonicModeEnable ? .black : .gray)
-                        Slider(value: $tonicPitchValue, in: tonicPitchValueSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
-                            }
-                        }
-                        .tint(tonicModeEnable ? .blue : .gray)
-                        .disabled(!tonicPitchEnable)
-                    }
-                    
-                    HStack {
-                        Text("Voice Conversion".localized)
-                        Picker("", selection: $selectedVoiceConversion) {
-                            ForEach(voiceConversionCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedVoiceConversion) { newValue in
-                            if shouldPreset {
-                                voiceChangerRTC.agoraKit.setVoiceConversionPreset(newValue)
-                                resetAllSelectors(except: "VoiceConversion")
-                                updateAudioEffectsControls(.off)
-                            }
-                        }
-                    }
-                    
-                    VStack {
-                        Text("Voice Formant".localized)
-                        Slider(value: $voiceFormantValue, in: voiceFormantValueSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setLocalVoiceFormant(Double(voiceFormantValue))
-                            }
-                        }
-                    }
-                    
-                    Text("Customize Voice Effects".localized)
-                        .font(.system(size: 15, weight: .bold))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
-                        Text("Pitch".localized)
-                        Slider(value: $pitchValue, in: pitchValueSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setLocalVoicePitch(Double(pitchValue))
-                            }
-                        }
-                    }
-                    
-                    HStack {
-                        Text("BandFreq".localized)
-                        Picker("", selection: $selectedVoiceEqualizationFreq) {
-                            ForEach(voiceEqualizationFreqCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedVoiceEqualizationFreq) { newValue in
-                            voiceChangerRTC.agoraKit.setLocalVoiceEqualizationOf(selectedVoiceEqualizationFreq, withGain: Int(bandGainValue))
-                        }
-                    }
-                    
-                    HStack {
-                        Text("BandGain".localized)
-                        Slider(value: $bandGainValue, in: bandGainSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setLocalVoiceEqualizationOf(selectedVoiceEqualizationFreq, withGain: Int(bandGainValue))
-                            }
-                        }
-                    }
-                    
-                    HStack {
-                        Text("ReverbKey".localized)
-                        Picker("", selection: $selectedReverbKay) {
-                            ForEach(reverbKeyCases) { e in
-                                Text(e.description()).tag(e)
-                            }
-                        }
-                        .onChange(of: selectedReverbKay) { newValue in
-                            updateReverbValueRange(reverbKey: newValue)
-                        }
-                    }
-                    
-                    HStack {
-                        Text("ReverbValue".localized)
-                        Slider(value: $reverbValue, in: reverbValueSliderRange) { isEditing in
-                            if !isEditing {
-                                voiceChangerRTC.agoraKit.setLocalVoiceReverbOf(selectedReverbKay, withValue: Int(reverbValue))
-                            }
-                        }
-                    }
-                    
+                    anisModelViews
+                    voiceBeautifierViews
+                    voiceEffectViews
                 }
                 .padding(.all, 20)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -521,6 +539,6 @@ extension AgoraAudioEqualizationBandFrequency: Identifiable {
 extension AgoraAudioReverbType: Identifiable {
     public var id: Int { rawValue }
 }
-#Preview {
-    VoiceChanger()
-}
+//#Preview {
+//    VoiceChanger()
+//}

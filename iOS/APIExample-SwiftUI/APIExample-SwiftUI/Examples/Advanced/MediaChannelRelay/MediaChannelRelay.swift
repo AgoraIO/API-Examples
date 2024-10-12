@@ -32,9 +32,9 @@ struct MediaChannelRelayEntry: View {
     }
 }
 
-#Preview {
-    MediaChannelRelayEntry()
-}
+//#Preview {
+//    MediaChannelRelayEntry()
+//}
 
 struct MediaChannelRelay: View {
     @State var configs: [String: Any] = [:]
@@ -92,6 +92,6 @@ struct MediaChannelRelay: View {
     }
 }
 
-#Preview {
-    MediaChannelRelay(configs: [:])
-}
+//#Preview {
+//    MediaChannelRelay(configs: [:])
+//}

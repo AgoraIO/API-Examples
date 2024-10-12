@@ -32,9 +32,9 @@ struct ScreenShareEntry: View {
     }
 }
 
-#Preview {
-    ScreenShareEntry()
-}
+//#Preview {
+//    ScreenShareEntry()
+//}
 
 struct ScreenShare: View {
     @State var configs: [String: Any] = [:]
@@ -172,6 +172,6 @@ struct ScreenShare: View {
     }
 }
 
-#Preview {
-    ScreenShare(configs: [:])
-}
+//#Preview {
+//    ScreenShare(configs: [:])
+//}

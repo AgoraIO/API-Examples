@@ -32,9 +32,9 @@ struct FaceCaptureEntry: View {
     }
 }
 
-#Preview {
-    FaceCaptureEntry()
-}
+//#Preview {
+//    FaceCaptureEntry()
+//}
 
 struct FaceCapture: View {
     @State var configs: [String: Any] = [:]
@@ -62,6 +62,6 @@ struct FaceCapture: View {
     }
 }
 
-#Preview {
-    FaceCapture(configs: [:])
-}
+//#Preview {
+//    FaceCapture(configs: [:])
+//}

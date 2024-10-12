@@ -14,9 +14,8 @@ struct JoinChannelVideoTokenEntry: View {
     @State private var isActive = false
     @State private var showAlert = false
     @State private var configs: [String: Any] = [:]
-    
-    var body: some View {
-        VStack(alignment: .leading) {
+    var inputView: some View {
+        Group {
             Spacer()
             Text("AppID")
             TextField("Please the input APPID".localized, text: $appId).textFieldStyle(.roundedBorder)
@@ -24,6 +23,12 @@ struct JoinChannelVideoTokenEntry: View {
             TextField("Please the input Token".localized, text: $token).textFieldStyle(.roundedBorder)
             Text("Channel Name")
             TextField("Enter channel name".localized, text: $channelName).textFieldStyle(.roundedBorder)
+        }
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            inputView
             HStack {
                 Spacer()
                 Button {
@@ -42,25 +47,48 @@ struct JoinChannelVideoTokenEntry: View {
                 EmptyView()
             }
             Spacer()
-        }.padding(EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 50))
-
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        showAlert = true
-                    }) {
-                        Image("tips")
-                    }.alert(isPresented: $showAlert) {
-                        Alert(title: Text("Quick input APPID and Token methods".localized), message: Text("I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff.".localized), dismissButton: .default(Text("OK")))
-                    }
-                }
-            }
+        }
+        .padding(EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 50))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(content: toobarItems)
     }
+    
+    @ToolbarContentBuilder // 使用 @ToolbarContentBuilder 声明
+    func toobarItems() -> some ToolbarContent {
+        let placement: ToolbarItemPlacement = {
+#if os(iOS) && swift(>=5.7)
+            return .topBarTrailing
+#else
+            return .navigationBarTrailing
+#endif
+        }()
+
+        return ToolbarItem(placement: placement) {
+            Button(action: {
+                showAlert = true
+            }) {
+                Image("tips")
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Quick input APPID and Token methods".localized),
+                    message: Text("""
+                    I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n
+                    II: use https://cl1p.net/ online clipboard:\n\n
+                    1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n
+                    2.Paste in anything you want.\n\n
+                    3.On another computer enter the same URL and get your stuff.
+                    """.localized),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
+    }
+    
 }
-#Preview {
-    JoinChannelVideoTokenEntry()
-}
+//#Preview {
+//    JoinChannelVideoTokenEntry()
+//}
 
 struct JoinChannelVideoToken: View {
     @State var configs: [String: Any] = [:]
@@ -90,6 +118,6 @@ struct JoinChannelVideoToken: View {
     }
 }
 
-#Preview {
-    JoinChannelVideoToken(configs: [:])
-}
+//#Preview {
+//    JoinChannelVideoToken(configs: [:])
+//}

@@ -43,9 +43,9 @@ struct ARKitEntry: View {
     }
 }
 
-#Preview {
-    ARKitEntry()
-}
+//#Preview {
+//    ARKitEntry()
+//}
 
 struct ARViewWrapper: UIViewRepresentable {
     let arView = ARSCNView()
@@ -129,6 +129,6 @@ struct ARKit: View {
     }
 }
 
-#Preview {
-    ARKit(configs: [:])
-}
+//#Preview {
+//    ARKit(configs: [:])
+//}

@@ -77,9 +77,9 @@ struct RhythmPlayerEntry: View {
     }
 }
 
-#Preview {
-    RhythmPlayerEntry()
-}
+//#Preview {
+//    RhythmPlayerEntry()
+//}
 
 struct RhythmPlayer: View {
     @State var configs: [String: Any] = [:]
@@ -144,6 +144,6 @@ struct RhythmPlayer: View {
     }
 }
 
-#Preview {
-    RhythmPlayer(configs: [:])
-}
+//#Preview {
+//    RhythmPlayer(configs: [:])
+//}

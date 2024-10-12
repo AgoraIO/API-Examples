@@ -77,9 +77,9 @@ struct AudioMixingEntry: View {
     }
 }
 
-#Preview {
-    AudioMixingEntry()
-}
+//#Preview {
+//    AudioMixingEntry()
+//}
 
 struct AudioMixing: View {
     @State var configs: [String: Any] = [:]
@@ -215,6 +215,6 @@ struct AudioMixing: View {
     }
 }
 
-#Preview {
-    AudioMixing(configs: [:])
-}
+//#Preview {
+//    AudioMixing(configs: [:])
+//}
