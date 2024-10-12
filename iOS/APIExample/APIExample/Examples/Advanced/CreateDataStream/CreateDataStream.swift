@@ -35,6 +35,7 @@ class CreateDataStreamEntry: UIViewController {
 }
 
 class CreateDataStreamMain: BaseViewController {
+    private var streamId: Int = 0
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
@@ -128,13 +129,14 @@ class CreateDataStreamMain: BaseViewController {
     /// send message
     @IBAction func onSendPress(_ sender: UIButton) {
         // indicate if stream has created
-        var streamId: Int = 0
-        
         guard let message = messageField.text, !message.isEmpty else { return }
         // create the data stream
         // Each user can create up to five data streams during the lifecycle of the agoraKit
         let config = AgoraDataStreamConfig()
-        let result = agoraKit.createDataStream(&streamId, config: config)
+        var result: Int32 = 0
+        if streamId == 0 {
+             result = agoraKit.createDataStream(&streamId, config: config)
+        }
         if result != 0 {
             showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
         }
