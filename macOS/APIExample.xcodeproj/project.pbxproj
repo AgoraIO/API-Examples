@@ -92,6 +92,7 @@
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD8A1F922CA55AA4001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */; };
+		DD962C642CBA491600B8AAA7 /* AgoraALD.driver in Resources */ = {isa = PBXBuildFile; fileRef = DD962C632CBA491600B8AAA7 /* AgoraALD.driver */; };
 		E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */; };
 		E702C1E828B4DB4800D7C7ED /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */; };
 		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
@@ -273,6 +274,7 @@
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
 		DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPCMPlayer.swift; sourceTree = "<group>"; };
+		DD962C632CBA491600B8AAA7 /* AgoraALD.driver */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AgoraALD.driver; path = APIExample/AgoraALD.driver; sourceTree = "<group>"; };
 		E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
 		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 		03896D2324F8A00F008593CD = {
 			isa = PBXGroup;
 			children = (
+				DD962C632CBA491600B8AAA7 /* AgoraALD.driver */,
 				03896D2E24F8A00F008593CD /* APIExample */,
 				8BD4AE7A272518D600E95B87 /* SimpleFilter */,
 				03896D2D24F8A00F008593CD /* Products */,
@@ -1009,6 +1012,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD962C642CBA491600B8AAA7 /* AgoraALD.driver in Resources */,
 				E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */,
 				E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */,
 				E75279D529F6737100358F18 /* LiveStreaming.storyboard in Resources */,
