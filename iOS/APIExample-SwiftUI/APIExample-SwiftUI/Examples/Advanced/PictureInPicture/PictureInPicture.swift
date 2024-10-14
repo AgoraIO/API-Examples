@@ -79,6 +79,8 @@ struct PictureInPictureJoinEntry: View {
     
 }
 
-//#Preview {
-//    PictureInPictureJoinEntry(pipType: .customRender)
-//}
+struct PictureInPictureJoinEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        PictureInPictureJoinEntry(pipType: .customRender)
+    }
+}

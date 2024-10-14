@@ -32,9 +32,11 @@ struct SpatialAudioEntry: View {
     }
 }
 
-//#Preview {
-//    SpatialAudioEntry()
-//}
+struct SpatialAudioEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        SpatialAudioEntry()
+    }
+}
 
 struct SpatialAudio: View {
     @State var configs: [String: Any] = [:]
@@ -303,6 +305,8 @@ struct ActionSheetView: View {
     }
 }
 
-//#Preview {
-//    SpatialAudio(configs: [:])
-//}
+struct SpatialAudioPreviews: PreviewProvider {
+    static var previews: some View {
+        SpatialAudio(configs: [:])
+    }
+}

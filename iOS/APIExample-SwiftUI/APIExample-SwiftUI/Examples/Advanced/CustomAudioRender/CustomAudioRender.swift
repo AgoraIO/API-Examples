@@ -63,6 +63,8 @@ struct CustomAudioRender: View {
     }
 }
 
-//#Preview {
-//    CustomAudioRender()
-//}
+struct CustomAudioRenderPreviews: PreviewProvider {
+    static var previews: some View {
+        CustomAudioRender()
+    }
+}
