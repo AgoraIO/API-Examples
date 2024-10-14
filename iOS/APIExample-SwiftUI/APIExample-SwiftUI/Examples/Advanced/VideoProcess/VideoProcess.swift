@@ -32,9 +32,11 @@ struct VideoProcessEntry: View {
     }
 }
 
-//#Preview {
-//    VideoProcessEntry()
-//}
+struct VideoProcessEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        VideoProcessEntry()
+    }
+}
 
 struct VideoProcess: View {
     @State var configs: [String: Any] = [:]
@@ -210,6 +212,8 @@ struct VideoProcess: View {
     }
 }
 
-//#Preview {
-//    VideoProcess(configs: [:])
-//}
+struct VideoProcessPreviews: PreviewProvider {
+    static var previews: some View {
+        VideoProcess(configs: [:])
+    }
+}

@@ -32,9 +32,11 @@ struct MediaPlayerEntry: View {
     }
 }
 
-//#Preview {
-//    MediaPlayerEntry()
-//}
+struct MediaPlayerEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        MediaPlayerEntry()
+    }
+}
 
 struct MediaPlayer: View {
     @State var configs: [String: Any] = [:]
@@ -164,6 +166,8 @@ struct MediaPlayer: View {
     }
 }
 
-//#Preview {
-//    MediaPlayer(configs: [:])
-//}
+struct MediaPlayerPreviews: PreviewProvider {
+    static var previews: some View {
+        MediaPlayer(configs: [:])
+    }
+}
