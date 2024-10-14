@@ -539,6 +539,9 @@ extension AgoraAudioEqualizationBandFrequency: Identifiable {
 extension AgoraAudioReverbType: Identifiable {
     public var id: Int { rawValue }
 }
-//#Preview {
-//    VoiceChanger()
-//}
+
+struct VoiceChangerPreviews: PreviewProvider {
+    static var previews: some View {
+        VoiceChanger()
+    }
+}

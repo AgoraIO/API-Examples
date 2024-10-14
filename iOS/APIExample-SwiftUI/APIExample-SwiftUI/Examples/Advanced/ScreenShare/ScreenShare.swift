@@ -32,9 +32,11 @@ struct ScreenShareEntry: View {
     }
 }
 
-//#Preview {
-//    ScreenShareEntry()
-//}
+struct ScreenShareEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        ScreenShareEntry()
+    }
+}
 
 struct ScreenShare: View {
     @State var configs: [String: Any] = [:]
@@ -172,6 +174,8 @@ struct ScreenShare: View {
     }
 }
 
-//#Preview {
-//    ScreenShare(configs: [:])
-//}
+struct ScreenSharePreviews: PreviewProvider {
+    static var previews: some View {
+        ScreenShare(configs: [:])
+    }
+}
