@@ -32,9 +32,11 @@ struct QuickSwitchChannelEntry: View {
     }
 }
 
-//#Preview {
-//    QuickSwitchChannelEntry()
-//}
+struct QuickSwitchChannelEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        QuickSwitchChannelEntry()
+    }
+}
 
 struct QuickSwitchChannel: View {
     @State var configs: [String: Any] = [:]
@@ -82,6 +84,8 @@ struct QuickSwitchChannel: View {
     }
 }
 
-//#Preview {
-//    QuickSwitchChannel(configs: [:])
-//}
+struct QuickSwitchChannelPreviews: PreviewProvider {
+    static var previews: some View {
+        QuickSwitchChannel(configs: [:])
+    }
+}
