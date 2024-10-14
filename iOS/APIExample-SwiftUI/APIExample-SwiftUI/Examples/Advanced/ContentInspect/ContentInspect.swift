@@ -32,9 +32,11 @@ struct ContentInspectEntry: View {
     }
 }
 
-//#Preview {
-//    ContentInspectEntry()
-//}
+struct ContentInspectEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        ContentInspectEntry()
+    }
+}
 
 struct ContentInspect: View {
     @State var configs: [String: Any] = [:]
@@ -79,6 +81,8 @@ struct ContentInspect: View {
     }
 }
 
-//#Preview {
-//    ContentInspect(configs: [:])
-//}
+struct ContentInspectPreviews: PreviewProvider {
+    static var previews: some View {
+        ContentInspect(configs: [:])
+    }
+}

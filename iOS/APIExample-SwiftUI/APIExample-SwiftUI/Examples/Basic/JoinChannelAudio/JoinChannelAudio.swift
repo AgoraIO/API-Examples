@@ -77,9 +77,11 @@ struct JoinChannelAudioEntry: View {
     }
 }
 
-//#Preview {
-//    JoinChannelAudioEntry()
-//}
+struct JoinChannelAudioEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelAudioEntry()
+    }
+}
 
 struct JoinChannelAudio: View {
     @State var configs: [String: Any] = [:]
@@ -165,6 +167,8 @@ struct JoinChannelAudio: View {
      }
 }
 
-//#Preview {
-//    JoinChannelAudio(configs: [:])
-//}
+struct JoinChannelAudioPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelAudio(configs: [:])
+    }
+}
