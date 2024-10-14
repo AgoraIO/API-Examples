@@ -159,11 +159,11 @@ struct SpatialAudio: View {
                 HStack {
                     GeometryReader { g in
                         HStack {
-    #if os(iOS) && swift(>=5.7)
+#if os(iOS) && swift(>=5.7)
                             Image(.spatialRemote)
-    #else
+#else
                             Image("spatial_remote")
-    #endif
+#endif
                             Text("\(agoraKit.remoteUser1)")
                         }
                         .opacity(agoraKit.remoteUser1 == 0 ? 0.0 : 1.0)
@@ -177,11 +177,11 @@ struct SpatialAudio: View {
                     Spacer()
                     GeometryReader { g in
                         HStack {
-    #if os(iOS) && swift(>=5.7)
+#if os(iOS) && swift(>=5.7)
                             Image(.spatialRemote)
-    #else
+#else
                             Image("spatial_remote")
-    #endif
+#endif
                             Text("\(agoraKit.remoteUser2)")
                         }
                         .onAppear {
