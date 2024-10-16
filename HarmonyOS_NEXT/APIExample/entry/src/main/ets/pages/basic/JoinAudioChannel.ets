@@ -1,4 +1,4 @@
-import { ChannelMediaOptions, Constants, RtcEngine, RtcEngineEx, RtcEngineConfig, AudioVolumeInfo } from 'AgoraRtcSdk';
+import { ChannelMediaOptions, Constants, RtcEngine, RtcEngineEx, RtcEngineConfig, AudioVolumeInfo } from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
