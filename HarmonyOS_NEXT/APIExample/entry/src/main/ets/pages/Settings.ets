@@ -1,4 +1,4 @@
-import { OrientationMode, RtcEngine, VideoDimensions } from 'AgoraRtcSdk'
+import { OrientationMode, RtcEngine, VideoDimensions } from '@shengwang/rtc-full'
 import { TitleBar } from '../common/TitleBar'
 import { CommonItemSelect } from '../common/Widgets'
 import { GlobalInfo } from './Data'

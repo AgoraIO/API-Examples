@@ -9,7 +9,7 @@ import {
   VideoCanvas,
   VideoEncoderConfiguration,
   ScreenCaptureParameters
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -19,10 +19,10 @@ import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
 import { TokenUtils } from '../../util/TokenUtils';
 import { LengthMetrics } from '@kit.ArkUI';
-import { TranscodingVideoStream } from 'AgoraRtcSdk';
+import { TranscodingVideoStream } from '@shengwang/rtc-full';
 import { JSON } from '@kit.ArkTS';
 import { camera } from '@kit.CameraKit';
-import { VideoDimensions } from 'AgoraRtcSdk';
+import { VideoDimensions } from '@shengwang/rtc-full';
 
 const TAG: string = 'LocalVideoTranscoding'
 
@@ -190,8 +190,8 @@ struct LocalVideoTranscoding {
               }
 
 
-              let width = 960;
-              let height = 540;
+              let width = 540;
+              let height = 960;
 
               let screenConfig = new ScreenCaptureParameters()
               this.rtcEngine?.startScreenCapture(screenConfig)

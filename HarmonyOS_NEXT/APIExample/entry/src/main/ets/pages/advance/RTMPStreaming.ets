@@ -6,7 +6,7 @@ import {
     TranscodingUser,
     VideoCanvas,
     VideoEncoderConfiguration
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
