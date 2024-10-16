@@ -63,7 +63,7 @@ struct JoinChannelVideoTokenEntry: View {
 #endif
         }()
 
-        return ToolbarItem(placement: placement) {
+        ToolbarItem(placement: placement) {
             Button(action: {
                 showAlert = true
             }) {
@@ -86,9 +86,12 @@ struct JoinChannelVideoTokenEntry: View {
     }
     
 }
-//#Preview {
-//    JoinChannelVideoTokenEntry()
-//}
+
+struct JoinChannelVideoTokenEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelVideoTokenEntry()
+    }
+}
 
 struct JoinChannelVideoToken: View {
     @State var configs: [String: Any] = [:]
@@ -118,6 +121,8 @@ struct JoinChannelVideoToken: View {
     }
 }
 
-//#Preview {
-//    JoinChannelVideoToken(configs: [:])
-//}
+struct JoinChannelVideoToken_Previews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelVideoToken(configs: [:])
+    }
+}

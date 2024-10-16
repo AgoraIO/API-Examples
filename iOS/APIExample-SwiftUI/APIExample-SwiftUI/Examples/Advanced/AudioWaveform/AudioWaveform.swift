@@ -77,9 +77,11 @@ struct AudioWaveformEntry: View {
     }
 }
 
-//#Preview {
-//    AudioWaveformEntry()
-//}
+struct AudioWaveFromEntryPreivew: PreviewProvider {
+    static var previews: some View {
+        AudioWaveformEntry()
+    }
+}
 
 struct BoxingViewWrapper: UIViewRepresentable {
     let boxingview = ZSNBoxingView()
@@ -127,6 +129,8 @@ struct AudioWaveform: View {
     }
 }
 
-//#Preview {
-//    AudioWaveform(configs: [:])
-//}
+struct AudioWaveFormPreview: PreviewProvider {
+    static var previews: some View {
+        AudioWaveform(configs: [:])
+    }
+}

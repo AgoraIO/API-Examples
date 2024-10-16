@@ -208,7 +208,9 @@
 "AI_Tunner_Powerful_Male_Singing"="力量男歌声";
 "AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";
 
-"Transparent_Render"="透明渲染";
+"Transparent Render"="透明渲染";
+
+"URL Streaming(RTE Player)"="URL拉流(RTE Player)";
 
 "Makeup_enable_mu" = "美妆开关";
 "Makeup_browStyle" = "眉毛类型";
@@ -266,3 +268,5 @@
 "face_shape_area_nose_length"="鼻子长度";
 "face_shape_area_nose_width"="鼻子宽度";
 "face_shape_area_mouth_scale"="嘴巴比例";
+
+"Live Channel Name" = "直播频道名";

@@ -32,9 +32,11 @@ struct JoinMultiChannelEntry: View {
     }
 }
 
-//#Preview {
-//    JoinMultiChannelEntry()
-//}
+struct JoinMultiChannelEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinMultiChannelEntry()
+    }
+}
 
 struct JoinMultiChannel: View {
     @State var configs: [String: Any] = [:]
@@ -109,6 +111,8 @@ struct JoinMultiChannel: View {
     }
 }
 
-//#Preview {
-//    JoinMultiChannel(configs: [:])
-//}
+struct JoinMultiChannelPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinMultiChannel(configs: [:])
+    }
+}

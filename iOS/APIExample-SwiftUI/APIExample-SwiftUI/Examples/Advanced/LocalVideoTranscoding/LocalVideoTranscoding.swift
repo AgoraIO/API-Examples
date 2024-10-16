@@ -56,6 +56,9 @@ struct LocalVideoTranscoding: View {
     }
 }
 
-//#Preview {
-//    LocalVideoTranscoding()
-//}
+struct LocalVideoTranscodingPreviews: PreviewProvider {
+    static var previews: some View {
+        LocalVideoTranscoding()
+    }
+}
+

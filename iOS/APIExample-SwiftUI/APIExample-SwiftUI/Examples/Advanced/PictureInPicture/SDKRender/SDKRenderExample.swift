@@ -80,6 +80,8 @@ struct SDKRenderExample: View {
     }
 }
 
-//#Preview {
-//    SDKRenderExample(configs: [:])
-//}
+struct SDKRenderExamplePreviews: PreviewProvider {
+    static var previews: some View {
+        SDKRenderExample(configs: [:])
+    }
+}
