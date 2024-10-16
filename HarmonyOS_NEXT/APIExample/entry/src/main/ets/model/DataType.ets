@@ -1,4 +1,4 @@
-import { OrientationMode, VideoDimensions } from 'AgoraRtcSdk'
+import { OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
 
 export interface ExampleCategory{
   title: Resource,

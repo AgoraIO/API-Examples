@@ -5,7 +5,7 @@ import {
   RtcEngine,
   RtcEngineConfig,
   VideoCanvas
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { AppID } from '../../common/KeyCenter';
 import Logger from '../../util/Logger';
 import { common } from '@kit.AbilityKit';
