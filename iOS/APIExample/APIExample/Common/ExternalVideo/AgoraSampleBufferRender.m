@@ -12,11 +12,10 @@
     NSInteger _videoWidth, _videoHeight;
 }
 
-@property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
-
 @end
 
 @implementation AgoraSampleBufferRender
+@synthesize displayLayer = _displayLayer;
 
 - (AVSampleBufferDisplayLayer *)displayLayer {
     if (!_displayLayer) {
@@ -220,6 +219,7 @@
         return;
     }
     
+    // Update video dimensions on the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
         self->_videoWidth = videoData.width;
         self->_videoHeight = videoData.height;
@@ -229,30 +229,56 @@
     
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = videoData.pixelBuffer;
-        
+
+        // Create video format description
         CMVideoFormatDescriptionRef videoInfo;
-        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault,
-                                                     pixelBuffer,
-                                                     &videoInfo);
+        OSStatus status = CMVideoFormatDescriptionCreate(kCFAllocatorDefault,
+                                                         CVPixelBufferGetPixelFormatType(pixelBuffer),
+                                                         (int32_t)self->_videoWidth,
+                                                         (int32_t)self->_videoHeight,
+                                                         NULL, // extensions
+                                                         &videoInfo);
+        
+        if (status != noErr) {
+            NSLog(@"Failed to create video format description: %d", (int)status);
+            return;
+        }
         
         CMSampleTimingInfo timingInfo;
         timingInfo.duration = kCMTimeZero;
         timingInfo.decodeTimeStamp = kCMTimeInvalid;
-        timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
+        timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime() * 1000, 1000);
         
-        CMSampleBufferRef sampleBuffer;
-        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault,
-                                                 pixelBuffer,
-                                                 videoInfo,
-                                                 &timingInfo,
-                                                 &sampleBuffer);
+        CMSampleBufferRef sampleBuffer = NULL;
+        status = CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault,
+                                                          pixelBuffer,
+                                                          videoInfo,
+                                                          &timingInfo,
+                                                          &sampleBuffer);
         
+        if (status != noErr || sampleBuffer == NULL) {
+            NSLog(@"Failed to create sample buffer: %d", (int)status);
+            CFRelease(videoInfo); // Release videoInfo if creation of sample buffer fails
+            return;
+        }
+        
+        // Enqueue the sample buffer for rendering
         [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+        
+        // Check for rendering status
         if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
+            NSLog(@"Display layer failed to render sample buffer.");
             [self.displayLayer flush];
         }
+        
+        // Invalidate the sample buffer after enqueuing
         CMSampleBufferInvalidate(sampleBuffer);
-        CFRelease(sampleBuffer);
+        
+        // Release videoInfo after use
+        CFRelease(videoInfo); // Ensure videoInfo is released
+
+        // Release sampleBuffer after it has been enqueued and invalidated
+        CFRelease(sampleBuffer); // This may cause issues if displayLayer keeps the reference
     }
 }
 
