@@ -330,7 +330,7 @@ class VoiceChanger: BaseViewController {
     
     func initSelectVoiceAITunerPicker() {
         voiceAITunerPicker.isEnabled = false
-        voiceAITunerPicker.label.stringValue = "Voice_AI_Tuner".localized
+        voiceAITunerPicker.label.stringValue = "Set Voice AI Tuner".localized
         let items: [AgoraVoiceAITunerType?] = [nil] + (0...9).map { AgoraVoiceAITunerType(rawValue: $0) }
         let titles = items.map { $0?.description() ?? "Off" }
         voiceAITunerPicker.picker.addItems(withTitles: titles)
