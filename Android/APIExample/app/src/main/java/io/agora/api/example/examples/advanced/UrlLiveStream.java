@@ -279,6 +279,7 @@ public class UrlLiveStream extends BaseVbFragment<FragmentUrlLiveStreamBinding> 
                     playerStateDesc = playerStateDesc + " error code = " + code.name();
                     Log.d(TAG, "onStateChanged: FAILED error code = " + Constants.ErrorCode.getValue(code));
                     isPrepareSuccess = false;
+                    stopPlay();
                     break;
             }
             updatePlayButtonState();
