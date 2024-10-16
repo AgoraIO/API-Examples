@@ -268,7 +268,7 @@
     <string name="lightness_enhance">暗光增强</string>
     <string name="lightness_enhance_rtc">暗光增强(RTC)</string>
     <string name="colorful_enhance">色彩增强</string>
-    <string name="video_enhance">视频增强</string>
+    <string name="video_enhance_light">亮度</string>
     <string name="colorful_enhance_rtc">色彩增强(RTC)</string>
     <string name="video_denoise">视频降噪</string>
     <string name="video_denoise_rtc">视频降噪(RTC)</string>
