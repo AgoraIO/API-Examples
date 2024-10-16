@@ -1,5 +1,5 @@
 import { AudioTrackConfig, ChannelMediaOptions, Constants, RtcEngine, RtcEngineConfig,
-  VideoEncoderConfiguration } from 'AgoraRtcSdk';
+  VideoEncoderConfiguration } from '@shengwang/rtc-full';
 import { common } from '@kit.AbilityKit';
 import { AppID } from '../../common/KeyCenter';
 import Logger from '../../util/Logger';

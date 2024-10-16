@@ -1,4 +1,4 @@
-import { OrientationMode, VideoDimensions } from 'AgoraRtcSdk'
+import { OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
 import { ExampleCategory, ExampleItem, SettingsInfo } from '../model/DataType'
 
 export const BASIC_ITEMS: ExampleItem[] =
