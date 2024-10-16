@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface AgoraYUVImageSourcePush : NSObject
-- (instancetype)initWithSize: (CGSize)size fileName: (NSString *)fileName frameRate: (int)frameRate;
+- (instancetype)initWithSize: (CGSize)size fileName: (NSString *)fileName frameRate: (int)frameRate isHDR: (BOOL)isHDR;
 @property(nonatomic, assign)UInt32 trackId;
 @property(nonatomic, weak)id<AgoraYUVImageSourcePushDelegate> delegate;
 

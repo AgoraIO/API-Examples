@@ -32,9 +32,11 @@ struct SpatialAudioEntry: View {
     }
 }
 
-//#Preview {
-//    SpatialAudioEntry()
-//}
+struct SpatialAudioEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        SpatialAudioEntry()
+    }
+}
 
 struct SpatialAudio: View {
     @State var configs: [String: Any] = [:]
@@ -159,11 +161,11 @@ struct SpatialAudio: View {
                 HStack {
                     GeometryReader { g in
                         HStack {
-    #if os(iOS) && swift(>=5.7)
+#if os(iOS) && swift(>=5.7)
                             Image(.spatialRemote)
-    #else
+#else
                             Image("spatial_remote")
-    #endif
+#endif
                             Text("\(agoraKit.remoteUser1)")
                         }
                         .opacity(agoraKit.remoteUser1 == 0 ? 0.0 : 1.0)
@@ -177,11 +179,11 @@ struct SpatialAudio: View {
                     Spacer()
                     GeometryReader { g in
                         HStack {
-    #if os(iOS) && swift(>=5.7)
+#if os(iOS) && swift(>=5.7)
                             Image(.spatialRemote)
-    #else
+#else
                             Image("spatial_remote")
-    #endif
+#endif
                             Text("\(agoraKit.remoteUser2)")
                         }
                         .onAppear {
@@ -303,6 +305,8 @@ struct ActionSheetView: View {
     }
 }
 
-//#Preview {
-//    SpatialAudio(configs: [:])
-//}
+struct SpatialAudioPreviews: PreviewProvider {
+    static var previews: some View {
+        SpatialAudio(configs: [:])
+    }
+}
