@@ -93,6 +93,14 @@ class CustomVideoSourcePushMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         isHDR = configs["isHDR"] as? Bool ?? false
         
+        let cap1 = agoraKit.queryHDRCapability(.hardwareEncoder) == .supported ? true : false
+        let cap2 = agoraKit.queryHDRCapability(.softwareEncoder) == .supported ? true : false
+        if !cap1 && !cap2 {
+            showAlert(title: "Error", message: "Current device does not support HDR")
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        
         // make myself a broadcaster
         // agoraKit.setClientRole(.broadcaster)
         
