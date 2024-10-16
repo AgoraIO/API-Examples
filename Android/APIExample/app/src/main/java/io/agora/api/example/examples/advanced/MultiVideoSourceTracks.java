@@ -22,9 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -41,6 +38,7 @@ import io.agora.api.example.common.gles.GLThread;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.examples.advanced.videoRender.YuvFboProgram;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
 import io.agora.base.JavaI420Buffer;
@@ -199,19 +197,15 @@ public class MultiVideoSourceTracks extends BaseFragment implements View.OnClick
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        // Permissions Granted
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));

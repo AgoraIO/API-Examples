@@ -56,9 +56,9 @@ class AgoraImageHelper {
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer.frameBufferId)
         if(texType == VideoFrame.TextureBuffer.Type.OES){
-            drawer.drawOes(texId, 0, transform, width, height, 0, 0, width, height, 0)
+            drawer.drawOes(texId, 0, transform, width, height, 0, 0, width, height, 0,0)
         }else{
-            drawer.drawRgb(texId, 0, transform, width, height, 0, 0, width, height, 0)
+            drawer.drawRgb(texId, 0, transform, width, height, 0, 0, width, height, 0,0)
         }
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
         GLES20.glFinish()

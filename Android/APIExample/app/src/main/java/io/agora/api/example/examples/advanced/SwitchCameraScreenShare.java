@@ -24,15 +24,13 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.util.Random;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -232,19 +230,15 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        // Permissions Granted
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));

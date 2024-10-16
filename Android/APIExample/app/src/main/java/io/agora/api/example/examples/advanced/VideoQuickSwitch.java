@@ -27,9 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +34,7 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -234,18 +232,15 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check permission
-        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-            joinChannel(channelList.get(0));
-            return;
-        }
-        // Request permission
-        AndPermission.with(this).runtime().permission(
-                Permission.READ_EXTERNAL_STORAGE,
-                Permission.WRITE_EXTERNAL_STORAGE
-        ).onGranted(permissions -> {
-            // Permissions Granted
-            joinChannel(channelList.get(0));
-        }).start();
+        checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+            @Override
+            public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                // Permissions Granted
+                if (allPermissionsGranted) {
+                    joinChannel(channelList.get(0));
+                }
+            }
+        });
     }
 
     @Override
