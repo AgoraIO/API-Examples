@@ -18,7 +18,7 @@ import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
 import { TokenUtils } from '../../util/TokenUtils';
-import { LengthMetrics } from '@kit.ArkUI';
+import { display,LengthMetrics } from '@kit.ArkUI';
 import { TranscodingVideoStream } from '@shengwang/rtc-full';
 import { JSON } from '@kit.ArkTS';
 import { camera } from '@kit.CameraKit';
@@ -124,7 +124,7 @@ struct LocalVideoTranscoding {
   build() {
     Column() {
       TitleBar({
-        title: $r('app.string.item_livestreaming'),
+        title: $r('app.string.item_localvideotranscoding'),
         showBack: true
       })
 
@@ -138,7 +138,7 @@ struct LocalVideoTranscoding {
             let localCanvas = new VideoCanvas("preview_local");
             localCanvas.uid = this.localUid;
             localCanvas.renderMode = VideoCanvas.RENDER_MODE_FIT;
-            localCanvas.mirrorMode = 0;
+            localCanvas.mirrorMode = VideoCanvas.VIDEO_MIRROR_MODE_DISABLED;
             localCanvas.sourceType = Constants.VideoSourceType.TRANSCODED
             this.rtcEngine?.setupLocalVideo(localCanvas);
           }).width('100%').height('100%')
@@ -190,10 +190,11 @@ struct LocalVideoTranscoding {
               }
 
 
-              let width = 540;
-              let height = 960;
+              let width = GlobalInfo.settings.dimensions.height
+              let height = GlobalInfo.settings.dimensions.width
 
               let screenConfig = new ScreenCaptureParameters()
+              screenConfig.videoParams.dimensions = new VideoDimensions(width,height)
               this.rtcEngine?.startScreenCapture(screenConfig)
 
               let cameraConfig = new CameraCapturerConfiguration()
@@ -204,7 +205,7 @@ struct LocalVideoTranscoding {
               config.videoOutputConfiguration.dimensions = new VideoDimensions(width,height)
               config.transcodingVideoStreams[0]  = new TranscodingVideoStream();
               config.transcodingVideoStreams[0].sourceType = Constants.VideoSourceType.SCREEN_PRIMARY
-              config.transcodingVideoStreams[0].width = width/2
+              config.transcodingVideoStreams[0].width = width
               config.transcodingVideoStreams[0].height = height
               config.transcodingVideoStreams[0].x = 0
               config.transcodingVideoStreams[0].y = 0
@@ -213,9 +214,9 @@ struct LocalVideoTranscoding {
               config.transcodingVideoStreams[1]  = new TranscodingVideoStream()
               config.transcodingVideoStreams[1].sourceType = Constants.VideoSourceType.CAMERA_PRIMARY
               config.transcodingVideoStreams[1].width = width/2
-              config.transcodingVideoStreams[1].height = height
-              config.transcodingVideoStreams[1].x = width/2
-              config.transcodingVideoStreams[1].y = 0
+              config.transcodingVideoStreams[1].height = height/2
+              config.transcodingVideoStreams[1].x = 0
+              config.transcodingVideoStreams[1].y = height / 2
               config.transcodingVideoStreams[1].zOrder = 2
               config.transcodingVideoStreams[1].mirror = true
 
