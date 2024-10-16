@@ -226,7 +226,8 @@ class CustomVideoSourcePushMulti: BaseViewController {
             if(customCamera == nil){
                 customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
                                                        fileName: "sample" ,
-                                                       frameRate: 15)
+                                                       frameRate: 15,
+                                                       isHDR: false)
                 customCamera?.trackId = agoraKit.createCustomVideoTrack()
                 customCamera?.delegate = self
                 customCamera?.startSource()
@@ -374,8 +375,9 @@ class CustomVideoSourcePushMulti: BaseViewController {
     
     private func createVideoTrack(userModel: UserModel) {
         let customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
-                                               frameRate: 15)
+                                                   fileName: "sample" ,
+                                                   frameRate: 15,
+                                                   isHDR: false)
         customCamera.trackId = userModel.trackId
         customCamera.delegate = self
         userModel.isJoin = true
