@@ -41,6 +41,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -485,7 +486,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         TokenUtils.gen(requireContext(), rtcConnection2.channelId, rtcConnection2.localUid, new TokenUtils.OnTokenGenCallback<String>() {
             @Override
             public void onTokenGen(String token) {
-                int res = engine.joinChannelEx(token, rtcConnection2, mediaOptions, null);
+                int res = engine.joinChannelEx(token, rtcConnection2, mediaOptions, secondHandler);
                 if (res != Constants.ERR_OK) {
                     showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 } else {
@@ -567,6 +568,90 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         });
 
     }
+
+    private final IRtcEngineEventHandler secondHandler = new IRtcEngineEventHandler() {
+
+        public static final String LABLE = "secondHandler";
+        private List<Integer> remoteUidList = new ArrayList<>();
+
+        @Override
+        public void onError(int error) {
+            Log.w(TAG, String.format(LABLE + " onError code %d message %s", error, RtcEngine.getErrorDescription(error)));
+        }
+
+        @Override
+        public void onLeaveChannel(RtcStats stats) {
+            super.onLeaveChannel(stats);
+            Log.i(TAG, String.format(LABLE + " local user %d leaveChannel!", myUid));
+            for (Integer i : remoteUidList) {
+                audioSeatManager.downSeat(i);
+            }
+            remoteUidList.clear();
+        }
+
+        @Override
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+            Log.i(TAG, String.format(LABLE + " onJoinChannelSuccess channel %s uid %d", channel, uid));
+            remoteUidList.clear();
+        }
+
+        @Override
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
+            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, LABLE + " onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        @Override
+        public void onUserJoined(int uid, int elapsed) {
+            super.onUserJoined(uid, elapsed);
+            Log.i(TAG, LABLE + " onUserJoined->" + uid);
+            runOnUIThread(() -> {
+                audioSeatManager.upRemoteSeat(uid);
+                remoteUidList.add(uid);
+            });
+        }
+
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            Log.i(TAG, String.format(LABLE + " user %d offline! reason:%d", uid, reason));
+            runOnUIThread(() -> {
+                audioSeatManager.downSeat(uid);
+                remoteUidList.remove(uid);
+            });
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("sentSampleRate", stats.sentSampleRate + "");
+                _stats.put("sentBitrate", stats.sentBitrate + " kbps");
+                _stats.put("internalCodec", stats.internalCodec + "");
+                _stats.put("audioDeviceDelay", stats.audioDeviceDelay + " ms");
+                audioSeatManager.getLocalSeat().updateStats(_stats);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("numChannels", stats.numChannels + "");
+                _stats.put("receivedBitrate", stats.receivedBitrate + " kbps");
+                _stats.put("audioLossRate", stats.audioLossRate + "");
+                _stats.put("jitterBufferDelay", stats.jitterBufferDelay + " ms");
+                audioSeatManager.getRemoteSeat(stats.uid).updateStats(_stats);
+            });
+        }
+
+        @Override
+        public void onAudioRouteChanged(int routing) {
+            super.onAudioRouteChanged(routing);
+            Log.d(TAG, "secondHandler onAudioRouteChanged : " + routing);
+        }
+    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
