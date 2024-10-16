@@ -7,6 +7,7 @@
     <string name="stoppublish">停止推流</string>
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
+    <string name="url_rte">请输入Rte Url</string>
     <string name="ex_channel_id">目标频道ID</string>
     <string name="encryption_password">加密密钥</string>
     <string name="join">加入</string>
@@ -175,6 +176,7 @@
     <string name="screen_share">屏幕共享</string>
     <string name="screen_share_preview">屏幕共享本地预览</string>
     <string name="screen_share_audio">屏幕共享本地音频</string>
+    <string name="external_mediaprojection">外置 MediaProjection</string>
     <string name="screen_share_video">屏幕共享本地视频</string>
     <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
@@ -195,6 +197,7 @@
     <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
     <string name="face_capture_tip">此示例演示如何使用面捕功能获取面捕数据</string>
     <string name="transparent_rendering">此示例演示如何使用透明渲染功能播放Mp4视频</string>
+    <string name="tip_ultra_live_streaming_with_url">此示例演示如何使用URL拉流来极速直播</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -233,6 +236,30 @@
     <string name="item_rhythmplayer">虚拟节拍器</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
+    <string name="face_makeup">美妆</string>
+    <string name="shape_beautify">美型</string>
+    <string name="shape_beautify_area">美型部位</string>
+    <string name="shape_beautify_area_intensity">部位强度</string>
+    <string name="shape_beautify_style">美型风格</string>
+    <string name="shape_beautify_style_intensity">风格强度</string>
+    <string name="brow_style">眉毛类型</string>
+    <string name="brow_color">眉毛颜色</string>
+    <string name="brow_strength">眉毛强度</string>
+    <string name="lash_style">眼睫毛类型</string>
+    <string name="lash_color">眼睫毛颜色</string>
+    <string name="lash_strength">眼睫毛强度</string>
+    <string name="shadow_style">眼影类型</string>
+    <string name="shadow_color">眼影颜色</string>
+    <string name="shadow_strength">眼影强度</string>
+    <string name="pupil_style">瞳孔类型</string>
+    <string name="pupil_color">瞳孔颜色</string>
+    <string name="pupil_strength">瞳孔强度</string>
+    <string name="blush_style">腮红类型</string>
+    <string name="blush_color">腮红颜色</string>
+    <string name="blush_strength">腮红强度</string>
+    <string name="lip_style">唇彩类型</string>
+    <string name="lip_color">唇彩颜色</string>
+    <string name="lip_strength">唇彩强度</string>
     <string name="face_beautify">美颜</string>
     <string name="lightening">美白</string>
     <string name="redness">红润</string>
@@ -241,6 +268,7 @@
     <string name="lightness_enhance">暗光增强</string>
     <string name="lightness_enhance_rtc">暗光增强(RTC)</string>
     <string name="colorful_enhance">色彩增强</string>
+    <string name="video_enhance_light">亮度</string>
     <string name="colorful_enhance_rtc">色彩增强(RTC)</string>
     <string name="video_denoise">视频降噪</string>
     <string name="video_denoise_rtc">视频降噪(RTC)</string>
@@ -255,6 +283,7 @@
     <string name="content_inspect_tip">你可以用摄像头对准图片检验鉴黄效果</string>
 
     <string name="remote_screenshot">远端截图</string>
+    <string name="local_screenshot">本地截图</string>
     <string name="remote_screenshot_tip">当前没有远端用户，请加入频道并等待远端用户加入</string>
     <string name="simple_extension_tip">Agora-simple-filter插件没有开启，请看README.md了解怎么开启插件后再运行.</string>
     <string name="virtual_background_image">图片</string>
@@ -324,6 +353,7 @@
     <string name="start_recording">开始录制</string>
     <string name="stop_recording">停止录制</string>
     <string name="transparent_background">透明背景</string>
+    <string name="forward_audio_stream">转发音频流</string>
     <string name="user_id">用户ID</string>
     <string name="view_bg_color">View背景色(只在居中渲染模式下有效果)</string>
     <string name="render_mode">渲染模式</string>
@@ -358,4 +388,14 @@
     <string name="camera_focal_telephoto">长焦摄像头</string>
     <string name="enter_pip">进入画中画模式</string>
     <string name="item_transparentrendering">透明渲染</string>
+    <string name="ultra_live_streaming_with_url">极速直播Url拉流</string>
+    <string name="local_fps_set">本地帧率,范围：1-60</string>
+    <string name="remote_fps_set">远端帧率,范围：1-60</string>
+    <string name="scenario">场景</string>
+    <string name="snapshot_position">截图时机</string>
+    <string name="join_channel_first">请先加入频道</string>
+    <string name="external_eglcontext">外部EglContext</string>
+    <string name="eglcontext_select_desc">外部EglContext设置</string>
+    <string name="channel_empty">频道号为空</string>
+    <string name="dest_channel_empty">目标频道号为空</string>
 </resources>

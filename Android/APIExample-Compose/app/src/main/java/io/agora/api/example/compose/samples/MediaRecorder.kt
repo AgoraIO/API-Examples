@@ -204,7 +204,7 @@ fun MediaRecorder() {
             if (isRecording) {
                 val storagePath: String =
                     context.externalCacheDir?.absolutePath + File.separator + "media_recorder_" + channelName + "_" + id + ".mp4"
-                val recorder = rtcEngine.createMediaRecorder(RecorderStreamInfo(channelName, id))
+                val recorder = rtcEngine.createMediaRecorder(RecorderStreamInfo(channelName, id,0))
                 recorder.setMediaRecorderObserver(object : IMediaRecorderCallback {
                     override fun onRecorderStateChanged(
                         channelId: String?,

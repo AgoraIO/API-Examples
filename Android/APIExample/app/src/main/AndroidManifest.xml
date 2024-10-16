@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.agora.api.example">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -57,6 +59,11 @@
 
         <service android:name=".examples.basic.JoinChannelAudio$LocalRecordingService"
             android:foregroundServiceType="microphone"/>
+
+        <service
+            android:name=".service.MediaProjectionService"
+            android:foregroundServiceType="mediaProjection">
+        </service>
 
     </application>
 

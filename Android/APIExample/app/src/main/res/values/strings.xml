@@ -6,6 +6,7 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="url_rte">Input RTE Url</string>
     <string name="token" translatable="false">Token</string>
     <string name="app_id" translatable="false">App ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
@@ -182,6 +183,7 @@
     <string name="screen_share">Screen Share</string>
     <string name="screen_share_preview">Screen Preview</string>
     <string name="screen_share_audio">Screen Audio</string>
+    <string name="external_mediaprojection">External MediaProjection</string>
     <string name="screen_share_video">Screen Video</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
@@ -202,6 +204,7 @@
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
     <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
     <string name="transparent_rendering">This example demonstrates how to use transparent rendering.</string>
+    <string name="tip_ultra_live_streaming_with_url">This example demonstrates how to use ultra live stream with url.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -241,6 +244,30 @@
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
+    <string name="face_makeup">Makeup</string>
+    <string name="shape_beautify">Shape Beautify</string>
+    <string name="shape_beautify_area">Shape Beautify Area</string>
+    <string name="shape_beautify_area_intensity">Shape Beautify Area Intensity</string>
+    <string name="shape_beautify_style">Shape Beautify Style</string>
+    <string name="shape_beautify_style_intensity">Shape Beautify Style Intensity</string>
+    <string name="brow_style">Brow Style</string>
+    <string name="brow_color">Brow Color</string>
+    <string name="brow_strength">Brow Strength</string>
+    <string name="lash_style">Lash Style</string>
+    <string name="lash_color">Lash Color</string>
+    <string name="lash_strength">Lash Strength</string>
+    <string name="shadow_style">Shadow Style</string>
+    <string name="shadow_color">Shadow Color</string>
+    <string name="shadow_strength">Shadow Strength</string>
+    <string name="pupil_style">Pupil Style</string>
+    <string name="pupil_color">Pupil Color</string>
+    <string name="pupil_strength">Pupil Strength</string>
+    <string name="blush_style">Blush Style</string>
+    <string name="blush_color">Blush Color</string>
+    <string name="blush_strength">Blush Strength</string>
+    <string name="lip_style">Lip Style</string>
+    <string name="lip_color">Lip Color</string>
+    <string name="lip_strength">Lip Strength</string>
     <string name="face_beautify">Face Beautify</string>
     <string name="lightening">Lightening</string>
     <string name="redness">Redness</string>
@@ -248,6 +275,7 @@
     <string name="lightness_enhance">Lightening Enhance</string>
     <string name="lightness_enhance_rtc">Lightening Enhance(RTC)</string>
     <string name="colorful_enhance">Colorful Enhance</string>
+    <string name="video_enhance_light">Light</string>
     <string name="colorful_enhance_rtc">Colorful Enhance(RTC)</string>
     <string name="smoothness">Smoothness</string>
     <string name="video_denoise">Video Denoise</string>
@@ -263,6 +291,7 @@
     <string name="content_inspect_tip">You can use the camera to point the picture to check the yellowing effect</string>
 
     <string name="remote_screenshot">Remote screenshot</string>
+    <string name="local_screenshot">Local screenshot</string>
     <string name="remote_screenshot_tip">There is not remote user, please join channel and wait for remote user joining.</string>
 
     <string name="simple_extension_tip">Agora-simple-filter extension must be enabled firstly.Read README.md to know how to enable the extension.</string>
@@ -335,6 +364,7 @@
     <string name="stop_recording">Stop Recording</string>
     <string name="recording_tag" translatable="false">RecordingTag</string>
     <string name="transparent_background">TransparentBackground</string>
+    <string name="forward_audio_stream">Forward audio stream</string>
     <string name="user_id">User ID</string>
     <string name="view_bg_color">View background color</string>
     <string name="render_mode">RenderMode</string>
@@ -377,4 +407,14 @@
     <string name="camera_focal_telephoto">Telephoto</string>
     <string name="enter_pip">Enter picture in picture mode</string>
     <string name="item_transparentrendering">TransparentRendering</string>
+    <string name="ultra_live_streaming_with_url">Ultra Live Streaming with Url</string>
+    <string name="local_fps_set">local fps, range：1-60</string>
+    <string name="remote_fps_set">remote fps, range：1-60</string>
+    <string name="scenario">scenario</string>
+    <string name="snapshot_position">Postion</string>
+    <string name="join_channel_first">please join channel first</string>
+    <string name="external_eglcontext">Eexternal EglContext</string>
+    <string name="eglcontext_select_desc">External EglContext Settings</string>
+    <string name="channel_empty">Channel is empty</string>
+    <string name="dest_channel_empty">Destination Channel is empty</string>
 </resources>
