@@ -74,10 +74,11 @@ struct PrecallTest: View {
     }
 }
 
-//#Preview {
-//    PrecallTest(configs: [:])
-//}
-
+struct PrecallTestPreviews: PreviewProvider {
+    static var previews: some View {
+        PrecallTest(configs: [:])
+    }
+}
 
 struct ActivityIndicator: UIViewRepresentable {
     @Binding var isAnimating: Bool

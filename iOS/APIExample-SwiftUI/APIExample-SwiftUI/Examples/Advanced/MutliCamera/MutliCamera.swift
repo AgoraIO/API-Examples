@@ -32,9 +32,11 @@ struct MutliCameraEntry: View {
     }
 }
 
-//#Preview {
-//    MutliCameraEntry()
-//}
+struct MutliCameraEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        MutliCameraEntry()
+    }
+}
 
 struct MutliCamera: View {
     @State var configs: [String: Any] = [:]
@@ -84,6 +86,8 @@ struct MutliCamera: View {
     }
 }
 
-//#Preview {
-//    MutliCamera(configs: [:])
-//}
+struct MutliCameraPreviews: PreviewProvider {
+    static var previews: some View {
+        MutliCamera(configs: [:])
+    }
+}
