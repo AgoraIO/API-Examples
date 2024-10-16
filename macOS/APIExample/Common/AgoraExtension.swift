@@ -100,19 +100,19 @@ extension AUDIO_AINS_MODE {
 }
 
 extension AgoraVoiceAITunerType {
-    func description() -> String? {
+    func description() -> String {
         switch self {
-        case .matureMale: return "AI_Tunner_Mature_Male".localized
-        case .freshMale: return "AI_Tunner_Fresh_Male".localized
-        case .elegantFemale: return "AI_Tunner_Elegant_Female".localized
-        case .sweetFemale: return "AI_Tunner_Sweet_Female".localized
-        case .warmMaleSinging: return "AI_Tunner_Warm_Male_Singing".localized
-        case .gentleFemaleSinging: return "AI_Tunner_Gentle_Female_Singing".localized
-        case .huskyMaleSinging: return "AI_Tunner_Husky_Male_Singing".localized
-        case .warmElegantFemaleSinging: return "AI_Tunner_Warm_Elegant_Female_Singing".localized
-        case .powerfulMaleSinging: return "AI_Tunner_Powerful_Male_Singing".localized
-        case .dreamyFemaleSinging: return "AI_Tunner_Dreamy_Female_Singing".localized
-        @unknown default: return nil
+        case .matureMale: return "Mature Male Voice".localized
+        case .freshMale: return "Fresh Male Voice".localized
+        case .elegantFemale: return "Elegant Female Voice".localized
+        case .sweetFemale: return "Sweet Female Voice".localized
+        case .warmMaleSinging: return "Warm Male Singing Voice".localized
+        case .gentleFemaleSinging: return "Gentle Female Singing Voice".localized
+        case .huskyMaleSinging: return "Husky Male Singing Voice".localized
+        case .warmElegantFemaleSinging: return "Warm Elegant Female Singing Voice".localized
+        case .powerfulMaleSinging: return "Powerful Male Singing Voice".localized
+        case .dreamyFemaleSinging: return "Dreamy Female Singing Voice".localized
+        @unknown default: return "\(self.rawValue)"
         }
     }
 }
