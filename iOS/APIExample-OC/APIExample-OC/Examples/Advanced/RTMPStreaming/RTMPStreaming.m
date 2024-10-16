@@ -279,7 +279,7 @@ static CGFloat CANVAS_HEIGHT = 480;
 -(void)rtcEngine:(AgoraRtcEngineKit *)engine rtmpStreamingChangedToState:(NSString *)url state:(AgoraRtmpStreamingState)state reason:(AgoraRtmpStreamingReason)reason {
     [LogUtil log:[NSString stringWithFormat:@"streamStateChanged: %@ state %ld reason %ld", url, state, reason] level:(LogLevelDebug)];
     if (state == AgoraRtmpStreamingStateRunning) {
-        [self showAlertWithTitle:@"Notice" message:@"RTMP Publish SUccess"];
+        [self showAlertWithTitle:@"Notice" message:@"RTMP Publish Success"];
         self.isPublished = YES;
     } else if (state == AgoraRtmpStreamingStateFailure) {
         
