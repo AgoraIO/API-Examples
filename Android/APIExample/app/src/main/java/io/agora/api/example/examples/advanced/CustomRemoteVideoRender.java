@@ -17,12 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.concurrent.Callable;
 
@@ -33,9 +31,11 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.gles.core.EglCore;
 import io.agora.api.example.examples.advanced.videoRender.GLTextureView;
 import io.agora.api.example.examples.advanced.videoRender.YuvUploader;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
@@ -67,6 +67,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
     private FrameLayout fl_local, fl_remote;
     private Button join;
+    private Switch switchExEglContext;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid, remoteUid;
@@ -78,6 +79,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     private final GlRectDrawer drawer = new GlRectDrawer();
     private final YuvUploader yuvUploader = new YuvUploader();
     private final Matrix renderMatrix = new Matrix();
+    private EglCore eglCore;
 
     @Nullable
     @Override
@@ -94,6 +96,23 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        switchExEglContext = view.findViewById(R.id.switch_ex_context);
+        view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.findViewById(R.id.fl_container_egl_select).setVisibility(View.GONE);
+                //init egl context option
+                Log.d(TAG, "isChecked =" + switchExEglContext.isChecked());
+                if (switchExEglContext.isChecked()) {
+                    if (eglCore == null) {
+                        eglCore = new EglCore();
+                    }
+                    //once set the external egl context, you should use it until engine destroyed
+                    int ret = engine.setExternalRemoteEglContext(eglCore.getEGLContext());
+                    Log.d(TAG, "setExternalRemoteEglContext:  ret = " + ret);
+                }
+            }
+        });
     }
 
     @Override
@@ -181,19 +200,15 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 /*After joining a channel, the user must call the leaveChannel method to end the
