@@ -1,4 +1,4 @@
-import { Constants } from 'AgoraRtcSdk';
+import { Constants } from '@shengwang/rtc-full';
 
 export class AudioConfigHelper {
   public static readonly AUDIO_SCENARIO_DEFAULT = 'DEFAULT'
