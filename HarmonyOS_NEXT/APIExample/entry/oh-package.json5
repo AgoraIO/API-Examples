@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "AgoraRtcSdk": "file:./libs/AgoraRtcSdk.har",
+    "@shengwang/rtc-full": "file:./libs/AgoraRtcSdk.har",
     "librawdataprocessing.so": "file:./src/main/cpp/types/librawdataprocessing"
   }
 }

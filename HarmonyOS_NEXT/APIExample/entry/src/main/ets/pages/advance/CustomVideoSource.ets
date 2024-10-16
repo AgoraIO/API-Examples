@@ -9,7 +9,7 @@ import {
   VideoEncoderConfiguration,
   VideoFrame,
   VideoPixelFormat
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -27,7 +27,6 @@ struct CustomVideoSource {
   private rtcEngine: RtcEngineEx | undefined = undefined;
   private pushingVideoFrame = false
   private intervalVideoNum = -1;
-  private customVideoTrack = -1;
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
@@ -77,7 +76,7 @@ struct CustomVideoSource {
 
     this.rtcEngine.enableVideo()
 
-    this.customVideoTrack = this.rtcEngine.createCustomVideoTrack()
+    this.rtcEngine.setExternalVideoSource(true,false,Constants.ExternalVideoSourceType.VIDEO_FRAME);
   }
 
   aboutToDisappear(): void {
@@ -87,8 +86,6 @@ struct CustomVideoSource {
         this.rtcEngine.leaveChannel();
       }
       this.stopPushVideo()
-      this.rtcEngine.destroyCustomVideoTrack(this.customVideoTrack)
-      this.customVideoTrack = -1
       Logger.info(TAG, "destroy begin")
       RtcEngine.destroy().then(() => {
         Logger.info(TAG, "destroy done")
@@ -129,8 +126,8 @@ struct CustomVideoSource {
           frame.yStride = width;
           frame.height = height;
           frame.timestamp = 0;
-          let ret = this.rtcEngine?.pushExternalVideoFrameById(frame, this.customVideoTrack)
-          if (ret != 0) {
+          let ret = this.rtcEngine?.pushExternalVideoFrame(frame)
+          if (!ret) {
             Logger.error(TAG, "pushExternalVideoFrameEx failed: " + ret)
           }
         }, frame_interval_ms)
@@ -165,7 +162,7 @@ struct CustomVideoSource {
               let localCanvas = new VideoCanvas("preview_local");
               localCanvas.uid = this.localUid;
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
-              localCanvas.mirrorMode = 0;
+              localCanvas.mirrorMode = VideoCanvas.VIDEO_MIRROR_MODE_DISABLED;
               // TODO set source type
               localCanvas.sourceType = Constants.VideoSourceType.CUSTOM
               this.rtcEngine?.setupLocalVideo(localCanvas);
@@ -232,7 +229,6 @@ struct CustomVideoSource {
               }
               let mediaOption: ChannelMediaOptions = new ChannelMediaOptions();
               mediaOption.publishCustomVideoTrack = true
-              mediaOption.customVideoTrackId = this.customVideoTrack
               mediaOption.publishMicrophoneTrack = true;
               mediaOption.autoSubscribeVideo = true;
               mediaOption.autoSubscribeAudio = true;
