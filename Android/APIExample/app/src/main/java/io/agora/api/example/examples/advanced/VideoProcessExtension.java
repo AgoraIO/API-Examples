@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -18,21 +19,21 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
+import io.agora.api.example.bean.MpOptions;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.FileUtils;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -42,6 +43,9 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.BeautyOptions;
 import io.agora.rtc2.video.ColorEnhanceOptions;
+import io.agora.rtc2.video.FaceShapeAreaOptions;
+import io.agora.rtc2.video.FaceShapeBeautyOptions;
+import io.agora.rtc2.video.FilterEffectOptions;
 import io.agora.rtc2.video.LowLightEnhanceOptions;
 import io.agora.rtc2.video.SegmentationProperty;
 import io.agora.rtc2.video.VideoCanvas;
@@ -59,20 +63,31 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
         actionId = R.id.action_mainFragment_video_enhancement,
         tipsId = R.string.videoEnhancement
 )
-public class VideoProcessExtension extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
+public class VideoProcessExtension extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = VideoProcessExtension.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
     private LinearLayout controlPanel;
     private Button join;
-    private Switch beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
-    private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
+    private Switch shapeBeauty, makeUp, beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
+    private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_videoEnhance, seek_smoothness, seek_strength, seek_skin;
+    //美妆
+    private SeekBar sbBrowStrength, sbLashStrength, sbShadowStrength, sbPupilStrength, sbBlushStrength, sbLipStrength;
+    private Spinner spinnerBrowStyle, spinnerLashStyle, spinnerShadowStyle, spinnerPupilStyle, spinnerBlushStyle, spinnerLipStyle;
+    private Spinner spinnerBrowColor, spinnerLashColor, spinnerShadowColor, spinnerPupilColor, spinnerBlushColor, spinnerLipColor;
+    //美型
+    private SeekBar sbShapeBeautifyAreaIntensity, sbShapeBeautifyStyleIntensity;
+    private Spinner spinnerShapeBeautyArea, spinnerShapeBeautifyStyle;
     private EditText et_channel;
     private RadioGroup virtualBgType;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private BeautyOptions beautyOptions = new BeautyOptions();
+    private FilterEffectOptions filterEffectOptions = new FilterEffectOptions();
+    private MpOptions makeUpOptions = new MpOptions();
+    private FaceShapeBeautyOptions faceShapeBeautyOptions = new FaceShapeBeautyOptions();
+    private FaceShapeAreaOptions faceShapeAreaOptions = new FaceShapeAreaOptions();
     private double skinProtect = 1.0;
     private double strength = 0.5;
     private VirtualBackgroundSource virtualBackgroundSource = new VirtualBackgroundSource();
@@ -93,6 +108,10 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         controlPanel = view.findViewById(R.id.controlPanel);
+        shapeBeauty = view.findViewById(R.id.switch_face_shape_beautify);
+        shapeBeauty.setOnCheckedChangeListener(this);
+        makeUp = view.findViewById(R.id.switch_face_makeup);
+        makeUp.setOnCheckedChangeListener(this);
         beauty = view.findViewById(R.id.switch_face_beautify);
         beauty.setOnCheckedChangeListener(this);
         lightness2 = view.findViewById(R.id.switch_lightness2);
@@ -107,6 +126,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         seek_lightness.setOnSeekBarChangeListener(this);
         seek_redness = view.findViewById(R.id.redness);
         seek_redness.setOnSeekBarChangeListener(this);
+        seek_videoEnhance = view.findViewById(R.id.sb_video_enhance);
+        seek_videoEnhance.setOnSeekBarChangeListener(this);
         seek_sharpness = view.findViewById(R.id.sharpness);
         seek_sharpness.setOnSeekBarChangeListener(this);
         seek_smoothness = view.findViewById(R.id.smoothness);
@@ -115,6 +136,60 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         seek_strength.setOnSeekBarChangeListener(this);
         seek_skin = view.findViewById(R.id.skinProtect);
         seek_skin.setOnSeekBarChangeListener(this);
+
+        //美型
+        sbShapeBeautifyAreaIntensity = view.findViewById(R.id.sb_shape_beautify_area_intensity);
+        sbShapeBeautifyAreaIntensity.setOnSeekBarChangeListener(this);
+        sbShapeBeautifyStyleIntensity = view.findViewById(R.id.sb_shape_beautify_style_intensity);
+        sbShapeBeautifyStyleIntensity.setOnSeekBarChangeListener(this);
+
+        spinnerShapeBeautyArea = view.findViewById(R.id.spinner_shape_beauty_area);
+        spinnerShapeBeautyArea.setOnItemSelectedListener(this);
+        spinnerShapeBeautifyStyle = view.findViewById(R.id.spinner_shape_beautify_style);
+        spinnerShapeBeautifyStyle.setOnItemSelectedListener(this);
+
+        //美妆
+        sbBrowStrength = view.findViewById(R.id.sb_brow_strength);
+        sbBrowStrength.setOnSeekBarChangeListener(this);
+        sbLashStrength = view.findViewById(R.id.sb_lash_strength);
+        sbLashStrength.setOnSeekBarChangeListener(this);
+        sbShadowStrength = view.findViewById(R.id.sb_shadow_strength);
+        sbShadowStrength.setOnSeekBarChangeListener(this);
+        sbPupilStrength = view.findViewById(R.id.sb_pupil_strength);
+        sbPupilStrength.setOnSeekBarChangeListener(this);
+        sbBlushStrength = view.findViewById(R.id.sb_blush_strength);
+        sbBlushStrength.setOnSeekBarChangeListener(this);
+        sbLipStrength = view.findViewById(R.id.sb_lip_strength);
+        sbLipStrength.setOnSeekBarChangeListener(this);
+
+        spinnerBrowStyle = view.findViewById(R.id.spinner_brow_style);
+        spinnerLashStyle = view.findViewById(R.id.spinner_lash_style);
+        spinnerShadowStyle = view.findViewById(R.id.spinner_shadow_style);
+        spinnerPupilStyle = view.findViewById(R.id.spinner_pupil_style);
+        spinnerBlushStyle = view.findViewById(R.id.spinner_blush_style);
+        spinnerLipStyle = view.findViewById(R.id.spinner_lip_style);
+
+        spinnerBrowColor = view.findViewById(R.id.spinner_brow_color);
+        spinnerLashColor = view.findViewById(R.id.spinner_lash_color);
+        spinnerShadowColor = view.findViewById(R.id.spinner_shadow_color);
+        spinnerPupilColor = view.findViewById(R.id.spinner_pupil_color);
+        spinnerBlushColor = view.findViewById(R.id.spinner_blush_color);
+        spinnerLipColor = view.findViewById(R.id.spinner_lip_color);
+
+        spinnerBrowStyle.setOnItemSelectedListener(this);
+        spinnerLashStyle.setOnItemSelectedListener(this);
+        spinnerShadowStyle.setOnItemSelectedListener(this);
+        spinnerPupilStyle.setOnItemSelectedListener(this);
+        spinnerBlushStyle.setOnItemSelectedListener(this);
+        spinnerLipStyle.setOnItemSelectedListener(this);
+
+        spinnerBrowColor.setOnItemSelectedListener(this);
+        spinnerLashColor.setOnItemSelectedListener(this);
+        spinnerShadowColor.setOnItemSelectedListener(this);
+        spinnerPupilColor.setOnItemSelectedListener(this);
+        spinnerBlushColor.setOnItemSelectedListener(this);
+        spinnerLipColor.setOnItemSelectedListener(this);
+
 
         virtualBgType = view.findViewById(R.id.virtual_bg_type);
         virtualBgType.setOnCheckedChangeListener((group, checkedId) -> {
@@ -205,9 +280,30 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             }
 
             engine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
+            updateExtensionProperty();
+            updateFaceShapeBeautyStyleOptions();
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
+        }
+    }
+
+    private void updateFaceShapeBeautyAreaOptions() {
+        if (engine != null) {
+            engine.setFaceShapeAreaOptions(faceShapeAreaOptions);
+        }
+    }
+
+
+    private void updateFaceShapeBeautyStyleOptions() {
+        if (engine != null) {
+            engine.setFaceShapeBeautyOptions(shapeBeauty.isChecked(), faceShapeBeautyOptions);
+        }
+    }
+
+    private void updateExtensionProperty() {
+        if (engine != null) {
+            engine.setExtensionProperty("agora_video_filters_clear_vision", "clear_vision", "makeup_options", makeUpOptions.toJson(), Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE);
         }
     }
 
@@ -289,19 +385,15 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        // Permissions Granted
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 /*After joining a channel, the user must call the leaveChannel method to end the
@@ -329,8 +421,80 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     }
 
     @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        switch (parent.getId()) {
+            case R.id.spinner_shape_beauty_area:
+                faceShapeAreaOptions.shapeArea = position - 1;
+                //get origin beauty option params
+                FaceShapeAreaOptions originOptions = engine.getFaceShapeAreaOptions(faceShapeAreaOptions.shapeArea);
+                if (originOptions != null) {
+                    faceShapeAreaOptions.shapeIntensity = originOptions.shapeIntensity;
+                    sbShapeBeautifyAreaIntensity.setProgress(originOptions.shapeIntensity);
+                }
+                updateFaceShapeBeautyAreaOptions();
+                return;
+            case R.id.spinner_shape_beautify_style:
+                faceShapeBeautyOptions.shapeStyle = position;
+                updateFaceShapeBeautyStyleOptions();
+                return;
+            case R.id.spinner_brow_style:
+                makeUpOptions.browStyle = position;
+                break;
+            case R.id.spinner_lash_style:
+                makeUpOptions.lashStyle = position;
+                break;
+            case R.id.spinner_shadow_style:
+                makeUpOptions.shadowStyle = position;
+                break;
+            case R.id.spinner_pupil_style:
+                makeUpOptions.pupilStyle = position;
+                break;
+            case R.id.spinner_blush_style:
+                makeUpOptions.blushStyle = position;
+                break;
+            case R.id.spinner_lip_style:
+                makeUpOptions.lipStyle = position;
+                break;
+            case R.id.spinner_brow_color:
+                makeUpOptions.browColor = position;
+                break;
+            case R.id.spinner_lash_color:
+                makeUpOptions.lashColor = position;
+                break;
+            case R.id.spinner_blush_color:
+                makeUpOptions.blushColor = position;
+                break;
+            case R.id.spinner_lip_color:
+                makeUpOptions.lipColor = position;
+                break;
+        }
+        updateExtensionProperty();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView.getId() == beauty.getId()) {
+        if (buttonView.getId() == shapeBeauty.getId()) {
+            if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
+                buttonView.setChecked(false);
+                Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            updateFaceShapeBeautyStyleOptions();
+        } else if (buttonView.getId() == makeUp.getId()) {
+            if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
+                buttonView.setChecked(false);
+                Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            makeUpOptions.enable_mu = isChecked;
+            updateExtensionProperty();
+        } else if (buttonView.getId() == beauty.getId()) {
             if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
                 buttonView.setChecked(false);
                 Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
@@ -338,6 +502,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             }
 
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
+            engine.setFilterEffectOptions(isChecked, filterEffectOptions);
         } else if (buttonView.getId() == lightness2.getId()) {
             LowLightEnhanceOptions options = new LowLightEnhanceOptions();
             options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST;
@@ -370,7 +535,31 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float value = ((float) progress) / 10;
-        if (seekBar.getId() == seek_lightness.getId()) {
+        if (seekBar.getId() == sbShapeBeautifyAreaIntensity.getId()) {
+            faceShapeAreaOptions.shapeIntensity = progress;
+            updateFaceShapeBeautyAreaOptions();
+        } else if (seekBar.getId() == sbShapeBeautifyStyleIntensity.getId()) {
+            faceShapeBeautyOptions.styleIntensity = progress;
+            updateFaceShapeBeautyStyleOptions();
+        } else if (seekBar.getId() == sbBrowStrength.getId()) {
+            makeUpOptions.browStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == sbLashStrength.getId()) {
+            makeUpOptions.lashStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == sbShadowStrength.getId()) {
+            makeUpOptions.shadowStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == sbPupilStrength.getId()) {
+            makeUpOptions.pupilStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == sbBlushStrength.getId()) {
+            makeUpOptions.blushStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == sbLipStrength.getId()) {
+            makeUpOptions.lipStrength = value;
+            updateExtensionProperty();
+        } else if (seekBar.getId() == seek_lightness.getId()) {
             beautyOptions.lighteningLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
         } else if (seekBar.getId() == seek_redness.getId()) {
@@ -379,6 +568,11 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         } else if (seekBar.getId() == seek_sharpness.getId()) {
             beautyOptions.sharpnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
+        } else if (seekBar.getId() == seek_videoEnhance.getId()) {
+            filterEffectOptions.strength = value;
+            filterEffectOptions.path = "built_in_whiten_filter";
+            int ret = engine.setFilterEffectOptions(beauty.isChecked(), filterEffectOptions);
+            Log.d(TAG, "onProgressChanged: ret=" + ret);
         } else if (seekBar.getId() == seek_smoothness.getId()) {
             beautyOptions.smoothnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
@@ -586,4 +780,5 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             });
         }
     };
+
 }
