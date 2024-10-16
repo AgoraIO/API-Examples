@@ -146,6 +146,9 @@
         <action
             android:id="@+id/action_mainFragment_to_transparentrendering"
             app:destination="@id/transparentRendering" />
+        <action
+            android:id="@+id/action_mainFragment_to_url_live_stream"
+            app:destination="@id/urlLiveStream" />
     </fragment>
 
     <fragment
@@ -441,5 +444,11 @@
         android:name="io.agora.api.example.examples.advanced.TransparentRendering"
         android:label="@string/item_transparentrendering"
         tools:layout="@layout/fragment_transparentrendering" />
+
+    <fragment
+        android:id="@+id/urlLiveStream"
+        android:name="io.agora.api.example.examples.advanced.UrlLiveStream"
+        android:label="@string/ultra_live_streaming_with_url"
+        tools:layout="@layout/fragment_url_live_stream" />
 
 </navigation>
