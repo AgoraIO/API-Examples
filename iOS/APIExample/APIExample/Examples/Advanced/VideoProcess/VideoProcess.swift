@@ -393,102 +393,100 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
 
 private let makeupList = [
     [
-        "name": "Makeup_enable_mu".localized,
+        "name": "Makeup Enable".localized,
         "key": "enable_mu",
         "type": "switch"
     ], [
-        "name": "Makeup_browStyle".localized,
+        "name": "Eyebrow Style".localized,
         "key": "browStyle",
         "type": "segment",
-        "value": ["Makeup_browStyle_value1".localized, "Makeup_browStyle_value2".localized, "Makeup_browStyle_value3".localized]
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
     ], [
-        "name": "Makeup_browColor".localized,
+        "name": "Eyebrow Color".localized,
         "key": "browColor",
         "type": "segment",
-        "value": ["Makeup_browColor_value1".localized, "Makeup_browColor_value2".localized, "Makeup_browColor_value3".localized]
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
     ], [
-        "name": "Makeup_browStrength".localized,
+        "name": "Eyebrow Strength".localized,
         "key": "browStrength",
         "type": "slider",
         "value": [0, 1]
     ], [
-        "name": "Makeup_lashStyle".localized,
+        "name": "Eyelash Style".localized,
         "key": "lashStyle",
         "type": "segment",
-        "value": ["Makeup_browStyle_value1".localized, "Makeup_browStyle_value2".localized, "Makeup_browStyle_value3".localized]
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
     ], [
-        "name": "Makeup_lashColor".localized,
+        "name": "Eyelash Color".localized,
         "key": "lashColor",
         "type": "segment",
-        "value": ["Makeup_browColor_value1".localized, "Makeup_browColor_value2".localized, "Makeup_browColor_value3".localized]
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
     ], [
-        "name": "Makeup_lashStrength".localized,
+        "name": "Eyelash Strength".localized,
         "key": "lashStrength",
         "type": "slider",
         "value": [0, 1]
     ], [
-        "name": "Makeup_shadowStyle".localized,
+        "name": "Eyeshadow Style".localized,
         "key": "shadowStyle",
         "type": "segment",
-        "value": ["Makeup_browStyle_value1".localized, "Makeup_browStyle_value2".localized, "Makeup_browStyle_value3".localized]
-    ],
-    //    ["name": "Makeup_shadowColor".localized, "key": "shadowColor"],
-    [
-        "name": "Makeup_shadowStrength".localized,
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Eyeshadow Strength".localized,
         "key": "shadowStrength",
         "type": "slider",
         "value": [0, 1]
     ], [
-        "name": "Makeup_pupilStyle".localized,
+        "name": "Pupil Style".localized,
         "key": "pupilStyle",
         "type": "segment",
-        "value": ["Makeup_browStyle_value1".localized, "Makeup_browStyle_value2".localized, "Makeup_browStyle_value3".localized]
-    ],
-    //    ["name": "Makeup_pupilColor".localized, "key": "pupilColor"],
-    [
-        "name": "Makeup_pupilStrength".localized,
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Pupil Strength".localized,
         "key": "pupilStrength",
         "type": "slider",
         "value": [0, 1]
     ], [
-        "name": "Makeup_blushStyle".localized,
+        "name": "Blush Style".localized,
         "key": "blushStyle",
         "type": "segment",
-        "value": ["Makeup_browStyle_value1".localized, "Makeup_browStyle_value2".localized, "Makeup_browStyle_value3".localized]
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
     ], [
-        "name": "Makeup_blushColor".localized,
+        "name": "Blush Color".localized,
         "key": "blushColor",
         "type": "segment",
         "value": [
-            "Makeup_blushColor_value1".localized,
-            "Makeup_blushColor_value2".localized,
-            "Makeup_blushColor_value3".localized,
-            "Makeup_blushColor_value4".localized,
-            "Makeup_blushColor_value5".localized
+            "Blush Color None".localized,
+            "Blush Color Shade 1".localized,
+            "Blush Color Shade 2".localized,
+            "Blush Color Shade 3".localized,
+            "Blush Color Shade 4".localized,
+            "Blush Color Shade 5".localized
         ]
     ], [
-        "name": "Makeup_blushStrength".localized,
+        "name": "Blush Strength".localized,
         "key": "blushStrength",
         "type": "slider",
         "value": [0, 1]
     ], [
-        "name": "Makeup_lipStyle".localized,
+        "name": "Lip Style".localized,
         "key": "lipStyle",
         "type": "segment",
-        "value": ["Makeup_browColor_value1".localized, "Makeup_browColor_value2".localized, "Makeup_browColor_value3".localized]
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
     ], [
-        "name": "Makeup_lipColor".localized,
+        "name": "Lip Color".localized,
         "key": "lipColor",
         "type": "segment",
         "value": [
-            "Makeup_blushColor_value1".localized,
-            "Makeup_blushColor_value2".localized,
-            "Makeup_blushColor_value3".localized,
-            "Makeup_blushColor_value4".localized,
-            "Makeup_blushColor_value5".localized
+            "Blush Color None".localized,
+            "Blush Color Shade 1".localized,
+            "Blush Color Shade 2".localized,
+            "Blush Color Shade 3".localized,
+            "Blush Color Shade 4".localized,
+            "Blush Color Shade 5".localized
         ]
     ], [
-        "name": "Makeup_lipStrength".localized,
+        "name": "Lip Strength".localized,
         "key": "lipStrength",
         "type": "slider",
         "value": [0, 1]
@@ -668,25 +666,25 @@ extension VideoProcessMain {
 }
 
 private let beautyShapeList = [
-    ["name": "face_shape_enable".localized, "key": "enable", "type": "switch"],
-    ["name": "face_shape_gender".localized, 
+    ["name": "Face Shape Enable".localized, "key": "enable", "type": "switch"],
+    ["name": "Face Shape Gender".localized,
      "key": "gender",
      "type": "segment",
-     "value": ["face_shape_gender_female".localized, "face_shape_gender_male".localized]],
-    ["name": "face_shape_intensity".localized, "key": "intensity", "type": "slider", "value": [0, 100]],
+     "value": ["Face Shape Gender Female".localized, "Face Shape Gender Male".localized]],
+    ["name": "Face Shape Intensity".localized, "key": "intensity", "type": "slider", "value": [0, 100]],
     
-    ["name": "face_shape_area_head_scale".localized, "key": "headscale", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_forehead".localized, "key": "forehead", "type": "slider", "value": [-100, 100]],
-    ["name": "face_shape_area_face_contour".localized, "key": "facecontour", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_face_length".localized, "key": "facelength", "type": "slider", "value": [-100, 100]],
-    ["name": "face_shape_area_face_width".localized, "key": "facewidth", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_cheek_bone".localized, "key": "cheekbone", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_cheek".localized, "key": "cheek", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_chin".localized, "key": "chin", "type": "slider", "value": [-100, 100]],
-    ["name": "face_shape_area_eye_scale".localized, "key": "eyescale", "type": "slider", "value": [0, 100]],
-    ["name": "face_shape_area_nose_length".localized, "key": "noselength", "type": "slider", "value": [-100, 100]],
-    ["name": "face_shape_area_nose_width".localized, "key": "nosewidth", "type": "slider", "value": [-100, 100]],
-    ["name": "face_shape_area_mouth_scale".localized, "key": "mouthscale", "type": "slider", "value": [-100, 100]]
+    ["name": "Face Shape Area Head Scale".localized, "key": "headscale", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Forehead".localized, "key": "forehead", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Face Contour".localized, "key": "facecontour", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Face Length".localized, "key": "facelength", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Face Width".localized, "key": "facewidth", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Cheek Bone".localized, "key": "cheekbone", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Cheek".localized, "key": "cheek", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Chin".localized, "key": "chin", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Eye Scale".localized, "key": "eyescale", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Nose Length".localized, "key": "noselength", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Nose Width".localized, "key": "nosewidth", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Mouth Scale".localized, "key": "mouthscale", "type": "slider", "value": [-100, 100]]
 ]
 
 // MARK: face shape settings
