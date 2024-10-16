@@ -275,7 +275,7 @@
     <string name="lightness_enhance">Lightening Enhance</string>
     <string name="lightness_enhance_rtc">Lightening Enhance(RTC)</string>
     <string name="colorful_enhance">Colorful Enhance</string>
-    <string name="video_enhance">Video Enhance</string>
+    <string name="video_enhance_light">Light</string>
     <string name="colorful_enhance_rtc">Colorful Enhance(RTC)</string>
     <string name="smoothness">Smoothness</string>
     <string name="video_denoise">Video Denoise</string>
