@@ -212,7 +212,6 @@ class CustomVideoSourcePush: BaseViewController {
 //            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
 //            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
-            isHDR = hdrSwitch?.state == .on ? true : false
             // setup my own camera as custom video source
             customCamera = AgoraYUVImageSourcePush(size: isHDR ? CGSize(width: 1280, height: 720) : CGSize(width: 320, height: 180),
                                                    fileName: isHDR ? "hlg-hdr" : "sample",
@@ -254,7 +253,7 @@ class CustomVideoSourcePush: BaseViewController {
                     // Error code description can be found at:
                     // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                     // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result ?? 0), please check your params")
                 }
             })
         } else {
@@ -265,6 +264,21 @@ class CustomVideoSourcePush: BaseViewController {
                 self.isProcessing = false
                 self.isJoined = false
             }
+        }
+    }
+    
+    @IBAction func onHDRAction(sender: NSSwitch) {
+        if hdrSwitch?.state == .on {
+            let cap1 = agoraKit?.queryHDRCapability(.hardwareEncoder) == .supported ? true : false
+            let cap2 = agoraKit?.queryHDRCapability(.softwareEncoder) == .supported ? true : false
+            if !cap1 && !cap2 {
+                showAlert(title: "Error", message: "Current device does not support HDR")
+                hdrSwitch?.state = .off
+                return
+            }
+            isHDR = true
+        } else {
+            isHDR = false
         }
     }
     

@@ -39,6 +39,9 @@
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="2EK-Zp-r3K">
                                                     <rect key="frame" x="96" y="286" width="42" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <connections>
+                                                        <action selector="onHDRActionWithSender:" target="sXF-vm-Rrb" id="e2M-QQ-zXL"/>
+                                                    </connections>
                                                 </switch>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ycX-KS-D6W">
                                                     <rect key="frame" x="18" y="291" width="52" height="16"/>
