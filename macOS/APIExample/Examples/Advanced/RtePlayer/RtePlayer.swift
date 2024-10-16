@@ -21,6 +21,7 @@ class RtePlayer: BaseViewController {
      */
     @IBOutlet weak var channelField: Input!
     func initChannelField() {
+        channelField.label.stringValue = "URL"
         channelField.stringValue = "rte://\(KeyCenter.AppId)/{\("Live Channel Name".localized)}"
         channelField.field.placeholderString = "Channel Name".localized
     }
@@ -131,6 +132,7 @@ class RtePlayer: BaseViewController {
         } else {
             self.playerUrl = nil
             self.isPlaying = false
+            self.rtePlayerStop()
         }
     }
     
