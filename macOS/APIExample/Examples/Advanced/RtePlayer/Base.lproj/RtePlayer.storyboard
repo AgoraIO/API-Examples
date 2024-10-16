@@ -27,24 +27,8 @@
                                             <rect key="frame" x="311" y="0.0" width="314" height="498"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-8G-Ea6">
-                                                    <rect key="frame" x="21" y="412" width="60" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Play" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bWd-uM-koW">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                </button>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BMl-7o-vyF">
-                                                    <rect key="frame" x="96" y="412" width="63" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hHx-YJ-s3e">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                </button>
                                                 <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RaA-AV-UE8">
-                                                    <rect key="frame" x="18" y="205" width="278" height="185"/>
+                                                    <rect key="frame" x="18" y="280" width="278" height="185"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" selectable="YES" id="hYW-5k-R55">
                                                         <font key="font" metaFont="system"/>
@@ -124,9 +108,7 @@
                     <connections>
                         <outlet property="channelField" destination="yPE-u5-gxp" id="7Y6-kl-sNH"/>
                         <outlet property="joinChannelButton" destination="vAn-eI-BoG" id="IlU-Mb-0Ds"/>
-                        <outlet property="playButton" destination="gxd-8G-Ea6" id="bjD-wr-1ad"/>
                         <outlet property="playerView" destination="2Wt-eF-vnz" id="9OH-vB-ozx"/>
-                        <outlet property="stopButton" destination="BMl-7o-vyF" id="Rm8-ff-HPe"/>
                     </connections>
                 </viewController>
                 <customObject id="PeS-ve-mWK" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

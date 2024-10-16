@@ -180,7 +180,7 @@
                                     <rect key="frame" x="-100" y="-100" width="299" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.52970297029702973" horizontal="NO" id="w8X-ZN-2Mt">
+                                <scroller key="verticalScroller" autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="w8X-ZN-2Mt">
                                     <rect key="frame" x="298" y="0.0" width="16" height="498"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 </scroller>
