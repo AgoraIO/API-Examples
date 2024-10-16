@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Rte Player-->
+        <scene sceneID="FTD-bT-A3y">
+            <objects>
+                <viewController storyboardIdentifier="RtePlayer" id="ddQ-xA-Ik0" userLabel="Rte Player" customClass="RtePlayer" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="pDG-Kb-7ab">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="ywf-Oh-hOx">
+                                <rect key="frame" x="496" y="0.0" width="5" height="600"/>
+                            </box>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KGv-3J-gbI">
+                                <rect key="frame" x="499" y="102" width="315" height="498"/>
+                                <clipView key="contentView" id="lPd-3D-UrP">
+                                    <rect key="frame" x="0.0" y="0.0" width="315" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="QkT-iE-U2b">
+                                            <rect key="frame" x="311" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-8G-Ea6">
+                                                    <rect key="frame" x="21" y="412" width="60" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Play" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bWd-uM-koW">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BMl-7o-vyF">
+                                                    <rect key="frame" x="96" y="412" width="63" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hHx-YJ-s3e">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RaA-AV-UE8">
+                                                    <rect key="frame" x="18" y="205" width="278" height="185"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" selectable="YES" id="hYW-5k-R55">
+                                                        <font key="font" metaFont="system"/>
+                                                        <string key="title">Please use another device to open a live broadcast channel as a host, and enter the corresponding channel name in the input box above.</string>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </subviews>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="8OV-pD-bCi">
+                                    <rect key="frame" x="0.0" y="482" width="290" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="rnh-zG-ahc">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="I4o-9l-2Vv">
+                                <rect key="frame" x="499" y="0.0" width="315" height="103"/>
+                                <view key="contentView" id="asf-y1-UyY">
+                                    <rect key="frame" x="0.0" y="0.0" width="315" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="yPE-u5-gxp" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vAn-eI-BoG">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mmH-hT-gAv">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onJoinPressed:" target="ddQ-xA-Ik0" id="SNf-Do-COj"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="vAn-eI-BoG" secondAttribute="bottom" constant="14" id="3AL-DR-s51"/>
+                                        <constraint firstItem="vAn-eI-BoG" firstAttribute="leading" secondItem="asf-y1-UyY" secondAttribute="leading" constant="33" id="5xb-1k-aJ9"/>
+                                        <constraint firstItem="vAn-eI-BoG" firstAttribute="top" secondItem="yPE-u5-gxp" secondAttribute="bottom" constant="9" id="aeq-Hv-dGW"/>
+                                        <constraint firstItem="vAn-eI-BoG" firstAttribute="centerX" secondItem="yPE-u5-gxp" secondAttribute="centerX" id="mBm-SD-ah5"/>
+                                        <constraint firstAttribute="trailing" secondItem="vAn-eI-BoG" secondAttribute="trailing" constant="28" id="o2C-UF-TBe"/>
+                                    </constraints>
+                                </view>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="2Wt-eF-vnz">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="bSt-oY-9Yr"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="2Wt-eF-vnz" firstAttribute="top" secondItem="ywf-Oh-hOx" secondAttribute="top" id="4Qp-N9-R7U"/>
+                            <constraint firstItem="ywf-Oh-hOx" firstAttribute="bottom" secondItem="I4o-9l-2Vv" secondAttribute="bottom" id="4bm-8o-RIF"/>
+                            <constraint firstItem="2Wt-eF-vnz" firstAttribute="bottom" secondItem="ywf-Oh-hOx" secondAttribute="bottom" id="5d3-gu-ZWK"/>
+                            <constraint firstItem="ywf-Oh-hOx" firstAttribute="top" secondItem="KGv-3J-gbI" secondAttribute="top" id="8fW-cf-ghR"/>
+                            <constraint firstItem="KGv-3J-gbI" firstAttribute="leading" secondItem="I4o-9l-2Vv" secondAttribute="leading" id="S9A-0q-hGf"/>
+                            <constraint firstItem="2Wt-eF-vnz" firstAttribute="leading" secondItem="pDG-Kb-7ab" secondAttribute="leading" id="U4P-Ld-Skl"/>
+                            <constraint firstAttribute="bottom" secondItem="KGv-3J-gbI" secondAttribute="bottom" constant="102" id="Zuj-NL-Uqr"/>
+                            <constraint firstAttribute="trailing" secondItem="2Wt-eF-vnz" secondAttribute="trailing" constant="314" id="b8y-aC-Yny"/>
+                            <constraint firstItem="KGv-3J-gbI" firstAttribute="trailing" secondItem="I4o-9l-2Vv" secondAttribute="trailing" id="fwd-Pp-PYH"/>
+                            <constraint firstItem="KGv-3J-gbI" firstAttribute="leading" secondItem="ywf-Oh-hOx" secondAttribute="trailing" id="mCa-Bt-MwZ"/>
+                            <constraint firstItem="2Wt-eF-vnz" firstAttribute="top" secondItem="pDG-Kb-7ab" secondAttribute="top" id="p1U-RL-RrF"/>
+                            <constraint firstAttribute="trailing" secondItem="KGv-3J-gbI" secondAttribute="trailing" id="p8i-Dw-f22"/>
+                            <constraint firstAttribute="bottom" secondItem="2Wt-eF-vnz" secondAttribute="bottom" id="xEa-Ew-WFl"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="yPE-u5-gxp" id="7Y6-kl-sNH"/>
+                        <outlet property="joinChannelButton" destination="vAn-eI-BoG" id="IlU-Mb-0Ds"/>
+                        <outlet property="playButton" destination="gxd-8G-Ea6" id="bjD-wr-1ad"/>
+                        <outlet property="playerView" destination="2Wt-eF-vnz" id="9OH-vB-ozx"/>
+                        <outlet property="stopButton" destination="BMl-7o-vyF" id="Rm8-ff-HPe"/>
+                    </connections>
+                </viewController>
+                <customObject id="PeS-ve-mWK" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-291" y="138"/>
+        </scene>
+    </scenes>
+</document>

@@ -32,8 +32,10 @@
 "Precall Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";
-"Super Resolution" = "超级分辨率";
 "Media Channel Relay" = "跨频道流转发";
+"URL Streaming(RTE Player)"="URL拉流(RTE Player)";
+
+"Super Resolution" = "超级分辨率";
 "Set Resolution" = "设置视频分辨率";
 "Set Fps" = "设置视频帧率";
 "Set Orientation" = "设置视频朝向";
@@ -297,3 +299,8 @@
 "face_shape_area_nose_length"="鼻子长度";
 "face_shape_area_nose_width"="鼻子宽度";
 "face_shape_area_mouth_scale"="嘴巴比例";
+
+"Live Channel Name" = "直播频道名";
+
+"Play" = "播放";
+"Stop" = "停止";
