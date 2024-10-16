@@ -19,9 +19,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,6 +29,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -66,23 +64,20 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     private AudioSeatManager audioSeatManager;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_play_audio_files, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         join = view.findViewById(R.id.btn_join);
@@ -130,7 +125,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         resetLayoutByJoin();
     }
 
-    private void resetLayoutByJoin(){
+    private void resetLayoutByJoin() {
         audioProfile.setEnabled(!joined);
 
         mixingStart.setClickable(joined);
@@ -149,17 +144,14 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
@@ -182,7 +174,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -203,9 +195,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
             preloadAudioEffect();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -215,7 +205,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
      * To ensure smooth communication, limit the size of the audio effect file.
      * We recommend using this method to preload the audio effect before calling the joinChannel method.
      */
-    private void preloadAudioEffect(){
+    private void preloadAudioEffect() {
         // Gets the global audio effect manager.
         audioEffectManager = engine.getAudioEffectManager();
         // Preloads the audio effect (recommended). Note the file size, and preload the file before joining the channel.
@@ -225,12 +215,10 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -250,33 +238,23 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v == join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v == join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
-            }
-            else
-            {
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
+            } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -300,29 +278,19 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 resetLayoutByJoin();
                 audioSeatManager.downAllSeats();
             }
-        }
-        else if (v == mixingStart)
-        {
+        } else if (v == mixingStart) {
             int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, -1, 0);
             Log.i(TAG, "startAudioMixing >> ret=" + ret);
-        }
-        else if (v == mixingResume)
-        {
+        } else if (v == mixingResume) {
             int ret = engine.resumeAudioMixing();
             Log.i(TAG, "resumeAudioMixing >> ret=" + ret);
-        }
-        else if (v == mixingPause)
-        {
+        } else if (v == mixingPause) {
             int ret = engine.pauseAudioMixing();
             Log.i(TAG, "pauseAudioMixing >> ret=" + ret);
-        }
-        else if (v == mixingStop)
-        {
+        } else if (v == mixingStop) {
             int ret = engine.stopAudioMixing();
             Log.i(TAG, "stopAudioMixing >> ret=" + ret);
-        }
-        else if (v == effectStart)
-        {
+        } else if (v == effectStart) {
             /** Plays an audio effect file.
              * Returns
              * 0: Success.
@@ -337,17 +305,14 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                     100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
                     true // Sets whether to publish the audio effect.
             );
-            Log.i(TAG, "result playRet:"+ playRet);
-        }
-        else if(v == effectResume){
+            Log.i(TAG, "result playRet:" + playRet);
+        } else if (v == effectResume) {
             int ret = engine.resumeEffect(EFFECT_SOUND_ID);
             Log.i(TAG, "resumeEffect >> ret=" + ret);
-        }
-        else if(v == effectPause){
+        } else if (v == effectPause) {
             int ret = engine.pauseEffect(EFFECT_SOUND_ID);
             Log.i(TAG, "resumeEffect >> ret=" + ret);
-        }
-        else if(v == effectStop){
+        } else if (v == effectStop) {
             int ret = engine.stopEffect(EFFECT_SOUND_ID);
             Log.i(TAG, "resumeEffect >> ret=" + ret);
         }
@@ -355,9 +320,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
 
     /**
      * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
-    {
+     *                  Users that input the same channel name join the same channel.
+     */
+    private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         engine.setAudioProfile(
@@ -377,8 +342,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
             int res = engine.joinChannel(ret, channelId, 0, option);
-            if (res != 0)
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -392,18 +356,18 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         });
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          * cn: https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
@@ -411,8 +375,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -425,17 +388,14 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     resetLayoutByJoin();
@@ -513,8 +473,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -532,8 +491,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             runOnUIThread(() -> audioSeatManager.downSeat(uid));
@@ -552,29 +510,26 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if(seekBar.getId() == R.id.mixingPublishVolBar){
+        if (seekBar.getId() == R.id.mixingPublishVolBar) {
             /**
              * Adjusts the volume of audio mixing for publishing (sending to other users).
              * @param volume: Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingPublishVolume(progress);
-        }
-        else if(seekBar.getId() == R.id.mixingPlayoutVolBar){
+        } else if (seekBar.getId() == R.id.mixingPlayoutVolBar) {
             /**
              * Adjusts the volume of audio mixing for local playback.
              * @param volume: Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingPlayoutVolume(progress);
-        }
-        else if(seekBar.getId() == R.id.mixingVolBar){
+        } else if (seekBar.getId() == R.id.mixingVolBar) {
             /**
              * Adjusts the volume of audio mixing.
              * Call this method when you are in a channel.
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
-        }
-        else if(seekBar.getId() == R.id.effectVolBar){
+        } else if (seekBar.getId() == R.id.effectVolBar) {
             engine.setEffectsVolume(progress);
         }
     }

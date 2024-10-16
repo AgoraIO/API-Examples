@@ -17,9 +17,6 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -27,6 +24,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.AudioFileReader;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -140,7 +138,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -162,7 +160,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             }
 
             audioPushingHelper = new AudioFileReader(requireContext(), (buffer, timestamp) -> {
-                if(joined && engine != null && customAudioTrack != -1){
+                if (joined && engine != null && customAudioTrack != -1) {
                     int ret = engine.pushExternalAudioFrame(buffer, timestamp, AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, Constants.BytesPerSample.TWO_BYTES_PER_SAMPLE, customAudioTrack);
                     Log.i(TAG, "pushExternalAudioFrame times:" + (++pushTimes) + ", ret=" + ret);
                 }
@@ -176,11 +174,11 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(customAudioTrack != -1){
+        if (customAudioTrack != -1) {
             engine.destroyCustomAudioTrack(customAudioTrack);
             customAudioTrack = -1;
         }
-        if(audioPushingHelper != null){
+        if (audioPushingHelper != null) {
             audioPushingHelper.stop();
         }
         /**leaveChannel and Destroy the RtcEngine instance*/
@@ -214,19 +212,15 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
@@ -252,7 +246,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 pcm.setEnabled(false);
                 pcm.setChecked(false);
                 mic.setChecked(true);
-                if(audioPushingHelper != null){
+                if (audioPushingHelper != null) {
                     audioPushingHelper.stop();
                 }
                 audioSeatManager.downAllSeats();
@@ -343,7 +337,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    if(audioPushingHelper != null){
+                    if (audioPushingHelper != null) {
                         pushTimes = 0;
                         audioPushingHelper.start();
                     }

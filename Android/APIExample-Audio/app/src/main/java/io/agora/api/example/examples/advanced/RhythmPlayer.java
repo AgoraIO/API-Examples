@@ -18,14 +18,12 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -59,23 +57,20 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
     private ChannelMediaOptions mChannelMediaOptions;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rhythm_player, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         play = view.findViewById(R.id.play);
@@ -91,17 +86,14 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
@@ -124,7 +116,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -144,21 +136,17 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.stopRhythmPlayer();
             engine.leaveChannel();
         }
@@ -168,33 +156,23 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
 
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
-            }
-            else
-            {
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
+            } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -216,11 +194,10 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.play){
-            if(!isPlaying){
+        } else if (v.getId() == R.id.play) {
+            if (!isPlaying) {
                 int ret = engine.startRhythmPlayer(URL_DOWNBEAT, URL_UPBEAT, agoraRhythmPlayerConfig);
-                if(joined){
+                if (joined) {
                     mChannelMediaOptions.publishRhythmPlayerTrack = true;
                     engine.updateChannelMediaOptions(mChannelMediaOptions);
                 }
@@ -229,10 +206,9 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
                 beatPerMeasure.setEnabled(false);
                 beatPerMinute.setEnabled(false);
             }
-        }
-        else if(v.getId() == R.id.stop){
+        } else if (v.getId() == R.id.stop) {
             engine.stopRhythmPlayer();
-            if(joined){
+            if (joined) {
                 mChannelMediaOptions.publishRhythmPlayerTrack = false;
                 engine.updateChannelMediaOptions(mChannelMediaOptions);
             }
@@ -244,9 +220,9 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
 
     /**
      * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
-    {
+     *                  Users that input the same channel name join the same channel.
+     */
+    private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         engine.enableAudioVolumeIndication(1000, 3, true);
@@ -283,18 +259,18 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          * cn: https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
@@ -302,8 +278,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -316,17 +291,14 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     play.setEnabled(true);
@@ -380,8 +352,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -398,8 +369,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
@@ -413,13 +383,12 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if(seekBar.getId() == R.id.beatsPerMeasure){
+        if (seekBar.getId() == R.id.beatsPerMeasure) {
             agoraRhythmPlayerConfig.beatsPerMeasure = seekBar.getProgress() < 1 ? 1 : seekBar.getProgress();
-        }
-        else if(seekBar.getId() == R.id.beatsPerMinute){
+        } else if (seekBar.getId() == R.id.beatsPerMinute) {
             agoraRhythmPlayerConfig.beatsPerMinute = seekBar.getProgress() < 60 ? 60 : seekBar.getProgress();
         }
-        Log.i(TAG, "agoraRhythmPlayerConfig beatsPerMeasure:"+ agoraRhythmPlayerConfig.beatsPerMeasure +", beatsPerMinute:" + agoraRhythmPlayerConfig.beatsPerMinute);
+        Log.i(TAG, "agoraRhythmPlayerConfig beatsPerMeasure:" + agoraRhythmPlayerConfig.beatsPerMeasure + ", beatsPerMinute:" + agoraRhythmPlayerConfig.beatsPerMinute);
     }
 
     @Override

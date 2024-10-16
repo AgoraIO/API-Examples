@@ -54,7 +54,7 @@
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
     <string name="audiorouter_palyer">This example shows the behavior of audio router while communicating with rtc.</string>
-
+    <string name="permission">Please granted the request permissions</string>
 
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
