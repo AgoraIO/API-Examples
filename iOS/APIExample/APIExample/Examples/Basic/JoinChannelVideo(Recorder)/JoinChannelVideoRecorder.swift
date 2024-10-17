@@ -249,6 +249,9 @@ class JoinChannelVideoRecorder: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
 //        joinChannel(channelName: channelName)
+        guard let button = joinOrLeaveButton else {return}
+        onJoinOrLeave(sender: button)
+            
     }
     
     private func joinChannel(channelName: String) {
