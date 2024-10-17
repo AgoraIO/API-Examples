@@ -60,17 +60,6 @@
     return _remoteView;
 }
 
-- (AgoraPictureInPictureController *)pipController {
-    if (_pipController == nil) {
-        _pipController = [[AgoraPictureInPictureController alloc] initWithDisplayView:self.remoteView.videoView];
-        if (@available(iOS 14.2, *)) {
-            _pipController.pipController.canStartPictureInPictureAutomaticallyFromInline = YES;
-        }
-        _pipController.pipController.delegate = self;
-    }
-    return _pipController;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -139,7 +128,19 @@
             NSLog(@"joinChannel call failed: %d, please check your params", result);
         }
     }];
+    
+    //AgoraPictureInPictureController cannot be initialized at the first click of the button, and needs to be initialized in advance (there will be bugs in lazy loading, and the first click of the pip button pip will not take effect), so initialize AgoraPictureInPictureController in viewDidLoad
+    [self setupPIPViewController];
 }
+
+- (void)setupPIPViewController {
+    _pipController = [[AgoraPictureInPictureController alloc] initWithDisplayView:self.remoteView.videoView];
+    if (@available(iOS 14.2, *)) {
+        _pipController.pipController.canStartPictureInPictureAutomaticallyFromInline = YES;
+    }
+    _pipController.pipController.delegate = self;
+}
+
 - (IBAction)onPIP:(UIButton *)sender {
     if (self.pipController.pipController) {
         [self.pipController.pipController startPictureInPicture];
