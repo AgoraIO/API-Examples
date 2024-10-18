@@ -83,15 +83,8 @@ public:
 		}
 	}
 
-	/** Occurs when the state of the media stream relay changes.
-	*
-	* The SDK returns the state of the current media relay with any error
-	* message.
-	*
-	* @param state The state code in #CHANNEL_MEDIA_RELAY_STATE.
-	* @param code The error code in #CHANNEL_MEDIA_RELAY_ERROR.
-	*/
-	virtual void onChannelMediaRelayStateChanged(CHANNEL_MEDIA_RELAY_STATE state, CHANNEL_MEDIA_RELAY_ERROR code)override {
+
+	virtual void onChannelMediaRelayStateChanged(int state, int code)override {
 		if (m_hMsgHanlder)
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_MEDIA_RELAY_STATE_CHNAGENED), state, code);
 	}
@@ -100,7 +93,7 @@ public:
 	 *
 	 * @param code The event code in #CHANNEL_MEDIA_RELAY_EVENT.
 	 */
-	virtual void onChannelMediaRelayEvent(CHANNEL_MEDIA_RELAY_EVENT code) {
+	virtual void onChannelMediaRelayEvent(int code) {
 		if (m_hMsgHanlder)
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_MEDIA_RELAY_EVENT), code, 0);
 	}
