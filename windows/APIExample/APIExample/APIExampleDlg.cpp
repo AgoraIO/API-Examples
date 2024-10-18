@@ -226,6 +226,7 @@ void CAPIExampleDlg::InitSceneDialog()
 	//advanced list
 	// m_vecAdvanced.push_back(advancedRtmpInject);
 	m_vecAdvanced.push_back(advancedRtmpStreaming);
+	m_vecAdvanced.push_back(advancedCrossChannel);
 	m_vecAdvanced.push_back(advancedMetadata);
 	m_vecAdvanced.push_back(advancedMediaPlayer);
 	m_vecAdvanced.push_back(advancedMediaRecorder);
@@ -387,6 +388,10 @@ void CAPIExampleDlg::InitSceneDialog()
 	m_pMultiVideoSourceTracks->Create(MultiVideoSourceTracks::IDD);
 	m_pMultiVideoSourceTracks->MoveWindow(&rcWnd);
 
+	m_pAgoraCrossChannelDlg = new CAgoraCrossChannelDlg(&m_staMainArea);
+    m_pAgoraCrossChannelDlg->Create(CAgoraCrossChannelDlg::IDD);
+    m_pAgoraCrossChannelDlg->MoveWindow(&rcWnd);
+
 	// transparent bg
 	m_TransparentDlg = new CTransparentBgDlg(&m_staMainArea);
 	m_TransparentDlg->Create(CTransparentBgDlg::IDD);
@@ -539,6 +544,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pRtmpStreamingDlg->InitAgora();
 		m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedCrossChannel) == 0) {
+		m_pAgoraCrossChannelDlg->InitAgora();
+		m_pAgoraCrossChannelDlg->ShowWindow(SW_SHOW);
+	}
 	else if (selectedText.Compare(advancedMetadata) == 0) {
 		m_pVideoSEIDlg->InitAgora();
 		m_pVideoSEIDlg->ShowWindow(SW_SHOW);
@@ -671,6 +680,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedRtmpStreaming) == 0) {
 		m_pRtmpStreamingDlg->UnInitAgora();
 		m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedCrossChannel) == 0) {
+		m_pAgoraCrossChannelDlg->UnInitAgora();
+		m_pAgoraCrossChannelDlg->ShowWindow(SW_HIDE);
 	}
 	else if (str.Compare(advancedMetadata) == 0) {
 		m_pVideoSEIDlg->UnInitAgora();

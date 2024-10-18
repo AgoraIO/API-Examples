@@ -109,6 +109,9 @@
     <Filter Include="Basic\JoinChannelVideoByToken">
       <UniqueIdentifier>{f40fbcc5-c4fb-4581-a7b2-05cbcc5f737c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\CrossChannel">
+      <UniqueIdentifier>{2cf4beba-8f24-4801-932d-2ab0dd5da40e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Advanced\Metadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
@@ -264,6 +267,9 @@
     <ClInclude Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.h">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
     </ClInclude>
+     <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h">
+      <Filter>Advanced\CrossChannel</Filter>
+    </ClInclude>
     <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h">
       <Filter>Advanced\Metadata</Filter>
     </ClInclude>
@@ -415,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.cpp">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Advanced\CrossChannel</Filter>
     </ClCompile>
     <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp">
       <Filter>Advanced\Metadata</Filter>
