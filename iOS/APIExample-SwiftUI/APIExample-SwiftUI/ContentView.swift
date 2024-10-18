@@ -101,27 +101,7 @@ struct ContentView: View {
                 ForEach(menus) { section in
                     Section(header: Text(section.name)) {
                         ForEach(section.rows) { item in
-                            if item.name == "Picture In Picture".localized {
-                                if #available(iOS 15.0, *) {
-                                    NavigationLink(destination: {
-                                        item.view.navigationTitle(item.name)
-                                    }) {
-                                        Text(item.name)
-                                    }
-                                } else {
-                                    Button(action: {
-                                        showAlert()
-                                    }) {
-                                        Text(item.name)
-                                    }
-                                }
-                            } else {
-                                NavigationLink(destination: {
-                                    item.view.navigationTitle(item.name)
-                                }) {
-                                    Text(item.name)
-                                }
-                            }
+                            MenuItemView(item: item)
                         }
                     }
                 }
@@ -129,6 +109,33 @@ struct ContentView: View {
             .listStyle(GroupedListStyle())
             .navigationTitle("Agora API Example")
             .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+struct MenuItemView: View {
+    var item: MenuItem
+    var body: some View {
+        if item.name == "Picture In Picture".localized {
+            if #available(iOS 15.0, *) {
+                NavigationLink(destination: {
+                    item.view.navigationTitle(item.name)
+                }) {
+                    Text(item.name)
+                }
+            } else {
+                Button(action: {
+                    showAlert()
+                }) {
+                    Text(item.name)
+                }
+            }
+        } else {
+            NavigationLink(destination: {
+                item.view.navigationTitle(item.name)
+            }) {
+                Text(item.name)
+            }
         }
     }
     
