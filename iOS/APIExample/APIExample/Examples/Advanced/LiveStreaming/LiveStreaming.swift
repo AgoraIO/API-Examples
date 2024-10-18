@@ -183,6 +183,7 @@ class LiveStreamingMain: BaseViewController {
     var backgroundVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     @IBOutlet weak var foregroundVideoContainer: UIView!
     @IBOutlet weak var backgroundVideoContainer: UIView!
+    @IBOutlet weak var touchBackgroundView: UIView?
     @IBOutlet weak var clientRoleToggleView: UIView!
     @IBOutlet weak var ultraLowLatencyToggleView: UIView!
     @IBOutlet weak var clientRoleToggle: UISwitch!
@@ -240,6 +241,8 @@ class LiveStreamingMain: BaseViewController {
         backgroundVideoContainer.addSubview(backgroundVideo)
         foregroundVideo.bindFrameToSuperviewBounds()
         backgroundVideo.bindFrameToSuperviewBounds()
+        
+        touchBackgroundView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapGesture(_ :))))
         
         localRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         remoteRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -354,6 +357,11 @@ class LiveStreamingMain: BaseViewController {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
     private var cameraDirection: AgoraCameraDirection = .front
+    
+    @IBAction func onTapGesture(_ ges: UIGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
     @IBAction func onTapCameraFocalButton(_ sender: UIButton) {
         let infos = agoraKit.queryCameraFocalLengthCapability()
         let pickerView = PickerView()

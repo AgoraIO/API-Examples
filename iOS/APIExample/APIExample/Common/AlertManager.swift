@@ -145,7 +145,10 @@ class AlertManager: NSObject {
     static func hiddenView(all: Bool = true, 
                            completion: (() -> Void)? = nil) {
         if currentPosition == .bottom {
-            guard let lastView = viewCache.last?.view else { return }
+            guard let lastView = viewCache.last?.view else {
+                completion?()
+                return
+            }
             bottomAnchor?.constant = lastView.frame.height
             bottomAnchor?.isActive = true
         }
@@ -167,6 +170,7 @@ class AlertManager: NSObject {
             } else {
                 viewCache.removeLast()
                 viewCache.last?.view?.alpha = 1
+                completion?()
             }
         })
     }
