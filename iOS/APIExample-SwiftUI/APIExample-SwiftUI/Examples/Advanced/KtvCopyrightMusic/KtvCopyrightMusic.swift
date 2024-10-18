@@ -15,7 +15,8 @@ struct KtvCopyrightMusic: View {
                 if let url = URL(string: urlString) {
                     UIApplication.shared.open(url)
                 }
-            }.buttonStyle(.borderedProminent)
+            }
+            .adaptiveButtonStyle()
         }
     }
 }

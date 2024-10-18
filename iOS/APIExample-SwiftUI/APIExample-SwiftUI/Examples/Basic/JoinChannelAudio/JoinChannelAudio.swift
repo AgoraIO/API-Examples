@@ -27,24 +27,34 @@ struct JoinChannelAudioEntry: View {
                     self.isShowAudioProfile = true
                 } label: {
                     Text(scenario.description())
-                }.confirmationDialog("Set Audio Scenario".localized, isPresented: $isShowAudioProfile, titleVisibility: .visible) {
+                }
+                .adaptiveDialog(title: "Set Audio Scenario".localized, isPresented: $isShowAudioProfile, actions: {
                     ForEach(AgoraAudioScenario.allValues(), id: \.self) { item in
                         getAudioScenarioAction(item)
                     }
-                    Button("Cancel".localized, role: .cancel) {}
-                }
+                    adaptiveCancelStyleButton(title: "Cancel".localized) {}
+                }, actionSheetActions: AgoraAudioScenario.allValues().map { item in
+                        .default(Text(item.description())) {
+                            self.scenario = item
+                        }
+                    } + [.cancel(Text("Cancel".localized))])
             }.padding(EdgeInsets(top: 0, leading: 35, bottom: 15, trailing: 35))
             HStack {
                 Text("Audio Profile".localized)
                 Spacer()
                 Button(profile.description()) {
                     self.isShowAudioScence = true
-                }.confirmationDialog("Set Audio Profile".localized, isPresented: $isShowAudioScence, titleVisibility: .visible) {
+                }
+                .adaptiveDialog(title: "Set Audio Profile".localized, isPresented: $isShowAudioScence, actions: {
                     ForEach(AgoraAudioProfile.allValues(), id: \.self) { item in
                         getAudioProfileAction(item)
                     }
-                    Button("Cancel".localized, role: .cancel) {}
-                }
+                    adaptiveCancelStyleButton(title: "Cancel".localized) {}
+                }, actionSheetActions: AgoraAudioScenario.allValues().map { item in
+                        .default(Text(item.description())) {
+                            self.profile = profile
+                        }
+                    } + [.cancel(Text("Cancel".localized))])
             }.padding(EdgeInsets(top: 0, leading: 35, bottom: 0, trailing: 35))
             TextField("Enter channel name".localized, text: $channelName).textFieldStyle(.roundedBorder).padding()
             Button {
@@ -112,12 +122,18 @@ struct JoinChannelAudio: View {
                 Spacer()
                 Button(scenario.description()) {
                     isShowAudioProfile = true
-                }.confirmationDialog("Set Audio Scenario".localized, isPresented: $isShowAudioProfile, titleVisibility: .visible) {
+                }
+                .adaptiveDialog(title: "Set Audio Scenario".localized, isPresented: $isShowAudioProfile, actions: {
                     ForEach(AgoraAudioScenario.allValues(), id: \.self) { item in
                         getAudioScenarioAction(item)
                     }
-                    Button("Cancel".localized, role: .cancel) {}
-                }.padding(.trailing, 30)
+                    adaptiveCancelStyleButton(title: "Cancel".localized) {}
+                }, actionSheetActions: AgoraAudioScenario.allValues().map { item in
+                        .default(Text(item.description())) {
+                            self.scenario = scenario
+                            self.agoraKit.setAudioScenario(scenario: scenario)
+                        }
+                    } + [.cancel(Text("Cancel".localized))])
             }.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
             HStack {
                 Text("RecordingVolume".localized)
