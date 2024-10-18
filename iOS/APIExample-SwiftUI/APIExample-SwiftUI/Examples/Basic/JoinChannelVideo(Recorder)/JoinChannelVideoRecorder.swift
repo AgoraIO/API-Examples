@@ -32,8 +32,10 @@ struct JoinChannelVideoRecorderEntry: View {
     }
 }
 
-#Preview {
-    JoinChannelVideoRecorderEntry()
+struct JoinChannelVideoRecorderEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelVideoRecorderEntry()
+    }
 }
 
 struct JoinChannelVideoRecorder: View {
@@ -91,6 +93,8 @@ struct JoinChannelVideoRecorder: View {
     }
 }
 
-#Preview {
-    JoinChannelVideoRecorder(configs: [:])
+struct JoinChannelVideoRecorderPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinChannelVideoRecorder(configs: [:])
+    }
 }

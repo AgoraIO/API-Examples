@@ -119,7 +119,7 @@ class PrecallTestRTC: NSObject, ObservableObject {
             guard let self = self else { return }
             self.countDown -= 1
             // swiftlint:disable empty_count
-            if countDown == 0 {
+            if self.countDown == 0 {
                 // swiftlint:enable empty_count
                 self.timer?.invalidate()
                 callback()

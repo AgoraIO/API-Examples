@@ -32,8 +32,10 @@ struct JoinMultiChannelEntry: View {
     }
 }
 
-#Preview {
-    JoinMultiChannelEntry()
+struct JoinMultiChannelEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinMultiChannelEntry()
+    }
 }
 
 struct JoinMultiChannel: View {
@@ -66,7 +68,11 @@ struct JoinMultiChannel: View {
                 .padding(5)
                 .background(.blue)
                 .foregroundStyle(.white)
+#if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
+#else
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+#endif
                 .alert(isPresented: $isShowLeaveAlert) {
                     Alert(title: Text("stopMicrophoneRecording".localized), primaryButton: .default(Text("Stop".localized), action: {
                         agoraKit.onTapLeaveChannelEx(isStop: true)
@@ -84,7 +90,11 @@ struct JoinMultiChannel: View {
                 .padding(5)
                 .background(.blue)
                 .foregroundStyle(.white)
+#if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
+#else
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+#endif
                 .alert(isPresented: $agoraKit.isShowAlert) {
                     Alert(title: Text(agoraKit.snapshotPath), dismissButton: .default(Text("Sure".localized)))
                 }
@@ -101,6 +111,8 @@ struct JoinMultiChannel: View {
     }
 }
 
-#Preview {
-    JoinMultiChannel(configs: [:])
+struct JoinMultiChannelPreviews: PreviewProvider {
+    static var previews: some View {
+        JoinMultiChannel(configs: [:])
+    }
 }

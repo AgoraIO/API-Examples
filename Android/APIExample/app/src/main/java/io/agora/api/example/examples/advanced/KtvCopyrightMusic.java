@@ -23,7 +23,7 @@ public class KtvCopyrightMusic extends BaseBrowserFragment {
     @Override
     protected String getBrowserUrl() {
         if (getResources().getConfiguration().locale.getLanguage() == Locale.CHINESE.getLanguage()) {
-            return "https://doc.shengwang.cn/doc/online-ktv/android/landing-page";
+            return "https://doc.shengwang.cn/doc/online-ktv/android/ktv-scenario/landing-page";
         }
         return "https://docs.agora.io/en/interactive-live-streaming/overview/product-overview?platform=android";
     }

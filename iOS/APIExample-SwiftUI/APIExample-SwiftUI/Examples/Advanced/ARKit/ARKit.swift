@@ -43,8 +43,10 @@ struct ARKitEntry: View {
     }
 }
 
-#Preview {
-    ARKitEntry()
+struct ARKitEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        ARKitEntry()
+    }
 }
 
 struct ARViewWrapper: UIViewRepresentable {
@@ -129,6 +131,8 @@ struct ARKit: View {
     }
 }
 
-#Preview {
-    ARKit(configs: [:])
+struct ARKitPreviews: PreviewProvider {
+    static var previews: some View {
+        ARKit(configs: [:])
+    }
 }

@@ -50,7 +50,7 @@ class SDKRenderRTC: NSObject, ObservableObject, SDKRenderRTCProtocol {
     
     private weak var rtcEngine: AgoraRtcEngineKit?
     
-    private lazy var remoteRenderViews: NSHashTable = {
+    private lazy var remoteRenderViews: NSHashTable<VideoUIView> = {
         let table = NSHashTable<VideoUIView>(options: .weakMemory)
         return table
     }()

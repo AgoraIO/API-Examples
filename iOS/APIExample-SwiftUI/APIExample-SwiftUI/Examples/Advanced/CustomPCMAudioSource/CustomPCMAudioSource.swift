@@ -82,6 +82,8 @@ struct DynamicGridView: View {
     }
 }
 
-#Preview {
-    CustomPCMAudioSource()
+struct CustomPCMAudioSourcePreviews: PreviewProvider {
+    static var previews: some View {
+        CustomPCMAudioSource()
+    }
 }

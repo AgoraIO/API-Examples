@@ -32,8 +32,10 @@ struct MutliCameraEntry: View {
     }
 }
 
-#Preview {
-    MutliCameraEntry()
+struct MutliCameraEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        MutliCameraEntry()
+    }
 }
 
 struct MutliCamera: View {
@@ -62,18 +64,30 @@ struct MutliCamera: View {
         }).onDisappear(perform: {
             agoraKit.onDestory()
             
-        }).toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(title) {
-                    isOpenCamera.toggle()
-                    title = isOpenCamera ? "Close Rear Camera".localized : "Open Rear Camera".localized
-                    agoraKit.onTapBackCameraButton(isOpenCamera)
-                }
+        }).toolbar(content: toobarItems)
+    }
+    
+    func toobarItems() -> some ToolbarContent {
+        let placement: ToolbarItemPlacement = {
+#if os(iOS) && swift(>=5.7)
+            return .topBarTrailing
+#else
+            return .navigationBarTrailing
+#endif
+        }()
+        
+        return ToolbarItem(placement: placement) {
+            Button(title) {
+                isOpenCamera.toggle()
+                title = isOpenCamera ? "Close Rear Camera".localized : "Open Rear Camera".localized
+                agoraKit.onTapBackCameraButton(isOpenCamera)
             }
         }
     }
 }
 
-#Preview {
-    MutliCamera(configs: [:])
+struct MutliCameraPreviews: PreviewProvider {
+    static var previews: some View {
+        MutliCamera(configs: [:])
+    }
 }

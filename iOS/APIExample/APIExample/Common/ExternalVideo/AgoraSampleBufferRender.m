@@ -12,11 +12,10 @@
     NSInteger _videoWidth, _videoHeight;
 }
 
-@property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
-
 @end
 
 @implementation AgoraSampleBufferRender
+@synthesize displayLayer = _displayLayer;
 
 - (AVSampleBufferDisplayLayer *)displayLayer {
     if (!_displayLayer) {
@@ -229,11 +228,9 @@
     
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = videoData.pixelBuffer;
-        
+       
         CMVideoFormatDescriptionRef videoInfo;
-        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault,
-                                                     pixelBuffer,
-                                                     &videoInfo);
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &videoInfo);
         
         CMSampleTimingInfo timingInfo;
         timingInfo.duration = kCMTimeZero;
@@ -241,18 +238,15 @@
         timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
         
         CMSampleBufferRef sampleBuffer;
-        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault,
-                                                 pixelBuffer,
-                                                 videoInfo,
-                                                 &timingInfo,
-                                                 &sampleBuffer);
-        
-        [self.displayLayer enqueueSampleBuffer:sampleBuffer];
-        if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
-            [self.displayLayer flush];
+        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
+        if (sampleBuffer) {
+            [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+//            [self.displayLayer setNeedsDisplay];
+//            [_displayLayer display];
+//            [self.layer display];
+//            CMSampleBufferInvalidate(sampleBuffer);
+            CFRelease(sampleBuffer);
         }
-        CMSampleBufferInvalidate(sampleBuffer);
-        CFRelease(sampleBuffer);
     }
 }
 

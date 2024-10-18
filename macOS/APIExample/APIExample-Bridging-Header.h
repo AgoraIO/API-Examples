@@ -9,3 +9,4 @@
 #import "MediaUtils.h"
 #import "AgoraSampleBufferRender.h"
 #import "KFMP4Demuxer.h"
+#import <AgoraRtcKit/AgoraRteKit.h>

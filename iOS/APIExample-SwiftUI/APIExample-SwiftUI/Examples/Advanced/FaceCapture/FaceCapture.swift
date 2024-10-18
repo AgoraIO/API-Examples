@@ -32,8 +32,10 @@ struct FaceCaptureEntry: View {
     }
 }
 
-#Preview {
-    FaceCaptureEntry()
+struct FaceCaptureEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        FaceCaptureEntry()
+    }
 }
 
 struct FaceCapture: View {
@@ -62,6 +64,8 @@ struct FaceCapture: View {
     }
 }
 
-#Preview {
-    FaceCapture(configs: [:])
+struct FaceCapturePreviews: PreviewProvider {
+    static var previews: some View {
+        FaceCapture(configs: [:])
+    }
 }

@@ -26,7 +26,7 @@ struct MenuItem: Identifiable {
 struct ContentView: View {
     var menus: [MenuSection] = [
         MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Token)".localized, 
+            MenuItem(name: "Join a channel (Token)".localized,
                      view: AnyView(JoinChannelVideoTokenEntry())),
             MenuItem(name: "Join a channel (Video)".localized,
                      view: AnyView(JoinChannelVideoEntry())),
@@ -114,18 +114,20 @@ struct ContentView: View {
             .navigationTitle("Agora API Example")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: {
-                        SettingsView()
-                    }) {
-                        Text("Settings").foregroundStyle(.black)
-                    }
-                }
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    NavigationLink(destination: {
+//                        SettingsView()
+//                    }) {
+//                        Text("Settings").foregroundStyle(.black)
+//                    }
+//                }
             }
         }
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentViewPreviews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
