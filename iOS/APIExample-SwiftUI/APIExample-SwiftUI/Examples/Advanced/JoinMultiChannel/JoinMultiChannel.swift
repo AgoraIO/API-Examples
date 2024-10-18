@@ -66,8 +66,8 @@ struct JoinMultiChannel: View {
                 .disabled(!agoraKit.joinEx)
                 .colorMultiply(agoraKit.joinEx ? .white : .gray)
                 .padding(5)
-                .background(.blue)
-                .foregroundStyle(.white)
+                .adaptiveBackground(.blue)
+                .adaptiveForegroundStyle(.white)
 #if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
 #else
@@ -88,8 +88,8 @@ struct JoinMultiChannel: View {
                 .disabled(!agoraKit.joinEx)
                 .colorMultiply(agoraKit.joinEx ? .white : .gray)
                 .padding(5)
-                .background(.blue)
-                .foregroundStyle(.white)
+                .adaptiveBackground(.blue)
+                .adaptiveForegroundStyle(.white)
 #if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
 #else

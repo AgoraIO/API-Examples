@@ -75,7 +75,9 @@ extension AgoraClientRole {
     }
 }
 
-extension AgoraAudioProfile {
+extension AgoraAudioProfile: Identifiable {
+    public var id: Int { self.rawValue }
+
     func description() -> String {
         switch self {
         case .default: return "Default".localized
@@ -93,7 +95,7 @@ extension AgoraAudioProfile {
     }
 }
 
-extension AgoraAudioScenario {
+extension AgoraAudioScenario: Identifiable {
     func description() -> String {
         switch self {
         case .default: return "Default".localized
@@ -103,12 +105,16 @@ extension AgoraAudioScenario {
         }
     }
     
+    public var id: Int { self.rawValue }
+    
     static func allValues() -> [AgoraAudioScenario] {
         return [.default, .gameStreaming]
     }
 }
 
-extension AgoraEncryptionMode {
+extension AgoraEncryptionMode: Identifiable {
+    public var id: Int { self.rawValue }
+
     func description() -> String {
         switch self {
         case .AES128GCM2: return "AES128GCM"

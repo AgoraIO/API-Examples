@@ -47,7 +47,7 @@ struct CustomAudioRender: View {
                                     .font(.system(size: 12))
                                     .foregroundColor(.gray)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(.gray.opacity(0.5))
+                                    .adaptiveBackground(.gray.opacity(0.5))
                             }
                             .frame(width: geometry.size.width / 3, height: 200)
                         }
