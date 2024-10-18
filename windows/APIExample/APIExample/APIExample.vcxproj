@@ -277,6 +277,7 @@ if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (c
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CDlgBeauty.h" />
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
     <ClInclude Include="Advanced\Beauty\CDlgBeautyEx.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
@@ -333,6 +334,7 @@ if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (c
     <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CDlgBeauty.cpp" />
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
     <ClCompile Include="Advanced\Beauty\CDlgBeautyEx.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />

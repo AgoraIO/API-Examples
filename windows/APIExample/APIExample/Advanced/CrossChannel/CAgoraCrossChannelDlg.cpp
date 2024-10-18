@@ -151,7 +151,7 @@ void CAgoraCrossChannelDlg::RenderLocalVideo()
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -187,7 +187,7 @@ void CAgoraCrossChannelDlg::ResumeStatus()
 void CAgoraCrossChannelDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow)//bShwo is true ,show window 
+	if (bShow)//bShwo is true ,show window
 	{
 		InitCtrlText();
 		RenderLocalVideo();
@@ -327,8 +327,8 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay()
 		cmrc.destCount = nDestCount;
 		int ret = 0;
 		//start Channel Media Relay from cmrc.
-		ret = m_rtcEngine->startChannelMediaRelay(cmrc);
-		m_lstInfo.AddString(_T("startChannelMediaRelay"));
+		ret = m_rtcEngine->startOrUpdateChannelMediaRelay(cmrc);
+		m_lstInfo.AddString(_T("startOrUpdateChannelMediaRelay"));
 		delete lpDestInfos;
 		m_btnStartMediaRelay.SetWindowText(CrossChannelStopMediaRelay);
 	}
@@ -339,7 +339,7 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay()
 		m_btnStartMediaRelay.SetWindowText(CrossChannelStartMediaRelay);
 	}
 	m_startMediaRelay = !m_startMediaRelay;
-	
+
 }
 
 //update update Channel Media Relay.
@@ -360,8 +360,8 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonUpdate()
 		cmrc.destCount = nDestCount;
 		int ret = 0;
 		//update Channel Media Relay.
-		ret = m_rtcEngine->updateChannelMediaRelay(cmrc);
-		m_lstInfo.AddString(_T("updateChannelMediaRelay"));
+		ret = m_rtcEngine->startOrUpdateChannelMediaRelay(cmrc);
+		m_lstInfo.AddString(_T("startOrUpdateChannelMediaRelay"));
 		delete lpDestInfos;
 	}
 }
@@ -439,7 +439,7 @@ LRESULT CAgoraCrossChannelDlg::OnEIDChannelMediaRelayStateChanged(WPARAM wParam,
 // media relay event handler.
 LRESULT CAgoraCrossChannelDlg::OnEIDChannelMediaRelayEvent(WPARAM wParam, LPARAM lParam)
 {
-	CHANNEL_MEDIA_RELAY_EVENT evt = CHANNEL_MEDIA_RELAY_EVENT(wParam);
+	int evt = wParam;
 	CString strInfo;
 	strInfo.Format(_T("channel media event:%d"), evt);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

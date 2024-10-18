@@ -35,6 +35,7 @@
 #include "Advanced/FaceCapture/CAgoraFaceCaptureDlg.h"
 #include "Advanced/TransparentBg/TransparentBgDialog.h"
 #include "Advanced/RtePlayer/RtePlayerDlg.h"
+#include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -109,6 +110,7 @@ private:
     PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
     MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
     CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
+    CAgoraCrossChannelDlg       *m_pAgoraCrossChannelDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CTransparentBgDlg* m_TransparentDlg = nullptr;
     CRtePlayerDlg* m_RtePlayer = nullptr;
