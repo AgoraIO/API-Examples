@@ -21,6 +21,7 @@ struct SDKRenderMockContainerView: View {
     }
 }
 
+@available(iOS 15.0, *)
 struct SDKRenderExample: View {
     @State var configs: [String: Any]
 
@@ -76,12 +77,16 @@ struct SDKRenderExample: View {
             sdkRenderViewModel.cleanRtc()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.orange)
+        .adaptiveBackground(Color.orange)
     }
 }
 
 struct SDKRenderExamplePreviews: PreviewProvider {
     static var previews: some View {
-        SDKRenderExample(configs: [:])
+        if #available(iOS 15.0, *) {
+            SDKRenderExample(configs: [:])
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }

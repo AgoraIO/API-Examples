@@ -31,6 +31,7 @@ protocol PIPController {
     @class      PIPDisplayView，SwiftUI Picture-in-picture view wrapper class
     @abstract   The picture-in-picture view is a UIKit-related API that allows you to bridge SwiftUI's controls to the PIP view (view with UIKit layout, class).
  */
+@available(iOS 15.0, *)
 struct PIPDisplayView: UIViewRepresentable {
     ///PIP controller, used to control picture-in-picture
     @ObservedObject var viewModel: PIPViewModel
@@ -46,6 +47,7 @@ struct PIPDisplayView: UIViewRepresentable {
     @class      PIPViewModel，Picture-in-picture view control class
     @abstract   Provide the view that needs to be displayed in picture to PIPViewModel to quickly realize the picture-in-picture function (picture-in-picture window open or close, window              size switch)
  */
+@available(iOS 15.0, *)
 class PIPViewModel:NSObject, ObservableObject, PIPController {
     var backgroundView: PIPBackgroundView
     private var videoCallController: AVPictureInPictureVideoCallViewController?
@@ -92,6 +94,7 @@ class PIPViewModel:NSObject, ObservableObject, PIPController {
     @class     (inner class) PIPViewModel extension to handle draw-in-picture agent callbacks
     @abstract   Add or delete views through draw-in-picture proxy callbacks
  */
+@available(iOS 15.0, *)
 extension PIPViewModel: AVPictureInPictureControllerDelegate {
     func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         guard let vc = pictureInPictureController.contentSource?.activeVideoCallContentViewController, let pipSourceView = backgroundView.pipSourceView else { return }
