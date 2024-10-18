@@ -115,14 +115,16 @@ struct MediaPlayer: View {
                         withAnimation {
                             isShowPlayPickerView.toggle()
                         }
-                    }.foregroundStyle(.gray)
+                    }
+                    .adaptiveForegroundStyle(.gray)
                     Spacer()
                     Text("publish Track:".localized).padding(.trailing, 5)
                     Button(agoraKit.codecName) {
                         withAnimation {
                             isShowPublishPickerView.toggle()
                         }
-                    }.foregroundStyle(.gray)
+                    }
+                    .adaptiveForegroundStyle(.gray)
                 }.padding(20)
             }
             Spacer()

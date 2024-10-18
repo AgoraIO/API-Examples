@@ -55,12 +55,20 @@ struct PictureInPictureJoinEntry: View {
             }.disabled(channelName.isEmpty)
             Spacer()
             if pipType == .sdkRender {
-                NavigationLink(destination: sdkRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
-                    EmptyView()
+                if #available(iOS 15.0, *) {
+                    NavigationLink(destination: sdkRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+                        EmptyView()
+                    }
+                } else {
+                    // Fallback on earlier versions
                 }
             } else {
-                NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
-                    EmptyView()
+                if #available(iOS 15.0, *) {
+                    NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+                        EmptyView()
+                    }
+                } else {
+                    // Fallback on earlier versions
                 }
             }
             
@@ -69,10 +77,12 @@ struct PictureInPictureJoinEntry: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    @available(iOS 15.0, *)
     private func customRenderView() -> CustomRenderExample {
         return CustomRenderExample(configs: configs)
     }
     
+    @available(iOS 15.0, *)
     private func sdkRenderView() -> SDKRenderExample{
         return SDKRenderExample(configs: configs)
     }

@@ -102,7 +102,8 @@ struct ARKit: View {
     
     var body: some View {
         VStack {
-            sceneView.background(ignoresSafeAreaEdges: .all).alert(isPresented: $agoraKit.isSupportedAR) {
+            sceneView
+                .adaptiveBackground().alert(isPresented: $agoraKit.isSupportedAR) {
                 let message = "This app requires world tracking, which is available only on iOS devices with the A9 processor or later.".localized
                 return Alert(title: Text("ARKit is not available on this device.".localized), message: Text(message), dismissButton: .cancel())
             }.onReceive(agoraKit.$planarDetected, perform: { _ in

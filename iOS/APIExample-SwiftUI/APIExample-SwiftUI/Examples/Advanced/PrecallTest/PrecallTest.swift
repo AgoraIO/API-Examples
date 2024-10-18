@@ -62,7 +62,7 @@ struct PrecallTest: View {
                 }
                 .frame(width: geo.size.width,
                        height: geo.size.height)
-                .background(.black.opacity(0.3))
+                .adaptiveBackground(.black.opacity(0.3))
                 .opacity(agoraKit.isEchoTestEnd ? 0.0 : 1.0)
             }.onAppear(perform: {
                 agoraKit.setupRTC(configs: configs,
