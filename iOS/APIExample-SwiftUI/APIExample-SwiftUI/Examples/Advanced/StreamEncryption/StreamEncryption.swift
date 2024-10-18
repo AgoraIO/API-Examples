@@ -60,8 +60,10 @@ struct StreamEncryptionEntry: View {
     }
 }
 
-#Preview {
-    StreamEncryptionEntry()
+struct StreamEncryptionEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        StreamEncryptionEntry()
+    }
 }
 
 struct StreamEncryption: View {
@@ -92,6 +94,8 @@ struct StreamEncryption: View {
     }
 }
 
-#Preview {
-    StreamEncryption(configs: [:])
+struct StreamEncryptionPreviews: PreviewProvider {
+    static var previews: some View {
+        StreamEncryption(configs: [:])
+    }
 }

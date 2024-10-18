@@ -70,6 +70,8 @@ struct VideoMetadata: View {
     }
 }
 
-#Preview {
-    VideoMetadata()
+struct VideoMetadataPreviews: PreviewProvider {
+    static var previews: some View {
+        VideoMetadata()
+    }
 }

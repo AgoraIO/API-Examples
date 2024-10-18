@@ -75,6 +75,8 @@ struct RawAudioData: View {
     }
 }
 
-#Preview {
-    RawAudioData()
+struct RawAudioDataPreviews: PreviewProvider {
+    static var previews: some View {
+        RawAudioData()
+    }
 }

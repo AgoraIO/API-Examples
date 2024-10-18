@@ -31,9 +31,14 @@ class CustomVideoSourcePushEntry: UIViewController {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     let identifier = "CustomVideoSourcePush"
+    private var isHDR: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    @IBAction func onHDRAction(sender: UISwitch) {
+        isHDR = sender.isOn
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
@@ -46,7 +51,7 @@ class CustomVideoSourcePushEntry: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
         }
         newViewController.title = channelName
-        newViewController.configs = ["channelName": channelName]
+        newViewController.configs = ["channelName": channelName, "isHDR": isHDR]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -55,9 +60,10 @@ class CustomVideoSourcePushMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoViewSampleBufferDisplayView", withType: SampleBufferDisplayView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var customCamera: AgoraYUVImageSourcePush?
+    private var isHDR: Bool = false
     
     @IBOutlet weak var container: AGEVideoContainer!
-    var agoraKit: AgoraRtcEngineKit!
+    var agoraKit: AgoraRtcEngineKit?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -74,12 +80,26 @@ class CustomVideoSourcePushMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        
+        guard let agoraKit = agoraKit else {
+            return
+        }
+        
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
+        isHDR = configs["isHDR"] as? Bool ?? false
+        
+        let cap1 = agoraKit.queryHDRCapability(.hardwareEncoder) == .supported ? true : false
+        let cap2 = agoraKit.queryHDRCapability(.softwareEncoder) == .supported ? true : false
+        if !cap1 && !cap2 {
+            showAlert(title: "Error", message: "Current device does not support HDR")
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
         
         // make myself a broadcaster
         // agoraKit.setClientRole(.broadcaster)
@@ -91,9 +111,10 @@ class CustomVideoSourcePushMain: BaseViewController {
         // setup my own camera as custom video source
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
-        customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample",
-                                               frameRate: 15)
+        customCamera = AgoraYUVImageSourcePush(size: isHDR ? CGSize(width: 1280, height: 720) : CGSize(width: 320, height: 180),
+                                               fileName: isHDR ? "hlg-hdr" : "sample",
+                                               frameRate: 15,
+                                               isHDR: isHDR)
         customCamera?.delegate = self
         customCamera?.startSource()
         customCamera?.trackId = 0
@@ -122,14 +143,15 @@ class CustomVideoSourcePushMain: BaseViewController {
         option.publishCustomAudioTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.publishCustomVideoTrack = GlobalSettings.shared.getUserRole() == .broadcaster
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+        NetworkManager.shared.generateToken(channelName: channelName, success: {[weak self] token in
+            guard let self = self else {return}
+            let result = self.agoraKit?.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result ?? 0), please check your params")
             }
         })
     }
@@ -140,17 +162,18 @@ class CustomVideoSourcePushMain: BaseViewController {
             customCamera?.stopSource()
             // leave channel when exiting the view
             if isJoined {
-                agoraKit.disableAudio()
-                agoraKit.disableVideo()
+                agoraKit?.disableAudio()
+                agoraKit?.disableVideo()
                 let option = AgoraRtcChannelMediaOptions()
                 option.publishCustomAudioTrack = false
                 option.publishCustomVideoTrack = false
-                agoraKit.updateChannel(with: option)
-                agoraKit.leaveChannel { (stats) -> Void in
+                agoraKit?.updateChannel(with: option)
+                agoraKit?.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
                 agoraKit = nil
             }
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -197,7 +220,7 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit?.setupRemoteVideo(videoCanvas)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -215,7 +238,7 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit?.setupRemoteVideo(videoCanvas)
     }
 }
 
@@ -223,21 +246,16 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
 extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
     func onVideoFrame(_ buffer: CVPixelBuffer, size: CGSize, trackId: UInt, rotation: Int32) {
         let videoFrame = AgoraVideoFrame()
-        /** Video format:
-         * - 1: I420
-         * - 2: BGRA
-         * - 3: NV21
-         * - 4: RGBA
-         * - 5: IMC2
-         * - 7: ARGB
-         * - 8: NV12
-         * - 12: iOS texture (CVPixelBufferRef)
-         */
-        videoFrame.format = 12
+        
+        if isHDR {
+            videoFrame.format = AgoraVideoFormat.cvPixelP010.rawValue
+        } else {
+            videoFrame.format = AgoraVideoFormat.cvPixelNV12.rawValue
+        }
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
         // once we have the video frame, we can push to agora sdk
-        agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
+        agoraKit?.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
         
         let outputVideoFrame = AgoraOutputVideoFrame()
         outputVideoFrame.width = Int32(size.width)

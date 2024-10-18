@@ -18,12 +18,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
@@ -33,8 +31,10 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.gles.GLThread;
+import io.agora.api.example.common.gles.core.EglCore;
 import io.agora.api.example.examples.advanced.videoRender.YuvFboProgram;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
 import io.agora.base.JavaI420Buffer;
@@ -70,6 +70,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
 
     private FrameLayout fl_local, fl_remote;
     private Button join;
+    private Switch switchExEglContext;
     private EditText et_channel;
     private RtcEngineEx engine;
     private Spinner sp_push_buffer_type;
@@ -80,7 +81,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
 
     private YuvFboProgram yuvFboProgram;
     private TextureBufferHelper textureBufferHelper;
-
+    private EglCore eglCore;
 
     @Nullable
     @Override
@@ -98,6 +99,24 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         sp_push_buffer_type = view.findViewById(R.id.sp_buffer_type);
+
+        switchExEglContext = view.findViewById(R.id.switch_ex_context);
+        view.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.findViewById(R.id.fl_container_egl_select).setVisibility(View.GONE);
+                //init egl context option
+                Log.d(TAG, "isChecked =" + switchExEglContext.isChecked());
+                if (switchExEglContext.isChecked()) {
+                    if (eglCore == null) {
+                        eglCore = new EglCore();
+                    }
+                    //once set the external egl context, you should use it until engine destroyed
+                    int ret = engine.setExternalRemoteEglContext(eglCore.getEGLContext());
+                    Log.d(TAG, "setExternalRemoteEglContext:  ret = " + ret);
+                }
+            }
+        });
     }
 
     @Override
@@ -164,7 +183,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         if (videoFileReader != null) {
             videoFileReader.stop();
         }
-
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             /*After joining a channel, the user must call the leaveChannel method to end the
@@ -215,19 +233,15 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));
@@ -287,7 +301,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
-
         /*Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token

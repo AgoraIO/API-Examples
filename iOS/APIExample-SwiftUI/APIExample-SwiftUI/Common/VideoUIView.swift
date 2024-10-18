@@ -24,6 +24,8 @@ enum StreamType {
         case .local: "Local Host".localized
         case .remote: "Remote Host".localized
         }
+        
+        return ""
     }
 }
 

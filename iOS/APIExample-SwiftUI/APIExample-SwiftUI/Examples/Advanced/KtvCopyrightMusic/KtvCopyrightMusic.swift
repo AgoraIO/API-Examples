@@ -20,6 +20,8 @@ struct KtvCopyrightMusic: View {
     }
 }
 
-#Preview {
-    KtvCopyrightMusic()
+struct KtvCopyrightMusicPreviews: PreviewProvider {
+    static var previews: some View {
+        KtvCopyrightMusic()
+    }
 }

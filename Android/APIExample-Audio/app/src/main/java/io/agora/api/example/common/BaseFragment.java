@@ -1,6 +1,7 @@
 package io.agora.api.example.common;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,11 +10,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import java.util.Map;
+
+import io.agora.api.example.utils.PermissonUtils;
 
 /**
  * The type Base fragment.
@@ -31,6 +38,29 @@ public class BaseFragment extends Fragment {
             onBackPressed();
         }
     };
+    private String[] permissionArray;
+    private PermissonUtils.PermissionResultCallback permissionResultCallback;
+    private ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            result -> {
+                if (permissionResultCallback != null) {
+                    boolean allPermissionsGranted = true;
+                    for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+                        if (!entry.getValue()) {
+                            allPermissionsGranted = false;
+                            break;
+                        }
+                    }
+                    int[] grantResults = new int[permissionArray.length];
+                    for (int i = 0; i < permissionArray.length; i++) {
+                        grantResults[i] = result.containsKey(permissionArray[i]) && result.get(permissionArray[i]) ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED;
+                    }
+                    if (permissionResultCallback != null) {
+                        permissionResultCallback.onPermissionsResult(allPermissionsGranted, permissionArray, grantResults);
+                    }
+                }
+            }
+    );
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,5 +200,34 @@ public class BaseFragment extends Fragment {
         if (view != null) {
             Navigation.findNavController(view).navigateUp();
         }
+    }
+
+    /**
+     * @param permissions
+     * @param callback
+     */
+    protected void checkOrRequestPermisson(String[] permissions, PermissonUtils.PermissionResultCallback callback) {
+        if (permissions != null && permissions.length > 0) {
+            permissionArray = permissions;
+            permissionResultCallback = callback;
+            if (PermissonUtils.checkPermissions(getContext(), permissionArray)) {
+                int[] grantResults = new int[permissionArray.length];
+                for (int i = 0; i < permissionArray.length; i++) {
+                    grantResults[i] = PackageManager.PERMISSION_GRANTED;
+                }
+                permissionResultCallback.onPermissionsResult(true, permissionArray, grantResults);
+            } else {
+                permissionLauncher.launch(permissionArray);
+            }
+        }
+    }
+
+    /**
+     * request permisson with common permissions
+     *
+     * @param callback
+     */
+    protected void checkOrRequestPermisson(PermissonUtils.PermissionResultCallback callback) {
+        checkOrRequestPermisson(PermissonUtils.getCommonPermission(), callback);
     }
 }

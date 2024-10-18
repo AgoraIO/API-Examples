@@ -32,8 +32,10 @@ struct ContentInspectEntry: View {
     }
 }
 
-#Preview {
-    ContentInspectEntry()
+struct ContentInspectEntryPreviews: PreviewProvider {
+    static var previews: some View {
+        ContentInspectEntry()
+    }
 }
 
 struct ContentInspect: View {
@@ -58,16 +60,29 @@ struct ContentInspect: View {
                               localView: localView.videoView)
         }).onDisappear(perform: {
             agoraKit.onDestory()
-        }).toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("SwitchCamera".localized) {
-                    agoraKit.switchCamera()
-                }
+        }).toolbar(content: toobarItems)
+    }
+    
+    @ToolbarContentBuilder // 使用 @ToolbarContentBuilder 声明
+    func toobarItems() -> some ToolbarContent {
+        let placement: ToolbarItemPlacement = {
+#if os(iOS) && swift(>=5.7)
+            return .topBarTrailing
+#else
+            return .navigationBarTrailing
+#endif
+        }()
+        
+        ToolbarItem(placement: placement) {
+            Button("SwitchCamera".localized) {
+                agoraKit.switchCamera()
             }
         }
     }
 }
 
-#Preview {
-    ContentInspect(configs: [:])
+struct ContentInspectPreviews: PreviewProvider {
+    static var previews: some View {
+        ContentInspect(configs: [:])
+    }
 }
