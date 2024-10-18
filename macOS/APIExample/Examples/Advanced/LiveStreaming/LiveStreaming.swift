@@ -322,7 +322,7 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
-        scrollView.documentView?.setFrameSize(CGSizeMake(314, 720))
+        scrollView.documentView?.setFrameSize(CGSize(width: 314, height: 720))
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
