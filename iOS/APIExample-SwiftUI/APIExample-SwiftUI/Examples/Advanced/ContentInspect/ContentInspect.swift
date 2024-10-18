@@ -52,7 +52,8 @@ struct ContentInspect: View {
             localView
             ZStack(alignment: .center) {
                 Color.black.opacity(0.5).frame(height: 55)
-                Text("Please obtain the pornographic identification results through the console webhook.".localized).foregroundStyle(.white)
+                Text("Please obtain the pornographic identification results through the console webhook.".localized)
+                    .adaptiveForegroundStyle(.white)
             }
         }
         .onAppear(perform: {

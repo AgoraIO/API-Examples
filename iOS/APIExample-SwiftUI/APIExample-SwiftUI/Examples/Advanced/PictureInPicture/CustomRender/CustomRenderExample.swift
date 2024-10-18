@@ -22,6 +22,7 @@ struct CustomRenderMockContainerView: View {
     }
 }
 
+@available(iOS 15.0, *)
 struct CustomRenderExample: View {
     @State var configs: [String: Any]
     
@@ -77,13 +78,17 @@ struct CustomRenderExample: View {
             customRenderViewModel.cleanRtc()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.orange)
+        .adaptiveBackground(Color.orange)
     }
 }
 
 struct CustomRenderExamplePreviews: PreviewProvider {
     static var previews: some View {
-        CustomRenderExample(configs: [:])
+        if #available(iOS 15.0, *) {
+            CustomRenderExample(configs: [:])
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
 

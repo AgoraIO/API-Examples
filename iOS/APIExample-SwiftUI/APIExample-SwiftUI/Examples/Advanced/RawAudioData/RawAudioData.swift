@@ -23,12 +23,12 @@ struct RawAudioDataEntry: View {
                 Text("Join".localized)
             }.disabled(channelName.isEmpty)
             Spacer()
-            NavigationLink(destination: RawAudioData(configs: configs).navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+            NavigationLink(destination: RawAudioData(configs: configs).adaptiveNavigationTitle(channelName), isActive: $isActive) {
                 EmptyView()
             }
             Spacer()
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .adaptiveNavigationTitle()
     }
 }
 

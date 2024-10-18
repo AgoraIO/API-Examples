@@ -24,18 +24,26 @@ struct StreamEncryptionEntry: View {
                 Spacer()
                 Button(useCustom ? "Custom" : mode.description()) {
                     isShowActionSheet.toggle()
-                }.confirmationDialog("Set Encryption Mode".localized, isPresented: $isShowActionSheet, titleVisibility: .visible) {
+                }
+                .adaptiveDialog(title: "Set Encryption Mode".localized, isPresented: $isShowActionSheet, actions: {
                     ForEach(AgoraEncryptionMode.allValues(), id: \.self) { item in
                         Button(item.description()) {
-                            mode = item
-                            useCustom = false
+                            self.mode = item
+                            self.useCustom = false
                         }
                     }
                     Button("Custom") {
-                        useCustom = true
+                        self.useCustom = true
                     }
-                    Button("Cancel".localized, role: .cancel) {}
-                }
+                    adaptiveCancelStyleButton(title: "Cancel".localized) { }
+                }, actionSheetActions: AgoraEncryptionMode.allValues().map { item in
+                        .default(Text(item.description())) {
+                            self.mode = item
+                            self.useCustom = false
+                        }
+                } + [.default(Text("Custom")) {
+                    self.useCustom = true
+                }] + [.cancel(Text("Cancel".localized))])
                 Spacer()
             }.padding(.leading, 15)
             TextField("Enter encryption secret".localized, text: $encryptSecretField).textFieldStyle(.roundedBorder)
