@@ -344,7 +344,9 @@ void CDlgBeautyEx::OnCbnSelchangeComboLipColor()
 }
 
 
-void CDlgBeautyEx::OnBnClickedCheckBeautyShape() {}
+void CDlgBeautyEx::OnBnClickedCheckBeautyShape() {
+	SetBeauty();
+}
 
 
 void CDlgBeautyEx::OnCbnSelchangeComboFaceShapeArea()
