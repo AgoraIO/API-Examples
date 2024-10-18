@@ -32,8 +32,10 @@
 "Precall Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";
-"Super Resolution" = "超级分辨率";
 "Media Channel Relay" = "跨频道流转发";
+"URL Streaming(RTE Player)"="URL拉流(RTE Player)";
+
+"Super Resolution" = "超级分辨率";
 "Set Resolution" = "设置视频分辨率";
 "Set Fps" = "设置视频帧率";
 "Set Orientation" = "设置视频朝向";
@@ -225,15 +227,77 @@
 "Stop Video Echo Test" = "停止视频回路测试";
 
 
-"Voice_AI_Tuner"="AI调音器";
-"Set_Voice_AI_Tuner"="设置AI调音器";
-"AI_Tunner_Mature_Male"="大叔声";
-"AI_Tunner_Fresh_Male"="清新男音";
-"AI_Tunner_Elegant_Female"="御姐音";
-"AI_Tunner_Sweet_Female"="萝莉音";
-"AI_Tunner_Warm_Male_Singing"="暖男歌声";
-"AI_Tunner_Gentle_Female_Singing"="温柔女歌声";
-"AI_Tunner_Husky_Male_Singing"="烟嗓叔音歌声";
-"AI_Tunner_Warm_Elegant_Female_Singing"="温暖御姐歌声";
-"AI_Tunner_Powerful_Male_Singing"="力量男歌声";
-"AI_Tunner_Dreamy_Female_Singing"="梦幻女歌声";
+"Set Voice AI Tuner" = "设置AI调音器";
+"Mature Male Voice" = "大叔声";
+"Fresh Male Voice" = "清新男音";
+"Elegant Female Voice" = "御姐音";
+"Sweet Female Voice" = "萝莉音";
+"Warm Male Singing Voice" = "暖男歌声";
+"Gentle Female Singing Voice" = "温柔女歌声";
+"Husky Male Singing Voice" = "烟嗓叔音歌声";
+"Warm Elegant Female Singing Voice" = "温暖御姐歌声";
+"Powerful Male Singing Voice" = "力量男歌声";
+"Dreamy Female Singing Voice" = "梦幻女歌声";
+
+"Start Audio Mixing" = "开启音频转发";
+"Stop Audio Mixing" = "停止音频转发";
+
+
+"Makeup Enable" = "美妆开关";
+"Eyebrow Style" = "眉毛类型";
+"Eyebrow Color" = "眉毛颜色";
+"Eyebrow Strength" = "眉毛强度";
+"Eyelash Style" = "眼睫毛类型";
+"Eyelash Color" = "眼睫毛颜色";
+"Eyelash Strength" = "眼睫毛强度";
+"Eyeshadow Style" = "眼影类型";
+"Eyeshadow Color" = "眼影颜色";
+"Eyeshadow Strength" = "眼影强度";
+"Pupil Style" = "瞳孔类型";
+"Pupil Color" = "瞳孔颜色";
+"Pupil Strength" = "瞳孔强度";
+"Blush Style" = "腮红类型";
+"Blush Color" = "腮红颜色";
+"Blush Strength" = "腮红强度";
+"Lip Style" = "唇彩类型";
+"Lip Color" = "唇彩颜色";
+"Lip Strength" = "唇彩强度";
+
+"Eyebrow Style Off" = "关闭";
+"Eyebrow Style Type 1" = "类型1";
+"Eyebrow Style Type 2" = "类型2";
+
+"Eyebrow Color None" = "无";
+"Eyebrow Color Black" = "黑色";
+"Eyebrow Color Brown" = "棕色";
+
+"Blush Color None" = "无";
+"Blush Color Shade 1" = "1号色";
+"Blush Color Shade 2" = "2号色";
+"Blush Color Shade 3" = "3号色";
+"Blush Color Shade 4" = "4号色";
+"Blush Color Shade 5" = "5号色";
+
+"Face Shape Enable" = "美型开关";
+"Face Shape Gender" = "性别";
+"Face Shape Gender Male" = "男性";
+"Face Shape Gender Female" = "女性";
+"Face Shape Intensity" = "强度";
+
+"Face Shape Area Head Scale" = "头部比例";
+"Face Shape Area Forehead" = "额头";
+"Face Shape Area Face Contour" = "脸型轮廓";
+"Face Shape Area Face Length" = "脸长";
+"Face Shape Area Face Width" = "脸宽";
+"Face Shape Area Cheek Bone" = "颧骨";
+"Face Shape Area Cheek" = "脸颊";
+"Face Shape Area Chin" = "下巴";
+"Face Shape Area Eye Scale" = "眼睛比例";
+"Face Shape Area Nose Length" = "鼻子长度";
+"Face Shape Area Nose Width" = "鼻子宽度";
+"Face Shape Area Mouth Scale" = "嘴巴比例";
+
+"Live Channel Name" = "直播频道名";
+
+"Play" = "播放";
+"Stop" = "停止";

@@ -81,6 +81,9 @@ struct CustomRenderExample: View {
     }
 }
 
-#Preview {
-    CustomRenderExample(configs: [:])
+struct CustomRenderExamplePreviews: PreviewProvider {
+    static var previews: some View {
+        CustomRenderExample(configs: [:])
+    }
 }
+

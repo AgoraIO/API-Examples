@@ -81,6 +81,8 @@ struct RTMPStream: View {
     }
 }
 
-#Preview {
-    RTMPStream()
+struct RTMPStreamPreviews: PreviewProvider {
+    static var previews: some View {
+        RTMPStream()
+    }
 }

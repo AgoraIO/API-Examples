@@ -4,7 +4,6 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
 import android.app.PictureInPictureParams;
@@ -29,12 +28,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -43,6 +36,7 @@ import io.agora.api.example.common.floatwindow.AVCallFloatView;
 import io.agora.api.example.common.floatwindow.FloatWindowHelper;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -178,27 +172,15 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                List<String> permissionList = new ArrayList<>();
-                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
-                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
-                permissionList.add(Permission.RECORD_AUDIO);
-                permissionList.add(Permission.CAMERA);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
-                }
-
-                String[] permissionArray = new String[permissionList.size()];
-                permissionList.toArray(permissionArray);
-
-                if (AndPermission.hasPermissions(this, permissionArray)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(permissionArray).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        // Permissions Granted
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 /*After joining a channel, the user must call the leaveChannel method to end the
@@ -559,8 +541,8 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     }
 
 
-    private boolean checkPipSupported(){
-        if(Build.VERSION.SDK_INT < 26){
+    private boolean checkPipSupported() {
+        if (Build.VERSION.SDK_INT < 26) {
             return false;
         }
         return requireActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
@@ -577,7 +559,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 == AppOpsManager.MODE_ALLOWED;
     }
 
-    private void enterPip(){
+    private void enterPip() {
         if (android.os.Build.VERSION.SDK_INT < 26) {
             return;
         }
@@ -585,7 +567,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 .setAspectRatio(new Rational(video_layout_container.getWidth(), video_layout_container.getHeight()))
                 .build());
 
-        ((AppCompatActivity)requireActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().hide();
         ll_join.setVisibility(View.GONE);
         btn_pip.setVisibility(View.GONE);
         switch_float_window.setVisibility(View.GONE);
@@ -595,7 +577,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
         if (!isInPictureInPictureMode) {
-            ((AppCompatActivity)requireActivity()).getSupportActionBar().show();
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().show();
             ll_join.setVisibility(View.VISIBLE);
             btn_pip.setVisibility(View.VISIBLE);
             switch_float_window.setVisibility(View.VISIBLE);

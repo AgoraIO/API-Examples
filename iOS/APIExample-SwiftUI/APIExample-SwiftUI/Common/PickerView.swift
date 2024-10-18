@@ -28,7 +28,11 @@ struct PickerView: View {
                 .padding(.vertical, 3)
                 .background(.blue)
                 .foregroundStyle(.white)
+#if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
+#else
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+#endif
                 Spacer()
                 Button("Sure".localized) {
                     let value = selectedValue.isEmpty ? dataArray.first : selectedValue
@@ -38,7 +42,11 @@ struct PickerView: View {
                 .padding(.vertical, 3)
                 .background(.blue)
                 .foregroundStyle(.white)
+#if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
+#else
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+#endif
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 150)
@@ -46,10 +54,12 @@ struct PickerView: View {
     }
 }
 
-#Preview {
-    PickerView(dataArray: .constant(["aa", "bb", "cc"]), onTapCancel: {
-        
-    }, onTapSure: { value in
-        print(value)
-    })
+struct PickerViewPriviews: PreviewProvider {
+    static var previews: some View {
+        PickerView(dataArray: .constant(["aa", "bb", "cc"]), onTapCancel: {
+            
+        }, onTapSure: { value in
+            print(value)
+        })
+    }
 }

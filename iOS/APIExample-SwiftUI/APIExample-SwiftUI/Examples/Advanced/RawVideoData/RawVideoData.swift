@@ -73,6 +73,8 @@ struct RawVideoData: View {
     }
 }
 
-#Preview {
-    RawVideoData()
+struct RawVideoDataPreviews: PreviewProvider {
+    static var previews: some View {
+        RawVideoData()
+    }
 }

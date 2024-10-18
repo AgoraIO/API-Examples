@@ -91,7 +91,13 @@
 		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD33C1AA2CBF9DEA0046F50C /* RtePlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD33C1A52CBF9DEA0046F50C /* RtePlayer.storyboard */; };
+		DD33C1AB2CBF9DEA0046F50C /* RtePlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD33C1A72CBF9DEA0046F50C /* RtePlayer.strings */; };
+		DD33C1AC2CBF9DEA0046F50C /* RtePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD33C1A82CBF9DEA0046F50C /* RtePlayer.swift */; };
+		DD33C1AE2CBFA0490046F50C /* PlayerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD33C1AD2CBFA0490046F50C /* PlayerObserver.swift */; };
+		DD33C1B02CBFBF4E0046F50C /* hlg-hdr.yuv in Resources */ = {isa = PBXBuildFile; fileRef = DD33C1AF2CBFBF4E0046F50C /* hlg-hdr.yuv */; };
 		DD8A1F922CA55AA4001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */; };
+		DD962C642CBA491600B8AAA7 /* AgoraALD.driver in Resources */ = {isa = PBXBuildFile; fileRef = DD962C632CBA491600B8AAA7 /* AgoraALD.driver */; };
 		E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */; };
 		E702C1E828B4DB4800D7C7ED /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */; };
 		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
@@ -272,7 +278,13 @@
 		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		DD33C1A42CBF9DEA0046F50C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RtePlayer.storyboard; sourceTree = "<group>"; };
+		DD33C1A62CBF9DEA0046F50C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RtePlayer.strings"; sourceTree = "<group>"; };
+		DD33C1A82CBF9DEA0046F50C /* RtePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtePlayer.swift; sourceTree = "<group>"; };
+		DD33C1AD2CBFA0490046F50C /* PlayerObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerObserver.swift; sourceTree = "<group>"; };
+		DD33C1AF2CBFBF4E0046F50C /* hlg-hdr.yuv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "hlg-hdr.yuv"; sourceTree = "<group>"; };
 		DD8A1F912CA55AA4001CEC51 /* AgoraPCMPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPCMPlayer.swift; sourceTree = "<group>"; };
+		DD962C632CBA491600B8AAA7 /* AgoraALD.driver */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AgoraALD.driver; path = APIExample/AgoraALD.driver; sourceTree = "<group>"; };
 		E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
 		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
@@ -516,6 +528,7 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD33C1AF2CBFBF4E0046F50C /* hlg-hdr.yuv */,
 				E7AD0DF829CD84F800C9A4B0 /* sample.mov */,
 				E77D54D528F56D3A00D51C1E /* sample.yuv */,
 				E7218BA528BF5E65005A01D5 /* agora-logo.png */,
@@ -540,6 +553,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				DD33C1A92CBF9DEA0046F50C /* RtePlayer */,
 				E7883ADA2B046CB8003CCF44 /* FaceCapture */,
 				E732E9242A3960A2004403AF /* MultiCameraSourece */,
 				E7AD0DFA29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti */,
@@ -573,6 +587,7 @@
 		03896D2324F8A00F008593CD = {
 			isa = PBXGroup;
 			children = (
+				DD962C632CBA491600B8AAA7 /* AgoraALD.driver */,
 				03896D2E24F8A00F008593CD /* APIExample */,
 				8BD4AE7A272518D600E95B87 /* SimpleFilter */,
 				03896D2D24F8A00F008593CD /* Products */,
@@ -808,6 +823,17 @@
 			path = SimpleFilter;
 			sourceTree = "<group>";
 		};
+		DD33C1A92CBF9DEA0046F50C /* RtePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				DD33C1AD2CBFA0490046F50C /* PlayerObserver.swift */,
+				DD33C1A52CBF9DEA0046F50C /* RtePlayer.storyboard */,
+				DD33C1A72CBF9DEA0046F50C /* RtePlayer.strings */,
+				DD33C1A82CBF9DEA0046F50C /* RtePlayer.swift */,
+			);
+			path = RtePlayer;
+			sourceTree = "<group>";
+		};
 		E702C1E028B4DB4800D7C7ED /* LiveStreaming */ = {
 			isa = PBXGroup;
 			children = (
@@ -1009,6 +1035,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD962C642CBA491600B8AAA7 /* AgoraALD.driver in Resources */,
 				E77D54D828F5702B00D51C1E /* SampleBufferDisplayView.xib in Resources */,
 				E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */,
 				E75279D529F6737100358F18 /* LiveStreaming.storyboard in Resources */,
@@ -1046,6 +1073,7 @@
 				67033726279E81DF0069F4B3 /* bg.jpg in Resources */,
 				033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
+				DD33C1B02CBFBF4E0046F50C /* hlg-hdr.yuv in Resources */,
 				E7218BA628BF5E65005A01D5 /* agora-logo.png in Resources */,
 				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
 				E75279C829F66D1400358F18 /* SpatialAudio.storyboard in Resources */,
@@ -1056,6 +1084,7 @@
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				E7883AE02B046CB8003CCF44 /* FaceCapture.strings in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
+				DD33C1AA2CBF9DEA0046F50C /* RtePlayer.storyboard in Resources */,
 				E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */,
@@ -1064,6 +1093,7 @@
 				033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */,
 				E75279C329F66CE600358F18 /* QuickSwitchChannel.storyboard in Resources */,
 				034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */,
+				DD33C1AB2CBF9DEA0046F50C /* RtePlayer.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1146,6 +1176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */,
+				DD33C1AE2CBFA0490046F50C /* PlayerObserver.swift in Sources */,
 				E732E92B2A3960A2004403AF /* MultiCameraSourece.swift in Sources */,
 				0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */,
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
@@ -1179,6 +1210,7 @@
 				67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */,
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
 				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
+				DD33C1AC2CBF9DEA0046F50C /* RtePlayer.swift in Sources */,
 				E7AD0DEC29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.swift in Sources */,
 				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
 				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
@@ -1391,6 +1423,22 @@
 				8BE63B4527253CD900597DB1 /* Base */,
 			);
 			name = SimpleFilter.storyboard;
+			sourceTree = "<group>";
+		};
+		DD33C1A52CBF9DEA0046F50C /* RtePlayer.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD33C1A42CBF9DEA0046F50C /* Base */,
+			);
+			name = RtePlayer.storyboard;
+			sourceTree = "<group>";
+		};
+		DD33C1A72CBF9DEA0046F50C /* RtePlayer.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD33C1A62CBF9DEA0046F50C /* zh-Hans */,
+			);
+			name = RtePlayer.strings;
 			sourceTree = "<group>";
 		};
 		E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */ = {
@@ -1739,11 +1787,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1780,11 +1828,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

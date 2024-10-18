@@ -32,8 +32,10 @@ struct CreateDataStreamEntry: View {
     }
 }
 
-#Preview {
-    CreateDataStreamEntry()
+struct CreateDataStreamEntryPreview: PreviewProvider {
+    static var previews: some View {
+        CreateDataStreamEntry()
+    }
 }
 
 struct CreateDataStream: View {
@@ -82,6 +84,8 @@ struct CreateDataStream: View {
     }
 }
 
-#Preview {
-    CreateDataStream(configs: [:])
+struct CreateDataStreamPreviews: PreviewProvider {
+    static var previews: some View {
+        CreateDataStream(configs: [:])
+    }
 }

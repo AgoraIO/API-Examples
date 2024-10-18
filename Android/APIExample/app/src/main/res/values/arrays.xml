@@ -292,4 +292,55 @@
         <item>VOICE_AI_TUNER_DREAMY_FEMALE_SINGING</item>
     </string-array>
 
+    <string-array name="beauty_style_type" >
+        <item>Close</item>
+        <item>Type 1</item>
+        <item>Type 2</item>
+    </string-array>
+    <string-array name="beauty_style_color_2" >
+        <item>Close</item>
+        <item>Black</item>
+        <item>Brown</item>
+    </string-array>
+    <string-array name="beauty_style_color_5" >
+        <item>None</item>
+        <item>No. 1 color</item>
+        <item>No. 2 color</item>
+        <item>No. 3 color</item>
+        <item>No. 4 color</item>
+        <item>No. 5 color</item>
+    </string-array>
+
+    <string-array name="shape_beauty_area" >
+        <item>FACE_SHAPE_AREA_NONE</item>
+        <item>FACE_SHAPE_AREA_HEADSCALE</item>
+        <item>FACE_SHAPE_AREA_FOREHEAD</item>
+        <item>FACE_SHAPE_AREA_FACECONTOUR</item>
+        <item>FACE_SHAPE_AREA_FACELENGTH</item>
+        <item>FACE_SHAPE_AREA_FACEWIDTH</item>
+        <item>FACE_SHAPE_AREA_CHEEKBONE</item>
+        <item>FACE_SHAPE_AREA_CHEEK</item>
+        <item>FACE_SHAPE_AREA_CHIN</item>
+        <item>FACE_SHAPE_AREA_EYESCALE</item>
+        <item>FACE_SHAPE_AREA_NOSELENGTH</item>
+        <item>FACE_SHAPE_AREA_NOSEWIDTH</item>
+        <item>FACE_SHAPE_AREA_MOUTHSCALE</item>
+    </string-array>
+
+    <string-array name="shape_beauty_style">
+        <item>FACE_SHAPE_STYLE_FEMALE</item>
+        <item>FACE_SHAPE_STYLE_MALE</item>
+    </string-array>
+    <string-array name="scenario_type">
+        <item>APPLICATION_SCENARIO_GENERAL</item>
+        <item>APPLICATION_SCENARIO_MEETING</item>
+        <item>APPLICATION_SCENARIO_1V1</item>
+        <item>APPLICATION_SCENARIO_LIVESHOW</item>
+    </string-array>
+    <string-array name="video_module_postion">
+        <item>VIDEO_MODULE_POSITION_PRE_RENDERER</item>
+        <item>VIDEO_MODULE_POSITION_PRE_ENCODER</item>
+        <item>VIDEO_MODULE_POSITION_POST_CAPTURER_ORIGIN</item>
+    </string-array>
+
 </resources>

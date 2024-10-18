@@ -103,6 +103,7 @@
 
     </LinearLayout>
 
+
     <Switch
         android:id="@+id/screen_audio"
         android:layout_width="match_parent"
@@ -123,6 +124,18 @@
         android:checked="true"
         android:layout_marginBottom="16dp"
         android:text="@string/screen_share_preview" />
+
+    <Switch
+        android:id="@+id/media_projection_external"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/screen_preview"
+        android:layout_marginBottom="16dp"
+        android:paddingHorizontal="16dp"
+        android:checked="false"
+        android:enabled="true"
+        android:text="@string/external_mediaprojection" />
+
 
 
 </RelativeLayout>
