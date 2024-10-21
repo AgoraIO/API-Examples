@@ -323,6 +323,19 @@ wchar_t advancedMetadataSend[INFO_LEN] = { 0 };
 //transparent backgroud
 wchar_t TransparentBackground[INFO_LEN] = { 0 };
 
+wchar_t RteUrlPlayer[INFO_LEN] = { 0 };
+
+wchar_t VideoEnhance[INFO_LEN] = { 0 };
+
+wchar_t CrossChannelUpdateMediaRelay[INFO_LEN] = { 0 };
+wchar_t CrossChannelAddChannel[INFO_LEN] = { 0 };
+wchar_t CrossChannelRemoveChannel[INFO_LEN] = { 0 };
+wchar_t CrossChannelStartMediaRelay[INFO_LEN] = { 0 };
+wchar_t CrossChannelStopMediaRelay[INFO_LEN] = { 0 };
+wchar_t CrossChannelCtrlCrossChannel[INFO_LEN] = { 0 };
+wchar_t CrossChannelCrossChannelList[INFO_LEN] = { 0 };
+wchar_t CrossChannelCtrlToken[INFO_LEN] = { 0 };
+wchar_t CrossChannelCtrlUid[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -773,8 +786,22 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedMetadataAudio, INFO_LEN, Str(_T("Metadata.Audio")));
 	_tcscpy_s(advancedMetadataSend, INFO_LEN, Str(_T("Metadata.Send")));
 
-        //transparent bg
-        _tcscpy_s(TransparentBackground, INFO_LEN, Str(_T("TransparentBackground")));
+    //transparent bg
+    _tcscpy_s(TransparentBackground, INFO_LEN, Str(_T("TransparentBackground")));
+     //RteUrlPlayer
+    _tcscpy_s(RteUrlPlayer, INFO_LEN, Str(_T("RteUrlPlayer")));
+	_tcscpy_s(VideoEnhance, INFO_LEN, Str(_T("VideoEnhance")));
+
+
+	_tcscpy_s(CrossChannelAddChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.AddChannel")));
+	_tcscpy_s(CrossChannelCrossChannelList, INFO_LEN, Str(_T("CrossChannel.Ctrl.CrossChannelList")));
+	_tcscpy_s(CrossChannelCtrlCrossChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.CrossChannel")));
+	_tcscpy_s(CrossChannelCtrlToken, INFO_LEN, Str(_T("CrossChannel.Ctrl.Token")));
+	_tcscpy_s(CrossChannelCtrlUid, INFO_LEN, Str(_T("CrossChannel.Ctrl.Uid")));
+	_tcscpy_s(CrossChannelRemoveChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.RemoveChannel")));
+	_tcscpy_s(CrossChannelStartMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StartMediaRelay")));
+	_tcscpy_s(CrossChannelStopMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StopMediaRelay")));
+	_tcscpy_s(CrossChannelUpdateMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.UpdateMediaRelay")));
 
 
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));

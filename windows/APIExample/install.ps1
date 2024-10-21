@@ -1,6 +1,6 @@
 $ThirdPartysrc = 'https://fullapp.oss-cn-beijing.aliyuncs.com/API-Examples/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.4.0_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.5.0_FULL.zip'
 $agora_des = 'AgoraSdk.zip'
 $agora_local_sdk = '../../sdk'
 
@@ -21,9 +21,9 @@ if (-not (Test-Path sdk)){
 	    mkdir sdk\x64
 	    mkdir sdk\high_level_api
 	    mkdir sdk\high_level_api\include
-	    Copy-Item $agora_local_sdk\x86\*  sdk
-	    Copy-Item $agora_local_sdk\x86_64\*  sdk\x64
-	    Copy-Item $agora_local_sdk\high_level_api\include\*  sdk\high_level_api\include
+	    Copy-Item $agora_local_sdk\x86\*  sdk -Recurse
+	    Copy-Item $agora_local_sdk\x86_64\*  sdk\x64 -Recurse
+	    Copy-Item $agora_local_sdk\high_level_api\include\*  sdk\high_level_api\include -Recurse
     }else{
         echo "download $agora_des"
 	    mkdir sdk
