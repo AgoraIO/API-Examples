@@ -194,22 +194,16 @@ struct LiveStreaming: View {
         ZStack {
             backgroundView
             VStack {
-                if liveStreamRTCKit.remoteUid != nil {
-                    HStack {
-                        Spacer()
-                        foregroundView
-                            .frame(width: 136, height: 182)
-                            .offset(x: -20)
-                            .onTapGesture {
-                                liveStreamRTCKit.onTapForegroundVideo()
-                            }
-                    }
-                } else {
-                    Rectangle()
+                HStack {
+                    Spacer()
+                    foregroundView
                         .frame(width: 136, height: 182)
-                        .adaptiveForegroundStyle(.clear)
+                        .offset(x: -20)
+                        .onTapGesture {
+                            liveStreamRTCKit.onTapForegroundVideo()
+                        }
                 }
-                
+       
                 //防抖
                 HStack {
                     Text("anti shake".localized)

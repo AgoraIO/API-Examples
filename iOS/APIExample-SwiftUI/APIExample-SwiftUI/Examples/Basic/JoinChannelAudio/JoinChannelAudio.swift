@@ -50,9 +50,9 @@ struct JoinChannelAudioEntry: View {
                         getAudioProfileAction(item)
                     }
                     adaptiveCancelStyleButton(title: "Cancel".localized) {}
-                }, actionSheetActions: AgoraAudioScenario.allValues().map { item in
+                }, actionSheetActions: AgoraAudioProfile.allValues().map { item in
                         .default(Text(item.description())) {
-                            self.profile = profile
+                            self.profile = item
                         }
                     } + [.cancel(Text("Cancel".localized))])
             }.padding(EdgeInsets(top: 0, leading: 35, bottom: 0, trailing: 35))
