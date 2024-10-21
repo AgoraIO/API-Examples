@@ -535,7 +535,11 @@ void PushExternalVideoYUV::OnBnClickedCheckHdr()
 {
 	agora::rtc::HDR_CAPABILITY capability = agora::rtc::HDR_CAPABILITY::HDR_CAPABILITY_SUPPORTED;
 
-	int flag = m_rtcEngine->queryHDRCapability(VIDEO_MODULE_CAPTURER, capability);
+	int flag = m_rtcEngine->queryHDRCapability(VIDEO_MODULE_HARDWARE_ENCODER, capability);
+	if (flag != 0)
+	{
+		flag = m_rtcEngine->queryHDRCapability(VIDEO_MODULE_SOFTWARE_ENCODER, capability);
+	}
 
 	if (flag == 0) {
 		isUseHdr = !isUseHdr;
