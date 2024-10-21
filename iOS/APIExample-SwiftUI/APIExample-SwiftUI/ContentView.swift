@@ -101,11 +101,7 @@ struct ContentView: View {
                 ForEach(menus) { section in
                     Section(header: Text(section.name)) {
                         ForEach(section.rows) { item in
-                            NavigationLink(destination: {
-                                item.view.navigationTitle(item.name)
-                            }) {
-                                Text(item.name)
-                            }
+                            MenuItemView(item: item)
                         }
                     }
                 }
@@ -113,15 +109,42 @@ struct ContentView: View {
             .listStyle(GroupedListStyle())
             .navigationTitle("Agora API Example")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    NavigationLink(destination: {
-//                        SettingsView()
-//                    }) {
-//                        Text("Settings").foregroundStyle(.black)
-//                    }
-//                }
+        }
+    }
+}
+
+struct MenuItemView: View {
+    var item: MenuItem
+    var body: some View {
+        if item.name == "Picture In Picture".localized {
+            if #available(iOS 15.0, *) {
+                NavigationLink(destination: {
+                    item.view.navigationTitle(item.name)
+                }) {
+                    Text(item.name)
+                }
+            } else {
+                Button(action: {
+                    showAlert()
+                }) {
+                    Text(item.name)
+                }
             }
+        } else {
+            NavigationLink(destination: {
+                item.view.navigationTitle(item.name)
+            }) {
+                Text(item.name)
+            }
+        }
+    }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "Unsupported", message: "Picture in Picture is not supported on this version of iOS.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(alert, animated: true, completion: nil)
         }
     }
 }

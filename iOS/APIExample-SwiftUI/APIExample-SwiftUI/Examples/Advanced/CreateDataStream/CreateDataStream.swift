@@ -28,7 +28,7 @@ struct CreateDataStreamEntry: View {
             }
             Spacer()
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .adaptiveNavigationBarTitleDisplayMode()
     }
 }
 
