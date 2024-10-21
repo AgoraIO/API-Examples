@@ -23,12 +23,12 @@ struct SpatialAudioEntry: View {
                 Text("Join".localized)
             }.disabled(channelName.isEmpty)
             Spacer()
-            NavigationLink(destination: SpatialAudio(configs: configs).navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+            NavigationLink(destination: SpatialAudio(configs: configs).adaptiveNavigationTitle(channelName), isActive: $isActive) {
                 EmptyView()
             }
             Spacer()
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .adaptiveNavigationBarTitleDisplayMode()
     }
 }
 
@@ -169,7 +169,7 @@ struct SpatialAudio: View {
                             Text("\(agoraKit.remoteUser1)")
                         }
                         .opacity(agoraKit.remoteUser1 == 0 ? 0.0 : 1.0)
-                        .background(.clear)
+                        .adaptiveBackground(.clear)
                         .onAppear {
                             let frame = g.frame(in: .named("OuterV"))
                             agoraKit.remoteUser2Frame = frame
@@ -299,7 +299,7 @@ struct ActionSheetView: View {
                         }
                 }.padding(.horizontal, 15)
             }.frame(height: 200)
-            .background(Color.white)
+            .adaptiveBackground(Color.white)
             .offset(x: 0, y: isShow ? 200 : 0)
         }
     }

@@ -214,7 +214,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)
 
-if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))</Command>
+if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -262,7 +263,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Platform)\$(Configuration)
 
 if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
-</Command>
+if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -276,6 +277,8 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CDlgBeauty.h" />
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
+    <ClInclude Include="Advanced\Beauty\CDlgBeautyEx.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
@@ -294,6 +297,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
+    <ClInclude Include="Advanced\RtePlayer\RtePlayerDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
@@ -330,6 +334,8 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CDlgBeauty.cpp" />
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
+    <ClCompile Include="Advanced\Beauty\CDlgBeautyEx.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
@@ -348,6 +354,7 @@ if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\PushExternalVideoYUV\PushExternalVideoYUV.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
+    <ClCompile Include="Advanced\RtePlayer\RtePlayerDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />

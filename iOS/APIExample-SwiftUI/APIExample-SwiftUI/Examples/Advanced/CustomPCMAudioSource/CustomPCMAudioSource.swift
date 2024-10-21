@@ -73,7 +73,7 @@ struct DynamicGridView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(itemWidth)), count: columns)) {
                 ForEach(items, id: \.self) { item in
                     VideoView(type: item.local ? .local : .remote, audioOnly: true)
-                        .background(.gray)
+                        .adaptiveBackground(.gray)
                         .frame(width: itemWidth, height: 200)
                         .padding(4)
                 }

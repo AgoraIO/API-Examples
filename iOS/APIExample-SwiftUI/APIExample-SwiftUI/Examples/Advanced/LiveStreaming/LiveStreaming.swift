@@ -91,7 +91,7 @@ struct LiveStreamingEntry: View {
             } label: {
                 Text("Join".localized)
             }
-            .confirmationDialog("Pick Role".localized, isPresented: $roleSheetIsShow, actions: {
+            .adaptiveDialog(title: "Pick Role".localized, isPresented: $roleSheetIsShow, actions: {
                 Button("Broadcaster".localized) {
                     self.role = .broadcaster
                     prepareConfig()
@@ -102,8 +102,23 @@ struct LiveStreamingEntry: View {
                     prepareConfig()
                     self.channelButtonIsActive = true
                 }
-                Button("Cancel".localized, role: .cancel) {}
-            })
+                adaptiveCancelStyleButton(title: "Cancel".localized) {
+                    
+                }
+            }, actionSheetActions: [
+                .default(Text("Broadcaster".localized)) {
+                    self.role = .broadcaster
+                    prepareConfig()
+                    self.channelButtonIsActive = true
+                },
+                .default(Text("Audience".localized)) {
+                    self.role = .audience
+                    prepareConfig()
+                    self.channelButtonIsActive = true
+                },
+                
+                .cancel(Text("Cancel".localized))
+            ])
             .disabled(channelName.isEmpty)
             
             Spacer()
@@ -192,13 +207,13 @@ struct LiveStreaming: View {
                 } else {
                     Rectangle()
                         .frame(width: 136, height: 182)
-                        .foregroundStyle(.clear)
+                        .adaptiveForegroundStyle(.clear)
                 }
                 
                 //防抖
                 HStack {
                     Text("anti shake".localized)
-                        .foregroundStyle(.white)
+                        .adaptiveForegroundStyle(.white)
                     Picker("", selection: $selectStabilizationMode) {
                         ForEach(AntiShakeLevel.allCases) { e in
                             Text(e.suggestedLevel).tag(e)
@@ -208,14 +223,14 @@ struct LiveStreaming: View {
                         liveStreamRTCKit.agoraKit.setCameraStabilizationMode(newValue.value)
                     }
                 }
-                .background(.gray.opacity(0.3))
+                .adaptiveBackground(.gray.opacity(0.3))
                 .padding(.top, 30)
                 
                 if liveStreamRTCKit.role == .broadcaster {
                     //centerStage, 相机对焦
                     HStack {
                         Toggle("CenterStage", isOn: $centerStage)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                             .onChange(of: centerStage) { newValue in
                                 let centerStageNotSupported = liveStreamRTCKit.agoraKit.isCameraCenterStageSupported()
                                 if newValue && !centerStageNotSupported {
@@ -238,7 +253,7 @@ struct LiveStreaming: View {
                             })
                         
                         Text("Camera Selected".localized)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                         Button(selectedCamertOption) {
                             self.cameraSheetIsShow = true
                         }
@@ -265,12 +280,12 @@ struct LiveStreaming: View {
                         })
                     }
                     .fixedSize()
-                    .background(.gray.opacity(0.3))
+                    .adaptiveBackground(.gray.opacity(0.3))
                     
                     //B帧，编码方式
                     HStack {
                         Toggle("B Fps".localized, isOn: $bFpsState)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                             .onChange(of: bFpsState) { newValue in
                                 let encoderConfig = AgoraVideoEncoderConfiguration()
                                 let videoOptions = AgoraAdvancedVideoOptions()
@@ -280,7 +295,7 @@ struct LiveStreaming: View {
                                 liveStreamRTCKit.agoraKit.setVideoEncoderConfiguration(encoderConfig)
                             }
                         Text("Code Type".localized)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                         Picker("", selection: $selectEncodingType) {
                             ForEach(CodeType.allCases) { e in
                                 Text(e.suggestedType)
@@ -299,12 +314,12 @@ struct LiveStreaming: View {
                     
                     }
                     .fixedSize()
-                    .background(.gray.opacity(0.3))
+                    .adaptiveBackground(.gray.opacity(0.3))
                     
                     //水印， 垫片推流
                     HStack {
                         Toggle("Water Mark".localized, isOn: $waterMarkState)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                             .onChange(of: waterMarkState) { newValue in
                                 if newValue {
                                     if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
@@ -323,7 +338,7 @@ struct LiveStreaming: View {
                             }
                         
                         Toggle("Gasket push flow".localized, isOn: $gasketPushFlow)
-                            .foregroundStyle(.white)
+                            .adaptiveForegroundStyle(.white)
                             .onChange(of: gasketPushFlow) { newValue in
                                 let options = AgoraImageTrackOptions()
                                 let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
@@ -334,7 +349,7 @@ struct LiveStreaming: View {
 
                     }
                     .fixedSize()
-                    .background(.gray.opacity(0.3))
+                    .adaptiveBackground(.gray.opacity(0.3))
                 }
                 
                 //截图，大小流
@@ -364,7 +379,7 @@ struct LiveStreaming: View {
                             Text(simulcastStreamState ? "Opened State".localized : "Default State".localized)
                                 .font(.system(size: 11))
                         }
-                        .foregroundStyle(.white)
+                        .adaptiveForegroundStyle(.white)
                     })
                     .onChange(of: simulcastStreamState) { newValue in
                         simulcastStreamState = newValue
@@ -372,7 +387,7 @@ struct LiveStreaming: View {
                     }
                 }
                 .fixedSize()
-                .background(.gray.opacity(0.3))
+                .adaptiveBackground(.gray.opacity(0.3))
                 
                 //极速直播, 连麦
                 HStack {
@@ -393,7 +408,7 @@ struct LiveStreaming: View {
                     }
                 }
                 .fixedSize()
-                .background(.gray.opacity(0.3))
+                .adaptiveBackground(.gray.opacity(0.3))
                 
                 Spacer()
             }

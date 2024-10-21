@@ -26,8 +26,8 @@ struct PickerView: View {
                 }
                 .padding(.horizontal, 5)
                 .padding(.vertical, 3)
-                .background(.blue)
-                .foregroundStyle(.white)
+                .adaptiveBackground(.blue)
+                .adaptiveForegroundStyle(.white)
 #if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
 #else
@@ -40,8 +40,8 @@ struct PickerView: View {
                 }
                 .padding(.horizontal, 5)
                 .padding(.vertical, 3)
-                .background(.blue)
-                .foregroundStyle(.white)
+                .adaptiveBackground(.blue)
+                .adaptiveForegroundStyle(.white)
 #if os(iOS) && swift(>=5.7)
                 .clipShape(.rect(cornerRadius: 5))
 #else
@@ -50,7 +50,7 @@ struct PickerView: View {
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 150)
-        }.background(ignoresSafeAreaEdges: .bottom)
+        }.adaptiveBackground(ignoresSafeAreaEdges: .bottom)
     }
 }
 

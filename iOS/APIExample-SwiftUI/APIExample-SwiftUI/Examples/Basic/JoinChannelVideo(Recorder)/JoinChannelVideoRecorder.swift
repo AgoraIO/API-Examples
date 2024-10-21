@@ -64,7 +64,8 @@ struct JoinChannelVideoRecorder: View {
                         agoraKit.onTapLocalRecordButton(isStart: isLocalStart)
                     }.overlay(
                         RoundedRectangle(cornerRadius: 5).stroke(Color.red, lineWidth: 2).padding(-5)
-                    ).foregroundStyle(.red)
+                    )
+                    .adaptiveForegroundStyle(.red)
                         .padding(.bottom, 20)
                         .padding(.trailing, 20)
                  }
@@ -76,7 +77,7 @@ struct JoinChannelVideoRecorder: View {
                         agoraKit.onTapRemoteRecordButton(isStart: isRemoteStart)
                     }.overlay(
                         RoundedRectangle(cornerRadius: 5).stroke(Color.red, lineWidth: 2).padding(-5)
-                    ).foregroundStyle(.red)
+                    ).adaptiveForegroundStyle(.red)
                         .padding(.bottom, 20)
                         .padding(.trailing, 20)
                         .opacity(agoraKit.isRemoteJoind ? 1.0 : 0)

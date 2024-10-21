@@ -128,6 +128,17 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 * Decrypt a video stream after receiving it from an onReceiveVideoPacket
 
 
+### Transparent Background
+
+* Join the channel, send video streams, and receive video streams.
+* Configure the canvas property `enableAlphaMask = true` during rendering.
+
+### Ultra-Low Latency Live Streaming URL Pull
+
+* Initialize Rte, Player, and register relevant callbacks.
+* After successful initialization, you can call media-related methods, such as play, pause, etc.
+* Handle exceptions in the player callback methods.
+
 ## Connect Us
 
 - For potential issues, take a look at our [FAQ](https://docs.agora.io/cn/faq) first

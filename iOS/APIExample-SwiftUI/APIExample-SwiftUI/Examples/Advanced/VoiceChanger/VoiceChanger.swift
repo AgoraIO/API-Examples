@@ -277,23 +277,23 @@ struct VoiceChanger: View {
             
             HStack {
                 Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Mode".localized)
-                    .foregroundStyle(tonicModeEnable ? .black : .gray)
+                    .adaptiveForegroundStyle(tonicModeEnable ? .black : .gray)
                 Slider(value: $tonicModeValue, in: tonicModeValueSliderRange) { isEditing in
                     if !isEditing {
                         voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
                     }
                 }
-                .tint(tonicModeEnable ? .blue : .gray)
+                .adaptiveTint(tonicModeEnable ? .blue : .gray)
                 .disabled(!tonicModeEnable)
 
                 Text(selectedPitchCorrection == .off ? "N/A" : "Tonic Pitch".localized)
-                    .foregroundStyle(tonicModeEnable ? .black : .gray)
+                    .adaptiveForegroundStyle(tonicModeEnable ? .black : .gray)
                 Slider(value: $tonicPitchValue, in: tonicPitchValueSliderRange) { isEditing in
                     if !isEditing {
                         voiceChangerRTC.agoraKit.setAudioEffectParameters(currentAudioEffects, param1: Int32(tonicModeValue), param2: Int32(tonicPitchValue))
                     }
                 }
-                .tint(tonicModeEnable ? .blue : .gray)
+                .adaptiveTint(tonicModeEnable ? .blue : .gray)
                 .disabled(!tonicPitchEnable)
             }
 
@@ -406,9 +406,9 @@ struct VoiceChanger: View {
         VStack {
             HStack {
                 localView
-                    .background(.gray)
+                    .adaptiveBackground(.gray)
                 remoteView
-                    .background(.gray)
+                    .adaptiveBackground(.gray)
             }
             .frame(maxHeight: 200)
             .padding(.bottom, 50)
