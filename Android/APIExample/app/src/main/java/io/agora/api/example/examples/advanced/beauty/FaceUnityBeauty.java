@@ -71,7 +71,7 @@ public class FaceUnityBeauty extends BaseFragment {
         initVideoView();
         initRtcEngine();
 
-
+        FaceUnityBeautySDK.INSTANCE.configureFURenderKit();
         faceUnityBeautyAPI.initialize(new Config(requireContext(), rtcEngine, FURenderKit.getInstance(), null, CaptureMode.Agora, 0, false, new CameraConfig()));
         faceUnityBeautyAPI.enable(true);
         joinChannel();

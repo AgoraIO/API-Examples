@@ -31,7 +31,7 @@ import io.agora.base.VideoFrame
 import io.agora.rtc2.Constants
 import io.agora.rtc2.RtcEngine
 
-const val VERSION = "1.0.6"
+const val VERSION = "1.0.8"
 
 enum class CaptureMode{
     Agora, // 使用声网内部的祼数据接口进行处理
@@ -131,13 +131,6 @@ interface FaceUnityBeautyAPI {
      * @return 见ErrorCode
      */
     fun onFrame(videoFrame: VideoFrame): Int
-
-    /**
-     * 声网提供的美颜最佳默认参数
-     *
-     * @return 见ErrorCode
-     */
-    fun setBeautyPreset(preset: BeautyPreset = BeautyPreset.DEFAULT): Int
 
     /**
      * 更新摄像头配置

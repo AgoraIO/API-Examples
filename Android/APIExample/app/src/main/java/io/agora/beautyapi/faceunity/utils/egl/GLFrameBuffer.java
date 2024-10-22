@@ -201,4 +201,7 @@ public class GLFrameBuffer {
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_NONE);
     }
 
+    public void resetTexture() {
+        deleteTexture();
+    }
 }

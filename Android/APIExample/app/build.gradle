@@ -13,6 +13,7 @@ android {
 
     defaultConfig {
         applicationId "io.agora.api.example"
+//        applicationId "io.agora.entfull"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -140,8 +141,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
-    implementation 'com.faceunity:core:8.7.0'
-    implementation 'com.faceunity:model:8.7.0'
+    implementation 'com.faceunity:core:8.11.0'
+    implementation 'com.faceunity:model:8.11.0'
 
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
