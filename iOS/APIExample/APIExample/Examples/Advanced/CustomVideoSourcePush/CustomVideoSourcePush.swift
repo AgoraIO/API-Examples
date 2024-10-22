@@ -252,7 +252,7 @@ extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
         
         if isHDR {
             let colorSpace = AgoraColorSpace()
-            colorSpace.rangeID = .full
+            colorSpace.rangeID = .limited
             colorSpace.transferID = .IDARIB_STD_B67
             colorSpace.matrixID = .IDBT2020_NCL
             colorSpace.primaryID = .IDBT2020
