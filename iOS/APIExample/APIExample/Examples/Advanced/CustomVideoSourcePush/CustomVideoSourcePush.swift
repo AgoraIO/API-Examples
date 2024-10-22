@@ -85,6 +85,8 @@ class CustomVideoSourcePushMain: BaseViewController {
             return
         }
         
+        agoraKit.setParameters("{\"rtc.video.enable_hwdec_quickly_start\": false}")
+        
         // Configuring Privatization Parameters
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
