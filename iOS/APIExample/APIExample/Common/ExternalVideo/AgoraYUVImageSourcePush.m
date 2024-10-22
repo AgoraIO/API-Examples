@@ -239,6 +239,16 @@
     // Free temporary storage
     free(uPlane);
     free(vPlane);
+    
+    
+    NSMutableDictionary* attributes = [NSMutableDictionary dictionaryWithDictionary:@{
+      (id)kCVImageBufferColorPrimariesKey : (id)CFSTR("ITU_R_2020"),
+      (id)kCVImageBufferYCbCrMatrixKey : (id)CFSTR("ITU_R_2020")
+    }];
+    [attributes setObject:(id)CFSTR("ITU_R_2100_HLG") forKey:(id)kCVImageBufferTransferFunctionKey];
+
+    CVBufferSetAttachments(pixelBuffer, (__bridge CFDictionaryRef)attributes,
+                           kCVAttachmentMode_ShouldPropagate);
 
     return pixelBuffer;
 }
