@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 
 /**
- * DESC：高通芯片
  * Created on 2021/3/12
  */
 public class QualcommScoreProvider implements DeviceScoreProvider {

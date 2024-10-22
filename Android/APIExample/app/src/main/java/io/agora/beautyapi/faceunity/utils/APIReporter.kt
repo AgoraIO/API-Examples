@@ -6,14 +6,14 @@ import io.agora.rtc2.RtcEngine
 import org.json.JSONObject
 
 enum class APIType(val value: Int) {
-    KTV(1),             // K歌
-    CALL(2),            // 呼叫连麦
-    BEAUTY(3),          // 美颜
-    VIDEO_LOADER(4),    // 秒开秒切
-    PK(5),              // 团战
-    VIRTUAL_SPACE(6),   //
-    SCREEN_SPACE(7),    // 屏幕共享
-    AUDIO_SCENARIO(8)   // 音频
+    KTV(1),
+    CALL(2),
+    BEAUTY(3),
+    VIDEO_LOADER(4),
+    PK(5),
+    VIRTUAL_SPACE(6),
+    SCREEN_SPACE(7),
+    AUDIO_SCENARIO(8)
 }
 
 enum class ApiEventType(val value: Int) {
@@ -31,9 +31,9 @@ object ApiEventKey {
 }
 
 object ApiCostEvent {
-    const val CHANNEL_USAGE = "channelUsage"                 //频道使用耗时
-    const val FIRST_FRAME_ACTUAL = "firstFrameActual"        //首帧实际耗时
-    const val FIRST_FRAME_PERCEIVED = "firstFramePerceived"  //首帧感官耗时
+    const val CHANNEL_USAGE = "channelUsage"
+    const val FIRST_FRAME_ACTUAL = "firstFrameActual"
+    const val FIRST_FRAME_PERCEIVED = "firstFramePerceived"
 }
 
 class APIReporter(
@@ -50,7 +50,6 @@ class APIReporter(
         configParameters()
     }
 
-    // 上报普通场景化API
     fun reportFuncEvent(name: String, value: Map<String, Any>, ext: Map<String, Any>) {
         Log.d(tag, "reportFuncEvent: $name value: $value ext: $ext")
         val eventMap = mapOf(ApiEventKey.TYPE to ApiEventType.API.value, ApiEventKey.DESC to name)
@@ -75,7 +74,6 @@ class APIReporter(
         innerReportCostEvent(ts, name, cost, ext)
     }
 
-    // 上报耗时打点信息
     fun reportCostEvent(name: String, cost: Int, ext: Map<String, Any>) {
         durationEventStartMap.remove(name)
         innerReportCostEvent(
@@ -86,7 +84,6 @@ class APIReporter(
         )
     }
 
-    // 上报自定义信息
     fun reportCustomEvent(name: String, ext: Map<String, Any>) {
         Log.d(tag, "reportCustomEvent: $name ext: $ext")
         val eventMap = mapOf(ApiEventKey.TYPE to ApiEventType.CUSTOM.value, ApiEventKey.DESC to name)
@@ -107,10 +104,8 @@ class APIReporter(
     // ---------------------- private ----------------------
 
     private fun configParameters() {
-        //rtcEngine.setParameters("{\"rtc.qos_for_test_purpose\": true}") //测试环境使用
-        // 数据上报
+        //rtcEngine.setParameters("{\"rtc.qos_for_test_purpose\": true}") //for test use
         rtcEngine.setParameters("{\"rtc.direct_send_custom_event\": true}")
-        // 日志写入
         rtcEngine.setParameters("{\"rtc.log_external_input\": true}")
     }
 

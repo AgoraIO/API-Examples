@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * DESC： 联发科芯片
  * Created on 2021/3/12
  */
 public class MTKScoreProvider implements DeviceScoreProvider {

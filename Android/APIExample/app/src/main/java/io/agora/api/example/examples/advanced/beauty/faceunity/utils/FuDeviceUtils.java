@@ -42,11 +42,6 @@ public class FuDeviceUtils {
         return judgeDeviceLevel(context,false);
     }
 
-    /**
-     * 判断设备级别
-     *
-     * @return int
-     */
     public static int judgeDeviceLevel(Context context,boolean ignoreCache) {
         if (!ignoreCache) {
             int cacheDeviceLevel = getCacheDeviceLevel(context);
@@ -78,11 +73,6 @@ public class FuDeviceUtils {
         return level;
     }
 
-    /**
-     * -1 不是特定的高低端机型
-     *
-     * @return
-     */
     private static int judgeDeviceLevelInDeviceName() {
         String currentDeviceName = getDeviceName();
         for (String deviceName : levelFourDevices) {
@@ -108,11 +98,6 @@ public class FuDeviceUtils {
         return DEVICE_LEVEL_EMPTY;
     }
 
-    /**
-     * 获取设备名
-     *
-     * @return String
-     */
     public static String getDeviceName() {
         String deviceName = "";
         if (Build.MODEL != null) {
@@ -122,46 +107,23 @@ public class FuDeviceUtils {
         return deviceName;
     }
 
-    /**
-     * 缓存设备等级
-     *
-     * @param level int
-     */
     public static void saveCacheDeviceLevel(Context context,int level) {
         SharedPreferences sp = context.getSharedPreferences(DEVICE_LEVEL, MODE_PRIVATE);
         sp.edit().putInt(DEVICE_LEVEL, level).apply();
     }
 
-    /**
-     * 获取设备等级
-     *
-     * @return int
-     */
     public static int getCacheDeviceLevel(Context context) {
         SharedPreferences sp = context.getSharedPreferences(DEVICE_LEVEL, MODE_PRIVATE);
         return sp.getInt(DEVICE_LEVEL, DEVICE_LEVEL_EMPTY);
     }
 
     public static class Config{
-        /************************** 算法Model  ******************************/
-        // 人脸识别
         public static String BUNDLE_AI_FACE = "model" + File.separator + "ai_face_processor.bundle";
-        // 手势
         public static String BUNDLE_AI_HAND = "model" + File.separator + "ai_hand_processor.bundle";
-        // 人体
         public static String BUNDLE_AI_HUMAN = "model" + File.separator + "ai_human_processor.bundle";
-
-        // 舌头
         public static String BUNDLE_AI_TONGUE = "graphics" + File.separator + "tongue.bundle";
-
-        //设备等级默认为中级
         public static int DEVICE_LEVEL = FuDeviceUtils.DEVICE_LEVEL_TWO;
-
-        //设备名称
         public static String DEVICE_NAME = "";
-
-
-        //人脸离开之后是否延迟10帧移除人脸相关信息
         public static final boolean FACE_DELAY_LEAVE_ENABLE = false;
     }
 }

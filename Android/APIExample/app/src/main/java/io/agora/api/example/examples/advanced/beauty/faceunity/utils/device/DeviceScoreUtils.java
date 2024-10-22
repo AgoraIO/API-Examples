@@ -111,7 +111,7 @@ public class DeviceScoreUtils {
 
 
     /**
-     * 获取硬件信息(cpu型号)
+     * get device info
      *
      * @return String
      */

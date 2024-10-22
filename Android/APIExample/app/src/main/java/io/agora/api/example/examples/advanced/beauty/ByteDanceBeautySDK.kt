@@ -25,10 +25,8 @@ object ByteDanceBeautySDK {
 
     private var beautyAPI: ByteDanceBeautyAPI? = null
 
-    // 特效句柄
     val renderManager = RenderManager()
 
-    // 美颜配置
     val beautyConfig = BeautyConfig()
 
 
@@ -149,7 +147,6 @@ object ByteDanceBeautySDK {
 
     class BeautyConfig {
 
-        // 磨皮
         var smooth = 0.65f
             set(value) {
                 field = value
@@ -158,7 +155,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 美白
         var whiten = 0.5f
             set(value) {
                 field = value
@@ -167,7 +163,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 红润
         var redden = 0.0f
             set(value) {
                 field = value
@@ -176,7 +171,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 瘦脸
         var thinFace = 0.3f
             set(value) {
                 field = value
@@ -192,7 +186,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 大眼
         var enlargeEye = 0.0f
             set(value) {
                 field = value
@@ -204,7 +197,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 瘦颧骨
         var shrinkCheekbone = 0.3f
             set(value) {
                 field = value
@@ -220,7 +212,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 下颌骨
         var shrinkJawbone = 0.0f
             set(value) {
                 field = value
@@ -236,7 +227,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 美牙
         var whiteTeeth = 0.0f
             set(value) {
                 field = value
@@ -252,7 +242,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 额头
         var hairlineHeight = 0.0f
             set(value) {
                 field = value
@@ -268,7 +257,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 瘦鼻
         var narrowNose = 0.0f
             set(value) {
                 field = value
@@ -284,7 +272,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 嘴形
         var mouthSize = 0.0f
             set(value) {
                 field = value
@@ -300,7 +287,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 下巴
         var chinLength = 0.0f
             set(value) {
                 field = value
@@ -316,7 +302,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 亮眼
         var brightEye = 0.0f
             set(value) {
                 field = value
@@ -332,7 +317,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 祛黑眼圈
         var darkCircles = 0.0f
             set(value) {
                 field = value
@@ -348,7 +332,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 祛法令纹
         var nasolabialFolds = 0.0f
             set(value) {
                 field = value
@@ -364,7 +347,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 锐化
         var sharpen = 0.0f
             set(value) {
                 field = value
@@ -377,7 +359,6 @@ object ByteDanceBeautySDK {
                 }
             }
 
-        // 清晰度
         var clear = 0.0f
             set(value) {
                 field = value
@@ -391,7 +372,6 @@ object ByteDanceBeautySDK {
             }
 
 
-        // 美妆
         var makeUp: MakeUpItem? = null
             set(value) {
                 if (field == value) {
@@ -442,7 +422,6 @@ object ByteDanceBeautySDK {
             }
 
 
-        // 贴纸
         var sticker: String? = null
             set(value) {
                 if (field == value) {

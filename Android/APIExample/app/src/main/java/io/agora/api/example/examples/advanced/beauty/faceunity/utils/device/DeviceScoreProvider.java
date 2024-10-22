@@ -6,7 +6,7 @@ package io.agora.api.example.examples.advanced.beauty.faceunity.utils.device;
  */
 interface DeviceScoreProvider {
     /**
-     * 获取CPU分数
+     * get score for cpu
      *
      * @param cpuName String
      * @return double
@@ -14,7 +14,7 @@ interface DeviceScoreProvider {
     double getCpuScore(String cpuName);
 
     /**
-     * 获取GPU分数
+     * get score for gpu
      *
      * @param glRenderer String GPU名称
      * @return double
