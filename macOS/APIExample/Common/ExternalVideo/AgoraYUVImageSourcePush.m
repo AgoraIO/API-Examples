@@ -126,7 +126,7 @@
         (NSString *)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES,
         (NSString *)kCVPixelBufferWidthKey: @(width),
         (NSString *)kCVPixelBufferHeightKey: @(height),
-        (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr10BiPlanarFullRange),
+        (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange),
         (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
         (NSString *)kCVPixelBufferPoolAllocationThresholdKey: @1
     };
@@ -135,7 +135,7 @@
     CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
                                           width,
                                           height,
-                                          kCVPixelFormatType_420YpCbCr10BiPlanarFullRange,
+                                          kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange,
                                           (__bridge CFDictionaryRef)pixelBufferAttributes,
                                           &pixelBuffer);
 
@@ -238,8 +238,19 @@
     // Free temporary storage
     free(uPlane);
     free(vPlane);
+    
+    
+    NSMutableDictionary* attributes = [NSMutableDictionary dictionaryWithDictionary:@{
+      (id)kCVImageBufferColorPrimariesKey : (id)CFSTR("ITU_R_2020"),
+      (id)kCVImageBufferYCbCrMatrixKey : (id)CFSTR("ITU_R_2020")
+    }];
+    [attributes setObject:(id)CFSTR("ITU_R_2100_HLG") forKey:(id)kCVImageBufferTransferFunctionKey];
+
+    CVBufferSetAttachments(pixelBuffer, (__bridge CFDictionaryRef)attributes,
+                           kCVAttachmentMode_ShouldPropagate);
 
     return pixelBuffer;
 }
+
 
 @end
