@@ -203,6 +203,9 @@ class CustomVideoSourcePush: BaseViewController {
                 return
             }
             
+            // Turn off quick start for hardware decoding
+            agoraKit?.setParameters("{\"rtc.video.enable_hwdec_quickly_start\": false}")
+            
             // set live broadcaster mode
             agoraKit?.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
@@ -259,6 +262,17 @@ class CustomVideoSourcePush: BaseViewController {
         } else {
             isProcessing = true
             self.customCamera?.stopSource()
+            
+            remoteVideos.forEach { view in
+                guard let uid = view.uid else {return}
+                view.uid = nil
+                let videoCanvas = AgoraRtcVideoCanvas()
+                videoCanvas.uid = uid
+                videoCanvas.view = nil
+                videoCanvas.renderMode = .hidden
+                agoraKit?.setupRemoteVideo(videoCanvas)
+            }
+            
             agoraKit?.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
@@ -388,6 +402,12 @@ extension CustomVideoSourcePush: AgoraYUVImageSourcePushDelegate {
         let videoFrame = AgoraVideoFrame()
         
         if isHDR {
+            let colorSpace = AgoraColorSpace()
+            colorSpace.rangeID = .full
+            colorSpace.transferID = .IDARIB_STD_B67
+            colorSpace.matrixID = .IDBT2020_NCL
+            colorSpace.primaryID = .IDBT2020
+            videoFrame.colorSpace = colorSpace
             videoFrame.format = AgoraVideoFormat.cvPixelP010.rawValue
         } else {
             videoFrame.format = AgoraVideoFormat.cvPixelNV12.rawValue
