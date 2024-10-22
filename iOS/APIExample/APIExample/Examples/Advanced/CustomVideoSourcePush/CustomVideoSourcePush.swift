@@ -85,6 +85,7 @@ class CustomVideoSourcePushMain: BaseViewController {
             return
         }
         
+        // Turn off quick start for hardware decoding
         agoraKit.setParameters("{\"rtc.video.enable_hwdec_quickly_start\": false}")
         
         // Configuring Privatization Parameters
@@ -250,6 +251,12 @@ extension CustomVideoSourcePushMain: AgoraYUVImageSourcePushDelegate {
         let videoFrame = AgoraVideoFrame()
         
         if isHDR {
+            let colorSpace = AgoraColorSpace()
+            colorSpace.rangeID = .full
+            colorSpace.transferID = .IDARIB_STD_B67
+            colorSpace.matrixID = .IDBT2020_NCL
+            colorSpace.primaryID = .IDBT2020
+            videoFrame.colorSpace = colorSpace
             videoFrame.format = AgoraVideoFormat.cvPixelP010.rawValue
         } else {
             videoFrame.format = AgoraVideoFormat.cvPixelNV12.rawValue
