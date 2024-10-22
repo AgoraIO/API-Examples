@@ -295,6 +295,7 @@ void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffe
 		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_ARIB_STD_B67;
 		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT2020_NCL;
 		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT2020;
+		m_videoFrame.colorSpace = colorSpace;
 		m_videoFrame.stride = WIDHT_HDR;
 		m_videoFrame.height = HEIGHT_HDR;
 		m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
@@ -307,6 +308,7 @@ void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffe
 		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_BT709;
 		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT709;
 		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT709;
+		m_videoFrame.colorSpace = colorSpace;
 		m_videoFrame.stride = width;
 		m_videoFrame.height = height;
 		m_videoFrame.buffer = m_imgBuffer;
@@ -540,13 +542,13 @@ void PushExternalVideoYUV::OnBnClickedCheckHdr()
 	{
 		flag = m_rtcEngine->queryHDRCapability(VIDEO_MODULE_SOFTWARE_ENCODER, capability);
 	}
-
 	if (flag == 0) {
 		isUseHdr = !isUseHdr;
 	}
 	else {
 		isUseHdr = false;
 		mCbHdr.SetCheck(FALSE);
+		MessageBox(_T("The current device does not support HDR"));
 	}
 
 }
