@@ -94,8 +94,10 @@ bool PushExternalVideoYUV::InitAgora()
 
 
 	VideoEncoderConfiguration config;
-	config.dimensions.width = YUVReader::VIDEO_WIDTH;
-	config.dimensions.height = YUVReader::VIDEO_HEIGHT;
+	//config.dimensions.width = YUVReader::VIDEO_WIDTH;
+	//config.dimensions.height = YUVReader::VIDEO_HEIGHT;
+	config.dimensions.width = WIDHT_HDR;
+	config.dimensions.height = HEIGHT_HDR;
 	//set video encoder configuration.
 	m_rtcEngine->setVideoEncoderConfiguration(config);
 
@@ -304,10 +306,10 @@ void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffe
 	else
 	{
 		memcpy_s(m_imgBuffer, size, buffer, size);
-		colorSpace.range = agora::media::base::ColorSpace::RangeID::RANGEID_FULL;
+		/*colorSpace.range = agora::media::base::ColorSpace::RangeID::RANGEID_FULL;
 		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_BT709;
 		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT709;
-		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT709;
+		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT709;*/
 		m_videoFrame.colorSpace = colorSpace;
 		m_videoFrame.stride = width;
 		m_videoFrame.height = height;
