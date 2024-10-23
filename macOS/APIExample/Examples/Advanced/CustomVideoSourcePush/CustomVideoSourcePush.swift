@@ -284,8 +284,7 @@ class CustomVideoSourcePush: BaseViewController {
     @IBAction func onHDRAction(sender: NSSwitch) {
         if hdrSwitch?.state == .on {
             let cap1 = agoraKit?.queryHDRCapability(.hardwareEncoder) == .supported ? true : false
-            let cap2 = agoraKit?.queryHDRCapability(.softwareEncoder) == .supported ? true : false
-            if !cap1 && !cap2 {
+            if !cap1 {
                 showAlert(title: "Error", message: "Current device does not support HDR")
                 hdrSwitch?.state = .off
                 return
