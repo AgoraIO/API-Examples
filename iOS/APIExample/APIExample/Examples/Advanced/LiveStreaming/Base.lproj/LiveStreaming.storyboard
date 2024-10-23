@@ -542,6 +542,7 @@
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
                         <outlet property="localRenderTextField" destination="tOf-AP-HSe" id="3Hg-yj-Zxe"/>
                         <outlet property="remoteRenderTextField" destination="UFF-wU-Wze" id="GzW-OP-KOL"/>
+                        <outlet property="takeLocalSnapshot" destination="w4q-aT-JBc" id="nYJ-Z5-yg2"/>
                         <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
                         <outlet property="touchBackgroundView" destination="e11-BO-QiO" id="Ul6-Yy-Tfp"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
