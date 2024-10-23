@@ -126,7 +126,7 @@ class SpatialAudioRTC: NSObject, ObservableObject {
         if isVoice1 {
             _ = isMute ? mediaPlayer1.pause() : mediaPlayer1.resume()
         } else {
-            _ = isMute ? mediaPlayer1.pause() : mediaPlayer1.resume()
+            _ = isMute ? mediaPlayer2.pause() : mediaPlayer2.resume()
         }
     }
     func mediaPlayerVoiceBlur(isVoice1: Bool, isOn: Bool) {
@@ -135,7 +135,7 @@ class SpatialAudioRTC: NSObject, ObservableObject {
         if isVoice1 {
             mediaPlayer1.setSpatialAudioParams(params)
         } else {
-            mediaPlayer1.setSpatialAudioParams(params)
+            mediaPlayer2.setSpatialAudioParams(params)
         }
     }
     func mediaPlayerAirborne(isVoice1: Bool, isOn: Bool) {
@@ -144,7 +144,7 @@ class SpatialAudioRTC: NSObject, ObservableObject {
         if isVoice1 {
             mediaPlayer1.setSpatialAudioParams(params)
         } else {
-            mediaPlayer1.setSpatialAudioParams(params)
+            mediaPlayer2.setSpatialAudioParams(params)
         }
     }
     func mediaPlayerAttenuation(isVoice1: Bool, value: Float) {

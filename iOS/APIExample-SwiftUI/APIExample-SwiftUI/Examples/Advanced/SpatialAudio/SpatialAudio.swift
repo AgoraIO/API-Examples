@@ -299,7 +299,6 @@ struct ActionSheetView: View {
                         }
                 }.padding(.horizontal, 15)
             }.frame(height: 200)
-            .adaptiveBackground(Color.white)
             .offset(x: 0, y: isShow ? 200 : 0)
         }
     }
