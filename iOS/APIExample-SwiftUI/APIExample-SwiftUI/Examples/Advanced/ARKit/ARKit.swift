@@ -96,12 +96,20 @@ struct ARKit: View {
     
     @State private var statsInfo: String = ""
     @ObservedObject private var agoraKit = ARKitRTC()
-    @GestureState private var tappedLocation: CGPoint = .zero
-    
+    @State var tappedLocation: CGPoint = .zero
+    @State var dragLocation: CGPoint = .zero
+
     let sceneView = ARViewWrapper()
     
     var body: some View {
         VStack {
+            let tap = TapGesture().onEnded {
+                tappedLocation = dragLocation
+                agoraKit.doSceneViewTapped(tappedLocation)
+            }
+            let drag = DragGesture(minimumDistance: 0).onChanged { value in
+                dragLocation = value.location
+            }.sequenced(before: tap)
             sceneView
                 .adaptiveBackground().alert(isPresented: $agoraKit.isSupportedAR) {
                 let message = "This app requires world tracking, which is available only on iOS devices with the A9 processor or later.".localized
@@ -115,13 +123,8 @@ struct ARKit: View {
             }).onReceive(agoraKit.$isHiddenStatsLabel, perform: { _ in
                 sceneView.statsLabel.isHidden = agoraKit.isHiddenStatsLabel
                 sceneView.statsLabel.text = agoraKit.stats
-            }).onTapGesture {
-                agoraKit.doSceneViewTapped(tappedLocation)
-            }.gesture(DragGesture(minimumDistance: 0)
-                .updating($tappedLocation) { (value, state, _) in
-                    state = value.startLocation
-                }
-            )
+            })
+            .gesture(drag)
             
         }.onAppear(perform: {
             agoraKit.setupRTC(configs: configs,
