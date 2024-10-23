@@ -211,7 +211,8 @@
 
     // Normalize Y data to [0, 65535]
     for (size_t i = 0; i < width * height; i++) {
-        yBuffer[i] = (uint16_t)(yBuffer[i] * (65535.0 / 1023.0)); // Normalize Y component
+//        yBuffer[i] = (uint16_t)(yBuffer[i] * (65535.0 / 1023.0)); // Full Range
+        yBuffer[i] = (uint16_t)((yBuffer[i] - 64) * (65535.0 / (940 - 64)));  // Video Range
     }
 
     // Process U and V data
@@ -224,11 +225,13 @@
 
         // Normalize U component
         uint16_t uValue = uPlane[i]; // U
-        uValue = (uint16_t)((uValue - 512) * (65535.0 / 511.0) + 32768);
+//        uValue = (uint16_t)((uValue - 512) * (65535.0 / 511.0) + 32768);
+        uValue = (uint16_t)((uValue - 64) * (65535.0 / (960 - 64)));
 
         // Normalize V component
         uint16_t vValue = vPlane[i]; // V
-        vValue = (uint16_t)((vValue - 512) * (65535.0 / 511.0) + 32768);
+//        vValue = (uint16_t)((vValue - 512) * (65535.0 / 511.0) + 32768);
+        vValue = (uint16_t)((vValue - 64) * (65535.0 / (960 - 64)));
 
         // Write back normalized values
         uvPlane[i * 2] = uValue;
