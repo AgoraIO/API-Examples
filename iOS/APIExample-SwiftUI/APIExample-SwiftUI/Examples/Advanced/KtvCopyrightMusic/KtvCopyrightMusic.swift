@@ -11,7 +11,8 @@ struct KtvCopyrightMusic: View {
     var body: some View {
         ZStack {
             Button("Ktv copyright music".localized) {
-                let urlString = "https://doc.shengwang.cn/doc/online-ktv/ios/implementation/ktv-scenario/integrate-ktvapi"
+                let urlString = "https://doc.shengwang.cn/doc/online-ktv/ios/ktv-scenario/get-started/integrate-ktvapi"
+                
                 if let url = URL(string: urlString) {
                     UIApplication.shared.open(url)
                 }
