@@ -274,7 +274,8 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-
+			mCbHdr.SetCheck(FALSE);
+			isUseHdr = false;
 			yuvReader.stop();
 			m_remoteVideoWnd.Reset();
 			m_remoteVideoWnd.SetUID(0);
