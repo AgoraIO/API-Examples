@@ -294,7 +294,7 @@ void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffe
 	if (isUseHdr)
 	{
 		m_videoFrame.buffer = m_imgBuffer16;
-		colorSpace.range= agora::media::base::ColorSpace::RangeID::RANGEID_FULL;
+		colorSpace.range= agora::media::base::ColorSpace::RangeID::RANGEID_LIMITED;
 		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_ARIB_STD_B67;
 		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT2020_NCL;
 		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT2020;
@@ -538,10 +538,10 @@ void PushExternalVideoYUVEventHandler::onRemoteVideoStateChanged(uid_t uid, REMO
 
 void PushExternalVideoYUV::OnBnClickedCheckHdr()
 {
-	agora::rtc::HDR_CAPABILITY capability = agora::rtc::HDR_CAPABILITY::HDR_CAPABILITY_SUPPORTED;
+	agora::rtc::HDR_CAPABILITY capability = agora::rtc::HDR_CAPABILITY::HDR_CAPABILITY_UNKNOWN;
 
-	int flag = m_rtcEngine->queryHDRCapability(VIDEO_MODULE_HARDWARE_ENCODER, capability);
-	if (flag == 0) {
+	m_rtcEngine->queryHDRCapability(VIDEO_MODULE_HARDWARE_ENCODER, capability);
+	if (capability == HDR_CAPABILITY::HDR_CAPABILITY_SUPPORTED) {
 		isUseHdr = !isUseHdr;
 	}
 	else {
