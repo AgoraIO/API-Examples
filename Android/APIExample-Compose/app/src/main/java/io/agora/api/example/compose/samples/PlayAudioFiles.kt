@@ -201,7 +201,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined) {
                                     rtcEngine?.startAudioMixing(
                                         "/assets/music_1.m4a",
                                         false,
@@ -218,7 +218,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.resumeAudioMixing()
                                 }
                         )
@@ -230,7 +230,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.pauseAudioMixing()
                                 }
                         )
@@ -242,7 +242,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.stopAudioMixing()
                                 }
                         )
@@ -279,7 +279,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.playEffect(
                                         EFFECT_SOUND_ID,  // The sound ID of the audio effect file to be played.
                                         EFFECT_FILE_PATH,  // The file path of the audio effect file.
@@ -297,7 +297,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.resumeEffect(EFFECT_SOUND_ID)
                                 })
                         Text(text = stringResource(id = R.string.pause),
@@ -307,7 +307,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable (isJoined) {
                                     rtcEngine?.pauseEffect(EFFECT_SOUND_ID)
                                 })
                         Text(text = stringResource(id = R.string.stop),
@@ -317,7 +317,7 @@ private fun PlayAudioFilesView(
                             modifier = Modifier
                                 .weight(1.0f)
                                 .padding(16.dp, 8.dp)
-                                .clickable {
+                                .clickable(isJoined)  {
                                     rtcEngine?.stopEffect(EFFECT_SOUND_ID)
                                 })
                     }
