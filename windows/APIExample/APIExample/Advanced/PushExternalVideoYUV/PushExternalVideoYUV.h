@@ -4,6 +4,7 @@
 #include "DirectShow/AGDShowVideoCapture.h"
 #include "YUVReader.h"
 #include <IAgoraRtcEngine.h>
+#include <stdint.h>
 
 
 class PushExternalVideoYUVEventHandler : public IRtcEngineEventHandler {
@@ -18,7 +19,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -124,7 +125,10 @@ protected:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	BYTE* m_imgBuffer = nullptr;
-
+	uint16_t* m_imgBuffer16 = nullptr;
+	const int WIDHT_HDR = 1280;
+	const int HEIGHT_HDR = 720;
+	bool isUseHdr = false;
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -142,4 +146,7 @@ public:
 
 private:
 	YUVReader yuvReader;
+public:
+	afx_msg void OnBnClickedCheckHdr();
+	CButton mCbHdr;
 };

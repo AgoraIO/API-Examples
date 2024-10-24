@@ -270,18 +270,31 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonAddCrossChannel()
 		AfxMessageBox(_T("The channel and user ID cannot be empty"));
 		return;
 	}
-	ChannelMediaInfo mediaInfo;
+	
 	std::string szChannel = cs2utf8(strChannel);
 	std::string szToken = cs2utf8(strToken);
-	mediaInfo.channelName = new char[strChannel.GetLength() + 1];
-	mediaInfo.token = new char[strToken.GetLength() + 1];
-	mediaInfo.uid = _ttol(strUID);
-	strcpy_s(const_cast<char*>(mediaInfo.channelName), strChannel.GetLength() + 1, szChannel.data());
-	strcpy_s(const_cast<char*>(mediaInfo.token), strToken.GetLength() + 1, szToken.data());
-	//add mediaInfo to vector.
-	m_vecChannelMedias.push_back(mediaInfo);
-	m_cmbCrossChannelList.AddString(strChannel);
-	m_cmbCrossChannelList.SetCurSel(m_cmbCrossChannelList.GetCount() - 1);
+	auto it = std::find_if(m_vecChannelMedias.begin(), m_vecChannelMedias.end(),
+		[&](const ChannelMediaInfo& info) {
+			return info.channelName == szChannel && info.token == szToken;
+		});
+
+	if (it == m_vecChannelMedias.end()) {
+		ChannelMediaInfo mediaInfo;
+		mediaInfo.channelName = new char[strChannel.GetLength() + 1];
+		mediaInfo.token = new char[strToken.GetLength() + 1];
+		mediaInfo.uid = _ttol(strUID);
+		strcpy_s(const_cast<char*>(mediaInfo.channelName), strChannel.GetLength() + 1, szChannel.data());
+		strcpy_s(const_cast<char*>(mediaInfo.token), strToken.GetLength() + 1, szToken.data());
+		//add mediaInfo to vector.
+		m_vecChannelMedias.push_back(mediaInfo);
+		m_cmbCrossChannelList.AddString(strChannel);
+		m_cmbCrossChannelList.SetCurSel(m_cmbCrossChannelList.GetCount() - 1);
+	}
+	else
+	{
+		AfxMessageBox(_T("already added for same channel and token"));
+	}
+	
 }
 
 //remove combobox item
@@ -293,20 +306,19 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonRemoveCrossChannel2()
 	m_cmbCrossChannelList.GetWindowText(strChannelName);
 	std::string szChannelName = cs2utf8(strChannelName);
 
-	int offset = 0;
-	//erase media info from m_vecChannelMedias
-	for (auto & mediaInfo : m_vecChannelMedias)
-	{
-		if (szChannelName.compare(mediaInfo.channelName) == 0)
-		{
-			delete mediaInfo.channelName;
-			delete mediaInfo.token;
-			m_vecChannelMedias.erase(m_vecChannelMedias.begin() + offset);
-		}
-		offset++;
+	auto it = std::find_if(m_vecChannelMedias.begin(), m_vecChannelMedias.end(),
+		[&szChannelName](const ChannelMediaInfo& info) {
+			return info.channelName == szChannelName;
+		});
+
+	if (it != m_vecChannelMedias.end()) {
+		delete it->channelName;
+		delete it->token;
+		m_vecChannelMedias.erase(it);
 	}
 	m_cmbCrossChannelList.DeleteString(nSel);
 	m_cmbCrossChannelList.SetCurSel(m_cmbCrossChannelList.GetCount() - 1);
+	
 }
 
 //start media relay or stop media relay
@@ -315,6 +327,11 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay()
 	if (!m_startMediaRelay)
 	{
 		int nDestCount = m_vecChannelMedias.size();
+		if (nDestCount<=0)
+		{
+			AfxMessageBox(_T("please config target channel config first"));
+			return;
+		}
 		ChannelMediaInfo  *lpDestInfos = new ChannelMediaInfo[nDestCount];
 		for (int nIndex = 0; nIndex < nDestCount; nIndex++) {
 			lpDestInfos[nIndex].channelName = m_vecChannelMedias[nIndex].channelName;
