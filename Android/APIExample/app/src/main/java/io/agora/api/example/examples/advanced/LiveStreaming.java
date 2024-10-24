@@ -245,6 +245,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
 
         mRootBinding.spinnerScenario.setOnItemSelectedListener(this);
         mRootBinding.spinnerSnapshot.setOnItemSelectedListener(this);
+
+        mRootBinding.btnLocalScreenshot.setEnabled(false);
     }
 
     private void resetFps() {
@@ -388,6 +390,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
                     }
                 });
             } else {
+                mRootBinding.btnLocalScreenshot.setEnabled(false);
                 joined = false;
                 mRootBinding.llContainerFp.setVisibility(View.GONE);
                 isHost = false;
@@ -638,7 +641,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             showLongToast(getString(R.string.join_channel_first));
             return;
         }
-        String filePath = requireContext().getExternalCacheDir().getAbsolutePath() + "_livestreaming_snapshot.png";
+        String filePath = new File(requireContext().getExternalCacheDir(), uid + "_livestreaming_snapshot.png").getAbsolutePath();
         SnapshotConfig config = new SnapshotConfig();
         config.filePath = filePath;
         if (uid == myUid) {
@@ -647,7 +650,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             if (ret != Constants.ERR_OK) {
                 showLongToast("takeSnapshot local error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
             }
-        }else{
+        } else {
             if (uid != 0) {
 //                config.position = Constants.VideoModulePosition.VIDEO_MODULE_POSITION_PRE_RENDERER;
 //                int ret = engine.takeSnapshot(uid, config);
@@ -847,6 +850,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
             runOnUIThread(() -> {
                 mRootBinding.btnPublish.setEnabled(true);
+                if (newRole == Constants.CLIENT_ROLE_BROADCASTER) {
+                    mRootBinding.btnLocalScreenshot.setEnabled(true);
+                } else {
+                    mRootBinding.btnLocalScreenshot.setEnabled(false);
+                }
             });
         }
 
