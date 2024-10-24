@@ -73,6 +73,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         // layout render view
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
+        localVideo.backgroundColor = .black
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -113,7 +114,8 @@ class CustomVideoSourcePushMain: BaseViewController {
         // setup my own camera as custom video source
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
-        customCamera = AgoraYUVImageSourcePush(size: isHDR ? CGSize(width: 1280, height: 720) : CGSize(width: 320, height: 180),
+        let size = isHDR ? CGSize(width: 1280, height: 720) : CGSize(width: 320, height: 180)
+        customCamera = AgoraYUVImageSourcePush(size: size,
                                                fileName: isHDR ? "hlg-hdr" : "sample",
                                                frameRate: 15,
                                                isHDR: isHDR)
@@ -122,7 +124,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         customCamera?.trackId = 0
         agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         
-        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let resolution = size //(GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
         let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
         let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
             .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
@@ -221,7 +223,7 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
         videoCanvas.uid = uid
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
+        videoCanvas.renderMode = .fit
         agoraKit?.setupRemoteVideo(videoCanvas)
     }
     
@@ -237,9 +239,6 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
         // you will need to remove the EAGL sublayer from your binded view
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = nil
-        videoCanvas.renderMode = .hidden
         agoraKit?.setupRemoteVideo(videoCanvas)
     }
 }
