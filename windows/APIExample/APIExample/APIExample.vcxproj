@@ -122,7 +122,9 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)
 if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIExample\res\hdr_1280_720.yuv $(SolutionDir)$(Configuration))
+</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -169,6 +171,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(Solutio
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Platform)\$(Configuration)
 if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)$(Configuration))
 if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIExample\res\hdr_1280_720.yuv $(SolutionDir)$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
@@ -215,7 +218,8 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(Solutio
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)
 
 if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIExample\res\hdr_1280_720.yuv $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -263,7 +267,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Platform)\$(Configuration)
 
 if exist sample.yuv (copy sample.yuv $(SolutionDir)$(Platform)\$(Configuration))
-if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (copy $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIExample\res\hdr_1280_720.yuv $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -408,6 +413,7 @@ if exist $(SolutionDir)APIExample\res\yuvj_full_range_alpha_1280_540_left.mp4 (c
     <CopyFileToFolders Include="sample.yuv">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="res\hdr_1280_720.yuv" />
     <None Include="res\wave2.bin" />
     <None Include="zh-cn.ini" />
   </ItemGroup>

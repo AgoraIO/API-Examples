@@ -169,6 +169,7 @@
 #define IDC_CHECK_REPORT                1054
 #define IDC_CHECK_AUDIO_SOURCE_MUTE     1054
 #define IDC_CHECK_VIRTUAL_BG            1054
+#define IDC_CHECK_HDR                   1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -444,6 +445,7 @@
 #define IDC_CHECK4                      1167
 #define IDC_CHECK_EXTENTION             1167
 #define IDC_SLIDER__SHAPE_STYLE_INTENSITY 1168
+#define IDC_COMBO1                      1168
 #define IDC_COMBO_LASH_STYLE            1169
 #define IDC_SLIDER__LASH_STRENGTH       1170
 #define IDC_COMBO_LASH_COLOR            1171
@@ -466,7 +468,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        181
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1168
+#define _APS_NEXT_CONTROL_VALUE         1169
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
