@@ -52,6 +52,7 @@
 @property (nonatomic, assign, readwrite) BOOL audioEOF; // Indicates whether audio has ended.
 @property (nonatomic, assign, readwrite) BOOL videoEOF; // Indicates whether video has ended.
 @property (nonatomic, assign, readwrite) CGAffineTransform preferredTransform; // Transformation information for the image, e.g., video image rotation.
+@property (nonatomic, assign) CGFloat frameRate; // Frame rate of the video.
 @end
 
 @implementation KFMP4Demuxer
@@ -233,6 +234,9 @@
                 [self saveSampleBuffer:videoBuffer];
                 CFRelease(videoBuffer);
             }
+            
+            NSTimeInterval deley = 1000 / self.frameRate;
+            usleep(deley * 1000);
         }
         if (self.demuxerStatus == KFMP4DemuxerStatusCompleted) {
             NSLog(@"KFMP4Demuxer complete");
@@ -391,6 +395,9 @@
         AVAssetTrack *videoTrack = [[self.config.asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
         _hasVideoTrack = videoTrack ? YES : NO;
         if (_hasVideoTrack) {
+            // Get frame rate
+            self.frameRate = videoTrack.nominalFrameRate > 0 ? videoTrack.nominalFrameRate : 30;
+            
             // Get the image transformation information.
             _preferredTransform = videoTrack.preferredTransform;
             
