@@ -267,9 +267,6 @@
     <ClInclude Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.h">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
     </ClInclude>
-     <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h">
-      <Filter>Advanced\CrossChannel</Filter>
-    </ClInclude>
     <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h">
       <Filter>Advanced\Metadata</Filter>
     </ClInclude>
@@ -440,6 +437,9 @@
     <ClCompile Include="Advanced\Beauty\CDlgBeautyEx.cpp">
       <Filter>Advanced\Beauty</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -459,6 +459,7 @@
     <None Include="res\wave2.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\hdr_1280_720.yuv" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">

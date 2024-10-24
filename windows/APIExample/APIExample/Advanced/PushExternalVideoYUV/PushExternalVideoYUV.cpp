@@ -10,6 +10,7 @@ BEGIN_MESSAGE_MAP(PushExternalVideoYUV, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &PushExternalVideoYUV::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &PushExternalVideoYUV::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &PushExternalVideoYUV::OnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_CHECK_HDR, &PushExternalVideoYUV::OnBnClickedCheckHdr)
 END_MESSAGE_MAP()
 
 IMPLEMENT_DYNAMIC(PushExternalVideoYUV, CDialogEx)
@@ -17,7 +18,7 @@ IMPLEMENT_DYNAMIC(PushExternalVideoYUV, CDialogEx)
 PushExternalVideoYUV::PushExternalVideoYUV(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(PushExternalVideoYUV::IDD, pParent)
 {
-	
+
 }
 
 PushExternalVideoYUV::~PushExternalVideoYUV()
@@ -33,6 +34,7 @@ void PushExternalVideoYUV::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_CHECK_HDR, mCbHdr);
 }
 
 //set control text from config.
@@ -81,19 +83,21 @@ bool PushExternalVideoYUV::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	m_rtcEngine->enableVideo();
 
-	
+
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	m_mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
 	if (m_mediaEngine.get() == NULL)
 		return FALSE;
-	
+
 	ret = m_mediaEngine->setExternalVideoSource(true, false);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setExternalVideoSource enable=true, useTexture=false"));
 
 
 	VideoEncoderConfiguration config;
-	config.dimensions.width = YUVReader::VIDEO_WIDTH;
-	config.dimensions.height = YUVReader::VIDEO_HEIGHT;
+	//config.dimensions.width = YUVReader::VIDEO_WIDTH;
+	//config.dimensions.height = YUVReader::VIDEO_HEIGHT;
+	config.dimensions.width = WIDHT_HDR;
+	config.dimensions.height = HEIGHT_HDR;
 	//set video encoder configuration.
 	m_rtcEngine->setVideoEncoderConfiguration(config);
 
@@ -107,7 +111,28 @@ bool PushExternalVideoYUV::InitAgora()
 	m_videoFrame.cropTop = 0;
 	m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
 	m_videoFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
-	m_imgBuffer = new BYTE[YUVReader::VIDEO_FRAME_SIZE]{0};
+	m_imgBuffer = new BYTE[YUVReader::VIDEO_FRAME_SIZE]{ 0 };
+
+	m_imgBuffer16 = new uint16_t[WIDHT_HDR * HEIGHT_HDR * 1.5]{ 0 };
+	CString videoUrl = GetExePath() + _T("\\hdr_1280_720.yuv");
+	std::string tmp = cs2utf8(videoUrl);
+	std::ifstream file(tmp, std::ios::binary);
+	if (!file) {
+		AfxMessageBox(_T("open hdr file failed"));
+	}
+	file.seekg(0, std::ios::end);
+	std::streamsize fileSize = file.tellg();
+	file.seekg(0, std::ios::beg);
+	if (fileSize % sizeof(uint16_t) != 0) {
+		AfxMessageBox(_T(" hdr file format is wrong"));
+	}
+	std::vector<char> fileBuffer(fileSize);
+	if (!file.read(fileBuffer.data(), fileSize)) {
+		AfxMessageBox(_T("read hdr file failed"));
+	}
+	file.close();
+	uint16_t* uint16Buffer = reinterpret_cast<uint16_t*>(fileBuffer.data());
+	memcpy_s(m_imgBuffer16, fileSize, uint16Buffer, fileSize);
 
 	m_rtcEngine->startPreview(VIDEO_SOURCE_CUSTOM);
 	return true;
@@ -121,10 +146,13 @@ void PushExternalVideoYUV::UnInitAgora()
 	if (m_rtcEngine) {
 		yuvReader.stop();
 		if (m_imgBuffer) {
-			delete m_imgBuffer;
+			delete[] m_imgBuffer;
 			m_imgBuffer = nullptr;
 		}
-		
+		if (m_imgBuffer16) {
+			delete[] m_imgBuffer16;
+			m_imgBuffer16 = nullptr;
+		}
 
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -153,7 +181,7 @@ void PushExternalVideoYUV::UnInitAgora()
 BOOL PushExternalVideoYUV::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	
+
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
 
@@ -180,6 +208,8 @@ void PushExternalVideoYUV::ResumeStatus()
 	m_remoteVideoWnd.SetUID(0);
 	m_localVideoWnd.Reset();
 	m_localVideoWnd.SetUID(0);
+	mCbHdr.SetCheck(FALSE);
+	isUseHdr = false;
 }
 
 
@@ -244,7 +274,8 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-
+			mCbHdr.SetCheck(FALSE);
+			isUseHdr = false;
 			yuvReader.stop();
 			m_remoteVideoWnd.Reset();
 			m_remoteVideoWnd.SetUID(0);
@@ -259,9 +290,35 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 }
 
 void PushExternalVideoYUV::OnYUVRead(int width, int height, unsigned char* buffer, int size) {
-	memcpy_s(m_imgBuffer, size, buffer, size);
-	m_videoFrame.buffer = m_imgBuffer;
-	m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
+	agora::media::base::ColorSpace colorSpace;
+	if (isUseHdr)
+	{
+		m_videoFrame.buffer = m_imgBuffer16;
+		colorSpace.range= agora::media::base::ColorSpace::RangeID::RANGEID_LIMITED;
+		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_ARIB_STD_B67;
+		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT2020_NCL;
+		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT2020;
+		m_videoFrame.colorSpace = colorSpace;
+		m_videoFrame.stride = WIDHT_HDR;
+		m_videoFrame.height = HEIGHT_HDR;
+		m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
+		m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I010;
+	}
+	else
+	{
+		memcpy_s(m_imgBuffer, size, buffer, size);
+		/*colorSpace.range = agora::media::base::ColorSpace::RangeID::RANGEID_FULL;
+		colorSpace.transfer = agora::media::base::ColorSpace::TransferID::TRANSFERID_BT709;
+		colorSpace.matrix = agora::media::base::ColorSpace::MatrixID::MATRIXID_BT709;
+		colorSpace.primaries = agora::media::base::ColorSpace::PrimaryID::PRIMARYID_BT709;*/
+		m_videoFrame.colorSpace = colorSpace;
+		m_videoFrame.stride = width;
+		m_videoFrame.height = height;
+		m_videoFrame.buffer = m_imgBuffer;
+		m_videoFrame.timestamp = m_rtcEngine->getCurrentMonotonicTimeInMs();
+		m_videoFrame.format = agora::media::base::VIDEO_PIXEL_I420;
+	}
+
 	if (m_joinChannel && m_mediaEngine.get() != nullptr) {
 		m_mediaEngine->pushVideoFrame(&m_videoFrame);
 	}
@@ -385,7 +442,7 @@ note:
 	is called without a user ID specified. The server will automatically assign one
 parameters:
 	channel:channel name.
-	uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+	uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
@@ -407,7 +464,7 @@ note:
 parameters:
 	uid: remote user/anchor ID for newly added channel.
 	elapsed: The joinChannel is called from the local user to the delay triggered
-	by the callback£¨ms).
+	by the callbackï¿½ï¿½ms).
 */
 void PushExternalVideoYUVEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
@@ -476,4 +533,21 @@ void PushExternalVideoYUVEventHandler::onRemoteVideoStateChanged(uid_t uid, REMO
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
+}
+
+
+void PushExternalVideoYUV::OnBnClickedCheckHdr()
+{
+	agora::rtc::HDR_CAPABILITY capability = agora::rtc::HDR_CAPABILITY::HDR_CAPABILITY_UNKNOWN;
+
+	m_rtcEngine->queryHDRCapability(VIDEO_MODULE_HARDWARE_ENCODER, capability);
+	if (capability == HDR_CAPABILITY::HDR_CAPABILITY_SUPPORTED) {
+		isUseHdr = !isUseHdr;
+	}
+	else {
+		isUseHdr = false;
+		mCbHdr.SetCheck(FALSE);
+		MessageBox(_T("The current device does not support HDR"));
+	}
+
 }
