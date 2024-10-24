@@ -711,7 +711,7 @@ extension VideoProcess {
             let label = NSTextField(labelWithString: makeupList[i]["name"] as? String ?? "none")
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = NSFont.systemFont(ofSize: 12)
-            label.textColor = NSColor.white
+            label.textColor = NSColor.black
             label.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 2000)")
 
             // 创建水平堆栈视图
@@ -922,7 +922,7 @@ extension VideoProcess {
             let label = NSTextField(labelWithString: beautyShapeList[i]["name"] as? String ?? "none")
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = NSFont.systemFont(ofSize: 12)
-            label.textColor = NSColor.white
+            label.textColor = NSColor.black
             label.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 2000)")
 
             // 创建水平堆栈视图

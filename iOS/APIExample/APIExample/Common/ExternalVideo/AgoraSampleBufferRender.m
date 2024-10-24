@@ -64,14 +64,13 @@
     CGSize videoSize;
     if (videoRatio >= viewRatio) {
         videoSize.height = viewHeight;
-        videoSize.width = videoSize.height * videoRatio;
+        videoSize.width = viewHeight * videoRatio;
     }else {
         videoSize.width = viewWidth;
-        videoSize.height = videoSize.width / videoRatio;
+        videoSize.height = viewWidth / videoRatio;
     }
     
-    CGRect renderRect = CGRectMake(0.5 * (viewWidth - videoSize.width), 0.5 * (viewHeight - videoSize.height), videoSize.width, videoSize.height);
-    
+    CGRect renderRect = CGRectMake(0, 0, viewWidth, viewHeight);
     if (!CGRectEqualToRect(renderRect, self.displayLayer.frame)) {
         self.displayLayer.frame = renderRect;
     }
