@@ -141,6 +141,9 @@
                                 <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e11-BO-QiO">
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                            </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="b7R-QN-CCh">
                                 <rect key="frame" x="141" y="475" width="137" height="32"/>
                                 <color key="backgroundColor" name="videoPlaceholder"/>
@@ -497,8 +500,11 @@
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="150" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="top" secondItem="CN0-n0-1Gh" secondAttribute="bottom" constant="10" id="R0x-Bd-MjY"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="e11-BO-QiO" secondAttribute="bottom" id="RaO-AD-AyP"/>
+                            <constraint firstItem="e11-BO-QiO" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="YQp-Dz-w5o"/>
                             <constraint firstItem="eGT-sd-I3g" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="6" id="ZMj-WN-S5V"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="sOi-ZR-6Oj" secondAttribute="bottom" constant="8" symbolic="YES" id="aLT-2p-uy5"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="e11-BO-QiO" secondAttribute="trailing" id="afH-Q1-u1f"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="cYl-8X-Qgn"/>
                             <constraint firstItem="CN0-n0-1Gh" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="dyw-dZ-kUI"/>
@@ -519,6 +525,7 @@
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
                             <constraint firstItem="pha-4w-IfR" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="y5F-EN-Zak"/>
                             <constraint firstItem="eGT-sd-I3g" firstAttribute="leading" secondItem="i5U-ta-1hj" secondAttribute="trailing" constant="13" id="yoA-DT-xju"/>
+                            <constraint firstItem="e11-BO-QiO" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="zjZ-I2-iDM"/>
                         </constraints>
                     </view>
                     <connections>
@@ -535,7 +542,9 @@
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
                         <outlet property="localRenderTextField" destination="tOf-AP-HSe" id="3Hg-yj-Zxe"/>
                         <outlet property="remoteRenderTextField" destination="UFF-wU-Wze" id="GzW-OP-KOL"/>
+                        <outlet property="takeLocalSnapshot" destination="w4q-aT-JBc" id="nYJ-Z5-yg2"/>
                         <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
+                        <outlet property="touchBackgroundView" destination="e11-BO-QiO" id="Ul6-Yy-Tfp"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
                         <outlet property="ultraLowLatencyToggleView" destination="Wts-5Z-p7a" id="HI8-ov-5iY"/>
                         <outlet property="videoImageContainer" destination="eGT-sd-I3g" id="ikD-U4-C0O"/>

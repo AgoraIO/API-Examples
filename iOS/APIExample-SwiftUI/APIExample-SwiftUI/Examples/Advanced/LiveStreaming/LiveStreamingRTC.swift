@@ -10,7 +10,11 @@ import Combine
 import AgoraRtcKit
 
 class LiveStreamingRTC: NSObject, ObservableObject {
-    @Published var role: AgoraClientRole = .broadcaster
+    @Published var role: AgoraClientRole = .broadcaster {
+        didSet {
+            foregroundView?.isHidden = !(role == .broadcaster && remoteUid != nil)
+        }
+    }
     @Published var showUltraLowEntry: Bool = false
     @Published var showLinkStreamEntry: Bool = false
     var agoraKit: AgoraRtcEngineKit!
@@ -208,6 +212,10 @@ class LiveStreamingRTC: NSObject, ObservableObject {
     }
         
     func onTapForegroundVideo() {
+        if remoteUid == nil {
+            return
+        }
+        
         isLocalVideoForeground.toggle()
         
         let localVideoCanvas = AgoraRtcVideoCanvas()

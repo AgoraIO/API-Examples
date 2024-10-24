@@ -203,6 +203,9 @@ class CustomVideoSourcePush: BaseViewController {
                 return
             }
             
+            // Turn off quick start for hardware decoding
+            agoraKit?.setParameters("{\"rtc.video.enable_hwdec_quickly_start\": false}")
+            
             // set live broadcaster mode
             agoraKit?.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
@@ -259,6 +262,17 @@ class CustomVideoSourcePush: BaseViewController {
         } else {
             isProcessing = true
             self.customCamera?.stopSource()
+            
+            remoteVideos.forEach { view in
+                guard let uid = view.uid else {return}
+                view.uid = nil
+                let videoCanvas = AgoraRtcVideoCanvas()
+                videoCanvas.uid = uid
+                videoCanvas.view = nil
+                videoCanvas.renderMode = .hidden
+                agoraKit?.setupRemoteVideo(videoCanvas)
+            }
+            
             agoraKit?.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
@@ -270,8 +284,7 @@ class CustomVideoSourcePush: BaseViewController {
     @IBAction func onHDRAction(sender: NSSwitch) {
         if hdrSwitch?.state == .on {
             let cap1 = agoraKit?.queryHDRCapability(.hardwareEncoder) == .supported ? true : false
-            let cap2 = agoraKit?.queryHDRCapability(.softwareEncoder) == .supported ? true : false
-            if !cap1 && !cap2 {
+            if !cap1 {
                 showAlert(title: "Error", message: "Current device does not support HDR")
                 hdrSwitch?.state = .off
                 return
@@ -350,7 +363,7 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
             agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
@@ -369,11 +382,9 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
         if let remoteVideo = remoteVideos.first(where: { $0.uid == uid }) {
+            // the view to be binded
             let videoCanvas = AgoraRtcVideoCanvas()
             videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
             agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = nil
         } else {
@@ -388,6 +399,12 @@ extension CustomVideoSourcePush: AgoraYUVImageSourcePushDelegate {
         let videoFrame = AgoraVideoFrame()
         
         if isHDR {
+            let colorSpace = AgoraColorSpace()
+            colorSpace.rangeID = .limited
+            colorSpace.transferID = .IDARIB_STD_B67
+            colorSpace.matrixID = .IDBT2020_NCL
+            colorSpace.primaryID = .IDBT2020
+            videoFrame.colorSpace = colorSpace
             videoFrame.format = AgoraVideoFormat.cvPixelP010.rawValue
         } else {
             videoFrame.format = AgoraVideoFormat.cvPixelNV12.rawValue
