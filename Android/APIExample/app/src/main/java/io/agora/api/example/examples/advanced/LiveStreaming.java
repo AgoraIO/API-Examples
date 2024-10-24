@@ -556,7 +556,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
 
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+            option.clientRoleType = CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
             int res;
