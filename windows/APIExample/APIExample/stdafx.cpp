@@ -352,9 +352,17 @@ std::string cs2ANSI(CString str)
 }
 CString utf82cs(std::string utf8)
 {
-    TCHAR szBuf[2048] = { 0 };
+   /* TCHAR szBuf[2048] = { 0 };
     MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), 2048, szBuf, 2048);
-    return szBuf;
+    return szBuf;*/
+	int len = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, NULL, 0);
+	if (len == 0)
+	{
+		return CString();
+	}
+	std::vector<wchar_t> buffer(len);
+	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, buffer.data(), len);
+	return CString(buffer.data());
 }
 
 
