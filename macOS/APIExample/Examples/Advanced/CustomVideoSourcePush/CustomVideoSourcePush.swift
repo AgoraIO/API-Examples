@@ -363,7 +363,7 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
             agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
@@ -382,11 +382,9 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
         if let remoteVideo = remoteVideos.first(where: { $0.uid == uid }) {
+            // the view to be binded
             let videoCanvas = AgoraRtcVideoCanvas()
             videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
             agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = nil
         } else {
