@@ -492,16 +492,16 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 } else {
                     LocalAudioMixerConfiguration config = new LocalAudioMixerConfiguration();
                     config.syncWithLocalMic = false;
-                    config.mixedAudioStreams.clear();
+                    config.audioInputStreams.clear();
                     LocalAudioMixerConfiguration.MixedAudioStream remoteStream = new LocalAudioMixerConfiguration.MixedAudioStream();
                     remoteStream.sourceType = AUDIO_SOURCE_REMOTE_CHANNEL;
                     remoteStream.channelId = channelId;
-                    config.mixedAudioStreams.add(remoteStream);
+                    config.audioInputStreams.add(remoteStream);
 
                     LocalAudioMixerConfiguration.MixedAudioStream remoteStream2 = new LocalAudioMixerConfiguration.MixedAudioStream();
                     remoteStream2.sourceType = AUDIO_SOURCE_MICROPHONE;
                     remoteStream2.channelId = channelId;
-                    config.mixedAudioStreams.add(remoteStream2);
+                    config.audioInputStreams.add(remoteStream2);
                     engine.startLocalAudioMixer(config);
                 }
             }
