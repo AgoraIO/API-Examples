@@ -127,7 +127,7 @@
         (NSString *)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES,
         (NSString *)kCVPixelBufferWidthKey: @(width),
         (NSString *)kCVPixelBufferHeightKey: @(height),
-        (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr10BiPlanarFullRange),
+        (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange),
         (NSString *)kCVPixelBufferMetalCompatibilityKey: @YES,
         (NSString *)kCVPixelBufferPoolAllocationThresholdKey: @1
     };
@@ -136,7 +136,7 @@
     CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
                                           width,
                                           height,
-                                          kCVPixelFormatType_420YpCbCr10BiPlanarFullRange,
+                                          kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange,
                                           (__bridge CFDictionaryRef)pixelBufferAttributes,
                                           &pixelBuffer);
 
@@ -197,7 +197,7 @@
         free(uPlane);
         free(vPlane);
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-        CVPixelBufferRelease(pixelBuffer); 
+        CVPixelBufferRelease(pixelBuffer);
         return NULL;
     }
 
@@ -212,7 +212,8 @@
 
     // Normalize Y data to [0, 65535]
     for (size_t i = 0; i < width * height; i++) {
-        yBuffer[i] = (uint16_t)(yBuffer[i] * (65535.0 / 1023.0)); // Normalize Y component
+//        yBuffer[i] = (uint16_t)(yBuffer[i] * (65535.0 / 1023.0)); // Full Range
+        yBuffer[i] = (uint16_t)((yBuffer[i] - 64) * (65535.0 / (940 - 64)));  // Video Range
     }
 
     // Process U and V data
@@ -225,11 +226,13 @@
 
         // Normalize U component
         uint16_t uValue = uPlane[i]; // U
-        uValue = (uint16_t)((uValue - 512) * (65535.0 / 511.0) + 32768);
+//        uValue = (uint16_t)((uValue - 512) * (65535.0 / 511.0) + 32768);
+        uValue = (uint16_t)((uValue - 64) * (65535.0 / (960 - 64)));
 
         // Normalize V component
         uint16_t vValue = vPlane[i]; // V
-        vValue = (uint16_t)((vValue - 512) * (65535.0 / 511.0) + 32768);
+//        vValue = (uint16_t)((vValue - 512) * (65535.0 / 511.0) + 32768);
+        vValue = (uint16_t)((vValue - 64) * (65535.0 / (960 - 64)));
 
         // Write back normalized values
         uvPlane[i * 2] = uValue;
@@ -239,6 +242,16 @@
     // Free temporary storage
     free(uPlane);
     free(vPlane);
+    
+    
+    NSMutableDictionary* attributes = [NSMutableDictionary dictionaryWithDictionary:@{
+      (id)kCVImageBufferColorPrimariesKey : (id)CFSTR("ITU_R_2020"),
+      (id)kCVImageBufferYCbCrMatrixKey : (id)CFSTR("ITU_R_2020")
+    }];
+    [attributes setObject:(id)CFSTR("ITU_R_2100_HLG") forKey:(id)kCVImageBufferTransferFunctionKey];
+
+    CVBufferSetAttachments(pixelBuffer, (__bridge CFDictionaryRef)attributes,
+                           kCVAttachmentMode_ShouldPropagate);
 
     return pixelBuffer;
 }

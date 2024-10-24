@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
@@ -47,6 +50,7 @@ import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
@@ -173,7 +177,7 @@ fun MediaRecorder() {
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
             }
         }
-
+    val coroutineScope = rememberCoroutineScope()
     MediaRecorderView(
         channelName = channelName,
         isJoined = isJoined,
@@ -200,58 +204,81 @@ fun MediaRecorder() {
                 rtcEngine.setupRemoteVideo(VideoCanvas(view, Constants.RENDER_MODE_HIDDEN, id))
             }
         },
-        onRecorderClick = { id, isRecording ->
-            if (isRecording) {
-                val storagePath: String =
-                    context.externalCacheDir?.absolutePath + File.separator + "media_recorder_" + channelName + "_" + id + ".mp4"
-                val recorder = rtcEngine.createMediaRecorder(RecorderStreamInfo(channelName, id,0))
-                recorder.setMediaRecorderObserver(object : IMediaRecorderCallback {
-                    override fun onRecorderStateChanged(
-                        channelId: String?,
-                        uid: Int,
-                        state: Int,
-                        reason: Int
-                    ) {
-                        Log.d(
-                            "MediaRecorder",
-                            "LocalMediaRecorder -- onRecorderStateChanged channelId=$channelId, uid=$uid, state=$state, reason=$reason"
+        overlay = { _, id ->
+            var isRecording by remember { mutableStateOf(false) }
+            Button(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.BottomEnd),
+                onClick = {
+                    isRecording = !isRecording
+                    if (isRecording) {
+                        val storagePath: String =
+                            context.externalCacheDir?.absolutePath + File.separator + "media_recorder_" + channelName + "_" + id + ".mp4"
+                        val recorder =
+                            rtcEngine.createMediaRecorder(RecorderStreamInfo(channelName, id, 0))
+                        recorder.setMediaRecorderObserver(object : IMediaRecorderCallback {
+                            override fun onRecorderStateChanged(
+                                channelId: String?,
+                                uid: Int,
+                                state: Int,
+                                reason: Int
+                            ) {
+                                Log.d(
+                                    "MediaRecorder",
+                                    "LocalMediaRecorder -- onRecorderStateChanged channelId=$channelId, uid=$uid, state=$state, reason=$reason"
+                                )
+                                if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
+                                    recorders.remove(uid)
+                                    recoderResult = storagePath
+                                } else if (state == AgoraMediaRecorder.RECORDER_STATE_ERROR && reason == AgoraMediaRecorder.RECORDER_REASON_CONFIG_CHANGED) {
+                                    coroutineScope.launch {
+                                        isRecording = false
+                                        recorders[id]?.let {
+                                            it.stopRecording()
+                                            it.release()
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onRecorderInfoUpdated(
+                                channelId: String?,
+                                uid: Int,
+                                info: RecorderInfo?
+                            ) {
+                                info ?: return
+                                Log.d(
+                                    "MediaRecorder",
+                                    "LocalMediaRecorder -- onRecorderInfoUpdated channelId="
+                                            + channelId + ", uid=" + uid + ", fileName=" + info.fileName
+                                            + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize
+                                )
+                            }
+                        })
+                        recorder.startRecording(
+                            AgoraMediaRecorder.MediaRecorderConfiguration(
+                                storagePath,
+                                AgoraMediaRecorder.CONTAINER_MP4,
+                                AgoraMediaRecorder.STREAM_TYPE_BOTH,
+                                120000,
+                                0
+                            )
                         )
-                        if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
-                            recorders.remove(uid)
-                            recoderResult = storagePath
+                        recorders[id] = recorder
+                    } else {
+                        recorders[id]?.let {
+                            it.stopRecording()
+                            it.release()
                         }
                     }
-
-                    override fun onRecorderInfoUpdated(
-                        channelId: String?,
-                        uid: Int,
-                        info: RecorderInfo?
-                    ) {
-                        info ?: return
-                        Log.d(
-                            "MediaRecorder",
-                            "LocalMediaRecorder -- onRecorderInfoUpdated channelId="
-                                    + channelId + ", uid=" + uid + ", fileName=" + info.fileName
-                                    + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize
-                        )
-                    }
-
                 })
-                recorder.startRecording(
-                    AgoraMediaRecorder.MediaRecorderConfiguration(
-                        storagePath,
-                        AgoraMediaRecorder.CONTAINER_MP4,
-                        AgoraMediaRecorder.STREAM_TYPE_BOTH,
-                        120000,
-                        0
+            {
+                Text(
+                    text = if (!isRecording) stringResource(id = R.string.start_recording) else stringResource(
+                        id = R.string.stop_recording
                     )
                 )
-                recorders[id] = recorder
-            } else {
-                recorders[id]?.let {
-                    it.stopRecording()
-                    it.release()
-                }
             }
         },
         onCameraSwitchClick = {
@@ -284,7 +311,7 @@ private fun MediaRecorderView(
     videoIdList: List<Int>,
     setupVideo: (View, Int, Boolean) -> Unit,
     statsMap: Map<Int, VideoStatsInfo> = emptyMap(),
-    onRecorderClick: (id: Int, isRecording: Boolean) -> Unit = { _, _ -> },
+    overlay: @Composable BoxScope.(index: Int, id: Int) -> Unit? = { _, _ -> },
     onCameraSwitchClick: () -> Unit = { }
 ) {
     Column {
@@ -292,22 +319,7 @@ private fun MediaRecorderView(
             modifier = Modifier.weight(1.0f),
             videoIdList = videoIdList,
             setupVideo = setupVideo,
-            overlay = { _, id ->
-                var isRecording by rememberSaveable { mutableStateOf(false) }
-                Button(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.BottomEnd),
-                    onClick = {
-                        isRecording = !isRecording
-                        onRecorderClick(id, isRecording)
-                    })
-                {
-                    Text(text = if (!isRecording) stringResource(id = R.string.start_recording) else stringResource(
-                        id = R.string.stop_recording
-                    ))
-                }
-            }
+            overlay = overlay
         )
         Button(
             modifier = Modifier
