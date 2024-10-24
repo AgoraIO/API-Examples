@@ -321,15 +321,15 @@ void CAgoraAudioProfile::joinSecondChannelAndStartAudioMixer()
 		LocalAudioMixerConfiguration config;
 		config.syncWithLocalMic = false;
 		config.streamCount = 2;
-		config.sourceStreams = sourceStreams;
+		config.audioInputStreams = sourceStreams;
 		
 		MixedAudioStream remoteStream( AUDIO_SOURCE_REMOTE_CHANNEL);
-		remoteStream.channelName = mainchannelName;
-		config.sourceStreams[0] = remoteStream;
+		remoteStream.channelId = mainchannelName;
+		config.audioInputStreams[0] = remoteStream;
 
 		MixedAudioStream remoteStream2(AUDIO_SOURCE_MICROPHONE);
-		remoteStream2.channelName = mainchannelName;
-		config.sourceStreams[1] = remoteStream2;
+		remoteStream2.channelId = mainchannelName;
+		config.audioInputStreams[1] = remoteStream2;
 		int ret = m_rtcEngine->startLocalAudioMixer(config);
 		if (ret != 0)
 		{
