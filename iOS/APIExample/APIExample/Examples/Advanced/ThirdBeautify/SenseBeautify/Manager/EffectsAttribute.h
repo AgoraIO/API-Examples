@@ -3,7 +3,7 @@
 //  SenseMeEffects
 //
 //  Created by sunjian on 2021/7/16.
-//  Copyright © 2021 SenseTime. All rights reserved.
+//  Copyright © 2021 SoftSugar. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
                                  detectResult:(st_mobile_human_action_t)detectResult
                                     attrArray:(st_mobile_attributes_t *)pAttrArray;
 
+- (st_result_t)detectAttributeWithPixelbuffer:(CVPixelBufferRef)pixelBuffer
+                                 detectResult:(st_mobile_human_action_t)detectResult
+                                    attrArray:(st_mobile_attributes_t *)pAttrArray withGenderCallback:(void(^)(BOOL isMale))callback;
+
 - (st_result_t)detectAttributeWithBuffer:(unsigned char *)buffer
                              pixelFormat:(st_pixel_format)pixelFormat
                                    width:(int)width
@@ -30,6 +34,14 @@ NS_ASSUME_NONNULL_BEGIN
                                   stride:(int)stride
                                    faces:(st_mobile_106_t *)faces
                                attrArray:(st_mobile_attributes_t *)pAttrArray;
+
+- (st_result_t)detectAttributeWithBuffer:(unsigned char *)buffer
+                             pixelFormat:(st_pixel_format)pixelFormat
+                                   width:(int)width
+                                  height:(int)height
+                                  stride:(int)stride
+                                   faces:(st_mobile_106_t *)faces
+                               attrArray:(st_mobile_attributes_t *)pAttrArray withGenderCallback:(void(^)(BOOL isMale))callback;
 #endif
 @end
 

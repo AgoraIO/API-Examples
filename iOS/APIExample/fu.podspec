@@ -8,9 +8,9 @@ Pod::Spec.new do |spec|
    spec.author        = { "Agora Lab" => "developer@agora.io" }
    spec.platform      = :ios
    spec.source        = { :git => "" }
-   spec.vendored_frameworks = "FULib/FURenderKit.framework"
+   # spec.vendored_frameworks = "FULib/FURenderKit.framework"
    spec.resource_bundles    = {"FURenderKit" => "FULib/Resources/*"}
    spec.requires_arc  = true
    spec.ios.deployment_target  = '9.0'
-   spec.dependency 'FURenderKit'
+   spec.dependency 'FURenderKit', '8.7.0'
  end
