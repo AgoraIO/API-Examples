@@ -32,7 +32,7 @@
     export const AppCertificate: String = YOUR APP CERTIFICATE
     ```
 6. 在[官网](https://download.agora.io/sdk/release/Agora_Native_SDK_for_HarmonyOS_v4.4.1_FULL.har)上下载har包，重命名`AgoraRtcSdk.har`并复制到`HarmonyOS_NEXT/APIExample/entry/libs/AgoraRtcSdk.har`
-7. Replace the signature information in `build-profile.json5` under the root directory with your own.
+7. 在根目录下面的 `build-profile.json5` 文件配置你的签名
 
 然后你就可以编译并运行项目了。
 

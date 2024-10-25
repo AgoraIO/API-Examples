@@ -33,7 +33,7 @@ To build and run the sample application, get an App Id:
     ```
 
 6. Download the har package from the [official website](https://download.agora.io/sdk/release/Agora_Native_SDK_for_HarmonyOS_v4.4.1_FULL.har) and rename`AgoraRtcSdk.har`,then copy it to `HarmonyOS_NEXT/APIExample/entry/libs/AgoraRtcSdk.har`
-7. replace sign
+7. config the signature information in `build-profile.json5` under the root directory with your own
 
 You are all set. Now connect your HarmonyOS NEXT device and run the project.
 
