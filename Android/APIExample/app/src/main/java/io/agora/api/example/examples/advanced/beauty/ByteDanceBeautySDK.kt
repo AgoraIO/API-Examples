@@ -3,7 +3,7 @@ package io.agora.api.example.examples.advanced.beauty
 import android.content.Context
 import android.util.Log
 import com.effectsar.labcv.effectsdk.RenderManager
-import io.agora.api.example.utils.FileUtils
+import io.agora.api.example.examples.advanced.beauty.utils.FileUtils
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPI
 import java.io.File
 
