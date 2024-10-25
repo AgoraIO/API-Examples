@@ -1,20 +1,6 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "storePassword": "0000001B9FD70AC09FD6E7090CDBD445D5FB1D72E8AF1A431DFD7D0DE83AED585E00B980B61ECB9AADF9B3",
-          "certpath": "./sign/wayangAgora.cer",
-          "keyAlias": "wayangAgora",
-          "keyPassword": "0000001B0B0DA7F83E89969EDA7C66A97A4F258DA6A0C65BF29AF3ADB4602E45E902CF3DBD625DC2AF5C8D",
-          "profile": "./sign/ApiExampleDebug.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "./sign/wayang.p12"
-        }
-      }
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
