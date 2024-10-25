@@ -31,6 +31,8 @@ object FaceUnityBeautySDK {
 
     private var beautyAPI: FaceUnityBeautyAPI? = null
 
+    private var authSuccess = false
+
     fun initBeauty(context: Context): Boolean {
         val auth = try {
             getAuth()
@@ -45,13 +47,14 @@ object FaceUnityBeautySDK {
             override fun onSuccess(code: Int, msg: String) {
                 Log.i(TAG, "FURenderManager onSuccess -- code=$code, msg=$msg")
                 if (code == OPERATE_SUCCESS_AUTH) {
-                    faceunity.fuSetUseTexAsync(1)
+                    authSuccess = true
+                    faceunity.fuSetUseTexAsync(0)
                     FUAIKit.getInstance()
                         .loadAIProcessor(BUNDLE_AI_FACE, FUAITypeEnum.FUAITYPE_FACEPROCESSOR)
-                    FUAIKit.getInstance().loadAIProcessor(
-                        BUNDLE_AI_HUMAN,
-                        FUAITypeEnum.FUAITYPE_HUMAN_PROCESSOR
-                    )
+                    // FUAIKit.getInstance().loadAIProcessor(
+                    //     BUNDLE_AI_HUMAN,
+                    //     FUAITypeEnum.FUAITYPE_HUMAN_PROCESSOR
+                    // )
 
                 }
             }
@@ -63,9 +66,14 @@ object FaceUnityBeautySDK {
         return true
     }
 
+    fun isAuthSuccess(): Boolean {
+        return authSuccess
+    }
+
     fun unInitBeauty() {
         beautyAPI = null
         beautyConfig.reset()
+        authSuccess = false
         FUAIKit.getInstance().releaseAllAIProcessor()
         FURenderKit.getInstance().release()
     }
@@ -77,8 +85,9 @@ object FaceUnityBeautySDK {
         return aMethod.invoke(null) as? ByteArray
     }
 
-    internal fun setBeautyAPI(beautyAPI: FaceUnityBeautyAPI) {
-        this.beautyAPI = beautyAPI
+    internal fun setBeautyAPI(beautyAPI: FaceUnityBeautyAPI?) {
+        FaceUnityBeautySDK.beautyAPI = beautyAPI
+        beautyConfig.resume()
     }
 
     private fun runOnBeautyThread(run: () -> Unit) {
@@ -310,6 +319,28 @@ object FaceUnityBeautySDK {
 
             makeUp = null
             sticker = null
+        }
+
+        fun resume(){
+            smooth = smooth
+            whiten = whiten
+            thinFace = thinFace
+            enlargeEye = enlargeEye
+            redden = redden
+            shrinkCheekbone = shrinkCheekbone
+            shrinkJawbone = shrinkJawbone
+            whiteTeeth = whiteTeeth
+            hairlineHeight = hairlineHeight
+            narrowNose = narrowNose
+            mouthSize = mouthSize
+            chinLength = chinLength
+            brightEye = brightEye
+            darkCircles = darkCircles
+            nasolabialFolds = nasolabialFolds
+            faceThree = faceThree
+
+            makeUp = makeUp
+            sticker = sticker
         }
 
     }

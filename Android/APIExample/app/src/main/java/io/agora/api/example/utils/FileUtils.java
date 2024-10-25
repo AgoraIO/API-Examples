@@ -86,6 +86,11 @@ public final class FileUtils {
 
     }
 
+    public static void copyAssets(Context context, String assetsPath, String storagePath) {
+        copyFilesFromAssets(context, assetsPath, storagePath);
+    }
+
+
     /**
      * 读取输入流中的数据写入输出流
      *
