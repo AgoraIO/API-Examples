@@ -534,7 +534,6 @@
 		E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdBeautify.swift; sourceTree = "<group>"; };
 		E7A49CF129029E0000F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FUBeautify.strings"; sourceTree = "<group>"; };
 		E7A49CF229029E0000F06DD4 /* FUBeautifyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUBeautifyVC.h; sourceTree = "<group>"; };
-		E7A49CF329029E0000F06DD4 /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		E7A49CF529029E0000F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FUBeautify.storyboard; sourceTree = "<group>"; };
 		E7A49CF629029E0000F06DD4 /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
 		E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUBeautifyVC.m; sourceTree = "<group>"; };
@@ -1431,7 +1430,6 @@
 		E7A49D0029029E1900F06DD4 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				E7A49CF329029E0000F06DD4 /* authpack.h */,
 				E7A49CF629029E0000F06DD4 /* FUManager.h */,
 				E7A49CF829029E0000F06DD4 /* FUManager.m */,
 			);
