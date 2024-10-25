@@ -1,14 +1,14 @@
 #import "BEHttpRequestProvider.h"
 #import <Foundation/Foundation.h>
 
-#if __has_include("bef_effect_ai_api.h")
-//post请求暂时不需要实现
-bool BEHttpRequestProvider::getRequest(const RequestInfo* requestInfo, ResponseInfo& responseInfo)
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
+// {zh} post请求暂时不需要实现 {en} The post request does not need to be implemented for the time being
+bool BEHttpRequestProvider::getRequest(const EffectsSDK::RequestInfo* requestInfo, EffectsSDK::ResponseInfo& responseInfo)
 {
     return false;
 }
 
-bool BEHttpRequestProvider::postRequest(const RequestInfo* requestInfo, ResponseInfo& responseInfo)
+bool BEHttpRequestProvider::postRequest(const EffectsSDK::RequestInfo* requestInfo, EffectsSDK::ResponseInfo& responseInfo)
 {
     NSString* nsUrl = [[NSString alloc] initWithCString:requestInfo->url.c_str() encoding:NSUTF8StringEncoding];
     NSURL *URL = [NSURL URLWithString:nsUrl];

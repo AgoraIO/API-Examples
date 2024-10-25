@@ -7,6 +7,9 @@
 
 #import "FUBeautyRender.h"
 #import "BundleUtil.h"
+#if __has_include("FUManager.h")
+#import "authpack.h"
+#endif
 
 @interface FUBeautyRender ()
 
@@ -15,6 +18,7 @@
 @property (nonatomic, strong) FUSticker *currentSticker;
 @property (nonatomic, strong) FUAnimoji *currentAnimoji;
 #endif
+@property (nonatomic, copy) NSString *makeupKey;
 
 @end
 
@@ -29,12 +33,27 @@
     return self;
 }
 
++ (BOOL)checkLicense {
+    BOOL success = NO;
+#if __has_include(FURenderMoudle)
+    FUSetupConfig *setupConfig = [[FUSetupConfig alloc] init];
+    setupConfig.authPack = FUAuthPackMake(g_auth_package, sizeof(g_auth_package));
+    
+    // 初始化 FURenderKit
+    success = [FURenderKit setupWithSetupConfig:setupConfig];
+#endif
+    return success;
+}
+
 - (void)destroy {
 #if __has_include(FURenderMoudle)
-    [FURenderKit shareRenderKit].beauty = nil;
-    [FURenderKit shareRenderKit].makeup = nil;
-    [[FURenderKit shareRenderKit].stickerContainer removeAllSticks];
-    [FURenderKit destroy];
+    dispatch_queue_t referQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+    dispatch_async(referQueue, ^{
+        [FURenderKit shareRenderKit].beauty = nil;
+        [FURenderKit shareRenderKit].makeup = nil;
+        [[FURenderKit shareRenderKit].stickerContainer removeAllSticks];
+        [FURenderKit destroy];
+    });
     _fuManager = nil;
 #endif
 }
@@ -55,8 +74,7 @@
 #if __has_include(FURenderMoudle)
     FUBeauty *beauty = [FURenderKit shareRenderKit].beauty;
     if (beauty == nil) {
-        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
-        NSString *faceAIPath = [bundle pathForResource:[NSString stringWithFormat:@"graphics/%@", path] ofType:@"bundle"];
+        NSString *faceAIPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@", path] ofType:@"bundle"];
         beauty = [[FUBeauty alloc] initWithPath:faceAIPath name:@"FUBeauty"];
         beauty.heavyBlur = 0;
     }
@@ -129,21 +147,46 @@
     } else if ([key isEqualToString:@"sharpen"]) {
         beauty.sharpen = value;
     }
+    beauty.enable = YES;
     [FURenderKit shareRenderKit].beauty = beauty;
 #endif
 }
 
-- (void)setStyleWithPath:(NSString *)path key:(NSString *)key value:(float)value {
+- (void)setStyleWithPath:(NSString *)path key:(NSString *)key value:(float)value isCombined:(BOOL)isCombined {
 #if __has_include(FURenderMoudle)
-    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
-    NSString *makeupPath = [bundle pathForResource:path ofType:@"bundle"];
+    [self setupBeauty];
     FUMakeup *makeup = [FURenderKit shareRenderKit].makeup;
-    if (makeup == nil) {
-        makeup = [[FUMakeup alloc] initWithPath:makeupPath name:@"face_makeup"];
-        makeup.isMakeupOn = YES;
-        [FURenderKit shareRenderKit].makeup = makeup;
-        [FURenderKit shareRenderKit].makeup.enable = YES;
+    if (isCombined) {
+        if (makeup == nil || self.makeupKey != key) {
+            NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+            NSString *stylePath = [bundle pathForResource:key ofType:@"bundle"];
+            makeup = [[FUMakeup alloc] initWithPath:stylePath name:@"makeup"];
+            makeup.isMakeupOn = YES;
+            dispatch_queue_t referQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+            dispatch_async(referQueue, ^{
+                [FURenderKit shareRenderKit].makeup = makeup;
+                [FURenderKit shareRenderKit].makeup.intensity = value;
+                [FURenderKit shareRenderKit].makeup.enable = YES;
+            });
+        }
+        [FURenderKit shareRenderKit].makeup.intensity = value;
+        self.makeupKey = key;
+    } else {
+        NSString *makeupPath = [[NSBundle mainBundle] pathForResource:path ofType:@"bundle"];
+        if (makeup == nil || self.makeupKey != path) {
+            makeup = [[FUMakeup alloc] initWithPath:makeupPath name:@"face_makeup"];
+            makeup.isMakeupOn = YES;
+            [FURenderKit shareRenderKit].makeup = makeup;
+            [FURenderKit shareRenderKit].makeup.enable = YES;
+        }
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+        NSString *stylePath = [bundle pathForResource:key ofType:@"bundle"];
+        FUItem *makupItem = [[FUItem alloc] initWithPath:stylePath name:key];
+        [makeup updateMakeupPackage:makupItem needCleanSubItem:NO];
+        makeup.intensity = value;
+        self.makeupKey = path;
     }
+    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
     NSString *stylePath = [bundle pathForResource:key ofType:@"bundle"];
     FUItem *makupItem = [[FUItem alloc] initWithPath:stylePath name:key];
     [makeup updateMakeupPackage:makupItem needCleanSubItem:NO];
@@ -153,6 +196,7 @@
 
 - (void)setAnimojiWithPath:(NSString *)path {
 #if __has_include(FURenderMoudle)
+    [self setupBeauty];
     if (self.currentSticker) {
         [[FURenderKit shareRenderKit].stickerContainer removeSticker:self.currentSticker completion:nil];
         self.currentSticker = nil;
@@ -173,10 +217,15 @@
 }
 
 - (void)setStickerWithPath:(NSString *)path {
+#if __has_include(FURenderMoudle)
+    [self setupBeauty];
     NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
     NSString *stickerPath = [bundle pathForResource:[NSString stringWithFormat:@"sticker/%@", path] ofType:@"bundle"];
-#if __has_include(FURenderMoudle)
-    FUSticker *sticker = [[FUSticker alloc] initWithPath:stickerPath name:@"sticker"];
+    if (stickerPath == nil && self.currentSticker == nil) {
+        return;
+    }
+    FUSticker *sticker = [[FUSticker alloc] initWithPath:stickerPath
+                          name:path];
     if (self.currentAnimoji) {
         [[FURenderKit shareRenderKit].stickerContainer removeSticker:self.currentAnimoji completion:nil];
         self.currentAnimoji = nil;
@@ -192,15 +241,15 @@
 
 - (void)reset {
 #if __has_include(FURenderMoudle)
-    [FURenderKit shareRenderKit].beauty = nil;
+    [FURenderKit shareRenderKit].beauty.enable = NO;
 #endif
 }
 
 - (void)resetStyle {
 #if __has_include(FURenderMoudle)
     [FURenderKit shareRenderKit].makeup.enable = NO;
-    [FURenderKit shareRenderKit].makeup = nil;
 #endif
+    self.makeupKey = nil;
 }
 
 - (void)resetSticker {
@@ -213,19 +262,31 @@
 
 - (void)setBeautyPreset {
 #if __has_include(FURenderMoudle)
-    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
-    NSString *faceAIPath = [bundle pathForResource:@"graphics/face_beautification" ofType:@"bundle"];
-    FUBeauty *beauty = [[FUBeauty alloc] initWithPath:faceAIPath name:@"FUBeauty"];
-    [FURenderKit shareRenderKit].beauty = beauty;
+    dispatch_queue_t referQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+    dispatch_async(referQueue, ^{
+        NSString *faceAIPath = [[NSBundle mainBundle] pathForResource:@"face_beautification" ofType:@"bundle"];
+        FUBeauty *beauty = [[FUBeauty alloc] initWithPath:faceAIPath name:@"FUBeauty"];
+        [FURenderKit shareRenderKit].beauty = beauty;
+    });
+#endif
+}
+
+- (void)setupBeauty {
+#if __has_include(FURenderMoudle)
+    if ([FURenderKit shareRenderKit].beauty == nil) {
+        NSString *faceAIPath = [[NSBundle mainBundle] pathForResource:@"face_beautification" ofType:@"bundle"];
+        FUBeauty *beauty = [[FUBeauty alloc] initWithPath:faceAIPath name:@"FUBeauty"];
+        [FURenderKit shareRenderKit].beauty = beauty;
+    }
 #endif
 }
 
 - (void)setMakeup:(BOOL)isSelected {
 #if __has_include(FURenderMoudle)
     if (isSelected) {
-        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
-        NSString *makeupPath = [bundle pathForResource:@"graphics/face_makeup" ofType:@"bundle"];
+        NSString *makeupPath = [[NSBundle mainBundle] pathForResource:@"face_makeup" ofType:@"bundle"];
         FUMakeup *makeup = [[FUMakeup alloc] initWithPath:makeupPath name:@"face_makeup"];
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
         NSString *path = [bundle pathForResource:@"makeup/ziyun" ofType:@"bundle"];
         FUItem *makupItem = [[FUItem alloc] initWithPath:path name:@"ziyun"];
         makeup.isMakeupOn = YES;
@@ -235,7 +296,6 @@
         makeup.intensity = 0.7;
     } else {
         [FURenderKit shareRenderKit].makeup.enable = NO;
-        [FURenderKit shareRenderKit].makeup = nil;
     }
 #endif
 }

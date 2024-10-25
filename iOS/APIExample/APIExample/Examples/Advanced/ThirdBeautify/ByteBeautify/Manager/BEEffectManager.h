@@ -1,9 +1,6 @@
-//
 //  BEEffectManager.h
-//  BytedEffectSDK
-//
-//  Created by qun on 2021/5/17.
-//
+// EffectsARSDK
+
 
 #ifndef BEEffectManager_h
 #define BEEffectManager_h
@@ -12,9 +9,9 @@
 #import <OpenGLES/ES2/glext.h>
 #import <UIKit/UIKit.h>
 #import "BELicenseHelper.h"
-#if __has_include("bef_effect_ai_api.h")
-#import "bef_effect_ai_api.h"
-#import "bef_effect_ai_message_define.h"
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
+#import <effect-sdk/bef_effect_ai_api.h>
+#import <effect-sdk/bef_effect_ai_message_define.h>
 #endif
 #import "BEImageUtils.h"
 
@@ -28,8 +25,8 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
     BEEffectPart_2      = 2,
     BEEffectPart_3      = 3,
     BEEffectPart_4      = 4,
-    BEEffectPart_5      = 5,   //全局染发
-    BEEffectPart_6      = 6,   //清除染发效果
+    BEEffectPart_5      = 5,   // {zh} 全局染发 {en} Global hair color
+    BEEffectPart_6      = 6,   // {zh} 清除染发效果 {en} Clear hair color effect
 };
 
 @protocol BEEffectManagerDelegate <NSObject>
@@ -68,6 +65,10 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 @property (nonatomic, strong) id<BEEffectResourceProvider> provider;
 @property (nonatomic, strong) id<BELicenseProvider> licenseProvider;
 @property (nonatomic, weak) id<BEEffectManagerDelegate> delegate;
+@property (nonatomic, strong) NSString *resourcePath;
+@property (atomic, weak) dispatch_queue_t renderQueue;
+@property (nonatomic, strong) EAGLContext *glContext;
+@property (nonatomic, assign, readonly) BOOL isSuccessLicense;
 
 //   {zh} / @brief 构造函数     {en} /@brief constructor
 //   {zh} / @details 需要传入一个 BEEffectResourceProvider 实现，用于提供各种素材的路径，和一个BELicenseProvider的实现，用于获取license     {en} /@details need to pass in a BEEffectResourceProvider implementation to provide the path of various materials, and a BELicenseProvider implementation to get license
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 //   {zh} / @param provider 特效资源文件获取类     {en} /@param provider effect resource file acquisition class
 - (instancetype)initWithResourceProvider:(id<BEEffectResourceProvider>)resourceProvider licenseProvider:(id<BELicenseProvider>)licenseProvider;
 
-#if __has_include("bef_effect_ai_api.h")
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
 //   {zh} / @brief 初始化 SDK     {en} /@brief initialization SDK
 - (bef_effect_result_t)initTask;
 
@@ -94,15 +95,15 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 
 //   {zh} / @brief 设置licenseProvider     {en} /@Briefly set licenseProvider
 //   {zh} / @param licenseProvider 传入一个licenseProvider的实现用于license的获取     {en} /@param licenseProvider is a BELicenseProvider implementation to provide the path of license,
-
+#endif
 
 //   {zh} / @brief 设置滤镜路径     {en} /@Briefly set filter path
 //   {zh} / @details 相对 FilterResource.bundle/Filter 路径，为 null 时关闭滤镜     {en} /@details Relative to FilterResource .bundle/Filter path, close filter when null
 //   {zh} / @param path 相对路径     {en} /@param path relative path
 - (void)setFilterPath:(NSString *) path;
 
-/// @brief 设置滤镜绝对路径
-/// @param path 滤镜素材的文件路径，绝对路径
+// {zh} / @brief 设置滤镜绝对路径 {en} /@Brief Set the absolute path of the filter
+// {zh} / @param path 滤镜素材的文件路径，绝对路径 {en} /@Param path The file path of the filter material, absolute path
 - (void)setFilterAbsolutePath:(NSString *)path;
 
 //   {zh} / @brief 设置滤镜强度     {en} /@Briefly set filter strength
@@ -159,6 +160,7 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 // {zh} / @param majorRadius 触摸范围 {en} @param majorRadius touch range
 // {zh} / @param pointerId 触摸点 id {en} /@param pointerId touch point id
 // {zh} / @param pointerCount 触摸点数量 {en} @param pointerCount number of touch points
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
 - (BOOL)processTouchEvent:(bef_ai_touch_event_code)eventCode x:(float)x y:(float)y force:(float)force majorRadius:(float)majorRadius pointerId:(int)pointerId pointerCount:(int)pointerCount;
 
 // {zh} / @brief 处理手势事件 {en} Handle gesture events briefly
@@ -188,6 +190,7 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 //   {zh} / @brief 获取特效 SDK 中的人脸 mask 结果     {en} /@Brief Get the face mask results in the special effects SDK
 - (bef_ai_face_mask_info *)getFaceMaskInfo;
 #endif
+
 //   {zh} / @brief 是否开启并行渲染     {en} /@Brief whether to turn on parallel rendering
 //   {zh} / @details 特效 SDK 内部工作分为两部分，算法检测和特效渲染，当开启并行渲染之后，     {en} /@Details The internal work of the special effects SDK is divided into two parts, algorithm detection and special effects rendering. When parallel rendering is turned on,
 //   {zh} / 算法检测和特效渲染将在不同线程执行，以充分利用多多线程进行加速，     {en} /Algorithm detection and effects rendering will be performed on different threads to make full use of multi-threads for acceleration,
@@ -223,7 +226,9 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 //   {zh} / @details 传入一个固定名字的纹理给到 SDK，传入 BEBuffer，SDK 会将其解析成纹理     {en} /@details pass a texture with a fixed name to the SDK, pass BEBuffer, and the SDK will parse it into a texture
 //   {zh} / @param key 纹理名称     {en} /@param key texture name
 //   {zh} / @param buffer BEBuffer, 仅支持 RGBA 格式     {en} /@param buffer BEBuffer, only supports RGBA format
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
 - (BOOL)setRenderCacheTexture:(NSString *)key buffer:(BEBuffer *)buffer;
+#endif
 
 - (void)loadResource:(int)timeout;
 
@@ -239,6 +244,10 @@ typedef NS_ENUM(NSInteger, BEEffectPart) {
 - (BOOL)sendCaptureMessage;
 
 - (UIImage*)getCapturedImageWithKey:(const char*) key;
+
+// {zh} / @brief 开启或关闭强制人脸检测 {en} /@brief Enable or disable forced face detection
+// {zh} /detection YES 开启人脸检测 NO关闭人脸检测 {en} /detection YES on face detection NO off face detection
+- (void)forcedFaceDetection:(BOOL)detection;
 
 @end
 
