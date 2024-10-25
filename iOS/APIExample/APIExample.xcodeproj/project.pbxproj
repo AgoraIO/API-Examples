@@ -214,22 +214,15 @@
 		E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */; };
 		E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D292907DEE600F06DD4 /* EFMotionManager.m */; };
 		E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D332907E74A00F06DD4 /* BundleUtil.m */; };
-		E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D352907EB6000F06DD4 /* SENSEME.lic */; };
 		E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D39290907E200F06DD4 /* BytedEffect.strings */; };
 		E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */; };
 		E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */; };
-		E7A49D4529090F3C00F06DD4 /* ByteDanceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */; };
-		E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */; };
-		E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4929090FA000F06DD4 /* BERenderHelper.m */; };
-		E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */; };
 		E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */; };
 		E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */; };
 		E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D562909101D00F06DD4 /* BEImageUtils.m */; };
 		E7A49D5A2909103600F06DD4 /* BEGLTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D592909103500F06DD4 /* BEGLTexture.m */; };
-		E7A49D5D2909105000F06DD4 /* BEPixelBufferInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */; };
 		E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */; };
 		E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */; };
-		E7A49D682909113200F06DD4 /* BERender.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D672909113200F06DD4 /* BERender.mm */; };
 		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
@@ -242,6 +235,10 @@
 		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
 		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
 		F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = F728B9DF2CA29625007813BB /* PictureInPicture.strings */; };
+		F73B01CE2CCB7E730077B7D2 /* BETimeRecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */; };
+		F73B01CF2CCB7E730077B7D2 /* BEGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */; };
+		F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01D32CCB84590077B7D2 /* APIReporter.m */; };
+		F73B01D82CCB862A0077B7D2 /* EFGlobalSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -567,19 +564,10 @@
 		E7A49D2E2907E68800F06DD4 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		E7A49D322907E74A00F06DD4 /* BundleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BundleUtil.h; sourceTree = "<group>"; };
 		E7A49D332907E74A00F06DD4 /* BundleUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BundleUtil.m; sourceTree = "<group>"; };
-		E7A49D352907EB6000F06DD4 /* SENSEME.lic */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SENSEME.lic; sourceTree = "<group>"; };
 		E7A49D3A290907E200F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/BytedEffect.strings"; sourceTree = "<group>"; };
 		E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BytedEffectVC.m; sourceTree = "<group>"; };
 		E7A49D3D290907E200F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BytedEffect.storyboard; sourceTree = "<group>"; };
 		E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BytedEffectVC.h; sourceTree = "<group>"; };
-		E7A49D4329090F3B00F06DD4 /* ByteDanceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteDanceFilter.h; sourceTree = "<group>"; };
-		E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteDanceFilter.m; sourceTree = "<group>"; };
-		E7A49D4629090F7F00F06DD4 /* BEFrameProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFrameProcessor.h; sourceTree = "<group>"; };
-		E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEFrameProcessor.mm; sourceTree = "<group>"; };
-		E7A49D4929090FA000F06DD4 /* BERenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BERenderHelper.m; sourceTree = "<group>"; };
-		E7A49D4A29090FA000F06DD4 /* BERenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BERenderHelper.h; sourceTree = "<group>"; };
-		E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEResourceHelper.m; sourceTree = "<group>"; };
-		E7A49D4D29090FB800F06DD4 /* BEResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEResourceHelper.h; sourceTree = "<group>"; };
 		E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectManager.h; sourceTree = "<group>"; };
 		E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEEffectManager.mm; sourceTree = "<group>"; };
 		E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BELicenseHelper.h; sourceTree = "<group>"; };
@@ -588,16 +576,12 @@
 		E7A49D562909101D00F06DD4 /* BEImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEImageUtils.m; sourceTree = "<group>"; };
 		E7A49D582909103500F06DD4 /* BEGLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEGLTexture.h; sourceTree = "<group>"; };
 		E7A49D592909103500F06DD4 /* BEGLTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEGLTexture.m; sourceTree = "<group>"; };
-		E7A49D5B2909105000F06DD4 /* BEPixelBufferInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEPixelBufferInfo.h; sourceTree = "<group>"; };
-		E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEPixelBufferInfo.m; sourceTree = "<group>"; };
 		E7A49D5E290910A000F06DD4 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		E7A49D5F290910A100F06DD4 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEOpenGLRenderHelper.m; sourceTree = "<group>"; };
 		E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEOpenGLRenderHelper.h; sourceTree = "<group>"; };
 		E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEHttpRequestProvider.h; sourceTree = "<group>"; };
 		E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEHttpRequestProvider.mm; sourceTree = "<group>"; };
-		E7A49D662909113200F06DD4 /* BERender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BERender.h; sourceTree = "<group>"; };
-		E7A49D672909113200F06DD4 /* BERender.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BERender.mm; sourceTree = "<group>"; };
 		E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectResourceHelper.h; sourceTree = "<group>"; };
 		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
 		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
@@ -614,6 +598,16 @@
 		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
 		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
 		F728B9DF2CA29625007813BB /* PictureInPicture.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = PictureInPicture.strings; sourceTree = "<group>"; };
+		F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BETimeRecoder.m; sourceTree = "<group>"; };
+		F73B01C92CCB7E720077B7D2 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		F73B01CA2CCB7E720077B7D2 /* BETimeRecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BETimeRecoder.h; sourceTree = "<group>"; };
+		F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEGLUtils.m; sourceTree = "<group>"; };
+		F73B01CD2CCB7E730077B7D2 /* BEGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEGLUtils.h; sourceTree = "<group>"; };
+		F73B01D12CCB7EE20077B7D2 /* EffectMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectMacro.h; sourceTree = "<group>"; };
+		F73B01D22CCB84590077B7D2 /* APIReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIReporter.h; sourceTree = "<group>"; };
+		F73B01D32CCB84590077B7D2 /* APIReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIReporter.m; sourceTree = "<group>"; };
+		F73B01D62CCB862A0077B7D2 /* EFGlobalSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGlobalSingleton.h; sourceTree = "<group>"; };
+		F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGlobalSingleton.m; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1324,6 +1318,7 @@
 		E76347B62AAEF4AF005D130F /* BeautyAPI */ = {
 			isa = PBXGroup;
 			children = (
+				F73B01D42CCB84590077B7D2 /* Report */,
 				E76347B82AAEF4AF005D130F /* BeautyAPI.h */,
 				E76347C72AAEF4AF005D130F /* BeautyAPI.m */,
 				E76347BC2AAEF4AF005D130F /* Render */,
@@ -1458,12 +1453,14 @@
 		E7A49D0729067F8300F06DD4 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				E7A49D352907EB6000F06DD4 /* SENSEME.lic */,
 				E7A49D192907DD7800F06DD4 /* Effects.h */,
 				E7A49D182907DD7800F06DD4 /* Effects.m */,
 				E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */,
 				E7A49D292907DEE600F06DD4 /* EFMotionManager.m */,
+				F73B01D62CCB862A0077B7D2 /* EFGlobalSingleton.h */,
+				F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */,
 				E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */,
+				F73B01D12CCB7EE20077B7D2 /* EffectMacro.h */,
 				E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */,
 				E7A49D162907DD2600F06DD4 /* EffectsLicense.h */,
 				E7A49D152907DD2600F06DD4 /* EffectsLicense.m */,
@@ -1498,32 +1495,25 @@
 			children = (
 				E7A49D5E290910A000F06DD4 /* Core.h */,
 				E7A49D5F290910A100F06DD4 /* macro.h */,
-				E7A49D662909113200F06DD4 /* BERender.h */,
-				E7A49D672909113200F06DD4 /* BERender.mm */,
 				E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */,
 				E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */,
+				F73B01CD2CCB7E730077B7D2 /* BEGLUtils.h */,
+				F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */,
+				F73B01CA2CCB7E720077B7D2 /* BETimeRecoder.h */,
+				F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */,
+				F73B01C92CCB7E720077B7D2 /* Config.h */,
 				E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */,
 				E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */,
 				E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */,
 				E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */,
-				E7A49D5B2909105000F06DD4 /* BEPixelBufferInfo.h */,
-				E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */,
 				E7A49D582909103500F06DD4 /* BEGLTexture.h */,
 				E7A49D592909103500F06DD4 /* BEGLTexture.m */,
 				E7A49D552909101D00F06DD4 /* BEImageUtils.h */,
 				E7A49D562909101D00F06DD4 /* BEImageUtils.m */,
 				E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */,
 				E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */,
-				E7A49D4D29090FB800F06DD4 /* BEResourceHelper.h */,
-				E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */,
 				E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */,
 				E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */,
-				E7A49D4A29090FA000F06DD4 /* BERenderHelper.h */,
-				E7A49D4929090FA000F06DD4 /* BERenderHelper.m */,
-				E7A49D4629090F7F00F06DD4 /* BEFrameProcessor.h */,
-				E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */,
-				E7A49D4329090F3B00F06DD4 /* ByteDanceFilter.h */,
-				E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1545,6 +1535,15 @@
 				F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */,
 			);
 			path = PixelBufferPIPViewController;
+			sourceTree = "<group>";
+		};
+		F73B01D42CCB84590077B7D2 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				F73B01D22CCB84590077B7D2 /* APIReporter.h */,
+				F73B01D32CCB84590077B7D2 /* APIReporter.m */,
+			);
+			path = Report;
 			sourceTree = "<group>";
 		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
@@ -1616,6 +1615,7 @@
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
 				E76F80122AF0A7A200CCB9D6 /* ShellScript */,
+				EA59815E58120166C6FD72B5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1785,7 +1785,6 @@
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
-				E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 				F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */,
 			);
@@ -1901,6 +1900,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" \n";
 		};
+		EA59815E58120166C6FD72B5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1923,7 +1939,6 @@
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
 				E726BFFB2A949F70006870E2 /* AudioRouterPlayer.swift in Sources */,
-				E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */,
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
 				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
 				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
@@ -1933,7 +1948,6 @@
 				E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */,
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
-				E7A49D682909113200F06DD4 /* BERender.mm in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				E7A49D1A2907DD7800F06DD4 /* Effects.m in Sources */,
 				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
@@ -1945,13 +1959,10 @@
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */,
-				E7A49D4529090F3C00F06DD4 /* ByteDanceFilter.m in Sources */,
 				E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */,
-				E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */,
 				E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
-				E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
 				E76347D22AAEF4AF005D130F /* BytesBeautyRender.m in Sources */,
 				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
@@ -1999,8 +2010,10 @@
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */,
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
+				F73B01D82CCB862A0077B7D2 /* EFGlobalSingleton.m in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
 				E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */,
+				F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */,
 				57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */,
@@ -2023,12 +2036,13 @@
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
 				E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
+				F73B01CE2CCB7E730077B7D2 /* BETimeRecoder.m in Sources */,
 				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
-				E7A49D5D2909105000F06DD4 /* BEPixelBufferInfo.m in Sources */,
 				E7163F88296414F700EBBD55 /* ARVideoRenderer.swift in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
 				E76347D02AAEF4AF005D130F /* FUBeautyRender.m in Sources */,
+				F73B01CF2CCB7E730077B7D2 /* BEGLUtils.m in Sources */,
 				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,

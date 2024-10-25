@@ -25,11 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) FUManager *fuManager;
 #endif
 
-- (void)setBeautyWithPath: (NSString *)path key: (NSString *)key value: (float)value;
++ (BOOL)checkLicense;
 
-- (void)setStyleWithPath: (NSString *)path key: (NSString *)key value: (float)value;
+- (void)setBeautyWithPath:(NSString *)path key:(NSString *)key value:(float)value;
 
-- (void)setStickerWithPath: (NSString *)path;
+- (void)setStyleWithPath:(NSString *)path key:(NSString *)key value:(float)value isCombined:(BOOL)isCombined;
+
+- (void)setStickerWithPath:(NSString *)path;
 
 - (void)reset;
 
@@ -38,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resetSticker;
 
 - (void)destroy;
+
+
 
 @end
 
