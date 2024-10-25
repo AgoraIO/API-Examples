@@ -8,7 +8,7 @@ import {
     RtcEngineEx,
     VideoCanvas,
     VideoEncoderConfiguration
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import { common } from '@kit.AbilityKit';
@@ -108,7 +108,7 @@ struct JoinMultiChannel {
           if (this.mainLocalUid != 0) {
             XComponent({
               id: 'preview_local',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_local");
@@ -122,7 +122,7 @@ struct JoinMultiChannel {
           if (this.mainRemoteUid != 0) {
             XComponent({
               id: 'preview_remote',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_remote");
@@ -141,7 +141,7 @@ struct JoinMultiChannel {
           if (this.exRemoteUid != 0) {
             XComponent({
               id: 'preview_remote_ex',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
 

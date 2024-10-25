@@ -8,7 +8,7 @@
 #include <cassert>
 
 OriginVideoData::OriginVideoData(uintptr_t rtcEngineHandler)
-    : rtcEngine_(reinterpret_cast<agora::rtc::IRtcEngine *>(rtcEngineHandler)), env_(nullptr), wrapper_(nullptr) {}
+    : rtcEngine_(reinterpret_cast<agora::rtc::IRtcEngine *>(rtcEngineHandler)), env_(nullptr), wrapper_(nullptr),takeSnapshot_(false) {}
 
 OriginVideoData::~OriginVideoData() { napi_delete_reference(env_, wrapper_); }
 

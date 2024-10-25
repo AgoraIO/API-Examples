@@ -5,7 +5,7 @@ import {
   RtcEngine,
   RtcEngineConfig,
   VideoCanvas
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { AppID } from '../../common/KeyCenter';
 import Logger from '../../util/Logger';
 import { common } from '@kit.AbilityKit';
@@ -151,74 +151,77 @@ struct PlayAudioFiles {
         bottom: 6
       })
 
-      Column() {
-        Text('Audio Echo Pretest').padding({ top: 6, bottom: 6 })
-        Divider()
-        Button(this.isAudioEchoTesting ? this.audioEchoTestingText : $r('app.string.start'))
-          .margin({ top: 6, bottom: 6 })
-          .enabled(!this.isAudioEchoTesting && !this.isVideoEchoTesting)
-          .onClick(() => {
+      //todo
+      if (false) {
+        Column() {
+          Text('Audio Echo Pretest').padding({ top: 6, bottom: 6 })
+          Divider()
+          Button(this.isAudioEchoTesting ? this.audioEchoTestingText : $r('app.string.start'))
+            .margin({ top: 6, bottom: 6 })
+            .enabled(!this.isAudioEchoTesting && !this.isVideoEchoTesting)
+            .onClick(() => {
 
-            // TODO
-            // this.rtcEngine?.startEchoTest()
-            let countDownCount = 10
-            let revert = false
-            let countDownIndex = countDownCount
-            this.audioEchoTestingText = 'Recording(' + countDownIndex + 's)'
-            this.isAudioEchoTesting = true
-            this.audioEchoCountDown = setInterval(() => {
-              if (!revert) {
-                if (countDownIndex > 0) {
-                  this.audioEchoTestingText = 'Recording(' + countDownIndex + 's)'
-                  countDownIndex--
-                } else {
-                  revert = true
+              // TODO
+              // this.rtcEngine?.startEchoTest()
+              let countDownCount = 10
+              let revert = false
+              let countDownIndex = countDownCount
+              this.audioEchoTestingText = 'Recording(' + countDownIndex + 's)'
+              this.isAudioEchoTesting = true
+              this.audioEchoCountDown = setInterval(() => {
+                if (!revert) {
+                  if (countDownIndex > 0) {
+                    this.audioEchoTestingText = 'Recording(' + countDownIndex + 's)'
+                    countDownIndex--
+                  } else {
+                    revert = true
+                  }
                 }
-              }
-              if (revert) {
-                if (countDownIndex < countDownCount) {
-                  countDownIndex++
-                  this.audioEchoTestingText = 'Playing(' + countDownIndex + 's)'
-                } else {
-                  clearInterval(this.audioEchoCountDown)
-                  this.audioEchoCountDown = undefined
-                  this.isAudioEchoTesting = false
+                if (revert) {
+                  if (countDownIndex < countDownCount) {
+                    countDownIndex++
+                    this.audioEchoTestingText = 'Playing(' + countDownIndex + 's)'
+                  } else {
+                    clearInterval(this.audioEchoCountDown)
+                    this.audioEchoCountDown = undefined
+                    this.isAudioEchoTesting = false
+                  }
                 }
+              }, 1000)
+            })
+          Text('Video Echo Pretest').padding({ top: 6, bottom: 6 })
+          Divider()
+          Button($r(this.isVideoEchoTesting ? 'app.string.stop' : 'app.string.start'))
+            .margin({ top: 6, bottom: 12 })
+            .enabled(!this.isAudioEchoTesting)
+            .onClick(() => {
+              this.isVideoEchoTesting = !this.isVideoEchoTesting
+              // TODO
+              // this.rtcEngine?.startEchoTest()
+              if (this.isVideoEchoTesting) {
+                this.rtcEngine?.startPreview()
+              } else {
+                this.rtcEngine?.stopPreview()
               }
-            }, 1000)
-          })
-        Text('Video Echo Pretest').padding({ top: 6, bottom: 6 })
-        Divider()
-        Button($r(this.isVideoEchoTesting ? 'app.string.stop' : 'app.string.start'))
-          .margin({ top: 6, bottom: 12 })
-          .enabled(!this.isAudioEchoTesting)
-          .onClick(() => {
-            this.isVideoEchoTesting = !this.isVideoEchoTesting
-            // TODO
-            // this.rtcEngine?.startEchoTest()
-            if (this.isVideoEchoTesting) {
-              this.rtcEngine?.startPreview()
-            } else {
-              this.rtcEngine?.stopPreview()
-            }
-          })
-        XComponent({
-          id: 'preview_local',
-          type: 'surface',
-          libraryname: Constants.AGORA_LIB_NAME,
-        }).onLoad(() => {
-          let localCanvas = new VideoCanvas("preview_local");
-          localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
-          this.rtcEngine?.setupLocalVideo(localCanvas);
-        }).width(150).height(150)
-      }.alignItems(HorizontalAlign.Start)
-      .layoutWeight(1.3)
-      .padding({
-        left: 12,
-        right: 12,
-        top: 6,
-        bottom: 6
-      })
+            })
+          XComponent({
+            id: 'preview_local',
+            type: XComponentType.SURFACE,
+            libraryname: Constants.AGORA_LIB_NAME,
+          }).onLoad(() => {
+            let localCanvas = new VideoCanvas("preview_local");
+            localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
+            this.rtcEngine?.setupLocalVideo(localCanvas);
+          }).width(150).height(150)
+        }.alignItems(HorizontalAlign.Start)
+        .layoutWeight(1.3)
+        .padding({
+          left: 12,
+          right: 12,
+          top: 6,
+          bottom: 6
+        })
+      }
     }
 
 

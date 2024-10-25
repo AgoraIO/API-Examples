@@ -7,7 +7,7 @@ import {
   ScreenCaptureParameters,
   VideoCanvas,
   VideoEncoderConfiguration
-} from 'AgoraRtcSdk';
+} from '@shengwang/rtc-full';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -118,7 +118,7 @@ struct ScreenSharing {
           if (this.localUid != -1) {
             XComponent({
               id: 'preview_local',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_local");
@@ -133,7 +133,7 @@ struct ScreenSharing {
           if (this.remoteUid != -1) {
             XComponent({
               id: 'preview_remote',
-              type: 'surface',
+              type: XComponentType.SURFACE,
               libraryname: Constants.AGORA_LIB_NAME,
             }).onLoad(() => {
               let localCanvas = new VideoCanvas("preview_remote");

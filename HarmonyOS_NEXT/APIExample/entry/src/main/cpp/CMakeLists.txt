@@ -9,9 +9,9 @@ if(DEFINED PACKAGE_FIND_FILE)
 endif()
 
 include_directories(${ROOT_PATH}
-                    ${ROOT_PATH}/include)
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules/@shengwang/rtc-full/include)
 
-set(AGORA_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules/AgoraRtcSdk/libs)
+set(AGORA_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules/@shengwang/rtc-full/libs)
 
 add_library(agora_rtc_sdk SHARED IMPORTED)
 set_target_properties(agora_rtc_sdk PROPERTIES IMPORTED_LOCATION ${AGORA_LIB_PATH}/${CMAKE_OHOS_ARCH_ABI}/libagora_rtc_sdk.so)
