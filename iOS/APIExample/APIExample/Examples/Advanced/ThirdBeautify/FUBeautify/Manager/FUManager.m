@@ -7,9 +7,9 @@
 //
 
 #import "FUManager.h"
-#import "authpack.h"
 #import "BundleUtil.h"
 #if __has_include(<FURenderKit/FURenderKit.h>)
+#import "authpack.h"
 #import <FURenderKit/FURenderKit.h>
 #endif
 
