@@ -7,7 +7,8 @@
 
 #import "FUBeautyRender.h"
 #import "BundleUtil.h"
-#if __has_include("FUManager.h")
+
+#if __has_include(FURenderMoudle)
 #import "authpack.h"
 #endif
 
