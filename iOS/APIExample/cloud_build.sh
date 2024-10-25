@@ -14,6 +14,7 @@ cd ${PROJECT_PATH}
 
 #下载美颜资源
 echo "start download fu resource"
+echo "JFROG_API_KEY is $JFROG_API_KEY"
 curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory.agoralab.co/artifactory/qa_test_data/beauty/vender_bytedance_iOS.zip"
 unzip -o vender_bytedance_iOS.zip
 rm -f vender_bytedance_iOS.zip
