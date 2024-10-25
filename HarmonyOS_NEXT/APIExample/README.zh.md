@@ -31,7 +31,8 @@
     // 注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
     export const AppCertificate: String = YOUR APP CERTIFICATE
     ```
-6. 在[官网](https://doc.shengwang.cn/doc/rtc/harmonyos/resources#%E4%B8%8B%E8%BD%BD-sdk)上下载har包，并复制到`HarmonyOS_NEXT/APIExample/entry/libs/AgoraRtcSdk.har`
+6. 在[官网](https://download.agora.io/sdk/release/Agora_Native_SDK_for_HarmonyOS_v4.4.1_FULL.har)上下载har包，重命名`AgoraRtcSdk.har`并复制到`HarmonyOS_NEXT/APIExample/entry/libs/AgoraRtcSdk.har`
+7. Replace the signature information in `build-profile.json5` under the root directory with your own.
 
 然后你就可以编译并运行项目了。
 
