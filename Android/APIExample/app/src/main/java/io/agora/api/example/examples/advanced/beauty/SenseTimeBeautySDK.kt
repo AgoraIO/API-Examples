@@ -8,7 +8,7 @@ import com.softsugar.stmobile.STMobileEffectNative
 import com.softsugar.stmobile.STMobileEffectParams
 import com.softsugar.stmobile.STMobileHumanActionNative
 import com.softsugar.stmobile.params.STEffectBeautyType
-import io.agora.api.example.utils.FileUtils
+import io.agora.api.example.examples.advanced.beauty.utils.FileUtils
 import io.agora.beautyapi.sensetime.SenseTimeBeautyAPI
 
 object SenseTimeBeautySDK {
