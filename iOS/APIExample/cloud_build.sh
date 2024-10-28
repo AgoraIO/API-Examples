@@ -108,9 +108,12 @@ ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # plist路径
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 
+echo "start xcode build, appPath: $APP_PATH, target: $TARGET_NAME, config: $CONFIGURATION, archivePath: $ARCHIVE_PATH"
 
 # archive 这边使用的工作区间 也可以使用project
 xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit 1
+
+echo "xcode build finished"
 
 cd ${WORKSPACE}
 
@@ -118,8 +121,11 @@ cd ${WORKSPACE}
 7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
 # 签名
+echo "start export, targetName: $TARGET_NAME, bundleNumber: $BUILD_NUMBER, plistPath: $PLIST_PATH"
 # sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
+
+echo "export finished"
 
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
