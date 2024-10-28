@@ -71,6 +71,9 @@ class CustomAudioRenderMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+        // It is necessary to use publishMicrophoneTrack(true) and pullPlaybackAudio should utilize gameStreaming.
+        agoraKit.setAudioScenario(.gameStreaming)
+        
         // important!! this example is using onPlaybackAudioFrame to do custom rendering
         // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
 //        agoraKit.adjustPlaybackSignalVolume(0)
@@ -88,7 +91,7 @@ class CustomAudioRenderMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = false
+        option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = false
         option.channelProfile = .liveBroadcasting
