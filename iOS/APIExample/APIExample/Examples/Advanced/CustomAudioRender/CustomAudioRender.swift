@@ -71,6 +71,8 @@ class CustomAudioRenderMain: BaseViewController {
         agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        // It is necessary to use publishMicrophoneTrack(true) and pullPlaybackAudio should utilize gameStreaming.
+        agoraKit.setAudioScenario(.gameStreaming)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -80,7 +82,7 @@ class CustomAudioRenderMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = false
-        option.publishMicrophoneTrack = false
+        option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = false
         option.channelProfile = .liveBroadcasting
