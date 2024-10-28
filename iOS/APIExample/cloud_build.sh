@@ -79,6 +79,9 @@ PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 # Release
 /usr/libexec/PlistBuddy -c "Set :objects:03D13BF82448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
 
+MODIFIED_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :objects:03D13BF72448758C00B599B3:buildSettings:PRODUCT_BUNDLE_IDENTIFIER" "$PBXPROJ_PATH")
+echo "Modified Bundle Identifier: $MODIFIED_BUNDLE_ID"
+
 # 读取APPID环境变量
 echo AGORA_APP_ID: $APP_ID
 
