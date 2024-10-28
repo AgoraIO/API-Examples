@@ -67,6 +67,10 @@ class TransparentRenderViewController: BaseViewController {
         
         openMedia()
         
+        let config = AgoraVideoEncoderConfiguration()
+        config.advancedVideoOptions?.encodeAlpha = true
+        agoraKit.setVideoEncoderConfiguration(config)
+        
         agoraKit.setExternalVideoSource(true, useTexture: false, sourceType: .videoFrame)
         agoraKit.enableVideo()
         agoraKit.startPreview()
@@ -173,6 +177,7 @@ extension TransparentRenderViewController: AgoraRtcMediaPlayerVideoFrameDelegate
         newVideoFrame.format = 12
         newVideoFrame.textureBuf = videoFrame.pixelBuffer
         newVideoFrame.rotation = videoFrame.rotation
+        let pb = videoFrame.pixelBuffer
         newVideoFrame.alphaStitchMode = .alphaStitchRight
         let _ = agoraKit.pushExternalVideoFrame(newVideoFrame)
 //        LogUtils.log(message: "pushExternalVideoFrame: \(ret)", level: .info)
