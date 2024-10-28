@@ -8,7 +8,7 @@ import com.softsugar.stmobile.STMobileEffectNative
 import com.softsugar.stmobile.STMobileEffectParams
 import com.softsugar.stmobile.STMobileHumanActionNative
 import com.softsugar.stmobile.params.STEffectBeautyType
-import io.agora.api.example.utils.FileUtils
+import io.agora.api.example.examples.advanced.beauty.utils.FileUtils
 import io.agora.beautyapi.sensetime.SenseTimeBeautyAPI
 
 object SenseTimeBeautySDK {
@@ -55,16 +55,25 @@ object SenseTimeBeautySDK {
 
     private var beautyAPI: SenseTimeBeautyAPI? = null
 
+    private var authSuccess = false
+
     fun initBeautySDK(context: Context): Boolean {
         if (checkLicense(context)) {
             initHumanAction(context)
+            authSuccess = true
             return true
         }
+        initHumanAction(context)
         return false
+    }
+
+    fun isAuthSuccess(): Boolean {
+        return authSuccess
     }
 
     fun unInitBeautySDK() {
         beautyAPI = null
+        authSuccess = false
         unInitHumanActionNative()
         beautyConfig.reset()
     }
@@ -78,6 +87,7 @@ object SenseTimeBeautySDK {
             _mobileEffectNative?.createInstance(context, STMobileEffectNative.EFFECT_CONFIG_NONE)
         _mobileEffectNative?.setParam(STMobileEffectParams.EFFECT_PARAM_QUATERNION_SMOOTH_FRAME, 5f)
         Log.d(TAG, "SenseTime >> STMobileEffectNative create result : $result")
+        beautyConfig.resume()
     }
 
     fun unInitMobileEffect() {
@@ -98,8 +108,8 @@ object SenseTimeBeautySDK {
             license,
             license.length
         )
-        Log.d(TAG, "SenseTime >> checkLicense successfully! activeCode=$activeCode")
-        return true
+        Log.d(TAG, "SenseTime >> checkLicense activeCode=$activeCode")
+        return activeCode.isNotEmpty()
     }
 
     private fun initHumanAction(context: Context) {
@@ -147,8 +157,8 @@ object SenseTimeBeautySDK {
     }
 
 
-    internal fun setBeautyAPI(beautyAPI: SenseTimeBeautyAPI){
-        this.beautyAPI = beautyAPI
+    internal fun setBeautyAPI(beautyAPI: SenseTimeBeautyAPI?){
+        SenseTimeBeautySDK.beautyAPI = beautyAPI
         beautyConfig.resume()
     }
 
