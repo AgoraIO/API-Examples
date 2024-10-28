@@ -6,6 +6,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -82,7 +83,15 @@ public class ByteDanceBeauty extends BaseFragment {
                 ByteDanceBeautySDK.INSTANCE.getRenderManager(),
                 new EventCallback(beautyStats -> null,
                         () -> {
-                            ByteDanceBeautySDK.INSTANCE.initEffect(requireContext());
+                            boolean authSuccess = ByteDanceBeautySDK.INSTANCE.initEffect(requireContext());
+                            if(!authSuccess){
+                               runOnUIThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Toast.makeText(getContext(), "auth failed", Toast.LENGTH_SHORT).show();
+                                   }
+                               });
+                            }
                             return null;
                         },
                         () -> {

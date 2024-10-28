@@ -3,7 +3,7 @@ package io.agora.api.example.examples.advanced.beauty
 import android.content.Context
 import android.util.Log
 import com.effectsar.labcv.effectsdk.RenderManager
-import io.agora.api.example.utils.FileUtils
+import io.agora.api.example.examples.advanced.beauty.utils.FileUtils
 import io.agora.beautyapi.bytedance.ByteDanceBeautyAPI
 import java.io.File
 
@@ -37,21 +37,20 @@ object ByteDanceBeautySDK {
         assetsPath = "beauty_bytedance"
 
         // copy license
-        licensePath = "$storagePath/beauty_bytedance/LicenseBag.bundle"
-        FileUtils.copyFilesFromAssets(context, "$assetsPath/LicenseBag.bundle", licensePath)
-        licensePath += "/$LICENSE_NAME"
+        licensePath = "$storagePath/beauty_bytedance/LicenseBag.bundle/$LICENSE_NAME"
+        FileUtils.copyAssets(context, "$assetsPath/LicenseBag.bundle/$LICENSE_NAME", licensePath)
         if (!File(licensePath).exists()) {
             return false
         }
 
         // copy models
         modelsPath = "$storagePath/beauty_bytedance/ModelResource.bundle"
-        FileUtils.copyFilesFromAssets(context, "$assetsPath/ModelResource.bundle", modelsPath)
+        FileUtils.copyAssets(context, "$assetsPath/ModelResource.bundle", modelsPath)
 
         // copy beauty node
         beautyNodePath =
             "$storagePath/beauty_bytedance/ComposeMakeup.bundle/ComposeMakeup/beauty_Android_lite"
-        FileUtils.copyFilesFromAssets(
+        FileUtils.copyAssets(
             context,
             "$assetsPath/ComposeMakeup.bundle/ComposeMakeup/beauty_Android_lite",
             beautyNodePath
@@ -60,7 +59,7 @@ object ByteDanceBeautySDK {
         // copy beauty 4items node
         beauty4ItemsNodePath =
             "$storagePath/beauty_bytedance/ComposeMakeup.bundle/ComposeMakeup/beauty_4Items"
-        FileUtils.copyFilesFromAssets(
+        FileUtils.copyAssets(
             context,
             "$assetsPath/ComposeMakeup.bundle/ComposeMakeup/beauty_4Items",
             beauty4ItemsNodePath
@@ -69,7 +68,7 @@ object ByteDanceBeautySDK {
         // copy resharp node
         reSharpNodePath =
             "$storagePath/beauty_bytedance/ComposeMakeup.bundle/ComposeMakeup/reshape_lite"
-        FileUtils.copyFilesFromAssets(
+        FileUtils.copyAssets(
             context,
             "$assetsPath/ComposeMakeup.bundle/ComposeMakeup/reshape_lite",
             reSharpNodePath
@@ -77,19 +76,19 @@ object ByteDanceBeautySDK {
 
         // copy stickers
         stickerPath = "$storagePath/beauty_bytedance/StickerResource.bundle/stickers"
-        FileUtils.copyFilesFromAssets(context, "$assetsPath/StickerResource.bundle/stickers", stickerPath)
+        FileUtils.copyAssets(context, "$assetsPath/StickerResource.bundle/stickers", stickerPath)
 
         return true
     }
 
     // GL Thread
-    fun initEffect(context: Context) {
+    fun initEffect(context: Context) : Boolean{
         val ret = renderManager.init(
             context,
             modelsPath, licensePath, false, false, 0
         )
         if (!checkResult("RenderManager init ", ret)) {
-            return
+            return false
         }
         renderManager.useBuiltinSensor(true)
         renderManager.set3Buffer(false)
@@ -99,6 +98,7 @@ object ByteDanceBeautySDK {
         )
         renderManager.loadResourceWithTimeout(-1)
         beautyConfig.resume()
+        return true
     }
 
     // GL Thread
@@ -139,7 +139,7 @@ object ByteDanceBeautySDK {
     }
 
     internal fun setBeautyAPI(beautyAPI: ByteDanceBeautyAPI?) {
-        this.beautyAPI = beautyAPI
+        ByteDanceBeautySDK.beautyAPI = beautyAPI
     }
 
     private fun runOnBeautyThread(run: () -> Unit) {
@@ -411,7 +411,7 @@ object ByteDanceBeautySDK {
                     if (value != null) {
                         val nodePath =
                             "$storagePath/beauty_bytedance/ComposeMakeup.bundle/ComposeMakeup/style_makeup/${value.style}"
-                        FileUtils.copyFilesFromAssets(
+                        FileUtils.copyAssets(
                             value.context,
                             "$assetsPath/ComposeMakeup.bundle/ComposeMakeup/style_makeup/${value.style}",
                             nodePath
