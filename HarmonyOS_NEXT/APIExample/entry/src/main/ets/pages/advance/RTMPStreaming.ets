@@ -40,19 +40,19 @@ struct RTMPStreaming {
     config.mEventHandler = {};
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
-      // if (this.remoteUid == -1) {
-      //   this.remoteUid = uid
-      //   let user = new TranscodingUser();
-      //   user.uid = uid;
-      //   user.x = 0;
-      //   user.y = this.transcodingParameters.height / 2;
-      //   user.width =  this.transcodingParameters.width;
-      //   user.height =  this.transcodingParameters.height / 2;
-      //   user.zOrder = 1;
-      //   user.alpha = 1.0
-      //   user.audioChannel = 2;
-      //   this.transcodingParameters.transcodingUsers.set(uid,user)
-      // }
+      if (this.remoteUid == -1) {
+        this.remoteUid = uid
+        let user = new TranscodingUser();
+        user.uid = uid;
+        user.x = 0;
+        user.y = this.transcodingParameters.height / 2;
+        user.width =  this.transcodingParameters.width;
+        user.height =  this.transcodingParameters.height / 2;
+        user.zOrder = 1;
+        user.alpha = 1.0
+        user.audioChannel = 2;
+        this.transcodingParameters.transcodingUsers.set(uid,user)
+      }
     };
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
       Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason)
