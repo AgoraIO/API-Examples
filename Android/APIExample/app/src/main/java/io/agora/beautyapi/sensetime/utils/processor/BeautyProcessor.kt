@@ -443,12 +443,11 @@ class BeautyProcessor : IBeautyProcessor {
         if (isReleased) {
             return -1
         }
-        mSTMobileEffectNative.render(
+        val ret = mSTMobileEffectNative.render(
             sTEffectRenderInParam,
             stEffectRenderOutParam,
             false
         )
-
 
         if (event == mCustomEvent) {
             mCustomEvent = 0
@@ -457,12 +456,18 @@ class BeautyProcessor : IBeautyProcessor {
         if (isReleased) {
             return -1
         }
+
+        var finalTextId = stEffectRenderOutParam.texture?.id ?: 0
+        if(ret < 0){
+            finalTextId = textureId
+        }
+
         glFrameBuffer.setSize(width, height)
         glFrameBuffer.resetTransform()
         glFrameBuffer.setFlipV(true)
         glFrameBuffer.textureId = finalOutTextureId
         glFrameBuffer.process(
-            stEffectRenderOutParam.texture?.id ?: 0,
+            finalTextId,
             GLES20.GL_TEXTURE_2D
         )
         GLES20.glFinish()
