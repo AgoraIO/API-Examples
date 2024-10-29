@@ -166,6 +166,7 @@ void CAgoraCrossChannelDlg::ResumeStatus()
 {
 	InitCtrlText();
 	m_lstInfo.ResetContent();
+	m_cmbCrossChannelList.ResetContent();
 	m_staDetails.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
 	m_edtCrossChannel.SetWindowText(_T(""));
