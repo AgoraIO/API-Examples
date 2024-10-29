@@ -69,7 +69,7 @@ else
 	rm ./$unzip_name/rtc/commits
 	rm ./$unzip_name/rtc/package_size_report.txt
 fi
-mkdir ./$unzip_name/rtc/samples
+mkdir -p ./$unzip_name/rtc/samples 
 cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
@@ -82,7 +82,12 @@ if [ $compile_project = true ]; then
 	export ANDROID_HOME=/usr/lib/android_sdk
 	echo ANDROID_HOME: $ANDROID_HOME
 	cd ./$unzip_name/rtc/samples/API-Example || exit 1
-	./cloud_build.sh || exit 1
+	if [ -z "$sdk_url" ]; then
+		./cloud_build.sh false || exit 1
+	else
+		./cloud_build.sh true || exit 1
+	fi
+	
 fi
 
 
