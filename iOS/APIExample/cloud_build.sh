@@ -21,6 +21,9 @@ rm -f vender_bytedance_iOS.zip
 #打开第三方播放器配置
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
+echo "work space: $WORKSPACE"
+echo "project path: $PROJECT_PATH"
+
 pod install || exit 1
 
 # 打包环境
