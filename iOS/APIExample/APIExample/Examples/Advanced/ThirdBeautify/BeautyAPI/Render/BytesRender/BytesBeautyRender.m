@@ -187,7 +187,7 @@
 - (void)setSticker:(BOOL)isSelected {
 #if __has_include(BytesMoudle)
     if (isSelected) {
-        [self.effectManager setStickerPath:@"zhaocaimao"];
+        [self.effectManager setStickerPath:@"stickers_zhaocaimao"];
     } else {
         [self.effectManager setStickerPath:@""];
     }
