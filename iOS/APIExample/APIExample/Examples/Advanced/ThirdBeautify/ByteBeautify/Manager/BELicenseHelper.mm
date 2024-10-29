@@ -88,10 +88,7 @@ static BELicenseHelper* _instance = nil;
         else
         {
             _licenseProvider->setParam("mode", "OFFLINE");
-            NSString *licenseName = [NSString stringWithFormat:@"/%s", LICENSE_NAME];
-            NSBundle *bundle = [BundleUtil bundleWithBundleName:@"ByteEffectLib" podName:@"bytedEffect"];
-            NSString* licensePath = [bundle pathForResource:OFFLIN_LICENSE_PATH ofType:OFFLIN_BUNDLE];
-            licensePath = [licensePath stringByAppendingString:licenseName];
+            NSString* licensePath = [self getLicensePath];
             _licenseProvider->setParam("licensePath", [licensePath UTF8String]);
         }
         _requestProvider = new BEHttpRequestProvider;
@@ -100,6 +97,24 @@ static BELicenseHelper* _instance = nil;
 #endif
 
     return self;
+}
+
+- (NSString *)getLicensePath {
+    NSString *licensePath = @"";
+    NSString *licenseName = @"";
+    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"ByteEffectLib" podName:@"bytedEffect"];
+    licensePath = [bundle pathForResource:OFFLIN_LICENSE_PATH ofType:OFFLIN_BUNDLE];
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    NSArray *licenseArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:licensePath error:nil];
+    for (NSString *license in licenseArray) {
+        if ([license containsString:bundleIdentifier]) {
+            licenseName = [NSString stringWithFormat:@"/%@", license];
+            break;
+        }
+    }
+    
+    licensePath = [licensePath stringByAppendingString:licenseName];
+    return licensePath;
 }
 
 - (NSString *)licenseUrl {
@@ -198,10 +213,7 @@ static BELicenseHelper* _instance = nil;
 }
 
 - (bool)checkLicense {
-    NSString *licenseName = [NSString stringWithFormat:@"/%s", LICENSE_NAME];
-    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"ByteEffectLib" podName:@"bytedEffect"];
-    NSString* licensePath = [bundle pathForResource:OFFLIN_LICENSE_PATH ofType:OFFLIN_BUNDLE];
-    licensePath = [licensePath stringByAppendingString:licenseName];
+    NSString* licensePath = [self getLicensePath];
     return [self checkLicenseOK:[licensePath UTF8String]];
 }
 
