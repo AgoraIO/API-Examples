@@ -120,11 +120,19 @@ PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 # 修改ExportOptions.plist
 # 修改 io.agora.api.examples 的值
 echo "start modify ExportOption.plist"
-/usr/libexec/PlistBuddy -c "Set :provisioningProfiles:io.agora.api.examples io.agora.entfull" "$PLIST_PATH"
+# 先获取原始值
+value1=$(/usr/libexec/PlistBuddy -c "Print :provisioningProfiles:io.agora.api.examples" "$PLIST_PATH")
+value2=$(/usr/libexec/PlistBuddy -c "Print :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension" "$PLIST_PATH")
 
-# 修改 io.agora.api.examples.Agora-ScreenShare-Extension 的值
-/usr/libexec/PlistBuddy -c "Set :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension io.agora.entfull.Agora-ScreenShare-Extension" "$PLIST_PATH"
+# 删除原始键
+/usr/libexec/PlistBuddy -c "Delete :provisioningProfiles:io.agora.api.examples" "$PLIST_PATH"
+/usr/libexec/PlistBuddy -c "Delete :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension" "$PLIST_PATH"
 
+# 添加新键和值
+/usr/libexec/PlistBuddy -c "Add :provisioningProfiles:io.agora.entfull string $value1" "$PLIST_PATH"
+/usr/libexec/PlistBuddy -c "Add :provisioningProfiles:io.agora.entfull.Agora-ScreenShare-Extension string $value2" "$PLIST_PATH"
+
+# 打印修改后的 provisioningProfiles 值
 echo "修改后的 provisioningProfiles 值："
 /usr/libexec/PlistBuddy -c "Print :provisioningProfiles" "$PLIST_PATH"
 
