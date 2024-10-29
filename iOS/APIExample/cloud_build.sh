@@ -23,8 +23,8 @@ sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
 #打开第三方美颜
 sed -i -e "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
-sed -i -e "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
-sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
+#sed -i -e "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
+#sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
 
 echo "work space: $WORKSPACE"
 echo "project path: $PROJECT_PATH"
