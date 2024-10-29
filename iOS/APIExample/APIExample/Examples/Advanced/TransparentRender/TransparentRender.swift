@@ -95,7 +95,10 @@ class TransparentRenderViewController: BaseViewController {
         setupLocalAlphaCavans()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        agoraKit.destroyMediaPlayer(mediaPlayer)
         agoraKit.leaveChannel()
         agoraKit.disableVideo()
         agoraKit.stopPreview()
