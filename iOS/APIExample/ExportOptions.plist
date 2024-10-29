@@ -10,9 +10,9 @@
 	<string>development</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>io.agora.entfull</key>
+		<key>io.agora.api.examples</key>
 		<string>AgoraLab2020</string>
-		<key>io.agora.entfull.Agora-ScreenShare-Extension</key>
+		<key>io.agora.api.examples.Agora-ScreenShare-Extension</key>
 		<string>AgoraLab2020</string>
 	</dict>
 	<key>signingCertificate</key>
