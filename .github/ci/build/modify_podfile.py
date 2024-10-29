@@ -10,8 +10,6 @@ def modfiy(path):
                 line = ""
             elif 'sh .download_script' in line:
                 line = line.replace('true', 'false') + "\n"
-            elif 'SenseLib' in line:
-                line = "pod 'SenseLib', :path => 'sense.podspec'"
             contents.append(line)
         file.close()
         
