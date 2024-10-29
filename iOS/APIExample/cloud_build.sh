@@ -117,6 +117,17 @@ ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 # plist路径
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 
+# 修改ExportOptions.plist
+# 修改 io.agora.api.examples 的值
+echo "start modify ExportOption.plist"
+/usr/libexec/PlistBuddy -c "Set :provisioningProfiles:io.agora.api.examples io.agora.entfull" "$PLIST_PATH"
+
+# 修改 io.agora.api.examples.Agora-ScreenShare-Extension 的值
+/usr/libexec/PlistBuddy -c "Set :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension io.agora.entfull.Agora-ScreenShare-Extension" "$PLIST_PATH"
+
+echo "修改后的 provisioningProfiles 值："
+/usr/libexec/PlistBuddy -c "Print :provisioningProfiles" "$PLIST_PATH"
+
 echo "start xcode build, appPath: $APP_PATH, target: $TARGET_NAME, config: $CONFIGURATION, archivePath: $ARCHIVE_PATH"
 
 # archive 这边使用的工作区间 也可以使用project
