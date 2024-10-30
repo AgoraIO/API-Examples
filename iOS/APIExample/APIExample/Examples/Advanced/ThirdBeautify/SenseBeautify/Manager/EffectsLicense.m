@@ -45,29 +45,7 @@ static NSString *strActiveCodeKey = @"EFFECTS_ACTIVE_CODE";
 
 + (BOOL)authorizeWithLicensePath:(NSString *)licensePath{
     NSData * dataLicense = [NSData dataWithContentsOfFile:licensePath];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *strActiveCode = [userDefaults objectForKey:strActiveCodeKey];
-    if (strActiveCode.length) {
-#if __has_include("st_mobile_common.h")
-        st_result_t iRet = ST_E_FAIL;
-        iRet = st_mobile_check_activecode_from_buffer(
-                                                      [dataLicense bytes],
-                                                      (int)[dataLicense length],
-                                                      strActiveCode.UTF8String,
-                                                      (int)[strActiveCode length]
-                                                      );
-        
-        if (iRet) {
-            return NO;
-        }
-        return YES;
-#endif
-    }
-    strActiveCode = [self getActiveCodeWithData:dataLicense];
-    if (strActiveCode) {
-        return YES;
-    }
-    return NO;
+    return [self authorizeWithLicenseData:dataLicense];
 }
 
 + (BOOL)authorizeWithLicenseData:(NSData *)dataLicense{

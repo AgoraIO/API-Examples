@@ -1,9 +1,6 @@
-//
 //  BEEffectResourceHelper.h
 //  Effect
-//
-//  Created by qun on 2021/5/18.
-//
+
 
 #ifndef BELicenseHelper_h
 #define BELicenseHelper_h
@@ -29,6 +26,9 @@ typedef NS_ENUM(NSInteger, LICENSE_MODE_ENUM) {
 
 - (bool)checkLicenseOK:(const char *) filePath;
 
+- (bool)deleteCacheFile;
+
+- (bool)checkLicense;
 @end
 
 @interface BELicenseHelper : NSObject<BELicenseProvider>
@@ -38,6 +38,8 @@ typedef NS_ENUM(NSInteger, LICENSE_MODE_ENUM) {
 @property (atomic, readwrite) NSString* errorMsg;
 
 +(instancetype) shareInstance;
+
+- (void)setParam:(NSString*)key value:(NSString*) value;
 
 @end
 
