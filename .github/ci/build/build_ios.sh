@@ -54,6 +54,7 @@ echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
 unzip_name=Agora_Native_SDK_for_iOS_FULL
+zip_name=output.zip
 sdk_url_flag=false
 if [ -z "$sdk_url" ]; then
    sdk_url_flag=false
