@@ -1,5 +1,5 @@
 Pod::Spec.new do |spec|
-   spec.name          = "senseLib"
+   spec.name          = "SenseLib"
    spec.version       = "1.0"
    spec.summary       = "Agora iOS video SDK"
    spec.description   = "iOS library for agora A/V communication, broadcasting and data channel service."
@@ -8,11 +8,11 @@ Pod::Spec.new do |spec|
    spec.author        = { "Agora Lab" => "developer@agora.io" }
    spec.platform      = :ios
    spec.source        = { :git => "" }
-   spec.source_files = 'SenseLib/**/*.{h,m, model}'
+   spec.source_files = 'SenseLib/**/*.{h,m}'
+   spec.resources = "SenseLib/**/*.zip", "SenseLib/filter_style/*.model", "SenseLib/*.lic", 
    spec.library = "z"
    spec.vendored_libraries = "SenseLib/**/*.a"
    spec.resource_bundles    = {"SenseLib" => "SenseLib/**/*.bundle"}
-   spec.resources = "SenseLib/**/*.zip"
    spec.requires_arc  = true
    spec.ios.deployment_target  = '9.0'
  end
