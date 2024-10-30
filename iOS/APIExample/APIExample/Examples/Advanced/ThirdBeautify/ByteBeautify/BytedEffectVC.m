@@ -48,7 +48,7 @@
 }
 
 - (void) initSDK {
-#if __has_include("bef_effect_ai_api.h")
+#if __has_include(BytesMoudle)
     [self.tipsLabel setHidden:YES];
     [self.container setHidden:NO];
 #else

@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "EffectsDetector.h"
+#if __has_include("st_mobile_common.h")
+#import "st_mobile_human_action.h"
+#endif
 #import <AVFoundation/AVFoundation.h>
+#import "EFGlobalSingleton.h"
 
 @interface EffectsDetector ()
 {
@@ -30,15 +34,14 @@
 
 - (instancetype)initWithType:(EffectsType)type{
     if ((self = [super init])) {
-#if __has_include("st_mobile_common.h")
         [self createHandlerWithType:type];
-#endif
     }
     return self;
 }
 
-#if __has_include("st_mobile_common.h")
+
 - (void)createHandlerWithType:(EffectsType)type{
+#if __has_include("st_mobile_common.h")
     if (!_hDetector) {
         int config = ST_MOBILE_TRACKING_MULTI_THREAD;
         switch (type) {
@@ -58,7 +61,8 @@
             NSLog(@"st_mobile_human_action_create error %d", ret);
         }
         
-        ret = st_mobile_human_action_setparam(_hDetector, ST_HUMAN_ACTION_PARAM_MESH_MODE, 0x111000);
+        ret = st_mobile_human_action_setparam(_hDetector, ST_HUMAN_ACTION_PARAM_MESH_MODE, ST_MOBILE_MESH_PART_FACE|ST_MOBILE_MESH_PART_EYE|ST_MOBILE_MESH_PART_MOUTH|ST_MOBILE_MESH_PART_SKULL|ST_MOBILE_MESH_PART_EAR|ST_MOBILE_MESH_PART_NECK|ST_MOBILE_MESH_PART_EYEBROW);
+        
         if (ret != ST_OK) {
             NSLog(@"st_mobile_human_action_setparam error %d", ret);
         }
@@ -67,9 +71,21 @@
         if (ret != ST_OK) {
             NSLog(@"st_mobile_human_action_setparam error %d", ret);
         }
+        
+        ret = st_mobile_human_action_setparam(_hDetector, ST_HUMAN_ACTION_PARAM_HEAD_SEGMENT_INSTANCE, 1.0);
+        if (ret != ST_OK) {
+            NSLog(@"st_mobile_human_action_setparam error %d", ret);
+        }
+        
+        ret = st_mobile_human_action_setparam(_hDetector, ST_HUMAN_ACTION_PARAM_FACE_MESH_OUTPUT_FORMAT, ST_3D_WORLD_COORDINATE);
+        if (ret != ST_OK) {
+            NSLog(@"st_mobile_human_action_setparam error %d", ret);
+        }
     }
+#endif
 }
 
+#if __has_include("st_mobile_common.h")
 st_result_t addSubModel(st_handle_t handle, NSString* file) {
     st_result_t iRet = st_mobile_human_action_add_sub_model(handle, file.UTF8String);
     if (iRet != ST_OK) {
@@ -84,20 +100,69 @@ st_result_t addSubModel(st_handle_t handle, NSString* file) {
     st_result_t state = ST_OK;
 
     NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:modelPath error:nil];
-
+//    NSTimeInterval last = CFAbsoluteTimeGetCurrent();
     for(NSString *file in files) {
-        NSString *fullPath = [modelPath stringByAppendingPathComponent:file];
+//        if ([file containsString:@"M_SenseME_Face_"] || [file containsString:@"Occlusion"] || [file containsString:@"M_SenseME_3DMesh_Face2396pt"]) {
+            NSString *fullPath = [modelPath stringByAppendingPathComponent:file];
+            
+            state = st_mobile_human_action_add_sub_model(_hDetector, fullPath.UTF8String);
+            if ([fullPath containsString:@"Skin"]) { // 皮肤分割
+                [EFGlobalSingleton sharedInstance].efHasSegmentCapability = state != ST_E_NO_CAPABILITY;
+            }
+            if (state != ST_OK) {
+                NSLog(@"st mobile human action add %@ model failed: %d", fullPath, state);
+            }
+//        }
+    }
+//    NSLog(@"@mahaomeng cost %f", CFAbsoluteTimeGetCurrent()-last);
+    return state;
+}
 
+- (st_result_t)setModelPath:(NSString *)modelPath withFirstPhaseFinished:(void(^)(void))finishedCallback {
+    st_result_t state = ST_OK;
+
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:modelPath error:nil];
+//    NSTimeInterval last = CFAbsoluteTimeGetCurrent();
+    for(NSString *file in files) {
+        if ([file containsString:@"M_SenseME_Face_"] || [file containsString:@"Occlusion"] || [file containsString:@"M_SenseME_3DMesh_Face2396pt"]) {
+            NSString *fullPath = [modelPath stringByAppendingPathComponent:file];
+            
+            state = st_mobile_human_action_add_sub_model(_hDetector, fullPath.UTF8String);
+            if ([fullPath containsString:@"Skin"]) { // 皮肤分割
+                [EFGlobalSingleton sharedInstance].efHasSegmentCapability = state != ST_E_NO_CAPABILITY;
+            }
+            if (state != ST_OK) {
+                NSLog(@"st mobile human action add %@ model failed: %d", fullPath, state);
+            }
+        }
+    }
+    if (finishedCallback) {
+        finishedCallback();
+    }
+    for(NSString *file in files) {
+        if ([file containsString:@"M_SenseME_Face_"] || [file containsString:@"Occlusion"] || [file containsString:@"M_SenseME_3DMesh_Face2396pt"]) {
+            continue;
+        }
+        NSString *fullPath = [modelPath stringByAppendingPathComponent:file];
+        
         state = st_mobile_human_action_add_sub_model(_hDetector, fullPath.UTF8String);
         if ([fullPath containsString:@"Skin"]) { // 皮肤分割
-//            [EFGlobalSingleton sharedInstance].efHasSegmentCapability = state != ST_E_NO_CAPABILITY;
+            [EFGlobalSingleton sharedInstance].efHasSegmentCapability = state != ST_E_NO_CAPABILITY;
         }
         if (state != ST_OK) {
             NSLog(@"st mobile human action add %@ model failed: %d", fullPath, state);
         }
     }
- 
+    
     return state;
+}
+
+-(st_result_t)setParam:(st_human_action_param_type)type andValue:(float)value {
+    st_result_t iRet = st_mobile_human_action_setparam(_hDetector, type, value);
+    if (iRet != ST_OK) {
+        NSLog(@"st_mobile_human_action_setparam error %d", iRet);
+    }
+    return iRet;
 }
 
 - (st_result_t)detectHumanActionWithPixelbuffer:(CVPixelBufferRef)pixelBuffer
@@ -188,10 +253,20 @@ st_result_t addSubModel(st_handle_t handle, NSString* file) {
 
 -(st_result_t)getMeshList:(st_mobile_face_mesh_list_t *)p_mesh {
     st_result_t state;
-    st_mobile_face_mesh_list_t unuse_mesh_list;
-    state = st_mobile_human_action_get_mesh_list(_hDetector, ST_MOBILE_FACE_MESH, p_mesh, &unuse_mesh_list);
+    st_mobile_mesh_info_t mesh_info;
+    state = st_mobile_human_action_get_mesh_info(_hDetector, ST_MOBILE_FACE_MESH, &mesh_info);
+    
     if (state != ST_OK) {
         NSLog(@"st_mobile_human_action_get_mesh_list failed");
+    }
+    return state;
+}
+
+-(st_result_t)getMeshInfo:(st_mobile_mesh_info_t *)mesh_info {
+    st_result_t state;
+    state = st_mobile_human_action_get_mesh_info(_hDetector, ST_MOBILE_FACE_MESH, mesh_info);
+    if (state != ST_OK) {
+        NSLog(@"st_mobile_human_action_get_mesh_info failed");
     }
     return state;
 }

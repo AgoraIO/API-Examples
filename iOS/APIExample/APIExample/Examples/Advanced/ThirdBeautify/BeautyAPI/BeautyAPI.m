@@ -6,8 +6,9 @@
 //
 
 #import "BeautyAPI.h"
+#import "APIReporter.h"
 
-static NSString *const beautyAPIVnersio = @"1.0.3";
+static NSString *const beautyAPIVersion = @"1.0.7";
 
 @implementation BeautyStats
 @end
@@ -24,6 +25,8 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
 @property (nonatomic, assign) CFTimeInterval preTime;
 @property (nonatomic, strong) NSMutableArray *statsArray;
 @property (nonatomic, assign) AgoraVideoRenderMode renderMode;
+@property (nonatomic, strong) APIReporter *reporter;
+@property (nonatomic, assign) BOOL isFirstFrame;
 
 @end
 
@@ -34,11 +37,27 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
 
 @implementation BeautyAPI
 
+- (instancetype)init {
+    if (self == [super init]) {
+        _isFrontCamera = YES;
+    }
+    return self;
+}
+
 - (NSMutableArray *)statsArray {
     if (_statsArray == nil) {
         _statsArray = [NSMutableArray new];
     }
     return _statsArray;
+}
+
+- (APIReporter *)reporter {
+    if (_reporter == nil) {
+        _reporter = [[APIReporter alloc] initWithType:(APITypeBeauty) 
+                                              version:beautyAPIVersion
+                                               engine:self.config.rtcEngine];
+    }
+    return _reporter;
 }
 
 - (int)initialize:(BeautyConfig *)config {
@@ -50,7 +69,6 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
     }
     [LogUtil log:[NSString stringWithFormat:@"RTC Version == %@", [AgoraRtcEngineKit getSdkVersion]]];
     [LogUtil log:[NSString stringWithFormat:@"BeautyAPI Version == %@", [self getVersion]]];
-    _isFrontCamera = YES;
     self.config = config;
     if (self.config.statsDuration <= 0) {
         self.config.statsDuration = 1;
@@ -64,6 +82,7 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
         return -1;
     }
     [LogUtil log:[NSString stringWithFormat:@"beautyRender == %@", config.beautyRender.description]];
+    [self.reporter startDurationEventWithName:@"initialize-release"];
     self.beautyRender = config.beautyRender;
     if (config.captureMode == CaptureModeAgora) {
 #if __has_include(<AgoraRtcKit/AgoraRtcKit.h>)
@@ -79,6 +98,7 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
             }
         };
         [self rtcReportWithEvent:@"initialize" label:dict];
+        [self setupMirror];
 #else
         [LogUtil log:@"rtc 未导入" level:(LogLevelError)];
         return -1;
@@ -86,15 +106,17 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
     } else {
         [LogUtil log:@"captureMode == Custom"];
     }
+    [self setupMirror];
     return 0;
 }
 
 - (int)switchCamera {
     _isFrontCamera = !_isFrontCamera;
-    [self setupMirror];
     NSDictionary *dict = @{ @"cameraPosition": @(_isFrontCamera) };
     [self rtcReportWithEvent:@"cameraPosition" label:dict];
-    return [self.config.rtcEngine switchCamera];
+    int res = [self.config.rtcEngine switchCamera];
+    [self setupMirror];
+    return res;
 }
 
 - (AgoraVideoMirrorMode)setupMirror {
@@ -190,6 +212,7 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
     [self.config.beautyRender destroy];
     self.config = nil;
     [LogUtil log:@"destroy"];
+    [self.reporter endDurationEventWithName:@"initialize-release" ext:@{}];
     return 0;
 }
 
@@ -198,39 +221,34 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
         [LogUtil log:@"rtc 不能为空" level:(LogLevelError)];
         return;
     }
-    NSString *jsonString = [self convertToJson:label];
-    [self.config.rtcEngine sendCustomReportMessage:@"scenarioAPI"
-                                          category:[NSString stringWithFormat:@"beauty_iOS_%@",[self getVersion]]
-                                             event:event
-                                             label:jsonString
-                                             value:0];
-}
-
-- (NSString *)convertToJson: (NSDictionary *)object {
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
-                                                       options:0
-                                                         error:&error];
-    if (error) {
-        // 转换失败
-        NSLog(@"Error: %@", error.localizedDescription);
-        return nil;
-    }
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                 encoding:NSUTF8StringEncoding];
-    return jsonString;
+    [self.reporter reportFuncEventWithName:event value:label ext:@{}];
 }
 
 - (NSString *)getVersion {
-    return beautyAPIVnersio;
+    return beautyAPIVersion;
 }
 
 #pragma mark - VideoFrameDelegate
 #if __has_include(<AgoraRtcKit/AgoraRtcKit.h>)
+- (BOOL)onCaptureVideoFrame:(AgoraOutputVideoFrame *)videoFrame {
+    return [self onCaptureVideoFrame:videoFrame sourceType:(AgoraVideoSourceTypeCamera)];
+}
 - (BOOL)onCaptureVideoFrame:(AgoraOutputVideoFrame *)videoFrame sourceType:(AgoraVideoSourceType)sourceType {
     if (!self.isEnable) { return YES; }
     CFTimeInterval startTime = CACurrentMediaTime();
+    if (!self.isFirstFrame) {
+        [self.reporter startDurationEventWithName:@"first_beauty_frame"];
+    }
     CVPixelBufferRef pixelBuffer = [self.config.beautyRender onCapture:videoFrame.pixelBuffer];
+    if (!self.isFirstFrame) {
+        [self.reporter endDurationEventWithName:@"first_beauty_frame" ext:@{
+            @"width": @(CVPixelBufferGetWidth(pixelBuffer)),
+            @"height": @(CVPixelBufferGetHeight(pixelBuffer)),
+            @"camera_facing": _isFrontCamera ? @"front" : @"back",
+            @"buffer_type": @"pixelbuffer"
+        }];
+        self.isFirstFrame = YES;
+    }
     CFTimeInterval endTime = CACurrentMediaTime();
     if (self.config.statsEnable) {
         [self.statsArray addObject:@(endTime - startTime)];
@@ -239,7 +257,7 @@ static NSString *const beautyAPIVnersio = @"1.0.3";
     if (self.config.eventCallback && self.preTime > 0 && self.config.statsEnable) {
         CFTimeInterval time = startTime - self.preTime;
         if (time > self.config.statsDuration && self.statsArray.count > 0) {
-           NSArray *sortArray = [self.statsArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber * _Nonnull obj1, NSNumber * _Nonnull obj2) {
+            NSArray *sortArray = [self.statsArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber * _Nonnull obj1, NSNumber * _Nonnull obj2) {
                 return obj1.doubleValue > obj2.doubleValue;
             }];
             double totalValue = 0;
