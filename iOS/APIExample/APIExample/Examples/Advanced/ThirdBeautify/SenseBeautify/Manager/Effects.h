@@ -9,7 +9,6 @@
 #if __has_include("st_mobile_common.h")
 #import "st_mobile_common.h"
 #import "st_mobile_effect.h"
-#import "st_mobile_color_convert.h"
 #endif
 #import "EffectMacro.h"
 
@@ -92,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
 
+-(void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
+
 /// 获取获取素材的贴纸信息
 /// @param package_id package_id
 /// @param modules 贴纸信息
@@ -120,10 +121,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 清空贴纸
 - (st_result_t)cleareStickers;
 
-///// 移除美妆
-///// @param stickerId 美妆Id
-//- (st_result_t)removeMakeup:(int)stickerId;
 - (uint64_t)getDetectConfig;
+- (uint64_t)getDetectConfigWithMode:(EFDetectConfigMode)configMode;
 
 - (uint64_t)getAnimalDetectConfig;
 
@@ -136,8 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
                   stride:(int)stride
                   rotate:(st_rotate_type)rotate
             detectResult:(st_mobile_human_action_t)detectResult
-            animalResult:(st_mobile_animal_face_t const *)animalResult
-             animalCount:(int)animalCount
+            animalResult:(st_mobile_animal_result_t *)animalResult
          outDetectResult:(st_mobile_human_action_t)outDetectResult
                withCache:(CVOpenGLESTextureCacheRef)cache
           outPixelFormat:(st_pixel_format)fmt_out
@@ -152,8 +150,7 @@ NS_ASSUME_NONNULL_BEGIN
                   stride:(int)stride
                   rotate:(st_rotate_type)rotate
             detectResult:(st_mobile_human_action_t)detectResult
-            animalResult:(st_mobile_animal_face_t const *)animalResult
-             animalCount:(int)animalCount
+            animalResult:(st_mobile_animal_result_t *)animalResult
          outDetectResult:(st_mobile_human_action_t)outDetectResult
                withCache:(CVOpenGLESTextureCacheRef)cache
           outPixelFormat:(st_pixel_format)fmt_out
@@ -163,6 +160,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)convertYUVBuffer:(unsigned char *)buffer
                     rgba:(GLuint)texture
                     size:(CGSize)size;
+
+-(st_result_t)setParam:(st_effect_param_t)param andValue:(float)value;
 
 -(st_result_t)setFaceMeshList:(st_mobile_face_mesh_list_t)mesh_list;
 

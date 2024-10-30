@@ -61,10 +61,11 @@
     self.isSuccessLicense = [EffectsProcess authorizeWithLicensePath:licensePath];
     __weak SenseBeautyRender *weakSelf = self;
     self.timer = [NSTimer timerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        weakSelf.isSuccessLicense = weakSelf.videoProcessing.effectsProcess.isAuthrized;
         if (weakSelf.isSuccessLicense) {
             [weakSelf.timer invalidate];
             weakSelf.timer = nil;
+        } else {
+            weakSelf.isSuccessLicense = weakSelf.videoProcessing.effectsProcess.isAuthrized;
         }
         if (weakSelf.licenseEventCallback) {
             weakSelf.licenseEventCallback(weakSelf.isSuccessLicense);
@@ -86,7 +87,7 @@
     if (self.isSuccessLicense) {
         return [self.videoProcessing videoProcessHandler:pixelBuffer];
     }
-    return nil;
+    return pixelBuffer;
 #endif
     return pixelBuffer;
 }
@@ -134,14 +135,12 @@
 - (void)setMakeup:(BOOL)isSelected { 
 #if __has_include(Sensetime)
     if (isSelected) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"qise.zip" ofType:nil];
         __weak SenseBeautyRender *weakself = self;
-        [self.videoProcessing.effectsProcess addStickerWithPath:path callBack:^(st_result_t state, int sticker, uint64_t action) {
-            [weakself.videoProcessing.effectsProcess setPackageId:sticker groupType:EFFECT_BEAUTY_GROUP_MAKEUP strength:0.5];
+        [self.videoProcessing addStylePath:@"hunxue.zip" groupId:0 strength:0.5 callBack:^(int sticker) {
             weakself.stickerId = sticker;
         }];
     } else {
-        [self.videoProcessing.effectsProcess removeSticker:self.stickerId];
+        [self.videoProcessing removeStickerId:self.stickerId];
         self.stickerId = 0;
     }
 #endif
@@ -150,7 +149,7 @@
 - (void)setSticker:(BOOL)isSelected { 
 #if __has_include(Sensetime)
     if (isSelected) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"lianxingface.zip" ofType:nil];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"ShangBanLe.zip" ofType:nil];
         [self.videoProcessing.effectsProcess setStickerWithPath:path callBack:^(st_result_t state, int stickerId, uint64_t action) {
             
         }];
