@@ -1,18 +1,18 @@
 #ifndef BEHttpRequestProvider_h
 #define BEHttpRequestProvider_h
 
-#if __has_include("bef_effect_ai_api.h")
-#include "BytedLicenseDefine.h"
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
+#include <effect-sdk/bef_effect_ai_license_wrapper.h>
 #endif
 
-#if __has_include("bef_effect_ai_api.h")
-class BEHttpRequestProvider: public HttpRequestProvider
+#if __has_include(<effect-sdk/bef_effect_ai_api.h>)
+class BEHttpRequestProvider: public EffectsSDK::HttpRequestProvider
 {
     
 public:
-    bool getRequest(const RequestInfo* requestInfo, ResponseInfo& responseInfo) override;
+    bool getRequest(const EffectsSDK::RequestInfo* requestInfo, EffectsSDK::ResponseInfo& responseInfo) override;
     
-    bool postRequest(const RequestInfo* requestInfo, ResponseInfo& responseInfo) override;
+    bool postRequest(const EffectsSDK::RequestInfo* requestInfo, EffectsSDK::ResponseInfo& responseInfo) override;
     
 };
 #endif

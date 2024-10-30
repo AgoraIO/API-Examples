@@ -6,9 +6,14 @@
 //
 
 #import "Effects.h"
+#if __has_include("st_mobile_common.h")
+#import "st_mobile_effect.h"
+#import "st_mobile_color_convert.h"
+#endif
 #import <OpenGLES/ES3/glext.h>
 #import <CoreMotion/CoreMotion.h>
 #import <AVFoundation/AVFoundation.h>
+#import "EFGlobalSingleton.h"
 
 @interface EffectsMotionManager ()
 {
@@ -62,7 +67,6 @@
 {
     EffectsType _type;
 }
-//@property (nonatomic, strong) EffectsAudioPlayerManager *audioManager;
 @end
 
 @implementation Effects
@@ -115,25 +119,28 @@
                 NSLog(@"st_mobile_effect_create_handle error %d", ret);
                 return;
             }
-//            self.audioManager = [[EffectsAudioPlayerManager alloc] init];
-//            self.audioManager.delegate = self;
-//            st_result_t setRet = ST_OK;
-//            setRet = st_mobile_effect_set_module_state_change_callback(handle, _modul_state_change_callback);
-//            if (setRet != ST_OK) {
-//                NSLog(@"st_mobile_effect_set_module_state_change_callback error %d", setRet);
-//            }
-//            setRet = st_mobile_effect_set_packaged_state_change_callback(handle, _package_state_change_callback);
-//            if (setRet != ST_OK) {
-//                NSLog(@"st_mobile_effect_set_packaged_state_change_callback error %d", setRet);
-//            }
+            st_result_t setRet = ST_OK;
+            setRet = st_mobile_effect_set_module_state_change_callback(handle, _modul_state_change_callback);
+            if (setRet != ST_OK) {
+                NSLog(@"st_mobile_effect_set_module_state_change_callback error %d", setRet);
+            }
             self.glContext = glContext;
         }
             break;
         case EffectsTypeVideo:
             ret = st_mobile_effect_create_handle(EFFECT_CONFIG_IMAGE_MODE, &handle);
+            st_result_t setRet = ST_OK;
+            setRet = st_mobile_effect_set_module_state_change_callback(handle, _modul_state_change_callback);
+            if (setRet != ST_OK) {
+                NSLog(@"st_mobile_effect_set_module_state_change_callback error %d", setRet);
+            }
             break;
         case EffectsTypePhoto:
             ret = st_mobile_effect_create_handle(EFFECT_CONFIG_IMAGE_MODE, &handle);
+            ret = st_mobile_effect_set_module_state_change_callback(handle, _modul_state_change_callback);
+            if (setRet != ST_OK) {
+                NSLog(@"st_mobile_effect_set_module_state_change_callback error %d", setRet);
+            }
             break;
     }
     st_mobile_effect_set_param(handle, EFFECT_PARAM_MAX_MEMORY_BUDGET_MB, 1000.0);
@@ -349,6 +356,27 @@
     }
 }
 
+-(void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback {
+    if (!stickerPath) {
+        return ;
+    }
+    int packageId = 0;
+    st_result_t iRet = st_mobile_effect_change_package(self.handle, stickerPath.UTF8String, &packageId);
+    if (ST_OK != iRet) {
+        NSLog(@"st_mobile_effect_add_package error %d", iRet);
+        return;
+    }
+    uint64_t action = 0;
+    st_mobile_effect_get_detect_config(self.handle, &action);
+    
+    uint64_t customAciton = 0;
+    st_mobile_effect_get_custom_event_config(self.handle, &customAciton);
+    
+    if (callback) {
+        callback(iRet, packageId, action, customAciton);
+    }
+}
+
 -(st_result_t)getModulesInPackage:(int)package_id modules:(st_effect_module_info_t*)modules {
     st_effect_package_info_t *p_package_info = malloc(sizeof(st_effect_package_info_t));
     st_result_t iRet = st_mobile_effect_get_package_info(self.handle, package_id, p_package_info);
@@ -424,14 +452,13 @@
                   stride:(int)stride
                   rotate:(st_rotate_type)rotate
             detectResult:(st_mobile_human_action_t)detectResult
-            animalResult:(st_mobile_animal_face_t const *)animalResult
-             animalCount:(int)animalCount
+            animalResult:(st_mobile_animal_result_t *)animalResult
          outDetectResult:(st_mobile_human_action_t)outDetectResult
                withCache:(CVOpenGLESTextureCacheRef)cache
           outPixelFormat:(st_pixel_format)fmt_out
                outBuffer:(unsigned char *)img_out {
     st_mobile_face_mesh_list_t tmp = {};
-    return [self processTexture:inputTexture inputData:inputData inputFormat:inputFormat outputTexture:outputTexture width:width height:height stride:stride rotate:rotate detectResult:detectResult animalResult:animalResult animalCount:animalCount outDetectResult:outDetectResult withCache:cache outPixelFormat:fmt_out outBuffer:img_out meshList:tmp];
+    return [self processTexture:inputTexture inputData:inputData inputFormat:inputFormat outputTexture:outputTexture width:width height:height stride:stride rotate:rotate detectResult:detectResult animalResult:animalResult outDetectResult:outDetectResult withCache:cache outPixelFormat:fmt_out outBuffer:img_out meshList:tmp];
 }
 
 - (GLuint)processTexture:(GLuint)inputTexture
@@ -443,8 +470,7 @@
                   stride:(int)stride
                   rotate:(st_rotate_type)rotate
             detectResult:(st_mobile_human_action_t)detectResult
-            animalResult:(st_mobile_animal_face_t const *)animalResult
-             animalCount:(int)animalCount
+            animalResult:(st_mobile_animal_result_t *)animalResult
          outDetectResult:(st_mobile_human_action_t)outDetectResult
                withCache:(CVOpenGLESTextureCacheRef)cache
           outPixelFormat:(st_pixel_format)fmt_out
@@ -486,18 +512,17 @@
             inputEvent.front_camera = self.cameraPosition == AVCaptureDevicePositionFront;
         }
         
-//        EFGlobalSingleton *globalSingleton = [EFGlobalSingleton sharedInstance];
-//        if (globalSingleton.efTouchTriggerAction > 0) {
-//            inputEvent.event = globalSingleton.efTouchTriggerAction;
-//            globalSingleton.efTouchTriggerAction = 0;
-//        }
+        EFGlobalSingleton *globalSingleton = [EFGlobalSingleton sharedInstance];
+        if (globalSingleton.efTouchTriggerAction > 0) {
+            inputEvent.event = globalSingleton.efTouchTriggerAction;
+            globalSingleton.efTouchTriggerAction = 0;
+        }
                 
-        st_effect_texture_t input_texture = {inputTexture, width, height, ST_PIX_FMT_BGRA8888};
+        st_mobile_texture_t input_texture = {inputTexture, width, height, ST_PIX_FMT_BGRA8888};
         st_effect_render_in_param_t input_param ={};
         input_param.p_custom_param = &inputEvent;
         input_param.p_human = &detectResult;
-        input_param.animal_face_count = animalCount;
-        input_param.p_animal_face = animalResult;
+        input_param.p_animal = animalResult;
         input_param.rotate = rotate;
         input_param.front_rotate = rotate;
         input_param.need_mirror = false;
@@ -506,7 +531,7 @@
         st_image_t inputImage = {.data = inputData, .pixel_format = inputFormat, .width = width, .height = height, .stride = stride, .time_stamp= 0.0};
         st_effect_in_image_t effectImag = {.image = inputImage, .rotate = ST_CLOCKWISE_ROTATE_0, .b_mirror = GL_FALSE};
         input_param.p_image = &effectImag;
-        st_effect_texture_t output_texture = {outputTexture, width,  height, ST_PIX_FMT_BGRA8888};
+        st_mobile_texture_t output_texture = {outputTexture, width,  height, ST_PIX_FMT_BGRA8888};
         st_effect_render_out_param_t output_param = {};
         output_param.p_tex = &output_texture;
         st_mobile_human_action_t human_out_param;
@@ -538,6 +563,14 @@
     return config;
 }
 
+- (uint64_t)getDetectConfigWithMode:(EFDetectConfigMode)configMode {
+    uint64_t config = [self getDetectConfig];
+    if (configMode == EFDetectConfigModeItsMe) {
+        config |= ST_MOBILE_FACE_DETECT;
+    }
+    return config;
+}
+
 - (uint64_t)getAnimalDetectConfig{
     uint64_t config;
     st_handle_t handle = self.handle;
@@ -559,20 +592,12 @@
 }
 
 
-#pragma mark - EffectsAudioPlayerManagerDelegate
-- (void)audioPlayerDidFinishPlayingWithAudioName:(NSString *)audioName{
-    if (self.handle) {
-        st_result_t iRet = ST_OK;
-        st_effect_module_info_t module_info;
-        memset(&module_info, 0, sizeof(st_effect_module_info_t));
-        module_info.type = EFFECT_MODULE_SOUND;
-        module_info.state = EFFECT_MODULE_PAUSED_LAST_FRAME;
-        memcpy(module_info.name, audioName.UTF8String, audioName.length);
-        iRet = st_mobile_effect_set_module_info(self.handle, &module_info);
-        if (iRet != ST_OK) {
-            NSLog(@"st mobile set sound complete str failed: %d", iRet);
-        }
+-(st_result_t)setParam:(st_effect_param_t)param andValue:(float)value {
+    st_result_t iRet = st_mobile_effect_set_param(self.handle, param, value);
+    if (iRet != ST_OK) {
+        NSLog(@"st_mobile_effect_set_param error %d", iRet);
     }
+    return iRet;
 }
 
 -(st_result_t)setFaceMeshList:(st_mobile_face_mesh_list_t)mesh_list {
@@ -583,11 +608,21 @@
     }
     return iRet;
 }
-#endif
 
 - (void)setCurrentEAGLContext:(EAGLContext*)glContext{
     if ([EAGLContext currentContext] != glContext) {
         [EAGLContext setCurrentContext:glContext];
     }
 }
+
+st_result_t _modul_state_change_callback(st_handle_t handle, const st_effect_module_info_t* p_module_info) {
+    if (p_module_info->type == EFFECT_MODULE_GAN_IMAGE) { // GAN
+//        _gan_modul_state_change_callback(handle, p_module_info);
+    } else if (p_module_info->type == EFFECT_MODULE_SEGMENT) { // 绿幕分割
+//        _segment_modul_state_change_callback(handle, p_module_info);
+    }
+    return ST_OK;
+}
+#endif
+
 @end

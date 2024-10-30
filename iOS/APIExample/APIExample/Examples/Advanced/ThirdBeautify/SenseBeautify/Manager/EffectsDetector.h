@@ -15,14 +15,18 @@
 
 @interface EffectsDetector : NSObject
 
+#if __has_include("st_mobile_common.h")
+
 /// 初始化对象
 /// @param type 类型
 - (instancetype)initWithType:(EffectsType)type;
 
-#if __has_include("st_mobile_common.h")
 /// 添加model
 /// @param modelPath 模型路径
 - (st_result_t)setModelPath:(NSString *)modelPath;
+- (st_result_t)setModelPath:(NSString *)modelPath withFirstPhaseFinished:(void(^)(void))finishedCallback;
+
+- (st_result_t)setParam:(st_human_action_param_type)type andValue:(float)value;
 
 /// 人脸检测函数
 /// @param pixelBuffer 每帧图像数据
@@ -65,6 +69,7 @@
 -(st_result_t)resetHumanAction;
 
 -(st_result_t)getMeshList:(st_mobile_face_mesh_list_t *)p_mesh;
+-(st_result_t)getMeshInfo:(st_mobile_mesh_info_t *)mesh_info;
 
 #endif
 
