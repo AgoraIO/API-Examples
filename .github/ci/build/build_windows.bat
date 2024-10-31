@@ -78,7 +78,6 @@ echo sdk_url: %sdk_url%
 echo part2: %part2%
 echo zip_name: %zip_name%
 
-if %compile_project% EQU false goto FINAL
 curl %sdk_url% -o %zip_name%
 if %errorlevel% neq 0 (
     echo Failed to download the file from %sdk_url%
