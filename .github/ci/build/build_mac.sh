@@ -51,26 +51,37 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
-zip_name=${sdk_url##*/}
+unzip_name=Agora_Native_SDK_for_iOS_FULL
+zip_name=output.zip
+sdk_url_flag=false
+
 echo zip_name: $zip_name
+if [ -z "$sdk_url" ]; then
+   sdk_url_flag=false
+   echo "sdk_url is empty"
+   echo unzip_name: $unzip_name 
+   mkdir ./$unzip_name/samples
+   cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
+   ls -al ./$unzip_name/samples/API-Example/
+else 
+   sdk_url_flag=true
+   zip_name=${sdk_url##*/}
+   echo unzip_name: $unzip_name
+   curl -o $zip_name $sdk_url || exit 1
+   7za x ./$zip_name -y > log.txt
+   unzip_name=`ls -S -d */ | grep Agora`
+   echo unzip_name: $unzip_name
 
-curl -o $zip_name $sdk_url || exit 1
-7za x ./$zip_name -y > log.txt
+   rm -rf ./$unzip_name/bin
+   rm ./$unzip_name/commits
+   rm ./$unzip_name/package_size_report.txt
+   mkdir ./$unzip_name/samples
+   cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
+   ls -al ./$unzip_name/samples/API-Example/
+   mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
+fi
 
-unzip_name=`ls -S -d */ | grep Agora`
-echo unzip_name: $unzip_name
-
-rm -rf ./$unzip_name/bin
-rm ./$unzip_name/commits
-rm ./$unzip_name/package_size_report.txt
-mkdir ./$unzip_name/samples
-
-
-cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
-ls -al ./$unzip_name/samples/API-Example/
-mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
-
+python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile $sdk_url_flag
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
