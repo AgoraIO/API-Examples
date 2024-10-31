@@ -61,8 +61,8 @@ if [ -z "$sdk_url" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
    mkdir -p ./$unzip_name/samples
-   cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/API-Example || exit 1
-   ls -al ./$unzip_name/samples/API-Example/
+   cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/${ios_direction} || exit 1
+   ls -al ./$unzip_name/samples/${ios_direction}/
 else
    sdk_url_flag=true
    zip_name=${sdk_url##*/}
@@ -75,13 +75,13 @@ else
    rm ./$unzip_name/commits
    rm ./$unzip_name/package_size_report.txt
    mkdir -p ./$unzip_name/samples
-   cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/API-Example || exit 1
-   ls -al ./$unzip_name/samples/API-Example/
-   mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/ || exit 1
+   cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/${ios_direction} || exit 1
+   ls -al ./$unzip_name/samples/${ios_direction}/
+   mv ./$unzip_name/samples/${ios_direction}/sdk.podspec ./$unzip_name/ || exit 1
 fi
 
 echo "work space1: $WORKSPACE"
-python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/API-Example/Podfile $sdk_url_flag || exit 1
+python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
 
 echo "start compress"
 7za a -tzip result.zip -r $unzip_name > log.txt
@@ -90,7 +90,7 @@ echo $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
 if [ $compile_project = true ]; then
-	cd ./$unzip_name/samples/API-Example
+	cd ./$unzip_name/samples/${ios_direction}
 	./cloud_build.sh || exit 1
 	cd -
 fi
