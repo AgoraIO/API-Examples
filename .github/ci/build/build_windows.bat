@@ -49,8 +49,19 @@ echo build_time: %build_time%
 echo release_version: %release_version%
 echo short_version: %short_version%
 echo pwd: %cd%
-echo sdk_url: %sdk_url%
-
+echo init value sdk_url: %sdk_url%
+setlocal enabledelayedexpansion
+if "%sdk_url%"=="" (
+    REM Read sdk_url from install.ps1
+    for /f "tokens=2 delims=''" %%a in ('findstr /R "^ *\$agora_sdk = '" .\windows\APIExample\install.ps1') do (
+        set sdk_url=%%a
+        REM Remove the trailing single quote
+        set sdk_url=!sdk_url:'=!
+        REM Exit the loop after finding the first match
+        goto :FOUND
+    )
+)
+:FOUND
 echo off
 set zip_name=%sdk_url%
 :LOOP
@@ -63,11 +74,16 @@ set zip_name=%part2%
 goto LOOP
 :END
 echo on
+echo sdk_url: %sdk_url%
+echo part2: %part2%
 echo zip_name: %zip_name%
-
 dir
 
 curl %sdk_url% -o %zip_name%
+if %errorlevel% neq 0 (
+    echo Failed to download the file from %sdk_url%
+    exit /b 1
+)
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
 
