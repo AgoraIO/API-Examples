@@ -78,10 +78,18 @@ echo sdk_url: %sdk_url%
 echo part2: %part2%
 echo zip_name: %zip_name%
 
-dir
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
-del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
-del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
+if %compile_project% EQU false goto FINAL
+curl %sdk_url% -o %zip_name%
+if %errorlevel% neq 0 (
+    echo Failed to download the file from %sdk_url%
+) else (
+    echo Successfully downloaded the file from %sdk_url%
+    dir
+    rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
+    del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
+    del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
+)
+
 mkdir Agora_Native_SDK_for_Windows_FULL\samples
 mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
 rmdir /S /Q windows\cicd
@@ -97,14 +105,6 @@ del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
 if %compile_project% EQU false goto FINAL
-curl %sdk_url% -o %zip_name%
-if %errorlevel% neq 0 (
-    echo Failed to download the file from %sdk_url%
-) else (
-REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
-7z x ./%zip_name% -y
 cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
 call cloud_build.bat
-)
-
 :FINAL
