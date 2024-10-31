@@ -96,15 +96,15 @@ copy result.zip %WORKSPACE%\\withAPIExample_%BUILD_NUMBER%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
+if %compile_project% EQU false goto FINAL
 curl %sdk_url% -o %zip_name%
 if %errorlevel% neq 0 (
     echo Failed to download the file from %sdk_url%
-    exit /b 1
-)
+)else(
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
-
-if %compile_project% EQU false goto FINAL
 cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
 call cloud_build.bat
+)
+
 :FINAL
