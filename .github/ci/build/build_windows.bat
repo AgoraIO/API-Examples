@@ -100,7 +100,7 @@ if %compile_project% EQU false goto FINAL
 curl %sdk_url% -o %zip_name%
 if %errorlevel% neq 0 (
     echo Failed to download the file from %sdk_url%
-)else(
+) else (
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
 cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
