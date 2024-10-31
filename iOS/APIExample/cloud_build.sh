@@ -40,7 +40,7 @@ echo "work space: $WORKSPACE"
 echo "project path: $PROJECT_PATH"
 
 
-pod install || exit 1
+pod install --repo-update || exit 1
 
 # 打包环境
 CONFIGURATION="Debug"
