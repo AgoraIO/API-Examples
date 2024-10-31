@@ -3,7 +3,14 @@ apply plugin: 'kotlin-android'
 apply from: "${rootDir.absolutePath}/git-hooks.gradle"
 apply from: 'vendors.gradle'
 
-def agoraSdkVersion = "4.5.0"
+
+def sdkVersionFile = file("../gradle.properties")
+def properties = new Properties()
+sdkVersionFile.withInputStream { stream ->
+    properties.load(stream)
+}
+def agoraSdkVersion = properties.getProperty("rtc_sdk_version")
+println("${rootProject.project.name}   agoraSdkVersion: ${agoraSdkVersion}")
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
 

@@ -8,6 +8,11 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
+val sdkVersionFile = file("../gradle.properties")
+val properties = Properties()
+properties.load(sdkVersionFile.inputStream())
+val agoraSdkVersion = properties.getProperty("rtc_sdk_version")
+println("${rootProject.project.name}   agoraSdkVersion: ${agoraSdkVersion}")
 val localSdkPath = "${rootProject.projectDir.absolutePath}/../../sdk"
 
 android {
@@ -85,7 +90,7 @@ android {
         outputs.all {
             if (this is ApkVariantOutputImpl) {
                 this.outputFileName =
-                    "${rootProject.name}_${libs.versions.agoraSdk.get()}_${
+                    "${rootProject.name}_${agoraSdkVersion}_${
                         SimpleDateFormat("yyyyMMddHHmm").format(
                             Date()
                         )
@@ -129,8 +134,10 @@ dependencies {
     if (File(localSdkPath).exists()) {
         implementation(fileTree(localSdkPath).include("*.jar", "*.aar"))
     } else {
-        implementation(libs.agora.full.sdk)
-        implementation(libs.agora.full.screen.sharing)
+        implementation("io.agora.rtc:full-sdk:${agoraSdkVersion}")
+        implementation("io.agora.rtc:full-screen-sharing:${agoraSdkVersion}")
+//        implementation(libs.agora.full.sdk)
+//        implementation(libs.agora.full.screen.sharing)
     }
 
 }
