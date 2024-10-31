@@ -49,10 +49,12 @@ echo release_version: $release_version
 echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
-unzip_name=Agora_Native_SDK_for_Android_FULL
+unzip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT
+zip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT.zip
 if [ -z "$sdk_url" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
+   echo zip_name: $zip_name
 else
 	zip_name=${sdk_url##*/}
 	echo zip_name: $zip_name
