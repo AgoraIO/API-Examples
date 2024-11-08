@@ -106,7 +106,7 @@ struct ContentView: View {
                     }
                 }
                 
-                Text("SDK Version: arsenal_46627_FULL_20241022_0154_394587")
+                Text("SDK Version: \(AgoraRtcEngineKit.getSdkVersion())")
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("Agora API Example")
