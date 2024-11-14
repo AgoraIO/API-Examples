@@ -70,6 +70,7 @@ else
 	rm -rf ./$unzip_name/rtc/demo
 	rm ./$unzip_name/rtc/commits
 	rm ./$unzip_name/rtc/package_size_report.txt
+	rm ./$unzip_name/pom
 fi
 mkdir -p ./$unzip_name/rtc/samples 
 cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
