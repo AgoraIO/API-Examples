@@ -80,18 +80,19 @@ else
    mv ./$unzip_name/samples/${ios_direction}/sdk.podspec ./$unzip_name/ || exit 1
 fi
 
-echo "work space1: $WORKSPACE"
-python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
+echo "Current directory files:"
+ls -la
+# python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
 
-echo "start compress"
-7za a -tzip result.zip -r $unzip_name > log.txt
-echo "start move to"
-echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
-mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
+# echo "start compress"
+# 7za a -tzip result.zip -r $unzip_name > log.txt
+# echo "start move to"
+# echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
+# mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
-if [ $compile_project = true ]; then
-	cd ./$unzip_name/samples/${ios_direction}
-	./cloud_build.sh || exit 1
-	cd -
-fi
+# if [ $compile_project = true ]; then
+# 	cd ./$unzip_name/samples/${ios_direction}
+# 	./cloud_build.sh || exit 1
+# 	cd -
+# fi
 
