@@ -78,6 +78,7 @@ else
    rm ./$unzip_name/.commits
    rm ./$unzip_name/AgoraInfra_iOS.swift
    rm ./$unzip_name/AgoraRtcEngine_iOS.podspec
+   rm ./$unzip_name/AgoraAudio_iOS.podspec
    rm ./$unzip_name/Package.swift
    mkdir -p ./$unzip_name/samples
    cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/${ios_direction} || exit 1
