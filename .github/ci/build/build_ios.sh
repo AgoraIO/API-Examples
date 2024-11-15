@@ -74,6 +74,11 @@ else
    rm -rf ./$unzip_name/bin
    rm ./$unzip_name/commits
    rm ./$unzip_name/package_size_report.txt
+
+   rm ./$unzip_name/.commits
+   rm ./$unzip_name/AgoraInfra_iOS.swift
+   rm ./$unzip_name/AgoraRtcEngine_iOS.podspec
+   rm ./$unzip_name/Package.swift
    mkdir -p ./$unzip_name/samples
    cp -rf ./iOS/${ios_direction} ./$unzip_name/samples/${ios_direction} || exit 1
    ls -al ./$unzip_name/samples/${ios_direction}/
