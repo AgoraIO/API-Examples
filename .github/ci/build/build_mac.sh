@@ -76,8 +76,8 @@ else
    rm ./$unzip_name/commits
    rm ./$unzip_name/package_size_report.txt
    rm ./$unzip_name/.commits
-   rm ./$unzip_name/AgoraInfra_iOS.swift
-   rm ./$unzip_name/AgoraRtcEngine_iOS.podspec
+   rm ./$unzip_name/AgoraInfra_macOS.swift
+   rm ./$unzip_name/AgoraRtcEngine_macOS.podspec
    rm ./$unzip_name/Package.swift
    
    mkdir ./$unzip_name/samples
