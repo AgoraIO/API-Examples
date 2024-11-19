@@ -35,6 +35,7 @@ struct JoinVideoChannelToken {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = appId;
+    config.areaCode = GlobalInfo.settings.areaCode;
     config.mEventHandler = {};
     config.mEventHandler.onRequestToken = () => {
       Logger.info(TAG, "onRequestToken ...");

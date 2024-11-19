@@ -11,6 +11,7 @@ import Logger from '../../util/Logger';
 import { common } from '@kit.AbilityKit';
 import ShowToast from '../../util/ShowToast';
 import { TitleBar } from '../../common/TitleBar';
+import { GlobalInfo } from '../Data';
 
 const TAG: string = 'PlayAudioFiles'
 
@@ -31,6 +32,7 @@ struct PlayAudioFiles {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = AppID;
+    config.areaCode = GlobalInfo.settings.areaCode;
     config.mEventHandler = {};
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);

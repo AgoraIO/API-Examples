@@ -25,6 +25,7 @@ import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { AVCastPicker } from '@kit.AVSessionKit';
 import { audio } from '@kit.AudioKit';
+import { GlobalInfo } from '../Data';
 
 const TAG: string = 'JoinAudioChannel'
 
@@ -147,6 +148,7 @@ struct JoinAudioChannel {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = AppID;
+    config.areaCode = GlobalInfo.settings.areaCode;
     config.mEventHandler = {};
     config.mEventHandler.onAudioVolumeIndication = (speakers: Array<AudioVolumeInfo>, totalVolume: number) => {
       Logger.info(TAG,`onAudioVolumeIndication totalVolume:${totalVolume}    speakers:${JSON.stringify(speakers)}`)

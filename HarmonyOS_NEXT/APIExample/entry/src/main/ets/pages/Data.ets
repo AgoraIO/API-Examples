@@ -1,4 +1,4 @@
-import { OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
+import { Constants, OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
 import { ExampleCategory, ExampleItem, SettingsInfo } from '../model/DataType'
 
 export const BASIC_ITEMS: ExampleItem[] =
@@ -101,6 +101,7 @@ export class GlobalInfo {
   static settings: SettingsInfo = {
     dimensions: new VideoDimensions(960, 540),
     frameRate: 15,
-    orientationMode: OrientationMode.ORIENTATION_MODE_ADAPTIVE
+    orientationMode: OrientationMode.ORIENTATION_MODE_ADAPTIVE,
+    areaCode: Constants.AreaCode.GLOB
   }
 }

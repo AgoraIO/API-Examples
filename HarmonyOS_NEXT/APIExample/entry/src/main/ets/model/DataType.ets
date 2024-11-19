@@ -1,4 +1,4 @@
-import { OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
+import { Constants, OrientationMode, VideoDimensions } from '@shengwang/rtc-full'
 
 export interface ExampleCategory{
   title: Resource,
@@ -13,5 +13,6 @@ export interface ExampleItem{
 export interface SettingsInfo {
   dimensions: VideoDimensions,
   frameRate: number,
-  orientationMode: OrientationMode
+  orientationMode: OrientationMode,
+  areaCode: Constants.AreaCode,
 }

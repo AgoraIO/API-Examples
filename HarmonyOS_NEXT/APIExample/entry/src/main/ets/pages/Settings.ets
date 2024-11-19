@@ -1,4 +1,4 @@
-import { OrientationMode, RtcEngine, VideoDimensions } from '@shengwang/rtc-full'
+import { Constants, OrientationMode, RtcEngine, VideoDimensions } from '@shengwang/rtc-full'
 import { TitleBar } from '../common/TitleBar'
 import { CommonItemSelect } from '../common/Widgets'
 import { GlobalInfo } from './Data'
@@ -30,6 +30,16 @@ struct Settings {
     "ADAPTIVE", "FIXED_LANDSCAPE", "FIXED_PORTRAIT"
   ]
   private orientationModeSelectedIndex = 0
+  private areaCodeList: Constants.AreaCode[] = [
+    Constants.AreaCode.GLOB,
+    Constants.AreaCode.CN,
+    Constants.AreaCode.NA,
+    Constants.AreaCode.EU,
+    Constants.AreaCode.AS,
+    Constants.AreaCode.JP,
+    Constants.AreaCode.IN
+  ]
+  private areaCodeSelectedIndex = 0
 
   aboutToAppear(): void {
     for (let i = 0; i < this.dimensionList.length; i++) {
@@ -48,6 +58,11 @@ struct Settings {
     for (let i = 0; i < this.orientationModeList.length; i++) {
       if (GlobalInfo.settings.orientationMode == this.orientationModeList[i]) {
         this.orientationModeSelectedIndex = i
+      }
+    }
+    for (let i = 0; i < this.areaCodeList.length; i++) {
+      if (GlobalInfo.settings.areaCode == this.areaCodeList[i]) {
+        this.areaCodeSelectedIndex = i
       }
     }
   }
@@ -94,6 +109,17 @@ struct Settings {
 
         Divider().margin({ left: 20, right: 20 })
 
+        CommonItemSelect({
+          name: $r("app.string.area"),
+          selects: this.getAreaCodeKeys(),
+          selectIndex: this.areaCodeSelectedIndex,
+          callback: (index: number, value?: string) => {
+            GlobalInfo.settings.areaCode = this.areaCodeList[index]
+          }
+        }).margin({ left: 26, right: 26 })
+
+        Divider().margin({ left: 20, right: 20 })
+
         Text("SDK Version:" + RtcEngine.getSdkVersion())
           .width('100%')
           .textAlign(TextAlign.End)
@@ -101,5 +127,16 @@ struct Settings {
       }
     }
     .backgroundColor($r('app.color.background_shallow_grey'))
+  }
+
+  private getAreaCodeKeys(): string[] {
+    const allKeys = Object.keys(Constants.AreaCode);
+    const allValues = Object.values(Constants.AreaCode);
+
+    // Filter matching keys based on the values in areaCodeList
+    return this.areaCodeList.map(areaCodeValue => {
+      const index = allValues.indexOf(areaCodeValue);
+      return allKeys[index] || '';
+    });
   }
 }

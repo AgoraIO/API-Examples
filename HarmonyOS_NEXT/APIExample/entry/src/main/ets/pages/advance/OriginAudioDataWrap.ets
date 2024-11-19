@@ -11,6 +11,7 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { OriginAudioData } from 'librawdataprocessing.so';
+import { GlobalInfo } from '../Data';
 
 const TAG: string = 'OriginAudioData'
 
@@ -30,6 +31,7 @@ struct OriginAudioDataWrap {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = AppID;
+    config.areaCode = GlobalInfo.settings.areaCode;
     config.mEventHandler = {};
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);

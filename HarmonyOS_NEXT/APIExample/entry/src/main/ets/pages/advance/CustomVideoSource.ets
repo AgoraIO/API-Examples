@@ -38,6 +38,7 @@ struct CustomVideoSource {
     let config: RtcEngineConfig = new RtcEngineConfig();
     let context = getContext(this) as common.UIAbilityContext;
     config.mAppId = AppID;
+    config.areaCode = GlobalInfo.settings.areaCode;
     config.mEventHandler = {};
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
