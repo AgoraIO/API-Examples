@@ -73,12 +73,12 @@ else
    echo unzip_name: $unzip_name
 
    rm -rf ./$unzip_name/bin
-   rm ./$unzip_name/commits
-   rm ./$unzip_name/package_size_report.txt
-   rm ./$unzip_name/.commits
-   rm ./$unzip_name/AgoraInfra_macOS.swift
-   rm ./$unzip_name/AgoraRtcEngine_macOS.podspec
-   rm ./$unzip_name/Package.swift
+   rm -f ./$unzip_name/commits
+   rm -f ./$unzip_name/package_size_report.txt
+   rm -f ./$unzip_name/.commits
+   rm -f ./$unzip_name/AgoraInfra_macOS.swift
+   rm -f ./$unzip_name/AgoraRtcEngine_macOS.podspec
+   rm -f ./$unzip_name/Package.swift
    
    mkdir ./$unzip_name/samples
    cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
