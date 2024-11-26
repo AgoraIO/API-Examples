@@ -616,7 +616,12 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             Log.i(TAG, String.format(LABLE + " user %d offline! reason:%d", uid, reason));
             runOnUIThread(() -> {
                 audioSeatManager.downSeat(uid);
-                remoteUidList.remove(uid);
+                if (remoteUidList.contains(uid)) {
+                    remoteUidList.remove((Integer) uid);
+                    Log.d(TAG, "After removing UID, remoteUidList: " + remoteUidList);
+                } else {
+                    Log.w(TAG, "UID not found in remoteUidList: " + uid);
+                }
             });
         }
 
