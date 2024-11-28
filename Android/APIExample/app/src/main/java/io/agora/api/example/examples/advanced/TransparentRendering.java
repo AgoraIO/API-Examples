@@ -4,10 +4,8 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.RENDER_MODE_FIT;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +20,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import io.agora.api.example.MainApplication;
@@ -35,6 +28,7 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.data.MediaPlayerSource;
@@ -165,29 +159,15 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                List<String> permissionList = new ArrayList<>();
-                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
-                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
-                permissionList.add(Permission.RECORD_AUDIO);
-                permissionList.add(Permission.CAMERA);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
-                }
-
-                String[] permissionArray = new String[permissionList.size()];
-                permissionList.toArray(permissionArray);
-
-                if (AndPermission.hasPermissions(this, permissionArray)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        permissionArray
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        // Permissions Granted
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 stopPlaying();

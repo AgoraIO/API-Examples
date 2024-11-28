@@ -11,7 +11,7 @@
         android:id="@+id/background_video"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/ll_join"
+        app:layout_constraintBottom_toTopOf="@id/ll_container_operation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
@@ -26,80 +26,206 @@
     <include
         android:id="@+id/video_tracking_layout"
         layout="@layout/fragment_live_streaming_video_tracking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/btn_remote_screenshot"
-        app:layout_constraintStart_toStartOf="@id/btn_publish"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_remote_screenshot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-
-        android:text="@string/remote_screenshot"
-        app:layout_constraintBottom_toTopOf="@id/btn_publish"
-        app:layout_constraintStart_toStartOf="@id/btn_publish" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_publish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:enabled="false"
-        android:text="@string/enable_publish"
-        app:layout_constraintBottom_toTopOf="@id/ll_join"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_preload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="@string/preload"
-        app:layout_constraintBottom_toTopOf="@id/ll_join"
-        app:layout_constraintStart_toEndOf="@id/btn_publish" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_switch_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="@string/switch_camera"
-        app:layout_constraintBottom_toTopOf="@id/ll_join"
-        app:layout_constraintStart_toEndOf="@id/btn_preload" />
+        app:layout_constraintBottom_toTopOf="@id/ll_container_operation"
+        app:layout_constraintStart_toStartOf="@id/ll_container_operation"
+        tools:visibility="visible" />
 
     <LinearLayout
-        android:id="@+id/ll_join"
-        android:layout_width="match_parent"
+        android:id="@+id/ll_container_operation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_channel"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:digits="@string/chanel_support_char"
-            android:hint="@string/channel_id" />
+            android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_join"
-            android:layout_width="wrap_content"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_remote_screenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/remote_screenshot" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/scenario"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinner_scenario"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:entries="@array/scenario_type"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/join" />
+            android:gravity="center_vertical">
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_local_screenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:layout_marginBottom="4dp"
+                android:text="@string/local_screenshot" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_setting"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/snapshot_position"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/spinner_snapshot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:entries="@array/video_module_postion"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/setting" />
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_publish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:enabled="false"
+                android:text="@string/enable_publish" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_preload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/preload" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_switch_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/switch_camera" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_container_fp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/local_fps_set"
+                    android:textColor="@android:color/black" />
+
+                <SeekBar
+                    android:id="@+id/sb_local"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="60"
+                    android:min="1"
+                    android:progress="10" />
+
+                <TextView
+                    android:id="@+id/tv_local_fps_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/remote_fps_set"
+                    android:textColor="@android:color/black" />
+
+                <SeekBar
+                    android:id="@+id/sb_remote"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="60"
+                    android:min="1"
+                    android:progress="10" />
+
+                <TextView
+                    android:id="@+id/tv_remote_fps_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_join"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:digits="@string/chanel_support_char"
+                android:hint="@string/channel_id" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/join" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

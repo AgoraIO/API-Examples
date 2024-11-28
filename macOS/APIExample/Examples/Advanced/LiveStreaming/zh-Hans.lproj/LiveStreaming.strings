@@ -38,3 +38,6 @@
 "gCs-hv-sr4.title" = "预加载";
 
 "gBn-zJ-ZES.title" = "垫片推流";
+
+"iuE-dA-CLg.placeholderString"="远端渲染帧率(1-60)，默认15";
+"dbV-BZ-hXR.placeholderString"="本地渲染帧率(1-60)，默认15";

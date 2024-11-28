@@ -2,6 +2,7 @@
 
 #include <IAgoraRtcEngine.h>
 #include "AGVideoWnd.h"
+#include "CDlgBeautyEx.h"
 
 // CDlgBeauty 
 
@@ -76,6 +77,7 @@ private:
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
 	CBeautyEventHandler m_eventHandler;
 	CAGVideoWnd m_videoWnds[2];
+	CDlgBeautyEx* mBeautyDlgEx;
 public:
 	afx_msg void OnBnClickedButtonJoinchannel();
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -88,6 +90,8 @@ public:
 	void ResumeStatus();
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
+
+	void UpdateExtentCbState(bool isCheck);
 
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
@@ -131,4 +135,8 @@ public:
 
 	afx_msg void OnBnClickedStaticVirtualBgChoose(UINT idCtl);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	CSliderCtrl mSliderBright;
+	afx_msg void OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedCheckExtention();
+	CButton mCkExtention;
 };

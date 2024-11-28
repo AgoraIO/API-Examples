@@ -3,7 +3,7 @@
 //  SenseMeEffects
 //
 //  Created by sunjian on 2021/7/16.
-//  Copyright © 2021 SenseTime. All rights reserved.
+//  Copyright © 2021 SoftSugar. All rights reserved.
 //
 
 #import "EffectsAnimal.h"
@@ -11,11 +11,10 @@
 #import "st_mobile_effect.h"
 #endif
 #import <AVFoundation/AVFoundation.h>
-#import "BundleUtil.h"
 
 @interface EffectsAnimal ()
 {
-#if __has_include("st_mobile_common.h")
+#if __has_include("st_mobile_effect.h")
     st_handle_t _hAnimalHandle;
 #endif
 }
@@ -42,10 +41,9 @@
 }
 
 - (void)createHandlerWithType:(EffectsType)type{
-#if __has_include("st_mobile_common.h")
-    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"SenseLib" podName:@"senseLib"];
-    NSString *catFaceModelPath = [bundle pathForResource:@"M_SenseME_CatFace_3.0.0" ofType:@"model"];
-    NSString *dogFaceModelPath = [bundle pathForResource:@"M_SenseME_DogFace_2.0.0" ofType:@"model"];
+    NSString *catFaceModelPath = [[NSBundle mainBundle] pathForResource:@"M_SenseME_CatFace_p_3.2.0.1" ofType:@"model"];
+    NSString *dogFaceModelPath = [[NSBundle mainBundle] pathForResource:@"M_SenseME_DogFace_p_2.0.0.1" ofType:@"model"];
+#if __has_include("st_mobile_effect.h")
     int config = ST_MOBILE_TRACKING_MULTI_THREAD;
     switch (type) {
         case EffectsTypePhoto:
@@ -80,8 +78,7 @@
 - (st_result_t)detectAnimalWithPixelbuffer:(CVPixelBufferRef)pixelBuffer
                                     rotate:(st_rotate_type)rotate
                                     config:(st_mobile_animal_type)config
-                              detectResult:(st_mobile_animal_face_t **)detectResult
-                               animalCount:(int *)animalCount{
+                              detectResult:(nonnull st_mobile_animal_result_t *)detectResult{
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     unsigned char* pixelData = (unsigned char*)CVPixelBufferGetBaseAddress(pixelBuffer);
     int iBytesPerRow = (int)CVPixelBufferGetBytesPerRow(pixelBuffer);
@@ -95,7 +92,7 @@
                                               stride:iBytesPerRow
                                               config:config
                                         detectResult:detectResult
-                                         animalCount:animalCount];
+    ];
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     return state;
 }
@@ -107,9 +104,7 @@
                                height:(int)height
                                stride:(int)stride
                                config:(st_mobile_animal_type)config
-                         detectResult:(st_mobile_animal_face_t **)detectResult
-                          animalCount:(int *)animalCount{
-
+                         detectResult:(st_mobile_animal_result_t *)detectResult {
     EFFECTSTIMELOG(key)
     st_result_t iRet = st_mobile_tracker_animal_face_track(_hAnimalHandle,
                                                            buffer,
@@ -119,8 +114,7 @@
                                                            stride,
                                                            rotate,
                                                            config,
-                                                           detectResult,
-                                                           animalCount);
+                                                           detectResult);
     EFFECTSTIMEPRINT(key, "st_mobile_tracker_animal_face_track");
     return iRet;
 }
@@ -133,5 +127,4 @@
     return iRet;
 }
 #endif
-
 @end

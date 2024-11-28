@@ -6,10 +6,10 @@
 //  Copyright © 2021 sjuinan. All rights reserved.
 //
 
-#import <AVFoundation/AVFoundation.h>
+#import <Foundation/Foundation.h>
 #import <OpenGLES/EAGL.h>
-#import "EffectsDetector.h"
 #if __has_include("st_mobile_common.h")
+#import "EffectsDetector.h"
 #import "st_mobile_common.h"
 #import "st_mobile_effect.h"
 #endif
@@ -18,7 +18,6 @@
 @protocol EFEffectsProcessDelegate <NSObject>
 
 - (void)updateEffectsFacePoint:(CGPoint)point;
-
 #if __has_include("st_mobile_common.h")
 - (void)updateCommonObjectPosition:(st_rect_t)rect;
 #endif
@@ -38,6 +37,8 @@
 
 @property (nonatomic, assign) uint64_t detectConfig;
 
+@property (nonatomic, assign) EFDetectConfigMode configMode;
+
 /// 鉴权
 /// @param licensePath 授权文件路径
 + (BOOL)authorizeWithLicensePath:(NSString *)licensePath;
@@ -48,12 +49,13 @@
 
 /// 初始化对象
 /// @param type 类型
-- (instancetype)initWithType:(EffectsType)type glContext:(EAGLContext *)glContext;
+- (instancetype)initWithType:(EffectsType)type  glContext:(EAGLContext *)glContext;
 
 #if __has_include("st_mobile_common.h")
 /// 加载模型
 /// @param modelPath 模型文件路径(可将多个模型放在一个文件中，SDK内部遍历加载Model)
 - (st_result_t)setModelPath:(NSString *)modelPath;
+- (st_result_t)setModelPath:(NSString *)modelPath withFirstPhaseFinished:(void(^)(void))finishedCallback;
 
 /// 设置特效
 /// @param type 特效类型
@@ -116,6 +118,8 @@
 
 - (void)addStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
 
+-(void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
+
 /// 获取获取素材的贴纸信息
 /// @param package_id package_id
 /// @param modules 贴纸信息
@@ -144,19 +148,24 @@
                               rotate:(st_rotate_type)rotate
                       cameraPosition:(AVCaptureDevicePosition)position
                          humanAction:(st_mobile_human_action_t *)detectResult
-                        animalResult:(st_mobile_animal_face_t **)animalResult
-                         animalCount:(int *)animalCount;
+                        animalResult:(st_mobile_animal_result_t *)animalResult;
 
 -(st_result_t)resetHumanAction;
+
+-(st_result_t)setHumanActionParam:(st_human_action_param_type)type andValue:(float)value;
+-(st_result_t)setEffectParam:(st_effect_param_t)param andValue:(float)value;
 
 - (st_result_t)renderPixelBuffer:(CVPixelBufferRef)pixelBuffer
                           rotate:(st_rotate_type)rotate
                      humanAction:(st_mobile_human_action_t)detectResult
-                    animalResult:(st_mobile_animal_face_t *)animalResult
-                     animalCount:(int)animalCount
+                    animalResult:(st_mobile_animal_result_t *)animalResult
                       outTexture:(GLuint)outTexture
                   outPixelFormat:(st_pixel_format)fmt_out
                          outData:(unsigned char *)img_out;
+
+-(st_result_t)detectAttribute:(unsigned char *)imageData pixelFormat:(st_pixel_format)pixel_format imageWidth:(int)image_width imageHeight:(int)image_height imageStride:(int)image_stride orientation:(st_rotate_type)orientation withGenderCallback:(void(^)(BOOL isMale))callback;
+
+-(st_result_t)detectAttribute:(unsigned char *)imageData pixelFormat:(st_pixel_format)pixel_format imageWidth:(int)image_width imageHeight:(int)image_height detectResult:(st_mobile_human_action_t)detectResult withGenderCallback:(void(^)(BOOL isMale))callback;
 
 /// 处理视频数据
 /// @param pixelBuffer 视频数据

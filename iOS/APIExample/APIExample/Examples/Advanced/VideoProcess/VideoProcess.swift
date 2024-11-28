@@ -44,6 +44,8 @@ class VideoProcessMain: BaseViewController {
     @IBOutlet weak var smoothSlider: UISlider!
     @IBOutlet weak var strengthSlider: UISlider!
     @IBOutlet weak var skinProtectSlider: UISlider!
+    @IBOutlet weak var whiteningSlider: UISlider?
+    @IBOutlet weak var beautyScrollView: UIScrollView?
 
     var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -54,10 +56,20 @@ class VideoProcessMain: BaseViewController {
     var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
+    var whintening = 0.5
+    
+    private var makeupParams = [String: Any]()
+    private var enableFaceShape: Bool = false
+    private lazy var faceshapeOption = AgoraFaceShapeBeautyOptions()
+    private var beautyShapeParames = [String: Float]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        if let beautyScrollView = beautyScrollView {
+            beautyScrollView.contentSize = CGSize(width: 800, height: beautyScrollView.frame.size.height)
+        }
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -167,17 +179,18 @@ class VideoProcessMain: BaseViewController {
         smoothSlider.value = beautifyOption.smoothnessLevel
         strengthSlider.value = Float(strength)
         skinProtectSlider.value = Float(skinProtect)
+        whiteningSlider?.value = Float(whintening)
     }
     
     @IBAction func onChangeBeauty(_ sender: UISwitch) {
-        if sender.isOn {
-            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
-                agoraKit.setBeautyEffectOptions(true, options: beautifyOption)
-            } else {
-                ToastView.show(text: "The feature is unavailable in the device!")
-            }
-        } else {
-            agoraKit.setBeautyEffectOptions(false, options: beautifyOption)
+        guard agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) else {
+            ToastView.show(text: "The feature is unavailable in the device!")
+            return
+        }
+            
+        agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
+        if let slider = whiteningSlider {
+            onWhinteningSlider(slider)
         }
     }
 
@@ -236,6 +249,15 @@ class VideoProcessMain: BaseViewController {
         options.strengthLevel = Float(strength)
         options.skinProtectLevel = Float(skinProtect)
         agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: options)
+    }
+    
+    @IBAction func onWhinteningSlider(_ sender: UISlider) {
+        let options = AgoraFilterEffectOptions()
+        options.path = "built_in_whiten_filter"
+        options.strength = sender.value
+        whintening = Double(sender.value)
+        let ret = agoraKit.setFilterEffectOptions(beautySwitch.isOn, options: options)
+        print("onWhinteningSlider: \(ret), \(options.strength)")
     }
     
     @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
@@ -366,5 +388,494 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+}
+
+private let makeupList = [
+    [
+        "name": "Makeup Enable".localized,
+        "key": "enable_mu",
+        "type": "switch"
+    ], [
+        "name": "Eyebrow Style".localized,
+        "key": "browStyle",
+        "type": "segment",
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Eyebrow Color".localized,
+        "key": "browColor",
+        "type": "segment",
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
+    ], [
+        "name": "Eyebrow Strength".localized,
+        "key": "browStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ], [
+        "name": "Eyelash Style".localized,
+        "key": "lashStyle",
+        "type": "segment",
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Eyelash Color".localized,
+        "key": "lashColor",
+        "type": "segment",
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
+    ], [
+        "name": "Eyelash Strength".localized,
+        "key": "lashStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ], [
+        "name": "Eyeshadow Style".localized,
+        "key": "shadowStyle",
+        "type": "segment",
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Eyeshadow Strength".localized,
+        "key": "shadowStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ], [
+        "name": "Pupil Style".localized,
+        "key": "pupilStyle",
+        "type": "segment",
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Pupil Strength".localized,
+        "key": "pupilStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ], [
+        "name": "Blush Style".localized,
+        "key": "blushStyle",
+        "type": "segment",
+        "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+    ], [
+        "name": "Blush Color".localized,
+        "key": "blushColor",
+        "type": "segment",
+        "value": [
+            "Blush Color None".localized,
+            "Blush Color Shade 1".localized,
+            "Blush Color Shade 2".localized,
+            "Blush Color Shade 3".localized,
+            "Blush Color Shade 4".localized,
+            "Blush Color Shade 5".localized
+        ]
+    ], [
+        "name": "Blush Strength".localized,
+        "key": "blushStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ], [
+        "name": "Lip Style".localized,
+        "key": "lipStyle",
+        "type": "segment",
+        "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
+    ], [
+        "name": "Lip Color".localized,
+        "key": "lipColor",
+        "type": "segment",
+        "value": [
+            "Blush Color None".localized,
+            "Blush Color Shade 1".localized,
+            "Blush Color Shade 2".localized,
+            "Blush Color Shade 3".localized,
+            "Blush Color Shade 4".localized,
+            "Blush Color Shade 5".localized
+        ]
+    ], [
+        "name": "Lip Strength".localized,
+        "key": "lipStrength",
+        "type": "slider",
+        "value": [0, 1]
+    ]
+]
+
+// MARK: make up setting
+extension VideoProcessMain {
+    @IBAction func onShowMakeUpAction() {
+        // 创建自定义视图控制器
+        let customAlertVC = UIViewController()
+        customAlertVC.modalPresentationStyle = .overFullScreen
+        customAlertVC.view.backgroundColor = .clear
+
+        // 自定义内容视图
+        let alertView = UIView()
+        alertView.translatesAutoresizingMaskIntoConstraints = false
+        alertView.backgroundColor = UIColor.white
+        alertView.layer.shadowColor = UIColor.black.cgColor
+        alertView.layer.shadowOpacity = 0.2
+        alertView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        alertView.layer.shadowRadius = 4
+
+        customAlertVC.view.addSubview(alertView)
+
+        // 设置 alertView 的约束
+        NSLayoutConstraint.activate([
+            alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
+            alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
+            alertView.widthAnchor.constraint(equalTo: customAlertVC.view.widthAnchor, constant: -20),
+            alertView.heightAnchor.constraint(equalToConstant: 300)
+        ])
+
+        // 创建 scrollView
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        alertView.addSubview(scrollView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+        ])
+
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+        
+
+        // 添加 UILabels 和 UISliders 到 contentView
+        var lastLabel: UILabel?
+        for i in 0..<makeupList.count {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.text = makeupList[i]["name"] as? String ?? "none"
+            label.font = UIFont.systemFont(ofSize: 12)
+            label.textColor = .black
+            label.tag = i + 2000
+            contentView.addSubview(label)
+
+            var valueView: UIView?
+            let key = makeupList[i]["key"] as? String ?? ""
+            let type = makeupList[i]["type"] as? String ?? ""
+            if type == "slider" {
+                let value = makeupList[i]["value"] as? [Float] ?? []
+                let sliderView = UISlider()
+                label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
+                sliderView.minimumValue = value.first ?? 0
+                sliderView.maximumValue = value.last ?? 1
+                sliderView.value = makeupParams[key] as? Float ?? 0
+                sliderView.addTarget(self, action: #selector(makeupSliderAction(_:)), for: .valueChanged)
+                valueView = sliderView
+            } else if type == "switch" {
+                let switchView = UISwitch()
+                switchView.isOn = makeupParams[key] as? Bool ?? false
+                switchView.addTarget(self, action: #selector(makeupSwitchAction(_:)), for: .valueChanged)
+                valueView = switchView
+            } else if type == "segment" {
+                let value = makeupList[i]["value"] as? [String] ?? []
+                let segmentView = UISegmentedControl(items: value)
+                segmentView.selectedSegmentIndex = makeupParams[key] as? Int ?? 0
+                segmentView.addTarget(self, action: #selector(makeupSegmentAction(_:)), for: .valueChanged)
+                valueView = segmentView
+            }
+            guard let valueView = valueView else {return}
+            valueView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(valueView)
+            valueView.tag = i + 1000
+            // 设置 label 和 valueView 的约束
+            NSLayoutConstraint.activate([
+                label.topAnchor.constraint(equalTo: lastLabel?.bottomAnchor ?? contentView.topAnchor, constant: lastLabel == nil ? 10 : 10),
+                label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+                label.trailingAnchor.constraint(equalTo: valueView.leadingAnchor, constant: -10),
+                label.heightAnchor.constraint(equalToConstant: 40),
+                valueView.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+                valueView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+            ])
+            lastLabel = label // 更新 lastLabel
+        }
+
+        // 添加确认按钮
+        let confirmButton = UIButton(type: .system)
+        confirmButton.setTitle("Sure".localized, for: .normal)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        confirmButton.addTarget(self, action: #selector(confirmAction), for: .touchUpInside)
+
+        alertView.addSubview(confirmButton)
+
+        // 设置确认按钮的约束
+        NSLayoutConstraint.activate([
+            confirmButton.topAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -40),
+            confirmButton.centerXAnchor.constraint(equalTo: alertView.centerXAnchor)
+        ])
+
+        // 更新 contentView 的高度约束
+        let lastView = lastLabel ?? contentView
+        NSLayoutConstraint.activate([
+            contentView.bottomAnchor.constraint(equalTo: lastView.bottomAnchor, constant: 10)
+        ])
+
+        // 显示自定义视图控制器
+        self.present(customAlertVC, animated: true, completion: nil)
+    }
+    
+    @objc func makeupSliderAction(_ view: UISlider) {
+        let index = view.tag - 1000
+        let key = makeupList[index]["key"] as? String ?? ""
+        makeupParams[key] = view.value
+        
+        if let label = view.superview?.viewWithTag(index + 2000) as? UILabel {
+            label.text = String(format: "%@[%.f]", makeupList[index]["name"] as? String ?? "none", view.value)
+        }
+        updateMakeup()
+    }
+    
+    @objc func makeupSwitchAction(_ view: UISwitch) {
+        let index = view.tag - 1000
+        let key = makeupList[index]["key"] as? String ?? ""
+        makeupParams[key] = view.isOn
+        updateMakeup()
+    }
+    
+    @objc func makeupSegmentAction(_ view: UISegmentedControl) {
+        let index = view.tag - 1000
+        let key = makeupList[index]["key"] as? String ?? ""
+        makeupParams[key] = view.selectedSegmentIndex
+        updateMakeup()
+    }
+    
+    @objc func confirmAction() {
+        // 关闭自定义视图控制器
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    private func updateMakeup() {
+        guard let json = try? JSONSerialization.data(withJSONObject: makeupParams, options: []),
+              let jsonString = String(data: json, encoding: .utf8) else {
+            print("updateMakeup fail")
+            return
+        }
+        
+        let ret = self.agoraKit.setExtensionPropertyWithVendor("agora_video_filters_clear_vision",
+                                                               extension: "clear_vision",
+                                                               key: "makeup_options",
+                                                               value: jsonString)
+//        print("updateMakeup ret: \(ret) jsonString: \(jsonString)")
+    }
+}
+
+private let beautyShapeList = [
+    ["name": "Face Shape Enable".localized, "key": "enable", "type": "switch"],
+    ["name": "Face Shape Gender".localized,
+     "key": "gender",
+     "type": "segment",
+     "value": ["Face Shape Gender Female".localized, "Face Shape Gender Male".localized]],
+    ["name": "Face Shape Intensity".localized, "key": "intensity", "type": "slider", "value": [0, 100]],
+    
+    ["name": "Face Shape Area Head Scale".localized, "key": "headscale", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Forehead".localized, "key": "forehead", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Face Contour".localized, "key": "facecontour", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Face Length".localized, "key": "facelength", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Face Width".localized, "key": "facewidth", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Cheek Bone".localized, "key": "cheekbone", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Cheek".localized, "key": "cheek", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Chin".localized, "key": "chin", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Eye Scale".localized, "key": "eyescale", "type": "slider", "value": [0, 100]],
+    ["name": "Face Shape Area Nose Length".localized, "key": "noselength", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Nose Width".localized, "key": "nosewidth", "type": "slider", "value": [-100, 100]],
+    ["name": "Face Shape Area Mouth Scale".localized, "key": "mouthscale", "type": "slider", "value": [-100, 100]]
+]
+
+// MARK: face shape settings
+extension VideoProcessMain {
+    private func setBeauty(key: String?, value: Float) {
+        let areaOption = AgoraFaceShapeAreaOptions()
+        switch key {
+        case "intensity":
+            faceshapeOption.styleIntensity = Int32(value)
+            updateFaceShape()
+            return
+        case "headscale":
+            areaOption.shapeArea = AgoraFaceShapeArea.headScale
+        case "forehead":
+            areaOption.shapeArea = AgoraFaceShapeArea.forehead
+        case "facecontour":
+            areaOption.shapeArea = AgoraFaceShapeArea.faceContour
+        case "facewidth":
+            areaOption.shapeArea = AgoraFaceShapeArea.faceWidth
+        case "facelength":
+            areaOption.shapeArea = AgoraFaceShapeArea.faceLength
+        case "cheekbone":
+            areaOption.shapeArea = AgoraFaceShapeArea.cheekbone
+        case "cheek":
+            areaOption.shapeArea = AgoraFaceShapeArea.cheek
+        case "chin":
+            areaOption.shapeArea = AgoraFaceShapeArea.chin
+        case "eyescale":
+            areaOption.shapeArea = AgoraFaceShapeArea.eyeScale
+        case "noselength":
+            areaOption.shapeArea = AgoraFaceShapeArea.noseLength
+        case "nosewidth":
+            areaOption.shapeArea = AgoraFaceShapeArea.noseWidth
+        case "mouthscale":
+            areaOption.shapeArea = AgoraFaceShapeArea.mouthScale
+        default:
+            break
+        }
+        areaOption.shapeIntensity = Int32(value)
+        agoraKit?.setFaceShapeAreaOptions(areaOption)
+        updateFaceShape()
+    }
+    
+    @IBAction func onShowFaceShapeAction() {
+        // 创建自定义视图控制器
+        let customAlertVC = UIViewController()
+        customAlertVC.modalPresentationStyle = .overFullScreen
+        customAlertVC.view.backgroundColor = .clear
+
+        // 自定义内容视图
+        let alertView = UIView()
+        alertView.translatesAutoresizingMaskIntoConstraints = false
+        alertView.backgroundColor = UIColor.white
+        alertView.layer.shadowColor = UIColor.black.cgColor
+        alertView.layer.shadowOpacity = 0.2
+        alertView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        alertView.layer.shadowRadius = 4
+
+        customAlertVC.view.addSubview(alertView)
+
+        // 设置 alertView 的约束
+        NSLayoutConstraint.activate([
+            alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
+            alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
+            alertView.widthAnchor.constraint(equalTo: customAlertVC.view.widthAnchor, constant: -20),
+            alertView.heightAnchor.constraint(equalToConstant: 300)
+        ])
+
+        // 创建 scrollView
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        alertView.addSubview(scrollView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+        ])
+
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+
+        // 添加 UILabels 和 UISliders 到 contentView
+        var lastLabel: UILabel?
+        for i in 0..<beautyShapeList.count {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.text = beautyShapeList[i]["name"]  as? String ?? "unknown"
+            label.font = UIFont.systemFont(ofSize: 12)
+            label.textColor = .black
+            label.tag = i + 2000
+            contentView.addSubview(label)
+            
+            var valueView: UIView?
+            let key = beautyShapeList[i]["key"] as? String ?? ""
+            let type = beautyShapeList[i]["type"] as? String ?? ""
+            if type == "slider" {
+                let value = makeupList[i]["value"] as? [Float] ?? []
+                let sliderView = UISlider()
+                label.text = String(format: "%@[%.f]", label.text ?? "none", sliderView.value)
+                sliderView.minimumValue = value.first ?? 0
+                sliderView.maximumValue = value.last ?? 100
+                sliderView.value = beautyShapeParames[key] ?? 0
+                sliderView.addTarget(self, action: #selector(beautyShapeSliderAction(_:)), for: .valueChanged)
+                valueView = sliderView
+            } else if type == "switch" {
+                let switchView = UISwitch()
+                switchView.isOn = enableFaceShape
+                switchView.addTarget(self, action: #selector(beautyShapeSwitchAction(_:)), for: .valueChanged)
+                valueView = switchView
+            } else if type == "segment" {
+                let value = beautyShapeList[i]["value"] as? [String] ?? []
+                let segmentView = UISegmentedControl(items: value)
+                segmentView.selectedSegmentIndex = Int(faceshapeOption.shapeStyle.rawValue)
+                segmentView.addTarget(self, action: #selector(beautyShapeSegmentAction(_:)), for: .valueChanged)
+                valueView = segmentView
+            }
+            guard let valueView = valueView else {return}
+            valueView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(valueView)
+            valueView.tag = i + 1000
+            
+            // 设置 label 和 valueView 的约束
+            NSLayoutConstraint.activate([
+                label.topAnchor.constraint(equalTo: lastLabel?.bottomAnchor ?? contentView.topAnchor, constant: lastLabel == nil ? 10 : 10),
+                label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+                label.trailingAnchor.constraint(equalTo: valueView.leadingAnchor, constant: -10),
+                label.heightAnchor.constraint(equalToConstant: 40),
+                valueView.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+                valueView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+            ])
+            lastLabel = label // 更新 lastLabel
+        }
+
+        // 添加确认按钮
+        let confirmButton = UIButton(type: .system)
+        confirmButton.setTitle("Sure".localized, for: .normal)
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        confirmButton.addTarget(self, action: #selector(confirmAction), for: .touchUpInside)
+
+        alertView.addSubview(confirmButton)
+
+        // 设置确认按钮的约束
+        NSLayoutConstraint.activate([
+            confirmButton.topAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -40),
+            confirmButton.centerXAnchor.constraint(equalTo: alertView.centerXAnchor)
+        ])
+
+        // 更新 contentView 的高度约束
+        let lastView = lastLabel ?? contentView
+        NSLayoutConstraint.activate([
+            contentView.bottomAnchor.constraint(equalTo: lastView.bottomAnchor, constant: 10)
+        ])
+
+        // 显示自定义视图控制器
+        self.present(customAlertVC, animated: true, completion: nil)
+    }
+    
+    @objc func beautyShapeSliderAction(_ view: UISlider) {
+        let index = view.tag - 1000
+        let key = beautyShapeList[index]["key"] as? String ?? ""
+        beautyShapeParames[key] = view.value
+        
+        if let label = view.superview?.viewWithTag(index + 2000) as? UILabel {
+            label.text = String(format: "%@[%.f]", beautyShapeList[index]["name"] as? String ?? "none", view.value)
+        }
+        
+        setBeauty(key: key, value: view.value)
+    }
+    
+    @objc func beautyShapeSwitchAction(_ view: UISwitch) {
+        enableFaceShape = view.isOn
+        updateFaceShape()
+    }
+    
+    @objc func beautyShapeSegmentAction(_ view: UISegmentedControl) {
+        faceshapeOption.shapeStyle = AgoraFaceShapeStyle(rawValue: UInt(view.selectedSegmentIndex)) ?? .female
+        updateFaceShape()
+    }
+    
+    private func updateFaceShape() {
+        self.agoraKit.setFaceShapeBeautyOptions(enableFaceShape, options: faceshapeOption)
     }
 }

@@ -143,6 +143,7 @@ fun CustomAudioSource() {
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
                 option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+                option.publishMicrophoneTrack = false
                 TokenUtils.gen(channelName, 0){
                     rtcEngine.joinChannel(it, channelName, 0, option)
                 }

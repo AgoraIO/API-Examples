@@ -51,7 +51,9 @@ echo short_version: %short_version%
 echo pwd: %cd%
 echo sdk_url: %sdk_url%
 
-echo off
+
+set zip_name=Agora_Native_SDK_for_Windows_FULL_DEFAULT.zip
+if %compile_project% EQU false goto SKIP_DOWNLOAD
 set zip_name=%sdk_url%
 :LOOP
 for /f "tokens=1* delims=</>" %%a in ("%zip_name%") do (
@@ -70,11 +72,13 @@ dir
 curl %sdk_url% -o %zip_name%
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
-
 dir
 rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
 del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
 del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
+:SKIP_DOWNLOAD
+
+
 mkdir Agora_Native_SDK_for_Windows_FULL\samples
 mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
 rmdir /S /Q windows\cicd

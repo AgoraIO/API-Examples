@@ -33,6 +33,9 @@
 #include "Advanced/PushExternalVideoYUV/PushExternalVideoYUV.h"
 #include "Advanced/MultiVideoSourceTracks/MultiVideoSourceTracks.h"
 #include "Advanced/FaceCapture/CAgoraFaceCaptureDlg.h"
+#include "Advanced/TransparentBg/TransparentBgDialog.h"
+#include "Advanced/RtePlayer/RtePlayerDlg.h"
+#include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -69,13 +72,13 @@ public:
     afx_msg void OnBnClickedButtonRegister();
     afx_msg void OnBnClickedButtonDemo();
     afx_msg LRESULT OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam);
-   
+
 private:
     void InitSceneDialog();
     void InitSceneList();
     void InitCtrlText();
     HTREEITEM GetHitItem(NMHDR *pNMHDR);
-    
+
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
@@ -107,7 +110,10 @@ private:
     PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
     MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
     CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
+    CAgoraCrossChannelDlg       *m_pAgoraCrossChannelDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
+    CTransparentBgDlg* m_TransparentDlg = nullptr;
+    CRtePlayerDlg* m_RtePlayer = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
 	std::mutex m_mutex;

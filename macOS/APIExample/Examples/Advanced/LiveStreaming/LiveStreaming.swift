@@ -241,8 +241,8 @@ class LiveStreamingMain: BaseViewController {
     func initSelectRolePicker() {
         selectRolePicker.label.stringValue = "Role".localized
         selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
-        selectRolePicker.onSelectChanged {
-            guard let selected = self.selectedRole else { return }
+        selectRolePicker.onSelectChanged { [weak self] in
+            guard let self = self, let selected = self.selectedRole else { return }
             if self.isJoined {
                 let mediaOption = AgoraRtcChannelMediaOptions()
                 mediaOption.publishCameraTrack = selected == .broadcaster
@@ -250,7 +250,7 @@ class LiveStreamingMain: BaseViewController {
                 mediaOption.clientRoleType = selected
                 self.agoraKit.updateChannel(with: mediaOption)
                 self.agoraKit.setClientRole(selected)
-                _ = selected == .broadcaster ? self.agoraKit.startPreview() : self.agoraKit.stopPreview()
+                self.updatePreview(role: selected)
             }
             self.functionVC?.waterMarkContainer.isHidden = selected == .audience
             self.functionVC?.bFrameContainer.isHidden = selected == .audience
@@ -322,7 +322,7 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
-        scrollView.documentView?.setFrameSize(CGSizeMake(314, 645))
+        scrollView.documentView?.setFrameSize(CGSize(width: 314, height: 720))
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
@@ -403,11 +403,7 @@ class LiveStreamingMain: BaseViewController {
             videoCanvas.renderMode = .hidden
             // you have to call startPreview to see local video
             agoraKit.setupLocalVideo(videoCanvas)
-            if role == .broadcaster {
-                agoraKit.startPreview()
-            } else {
-                agoraKit.stopPreview()
-            }
+            updatePreview(role: role)
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -443,6 +439,7 @@ class LiveStreamingMain: BaseViewController {
             videoCanvas.renderMode = .hidden
             agoraKit.setupLocalVideo(videoCanvas)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                self.agoraKit.stopPreview()
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
                 self.videos[0].uid = nil
@@ -452,6 +449,15 @@ class LiveStreamingMain: BaseViewController {
                     $0.statsLabel.stringValue = ""
                 }
             }
+        }
+    }
+    
+    private func updatePreview(role: AgoraClientRole) {
+        if role == .broadcaster {
+            agoraKit.startPreview()
+            agoraKit.setLocalRenderTargetFps(.camera, targetFps: functionVC?.localRenderTextField?.intValue ?? 0)
+        } else {
+            agoraKit.stopPreview()
         }
     }
     
@@ -487,6 +493,14 @@ class LiveStreamingMain: BaseViewController {
         }
         functionVC?.clickEncoderSegmentSwitch = { [weak self] s in
             self?.onTapEncoderSegment(s)
+        }
+        
+        functionVC?.onChangeLocalRenderFps = { [weak self] fps in
+            self?.agoraKit.setLocalRenderTargetFps(.camera, targetFps: fps)
+        }
+        
+        functionVC?.onChangeRemoteRenderFps = { [weak self] fps in
+            self?.agoraKit.setRemoteRenderTargetFps(fps)
         }
     }
     
@@ -568,6 +582,8 @@ class LiveStreamingMain: BaseViewController {
         encoderConfig.advancedVideoOptions = advancedOptions
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
+    
+    
 }
 
 class LiveStreamingRTCFunctionVC: BaseViewController {
@@ -578,6 +594,8 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     var clickVideoImageSwitch: ((NSSwitch) -> Void)?
     var clickBFrameSwitch: ((NSSwitch) -> Void)?
     var clickEncoderSegmentSwitch: ((NSSegmentedControl) -> Void)?
+    var onChangeRemoteRenderFps: ((Int32)->())?
+    var onChangeLocalRenderFps: ((Int32)->())?
     @IBOutlet weak var snapShot: NSButton!
     @IBAction func onTakeSnapshot(_ sender: Any) {
         clickTakeSnapshotClosure?()
@@ -612,6 +630,33 @@ class LiveStreamingRTCFunctionVC: BaseViewController {
     @IBOutlet weak var encoderSegment: NSSegmentedControl!
     @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
         clickEncoderSegmentSwitch?(sender)
+    }
+    
+    // lcoal render fps editor
+    @IBOutlet weak var localRenderTextField: NSTextField?
+    
+    // remote render fps editor
+    @IBOutlet weak var remoteRenderTextField: NSTextField?
+}
+
+extension LiveStreamingRTCFunctionVC: NSTextFieldDelegate {
+    func controlTextDidChange(_ obj: Notification) {
+        guard let textField = obj.object as? NSTextField else {return}
+        if let number = Int(textField.stringValue) {
+            if number > 60 {
+                textField.stringValue = "60"
+            } else if number == 0 {
+                textField.stringValue = ""
+            }
+        } else {
+            textField.stringValue = ""
+        }
+         
+        if textField == localRenderTextField {
+            self.onChangeLocalRenderFps?(Int32(textField.stringValue) ?? 15)
+        } else {
+            self.onChangeRemoteRenderFps?(Int32(textField.stringValue) ?? 15)
+        }
     }
 }
 

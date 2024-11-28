@@ -3,11 +3,11 @@
 //  SenseMeEffects
 //
 //  Created by sunjian on 2021/7/16.
-//  Copyright © 2021 SenseTime. All rights reserved.
+//  Copyright © 2021 SoftSugar. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#if __has_include("st_mobile_common.h")
+#if __has_include("st_mobile_effect.h")
 #import "st_mobile_common.h"
 #import "st_mobile_animal.h"
 #endif
@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EffectsAnimal : NSObject
 - (instancetype)initWithType:(EffectsType)type;
-#if __has_include("st_mobile_common.h")
+
+#if __has_include("st_mobile_effect.h")
 /// 动物检测函数
 /// @param pixelBuffer 每帧图像数据
 /// @param rotate 手机旋转方向
@@ -25,8 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (st_result_t)detectAnimalWithPixelbuffer:(CVPixelBufferRef)pixelBuffer
                                     rotate:(st_rotate_type)rotate
                                     config:(st_mobile_animal_type)config
-                              detectResult:(st_mobile_animal_face_t **)detectResult
-                               animalCount:(int *)animalCount;
+                             detectResult:(st_mobile_animal_result_t *)detectResult;
 
 /// 动物检测函数
 /// @param buffer 每帧图像数据
@@ -43,11 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
                                height:(int)height
                                stride:(int)stride
                                config:(st_mobile_animal_type)config
-                         detectResult:(st_mobile_animal_face_t **)detectResult
-                          animalCount:(int *)animalCount;
+                         detectResult:(st_mobile_animal_result_t *)detectResult;
 
 -(st_result_t)resetAnimalFaceTracker;
-
 #endif
 
 @end

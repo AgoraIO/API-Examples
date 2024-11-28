@@ -14,6 +14,7 @@ class LiveStreamingEntry: UIViewController {
     @IBOutlet weak var preloadButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var cameraButton: UIButton?
+    @IBOutlet weak var videoScenarioButton: UIButton?
     let identifier = "LiveStreaming"
     var role: AgoraClientRole = .broadcaster
     private var isFirstFrame: Bool = false
@@ -130,6 +131,25 @@ class LiveStreamingEntry: UIViewController {
         }
     }
     
+    @IBAction func onTapVideoScenarioButton(_ sender: UIButton) {
+        let pickerView = PickerView()
+        pickerView.dataArray = [
+            AgoraApplicationScenarioType.applicationGeneralScenario.description(),
+            AgoraApplicationScenarioType.applicationMeetingScenario.description(),
+            AgoraApplicationScenarioType.application1V1Scenario.description(),
+            AgoraApplicationScenarioType.applicationLiveShowScenario.description()
+        ]
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
+            guard let self = self else { return }
+            let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
+            let type = AgoraApplicationScenarioType(rawValue: idx) ?? .applicationGeneralScenario
+            let ret = self.agoraKit.setVideoScenario(type)
+            print("setVideoScenario[\(type.rawValue)] ret = \(ret)")
+            self.videoScenarioButton?.setTitle(key, for: .normal)
+        }
+    }
+    
     func doJoin() {
         guard let channelName = channelTextField.text else { return }
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
@@ -163,11 +183,13 @@ class LiveStreamingMain: BaseViewController {
     var backgroundVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     @IBOutlet weak var foregroundVideoContainer: UIView!
     @IBOutlet weak var backgroundVideoContainer: UIView!
+    @IBOutlet weak var touchBackgroundView: UIView?
     @IBOutlet weak var clientRoleToggleView: UIView!
     @IBOutlet weak var ultraLowLatencyToggleView: UIView!
     @IBOutlet weak var clientRoleToggle: UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle: UISwitch!
     @IBOutlet weak var takeSnapshot: UIButton!
+    @IBOutlet weak var takeLocalSnapshot: UIButton!
     @IBOutlet weak var watarMarkContainer: UIView!
     @IBOutlet weak var dualStreamContainer: UIView!
     @IBOutlet weak var dualStreamTipsLabel: UILabel!
@@ -177,6 +199,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var centerStageContainerView: UIView!
     @IBOutlet weak var CameraFocalButton: UIButton!
     @IBOutlet weak var cameraStabilizationButton: UIButton?
+    @IBOutlet weak var localRenderTextField: UITextField?
+    @IBOutlet weak var remoteRenderTextField: UITextField?
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -193,6 +217,9 @@ class LiveStreamingMain: BaseViewController {
             videoImageContainer.isHidden = role == .audience
             centerStageContainerView.isHidden = role == .audience
             CameraFocalButton.isHidden = role == .audience
+            localRenderTextField?.isHidden = role == .audience
+            cameraStabilizationButton?.isHidden = role == .audience
+            takeLocalSnapshot.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -206,7 +233,9 @@ class LiveStreamingMain: BaseViewController {
             }
         }
     }
-    var isUltraLowLatencyOn: Bool = false
+    private var isUltraLowLatencyOn: Bool = false
+    
+    private var cameraStabilizationKey: String? = nil
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -218,6 +247,11 @@ class LiveStreamingMain: BaseViewController {
         backgroundVideoContainer.addSubview(backgroundVideo)
         foregroundVideo.bindFrameToSuperviewBounds()
         backgroundVideo.bindFrameToSuperviewBounds()
+        
+        touchBackgroundView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapGesture(_ :))))
+        
+        localRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        remoteRenderTextField?.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         let modeKey = stabilizationModeParams.first?.keys.first ?? ""
         cameraStabilizationButton?.setTitle("\("CameraStabilizationMode".localized) \(modeKey)", for: .normal)
@@ -329,6 +363,11 @@ class LiveStreamingMain: BaseViewController {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
     private var cameraDirection: AgoraCameraDirection = .front
+    
+    @IBAction func onTapGesture(_ ges: UIGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
     @IBAction func onTapCameraFocalButton(_ sender: UIButton) {
         let infos = agoraKit.queryCameraFocalLengthCapability()
         let pickerView = PickerView()
@@ -364,9 +403,19 @@ class LiveStreamingMain: BaseViewController {
         pickerView.dataArray = stabilizationModeParams.map({ $0.keys.first ?? "" })
         AlertManager.show(view: pickerView, alertPostion: .bottom)
         pickerView.pickerViewSelectedValueClosure = { [weak self] key in
-            guard let map = stabilizationModeParams.filter({$0.keys.contains(key)}).first else {return}
-            sender.setTitle("\("CameraStabilizationMode".localized) \(key)", for: .normal)
-            self?.agoraKit.setCameraStabilizationMode(map[key] ?? .auto)
+            guard let self = self, let map = stabilizationModeParams.filter({$0.keys.contains(key)}).first else {return}
+            self.cameraStabilizationKey = key
+            sender.setTitle("\("CameraStabilizationMode".localized) \(self.cameraStabilizationKey ?? "")", for: .normal)
+            self.updateCameraStabilization()
+        }
+    }
+    
+    private func updateCameraStabilization() {
+        guard let key = cameraStabilizationKey,
+              let map = stabilizationModeParams.filter({$0.keys.contains(key)}).first else {return}
+        let ret = self.agoraKit.setCameraStabilizationMode(map[key] ?? .auto)
+        if ret != 0 {
+            LogUtils.log(message: "setCameraStabilizationMode[\(key)] fail: \(ret)", level: .error)
         }
     }
     
@@ -374,8 +423,10 @@ class LiveStreamingMain: BaseViewController {
         let options = AgoraImageTrackOptions()
         let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
         options.imageUrl = imgPath
-        let res = agoraKit.enableVideoImageSource(sender.isOn, options: options)
-        print(res)
+        let ret = agoraKit.enableVideoImageSource(sender.isOn, options: options)
+        if ret != 0 {
+            LogUtils.log(message: "enableVideoImageSource fail: \(ret)", level: .info)
+        }
     }
     @IBAction func onTapBFrameSwitch(_ sender: UISwitch) {
         let encoderConfig = AgoraVideoEncoderConfiguration()
@@ -433,6 +484,29 @@ class LiveStreamingMain: BaseViewController {
         let path = NSTemporaryDirectory().appending("1.png")
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
         showAlert(title: "Screenshot successful".localized, message: path)
+    }
+    
+    @IBAction func onTakeLocalSnapshot(_ sender: Any) {
+        let pickerView = PickerView()
+        let values: [AgoraVideoModulePosition] = [
+//            .postCapture,
+            .preRenderer,
+            .preEncoder,
+            .postCaptureOrigin
+        ]
+        pickerView.dataArray = values.map({ $0.description()})
+        AlertManager.show(view: pickerView, alertPostion: .bottom)
+        pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
+            guard let self = self else { return }
+            let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
+            let position = values[idx]
+            let config = AgoraSnapshotConfig()
+            config.position = position
+            config.filePath = NSTemporaryDirectory().appending("local_\(position.rawValue).png")
+            let ret = self.agoraKit.takeSnapshotWithConfig(0, config: config)
+            print("takeSnapshot ret: \(ret) path: \(config.filePath ?? "")")
+            self.showAlert(title: "Screenshot successful".localized, message: config.filePath ?? "")
+        }
     }
     @IBAction func onTapForegroundVideo(_ sender: UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
@@ -492,6 +566,24 @@ class LiveStreamingMain: BaseViewController {
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
+        }
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if let text = textField.text, let number = Int(text) {
+            if number > 60 {
+                textField.text = "60"
+            } else if number == 0 {
+                textField.text = ""
+            }
+        } else {
+            textField.text = ""
+        }
+         
+        if textField == localRenderTextField {
+            agoraKit.setLocalRenderTargetFps(.camera, targetFps: Int32(textField.text ?? "") ?? 15)
+        } else {
+            agoraKit.setRemoteRenderTargetFps(Int32(textField.text ?? "") ?? 15)
         }
     }
 }
@@ -610,5 +702,10 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
                    currentEvent: AgoraMediaTraceEvent,
                    tracingInfo: AgoraVideoRenderingTracingInfo) {
         backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, reason: AgoraLocalVideoStreamReason, sourceType: AgoraVideoSourceType) {
+        guard state == .capturing else {return}
+        self.updateCameraStabilization()
     }
 }

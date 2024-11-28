@@ -67,6 +67,10 @@ class TransparentRenderViewController: BaseViewController {
         
         openMedia()
         
+        let config = AgoraVideoEncoderConfiguration()
+        config.advancedVideoOptions?.encodeAlpha = true
+        agoraKit.setVideoEncoderConfiguration(config)
+        
         agoraKit.setExternalVideoSource(true, useTexture: false, sourceType: .videoFrame)
         agoraKit.enableVideo()
         agoraKit.startPreview()
@@ -91,7 +95,10 @@ class TransparentRenderViewController: BaseViewController {
         setupLocalAlphaCavans()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        agoraKit.destroyMediaPlayer(mediaPlayer)
         agoraKit.leaveChannel()
         agoraKit.disableVideo()
         agoraKit.stopPreview()
@@ -173,6 +180,7 @@ extension TransparentRenderViewController: AgoraRtcMediaPlayerVideoFrameDelegate
         newVideoFrame.format = 12
         newVideoFrame.textureBuf = videoFrame.pixelBuffer
         newVideoFrame.rotation = videoFrame.rotation
+        let pb = videoFrame.pixelBuffer
         newVideoFrame.alphaStitchMode = .alphaStitchRight
         let _ = agoraKit.pushExternalVideoFrame(newVideoFrame)
 //        LogUtils.log(message: "pushExternalVideoFrame: \(ret)", level: .info)
