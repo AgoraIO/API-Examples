@@ -377,6 +377,7 @@ extension FaceCaptureMain: AgoraFaceInfoDelegate {
 extension FaceCaptureMain: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         let info = videoFrame.metaInfo["KEY_FACE_CAPTURE"] as? String
+        videos[0].statsInfo?.updateMetaInfo(data: info)
         LogUtils.log(message: info ?? "", level: .info)
         return true
     }

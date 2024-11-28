@@ -4,10 +4,8 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +34,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.AgoraMediaRecorder;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -152,6 +146,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
+            initLocalPreview();
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -179,29 +174,15 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                List<String> permissionList = new ArrayList<>();
-                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
-                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
-                permissionList.add(Permission.RECORD_AUDIO);
-                permissionList.add(Permission.CAMERA);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
-                }
-
-                String[] permissionArray = new String[permissionList.size()];
-                permissionList.toArray(permissionArray);
-
-                if (AndPermission.hasPermissions(this, permissionArray)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        permissionArray
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            // Permissions Granted
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
                 joined = false;
                 stopAllMediaRecorder();
@@ -229,17 +210,18 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     resetLayoutRecording(value);
                 }
                 remoteViews.clear();
-                fl_local.removeAllViews();
-                resetLayoutRecording(fl_local);
+                //exclude local
+//                fl_local.removeAllViews();
+//                resetLayoutRecording(fl_local);
             }
         } else if (v.getId() == switch_camera.getId()) {
-            if (engine != null && joined) {
+            if (engine != null) {
                 engine.switchCamera();
             }
         }
     }
 
-    private void joinChannel(String channelId) {
+    private void initLocalPreview() {
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
@@ -256,6 +238,9 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         setupLayoutRecording(fl_local, () -> startLocalMediaRecorder(channelId), this::stopLocalMediaRecorder);
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        engine.startPreview();
+        engine.startRecordingDeviceTest(0);
+
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
@@ -270,6 +255,9 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+    }
+
+    private void joinChannel(String channelId) {
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -301,7 +289,8 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
     }
 
     private void stopAllMediaRecorder() {
-        stopLocalMediaRecorder();
+        //exclude local
+//        stopLocalMediaRecorder();
         Set<Integer> remoteUidList = remoteMediaRecorders.keySet();
         for (Integer uid : remoteUidList) {
             stopRemoteMediaRecorder(uid);
@@ -326,7 +315,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_" + uid + ".mp4";
         if (mediaRecorder == null) {
-            mediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, uid));
+            mediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, uid, 0));
             // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
             mediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
                 @Override
@@ -380,7 +369,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4";
 
         if (localMediaRecorder == null) {
-            localMediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, myUid));
+            localMediaRecorder = engine.createMediaRecorder(new RecorderStreamInfo(channelId, myUid, joined ? 0 : 1));
             // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
             localMediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
                 @Override

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -36,6 +36,22 @@
                                                     <rect key="frame" x="27" y="330" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="2EK-Zp-r3K">
+                                                    <rect key="frame" x="96" y="286" width="42" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <connections>
+                                                        <action selector="onHDRActionWithSender:" target="sXF-vm-Rrb" id="e2M-QQ-zXL"/>
+                                                    </connections>
+                                                </switch>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ycX-KS-D6W">
+                                                    <rect key="frame" x="18" y="291" width="52" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="HDR" id="SL7-Vu-fdB">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
                                         </view>
                                     </subviews>
@@ -113,6 +129,7 @@
                     <connections>
                         <outlet property="Container" destination="feb-C2-lJ8" id="fvt-NI-d66"/>
                         <outlet property="channelField" destination="uIf-r8-8RT" id="D7m-aH-g2k"/>
+                        <outlet property="hdrSwitch" destination="2EK-Zp-r3K" id="bIX-bg-ibb"/>
                         <outlet property="joinChannelButton" destination="bha-cC-IuH" id="LKZ-PG-1ky"/>
                         <outlet property="selectFpsPicker" destination="Ihr-RI-I6j" id="TNr-rU-wsy"/>
                         <outlet property="selectLayoutPicker" destination="rii-tu-LVN" id="4uP-BJ-qtI"/>

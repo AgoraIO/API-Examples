@@ -8,6 +8,7 @@
 
 #import "EffectsProcess.h"
 #import "EffectsLicense.h"
+#import "EffectsDetector.h"
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
 #import "Effects.h"
@@ -63,7 +64,7 @@
     if (_inputTexture) {
         glDeleteTextures(1, &_inputTexture);
     }
-
+    
     if (_cvTextureCache) {
         CVOpenGLESTextureCacheFlush(_cvTextureCache, 0);
         CFRelease(_cvTextureCache);
@@ -85,20 +86,16 @@
         self.glContext = glContext;
         [self setCurrentEAGLContext:self.glContext];
         CVOpenGLESTextureCacheCreate(kCFAllocatorDefault, NULL, self.glContext, NULL, &_cvTextureCache);
+#if __has_include("st_mobile_common.h")
         self.detector = [[EffectsDetector alloc] initWithType:type];
+#endif
         self.animalDetect = [[EffectsAnimal alloc] initWithType:type];
         self.attriDetect  = [[EffectsAttribute alloc] init];
         self.commonObject      = [[EffectsCommonObject alloc] init];
         self.effect       = [[Effects alloc] initWithType:type context:self.glContext];
-
+        
     }
     return self;
-}
-
-- (void)setCurrentEAGLContext:(EAGLContext *)context{
-    if (![[EAGLContext currentContext] isEqual:self.glContext]) {
-        [EAGLContext setCurrentContext:self.glContext];
-    }
 }
 
 /// 鉴权
@@ -126,6 +123,11 @@
 #if __has_include("st_mobile_common.h")
 - (st_result_t)setModelPath:(NSString *)modelPath{
     st_result_t state = [self.detector setModelPath:modelPath];
+    return state;
+}
+
+- (st_result_t)setModelPath:(NSString *)modelPath withFirstPhaseFinished:(void(^)(void))finishedCallback {
+    st_result_t state = [self.detector setModelPath:modelPath withFirstPhaseFinished:finishedCallback];
     return state;
 }
 
@@ -211,6 +213,10 @@
     [self.effect addStickerWithPath:stickerPath callBackCustomEventIncluded:callback];
 }
 
+-(void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback {
+    [self.effect changeStickerWithPath:stickerPath callBackCustomEventIncluded:callback];
+}
+
 -(st_result_t)getModulesInPackage:(int)package_id modules:(st_effect_module_info_t*)modules {
     return [self.effect getModulesInPackage:package_id modules:modules];
 }
@@ -260,23 +266,21 @@
                               rotate:(st_rotate_type)rotate
                       cameraPosition:(AVCaptureDevicePosition)position
                          humanAction:(st_mobile_human_action_t *)detectResult
-                        animalResult:(st_mobile_animal_face_t **)animalResult
-                         animalCount:(int *)animalCount{
+                        animalResult:(st_mobile_animal_result_t *)animalResult {
     if(![EffectsToken sharedInstance].bAuthrize) return ST_E_NO_CAPABILITY;
     if (!self.detector) return ST_E_FAIL;
+    self.cameraPosition = position;
     OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
     if (pixelFormat != kCVPixelFormatType_32BGRA) {
         return [self detectYUVPixelBuffer:pixelBuffer
                                    rotate:rotate
                               humanAction:detectResult
-                             animalResult:animalResult
-                              animalCount:animalCount];
+                             animalResult:animalResult];
     }else{
         return [self detectRGBPixelBuffer:pixelBuffer
                                    rotate:rotate
                               humanAction:detectResult
-                             animalResult:animalResult
-                              animalCount:animalCount];
+                             animalResult:animalResult];
     }
 }
 
@@ -284,11 +288,18 @@
     return [self.detector resetHumanAction] || [self.animalDetect resetAnimalFaceTracker];
 }
 
+-(st_result_t)setHumanActionParam:(st_human_action_param_type)type andValue:(float)value {
+    return [self.detector setParam:type andValue:value];
+}
+
+-(st_result_t)setEffectParam:(st_effect_param_t)param andValue:(float)value {
+    return [self.effect setParam:param andValue:value];
+}
+
 - (st_result_t)detectYUVPixelBuffer:(CVPixelBufferRef)pixelBuffer
                              rotate:(st_rotate_type)rotate
                         humanAction:(st_mobile_human_action_t *)detectResult
-                       animalResult:(st_mobile_animal_face_t **)animalResult
-                        animalCount:(int *)animalCount{
+                       animalResult:(st_mobile_animal_result_t *)animalResult {
     uint64_t config = [self getDetectConfig];
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     unsigned char *yData = (unsigned char *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
@@ -332,8 +343,7 @@
                                                  height:yHeight
                                                  stride:iBytesPerRow
                                                  config:(st_mobile_animal_type)animalConfig
-                                           detectResult:animalResult
-                                            animalCount:animalCount];
+                                           detectResult:animalResult];
     }
     
     //focus center
@@ -389,8 +399,7 @@
 - (st_result_t)detectRGBPixelBuffer:(CVPixelBufferRef)pixelBuffer
                              rotate:(st_rotate_type)rotate
                         humanAction:(st_mobile_human_action_t *)detectResult
-                       animalResult:(st_mobile_animal_face_t **)animalResult
-                        animalCount:(int *)animalCount{
+                       animalResult:(st_mobile_animal_result_t *)animalResult {
     uint64_t config = [self getDetectConfig];
     //detect human action
     st_result_t ret = [self.detector detectHumanActionWithPixelbuffer:pixelBuffer
@@ -404,8 +413,7 @@
         ret = [self.animalDetect detectAnimalWithPixelbuffer:pixelBuffer
                                                       rotate:rotate
                                                       config:(st_mobile_animal_type)animalConfig
-                                                detectResult:animalResult
-                                                 animalCount:animalCount];
+                                                detectResult:animalResult];
     }
     
     //get face center point
@@ -447,11 +455,69 @@
     return ST_OK;
 }
 
+-(st_result_t)detectAttribute:(unsigned char *)imageData pixelFormat:(st_pixel_format)pixel_format imageWidth:(int)image_width imageHeight:(int)image_height imageStride:(int)image_stride orientation:(st_rotate_type)orientation withGenderCallback:(void(^)(BOOL isMale))callback {
+    unsigned long long config = [self getDetectConfig];
+    st_mobile_human_action_t detectResult;
+    st_result_t ret = ST_OK;
+    ret = [self.detector detectHumanActionWithBuffer:imageData size:0 config:config rotate:ST_CLOCKWISE_ROTATE_0 pixelFormat:pixel_format width:image_width height:image_height stride:image_stride detectResult:&detectResult];
+    if (ret != ST_OK) {
+        NSLog(@"%s - %d", __func__, __LINE__);
+        return ret;
+    }
+    if (detectResult.face_count == 0) return ST_E_INVALIDARG;
+    st_mobile_106_t *faces = &detectResult.p_faces[0].face106;
+    st_mobile_attributes_t *pAttrArray = NULL;
+    ret = [self.attriDetect detectAttributeWithBuffer:imageData pixelFormat:pixel_format width:image_width height:image_height stride:image_width *4 faces:faces attrArray:pAttrArray withGenderCallback:callback];
+    if (ret != ST_OK) {
+        NSLog(@"%s - %d", __func__, __LINE__);
+        return ret;
+    }
+    return ret;
+}
+
+-(st_result_t)detectAttribute:(unsigned char *)imageData pixelFormat:(st_pixel_format)pixel_format imageWidth:(int)image_width imageHeight:(int)image_height detectResult:(st_mobile_human_action_t)detectResult withGenderCallback:(void(^)(BOOL isMale))callback {
+    st_result_t ret = ST_OK;
+    if (detectResult.face_count == 0) return ST_E_INVALIDARG;
+    st_mobile_106_t *faces = &detectResult.p_faces[0].face106;
+    st_mobile_attributes_t *pAttrArray = NULL;
+    ret = [self.attriDetect detectAttributeWithBuffer:imageData pixelFormat:pixel_format width:image_width height:image_height stride:image_width *4 faces:faces attrArray:pAttrArray withGenderCallback:callback];
+    if (ret != ST_OK) {
+        NSLog(@"%s - %d", __func__, __LINE__);
+        return ret;
+    }
+    return ret;
+}
+
+//iRet = st_mobile_human_action_detect(_hDetector,
+//                                     pBGRAImageIn,
+//                                     ST_PIX_FMT_BGRA8888,
+//                                     iWidth,
+//                                     iHeight,
+//                                     iBytesPerRow,
+//                                     ST_CLOCKWISE_ROTATE_0,
+//                                     ST_MOBILE_FACE_DETECT ,
+//                                     &detectResult);
+
+//- (st_result_t)detectAttributeWithPixelbuffer:(CVPixelBufferRef)pixelBuffer
+//                                 detectResult:(st_mobile_human_action_t)detectResult
+//                                    attrArray:(st_mobile_attributes_t *)pAttrArray withGenderCallback:(void(^)(BOOL isMale))callback {
+
+//st_mobile_human_action_detect(
+//    st_handle_t handle,
+//    const unsigned char *image,
+//    st_pixel_format pixel_format,
+//    int image_width,
+//    int image_height,
+//    int image_stride,
+//    st_rotate_type orientation,
+//    unsigned long long detect_config,
+//    st_mobile_human_action_t *p_human_action
+//);
+
 - (st_result_t)renderPixelBuffer:(CVPixelBufferRef)pixelBuffer
                           rotate:(st_rotate_type)rotate
                      humanAction:(st_mobile_human_action_t)detectResult
-                    animalResult:(st_mobile_animal_face_t *)animalResult
-                     animalCount:(int)animalCount
+                    animalResult:(st_mobile_animal_result_t *)animalResult
                       outTexture:(GLuint)outTexture
                   outPixelFormat:(st_pixel_format)fmt_out
                          outData:(unsigned char *)img_out{
@@ -463,7 +529,6 @@
                                    rotate:rotate
                               humanAction:detectResult
                              animalResult:animalResult
-                              animalCount:animalCount
                                outTexture:outTexture
                            outPixelFormat:fmt_out
                                   outData:img_out];
@@ -472,7 +537,6 @@
                                    rotate:rotate
                               humanAction:detectResult
                              animalResult:animalResult
-                              animalCount:animalCount
                                outTexture:outTexture
                            outPixelFormat:fmt_out
                                   outData:img_out];
@@ -482,8 +546,7 @@
 - (st_result_t)renderYUVPixelBuffer:(CVPixelBufferRef)pixelBuffer
                              rotate:(st_rotate_type)rotate
                         humanAction:(st_mobile_human_action_t)detectResult
-                       animalResult:(st_mobile_animal_face_t *)animalResult
-                        animalCount:(int)animalCount
+                       animalResult:(st_mobile_animal_result_t *)animalResult
                          outTexture:(GLuint)outTexture
                      outPixelFormat:(st_pixel_format)fmt_out
                             outData:(unsigned char *)img_out{
@@ -524,7 +587,6 @@
                         rotate:rotate
                   detectResult:detectResult
                   animalResult:animalResult
-                   animalCount:animalCount
                 outPixelFormat:fmt_out
                      outBuffer:img_out];
     
@@ -539,8 +601,7 @@
 - (st_result_t)renderRGBPixelBuffer:(CVPixelBufferRef)pixelBuffer
                              rotate:(st_rotate_type)rotate
                         humanAction:(st_mobile_human_action_t)detectResult
-                       animalResult:(st_mobile_animal_face_t *)animalResult
-                        animalCount:(int)animalCount
+                       animalResult:(st_mobile_animal_result_t *)animalResult
                          outTexture:(GLuint)outTexture
                      outPixelFormat:(st_pixel_format)fmt_out
                             outData:(unsigned char *)img_out{
@@ -576,7 +637,6 @@
                                         rotate:rotate
                                   detectResult:detectResult
                                   animalResult:animalResult
-                                   animalCount:animalCount
                                 outPixelFormat:fmt_out
                                      outBuffer:img_out];
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
@@ -616,8 +676,8 @@
         return ret;
     }
     //detect animal
-    st_mobile_animal_face_t *animalResult = NULL;
-    int animal_count = 0;
+    st_mobile_animal_result_t animalResult;
+    memset(&animalResult, 0, sizeof(st_mobile_animal_result_t));
     uint64_t animalConfig = [_effect getAnimalDetectConfig];
     if (animalConfig) {
         ret = [self.animalDetect detectAnimalWithBuffer:data
@@ -627,8 +687,7 @@
                                                  height:height
                                                  stride:width * 4
                                                  config:(st_mobile_animal_type)animalConfig//ST_MOBILE_DOG_DETECT
-                                           detectResult:&animalResult
-                                            animalCount:&animal_count];
+                                           detectResult:&animalResult];
     }
     
     //attribute
@@ -659,13 +718,13 @@
                        stride:width * 4
                         rotate:rotate
                   detectResult:detectResult
-                  animalResult:animalResult
-                   animalCount:animal_count
+                 animalResult:&animalResult
                 outPixelFormat:fmt_out
                      outBuffer:outData];
     EFFECTSTIMEPRINT(total_cost, "total_cost");
     return ST_OK;
 }
+#endif
 
 - (GLuint)createTextureWidth:(int)width height:(int)height{
     [self setCurrentEAGLContext:self.glContext];
@@ -737,6 +796,7 @@
     return YES;
 }
 
+#if __has_include("st_mobile_common.h")
 - (st_mobile_human_action_t)detectHumanActionWithPixelBuffer:(CVPixelBufferRef)pixelBuffer {
     
     return [self.detector detectHumanActionWithPixelBuffer:pixelBuffer];
@@ -750,6 +810,7 @@
     _bObject = rect.top | rect.left | rect.right | rect.bottom;
     [self.commonObject setObjectRect:rect];
 }
+#endif
 
 - (BOOL)isAuthrized{
     return [EffectsToken sharedInstance].bAuthrize;
@@ -779,22 +840,29 @@
     if (*cvTexture) CFRelease(*cvTexture);
 }
 #pragma mark - 3D mesh
+#if __has_include("st_mobile_common.h")
 -(void)getMeshList {
-    st_mobile_face_mesh_list_t mesh_list;
-
-    st_result_t state = [self.detector getMeshList:&mesh_list];
+    st_mobile_mesh_info_t mesh_info;
+    st_result_t state = [self.detector getMeshInfo:&mesh_info];
     if (state != ST_OK) {
         NSLog(@"detect human action error %d", state);
         return;
     }
     
-    state = [self.effect setFaceMeshList:mesh_list];
+    state = [self.effect setFaceMeshList:*(mesh_info.p_mesh)];
     if (state != ST_OK) {
         NSLog(@"effect set face mesh list error %d", state);
     }
 }
+#endif
 
 #pragma mark - Private
+- (void)setCurrentEAGLContext:(EAGLContext *)context{
+    if (![[EAGLContext currentContext] isEqual:self.glContext]) {
+        [EAGLContext setCurrentContext:self.glContext];
+    }
+}
+#if __has_include("st_mobile_common.h")
 - (st_result_t)processYUVPixelBuffer:(CVPixelBufferRef)pixelBuffer
                                rotate:(st_rotate_type)rotate
                            outTexture:(GLuint)outTexture
@@ -841,8 +909,8 @@
     }
 
     //detect animal
-    st_mobile_animal_face_t *animalResult = NULL;
-    int animal_count = 0;
+    st_mobile_animal_result_t animalResult;
+    memset(&animalResult, 0, sizeof(st_mobile_animal_result_t));
     uint64_t animalConfig = [_effect getAnimalDetectConfig];
     if (animalConfig) {
         ret = [self.animalDetect detectAnimalWithBuffer:needPadding?detectData:yData
@@ -852,8 +920,7 @@
                                                  height:yHeight
                                                  stride:iBytesPerRow
                                                  config:(st_mobile_animal_type)animalConfig//ST_MOBILE_DOG_DETECT
-                                           detectResult:&animalResult
-                                            animalCount:&animal_count];
+                                           detectResult:&animalResult];
     }
     
     //render
@@ -883,8 +950,7 @@
                         stride:yWidth
                         rotate:rotate
                   detectResult:detectResult
-                  animalResult:animalResult
-                   animalCount:animal_count
+                  animalResult:&animalResult
                 outPixelFormat:fmt_out
                      outBuffer:img_out];
     
@@ -961,15 +1027,14 @@
     }
     
     //detect animal
-    st_mobile_animal_face_t *animalResult = NULL;
-    int animal_count = 0;
+    st_mobile_animal_result_t animalResult;
+    memset(&animalResult, 0, sizeof(st_mobile_animal_result_t));
     uint64_t animalConfig = [_effect getAnimalDetectConfig];
     if (animalConfig) {
         ret = [self.animalDetect detectAnimalWithPixelbuffer:pixelBuffer
                                                       rotate:rotate
                                                       config:(st_mobile_animal_type)animalConfig//ST_MOBILE_DOG_DETECT
-                                                detectResult:&animalResult
-                                                 animalCount:&animal_count];
+                                                detectResult:&animalResult];
     }
     
     //render
@@ -1002,8 +1067,7 @@
                        stride:width * 4
                         rotate:rotate
                   detectResult:detectResult
-                  animalResult:animalResult
-                   animalCount:animal_count
+                  animalResult:&animalResult
                 outPixelFormat:fmt_out
                      outBuffer:img_out];
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
@@ -1055,8 +1119,7 @@
                        stride:(int)stride
                        rotate:(st_rotate_type)rotate
                  detectResult:(st_mobile_human_action_t)detectResult
-                 animalResult:(st_mobile_animal_face_t*)animalResult
-                  animalCount:(int)animalCount
+                 animalResult:(st_mobile_animal_result_t *)animalResult
                outPixelFormat:(st_pixel_format)fmt_out
                     outBuffer:(unsigned char *)img_out{
     //render texture to outTexture
@@ -1075,7 +1138,6 @@
                              rotate:rotate
                        detectResult:detectResult
                        animalResult:animalResult
-                        animalCount:animalCount
                     outDetectResult:beautyOutDecResult
                           withCache:_cvTextureCache
                      outPixelFormat:fmt_out
@@ -1084,6 +1146,7 @@
     st_mobile_human_action_delete(&beautyOutDecResult);
     return outputTexture;
 }
+#endif
 
 - (void)solvePaddingImage:(Byte *)pImage width:(int)iWidth height:(int)iHeight bytesPerRow:(int *)pBytesPerRow
 {
@@ -1105,13 +1168,18 @@
     *pBytesPerRow = iBytesPerRowCopied;
     free(pCopiedImage);
 }
-
+#if __has_include("st_mobile_common.h")
 - (uint64_t)getDetectConfig{
+    if (self.configMode == EFDetectConfigModeItsMe) {
+        return [self getDetectConfigWithMode:EFDetectConfigModeItsMe];
+    }
     return [self.effect getDetectConfig] | (self.detectConfig?self.detectConfig:0);
 }
 
+- (uint64_t)getDetectConfigWithMode:(EFDetectConfigMode)configMode {
+    return [self.effect getDetectConfigWithMode:configMode] | (self.detectConfig?self.detectConfig:0);
+}
 #endif
-
 - (GLuint)createaTextureWithData:(unsigned char *)data
                            width:(int)width
                           height:(int)height{

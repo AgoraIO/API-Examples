@@ -348,3 +348,21 @@ extern wchar_t localVideoTranscodingVirtualBg[INFO_LEN];
 extern wchar_t advancedMetadataVideo[INFO_LEN];
 extern wchar_t advancedMetadataAudio[INFO_LEN];
 extern wchar_t advancedMetadataSend[INFO_LEN];
+
+//transparent background
+extern wchar_t TransparentBackground[INFO_LEN];
+
+extern wchar_t RteUrlPlayer[INFO_LEN];
+extern wchar_t VideoEnhance[INFO_LEN];
+
+extern wchar_t CrossChannelUpdateMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelAddChannel[INFO_LEN];
+extern wchar_t CrossChannelRemoveChannel[INFO_LEN];
+extern wchar_t CrossChannelStartMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelStopMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelCtrlCrossChannel[INFO_LEN];
+extern wchar_t CrossChannelCrossChannelList[INFO_LEN];
+extern wchar_t CrossChannelCtrlToken[INFO_LEN];
+extern wchar_t CrossChannelCtrlUid[INFO_LEN];
+
+

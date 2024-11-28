@@ -1,17 +1,22 @@
 # Uncomment the next line to define a global platform for your project
 
+
+def common_pods
+  pod 'AgoraRtcEngine_macOS', '4.5.0'
+#  pod 'sdk', :path => 'sdk.podspec'
+end
+
 target 'APIExample' do
   use_frameworks!
+  
+  common_pods
 
   pod 'AGEVideoLayout', '1.0.2'
-  pod 'AgoraRtcEngine_macOS', '4.4.0'
-#   pod 'sdk', :path => 'sdk.podspec'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-#   pod 'sdk', :path => 'sdk.podspec'
-  pod 'AgoraRtcEngine_macOS', '4.4.0'
+  common_pods
 end
 
 

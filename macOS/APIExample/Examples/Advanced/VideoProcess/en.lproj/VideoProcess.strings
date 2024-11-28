@@ -33,7 +33,15 @@
 "plA-5C-vDg.title" = "Video Denoise";
 
 /* Class = "NSTextFieldCell"; title = "美白"; ObjectID = "q1I-U0-llK"; */
-"q1I-U0-llK.title" = "Whitening";
+"q1I-U0-llK.title" = "Lightening";
 
 /* Class = "NSTextFieldCell"; title = "平滑"; ObjectID = "sFK-pV-vaj"; */
 "sFK-pV-vaj.title" = "Smoothing";
+
+"AAl-Un-v63.title" = "Whitening";
+
+/* Class = "NSButtonCell"; normalTitle = "Face Shape"; ObjectID = "9VS-Ox-yEZ"; */
+"9VS-Ox-yEZ.title" = "Face Shape";
+
+/* Class = "NSButtonCell"; normalTitle = "Make Up"; ObjectID = "8aS-7m-YP7"; */
+"8aS-7m-YP7.title" = "Make Up";

@@ -45,10 +45,15 @@
 #define IDD_DIALOG_MULTI_VIDEO_SOURCE_TRACKS 162
 #define IDD_DIALOG_FACE_CAPTURE         163
 #define IDD_DIALOG_JOINCHANNELVIDEOBYTOKEN 164
+#define IDD_DIALOG_TRANSPARENT_BG       165
 #define IDB_BITMAP_LOCAL                168
 #define IDB_BITMAP_REMOTE               170
 #define IDB_BITMAP_SPEAKER              171
 #define IDB_BITMAP_BG_LYELLOW           172
+#define IDD_DIALOG_RTE_PLAYER           177
+#define IDD_DIALOG_BEAUTY1              178
+#define IDD_DIALOG_VIDEO_ENHANCE        178
+#define IDD_DIALOG_BEAUTY_EX            178
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -69,7 +74,6 @@
 #define IDC_STATIC_PERSONS              1018
 #define IDC_STATIC_CHANNELNAME          1019
 #define IDC_EDIT_CHANNELNAME            1020
-#define IDC_BUTTON1                     1021
 #define IDC_BUTTON_JOINCHANNEL          1021
 #define IDC_BUTTON_START                1021
 #define IDC_STATIC_INJECT_URL           1022
@@ -165,6 +169,7 @@
 #define IDC_CHECK_REPORT                1054
 #define IDC_CHECK_AUDIO_SOURCE_MUTE     1054
 #define IDC_CHECK_VIRTUAL_BG            1054
+#define IDC_CHECK_HDR                   1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -283,10 +288,12 @@
 #define IDC_CHECK_                      1102
 #define IDC_CHECK_LOWLIGHT              1102
 #define IDC_CHECK_MUTE_LOCAL_AUDIO      1102
+#define IDC_CHECK_BEAUTY_SHAPE          1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_COMBO_PLAYBACK              1103
 #define IDC_CHECK_AUDIO_ZONE            1103
 #define IDC_BUTTON_PRELOAD              1104
+#define IDC_CHECK_MAKE_UP               1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
 #define IDC_STATIC_PLAYBACK             1105
 #define IDC_BUTTON_PAUSE_EFFECT         1106
@@ -354,6 +361,8 @@
 #define IDC_EDIT1                       1129
 #define IDC_EDIT_DETAIL_INFO            1129
 #define IDC_STATIC_VIDEO_ECHO_TEST      1129
+#define IDC_EDIT_DEST_CHANNEL_NAME      1129
+#define IDC_EDIT_RTE_URL                1129
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_BUTTON_VIDEO_ECHO_TEST      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
@@ -401,31 +410,65 @@
 #define IDC_EDIT_TOKEN                  1150
 #define IDC_EDIT_METADATA_INFO          1150
 #define IDC_STATIC_TOKEN                1151
+#define IDC_STATIC_VIDEO_LEFT           1151
 #define IDC_USER_ID                     1152
+#define IDC_STATIC_VIDEO_RIGHT          1152
 #define IDC_EDIT_USER_ID                1153
+#define IDC_STATIC_Local_fps            1153
 #define IDC_BUTTON_ADD_CROSS_CHANNEL    1154
+#define IDC_SLIDER_Local_fps            1154
 #define IDC_CROSS_CHANNEL_LIST          1155
+#define IDC_SLIDER_Remote_fps           1155
 #define IDC_COMBO_CROSS_CAHNNEL_LIST    1156
+#define IDC_STATIC_Remote_fps           1156
 #define IDC_BUTTON_REMOVE_CROSS_CHANNEL2 1157
+#define IDC_STATIC_Dest_Channel_Name    1157
 #define IDC_BUTTON_START_MEDIA_RELAY    1158
 #define IDC_BUTTON_START_MEDIA_RELAY2   1159
 #define IDC_BUTTON_UPDATE               1159
+#define IDC_CHEC_SECOND                 1159
+#define IDC_CHECK_SECOND                1159
 #define IDC_EDIT_PARAM1                 1160
 #define IDC_EDIT_PARAM2                 1161
+#define IDC_BUTTON_PAUSE                1161
 #define IDC_STATIC_PARAM1               1162
 #define IDC_STATIC_PARAM2               1163
+#define IDC_SLIDER_BRIHTNESS            1163
 #define IDC_CHECK_MODERATION            1164
+#define IDC_COMBO_BROW_STYLE            1164
 #define IDC_CHECK_B_FRAME               1165
+#define IDC_SLIDER__BROW_STRENGTH       1165
 #define IDC_CHECK_FIRST_FRAME_OPT       1166
+#define IDC_COMBO_BROW_COLOR            1166
 #define IDC_CHECK_VIDEO_IMAGE           1167
+#define IDC_COMBO_FACE_SHAPE_STYLE      1167
+#define IDC_CHECK4                      1167
+#define IDC_CHECK_EXTENTION             1167
+#define IDC_SLIDER__SHAPE_STYLE_INTENSITY 1168
+#define IDC_COMBO1                      1168
+#define IDC_COMBO_LASH_STYLE            1169
+#define IDC_SLIDER__LASH_STRENGTH       1170
+#define IDC_COMBO_LASH_COLOR            1171
+#define IDC_COMBO_SHADOW_STYLE          1172
+#define IDC_SLIDER__SHADOW_STRENGTH     1173
+#define IDC_COMBO_PUPIL_STYLE           1174
+#define IDC_SLIDER__Pupil_STRENGTH      1175
+#define IDC_COMBO_BLUSH_STYLE           1176
+#define IDC_SLIDER__BLUSH_STRENGTH      1177
+#define IDC_COMBO_BLUSH_COLOR           1178
+#define IDC_COMBO_LIP_STYLE             1179
+#define IDC_SLIDER__LIP_STRENGTH        1180
+#define IDC_COMBO_LIP_COLOR             1181
+#define IDC_COMBO_FACE_SHAPE_AREA       1182
+#define IDC_SLIDER__SHAPE_AREA_INTENSITY 1183
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        173
+#define _APS_NEXT_RESOURCE_VALUE        181
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1151
+#define _APS_NEXT_CONTROL_VALUE         1169
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

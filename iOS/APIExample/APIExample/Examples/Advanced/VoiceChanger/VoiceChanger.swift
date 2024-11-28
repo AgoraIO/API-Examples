@@ -446,7 +446,7 @@ class VoiceChangerMain: BaseViewController {
     
     @IBAction func onVoiceAITunerAction(_ sender: UIButton) {
         let style: UIAlertController.Style = UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
-        let alert = UIAlertController(title: "Set_Voice_AI_Tuner".localized, message: nil, preferredStyle: style)
+        let alert = UIAlertController(title: "Set Voice AI Tuner".localized, message: nil, preferredStyle: style)
         alert.addAction(getVoiceAITunerAction(nil))
         alert.addAction(getVoiceAITunerAction(.matureMale))
         alert.addAction(getVoiceAITunerAction(.freshMale))

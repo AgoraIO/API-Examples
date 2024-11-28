@@ -1,7 +1,14 @@
 apply plugin: 'com.android.application'
 
+
+def sdkVersionFile = file("../gradle.properties")
+def properties = new Properties()
+sdkVersionFile.withInputStream { stream ->
+    properties.load(stream)
+}
+def agoraSdkVersion = properties.getProperty("rtc_sdk_version")
+println("${rootProject.project.name}   agoraSdkVersion: ${agoraSdkVersion}")
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
-def agoraSdkVersion = '4.4.1'
 
 android {
     compileSdkVersion 32
@@ -103,7 +110,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
-    implementation 'com.yanzhenjie:permission:2.0.3'
     implementation 'de.javagl:obj:0.2.1'
 
     implementation "com.squareup.okhttp3:okhttp:4.10.0"

@@ -13,11 +13,17 @@ IMPLEMENT_DYNAMIC(CDlgBeauty, CDialogEx)
 CDlgBeauty::CDlgBeauty(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
 {
-
+	mBeautyDlgEx = new CDlgBeautyEx();
 }
 
 CDlgBeauty::~CDlgBeauty()
 {
+	if (mBeautyDlgEx)
+	{
+		delete mBeautyDlgEx;
+		mBeautyDlgEx = nullptr;
+	}
+		
 }
 
 void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
@@ -48,6 +54,8 @@ void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_COLOR, m_radioVirtualBgColor);
 	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_IMAGE, m_radioVirtualBgImage);
 	DDX_Control(pDX, IDC_RADIO_VIRTUAL_BG_VIDEO, m_radioVirtualBgVideo);
+	DDX_Control(pDX, IDC_SLIDER_BRIHTNESS, mSliderBright);
+	DDX_Control(pDX, IDC_CHECK_EXTENTION, mCkExtention);
 }
 
 
@@ -68,6 +76,8 @@ BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty::OnBnClickedCheckLowlight)
 	ON_WM_SHOWWINDOW()
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_VIRTUAL_BG_BLUR, IDC_RADIO_VIRTUAL_BG_IMAGE, &CDlgBeauty::OnBnClickedStaticVirtualBgChoose)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_BRIHTNESS, &CDlgBeauty::OnNMCustomdrawSliderBrihtness)
+	ON_BN_CLICKED(IDC_CHECK_EXTENTION, &CDlgBeauty::OnBnClickedCheckExtention)
 END_MESSAGE_MAP()
 
 
@@ -133,10 +143,16 @@ void CDlgBeauty::OnShowWindow(BOOL bShow, UINT nStatus)
 	if (bShow) {
 		//init control text.
 		InitCtrlText();
+		mBeautyDlgEx->InitCtrlText();
 	}
 	else {
 		//resume window status.
 		ResumeStatus();
+		if (mBeautyDlgEx)
+		{
+			mCkExtention.SetCheck(false);
+			mBeautyDlgEx->ShowWindow(SW_HIDE);
+		}
 	}
 }
 
@@ -247,6 +263,11 @@ void CDlgBeauty::InitCtrlText()
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 }
 
+void CDlgBeauty::UpdateExtentCbState(bool isCheck)
+{
+	mCkExtention.SetCheck(isCheck);
+}
+
 // resume window status.
 void CDlgBeauty::ResumeStatus()
 {
@@ -277,6 +298,8 @@ void CDlgBeauty::ResumeStatus()
 	m_sldRedness.SetPos(0);
 	m_sldSmoothness.SetRange(0, 100);
 	m_sldSmoothness.SetPos(0);
+
+	mSliderBright.SetRange(0, 100);
 	
 }
 
@@ -306,6 +329,9 @@ LRESULT CDlgBeauty::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 BOOL CDlgBeauty::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+	mBeautyDlgEx->Create(CDlgBeautyEx::IDD);
+	mBeautyDlgEx->initData(&m_initialize, &m_rtcEngine,this);
+	mBeautyDlgEx->InitCtrlText();
 	InitCtrlText();
 	for (int i = 0; i < 2; ++i) {
 		m_videoWnds[i].Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), &m_staVideoArea, i);
@@ -333,6 +359,16 @@ void CDlgBeauty::SetBeauty()
 	if (ret < 0) {
 		CString strInfo;
 		strInfo.Format(_T("setBeautyEffectOptions: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+
+	FilterEffectOptions optionFilter;
+	optionFilter.path = "built_in_whiten_filter";
+	optionFilter.strength = mSliderBright.GetPos() / 100.0f;
+	ret = m_rtcEngine->setFilterEffectOptions(m_chkBeauty.GetCheck() != 0, optionFilter);
+	if (ret < 0) {
+		CString strInfo;
+		strInfo.Format(_T("setFilterEffectOptions: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 }
@@ -475,5 +511,26 @@ void CDlgBeauty::OnBnClickedStaticVirtualBgChoose(UINT idCtl)
 			source.source = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
 		}
 		m_rtcEngine->enableVirtualBackground(true, source, SegmentationProperty(), PRIMARY_CAMERA_SOURCE);
+	}
+}
+
+
+void CDlgBeauty::OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	SetBeauty();
+	*pResult = 0;
+}
+
+
+void CDlgBeauty::OnBnClickedCheckExtention()
+{
+	int checked = mCkExtention.GetCheck();
+	if (checked)
+	{
+		mBeautyDlgEx->ShowWindow(SW_SHOW);
+	}
+	else {
+		mBeautyDlgEx->ShowWindow(SW_HIDE);
 	}
 }

@@ -1,12 +1,5 @@
 #import "macro.h"
-
-#define LICENSE_NAME ((const char *)"agora_test_20220805_20230208_io.agora.entfull_4.2.3.licbag")
-#define ONLINE_LICENSE_KEY ((const char *)"jiaoyang_test")
-#define ONLINE_LICENSE_SECRET ((const char *)"04273924-9a77-11eb-94da-0c42a1b32a30")
-
-static NSString *OFFLIN_LICENSE_PATH = @"LicenseBag";
-static NSString *OFFLIN_BUNDLE = @"bundle";
-static LICENSE_MODE_ENUM LICENSE_MODE = ONLINE_LICENSE;
+#import "Config.h"
 
 #define CHECK_RET_AND_RETURN(MSG, ret) \
 if (ret != 0 && ret != -11 && ret != 1) {\
@@ -64,8 +57,3 @@ if (ret != 0 && ret != -11 && ret != 1) {\
 #else
 #define BELog(fmt, ...)
 #endif
-
-
-#define BEColorWithARGBHex(hex) [UIColor colorWithRed:((hex&0xFF0000)>>16)/255.0 green:((hex&0x00FF00)>>8)/255.0 blue:((hex&0x0000FF))/255.0 alpha:((hex&0xFF000000)>>24)/255.0]
-#define BEColorWithRGBAHex(hex,alpha) [UIColor colorWithRed:((hex&0xFF0000)>>16)/255.0 green:((hex&0x00FF00)>>8)/255.0 blue:((hex&0x0000FF))/255.0 alpha:alpha]
-#define BEColorWithRGBHex(hex) [UIColor colorWithRed:((hex&0xFF0000)>>16)/255.0 green:((hex&0x00FF00)>>8)/255.0 blue:((hex&0x0000FF))/255.0 alpha:1]

@@ -31,7 +31,7 @@ import io.agora.base.VideoFrame
 import io.agora.rtc2.Constants
 import io.agora.rtc2.RtcEngine
 
-const val VERSION = "1.0.6"
+const val VERSION = "1.0.7"
 
 enum class CaptureMode{
     Agora, // 使用声网内部的祼数据接口进行处理

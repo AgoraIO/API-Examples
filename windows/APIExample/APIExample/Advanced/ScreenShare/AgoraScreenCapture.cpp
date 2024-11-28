@@ -365,7 +365,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         //start screen capture in the engine.
 		agora::rtc::Rectangle rcCapWnd;
 		m_screenParam.windowFocus = true;
-		ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, m_screenParam);
+		ret = m_rtcEngine->startScreenCaptureByWindowId((int64_t)hWnd, rcCapWnd, m_screenParam);
 		//start preview in the engine.
 		m_rtcEngine->startPreview(VIDEO_SOURCE_TYPE::VIDEO_SOURCE_SCREEN);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
@@ -1040,7 +1040,7 @@ void CAgoraScreenCapture::OnBnClickedButtonHwndExeclude()
 	while (pos != NULL) {
 		index++;
 		agora::rtc::ScreenCaptureSourceInfo info = m_listWndExecluded.GetNext(pos);
-		excludeViews[index] = info.sourceId;
+		excludeViews[index] = (view_t)info.sourceId;
 	}
 
 	if (m_screenParam.excludeWindowList != nullptr) {
