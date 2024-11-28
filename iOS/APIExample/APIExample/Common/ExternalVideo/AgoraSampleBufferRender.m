@@ -12,11 +12,10 @@
     NSInteger _videoWidth, _videoHeight;
 }
 
-@property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
-
 @end
 
 @implementation AgoraSampleBufferRender
+@synthesize displayLayer = _displayLayer;
 
 - (AVSampleBufferDisplayLayer *)displayLayer {
     if (!_displayLayer) {
@@ -65,14 +64,13 @@
     CGSize videoSize;
     if (videoRatio >= viewRatio) {
         videoSize.height = viewHeight;
-        videoSize.width = videoSize.height * videoRatio;
+        videoSize.width = viewHeight * videoRatio;
     }else {
         videoSize.width = viewWidth;
-        videoSize.height = videoSize.width / videoRatio;
+        videoSize.height = viewWidth / videoRatio;
     }
     
-    CGRect renderRect = CGRectMake(0.5 * (viewWidth - videoSize.width), 0.5 * (viewHeight - videoSize.height), videoSize.width, videoSize.height);
-    
+    CGRect renderRect = CGRectMake(0, 0, viewWidth, viewHeight);
     if (!CGRectEqualToRect(renderRect, self.displayLayer.frame)) {
         self.displayLayer.frame = renderRect;
     }
@@ -229,11 +227,9 @@
     
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = videoData.pixelBuffer;
-        
+       
         CMVideoFormatDescriptionRef videoInfo;
-        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault,
-                                                     pixelBuffer,
-                                                     &videoInfo);
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &videoInfo);
         
         CMSampleTimingInfo timingInfo;
         timingInfo.duration = kCMTimeZero;
@@ -241,18 +237,15 @@
         timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
         
         CMSampleBufferRef sampleBuffer;
-        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault,
-                                                 pixelBuffer,
-                                                 videoInfo,
-                                                 &timingInfo,
-                                                 &sampleBuffer);
-        
-        [self.displayLayer enqueueSampleBuffer:sampleBuffer];
-        if (self.displayLayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
-            [self.displayLayer flush];
+        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
+        if (sampleBuffer) {
+            [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+//            [self.displayLayer setNeedsDisplay];
+//            [_displayLayer display];
+//            [self.layer display];
+//            CMSampleBufferInvalidate(sampleBuffer);
+            CFRelease(sampleBuffer);
         }
-        CMSampleBufferInvalidate(sampleBuffer);
-        CFRelease(sampleBuffer);
     }
 }
 

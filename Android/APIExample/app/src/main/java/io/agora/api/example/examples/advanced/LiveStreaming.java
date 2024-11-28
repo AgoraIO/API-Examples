@@ -26,8 +26,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,6 +43,7 @@ import io.agora.api.example.databinding.FragmentLiveStreamingSettingBinding;
 import io.agora.api.example.databinding.FragmentLiveStreamingVideoTrackingBinding;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.FileUtils;
+import io.agora.api.example.utils.PermissonUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.ClientRoleOptions;
@@ -56,6 +55,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.AgoraFocalLengthInfo;
 import io.agora.rtc2.video.CameraCapturerConfiguration;
 import io.agora.rtc2.video.ImageTrackOptions;
+import io.agora.rtc2.video.SnapshotConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import io.agora.rtc2.video.WatermarkOptions;
@@ -74,15 +74,18 @@ import io.agora.rtc2.video.WatermarkOptions;
         actionId = R.id.action_mainFragment_to_live_streaming,
         tipsId = R.string.livestreaming
 )
-public class LiveStreaming extends BaseFragment implements View.OnClickListener {
+public class LiveStreaming extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
-
+    private static final int FPS_DEFAULT = 15;
+    public Constants.VideoModulePosition position = Constants.VideoModulePosition.VIDEO_MODULE_POSITION_PRE_RENDERER;
     private FragmentLiveStreamingBinding mRootBinding;
     private FragmentLiveStreamingSettingBinding mSettingBinding;
     private BottomSheetDialog mSettingDialog;
 
     private VideoReportLayout foreGroundVideo, backGroundVideo;
     private boolean isLocalVideoForeground;
+    private int localFps = 0;
+    private int remoteFps = 0;
 
     private RtcEngine engine;
     private int myUid = 0;
@@ -112,6 +115,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         mRootBinding.btnJoin.setOnClickListener(this);
         mRootBinding.btnPreload.setOnClickListener(this);
         mRootBinding.btnPublish.setOnClickListener(this);
+        mRootBinding.btnLocalScreenshot.setOnClickListener(this);
         mRootBinding.btnRemoteScreenshot.setOnClickListener(this);
         mRootBinding.btnSwitchCamera.setOnClickListener(this);
         foreGroundVideo.setOnClickListener(this);
@@ -234,6 +238,22 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         });
         mSettingDialog = new BottomSheetDialog(requireContext());
         mSettingDialog.setContentView(mSettingBinding.getRoot());
+
+        //init fps
+        mRootBinding.sbLocal.setOnSeekBarChangeListener(this);
+        mRootBinding.sbRemote.setOnSeekBarChangeListener(this);
+
+        mRootBinding.spinnerScenario.setOnItemSelectedListener(this);
+        mRootBinding.spinnerSnapshot.setOnItemSelectedListener(this);
+
+        mRootBinding.btnLocalScreenshot.setEnabled(false);
+    }
+
+    private void resetFps() {
+        localFps = FPS_DEFAULT;
+        remoteFps = FPS_DEFAULT;
+        mRootBinding.sbLocal.setProgress(localFps);
+        mRootBinding.sbRemote.setProgress(remoteFps);
     }
 
     private void updateVideoView() {
@@ -361,21 +381,18 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 // call when join button hit
                 String channelId = mRootBinding.etChannel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions -> {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                checkOrRequestPermisson(new PermissonUtils.PermissionResultCallback() {
+                    @Override
+                    public void onPermissionsResult(boolean allPermissionsGranted, String[] permissions, int[] grantResults) {
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId);
+                        }
+                    }
+                });
             } else {
+                mRootBinding.btnLocalScreenshot.setEnabled(false);
                 joined = false;
+                mRootBinding.llContainerFp.setVisibility(View.GONE);
                 isHost = false;
                 isPreloaded = false;
                 mRootBinding.btnJoin.setText(getString(R.string.join));
@@ -468,6 +485,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
         } else if (v.getId() == R.id.btn_setting) {
             mSettingDialog.show();
+        } else if (v.getId() == R.id.btn_local_screenshot) {
+            takeSnapshot(myUid);
         } else if (v.getId() == R.id.btn_remote_screenshot) {
             takeSnapshot(remoteUid);
         } else if (v.getId() == R.id.btn_preload) {
@@ -498,7 +517,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         if (context == null) {
             return;
         }
-
+        resetFps();
         isLocalVideoForeground = false;
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
@@ -540,7 +559,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
             ChannelMediaOptions option = new ChannelMediaOptions();
             option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
+            option.clientRoleType = CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
             int res;
@@ -618,15 +637,32 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     }
 
     private void takeSnapshot(int uid) {
-        if (uid != 0) {
-            String filePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "livestreaming_snapshot.png";
-            int ret = engine.takeSnapshot(uid, filePath);
+        if (!joined) {
+            showLongToast(getString(R.string.join_channel_first));
+            return;
+        }
+        String filePath = new File(requireContext().getExternalCacheDir(), uid + "_livestreaming_snapshot.png").getAbsolutePath();
+        SnapshotConfig config = new SnapshotConfig();
+        config.filePath = filePath;
+        if (uid == myUid) {
+            config.position = position;
+            int ret = engine.takeSnapshot(0, config);
             if (ret != Constants.ERR_OK) {
-                showLongToast("takeSnapshot error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
+                showLongToast("takeSnapshot local error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
             }
         } else {
-            showLongToast(getString(R.string.remote_screenshot_tip));
+            if (uid != 0) {
+//                config.position = Constants.VideoModulePosition.VIDEO_MODULE_POSITION_PRE_RENDERER;
+//                int ret = engine.takeSnapshot(uid, config);
+                int ret = engine.takeSnapshot(uid, filePath);
+                if (ret != Constants.ERR_OK) {
+                    showLongToast("takeSnapshot remote error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
+                }
+            } else {
+                showLongToast(getString(R.string.remote_screenshot_tip));
+            }
         }
+
     }
 
 
@@ -671,6 +707,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    mRootBinding.llContainerFp.setVisibility(View.VISIBLE);
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
@@ -813,6 +850,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
             runOnUIThread(() -> {
                 mRootBinding.btnPublish.setEnabled(true);
+                if (newRole == Constants.CLIENT_ROLE_BROADCASTER) {
+                    mRootBinding.btnLocalScreenshot.setEnabled(true);
+                } else {
+                    mRootBinding.btnLocalScreenshot.setEnabled(false);
+                }
             });
         }
 
@@ -886,4 +928,56 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
 
     };
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (seekBar == mRootBinding.sbLocal) {
+            localFps = progress;
+            mRootBinding.tvLocalFpsNum.setText(localFps + "");
+            if (engine != null) {
+                engine.setLocalRenderTargetFps(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY, localFps);
+            }
+        } else if (seekBar == mRootBinding.sbRemote) {
+            remoteFps = progress;
+            mRootBinding.tvRemoteFpsNum.setText(remoteFps + "");
+            if (engine != null) {
+                engine.setRemoteRenderTargetFps(remoteFps);
+            }
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == mRootBinding.spinnerScenario) {
+            if (engine != null) {
+                // Set the video scenario
+                String name = parent.getSelectedItem().toString();
+                Constants.VideoScenario videoScenario = Constants.VideoScenario.valueOf(name);
+                if (videoScenario != null) {
+                    int ret = engine.setVideoScenario(videoScenario);
+                    Log.d(TAG, "onItemSelected: setVideoScenario ret=" + ret);
+                }
+            }
+        } else if (parent == mRootBinding.spinnerSnapshot) {
+            if (engine != null) {
+                String name = parent.getSelectedItem().toString();
+                LiveStreaming.this.position = Constants.VideoModulePosition.valueOf(name);
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

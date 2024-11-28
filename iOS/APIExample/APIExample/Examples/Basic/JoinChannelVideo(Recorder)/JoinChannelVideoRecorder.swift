@@ -105,6 +105,8 @@ class JoinChannelVideoRecorderEntry: UIViewController {
 }
 
 class JoinChannelVideoRecorder: BaseViewController {
+    private var channelName: String?
+    @IBOutlet var joinOrLeaveButton: UIButton?
     private lazy var localRecordButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -144,6 +146,16 @@ class JoinChannelVideoRecorder: BaseViewController {
             remoteRecordButton.isHidden = remoteUid == 0
         }
     }
+    private lazy var localPreviewRecord: AgoraMediaRecorder? = {
+        let streamInfo = AgoraRecorderStreamInfo()
+        streamInfo.channelId = title ?? ""
+        streamInfo.uid = localUid
+        streamInfo.type = .preview
+        let record = agoraKit.createMediaRecorder(withInfo: streamInfo)
+        record?.setMediaRecorderDelegate(self)
+        return record
+    }()
+    
     private lazy var localRecord: AgoraMediaRecorder? = {
         let streamInfo = AgoraRecorderStreamInfo()
         streamInfo.channelId = title ?? ""
@@ -188,6 +200,9 @@ class JoinChannelVideoRecorder: BaseViewController {
         remoteRecordButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         remoteRecordButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
+        joinOrLeaveButton?.setTitle("Leave Channel".localized, for: .selected)
+        joinOrLeaveButton?.setTitle("Join Channel".localized, for: .normal)
+        
         setupRTC()
     }
 
@@ -208,6 +223,7 @@ class JoinChannelVideoRecorder: BaseViewController {
             let resolution = configs["resolution"] as? CGSize,
             let fps = configs["fps"] as? Int,
             let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else {return}
+        self.channelName = channelName
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
@@ -232,6 +248,13 @@ class JoinChannelVideoRecorder: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+//        joinChannel(channelName: channelName)
+        guard let button = joinOrLeaveButton else {return}
+        onJoinOrLeave(sender: button)
+            
+    }
+    
+    private func joinChannel(channelName: String) {
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -276,16 +299,28 @@ class JoinChannelVideoRecorder: BaseViewController {
     @objc
     private func onTapLocalRecordButton(sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        let path = storagePath + "/\(localUid).mp4"
+        var path: String? = nil
+        var recorder: AgoraMediaRecorder? = nil
+        if joinOrLeaveButton?.isSelected ?? false == true {
+            path = storagePath + "/\(localUid).mp4"
+            recorder = localRecord
+        } else {
+            path = storagePath + "/preview_\(localUid).mp4"
+            recorder = localPreviewRecord
+            agoraKit.startRecordingDeviceTest(500)
+        }
+        guard let path = path, let recorder = recorder else {return}
         if sender.isSelected {
             let config = AgoraMediaRecorderConfiguration()
             config.storagePath = path
             config.containerFormat = .MP4
             config.maxDurationMs = 10 * 1000
-            localRecord?.startRecording(config)
+            let ret = recorder.startRecording(config)
+            print("startRecording: \(ret)")
         } else {
-            localRecord?.stopRecording()
+            let ret = recorder.stopRecording()
             ToastView.show(text: path)
+            print("stopRecording: \(ret) path = \(path)")
         }
     }
     @objc
@@ -306,6 +341,18 @@ class JoinChannelVideoRecorder: BaseViewController {
     
     deinit {
         AgoraRtcEngineKit.destroy()
+    }
+    
+    @IBAction func onJoinOrLeave(sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            print("join channel")
+            joinChannel(channelName: channelName ?? "")
+        } else {
+            print("leave channel")
+            agoraKit.leaveChannel()
+        }
     }
 }
 

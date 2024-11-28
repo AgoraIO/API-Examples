@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-
+#include <IAgoraRtcEngineEx.h>
 
 class CAudioProfileEventHandler : public IRtcEngineEventHandler
 {
@@ -77,7 +77,7 @@ public:
 	 */
 	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
-	HWND m_hMsgHanlder;
+	HWND m_hMsgHanlder = nullptr;
 };
 
 
@@ -110,9 +110,16 @@ private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_setAudio = false;
-	IRtcEngine* m_rtcEngine = nullptr;
+	char* mainchannelName = nullptr;
+	char * mSubChannelName =nullptr;
+	IRtcEngineEx* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	CAudioProfileEventHandler m_eventHandler;
+	CAudioProfileEventHandler m_eventHandlerEx;
+	void joinSecondChannelAndStartAudioMixer();
+	void leaveSecondChannelAndStopAudioMixer();
+	RtcConnection m_exChannelRtcConn;
+	MixedAudioStream* sourceStreams = nullptr;
 public:
 
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -141,4 +148,8 @@ public:
 	CButton m_btnSetAudioProfile;
 	CListBox m_lstInfo;
 	CStatic m_staDetail;
+	CEdit mDestChannelEc;
+	afx_msg void OnBnClickedButtonDestJoin();
+	afx_msg void OnBnClickedCheckSecond();
+	CButton mJoinSecondCheckbox;
 };

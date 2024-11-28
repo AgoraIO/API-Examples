@@ -302,4 +302,8 @@ public:
 	CStatic m_staCavasColor;
 	CSliderCtrl m_sldCanvasColor;
 	afx_msg void OnBnClickedCheckVideoImage();
+	CSliderCtrl mLocalFpsSlider;
+	CSliderCtrl mRemoteFpsSlider;
+	afx_msg void OnNMCustomdrawSliderLocalfps(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMCustomdrawSliderRemotefps(NMHDR* pNMHDR, LRESULT* pResult);
 };

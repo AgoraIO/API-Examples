@@ -13,31 +13,41 @@ class UserModel {
     var uid: UInt = 0
     var canvasView: SampleBufferDisplayView?
     var trackId: UInt32 = 0
-    var isJoin: Bool = false
+    var isJoin: Bool = false {
+        didSet {
+            self.canvasView?.videoView.isHidden = !isJoin
+            self.canvasView?.videoView.reset()
+        }
+    }
     var isEncode: Bool = false
     var customSource: AgoraYUVImageSourcePush?
     var customEncodeSource: KFMP4Demuxer?
+    
+    func reset() {
+        self.customSource?.stopSource()
+        self.customSource = nil
+        self.customEncodeSource?.cancelReading()
+        self.customEncodeSource = nil
+        
+        self.uid = UInt(Int.random(in: 10000...99999))
+        self.trackId = 0
+        self.isJoin = false
+        self.isEncode = false
+    }
 }
-
-var kLocalUid: UInt = 999
 
 class CustomVideoSourcePushMulti: BaseViewController {
     @IBOutlet weak var Container: AGEVideoContainer!
-    lazy var localVideo: SampleBufferDisplayView = {
-        let videoView = SampleBufferDisplayView.createFromNib()
-        return videoView ?? SampleBufferDisplayView()
-    }()
-    lazy var remoteVideos: [UserModel] = (0..<3).map({ _ in
+    private let localUid: UInt = UInt(Int.random(in: 10000...99999))
+    lazy var remoteVideos: [UserModel] = (0..<4).map({ _ in
         let model = UserModel()
-        model.uid = UInt(Int.random(in: 10000...99999))
         model.canvasView = SampleBufferDisplayView.createFromNib()
+        model.reset()
         return model
     })
     @IBOutlet weak var createVideoTrackButton: NSButton!
     @IBOutlet weak var destoryVideoTrackButton: NSButton!
     
-    fileprivate var customCamera: AgoraYUVImageSourcePush?
-
     var agoraKit: AgoraRtcEngineKit!
     
     /**
@@ -177,25 +187,21 @@ class CustomVideoSourcePushMulti: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        customCamera?.stopSource()
         if isJoined {
             remoteVideos.forEach({
                 let connection = AgoraRtcConnection()
                 connection.localUid = $0.uid
                 connection.channelId = channelField.stringValue
-                $0.customSource?.stopSource()
                 agoraKit.leaveChannelEx(connection) { state in
-                    LogUtils.log(message: "warning: \(state.description)", level: .info)
+                    LogUtils.log(message: "leaveChannelEx: \(state.description)", level: .info)
                 }
+                $0.reset()
             })
             let connection = AgoraRtcConnection()
-            connection.localUid = kLocalUid
+            connection.localUid = localUid
             connection.channelId = channelField.stringValue
             agoraKit.leaveChannelEx(connection) { state in
-                LogUtils.log(message: "warning: \(state.description)", level: .info)
-            }
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                LogUtils.log(message: "Left channel", level: .info)
+                LogUtils.log(message: "leaveChannelEx : \(state.description)", level: .info)
             }
         }
         AgoraRtcEngineKit.destroy()
@@ -222,15 +228,6 @@ class CustomVideoSourcePushMulti: BaseViewController {
 //            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
 //            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
-            // setup my own camera as custom video source
-            if(customCamera == nil){
-                customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                                       fileName: "sample" ,
-                                                       frameRate: 15)
-                customCamera?.trackId = agoraKit.createCustomVideoTrack()
-                customCamera?.delegate = self
-                customCamera?.startSource()
-            }
             // enable video module and set up video encoding configs
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
@@ -248,67 +245,56 @@ class CustomVideoSourcePushMulti: BaseViewController {
             // when joining channel. The channel name and uid used to calculate
             // the token has to match the ones used for channel join
             isProcessing = true
-            joinChannel(uid: kLocalUid, trackId: customCamera?.trackId ?? 0, publishEncodedVideoTrack: false)
+            joinChannel(uid: localUid, trackId: nil, publishEncodedVideoTrack: false)
         } else {
-            self.customCamera?.stopSource()
-            agoraKit.destroyCustomVideoTrack(UInt(self.customCamera?.trackId ?? 0))
-            self.customCamera = nil
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                print(stats)
-            }
             LogUtils.log(message: "Left channel", level: .info)
             isProcessing = false
             isJoined = false
             remoteVideos.forEach({
                 let trackId = $0.trackId
-                $0.trackId = 0
-                $0.isEncode = false
-                $0.customEncodeSource?.cancelReading()
                 agoraKit.destroyCustomEncodedVideoTrack(UInt(trackId))
-                $0.customSource?.stopSource()
                 agoraKit.destroyCustomVideoTrack(UInt(trackId))
-                $0.customSource = nil
-                $0.isJoin = false
-                $0.uid = UInt(Int.random(in: 10000...99999))
+                $0.reset()
             })
-            remoteVideos.forEach({
-                $0.canvasView?.videoView?.reset()
-            })
-            localVideo.videoView.reset()
         }
     }
     
-    private func joinChannel(uid: UInt, trackId: UInt32, publishEncodedVideoTrack: Bool) {
+    private func joinChannel(uid: UInt, trackId: UInt32?, publishEncodedVideoTrack: Bool) {
         let channelName = channelField.stringValue
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCustomVideoTrack = !publishEncodedVideoTrack
         option.publishMicrophoneTrack = false
         option.publishCameraTrack = false
-        option.autoSubscribeAudio = uid == kLocalUid
-        option.autoSubscribeVideo = uid == kLocalUid
-        option.publishEncodedVideoTrack = publishEncodedVideoTrack
-        option.customVideoTrackId = Int(trackId)
-        option.clientRoleType = .broadcaster
-        let connection = AgoraRtcConnection()
-        connection.localUid = uid
-        connection.channelId = channelName
         
-        var delegate : AgoraRtcEngineDelegate? = self
-        if(uid != kLocalUid){
-            delegate = nil
+        let delegate: AgoraRtcEngineDelegate? = self
+        if let trackId = trackId {
+            option.publishCustomVideoTrack = !publishEncodedVideoTrack
+            option.customVideoTrackId = Int(trackId)
+            option.publishEncodedVideoTrack = publishEncodedVideoTrack
+            option.clientRoleType = .broadcaster
+            option.autoSubscribeAudio = false
+            option.autoSubscribeVideo = false
+//            delegate = nil
+        } else {
+            option.clientRoleType = .audience
+            option.autoSubscribeAudio = true
+            option.autoSubscribeVideo = true
         }
+        
         NetworkManager.shared.generateToken(channelName: channelName, uid: uid) { token in
+            let connection = AgoraRtcConnection()
+            connection.localUid = uid
+            connection.channelId = channelName
             let result = self.agoraKit.joinChannelEx(byToken: token,
-                                                connection: connection,
-                                                delegate: delegate,
-                                                mediaOptions: option,
-                                                joinSuccess: nil)
+                                                     connection: connection,
+                                                     delegate: delegate,
+                                                     mediaOptions: option,
+                                                     joinSuccess: nil)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                self.showAlert(title: "Error", message: "joinChannel[\(channelName)] uid: \(connection.localUid) call failed: \(result), please check your params")
             }
         }
     }
@@ -374,14 +360,17 @@ class CustomVideoSourcePushMulti: BaseViewController {
     
     private func createVideoTrack(userModel: UserModel) {
         let customCamera = AgoraYUVImageSourcePush(size: CGSize(width: 320, height: 180),
-                                               fileName: "sample" ,
-                                               frameRate: 15)
+                                                   fileName: "sample" ,
+                                                   frameRate: 15,
+                                                   isHDR: false)
         customCamera.trackId = userModel.trackId
         customCamera.delegate = self
         userModel.isJoin = true
         userModel.customSource = customCamera
         customCamera.startSource()
-        joinChannel(uid: userModel.uid, trackId: userModel.trackId, publishEncodedVideoTrack: userModel.isEncode)
+        joinChannel(uid: userModel.uid, 
+                    trackId: userModel.trackId,
+                    publishEncodedVideoTrack: userModel.isEncode)
     }
     
     @IBAction func onClickDestoryTrack(_ sender: Any) {
@@ -389,34 +378,38 @@ class CustomVideoSourcePushMulti: BaseViewController {
             return
         }
         let channelName = channelField.stringValue
-        let userModel = remoteVideos.filter({ $0.isJoin == true && $0.trackId != 0}).last
-        if(userModel == nil){
-            return
-        }
-        let trackId = userModel?.trackId
-        userModel?.isJoin = false
-        userModel?.trackId = 0
-        userModel?.customSource?.stopSource()
-        userModel?.customEncodeSource?.cancelReading()
-        userModel?.customEncodeSource = nil
-        userModel?.customSource = nil
+        guard let userModel = remoteVideos.filter({ $0.trackId != 0 }).last else { return }
+        let trackId = UInt(userModel.trackId)
         let connection = AgoraRtcConnection()
-        connection.localUid = userModel?.uid ?? 0
+        connection.localUid = userModel.uid
         connection.channelId = channelName
-        agoraKit.destroyCustomVideoTrack(UInt(trackId ?? 0))
-        agoraKit.destroyCustomEncodedVideoTrack(UInt(trackId ?? 0))
-        
-        userModel?.isEncode = false
-        userModel?.uid = UInt(Int.random(in: 10000...99999))
+        agoraKit.destroyCustomVideoTrack(trackId)
+        agoraKit.destroyCustomEncodedVideoTrack(trackId)
         agoraKit.leaveChannelEx(connection) { state in
-            LogUtils.log(message: "warning: \(state.description)", level: .info)
+            LogUtils.log(message: "leaveChannelEx: \(state.description)", level: .info)
         }
         
-        userModel?.canvasView?.videoView.reset()
+        cleanCanvas(uid: userModel.uid)
     }
     
-    func layoutVideos(_ count: Int) {
-        Container.layoutStream(views: [localVideo] + remoteVideos.compactMap({ $0.canvasView }))
+    private func layoutVideos(_ count: Int) {
+        Container.layoutStream(views: remoteVideos.compactMap({ $0.canvasView }))
+    }
+    
+    private func cleanCanvas(uid: UInt) {
+        guard let userModel = remoteVideos.first(where: { $0.uid == uid }) else { return }
+        
+        // to unlink your view from sdk, so that your view reference will be released
+        // note the video will stay at its last frame, to completely remove it
+        // you will need to remove the EAGL sublayer from your binded view
+        userModel.reset()
+        
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        let connect = AgoraRtcConnection()
+        connect.localUid = localUid
+        connect.channelId = channelField.stringValue
+        agoraKit.setupRemoteVideoEx(videoCanvas, connection: connect)
     }
 }
 
@@ -460,25 +453,21 @@ extension CustomVideoSourcePushMulti: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        if uid == kLocalUid { return }
-        for model in remoteVideos {
-            if model.trackId != 0 && model.uid == uid {
-                return
-            }
-        }
-        
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
+        if let _ = remoteVideos.first(where: { $0.uid == uid }) { return }
         guard let userModel = remoteVideos.first(where: { $0.isJoin == false && $0.trackId == 0 }) else { return }
-        videoCanvas.view = userModel.canvasView?.videoView
-        videoCanvas.renderMode = .hidden
+        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        
         userModel.uid = uid
         userModel.isJoin = true
         
+        // the view to be binded
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        videoCanvas.view = userModel.canvasView?.videoView
+        videoCanvas.renderMode = .fit
+        
         let connect = AgoraRtcConnection()
-        connect.localUid = kLocalUid
+        connect.localUid = localUid
         connect.channelId = channelField.stringValue
         agoraKit.setupRemoteVideoEx(videoCanvas, connection: connect)
     }
@@ -488,27 +477,10 @@ extension CustomVideoSourcePushMulti: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        guard let _ = remoteVideos.first(where: { $0.uid == uid }) else { return }
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        for model in remoteVideos {
-            if model.trackId != 0 && model.uid == uid {
-                return
-            }
-        }
         
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        let connect = AgoraRtcConnection()
-        connect.localUid = kLocalUid
-        connect.channelId = channelField.stringValue
-        agoraKit.setupRemoteVideoEx(videoCanvas, connection: connect)
-        
-        // to unlink your view from sdk, so that your view reference will be released
-        // note the video will stay at its last frame, to completely remove it
-        // you will need to remove the EAGL sublayer from your binded view
-        let userModel = remoteVideos.first(where: { $0.uid == uid && $0.trackId == 0 })
-        userModel?.isJoin = false
-        userModel?.uid = UInt(Int.random(in: 10000...99999))
-        userModel?.canvasView?.videoView.reset()
+        cleanCanvas(uid: uid)
     }
 }
 
@@ -516,17 +488,7 @@ extension CustomVideoSourcePushMulti: AgoraRtcEngineDelegate {
 extension CustomVideoSourcePushMulti: AgoraYUVImageSourcePushDelegate {
     func onVideoFrame(_ buffer: CVPixelBuffer, size: CGSize, trackId: UInt, rotation: Int32) {
         let videoFrame = AgoraVideoFrame()
-        /** Video format:
-         * - 1: I420
-         * - 2: BGRA
-         * - 3: NV21
-         * - 4: RGBA
-         * - 5: IMC2
-         * - 7: ARGB
-         * - 8: NV12
-         * - 12: iOS texture (CVPixelBufferRef)
-         */
-        videoFrame.format = 12
+        videoFrame.format = AgoraVideoFormat.cvPixelNV12.rawValue
         videoFrame.textureBuf = buffer
         videoFrame.rotation = Int32(rotation)
         
@@ -535,12 +497,8 @@ extension CustomVideoSourcePushMulti: AgoraYUVImageSourcePushDelegate {
         outputVideoFrame.height = Int32(size.height)
         outputVideoFrame.pixelBuffer = buffer
         outputVideoFrame.rotation = rotation
-        if customCamera?.trackId ?? 0 == trackId {
-            localVideo.videoView.renderVideoPixelBuffer(outputVideoFrame)
-        } else {
-            let userModel = remoteVideos.first(where: { $0.trackId == trackId })
-            userModel?.canvasView?.videoView.renderVideoPixelBuffer(outputVideoFrame)
-        }
+        let userModel = remoteVideos.first(where: { $0.trackId == trackId })
+        userModel?.canvasView?.videoView.renderVideoPixelBuffer(outputVideoFrame)
         //once we have the video frame, we can push to agora sdk
         agoraKit.pushExternalVideoFrame(videoFrame, videoTrackId: trackId)
     }

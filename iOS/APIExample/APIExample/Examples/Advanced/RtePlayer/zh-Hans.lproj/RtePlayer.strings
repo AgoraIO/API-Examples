@@ -1,0 +1,11 @@
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
+"Lzz-2R-G7f.text" = "极速直播";
+
+"17J-Ix-Qot.normalTitle" = "播放";
+"tqt-S5-7Lt.normalTitle" = "停止";
+
+
+"BMd-dm-te6.text" = "请用另一台设备作为主播身份开启一个直播频道，并在上述输入框内填入对应频道名。";

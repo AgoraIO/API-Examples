@@ -228,16 +228,16 @@ extension AUDIO_AINS_MODE {
 extension AgoraVoiceAITunerType {
     func description() -> String {
         switch self {
-        case .matureMale: return "AI_Tunner_Mature_Male".localized
-        case .freshMale: return "AI_Tunner_Fresh_Male".localized
-        case .elegantFemale: return "AI_Tunner_Elegant_Female".localized
-        case .sweetFemale: return "AI_Tunner_Sweet_Female".localized
-        case .warmMaleSinging: return "AI_Tunner_Warm_Male_Singing".localized
-        case .gentleFemaleSinging: return "AI_Tunner_Gentle_Female_Singing".localized
-        case .huskyMaleSinging: return "AI_Tunner_Husky_Male_Singing".localized
-        case .warmElegantFemaleSinging: return "AI_Tunner_Warm_Elegant_Female_Singing".localized
-        case .powerfulMaleSinging: return "AI_Tunner_Powerful_Male_Singing".localized
-        case .dreamyFemaleSinging: return "AI_Tunner_Dreamy_Female_Singing".localized
+        case .matureMale: return "Mature Male Voice".localized
+        case .freshMale: return "Fresh Male Voice".localized
+        case .elegantFemale: return "Elegant Female Voice".localized
+        case .sweetFemale: return "Sweet Female Voice".localized
+        case .warmMaleSinging: return "Warm Male Singing Voice".localized
+        case .gentleFemaleSinging: return "Gentle Female Singing Voice".localized
+        case .huskyMaleSinging: return "Husky Male Singing Voice".localized
+        case .warmElegantFemaleSinging: return "Warm Elegant Female Singing Voice".localized
+        case .powerfulMaleSinging: return "Powerful Male Singing Voice".localized
+        case .dreamyFemaleSinging: return "Dreamy Female Singing Voice".localized
         @unknown default: return "\(self.rawValue)"
         }
     }
@@ -324,6 +324,30 @@ extension AgoraFocalLengthInfo {
         case .ultraWide: return [title + "Length Wide".localized: focalLengthType]
         case .telephoto: return [title + "Telephoto".localized: focalLengthType]
         @unknown default: return [title + "Default".localized: focalLengthType]
+        }
+    }
+}
+
+extension AgoraApplicationScenarioType {
+    func description() -> String {
+        switch self {
+        case .applicationGeneralScenario: return "General".localized
+        case .applicationMeetingScenario: return "Meeting".localized
+        case .application1V1Scenario: return "1v1".localized
+        case .applicationLiveShowScenario: return "Live Show".localized
+        @unknown default: return ""
+        }
+    }
+}
+
+extension AgoraVideoModulePosition {
+    func description() -> String {
+        switch self {
+        case .postCapture: return "Post Capture".localized
+        case .preRenderer: return "PreRenderer".localized
+        case .preEncoder: return "PreEncoder".localized
+        case .postCaptureOrigin: return "Post Capture Origin".localized
+        @unknown default: return ""
         }
     }
 }

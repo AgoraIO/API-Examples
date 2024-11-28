@@ -1,0 +1,1527 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F2E75080F9F547EC377FE96 /* Pods_APIExample_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E633FB65347D029555FE8BDB /* Pods_APIExample_SwiftUI.framework */; };
+		4C9307522CB961150085EFF9 /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 4C93069D2CB961150085EFF9 /* output.raw */; };
+		4C9307532CB961150085EFF9 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4C93069E2CB961150085EFF9 /* sample.mov */; };
+		4C9307542CB961150085EFF9 /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C93069F2CB961150085EFF9 /* audioeffect.mp3 */; };
+		4C9307552CB961150085EFF9 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A02CB961150085EFF9 /* agora-logo.png */; };
+		4C9307562CB961150085EFF9 /* sample.yuv in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A12CB961150085EFF9 /* sample.yuv */; };
+		4C9307572CB961150085EFF9 /* frames0.yuv in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A22CB961150085EFF9 /* frames0.yuv */; };
+		4C9307582CB961150085EFF9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A32CB961150085EFF9 /* Localizable.strings */; };
+		4C9307592CB961150085EFF9 /* AR.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A42CB961150085EFF9 /* AR.scnassets */; };
+		4C93075A2CB961150085EFF9 /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A52CB961150085EFF9 /* audiomixing.mp3 */; };
+		4C93075B2CB961150085EFF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A62CB961150085EFF9 /* Assets.xcassets */; };
+		4C93075C2CB961150085EFF9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C9306A82CB961150085EFF9 /* Preview Assets.xcassets */; };
+		4C93075D2CB961150085EFF9 /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306AB2CB961150085EFF9 /* AgoraCustomEncryption.mm */; };
+		4C93075E2CB961150085EFF9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306AE2CB961150085EFF9 /* SettingsView.swift */; };
+		4C93075F2CB961150085EFF9 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306AF2CB961150085EFF9 /* GlobalSettings.swift */; };
+		4C9307602CB961150085EFF9 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B12CB961150085EFF9 /* ToastView.swift */; };
+		4C9307612CB961150085EFF9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B22CB961150085EFF9 /* NetworkManager.swift */; };
+		4C9307622CB961150085EFF9 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B32CB961150085EFF9 /* JSONObject.swift */; };
+		4C9307632CB961150085EFF9 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B42CB961150085EFF9 /* PickerView.swift */; };
+		4C9307642CB961150085EFF9 /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B62CB961150085EFF9 /* AgoraPictureInPictureController.m */; };
+		4C9307652CB961150085EFF9 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B72CB961150085EFF9 /* AgoraCameraSourcePush.swift */; };
+		4C9307662CB961150085EFF9 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B82CB961150085EFF9 /* AgoraMetalRender.swift */; };
+		4C9307672CB961150085EFF9 /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B92CB961150085EFF9 /* AgoraSampleBufferRender.m */; };
+		4C9307682CB961150085EFF9 /* AgoraScreenShareSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306BE2CB961150085EFF9 /* AgoraScreenShareSourcePush.m */; };
+		4C9307692CB961150085EFF9 /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C02CB961150085EFF9 /* AgoraMetalShader.metal */; };
+		4C93076A2CB961150085EFF9 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C12CB961150085EFF9 /* CircularBuffer.c */; };
+		4C93076B2CB961150085EFF9 /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C22CB961150085EFF9 /* AgoraYUVImageSourcePush.m */; };
+		4C93076C2CB961150085EFF9 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C32CB961150085EFF9 /* VideoView.swift */; };
+		4C93076D2CB961150085EFF9 /* LogUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C52CB961150085EFF9 /* LogUtil.swift */; };
+		4C93076E2CB961150085EFF9 /* KFMP4Demuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C62CB961150085EFF9 /* KFMP4Demuxer.m */; };
+		4C93076F2CB961150085EFF9 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C72CB961150085EFF9 /* MediaUtils.m */; };
+		4C9307702CB961150085EFF9 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306C82CB961150085EFF9 /* Util.swift */; };
+		4C9307712CB961150085EFF9 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306CB2CB961150085EFF9 /* StatisticsInfo.swift */; };
+		4C9307722CB961150085EFF9 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306CC2CB961150085EFF9 /* AgoraExtension.swift */; };
+		4C9307732CB961150085EFF9 /* ZSNBoxingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306CF2CB961150085EFF9 /* ZSNBoxingView.m */; };
+		4C9307742CB961150085EFF9 /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D02CB961150085EFF9 /* AudioWriteToFile.m */; };
+		4C9307752CB961150085EFF9 /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D12CB961150085EFF9 /* AgoraPcmSourcePush.swift */; };
+		4C9307762CB961150085EFF9 /* UIColor+CSRGB.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D42CB961150085EFF9 /* UIColor+CSRGB.m */; };
+		4C9307772CB961150085EFF9 /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D52CB961150085EFF9 /* UIView+CSshortFrame.m */; };
+		4C9307782CB961150085EFF9 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D62CB961150085EFF9 /* ExternalAudio.mm */; };
+		4C9307792CB961150085EFF9 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306D92CB961150085EFF9 /* AudioController.m */; };
+		4C93077A2CB961150085EFF9 /* VideoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306DC2CB961150085EFF9 /* VideoUIView.swift */; };
+		4C93077B2CB961150085EFF9 /* PickerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306DE2CB961150085EFF9 /* PickerSheetView.swift */; };
+		4C93077C2CB961150085EFF9 /* ARVideoRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306E02CB961150085EFF9 /* ARVideoRenderer.swift */; };
+		4C93077D2CB961150085EFF9 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306E12CB961150085EFF9 /* KeyCenter.swift */; };
+		4C9307BC2CB961160085EFF9 /* output.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4C9307412CB961150085EFF9 /* output.pcm */; };
+		4C9307BD2CB961160085EFF9 /* JoinChannelVideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307442CB961150085EFF9 /* JoinChannelVideoRecorder.swift */; };
+		4C9307BE2CB961160085EFF9 /* JoinChannelVideoRecorderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307452CB961150085EFF9 /* JoinChannelVideoRecorderRTC.swift */; };
+		4C9307C52CB961160085EFF9 /* APIExample_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93074F2CB961150085EFF9 /* APIExample_SwiftUIApp.swift */; };
+		4C9307C62CB961160085EFF9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307502CB961150085EFF9 /* ContentView.swift */; };
+		4C9307D52CB963380085EFF9 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9307D42CB963380085EFF9 /* ReplayKit.framework */; };
+		4C9307EB2CB963390085EFF9 /* Agora-ScreenShare-Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C9307D22CB963380085EFF9 /* Agora-ScreenShare-Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C9307F72CB963B30085EFF9 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307F42CB963B30085EFF9 /* SampleHandler.swift */; };
+		4C9307FC2CBA6F790085EFF9 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307FA2CBA6F790085EFF9 /* JoinChannelAudio.swift */; };
+		4C9307FD2CBA6F790085EFF9 /* JoinChannelAudioRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307FB2CBA6F790085EFF9 /* JoinChannelAudioRTC.swift */; };
+		4C9308012CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307FF2CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift */; };
+		4C9308022CBA6F8D0085EFF9 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9308002CBA6F8D0085EFF9 /* JoinChannelVideo.swift */; };
+		4C93080B2CBA712F0085EFF9 /* JoinChannelVideoTokenRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9308092CBA712F0085EFF9 /* JoinChannelVideoTokenRTC.swift */; };
+		4C93080C2CBA712F0085EFF9 /* JoinChannelVideoToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93080A2CBA712F0085EFF9 /* JoinChannelVideoToken.swift */; };
+		4C9309AB2CBA91530085EFF9 /* RawAudioDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93094F2CBA91520085EFF9 /* RawAudioDataRTC.swift */; };
+		4C9309AC2CBA91530085EFF9 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309502CBA91520085EFF9 /* RawAudioData.swift */; };
+		4C9309AD2CBA91530085EFF9 /* MediaChannelRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309522CBA91520085EFF9 /* MediaChannelRelay.swift */; };
+		4C9309AE2CBA91530085EFF9 /* MediaChannelRelayRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309532CBA91520085EFF9 /* MediaChannelRelayRTC.swift */; };
+		4C9309AF2CBA91530085EFF9 /* RawVideoDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309552CBA91520085EFF9 /* RawVideoDataRTC.swift */; };
+		4C9309B02CBA91530085EFF9 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309562CBA91520085EFF9 /* RawVideoData.swift */; };
+		4C9309B12CBA91530085EFF9 /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309582CBA91520085EFF9 /* ARKit.swift */; };
+		4C9309B22CBA91530085EFF9 /* ARKitRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309592CBA91520085EFF9 /* ARKitRTC.swift */; };
+		4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */; };
+		4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095C2CBA91520085EFF9 /* FaceCapture.swift */; };
+		4C9309B52CBA91530085EFF9 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095E2CBA91520085EFF9 /* MutliCamera.swift */; };
+		4C9309B62CBA91530085EFF9 /* MutliCameraRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */; };
+		4C9309B72CBA91530085EFF9 /* StreamEncryptionRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */; };
+		4C9309B82CBA91530085EFF9 /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309622CBA91520085EFF9 /* StreamEncryption.swift */; };
+		4C9309B92CBA91530085EFF9 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309642CBA91520085EFF9 /* LiveStreaming.swift */; };
+		4C9309BA2CBA91530085EFF9 /* LiveStreamingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309652CBA91520085EFF9 /* LiveStreamingRTC.swift */; };
+		4C9309BB2CBA91530085EFF9 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309672CBA91520085EFF9 /* CreateDataStream.swift */; };
+		4C9309BC2CBA91530085EFF9 /* CreateDataStreamRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309682CBA91520085EFF9 /* CreateDataStreamRTC.swift */; };
+		4C9309BD2CBA91530085EFF9 /* KtvCopyrightMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93096A2CBA91520085EFF9 /* KtvCopyrightMusic.swift */; };
+		4C9309BE2CBA91530085EFF9 /* PrecallTestRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93096C2CBA91520085EFF9 /* PrecallTestRTC.swift */; };
+		4C9309BF2CBA91530085EFF9 /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93096D2CBA91520085EFF9 /* PrecallTest.swift */; };
+		4C9309C02CBA91530085EFF9 /* CustomPCMAudioSourceRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93096F2CBA91520085EFF9 /* CustomPCMAudioSourceRTC.swift */; };
+		4C9309C12CBA91530085EFF9 /* CustomPCMAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309702CBA91520085EFF9 /* CustomPCMAudioSource.swift */; };
+		4C9309C22CBA91530085EFF9 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309722CBA91520085EFF9 /* JoinMultiChannel.swift */; };
+		4C9309C32CBA91530085EFF9 /* JoinMultiChannelRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309732CBA91520085EFF9 /* JoinMultiChannelRTC.swift */; };
+		4C9309C42CBA91530085EFF9 /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309752CBA91530085EFF9 /* PictureInPicture.swift */; };
+		4C9309C52CBA91530085EFF9 /* SDKRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */; };
+		4C9309C62CBA91530085EFF9 /* SDKRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */; };
+		4C9309C72CBA91530085EFF9 /* SDKRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */; };
+		4C9309C82CBA91530085EFF9 /* PIPDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097B2CBA91530085EFF9 /* PIPDisplayView.swift */; };
+		4C9309C92CBA91530085EFF9 /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097C2CBA91530085EFF9 /* PixelBufferRenderView.swift */; };
+		4C9309CA2CBA91530085EFF9 /* CustomRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */; };
+		4C9309CB2CBA91530085EFF9 /* CustomRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */; };
+		4C9309CC2CBA91530085EFF9 /* CustomRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */; };
+		4C9309CD2CBA91530085EFF9 /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309822CBA91530085EFF9 /* VideoMetadata.swift */; };
+		4C9309CE2CBA91530085EFF9 /* VideoMetaDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309832CBA91530085EFF9 /* VideoMetaDataRTC.swift */; };
+		4C9309CF2CBA91530085EFF9 /* RTMPStreamRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309852CBA91530085EFF9 /* RTMPStreamRTC.swift */; };
+		4C9309D02CBA91530085EFF9 /* RTMPStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309862CBA91530085EFF9 /* RTMPStream.swift */; };
+		4C9309D12CBA91530085EFF9 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309882CBA91530085EFF9 /* CustomAudioRender.swift */; };
+		4C9309D22CBA91530085EFF9 /* CustomAudioRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309892CBA91530085EFF9 /* CustomAudioRenderRTC.swift */; };
+		4C9309D32CBA91530085EFF9 /* LocalVideoTranscoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93098B2CBA91530085EFF9 /* LocalVideoTranscoding.swift */; };
+		4C9309D42CBA91530085EFF9 /* LocalVideoTranscodingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93098C2CBA91530085EFF9 /* LocalVideoTranscodingRTC.swift */; };
+		4C9309D52CBA91530085EFF9 /* AudioWaveformRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93098E2CBA91530085EFF9 /* AudioWaveformRTC.swift */; };
+		4C9309D62CBA91530085EFF9 /* AudioWaveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93098F2CBA91530085EFF9 /* AudioWaveform.swift */; };
+		4C9309D72CBA91530085EFF9 /* ScreenShareRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309912CBA91530085EFF9 /* ScreenShareRTC.swift */; };
+		4C9309D82CBA91530085EFF9 /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309922CBA91530085EFF9 /* ScreenShare.swift */; };
+		4C9309D92CBA91530085EFF9 /* RhythmPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309942CBA91530085EFF9 /* RhythmPlayer.swift */; };
+		4C9309DA2CBA91530085EFF9 /* RhythmPlayerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309952CBA91530085EFF9 /* RhythmPlayerRTC.swift */; };
+		4C9309DB2CBA91530085EFF9 /* VoiceChangerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309972CBA91530085EFF9 /* VoiceChangerRTC.swift */; };
+		4C9309DC2CBA91530085EFF9 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309982CBA91530085EFF9 /* VoiceChanger.swift */; };
+		4C9309DF2CBA91530085EFF9 /* VideoProcessRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93099D2CBA91530085EFF9 /* VideoProcessRTC.swift */; };
+		4C9309E02CBA91530085EFF9 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93099E2CBA91530085EFF9 /* VideoProcess.swift */; };
+		4C9309E12CBA91530085EFF9 /* QuickSwitchChannelRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A02CBA91530085EFF9 /* QuickSwitchChannelRTC.swift */; };
+		4C9309E22CBA91530085EFF9 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A12CBA91530085EFF9 /* QuickSwitchChannel.swift */; };
+		4C9309E32CBA91530085EFF9 /* ContentInspectRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A32CBA91530085EFF9 /* ContentInspectRTC.swift */; };
+		4C9309E42CBA91530085EFF9 /* ContentInspect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A42CBA91530085EFF9 /* ContentInspect.swift */; };
+		4C9309E52CBA91530085EFF9 /* MediaPlayerRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A62CBA91530085EFF9 /* MediaPlayerRTC.swift */; };
+		4C9309E62CBA91530085EFF9 /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A72CBA91530085EFF9 /* MediaPlayer.swift */; };
+		4C9309E72CBA91530085EFF9 /* AudioMixingRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309A92CBA91530085EFF9 /* AudioMixingRTC.swift */; };
+		4C9309E82CBA91530085EFF9 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309AA2CBA91530085EFF9 /* AudioMixing.swift */; };
+		4C9309EC2CBA95530085EFF9 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309EA2CBA95530085EFF9 /* SpatialAudio.swift */; };
+		4C9309ED2CBA95530085EFF9 /* SpatialAudioRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309EB2CBA95530085EFF9 /* SpatialAudioRTC.swift */; };
+		B47E9CD9BABE21C5B5B1ED09 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7585632841723316B616C1AB /* Pods_Agora_ScreenShare_Extension.framework */; };
+		F73B016B2CBA1AC60077B7D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */; };
+		F73B016C2CBA1ADE0077B7D2 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B32CB961150085EFF9 /* JSONObject.swift */; };
+		F73B016D2CBA1AE40077B7D2 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306E12CB961150085EFF9 /* KeyCenter.swift */; };
+		F73B016E2CBA1AED0077B7D2 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306AF2CB961150085EFF9 /* GlobalSettings.swift */; };
+		F73B016F2CBA1AF40077B7D2 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307F42CB963B30085EFF9 /* SampleHandler.swift */; };
+		F73B018D2CC10E240077B7D2 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73B018C2CC10E240077B7D2 /* ViewExtensions.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C9307E92CB963390085EFF9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C9306812CB9607E0085EFF9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C9307D12CB963380085EFF9;
+			remoteInfo = "Agora-ScreenShare-Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C9307F22CB9633A0085EFF9 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4C9307EB2CB963390085EFF9 /* Agora-ScreenShare-Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2FF1D082DDF2E2198DB041E4 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		472119ABD8B195183D4CC1E1 /* Pods-APIExample-SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
+		4C9306892CB9607E0085EFF9 /* APIExample-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C93069B2CB961150085EFF9 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		4C93069D2CB961150085EFF9 /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
+		4C93069E2CB961150085EFF9 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
+		4C93069F2CB961150085EFF9 /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
+		4C9306A02CB961150085EFF9 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
+		4C9306A12CB961150085EFF9 /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
+		4C9306A22CB961150085EFF9 /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
+		4C9306A32CB961150085EFF9 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		4C9306A42CB961150085EFF9 /* AR.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = AR.scnassets; sourceTree = "<group>"; };
+		4C9306A52CB961150085EFF9 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
+		4C9306A62CB961150085EFF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4C9306A82CB961150085EFF9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4C9306AB2CB961150085EFF9 /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		4C9306AC2CB961150085EFF9 /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
+		4C9306AE2CB961150085EFF9 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4C9306AF2CB961150085EFF9 /* GlobalSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		4C9306B12CB961150085EFF9 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		4C9306B22CB961150085EFF9 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		4C9306B32CB961150085EFF9 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		4C9306B42CB961150085EFF9 /* PickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
+		4C9306B62CB961150085EFF9 /* AgoraPictureInPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraPictureInPictureController.m; sourceTree = "<group>"; };
+		4C9306B72CB961150085EFF9 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		4C9306B82CB961150085EFF9 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		4C9306B92CB961150085EFF9 /* AgoraSampleBufferRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraSampleBufferRender.m; sourceTree = "<group>"; };
+		4C9306BA2CB961150085EFF9 /* AgoraScreenShareSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraScreenShareSourcePush.h; sourceTree = "<group>"; };
+		4C9306BB2CB961150085EFF9 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
+		4C9306BC2CB961150085EFF9 /* AgoraYUVImageSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraYUVImageSourcePush.h; sourceTree = "<group>"; };
+		4C9306BD2CB961150085EFF9 /* AgoraPictureInPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraPictureInPictureController.h; sourceTree = "<group>"; };
+		4C9306BE2CB961150085EFF9 /* AgoraScreenShareSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraScreenShareSourcePush.m; sourceTree = "<group>"; };
+		4C9306BF2CB961150085EFF9 /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
+		4C9306C02CB961150085EFF9 /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
+		4C9306C12CB961150085EFF9 /* CircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CircularBuffer.c; sourceTree = "<group>"; };
+		4C9306C22CB961150085EFF9 /* AgoraYUVImageSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraYUVImageSourcePush.m; sourceTree = "<group>"; };
+		4C9306C32CB961150085EFF9 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		4C9306C52CB961150085EFF9 /* LogUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtil.swift; sourceTree = "<group>"; };
+		4C9306C62CB961150085EFF9 /* KFMP4Demuxer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KFMP4Demuxer.m; sourceTree = "<group>"; };
+		4C9306C72CB961150085EFF9 /* MediaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
+		4C9306C82CB961150085EFF9 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		4C9306C92CB961150085EFF9 /* KFMP4Demuxer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KFMP4Demuxer.h; sourceTree = "<group>"; };
+		4C9306CA2CB961150085EFF9 /* MediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
+		4C9306CB2CB961150085EFF9 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
+		4C9306CC2CB961150085EFF9 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
+		4C9306CE2CB961150085EFF9 /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		4C9306CF2CB961150085EFF9 /* ZSNBoxingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSNBoxingView.m; sourceTree = "<group>"; };
+		4C9306D02CB961150085EFF9 /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		4C9306D12CB961150085EFF9 /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
+		4C9306D22CB961150085EFF9 /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		4C9306D32CB961150085EFF9 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		4C9306D42CB961150085EFF9 /* UIColor+CSRGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CSRGB.m"; sourceTree = "<group>"; };
+		4C9306D52CB961150085EFF9 /* UIView+CSshortFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CSshortFrame.m"; sourceTree = "<group>"; };
+		4C9306D62CB961150085EFF9 /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		4C9306D72CB961150085EFF9 /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		4C9306D82CB961150085EFF9 /* ZSNBoxingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSNBoxingView.h; sourceTree = "<group>"; };
+		4C9306D92CB961150085EFF9 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		4C9306DA2CB961150085EFF9 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
+		4C9306DB2CB961150085EFF9 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
+		4C9306DC2CB961150085EFF9 /* VideoUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoUIView.swift; sourceTree = "<group>"; };
+		4C9306DE2CB961150085EFF9 /* PickerSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerSheetView.swift; sourceTree = "<group>"; };
+		4C9306E02CB961150085EFF9 /* ARVideoRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARVideoRenderer.swift; sourceTree = "<group>"; };
+		4C9306E12CB961150085EFF9 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		4C9307412CB961150085EFF9 /* output.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.pcm; sourceTree = "<group>"; };
+		4C9307442CB961150085EFF9 /* JoinChannelVideoRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorder.swift; sourceTree = "<group>"; };
+		4C9307452CB961150085EFF9 /* JoinChannelVideoRecorderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorderRTC.swift; sourceTree = "<group>"; };
+		4C93074F2CB961150085EFF9 /* APIExample_SwiftUIApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIExample_SwiftUIApp.swift; sourceTree = "<group>"; };
+		4C9307502CB961150085EFF9 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4C9307512CB961150085EFF9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C9307D22CB963380085EFF9 /* Agora-ScreenShare-Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Agora-ScreenShare-Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C9307D42CB963380085EFF9 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		4C9307E02CB963390085EFF9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4C9307F42CB963B30085EFF9 /* SampleHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		4C9307F52CB963B30085EFF9 /* Agora-ScreenShare-Extension-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Agora-ScreenShare-Extension-Bridging-Header.h"; sourceTree = "<group>"; };
+		4C9307F62CB963B30085EFF9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C9307FA2CBA6F790085EFF9 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		4C9307FB2CBA6F790085EFF9 /* JoinChannelAudioRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudioRTC.swift; sourceTree = "<group>"; };
+		4C9307FF2CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRTC.swift; sourceTree = "<group>"; };
+		4C9308002CBA6F8D0085EFF9 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		4C9308092CBA712F0085EFF9 /* JoinChannelVideoTokenRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoTokenRTC.swift; sourceTree = "<group>"; };
+		4C93080A2CBA712F0085EFF9 /* JoinChannelVideoToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoToken.swift; sourceTree = "<group>"; };
+		4C93094F2CBA91520085EFF9 /* RawAudioDataRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawAudioDataRTC.swift; sourceTree = "<group>"; };
+		4C9309502CBA91520085EFF9 /* RawAudioData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
+		4C9309522CBA91520085EFF9 /* MediaChannelRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaChannelRelay.swift; sourceTree = "<group>"; };
+		4C9309532CBA91520085EFF9 /* MediaChannelRelayRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaChannelRelayRTC.swift; sourceTree = "<group>"; };
+		4C9309552CBA91520085EFF9 /* RawVideoDataRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawVideoDataRTC.swift; sourceTree = "<group>"; };
+		4C9309562CBA91520085EFF9 /* RawVideoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
+		4C9309582CBA91520085EFF9 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
+		4C9309592CBA91520085EFF9 /* ARKitRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKitRTC.swift; sourceTree = "<group>"; };
+		4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCaptureRTC.swift; sourceTree = "<group>"; };
+		4C93095C2CBA91520085EFF9 /* FaceCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCapture.swift; sourceTree = "<group>"; };
+		4C93095E2CBA91520085EFF9 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
+		4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCameraRTC.swift; sourceTree = "<group>"; };
+		4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptionRTC.swift; sourceTree = "<group>"; };
+		4C9309622CBA91520085EFF9 /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		4C9309642CBA91520085EFF9 /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
+		4C9309652CBA91520085EFF9 /* LiveStreamingRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreamingRTC.swift; sourceTree = "<group>"; };
+		4C9309672CBA91520085EFF9 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
+		4C9309682CBA91520085EFF9 /* CreateDataStreamRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStreamRTC.swift; sourceTree = "<group>"; };
+		4C93096A2CBA91520085EFF9 /* KtvCopyrightMusic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KtvCopyrightMusic.swift; sourceTree = "<group>"; };
+		4C93096C2CBA91520085EFF9 /* PrecallTestRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTestRTC.swift; sourceTree = "<group>"; };
+		4C93096D2CBA91520085EFF9 /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
+		4C93096F2CBA91520085EFF9 /* CustomPCMAudioSourceRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPCMAudioSourceRTC.swift; sourceTree = "<group>"; };
+		4C9309702CBA91520085EFF9 /* CustomPCMAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPCMAudioSource.swift; sourceTree = "<group>"; };
+		4C9309722CBA91520085EFF9 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
+		4C9309732CBA91520085EFF9 /* JoinMultiChannelRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannelRTC.swift; sourceTree = "<group>"; };
+		4C9309752CBA91530085EFF9 /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
+		4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderRTC.swift; sourceTree = "<group>"; };
+		4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderViewModel.swift; sourceTree = "<group>"; };
+		4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderExample.swift; sourceTree = "<group>"; };
+		4C93097B2CBA91530085EFF9 /* PIPDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPDisplayView.swift; sourceTree = "<group>"; };
+		4C93097C2CBA91530085EFF9 /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
+		4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderViewModel.swift; sourceTree = "<group>"; };
+		4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderRTC.swift; sourceTree = "<group>"; };
+		4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderExample.swift; sourceTree = "<group>"; };
+		4C9309822CBA91530085EFF9 /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
+		4C9309832CBA91530085EFF9 /* VideoMetaDataRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetaDataRTC.swift; sourceTree = "<group>"; };
+		4C9309852CBA91530085EFF9 /* RTMPStreamRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreamRTC.swift; sourceTree = "<group>"; };
+		4C9309862CBA91530085EFF9 /* RTMPStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStream.swift; sourceTree = "<group>"; };
+		4C9309882CBA91530085EFF9 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		4C9309892CBA91530085EFF9 /* CustomAudioRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRenderRTC.swift; sourceTree = "<group>"; };
+		4C93098B2CBA91530085EFF9 /* LocalVideoTranscoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscoding.swift; sourceTree = "<group>"; };
+		4C93098C2CBA91530085EFF9 /* LocalVideoTranscodingRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalVideoTranscodingRTC.swift; sourceTree = "<group>"; };
+		4C93098E2CBA91530085EFF9 /* AudioWaveformRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformRTC.swift; sourceTree = "<group>"; };
+		4C93098F2CBA91530085EFF9 /* AudioWaveform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveform.swift; sourceTree = "<group>"; };
+		4C9309912CBA91530085EFF9 /* ScreenShareRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShareRTC.swift; sourceTree = "<group>"; };
+		4C9309922CBA91530085EFF9 /* ScreenShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShare.swift; sourceTree = "<group>"; };
+		4C9309942CBA91530085EFF9 /* RhythmPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RhythmPlayer.swift; sourceTree = "<group>"; };
+		4C9309952CBA91530085EFF9 /* RhythmPlayerRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RhythmPlayerRTC.swift; sourceTree = "<group>"; };
+		4C9309972CBA91530085EFF9 /* VoiceChangerRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChangerRTC.swift; sourceTree = "<group>"; };
+		4C9309982CBA91530085EFF9 /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
+		4C93099D2CBA91530085EFF9 /* VideoProcessRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoProcessRTC.swift; sourceTree = "<group>"; };
+		4C93099E2CBA91530085EFF9 /* VideoProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
+		4C9309A02CBA91530085EFF9 /* QuickSwitchChannelRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelRTC.swift; sourceTree = "<group>"; };
+		4C9309A12CBA91530085EFF9 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
+		4C9309A32CBA91530085EFF9 /* ContentInspectRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentInspectRTC.swift; sourceTree = "<group>"; };
+		4C9309A42CBA91530085EFF9 /* ContentInspect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentInspect.swift; sourceTree = "<group>"; };
+		4C9309A62CBA91530085EFF9 /* MediaPlayerRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayerRTC.swift; sourceTree = "<group>"; };
+		4C9309A72CBA91530085EFF9 /* MediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		4C9309A92CBA91530085EFF9 /* AudioMixingRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixingRTC.swift; sourceTree = "<group>"; };
+		4C9309AA2CBA91530085EFF9 /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
+		4C9309EA2CBA95530085EFF9 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
+		4C9309EB2CBA95530085EFF9 /* SpatialAudioRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudioRTC.swift; sourceTree = "<group>"; };
+		7585632841723316B616C1AB /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7DAC714DCF967FD618502DC /* Pods-APIExample-SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
+		E633FB65347D029555FE8BDB /* Pods_APIExample_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		F73B018C2CC10E240077B7D2 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		F89807E42BC51A25F44D3692 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C9306862CB9607E0085EFF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F2E75080F9F547EC377FE96 /* Pods_APIExample_SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C9307CF2CB963380085EFF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F73B016B2CBA1AC60077B7D2 /* Accelerate.framework in Frameworks */,
+				4C9307D52CB963380085EFF9 /* ReplayKit.framework in Frameworks */,
+				B47E9CD9BABE21C5B5B1ED09 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1C3D4D6E3D075B054AAE835A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D7DAC714DCF967FD618502DC /* Pods-APIExample-SwiftUI.debug.xcconfig */,
+				472119ABD8B195183D4CC1E1 /* Pods-APIExample-SwiftUI.release.xcconfig */,
+				F89807E42BC51A25F44D3692 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
+				2FF1D082DDF2E2198DB041E4 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4C9306802CB9607E0085EFF9 = {
+			isa = PBXGroup;
+			children = (
+				4C9307F32CB963B30085EFF9 /* Agora-ScreenShare-Extension */,
+				4C93069A2CB961150085EFF9 /* APIExample-SwiftUI */,
+				4C9307D32CB963380085EFF9 /* Frameworks */,
+				4C93068A2CB9607E0085EFF9 /* Products */,
+				1C3D4D6E3D075B054AAE835A /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		4C93068A2CB9607E0085EFF9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306892CB9607E0085EFF9 /* APIExample-SwiftUI.app */,
+				4C9307D22CB963380085EFF9 /* Agora-ScreenShare-Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C93069A2CB961150085EFF9 /* APIExample-SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				4C93069B2CB961150085EFF9 /* APIExample-Bridging-Header.h */,
+				4C93069C2CB961150085EFF9 /* Resources */,
+				4C9306A62CB961150085EFF9 /* Assets.xcassets */,
+				4C9306A72CB961150085EFF9 /* Preview Content */,
+				4C9306A92CB961150085EFF9 /* Common */,
+				4C9306E22CB961150085EFF9 /* Examples */,
+				4C93074F2CB961150085EFF9 /* APIExample_SwiftUIApp.swift */,
+				4C9307502CB961150085EFF9 /* ContentView.swift */,
+				4C9307512CB961150085EFF9 /* Info.plist */,
+			);
+			path = "APIExample-SwiftUI";
+			sourceTree = "<group>";
+		};
+		4C93069C2CB961150085EFF9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C93069D2CB961150085EFF9 /* output.raw */,
+				4C93069E2CB961150085EFF9 /* sample.mov */,
+				4C93069F2CB961150085EFF9 /* audioeffect.mp3 */,
+				4C9306A02CB961150085EFF9 /* agora-logo.png */,
+				4C9306A12CB961150085EFF9 /* sample.yuv */,
+				4C9306A22CB961150085EFF9 /* frames0.yuv */,
+				4C9306A32CB961150085EFF9 /* Localizable.strings */,
+				4C9306A42CB961150085EFF9 /* AR.scnassets */,
+				4C9306A52CB961150085EFF9 /* audiomixing.mp3 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4C9306A72CB961150085EFF9 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306A82CB961150085EFF9 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4C9306A92CB961150085EFF9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306AA2CB961150085EFF9 /* CustomEncryption */,
+				4C9306AD2CB961150085EFF9 /* Settings */,
+				4C9306B02CB961150085EFF9 /* NetworkManager */,
+				4C9306B42CB961150085EFF9 /* PickerView.swift */,
+				4C9306B52CB961150085EFF9 /* ExternalVideo */,
+				4C9306C32CB961150085EFF9 /* VideoView.swift */,
+				4C9306C42CB961150085EFF9 /* Utils */,
+				4C9306CB2CB961150085EFF9 /* StatisticsInfo.swift */,
+				4C9306CC2CB961150085EFF9 /* AgoraExtension.swift */,
+				4C9306CD2CB961150085EFF9 /* ExternalAudio */,
+				4C9306DC2CB961150085EFF9 /* VideoUIView.swift */,
+				4C9306DD2CB961150085EFF9 /* View */,
+				4C9306DF2CB961150085EFF9 /* ARKit */,
+				4C9306E12CB961150085EFF9 /* KeyCenter.swift */,
+				F73B018C2CC10E240077B7D2 /* ViewExtensions.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		4C9306AA2CB961150085EFF9 /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306AB2CB961150085EFF9 /* AgoraCustomEncryption.mm */,
+				4C9306AC2CB961150085EFF9 /* AgoraCustomEncryption.h */,
+			);
+			path = CustomEncryption;
+			sourceTree = "<group>";
+		};
+		4C9306AD2CB961150085EFF9 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306AE2CB961150085EFF9 /* SettingsView.swift */,
+				4C9306AF2CB961150085EFF9 /* GlobalSettings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4C9306B02CB961150085EFF9 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306B12CB961150085EFF9 /* ToastView.swift */,
+				4C9306B22CB961150085EFF9 /* NetworkManager.swift */,
+				4C9306B32CB961150085EFF9 /* JSONObject.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		4C9306B52CB961150085EFF9 /* ExternalVideo */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306B62CB961150085EFF9 /* AgoraPictureInPictureController.m */,
+				4C9306B72CB961150085EFF9 /* AgoraCameraSourcePush.swift */,
+				4C9306B82CB961150085EFF9 /* AgoraMetalRender.swift */,
+				4C9306B92CB961150085EFF9 /* AgoraSampleBufferRender.m */,
+				4C9306BA2CB961150085EFF9 /* AgoraScreenShareSourcePush.h */,
+				4C9306BB2CB961150085EFF9 /* CircularBuffer.h */,
+				4C9306BC2CB961150085EFF9 /* AgoraYUVImageSourcePush.h */,
+				4C9306BD2CB961150085EFF9 /* AgoraPictureInPictureController.h */,
+				4C9306BE2CB961150085EFF9 /* AgoraScreenShareSourcePush.m */,
+				4C9306BF2CB961150085EFF9 /* AgoraSampleBufferRender.h */,
+				4C9306C02CB961150085EFF9 /* AgoraMetalShader.metal */,
+				4C9306C12CB961150085EFF9 /* CircularBuffer.c */,
+				4C9306C22CB961150085EFF9 /* AgoraYUVImageSourcePush.m */,
+			);
+			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		4C9306C42CB961150085EFF9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306C52CB961150085EFF9 /* LogUtil.swift */,
+				4C9306C62CB961150085EFF9 /* KFMP4Demuxer.m */,
+				4C9306C72CB961150085EFF9 /* MediaUtils.m */,
+				4C9306C82CB961150085EFF9 /* Util.swift */,
+				4C9306C92CB961150085EFF9 /* KFMP4Demuxer.h */,
+				4C9306CA2CB961150085EFF9 /* MediaUtils.h */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		4C9306CD2CB961150085EFF9 /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306CE2CB961150085EFF9 /* AudioOptions.h */,
+				4C9306CF2CB961150085EFF9 /* ZSNBoxingView.m */,
+				4C9306D02CB961150085EFF9 /* AudioWriteToFile.m */,
+				4C9306D12CB961150085EFF9 /* AgoraPcmSourcePush.swift */,
+				4C9306D22CB961150085EFF9 /* ExternalAudio.h */,
+				4C9306D32CB961150085EFF9 /* AudioController.h */,
+				4C9306D42CB961150085EFF9 /* UIColor+CSRGB.m */,
+				4C9306D52CB961150085EFF9 /* UIView+CSshortFrame.m */,
+				4C9306D62CB961150085EFF9 /* ExternalAudio.mm */,
+				4C9306D72CB961150085EFF9 /* AudioWriteToFile.h */,
+				4C9306D82CB961150085EFF9 /* ZSNBoxingView.h */,
+				4C9306D92CB961150085EFF9 /* AudioController.m */,
+				4C9306DA2CB961150085EFF9 /* UIView+CSshortFrame.h */,
+				4C9306DB2CB961150085EFF9 /* UIColor+CSRGB.h */,
+			);
+			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
+		4C9306DD2CB961150085EFF9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306DE2CB961150085EFF9 /* PickerSheetView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4C9306DF2CB961150085EFF9 /* ARKit */ = {
+			isa = PBXGroup;
+			children = (
+				4C9306E02CB961150085EFF9 /* ARVideoRenderer.swift */,
+			);
+			path = ARKit;
+			sourceTree = "<group>";
+		};
+		4C9306E22CB961150085EFF9 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				4C9308122CBA7F9B0085EFF9 /* Advanced */,
+				4C9307412CB961150085EFF9 /* output.pcm */,
+				4C9307422CB961150085EFF9 /* Basic */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		4C9307422CB961150085EFF9 /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				4C9308082CBA712F0085EFF9 /* JoinChannelVideo(Token) */,
+				4C9307FE2CBA6F8D0085EFF9 /* JoinChannelVideo */,
+				4C9307F92CBA6F790085EFF9 /* JoinChannelAudio */,
+				4C9307432CB961150085EFF9 /* JoinChannelVideo(Recorder) */,
+			);
+			path = Basic;
+			sourceTree = "<group>";
+		};
+		4C9307432CB961150085EFF9 /* JoinChannelVideo(Recorder) */ = {
+			isa = PBXGroup;
+			children = (
+				4C9307442CB961150085EFF9 /* JoinChannelVideoRecorder.swift */,
+				4C9307452CB961150085EFF9 /* JoinChannelVideoRecorderRTC.swift */,
+			);
+			path = "JoinChannelVideo(Recorder)";
+			sourceTree = "<group>";
+		};
+		4C9307D32CB963380085EFF9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */,
+				4C9307D42CB963380085EFF9 /* ReplayKit.framework */,
+				4C9307E02CB963390085EFF9 /* UIKit.framework */,
+				E633FB65347D029555FE8BDB /* Pods_APIExample_SwiftUI.framework */,
+				7585632841723316B616C1AB /* Pods_Agora_ScreenShare_Extension.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C9307F32CB963B30085EFF9 /* Agora-ScreenShare-Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4C9307F42CB963B30085EFF9 /* SampleHandler.swift */,
+				4C9307F52CB963B30085EFF9 /* Agora-ScreenShare-Extension-Bridging-Header.h */,
+				4C9307F62CB963B30085EFF9 /* Info.plist */,
+			);
+			path = "Agora-ScreenShare-Extension";
+			sourceTree = "<group>";
+		};
+		4C9307F92CBA6F790085EFF9 /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				4C9307FA2CBA6F790085EFF9 /* JoinChannelAudio.swift */,
+				4C9307FB2CBA6F790085EFF9 /* JoinChannelAudioRTC.swift */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
+		4C9307FE2CBA6F8D0085EFF9 /* JoinChannelVideo */ = {
+			isa = PBXGroup;
+			children = (
+				4C9307FF2CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift */,
+				4C9308002CBA6F8D0085EFF9 /* JoinChannelVideo.swift */,
+			);
+			path = JoinChannelVideo;
+			sourceTree = "<group>";
+		};
+		4C9308082CBA712F0085EFF9 /* JoinChannelVideo(Token) */ = {
+			isa = PBXGroup;
+			children = (
+				4C9308092CBA712F0085EFF9 /* JoinChannelVideoTokenRTC.swift */,
+				4C93080A2CBA712F0085EFF9 /* JoinChannelVideoToken.swift */,
+			);
+			path = "JoinChannelVideo(Token)";
+			sourceTree = "<group>";
+		};
+		4C9308122CBA7F9B0085EFF9 /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309E92CBA95530085EFF9 /* SpatialAudio */,
+				4C9309572CBA91520085EFF9 /* ARKit */,
+				4C9309A82CBA91530085EFF9 /* AudioMixing */,
+				4C93098D2CBA91530085EFF9 /* AudioWaveform */,
+				4C9309A22CBA91530085EFF9 /* ContentInspect */,
+				4C9309662CBA91520085EFF9 /* CreateDataStream */,
+				4C9309872CBA91530085EFF9 /* CustomAudioRender */,
+				4C93096E2CBA91520085EFF9 /* CustomPCMAudioSource */,
+				4C93095A2CBA91520085EFF9 /* FaceCapture */,
+				4C9309712CBA91520085EFF9 /* JoinMultiChannel */,
+				4C9309692CBA91520085EFF9 /* KtvCopyrightMusic */,
+				4C9309632CBA91520085EFF9 /* LiveStreaming */,
+				4C93098A2CBA91530085EFF9 /* LocalVideoTranscoding */,
+				4C9309512CBA91520085EFF9 /* MediaChannelRelay */,
+				4C9309A52CBA91530085EFF9 /* MediaPlayer */,
+				4C93095D2CBA91520085EFF9 /* MutliCamera */,
+				4C9309742CBA91530085EFF9 /* PictureInPicture */,
+				4C93096B2CBA91520085EFF9 /* PrecallTest */,
+				4C93099F2CBA91530085EFF9 /* QuickSwitchChannel */,
+				4C93094E2CBA91520085EFF9 /* RawAudioData */,
+				4C9309542CBA91520085EFF9 /* RawVideoData */,
+				4C9309932CBA91530085EFF9 /* RhythmPlayer */,
+				4C9309842CBA91530085EFF9 /* RTMPStream */,
+				4C9309902CBA91530085EFF9 /* ScreenShare */,
+				4C9309602CBA91520085EFF9 /* StreamEncryption */,
+				4C9309812CBA91530085EFF9 /* VideoMetadata */,
+				4C93099C2CBA91530085EFF9 /* VideoProcess */,
+				4C9309962CBA91530085EFF9 /* VoiceChanger */,
+			);
+			path = Advanced;
+			sourceTree = "<group>";
+		};
+		4C93094E2CBA91520085EFF9 /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				4C93094F2CBA91520085EFF9 /* RawAudioDataRTC.swift */,
+				4C9309502CBA91520085EFF9 /* RawAudioData.swift */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
+		4C9309512CBA91520085EFF9 /* MediaChannelRelay */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309522CBA91520085EFF9 /* MediaChannelRelay.swift */,
+				4C9309532CBA91520085EFF9 /* MediaChannelRelayRTC.swift */,
+			);
+			path = MediaChannelRelay;
+			sourceTree = "<group>";
+		};
+		4C9309542CBA91520085EFF9 /* RawVideoData */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309552CBA91520085EFF9 /* RawVideoDataRTC.swift */,
+				4C9309562CBA91520085EFF9 /* RawVideoData.swift */,
+			);
+			path = RawVideoData;
+			sourceTree = "<group>";
+		};
+		4C9309572CBA91520085EFF9 /* ARKit */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309582CBA91520085EFF9 /* ARKit.swift */,
+				4C9309592CBA91520085EFF9 /* ARKitRTC.swift */,
+			);
+			path = ARKit;
+			sourceTree = "<group>";
+		};
+		4C93095A2CBA91520085EFF9 /* FaceCapture */ = {
+			isa = PBXGroup;
+			children = (
+				4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */,
+				4C93095C2CBA91520085EFF9 /* FaceCapture.swift */,
+			);
+			path = FaceCapture;
+			sourceTree = "<group>";
+		};
+		4C93095D2CBA91520085EFF9 /* MutliCamera */ = {
+			isa = PBXGroup;
+			children = (
+				4C93095E2CBA91520085EFF9 /* MutliCamera.swift */,
+				4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */,
+			);
+			path = MutliCamera;
+			sourceTree = "<group>";
+		};
+		4C9309602CBA91520085EFF9 /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */,
+				4C9309622CBA91520085EFF9 /* StreamEncryption.swift */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		4C9309632CBA91520085EFF9 /* LiveStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309642CBA91520085EFF9 /* LiveStreaming.swift */,
+				4C9309652CBA91520085EFF9 /* LiveStreamingRTC.swift */,
+			);
+			path = LiveStreaming;
+			sourceTree = "<group>";
+		};
+		4C9309662CBA91520085EFF9 /* CreateDataStream */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309672CBA91520085EFF9 /* CreateDataStream.swift */,
+				4C9309682CBA91520085EFF9 /* CreateDataStreamRTC.swift */,
+			);
+			path = CreateDataStream;
+			sourceTree = "<group>";
+		};
+		4C9309692CBA91520085EFF9 /* KtvCopyrightMusic */ = {
+			isa = PBXGroup;
+			children = (
+				4C93096A2CBA91520085EFF9 /* KtvCopyrightMusic.swift */,
+			);
+			path = KtvCopyrightMusic;
+			sourceTree = "<group>";
+		};
+		4C93096B2CBA91520085EFF9 /* PrecallTest */ = {
+			isa = PBXGroup;
+			children = (
+				4C93096C2CBA91520085EFF9 /* PrecallTestRTC.swift */,
+				4C93096D2CBA91520085EFF9 /* PrecallTest.swift */,
+			);
+			path = PrecallTest;
+			sourceTree = "<group>";
+		};
+		4C93096E2CBA91520085EFF9 /* CustomPCMAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				4C93096F2CBA91520085EFF9 /* CustomPCMAudioSourceRTC.swift */,
+				4C9309702CBA91520085EFF9 /* CustomPCMAudioSource.swift */,
+			);
+			path = CustomPCMAudioSource;
+			sourceTree = "<group>";
+		};
+		4C9309712CBA91520085EFF9 /* JoinMultiChannel */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309722CBA91520085EFF9 /* JoinMultiChannel.swift */,
+				4C9309732CBA91520085EFF9 /* JoinMultiChannelRTC.swift */,
+			);
+			path = JoinMultiChannel;
+			sourceTree = "<group>";
+		};
+		4C9309742CBA91530085EFF9 /* PictureInPicture */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309752CBA91530085EFF9 /* PictureInPicture.swift */,
+				4C9309762CBA91530085EFF9 /* SDKRender */,
+				4C93097A2CBA91530085EFF9 /* PIPCommon */,
+				4C93097D2CBA91530085EFF9 /* CustomRender */,
+			);
+			path = PictureInPicture;
+			sourceTree = "<group>";
+		};
+		4C9309762CBA91530085EFF9 /* SDKRender */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */,
+				4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */,
+				4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */,
+			);
+			path = SDKRender;
+			sourceTree = "<group>";
+		};
+		4C93097A2CBA91530085EFF9 /* PIPCommon */ = {
+			isa = PBXGroup;
+			children = (
+				4C93097B2CBA91530085EFF9 /* PIPDisplayView.swift */,
+				4C93097C2CBA91530085EFF9 /* PixelBufferRenderView.swift */,
+			);
+			path = PIPCommon;
+			sourceTree = "<group>";
+		};
+		4C93097D2CBA91530085EFF9 /* CustomRender */ = {
+			isa = PBXGroup;
+			children = (
+				4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */,
+				4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */,
+				4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */,
+			);
+			path = CustomRender;
+			sourceTree = "<group>";
+		};
+		4C9309812CBA91530085EFF9 /* VideoMetadata */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309822CBA91530085EFF9 /* VideoMetadata.swift */,
+				4C9309832CBA91530085EFF9 /* VideoMetaDataRTC.swift */,
+			);
+			path = VideoMetadata;
+			sourceTree = "<group>";
+		};
+		4C9309842CBA91530085EFF9 /* RTMPStream */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309852CBA91530085EFF9 /* RTMPStreamRTC.swift */,
+				4C9309862CBA91530085EFF9 /* RTMPStream.swift */,
+			);
+			path = RTMPStream;
+			sourceTree = "<group>";
+		};
+		4C9309872CBA91530085EFF9 /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309882CBA91530085EFF9 /* CustomAudioRender.swift */,
+				4C9309892CBA91530085EFF9 /* CustomAudioRenderRTC.swift */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
+		4C93098A2CBA91530085EFF9 /* LocalVideoTranscoding */ = {
+			isa = PBXGroup;
+			children = (
+				4C93098B2CBA91530085EFF9 /* LocalVideoTranscoding.swift */,
+				4C93098C2CBA91530085EFF9 /* LocalVideoTranscodingRTC.swift */,
+			);
+			path = LocalVideoTranscoding;
+			sourceTree = "<group>";
+		};
+		4C93098D2CBA91530085EFF9 /* AudioWaveform */ = {
+			isa = PBXGroup;
+			children = (
+				4C93098E2CBA91530085EFF9 /* AudioWaveformRTC.swift */,
+				4C93098F2CBA91530085EFF9 /* AudioWaveform.swift */,
+			);
+			path = AudioWaveform;
+			sourceTree = "<group>";
+		};
+		4C9309902CBA91530085EFF9 /* ScreenShare */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309912CBA91530085EFF9 /* ScreenShareRTC.swift */,
+				4C9309922CBA91530085EFF9 /* ScreenShare.swift */,
+			);
+			path = ScreenShare;
+			sourceTree = "<group>";
+		};
+		4C9309932CBA91530085EFF9 /* RhythmPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309942CBA91530085EFF9 /* RhythmPlayer.swift */,
+				4C9309952CBA91530085EFF9 /* RhythmPlayerRTC.swift */,
+			);
+			path = RhythmPlayer;
+			sourceTree = "<group>";
+		};
+		4C9309962CBA91530085EFF9 /* VoiceChanger */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309972CBA91530085EFF9 /* VoiceChangerRTC.swift */,
+				4C9309982CBA91530085EFF9 /* VoiceChanger.swift */,
+			);
+			path = VoiceChanger;
+			sourceTree = "<group>";
+		};
+		4C93099C2CBA91530085EFF9 /* VideoProcess */ = {
+			isa = PBXGroup;
+			children = (
+				4C93099D2CBA91530085EFF9 /* VideoProcessRTC.swift */,
+				4C93099E2CBA91530085EFF9 /* VideoProcess.swift */,
+			);
+			path = VideoProcess;
+			sourceTree = "<group>";
+		};
+		4C93099F2CBA91530085EFF9 /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309A02CBA91530085EFF9 /* QuickSwitchChannelRTC.swift */,
+				4C9309A12CBA91530085EFF9 /* QuickSwitchChannel.swift */,
+			);
+			path = QuickSwitchChannel;
+			sourceTree = "<group>";
+		};
+		4C9309A22CBA91530085EFF9 /* ContentInspect */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309A32CBA91530085EFF9 /* ContentInspectRTC.swift */,
+				4C9309A42CBA91530085EFF9 /* ContentInspect.swift */,
+			);
+			path = ContentInspect;
+			sourceTree = "<group>";
+		};
+		4C9309A52CBA91530085EFF9 /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309A62CBA91530085EFF9 /* MediaPlayerRTC.swift */,
+				4C9309A72CBA91530085EFF9 /* MediaPlayer.swift */,
+			);
+			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		4C9309A82CBA91530085EFF9 /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309A92CBA91530085EFF9 /* AudioMixingRTC.swift */,
+				4C9309AA2CBA91530085EFF9 /* AudioMixing.swift */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		4C9309E92CBA95530085EFF9 /* SpatialAudio */ = {
+			isa = PBXGroup;
+			children = (
+				4C9309EA2CBA95530085EFF9 /* SpatialAudio.swift */,
+				4C9309EB2CBA95530085EFF9 /* SpatialAudioRTC.swift */,
+			);
+			path = SpatialAudio;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C9306882CB9607E0085EFF9 /* APIExample-SwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C9306972CB9607F0085EFF9 /* Build configuration list for PBXNativeTarget "APIExample-SwiftUI" */;
+			buildPhases = (
+				C9EAEDEF9EC186B75FAAF0E1 /* [CP] Check Pods Manifest.lock */,
+				4C9306852CB9607E0085EFF9 /* Sources */,
+				4C9306862CB9607E0085EFF9 /* Frameworks */,
+				4C9306872CB9607E0085EFF9 /* Resources */,
+				4C9307F22CB9633A0085EFF9 /* Embed App Extensions */,
+				F07648240F807435A198F5E3 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C9307EA2CB963390085EFF9 /* PBXTargetDependency */,
+			);
+			name = "APIExample-SwiftUI";
+			productName = "APIExample-SwiftUI";
+			productReference = 4C9306892CB9607E0085EFF9 /* APIExample-SwiftUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C9307D12CB963380085EFF9 /* Agora-ScreenShare-Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C9307EF2CB9633A0085EFF9 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension" */;
+			buildPhases = (
+				D627765E7AA668D516AE5176 /* [CP] Check Pods Manifest.lock */,
+				4C9307CE2CB963380085EFF9 /* Sources */,
+				4C9307CF2CB963380085EFF9 /* Frameworks */,
+				4C9307D02CB963380085EFF9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Agora-ScreenShare-Extension";
+			productName = "Agora-ScreenShare-Extension";
+			productReference = 4C9307D22CB963380085EFF9 /* Agora-ScreenShare-Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C9306812CB9607E0085EFF9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					4C9306882CB9607E0085EFF9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					4C9307D12CB963380085EFF9 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 4C9306842CB9607E0085EFF9 /* Build configuration list for PBXProject "APIExample-SwiftUI" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4C9306802CB9607E0085EFF9;
+			productRefGroup = 4C93068A2CB9607E0085EFF9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C9306882CB9607E0085EFF9 /* APIExample-SwiftUI */,
+				4C9307D12CB963380085EFF9 /* Agora-ScreenShare-Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C9306872CB9607E0085EFF9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C9307532CB961150085EFF9 /* sample.mov in Resources */,
+				4C93075C2CB961150085EFF9 /* Preview Assets.xcassets in Resources */,
+				4C9307552CB961150085EFF9 /* agora-logo.png in Resources */,
+				4C9307542CB961150085EFF9 /* audioeffect.mp3 in Resources */,
+				4C93075A2CB961150085EFF9 /* audiomixing.mp3 in Resources */,
+				4C93075B2CB961150085EFF9 /* Assets.xcassets in Resources */,
+				4C9307582CB961150085EFF9 /* Localizable.strings in Resources */,
+				4C9307592CB961150085EFF9 /* AR.scnassets in Resources */,
+				4C9307572CB961150085EFF9 /* frames0.yuv in Resources */,
+				4C9307BC2CB961160085EFF9 /* output.pcm in Resources */,
+				4C9307522CB961150085EFF9 /* output.raw in Resources */,
+				4C9307562CB961150085EFF9 /* sample.yuv in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C9307D02CB963380085EFF9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C9EAEDEF9EC186B75FAAF0E1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-SwiftUI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D627765E7AA668D516AE5176 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Agora-ScreenShare-Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F07648240F807435A198F5E3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C9306852CB9607E0085EFF9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C93076A2CB961150085EFF9 /* CircularBuffer.c in Sources */,
+				4C9309CA2CBA91530085EFF9 /* CustomRenderViewModel.swift in Sources */,
+				4C9309D52CBA91530085EFF9 /* AudioWaveformRTC.swift in Sources */,
+				4C9309CE2CBA91530085EFF9 /* VideoMetaDataRTC.swift in Sources */,
+				4C9309C12CBA91530085EFF9 /* CustomPCMAudioSource.swift in Sources */,
+				4C9307602CB961150085EFF9 /* ToastView.swift in Sources */,
+				4C9307682CB961150085EFF9 /* AgoraScreenShareSourcePush.m in Sources */,
+				4C9309D62CBA91530085EFF9 /* AudioWaveform.swift in Sources */,
+				4C9309C42CBA91530085EFF9 /* PictureInPicture.swift in Sources */,
+				4C9307792CB961150085EFF9 /* AudioController.m in Sources */,
+				4C9309D72CBA91530085EFF9 /* ScreenShareRTC.swift in Sources */,
+				4C93077A2CB961150085EFF9 /* VideoUIView.swift in Sources */,
+				4C9309B92CBA91530085EFF9 /* LiveStreaming.swift in Sources */,
+				4C9307FC2CBA6F790085EFF9 /* JoinChannelAudio.swift in Sources */,
+				4C9309CB2CBA91530085EFF9 /* CustomRenderRTC.swift in Sources */,
+				4C9309D12CBA91530085EFF9 /* CustomAudioRender.swift in Sources */,
+				4C93076E2CB961150085EFF9 /* KFMP4Demuxer.m in Sources */,
+				4C9309C22CBA91530085EFF9 /* JoinMultiChannel.swift in Sources */,
+				4C9309D22CBA91530085EFF9 /* CustomAudioRenderRTC.swift in Sources */,
+				4C9307772CB961150085EFF9 /* UIView+CSshortFrame.m in Sources */,
+				4C9309C92CBA91530085EFF9 /* PixelBufferRenderView.swift in Sources */,
+				4C93075D2CB961150085EFF9 /* AgoraCustomEncryption.mm in Sources */,
+				4C9307652CB961150085EFF9 /* AgoraCameraSourcePush.swift in Sources */,
+				4C9309CC2CBA91530085EFF9 /* CustomRenderExample.swift in Sources */,
+				4C9308012CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift in Sources */,
+				4C9309DC2CBA91530085EFF9 /* VoiceChanger.swift in Sources */,
+				4C93076F2CB961150085EFF9 /* MediaUtils.m in Sources */,
+				4C93080B2CBA712F0085EFF9 /* JoinChannelVideoTokenRTC.swift in Sources */,
+				4C9307702CB961150085EFF9 /* Util.swift in Sources */,
+				4C9309E52CBA91530085EFF9 /* MediaPlayerRTC.swift in Sources */,
+				4C9309B12CBA91530085EFF9 /* ARKit.swift in Sources */,
+				4C9309B52CBA91530085EFF9 /* MutliCamera.swift in Sources */,
+				4C9308022CBA6F8D0085EFF9 /* JoinChannelVideo.swift in Sources */,
+				4C9309E62CBA91530085EFF9 /* MediaPlayer.swift in Sources */,
+				4C9307782CB961150085EFF9 /* ExternalAudio.mm in Sources */,
+				4C9309AF2CBA91530085EFF9 /* RawVideoDataRTC.swift in Sources */,
+				4C93076D2CB961150085EFF9 /* LogUtil.swift in Sources */,
+				4C9309ED2CBA95530085EFF9 /* SpatialAudioRTC.swift in Sources */,
+				4C9309DA2CBA91530085EFF9 /* RhythmPlayerRTC.swift in Sources */,
+				4C9309BB2CBA91530085EFF9 /* CreateDataStream.swift in Sources */,
+				4C9309C62CBA91530085EFF9 /* SDKRenderViewModel.swift in Sources */,
+				4C9309B62CBA91530085EFF9 /* MutliCameraRTC.swift in Sources */,
+				4C93077D2CB961150085EFF9 /* KeyCenter.swift in Sources */,
+				4C9307692CB961150085EFF9 /* AgoraMetalShader.metal in Sources */,
+				4C9307FD2CBA6F790085EFF9 /* JoinChannelAudioRTC.swift in Sources */,
+				4C9307732CB961150085EFF9 /* ZSNBoxingView.m in Sources */,
+				4C9309AC2CBA91530085EFF9 /* RawAudioData.swift in Sources */,
+				4C9309BF2CBA91530085EFF9 /* PrecallTest.swift in Sources */,
+				4C9309B82CBA91530085EFF9 /* StreamEncryption.swift in Sources */,
+				4C9309E72CBA91530085EFF9 /* AudioMixingRTC.swift in Sources */,
+				4C9307F72CB963B30085EFF9 /* SampleHandler.swift in Sources */,
+				4C9309CF2CBA91530085EFF9 /* RTMPStreamRTC.swift in Sources */,
+				4C9307612CB961150085EFF9 /* NetworkManager.swift in Sources */,
+				4C9307C52CB961160085EFF9 /* APIExample_SwiftUIApp.swift in Sources */,
+				4C9309DB2CBA91530085EFF9 /* VoiceChangerRTC.swift in Sources */,
+				4C9309C72CBA91530085EFF9 /* SDKRenderExample.swift in Sources */,
+				F73B018D2CC10E240077B7D2 /* ViewExtensions.swift in Sources */,
+				4C9309AB2CBA91530085EFF9 /* RawAudioDataRTC.swift in Sources */,
+				4C9307752CB961150085EFF9 /* AgoraPcmSourcePush.swift in Sources */,
+				4C9307BD2CB961160085EFF9 /* JoinChannelVideoRecorder.swift in Sources */,
+				4C9309CD2CBA91530085EFF9 /* VideoMetadata.swift in Sources */,
+				4C9309D82CBA91530085EFF9 /* ScreenShare.swift in Sources */,
+				4C9309E02CBA91530085EFF9 /* VideoProcess.swift in Sources */,
+				4C93077C2CB961150085EFF9 /* ARVideoRenderer.swift in Sources */,
+				4C9309E32CBA91530085EFF9 /* ContentInspectRTC.swift in Sources */,
+				4C9309BD2CBA91530085EFF9 /* KtvCopyrightMusic.swift in Sources */,
+				4C9309D02CBA91530085EFF9 /* RTMPStream.swift in Sources */,
+				4C9309E12CBA91530085EFF9 /* QuickSwitchChannelRTC.swift in Sources */,
+				4C9307BE2CB961160085EFF9 /* JoinChannelVideoRecorderRTC.swift in Sources */,
+				4C9309BC2CBA91530085EFF9 /* CreateDataStreamRTC.swift in Sources */,
+				4C9307662CB961150085EFF9 /* AgoraMetalRender.swift in Sources */,
+				4C9307642CB961150085EFF9 /* AgoraPictureInPictureController.m in Sources */,
+				4C93075E2CB961150085EFF9 /* SettingsView.swift in Sources */,
+				4C93080C2CBA712F0085EFF9 /* JoinChannelVideoToken.swift in Sources */,
+				4C9309BA2CBA91530085EFF9 /* LiveStreamingRTC.swift in Sources */,
+				4C9309C52CBA91530085EFF9 /* SDKRenderRTC.swift in Sources */,
+				4C9309E42CBA91530085EFF9 /* ContentInspect.swift in Sources */,
+				4C9309D92CBA91530085EFF9 /* RhythmPlayer.swift in Sources */,
+				4C9307622CB961150085EFF9 /* JSONObject.swift in Sources */,
+				4C9309E82CBA91530085EFF9 /* AudioMixing.swift in Sources */,
+				4C9307712CB961150085EFF9 /* StatisticsInfo.swift in Sources */,
+				4C9309AE2CBA91530085EFF9 /* MediaChannelRelayRTC.swift in Sources */,
+				4C9307672CB961150085EFF9 /* AgoraSampleBufferRender.m in Sources */,
+				4C9309C02CBA91530085EFF9 /* CustomPCMAudioSourceRTC.swift in Sources */,
+				4C9309D42CBA91530085EFF9 /* LocalVideoTranscodingRTC.swift in Sources */,
+				4C9309D32CBA91530085EFF9 /* LocalVideoTranscoding.swift in Sources */,
+				4C93076C2CB961150085EFF9 /* VideoView.swift in Sources */,
+				4C9307722CB961150085EFF9 /* AgoraExtension.swift in Sources */,
+				4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */,
+				4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */,
+				4C9309DF2CBA91530085EFF9 /* VideoProcessRTC.swift in Sources */,
+				4C93076B2CB961150085EFF9 /* AgoraYUVImageSourcePush.m in Sources */,
+				4C9307C62CB961160085EFF9 /* ContentView.swift in Sources */,
+				4C9309E22CBA91530085EFF9 /* QuickSwitchChannel.swift in Sources */,
+				4C9307742CB961150085EFF9 /* AudioWriteToFile.m in Sources */,
+				4C9309AD2CBA91530085EFF9 /* MediaChannelRelay.swift in Sources */,
+				4C9309B72CBA91530085EFF9 /* StreamEncryptionRTC.swift in Sources */,
+				4C9307632CB961150085EFF9 /* PickerView.swift in Sources */,
+				4C93075F2CB961150085EFF9 /* GlobalSettings.swift in Sources */,
+				4C9309C82CBA91530085EFF9 /* PIPDisplayView.swift in Sources */,
+				4C9309BE2CBA91530085EFF9 /* PrecallTestRTC.swift in Sources */,
+				4C9307762CB961150085EFF9 /* UIColor+CSRGB.m in Sources */,
+				4C9309EC2CBA95530085EFF9 /* SpatialAudio.swift in Sources */,
+				4C9309B22CBA91530085EFF9 /* ARKitRTC.swift in Sources */,
+				4C9309C32CBA91530085EFF9 /* JoinMultiChannelRTC.swift in Sources */,
+				4C9309B02CBA91530085EFF9 /* RawVideoData.swift in Sources */,
+				4C93077B2CB961150085EFF9 /* PickerSheetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C9307CE2CB963380085EFF9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F73B016F2CBA1AF40077B7D2 /* SampleHandler.swift in Sources */,
+				F73B016E2CBA1AED0077B7D2 /* GlobalSettings.swift in Sources */,
+				F73B016D2CBA1AE40077B7D2 /* KeyCenter.swift in Sources */,
+				F73B016C2CBA1ADE0077B7D2 /* JSONObject.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C9307EA2CB963390085EFF9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C9307D12CB963380085EFF9 /* Agora-ScreenShare-Extension */;
+			targetProxy = 4C9307E92CB963390085EFF9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4C9306952CB9607F0085EFF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4C9306962CB9607F0085EFF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C9306982CB9607F0085EFF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7DAC714DCF967FD618502DC /* Pods-APIExample-SwiftUI.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				ENABLE_BITCODE = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C9306992CB9607F0085EFF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 472119ABD8B195183D4CC1E1 /* Pods-APIExample-SwiftUI.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				ENABLE_BITCODE = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Request Camera Access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-SwiftUI/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4C9307F02CB9633A0085EFF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F89807E42BC51A25F44D3692 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C9307F12CB9633A0085EFF9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FF1D082DDF2E2198DB041E4 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Agora-ScreenShare-Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C9306842CB9607E0085EFF9 /* Build configuration list for PBXProject "APIExample-SwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C9306952CB9607F0085EFF9 /* Debug */,
+				4C9306962CB9607F0085EFF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C9306972CB9607F0085EFF9 /* Build configuration list for PBXNativeTarget "APIExample-SwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C9306982CB9607F0085EFF9 /* Debug */,
+				4C9306992CB9607F0085EFF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C9307EF2CB9633A0085EFF9 /* Build configuration list for PBXNativeTarget "Agora-ScreenShare-Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C9307F02CB9633A0085EFF9 /* Debug */,
+				4C9307F12CB9633A0085EFF9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C9306812CB9607E0085EFF9 /* Project object */;
+}
