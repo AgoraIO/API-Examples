@@ -66,8 +66,6 @@ echo "目录已删除: $name_without_extension"
 compile_project=true
 
 if [ $compile_project = true ]; then
-	which java
-	java --version
     # source ~/.bashrc
 	cd $source_root || { echo "cd HarmonyOS failed!"; exit 1; }
     echo pwd: `pwd`
