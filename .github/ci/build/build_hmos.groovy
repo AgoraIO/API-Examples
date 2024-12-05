@@ -7,7 +7,7 @@ buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
     "sourceDir": "api-examples",
-    "docker": "hub.agoralab.co/server/rte/hmos_build2204:1.0",
+    "docker": "hub.agoralab.co/server/rte/hmos_build2204:1.1",
     "non-publish": [
         "command": "./.github/ci/build/build_hmos.sh",
         "extraArgs": "",
