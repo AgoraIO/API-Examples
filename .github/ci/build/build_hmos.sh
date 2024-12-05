@@ -26,7 +26,7 @@ name_without_extension=${file_name%.har}
 echo "文件名（不含扩展名）: $name_without_extension"
 
 # 安装 curl
-apt-get update && apt-get install -y curl
+apt-get update && apt-get install -y curl zip
 # 下载文件
 curl -o "$base_dir/$file_name" "$sdk_url" || { echo "File download failed!"; exit 1; }
 
