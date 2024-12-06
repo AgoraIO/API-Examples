@@ -14,6 +14,14 @@
 #define __AOSL_DEFS_H__
 
 
+#ifdef _MSC_VER
+/* C4200: nonstandard extension used: zero sized array */
+#pragma warning (disable: 4200)
+/* C4576: a parenthesized type followed by an initializer list is a non-standard explicit type conversion syntax */
+#pragma warning (disable: 4576)
+#endif
+
+
 #define aosl_stringify_1(x) #x
 #define aosl_stringify(x) aosl_stringify_1(x)
 

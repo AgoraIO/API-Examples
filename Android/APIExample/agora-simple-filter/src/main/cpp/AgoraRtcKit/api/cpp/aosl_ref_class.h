@@ -31,7 +31,7 @@
 #include <api/aosl_async.h>
 #endif
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 #include <functional>
 #include <memory>
 typedef std::function <void (void *arg)> aosl_ref_lambda_f;
@@ -39,6 +39,7 @@ typedef std::function <void (const aosl_ts_t &queued_ts, aosl_refobj_t robj)> ao
 typedef std::function <void (void)> aosl_ref_mpq_lambda_0arg_f;
 typedef std::function <int (int free_only)> aosl_async_prepare_lambda_f;
 typedef std::function <void (int free_only)> aosl_async_resume_lambda_f;
+typedef std::function <void (int err)> aosl_ref_destroy_exec_lambda_f;
 #endif
 
 class aosl_ref_class {
@@ -307,6 +308,25 @@ public:
 			return -1;
 		}
 
+	#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+		int destroy_exec (aosl_ref_destroy_exec_lambda_f &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
+		{
+			aosl_ref_destroy_exec_lambda_f *task_obj = new aosl_ref_destroy_exec_lambda_f (std::move (lambda_f));
+			int err = aosl_ref_destroy_exec (ref (), ares, ____ref_destroy_exec_f, 1, task_obj);
+			if (err < 0)
+				delete task_obj;
+
+			return err;
+		}
+	private:
+		static void ____ref_destroy_exec_f (int err, uintptr_t argc, uintptr_t argv [])
+		{
+			aosl_ref_destroy_exec_lambda_f *task_obj = reinterpret_cast<aosl_ref_destroy_exec_lambda_f *>(argv [0]);
+			(*task_obj) (err);
+			delete task_obj;
+		}
+	#endif
+
 	#ifdef __AOSL_MPQ_H__
 		/* MPQ relative encapsulations */
 	public:
@@ -499,7 +519,7 @@ public:
 	#endif /* __AOSL_MPQ_H__ */
 
 		/* C++11 lambda encapsulations */
-	#if (__cplusplus >= 201103) || defined (_MSC_VER)
+	#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 	public:
 		int hold (aosl_ref_lambda_f &&lambda_f)
 		{
@@ -973,7 +993,7 @@ public:
 	#endif /* __AOSL_ASYNC_H__ */
 	#endif /* C++11 */
 
-	#if (__cplusplus >= 201103) || defined (_MSC_VER)
+	#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 	private:
 		aosl_ref_t_oop (const aosl_ref_t_oop &) = delete;
 		aosl_ref_t_oop (aosl_ref_t_oop &&) = delete;
@@ -1326,6 +1346,13 @@ public:
 		return err;
 	}
 
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+	int destroy_exec (aosl_ref_destroy_exec_lambda_f &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
+	{
+		return refoop->destroy_exec (std::move (lambda_f), ares);
+	}
+#endif
+
 public:
 	class deleter {
 	public:
@@ -1541,7 +1568,7 @@ public:
 #endif /* __AOSL_MPQ_H__ */
 
 	/* C++11 lambda encapsulations */
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 public:
 	int hold (aosl_ref_lambda_f &&lambda_f)
 	{
@@ -1780,8 +1807,6 @@ public:
 	}
 
 public:
-	typedef std::function <void (int free_only)> aosl_async_resume_lambda_f;
-
 	int resume (aosl_stack_id_t stack_id, const char *f_name, aosl_async_resume_lambda_f&& task)
 	{
 		return refoop->resume (stack_id, f_name, std::move (task));
@@ -1794,7 +1819,7 @@ public:
 #endif /* __AOSL_ASYNC_H__ */
 #endif /* C++11 */
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 private:
 	aosl_ref_class (const aosl_ref_class &) = delete;
 	aosl_ref_class (aosl_ref_class &&) = delete;
@@ -1879,7 +1904,7 @@ public:
 		reset ();
 	}
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 private:
 	aosl_ref_unique_ptr (const aosl_ref_unique_ptr &) = delete;
 	aosl_ref_unique_ptr &operator = (const aosl_ref_unique_ptr &) = delete;
@@ -1923,7 +1948,7 @@ inline bool operator != (intptr_t _null, const aosl_ref_unique_ptr<T_ref_cls> &p
 	return  (T_ref_cls *)_null != ptr.get ();
 }
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 template<typename T_ref_cls>
 inline bool operator == (const aosl_ref_unique_ptr<T_ref_cls> &ptr, std::nullptr_t)
 {

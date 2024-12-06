@@ -20,7 +20,7 @@
 #include <api/aosl_poll.h>
 #include <api/cpp/aosl_ares_class.h>
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 #include <functional>
 #include <memory>
 #endif
@@ -40,7 +40,7 @@ public:
 		poll_refs [tail.ref ()] = &tail;
 	}
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 	template <class T, class ...Targs>
 	void add (const T &head, const Targs&... rest)
 	{
@@ -118,7 +118,7 @@ public:
 		return NULL;
 	}
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 private:
 	aosl_poll_class (const aosl_poll_class &) = delete;
 	aosl_poll_class (aosl_poll_class &&) = delete;

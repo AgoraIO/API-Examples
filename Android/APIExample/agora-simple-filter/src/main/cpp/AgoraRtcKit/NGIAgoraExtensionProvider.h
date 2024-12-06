@@ -39,6 +39,9 @@ class IExtensionProvider : public RefCountInterface {
    * note: discarded, Don't use it anymore.
    */
     AUDIO_FILTER,
+    /**
+     * note: discarded, Don't use it anymore.
+     */
     VIDEO_PRE_PROCESSING_FILTER,
     VIDEO_POST_PROCESSING_FILTER,
     AUDIO_SINK,
@@ -79,6 +82,18 @@ class IExtensionProvider : public RefCountInterface {
      * Used to modify local playback audio data after the remote audio mixed.
      */
     AUDIO_REMOTE_MIXED_PLAYBACK_FILTER = 10006,
+    /*
+     * Used to modify video data betweent capturer and post-capture observer
+     */
+    VIDEO_POST_CAPTURE_FILTER = 20001,
+    /*
+     * Used to modify video data betweent post-capture observer and preview
+     */
+    VIDEO_PRE_PREVIEW_FILTER = 20002,
+    /*
+     * Used to modify video data betweent adapter and encoder
+     */
+    VIDEO_PRE_ENCODER_FILTER = 20003,
     UNKNOWN = 0xFFFF,
   };
 
