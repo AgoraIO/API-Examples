@@ -58,7 +58,7 @@ extern __aosl_api__ aosl_ref_t aosl_ref_create (void *arg, aosl_ref_dtor_t dtor,
 
 /**
  * The ref object callback function prototype.
- * Parameter:
+ * Parameters:
  *            arg: the ref object argument which was passed in when creating;
  *           argc: specify the argv array elements count, the same as the argc
  *                    when invoking aosl_ref_[get|read|write] functions;
@@ -71,7 +71,7 @@ typedef void (*aosl_ref_func_t) (void *arg, uintptr_t argc, uintptr_t argv []);
 
 /**
  * Hold the ref object, and invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
  *           argc: the args count
@@ -86,7 +86,7 @@ extern __aosl_api__ int aosl_ref_hold_argv (aosl_ref_t ref, aosl_ref_func_t f, u
 
 /**
  * Hold the ref object and read lock it, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
  *           argc: the args count
@@ -101,7 +101,7 @@ extern __aosl_api__ int aosl_ref_read_argv (aosl_ref_t ref, aosl_ref_func_t f, u
 
 /**
  * Hold the ref object and write lock it, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
  *           argc: the args count
@@ -116,7 +116,7 @@ extern __aosl_api__ int aosl_ref_write_argv (aosl_ref_t ref, aosl_ref_func_t f, 
 
 /**
  * Hold the ref object and set it unsafe, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
  *           argc: the args count
@@ -131,7 +131,7 @@ extern __aosl_api__ int aosl_ref_unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f,
 
 /**
  * Hold the ref object and set it maystall, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
  *           argc: the args count
@@ -152,7 +152,7 @@ typedef void *aosl_refobj_t;
 
 /**
  * Retrieve the ref object arg.
- * Parameters:
+ * Parameter:
  *     robj: the reference object;
  * Return value:
  *     the ref object arg;
@@ -161,7 +161,7 @@ extern __aosl_api__ void *aosl_refobj_arg (aosl_refobj_t robj);
 
 /**
  * Get the ref id of the specified ref object.
- * Parameters:
+ * Parameter:
  *      robj: the reference object;
  * Return value:
  *      the ref id.
@@ -170,7 +170,7 @@ extern __aosl_api__ aosl_ref_t aosl_refobj_id (aosl_refobj_t robj);
 
 /**
  * Make sure read lock the ref object specified by robj, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *           robj: the ref object itself;
  *              f: the callback function;
  *           argc: the args count
@@ -185,7 +185,7 @@ extern __aosl_api__ int aosl_refobj_read_argv (aosl_refobj_t robj, aosl_ref_func
 
 /**
  * Make sure set the ref object specified by robj unsafe, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *           robj: the ref object itself;
  *              f: the callback function;
  *           argc: the args count
@@ -200,7 +200,7 @@ extern __aosl_api__ int aosl_refobj_unsafe_argv (aosl_refobj_t robj, aosl_ref_fu
 
 /**
  * Make sure set the ref object specified by robj maystall, then invoke the specified callback function.
- * Parameter:
+ * Parameters:
  *           robj: the ref object itself;
  *              f: the callback function;
  *           argc: the args count
@@ -239,7 +239,7 @@ extern __aosl_api__ int aosl_ref_set_scope (aosl_ref_t ref, aosl_ref_t scope_ref
 
 /**
  * Destroy the reference object specified by ref.
- * Parameter:
+ * Parameters:
  *         ref: the reference object id
  *   do_delete: 0 for just marking it destroyed
  *              non-0 value for deleting it
@@ -248,6 +248,77 @@ extern __aosl_api__ int aosl_ref_set_scope (aosl_ref_t ref, aosl_ref_t scope_ref
  *       <0: failed, and aosl_errno indicates what error occurs
  **/
 extern __aosl_api__ int aosl_ref_destroy (aosl_ref_t ref, int do_delete);
+
+/**
+ * The proto for a ref destroy async exec callback function.
+ * Parameters:
+ *        err: 0 for destroy ref object successfully, <0 for error code;
+ *       argc: the args count passed by exec series functions;
+ *       argv: args vector passed by exec series functions;
+ * Return value:
+ *      none.
+ **/
+typedef void (*aosl_ref_destroy_exec_f) (int err, uintptr_t argc, uintptr_t argv []);
+
+/**
+ * Execute the specified function asynchronously in thread pool before destroying
+ * the reference object specified by ref, this function supports coroutine.
+ * Parameters:
+ *         ref: the reference object id;
+ *        ares: ares object if you want to wait the execution of function f,
+ *              specify AOSL_REF_INVALID when you do not want to wait;
+ *           f: the target function which will be executed in thread pool
+ *              after destroyed the ref object;
+ *        argc: the args count;
+ *         ...: variable args;
+ * Return value:
+ *        0: success
+ *       <0: failed, and aosl_errno indicates what error occurs
+ * Remarks:
+ *   If ares is AOSL_REF_INVALID and the invoking thread is an mpq thread,
+ *   then this function will support coroutine resume mechanism.
+ **/
+extern __aosl_api__ int aosl_ref_destroy_exec (aosl_ref_t ref, aosl_ref_t ares, aosl_ref_destroy_exec_f f, uintptr_t argc, ...);
+
+/**
+ * Execute the specified function asynchronously in thread pool before destroying
+ * the reference object specified by ref, this function supports coroutine.
+ * Parameters:
+ *         ref: the reference object id;
+ *        ares: ares object if you want to wait the execution of function f,
+ *              specify AOSL_REF_INVALID when you do not want to wait;
+ *           f: the target function which will be executed in thread pool
+ *              after destroyed the ref object;
+ *        argc: the args count;
+ *        args: variable args;
+ * Return value:
+ *        0: success
+ *       <0: failed, and aosl_errno indicates what error occurs
+ * Remarks:
+ *   If ares is AOSL_REF_INVALID and the invoking thread is an mpq thread,
+ *   then this function will support coroutine resume mechanism.
+ **/
+extern __aosl_api__ int aosl_ref_destroy_exec_args (aosl_ref_t ref, aosl_ref_t ares, aosl_ref_destroy_exec_f f, uintptr_t argc, va_list args);
+
+/**
+ * Execute the specified function asynchronously in thread pool before destroying
+ * the reference object specified by ref, this function supports coroutine.
+ * Parameters:
+ *         ref: the reference object id;
+ *        ares: ares object if you want to wait the execution of function f,
+ *              specify AOSL_REF_INVALID when you do not want to wait;
+ *           f: the target function which will be executed in thread pool
+ *              after destroyed the ref object;
+ *        argc: the args count;
+ *        argv: variable args vector;
+ * Return value:
+ *        0: success
+ *       <0: failed, and aosl_errno indicates what error occurs
+ * Remarks:
+ *   If ares is AOSL_REF_INVALID and the invoking thread is an mpq thread,
+ *   then this function will support coroutine resume mechanism.
+ **/
+extern __aosl_api__ int aosl_ref_destroy_exec_argv (aosl_ref_t ref, aosl_ref_t ares, aosl_ref_destroy_exec_f f, uintptr_t argc, uintptr_t argv []);
 
 
 

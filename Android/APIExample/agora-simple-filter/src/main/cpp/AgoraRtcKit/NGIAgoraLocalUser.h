@@ -1146,13 +1146,11 @@ class ILocalUser {
    *
    * @param track The special mixed audio track.
    * @param enalble Action of start mixing this user's audio.
-   * @param MixLocal Mix publish stream.
-   * @param MixRemote Mix remote stream.
    * @return
    * - 0: success
    * - <0: failure
   */
-  virtual int EnableLocalMixedAudioTrack(agora_refptr<ILocalAudioTrack>& track, bool enable, bool MixLocal, bool MixRemote, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual int RegisterLocalMixedAudioTrack(agora_refptr<ILocalAudioTrack>& track, bool enable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Trigger data channel update callback with all data channel infos.
    *
@@ -1172,6 +1170,16 @@ class ILocalUser {
    * @technical preview 
   */
   virtual int sendAudioMetadata(const char* metadata, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  /**
+   * set remote render target fps
+   *
+   * @param target_fps The target fps
+   * @return
+   * - 0: success
+   * - <0: failure
+   * @technical preview
+  */
+  virtual int setRemoteRenderTargetFps(int targetFps) = 0;
 };
 
 /**
