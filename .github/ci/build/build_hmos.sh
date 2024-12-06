@@ -3,12 +3,12 @@ ci_dir="$(cd "$(dirname "$0")" && pwd)" # 获取当前脚本所在路径
 echo ci_dir: $ci_dir
 base_dir=$(echo "$ci_dir" | awk -F "/.github" '{print $1}')
 echo base_dir: $base_dir
-source_root="$base_dir/HarmonyOS_NEXT/ApiExample"
+source_root="$base_dir/HarmonyOS_NEXT/APIExample"
 lib_dir="$source_root/entry/libs"
 
+echo WORKSPACE: $WORKSPACE
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
-echo source_root: %source_root%
 echo output: /tmp/jenkins/${project}_out
 echo build_date: $build_date
 echo build_time: $build_time
@@ -26,7 +26,7 @@ name_without_extension=${file_name%.har}
 echo "文件名（不含扩展名）: $name_without_extension"
 
 # 安装 curl
-apt-get update && apt-get install -y curl zip
+# apt-get update && apt-get install -y curl zip
 # 下载文件
 curl -o "$base_dir/$file_name" "$sdk_url" || { echo "File download failed!"; exit 1; }
 
@@ -63,12 +63,15 @@ echo "目录已压缩为: ${sdk_sample_dir}.zip"
 rm -rf "./$name_without_extension" #  删除整个目录及其内容
 echo "目录已删除: $name_without_extension"
 
-compile_project=true
-
 if [ $compile_project = true ]; then
-    # source ~/.bashrc
-	cd $source_root || { echo "cd HarmonyOS failed!"; exit 1; }
-    echo pwd: `pwd`
+    cd $source_root || { echo "cd HarmonyOS failed!"; exit 1; }
+    echo "Current directory: $(pwd)"
+    
+    if [ ! -f "./cloud_build.sh" ]; then
+        echo "Error: cloud_build.sh not found in current directory"
+        exit 1
+    fi
+    
     chmod +x ./cloud_build.sh
-	./cloud_build.sh || exit 1
+    ./cloud_build.sh || exit 1
 fi
