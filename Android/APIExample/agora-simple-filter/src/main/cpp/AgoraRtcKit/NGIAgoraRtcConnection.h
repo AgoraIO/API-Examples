@@ -74,7 +74,8 @@ struct TConnectSettings {
    * callback. Your app must record and maintain the `userId` since the SDK does not do so.
   */
   user_id_t userId;
-
+  /*Reserved for future use*/
+  const char* info;
   /*
   App can provide a app defined start time to trace some events like connect cost , first video, etc.
   */
@@ -212,7 +213,7 @@ class IRtcConnection : public RefCountInterface {
    *   - -2(ERR_INVALID_ARGUMENT): The argument that you pass is invalid.
    *   - -8(ERR_INVALID_STATE): The current connection state is not CONNECTION_STATE_DISCONNECTED(1).
    */
-  virtual int connect(const char* token, const char* channelId, user_id_t userId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual int connect(const char* token, const char* channelId,  const char* info, user_id_t userId, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Connects to an Agora channel.

@@ -47,6 +47,12 @@ enum SyncEventType {
   kTransactionBegin = 6,
   kTransactionEnd = 7,
   kDocSyncEnd = 8,
+  kInitialized = 9
+};
+
+enum OP_Privilege {
+  OP_READ,
+  OP_WRITE
 };
 
 /**
@@ -77,7 +83,7 @@ struct SyncConfig {
   uint32_t connection_timeout;
   /* compact interval in seconds */
   uint32_t compact_interval;
-  SyncConfig() : shakehand_interval(1), connection_timeout(10), compact_interval(3600 * 1000) {}
+  SyncConfig() : appId(NULL), shakehand_interval(1), connection_timeout(10), compact_interval(3600 * 1000) {}
 };
 
 class ISyncClient : public RefCountInterface {
@@ -107,6 +113,8 @@ public:
   virtual int32_t subscribe(const char* database, const char* collection,
                     util::AString& snapshotJson) = 0;
   virtual int32_t unsubscribe(const char* database, const char* collection, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual int32_t addReadable(const char* database, const char* coll, const char* readable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual int32_t removeReadable(const char* database, const char* coll, const char* readable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   virtual int32_t putDoc(const char* database, const char* collection,
                  const char* docName, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   virtual int32_t deleteDoc(const char* database, const char* collection,
@@ -131,6 +139,8 @@ public:
                   const char* docName, const char* path, bool& result) = 0;
   virtual int32_t keepAliveDoc(const char* database, const char* collection,
                        const char* docName, uint32_t ttl, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  virtual bool isOpPermission(const char* database, const char* collection,
+                       const char* docName, OP_Privilege op) = 0;
 
   // sync operations
   virtual int32_t shakehand(aosl_ref_t ares = AOSL_REF_INVALID) = 0;
