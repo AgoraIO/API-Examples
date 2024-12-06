@@ -19,6 +19,9 @@
 #include <inttypes.h>
 #if defined (__linux__) || defined (__MACH__) || defined (__kliteos2__) || defined (_WIN32)
 #include <sys/types.h>
+#if defined (__linux__) || defined (__MACH__)
+#include <sys/uio.h>
+#endif
 #endif
 
 #include <api/aosl_defs.h>
@@ -85,6 +88,29 @@ static __inline__ int aosl_fd_invalid (aosl_fd_t fd)
 {
 	return (int)(fd == AOSL_INVALID_FD);
 }
+#endif
+
+
+#ifndef _WIN32
+typedef aosl_fd_t aosl_sk_t;
+#define AOSL_INVALID_SK AOSL_INVALID_FD
+#else
+typedef SOCKET aosl_sk_t;
+#define AOSL_INVALID_SK ((aosl_sk_t)INVALID_SOCKET)
+#endif
+
+
+#if !defined (_WIN32) && !defined (__kspreadtrum__)
+typedef struct iovec aosl_miov_t;
+#else
+typedef struct {
+	void *iov_base;
+	size_t iov_len;
+} aosl_miov_t;
+#endif
+
+#ifndef UIO_MAXIOV
+#define UIO_MAXIOV 1024
 #endif
 
 

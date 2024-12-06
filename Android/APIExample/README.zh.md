@@ -86,7 +86,12 @@
 从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：
 
 1. 下载 [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
+```text
+Android/APIExample/agora-simple-filter/src/main/jniLibs
+├── arm64-v8a
+└── armeabi-v7a
+```
+2. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs, 将 low_level_api/include 头文件替换到 Android/APIExample/agora-simple-filter/src/main/cpp/AgoraRtcKit 目录中
 
 ```text
 Android/APIExample/agora-simple-filter/src/main/agoraLibs
@@ -95,6 +100,10 @@ Android/APIExample/agora-simple-filter/src/main/agoraLibs
 ├── x86
 └── x86_64
 ```
+```text
+Android/APIExample/agora-simple-filter/src/main/cpp
+└── AgoraRtcKit
+```
 
 3. 修改Android/APIExample/gradle.properties配置文件中simpleFilter值为true
 
@@ -102,7 +111,7 @@ Android/APIExample/agora-simple-filter/src/main/agoraLibs
 
 本项目包含自定义加密示例，默认是不启用的。配置方法如下：
 
-1. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+1. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-stream-encrypt/src/main/agoraLibs，将 hight_level_api/include 头文件替换到 Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora 目录中
 
 ```text
 Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
@@ -110,6 +119,11 @@ Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
 ├── armeabi-v7a
 ├── x86
 └── x86_64
+```
+```text
+Android/APIExample/agora-stream-encrypt/src/main/cpp
+└── include
+    └── agora
 ```
 
 2. 修改Android/APIExample/gradle.properties配置文件中streamEncrypt值为true
