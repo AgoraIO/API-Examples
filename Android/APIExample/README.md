@@ -90,7 +90,12 @@ Since version 4.0.0, Agora SDK provides an Extension Interface Framework. Develo
 In order to enable it, you could do as follows:
 
 1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. Download [Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
+```text
+Android/APIExample/agora-simple-filter/src/main/jniLibs
+├── arm64-v8a
+└── armeabi-v7a
+```
+2. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs; Replace the low_level_api/include .h files in the Android/APIExample/agora-simple-filter/src/main/cpp/AgoraRtcKit directory.
 
 ```text
 Android/APIExample/agora-simple-filter/src/main/agoraLibs
@@ -98,6 +103,10 @@ Android/APIExample/agora-simple-filter/src/main/agoraLibs
 ├── armeabi-v7a
 ├── x86
 └── x86_64
+```
+```text
+Android/APIExample/agora-simple-filter/src/main/cpp
+└── AgoraRtcKit
 ```
 
 3. Modify simpleFilter to true in Android/APIExample/gradle.properties
@@ -107,7 +116,7 @@ Android/APIExample/agora-simple-filter/src/main/agoraLibs
 This project contains custom stream encrypt examples, which cannot be enabled by default. 
 The configuration method is as follows:
 
-1. Download [Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
+1. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs; Replace the hight_level_api/include .h files in the Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora directory.
 
 ```text
 Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
@@ -115,6 +124,11 @@ Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
 ├── armeabi-v7a
 ├── x86
 └── x86_64
+```
+```text
+Android/APIExample/agora-stream-encrypt/src/main/cpp
+└── include
+    └── agora
 ```
 
 2. Modify streamEncrypt to true in Android/APIExample/gradle.properties

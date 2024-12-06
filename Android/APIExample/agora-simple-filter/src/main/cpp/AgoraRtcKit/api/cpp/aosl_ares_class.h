@@ -74,7 +74,7 @@ private:
 		return 0;
 	}
 
-#if (__cplusplus >= 201103) || defined (_MSC_VER)
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 private:
 	aosl_ares_class (const aosl_ares_class &) = delete;
 	aosl_ares_class (aosl_ares_class &&) = delete;
