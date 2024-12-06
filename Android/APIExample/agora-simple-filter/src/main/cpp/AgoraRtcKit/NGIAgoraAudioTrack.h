@@ -407,7 +407,7 @@ class ILocalAudioTrack : public IAudioTrack {
    * @param number : the buffer number set，unit is 10ms 
    *
    */
-  virtual void setMaxBufferedAudioFrameNumber(int number) = 0;
+  virtual void setMaxBufferedAudioFrameNumber(int number, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** clear sender buffer
    *
@@ -595,6 +595,11 @@ struct RemoteAudioTrackStats {
   uint64_t publish_duration;
 
   int32_t e2e_delay_ms;
+
+  /**
+   * e2e_delay_ calculated by the new algorithm
+   */
+  int32_t new_e2e_delay_ms;
   /**
    * Quality of experience (QoE) of the local user when receiving a remote audio stream. See #EXPERIENCE_QUALITY_TYPE.
    */
@@ -652,9 +657,81 @@ struct RemoteAudioTrackStats {
     total_active_time(0),
     publish_duration(0),
     e2e_delay_ms(0),
+    new_e2e_delay_ms(0),
     qoe_quality(0),
     quality_changed_reason(0),
     downlink_effect_type(0) {}
+};
+
+
+/**
+ * Properties of receive parameters for IAudioEncodedFrameReceiver
+ *
+ */
+struct AudioEncFrameRecvParams {
+
+  /**
+   * The callback mode of IAudioEncodedFrameReceiver
+   */
+  enum ReceiveMode {
+    /**
+     * IAudioEncodedFrameReceiver callback the down-link audio packet directly
+     */
+    ORIGINAL = 0,
+
+    /**
+     * IAudioEncodedFrameReceiver whill callback the original down-link audio packet while
+     * the codec of down-link packet is same as target_codec.
+     * 
+     * Othewise convert down-link audio packet to new target packet which parameter contain
+     * the combination of (target_codec, target_sample_rate, target_sample_rate).
+     */
+    MATCHED_CODEC = 1,
+
+    /**
+     * IAudioEncodedFrameReceiver whill callback the original down-link audio packet while 
+     * the combination of (codec, sampling rate, channels) of down-link packet is same as
+     * the combination of (target_codec, target_sample_rate, target_sample_rate).
+     * 
+     * Othewise convert down-link audio packet to new target packet which parameter contain
+     * the combination of (target_codec, target_sample_rate, target_sample_rate).
+     */
+    MATCHED_ALL = 2,
+  };
+
+  /**
+   * The trans mode of audio packet
+   */
+  ReceiveMode receive_mode;
+
+  /**
+   * The audio codec of target audio packet
+   */
+  AUDIO_CODEC_TYPE target_codec;  
+  
+  /**
+   * The sample rate HZ of target audio packet
+   */
+  int32_t target_sample_rate;
+  
+  /**
+   * The channel numbers of target audio packet
+   */
+  int32_t target_num_channels;
+
+
+  AudioEncFrameRecvParams() :
+    receive_mode(ORIGINAL),
+    target_codec(AUDIO_CODEC_AACLC),
+    target_sample_rate(0),
+    target_num_channels(0) {}  
+
+  AudioEncFrameRecvParams(const AudioEncFrameRecvParams& src_params) {
+    receive_mode = src_params.receive_mode;
+    target_codec = src_params.target_codec;
+    target_sample_rate = src_params.target_sample_rate;
+    target_num_channels = src_params.target_num_channels;    
+  }  
 };
 
 /**
@@ -708,12 +785,14 @@ class IRemoteAudioTrack : public IAudioTrack {
    * audio packet.
    *
    * @param packetReceiver The pointer to the `IAudioEncodedFrameReceiver` object.
+   * @param recvParams The parameter
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int registerAudioEncodedFrameReceiver(IAudioEncodedFrameReceiver* packetReceiver, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-
+  virtual int registerAudioEncodedFrameReceiver(IAudioEncodedFrameReceiver* packetReceiver,
+                                                const AudioEncFrameRecvParams& recvParams,
+                                                aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
    * Releases the `IAudioEncodedFrameReceiver` object.
    * @param packetReceiver The pointer to the `IAudioEncodedFrameReceiver` object.

@@ -36,7 +36,7 @@ class IScreenCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int initWithDisplayId(uint32_t displayId, const Rectangle& regionRect) = 0;
+  virtual int initWithDisplayId(int64_t displayId, const Rectangle& regionRect) = 0;
 #endif
  
 #if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__))
@@ -193,6 +193,26 @@ class IScreenCapturer2 : public RefCountInterface {
    * - < 0: Failure
    */
   virtual int setAudioVolume(uint32_t volume, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
+#if defined(__ANDROID__)
+  /**
+   * Sets screen sharing using the Android native class MediaProjection.
+   *
+   * When screen capture stopped, the SDK will automatically release the MediaProjection internally.
+   *
+   * @param mediaProjection MediaProjection is an Android class that provides access to screen capture and recording capabiliies.
+   *
+   * @note
+   * Additional MediaProjection is primarily used for specific scenarios, 
+   * such as IOT custom devices or subprocess screen sharing.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   * @technical preview 
+   */
+  virtual int setExternalMediaProjection(void* mediaProjection) = 0;
+#endif
 
  protected:
   virtual ~IScreenCapturer2() {}
