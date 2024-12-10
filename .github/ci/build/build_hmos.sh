@@ -92,8 +92,16 @@ cd "$(dirname "$sdk_sample_dir")" || { echo "切换目录失败！"; exit 1; }
 rm -rf "./$name_without_extension"
 echo "目录已删除: $name_without_extension"
 
+# 在构建完成后复制文件
 if [ "$compile_project" = true ]; then
     cd "$hmos_source_root" || { echo "切换到 ApiExample Demo 源代码目录失败！"; exit 1; }
     chmod +x ./cloud_build.sh
     ./cloud_build.sh || exit 1
+
+    # 复制构建产物
+    echo "复制构建产物..."
+    # 复制 HAP 文件
+    cp -f "${hmos_source_root}/entry/build/default/outputs/default/"*.hap "${WORKSPACE}/" || true
+    # 复制 ZIP 文件
+    cp -f "${base_dir}/"*.zip "${WORKSPACE}/" || true
 fi
