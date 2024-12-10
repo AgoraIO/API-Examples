@@ -18,6 +18,48 @@ compileConfig = [
     ]
 ]
 
+def handleSignFiles(extraArgs) {
+    def signFile = "apiexample-hmos-sign.zip"
+    def extractDir = "hmos-sign"
+    
+    // 只在文件/目录存在时才清理
+    echo "[INFO] 检查并清理本地签名文件和解压目录..."
+    if (fileExists(signFile)) {
+        sh "rm -f '${signFile}'"
+    }
+    if (fileExists(extractDir)) {
+        sh "rm -rf '${extractDir}'"
+    }
+    
+    // 创建解压目标目录
+    sh "mkdir -p '${extractDir}'"
+    
+    echo "[INFO] 下载签名文件..."
+    loadResources(["apiexample-hmos-sign.zip"], "publish")
+    
+    // 检查下载的文件
+    sh "echo '=== 文件信息 ==='"
+    sh "ls -l '${signFile}'"
+    sh "echo '=== 文件类型 ==='"
+    sh "file '${signFile}'"
+    sh "echo '=== 文件头部 ==='"
+    sh "hexdump -C '${signFile}' | head -n 5"
+    sh "echo '=== ZIP 文件列表 ==='"
+    sh "unzip -l '${signFile}' || true"
+    
+    // 解压文件
+    sh "unzip -v '${signFile}'"  // 先查看内容但不解压
+    sh "unzip -o '${signFile}' -d '${extractDir}'"
+    
+    // 检查解压后的文件
+    sh "ls -l '${extractDir}'"
+    
+    echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_PATH=${extractDir}"
+    extraArgs += " SIGN_PATH=${extractDir}"
+    
+    return extraArgs
+}
+
 def doBuild(buildVariables) {
     type = params.Package_Publish ? "publish" : "non-publish"
     command = compileConfig.get(type).command
@@ -29,35 +71,7 @@ def doBuild(buildVariables) {
     
     // 下载并解压签名文件
     if (params.Package_Publish) {
-        def signFile = "apiexample-hmos-sign.zip"
-        def extractDir = "signing"
-        
-        // 只在文件/目录存在时才清理
-        echo "[INFO] 检查并清理本地签名文件和解压目录..."
-        if (fileExists(signFile)) {
-            sh "rm -f '${signFile}'"
-        }
-        if (fileExists(extractDir)) {
-            sh "rm -rf '${extractDir}'"
-        }
-        
-        echo "[INFO] 下载签名文件..."
-        loadResources(["apiexample-hmos-sign.zip"], "publish")
-        
-        echo "[INFO] 签名文件路径: ${signFile}"
-        
-        if (!fileExists(signFile)) {
-            echo "[ERROR] 下载后未找到签名文件: ${signFile}"
-        }
-        
-        echo "[INFO] 解压签名文件到 ${extractDir}..."
-        def result = sh(script: "7za x -y '${signFile}' -o'${extractDir}'", returnStatus: true)
-        if (result != 0) {
-            echo "[ERROR] 解压签名文件失败"
-        }
-        
-        echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_PATH=${extractDir}"
-        extraArgs += " SIGN_PATH=${extractDir}"
+        // extraArgs = handleSignFiles(extraArgs)
     }
     
     def commandConfig = [

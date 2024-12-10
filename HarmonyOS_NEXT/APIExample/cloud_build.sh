@@ -106,7 +106,7 @@ function main() {
     init_hdc
     init_ohpm
     buildHAP
-    loadSignAndSigned
+    # loadSignAndSigned
 
     local endTime=$(date '+%s')
     local elapsedTime=$(expr $endTime - $startTime)
