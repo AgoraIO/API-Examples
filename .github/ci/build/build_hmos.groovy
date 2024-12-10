@@ -30,41 +30,37 @@ def doBuild(buildVariables) {
     // 下载并解压签名文件
     if (params.Package_Publish) {
         dir(compileConfig.sourceDir) {
-            try {
-                def signFile = "${env.WORKSPACE}/apiexample-hmos-sign.zip"
-                def extractDir = "${env.WORKSPACE}/signing"
-                
-                println "[INFO] ===== 开始处理签名文件 ====="
-                
-                // 清理本地签名文件和解压目录
-                println "[INFO] 清理本地签名文件和解压目录..."
+            def signFile = "${env.WORKSPACE}/apiexample-hmos-sign.zip"
+            def extractDir = "${env.WORKSPACE}/signing"
+            
+            // 只在文件/目录存在时才清理
+            echo "[INFO] 检查并清理本地签名文件和解压目录..."
+            if (fileExists(signFile)) {
                 sh "rm -f '${signFile}'"
-                sh "rm -rf '${extractDir}'"
-                
-                println "[INFO] 下载签名文件..."
-                loadResources(["apiexample-hmos-sign.zip"], "publish")
-                
-                println "[INFO] 签名文件路径: ${signFile}"
-                
-                // 验证文件是否存在
-                def exists = fileExists signFile
-                if (!exists) {
-                    error "[ERROR] 下载后未找到签名文件: ${signFile}"
-                }
-                
-                // 解压签名文件到自定义目录
-                println "[INFO] 解压签名文件到 ${extractDir}..."
-                sh "mkdir -p '${extractDir}'"
-                sh "7za x -y '${signFile}' -o'${extractDir}' || { echo '[ERROR] 解压签名文件失败'; exit 1; }"
-                
-                println "[INFO] 将签名文件路径添加到 extraArgs: SIGN_FILE=${signFile}"
-                extraArgs += " SIGN_FILE=${signFile}"
-                
-                println "[INFO] ===== 签名文件处理完成 ====="
-            } catch (Exception e) {
-                println "[ERROR] 下载或解压签名文件失败: ${e.message}"
-                throw e
             }
+            if (fileExists(extractDir)) {
+                sh "rm -rf '${extractDir}'"
+            }
+            
+            echo "[INFO] 下载签名文件..."
+            loadResources(["apiexample-hmos-sign.zip"], "publish")
+            
+            echo "[INFO] 签名文件路径: ${signFile}"
+            
+            // 使用 fileExists 步骤来检查文件是否存在
+            if (!fileExists(signFile)) {
+                echo "[ERROR] 下载后未找到签名文件: ${signFile}"
+            }
+            
+            // 解压签名文件到自定义目录
+            echo "[INFO] 解压签名文件到 ${extractDir}..."
+            def result = sh(script: "7za x -y '${signFile}' -o'${extractDir}'", returnStatus: true)
+            if (result != 0) {
+                echo "[ERROR] 解压签名文件失败"
+            }
+            
+            echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_PATH=${extractDir}"
+            extraArgs += " SIGN_PATH=${extractDir}"
         }
     }
     
@@ -79,7 +75,7 @@ def doBuild(buildVariables) {
         ]
     ]
     
-    println "[INFO] 构建配置: ${commandConfig}"
+    echo "[INFO] 构建配置: ${commandConfig}"
     
     loadResources(["config.json", "artifactory_utils.py"])
     buildUtils.customBuild(commandConfig, preCommand, postCommand)
