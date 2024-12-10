@@ -36,10 +36,8 @@ def doBuild(buildVariables) {
                 
                 // 清理本地签名文件和解压目录
                 echo "[INFO] 清理本地签名文件和解压目录..."
-                sh """
-                    rm -f "${signFile}"
-                    rm -rf "${extractDir}"
-                """
+                sh "rm -f '${signFile}'"
+                sh "rm -rf '${extractDir}'"
                 
                 echo "[INFO] 下载签名文件..."
                 loadResources(["apiexample-hmos-sign.zip"], "publish")
@@ -47,19 +45,15 @@ def doBuild(buildVariables) {
                 echo "[INFO] 签名文件路径: ${signFile}"
                 
                 // 验证文件是否存在
-                sh """
-                    if [ ! -f "${signFile}" ]; then
-                        echo "[ERROR] 下载后未找到签名文件: ${signFile}"
-                        exit 1
-                    fi
-                """
+                def fileExists = sh(script: "test -f '${signFile}'", returnStatus: true)
+                if (fileExists != 0) {
+                    error "[ERROR] 下载后未找到签名文件: ${signFile}"
+                }
                 
                 // 解压签名文件到自定义目录
                 echo "[INFO] 解压签名文件到 ${extractDir}..."
-                sh """
-                    mkdir -p "${extractDir}"
-                    7za x -y "${signFile}" -o"${extractDir}" || { echo "[ERROR] 解压签名文件失败"; exit 1; }
-                """
+                sh "mkdir -p '${extractDir}'"
+                sh "7za x -y '${signFile}' -o'${extractDir}' || { echo '[ERROR] 解压签名文件失败'; exit 1; }"
                 
                 echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_FILE=${signFile}"
                 extraArgs += " SIGN_FILE=${signFile}"
