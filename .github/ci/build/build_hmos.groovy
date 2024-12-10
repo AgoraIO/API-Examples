@@ -34,31 +34,35 @@ def doBuild(buildVariables) {
                 def signFile = "${env.WORKSPACE}/apiexample-hmos-sign.zip"
                 def extractDir = "${env.WORKSPACE}/signing"
                 
+                println "[INFO] ===== 开始处理签名文件 ====="
+                
                 // 清理本地签名文件和解压目录
-                echo "[INFO] 清理本地签名文件和解压目录..."
+                println "[INFO] 清理本地签名文件和解压目录..."
                 sh "rm -f '${signFile}'"
                 sh "rm -rf '${extractDir}'"
                 
-                echo "[INFO] 下载签名文件..."
+                println "[INFO] 下载签名文件..."
                 loadResources(["apiexample-hmos-sign.zip"], "publish")
                 
-                echo "[INFO] 签名文件路径: ${signFile}"
+                println "[INFO] 签名文件路径: ${signFile}"
                 
                 // 验证文件是否存在
-                def fileExists = sh(script: "test -f '${signFile}'", returnStatus: true)
-                if (fileExists != 0) {
+                def exists = fileExists signFile
+                if (!exists) {
                     error "[ERROR] 下载后未找到签名文件: ${signFile}"
                 }
                 
                 // 解压签名文件到自定义目录
-                echo "[INFO] 解压签名文件到 ${extractDir}..."
+                println "[INFO] 解压签名文件到 ${extractDir}..."
                 sh "mkdir -p '${extractDir}'"
                 sh "7za x -y '${signFile}' -o'${extractDir}' || { echo '[ERROR] 解压签名文件失败'; exit 1; }"
                 
-                echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_FILE=${signFile}"
+                println "[INFO] 将签名文件路径添加到 extraArgs: SIGN_FILE=${signFile}"
                 extraArgs += " SIGN_FILE=${signFile}"
+                
+                println "[INFO] ===== 签名文件处理完成 ====="
             } catch (Exception e) {
-                echo "[ERROR] 下载或解压签名文件失败: ${e.message}"
+                println "[ERROR] 下载或解压签名文件失败: ${e.message}"
                 throw e
             }
         }
@@ -75,7 +79,7 @@ def doBuild(buildVariables) {
         ]
     ]
     
-    echo "[INFO] 构建配置: ${commandConfig}"
+    println "[INFO] 构建配置: ${commandConfig}"
     
     loadResources(["config.json", "artifactory_utils.py"])
     buildUtils.customBuild(commandConfig, preCommand, postCommand)
