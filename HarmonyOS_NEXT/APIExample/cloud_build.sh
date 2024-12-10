@@ -51,27 +51,15 @@ buildHAP() {
 loadSignAndSigned() {
     echo "[INFO] === Starting loadSignAndSigned ==="
     
-    local sign_file="/home/jenkins/workspace/ApiExample/build_harmonyos/api-examples/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip"
-    echo "[INFO] Looking for sign file: ${sign_file}"
-    echo "[INFO] Current directory: $(pwd)"
+    # 使用解压后的签名文件路径
+    local extract_dir="${WORKSPACE}/signing"
+    local cert_file=$(find "${extract_dir}" -name "*.cer")
+    local p7b_file=$(find "${extract_dir}" -name "*.p7b")
+    local p12_file=$(find "${extract_dir}" -name "*.p12")
     
-    if [ ! -f "${sign_file}" ]; then
-        echo "[ERROR] Sign file not found"
-        echo "[ERROR] Directory contents:"
-        ls -la
-        exit 1
-    fi
+    echo "[INFO] 使用解压后的签名文件路径: ${extract_dir}"
     
-    echo "[INFO] Found sign file, proceeding with signing..."
-    
-    mkdir -p ~/.ohos/config/
-    echo "[INFO] Extracting sign file to ~/.ohos/config/..."
-    7za x -y "${sign_file}" -o~/.ohos/config/ || { echo "[ERROR] Failed to extract sign file"; exit 1; }
-    
-    local cert_file=$(find ~/.ohos/config -name "*.cer")
-    local p7b_file=$(find ~/.ohos/config -name "*.p7b")
-    local p12_file=$(find ~/.ohos/config -name "*.p12")
-    
+    # 检查证书文件是否存在
     if [ ! -f "$cert_file" ] || [ ! -f "$p7b_file" ] || [ ! -f "$p12_file" ]; then
         echo "错误：未找到所需的证书文件"
         exit 1
@@ -107,7 +95,6 @@ loadSignAndSigned() {
     if [ -f "$signed_hap" ]; then
         echo "签名后的HAP文件已生成：$signed_hap"
         rm -f "$unsigned_hap"
-        rm -f "${sign_file}"
     else
         echo "错误：签名后的HAP文件未生成"
         exit 1

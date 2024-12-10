@@ -27,45 +27,44 @@ def doBuild(buildVariables) {
     extraArgs = compileConfig.get(type).extraArgs
     extraArgs += " " + params.getOrDefault("extra_args", "")
     
-    // 下载签名文件
+    // 下载并解压签名文件
     if (params.Package_Publish) {
         dir(compileConfig.sourceDir) {
             try {
-                echo "[INFO] Downloading sign file..."
+                def signFile = "${env.WORKSPACE}/apiexample-hmos-sign.zip"
+                def extractDir = "${env.WORKSPACE}/signing"
+                
+                // 清理本地签名文件和解压目录
+                echo "[INFO] 清理本地签名文件和解压目录..."
+                sh """
+                    rm -f "${signFile}"
+                    rm -rf "${extractDir}"
+                """
+                
+                echo "[INFO] 下载签名文件..."
                 loadResources(["apiexample-hmos-sign.zip"], "publish")
                 
-                def signFile = sh(script: 'readlink -f apiexample-hmos-sign.zip', returnStdout: true).trim()
-                echo "[INFO] Sign file path: ${signFile}"
+                echo "[INFO] 签名文件路径: ${signFile}"
                 
-                if [ ! -f "${signFile}" ]; then
-                    echo "[ERROR] Sign file not found after download: ${signFile}"
-                    exit 1
-                fi
+                // 验证文件是否存在
+                sh """
+                    if [ ! -f "${signFile}" ]; then
+                        echo "[ERROR] 下载后未找到签名文件: ${signFile}"
+                        exit 1
+                    fi
+                """
                 
-                echo "[INFO] Sign file details:"
-                ls -lh "${signFile}"
+                // 解压签名文件到自定义目录
+                echo "[INFO] 解压签名文件到 ${extractDir}..."
+                sh """
+                    mkdir -p "${extractDir}"
+                    7za x -y "${signFile}" -o"${extractDir}" || { echo "[ERROR] 解压签名文件失败"; exit 1; }
+                """
                 
-                # 确保目标目录存在
-                mkdir -p /tmp/jenkins/api-examples/HarmonyOS_NEXT/APIExample/
-                
-                # 复制文件到目标位置
-                cp -v "${signFile}" /tmp/jenkins/api-examples/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip
-                
-                # 验证复制后的文件
-                if [ -f "/tmp/jenkins/api-examples/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip" ]; then
-                    echo "[INFO] File successfully copied to target location"
-                    ls -lh /tmp/jenkins/api-examples/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip
-                else
-                    echo "[ERROR] Failed to copy file to target location"
-                    exit 1
-                fi
-                
-                echo "[INFO] Adding sign file to extraArgs: SIGN_FILE=${signFile}"
+                echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_FILE=${signFile}"
                 extraArgs += " SIGN_FILE=${signFile}"
             } catch (Exception e) {
-                echo "[ERROR] Failed to download sign file: ${e.message}"
-                echo "[ERROR] Stack trace:"
-                e.printStackTrace()
+                echo "[ERROR] 下载或解压签名文件失败: ${e.message}"
                 throw e
             }
         }
@@ -77,12 +76,12 @@ def doBuild(buildVariables) {
         "extraArgs": extraArgs,
         "docker": docker,
         "volumes": [
-            "/home/jenkins/workspace/ApiExample/build_harmonyos:/home/jenkins/workspace/ApiExample/build_harmonyos",
+            "${env.WORKSPACE}:/workspace",
             "/tmp/jenkins:/tmp/jenkins"
         ]
     ]
     
-    echo "[INFO] Build config: ${commandConfig}"
+    echo "[INFO] 构建配置: ${commandConfig}"
     
     loadResources(["config.json", "artifactory_utils.py"])
     buildUtils.customBuild(commandConfig, preCommand, postCommand)

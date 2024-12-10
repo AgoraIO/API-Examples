@@ -68,7 +68,6 @@ mkdir -p "$lib_dir" || { echo "无法创建目录 $lib_dir"; exit 1; }
 # 移动文件并重命名
 mv "$base_dir/$file_name" "$lib_dir/AgoraRtcSdk.har" || { echo "文件移动失败！"; exit 1; }
 
-
 # 确认文件已移动
 if [ ! -f "$lib_dir/AgoraRtcSdk.har" ]; then
     echo "文件移动失败！"
@@ -87,36 +86,6 @@ echo "创建子目录: $samples_dir"
 # 复制文件
 hmos_direction=APIExample
 cp -rf "$base_dir/HarmonyOS_NEXT/${hmos_direction}" "$samples_dir/API-Example" || exit 1
-
-# 复制签名文件到目标目录
-if [ -n "${SIGN_FILE}" ] && [ -f "${SIGN_FILE}" ]; then
-    echo "[INFO] Found sign file: ${SIGN_FILE}"
-    echo "[INFO] Copying sign file to target directory: ${source_root}/HarmonyOS_NEXT/APIExample/"
-    
-    # 确保目标目录存在
-    mkdir -p "${source_root}/HarmonyOS_NEXT/APIExample/"
-    
-    # 复制文件并验证
-    if cp -v "${SIGN_FILE}" "${source_root}/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip"; then
-        echo "[INFO] Sign file copy completed"
-        # 验证复制后的文件
-        if [ -f "${source_root}/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip" ]; then
-            echo "[INFO] Verified: Sign file exists in target location"
-            ls -l "${source_root}/HarmonyOS_NEXT/APIExample/apiexample-hmos-sign.zip"
-        else
-            echo "[ERROR] Failed to verify copied sign file"
-            exit 1
-        fi
-    else
-        echo "[ERROR] Failed to copy sign file"
-        exit 1
-    fi
-else
-    echo "[WARN] Sign file not found or not specified: ${SIGN_FILE}"
-    echo "[INFO] Current directory: $(pwd)"
-    echo "[INFO] Directory contents:"
-    ls -la
-fi
 
 # 压缩并清理
 cd "$(dirname "$sdk_sample_dir")" || { echo "切换目录失败！"; exit 1; }
