@@ -51,13 +51,13 @@ buildHAP() {
 loadSignAndSigned() {
     echo "[INFO] === Starting loadSignAndSigned ==="
     
-    # 使用解压后的签名文件路径
-    local extract_dir="${WORKSPACE}/signing"
+    # 使用从 groovy 传来的 SIGN_PATH 环境变量
+    local extract_dir="${SIGN_PATH}"
     local cert_file=$(find "${extract_dir}" -name "*.cer")
     local p7b_file=$(find "${extract_dir}" -name "*.p7b")
     local p12_file=$(find "${extract_dir}" -name "*.p12")
     
-    echo "[INFO] 使用解压后的签名文件路径: ${extract_dir}"
+    echo "[INFO] 使用签名文件路径: ${extract_dir}"
     
     # 检查证书文件是否存在
     if [ ! -f "$cert_file" ] || [ ! -f "$p7b_file" ] || [ ! -f "$p12_file" ]; then

@@ -5,10 +5,9 @@ echo ci_dir: $ci_dir
 base_dir=$(echo "$ci_dir" | awk -F "/.github" '{print $1}')
 echo base_dir: $base_dir
 
-source_root="$base_dir/HarmonyOS_NEXT/APIExample"
-lib_dir="$source_root/entry/libs"
 
 echo WORKSPACE: $WORKSPACE
+echo source_root: %source_root%
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo output: /tmp/jenkins/${project}_out
@@ -18,6 +17,9 @@ echo release_version: $release_version
 echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
+
+hmos_source_root="$base_dir/HarmonyOS_NEXT/APIExample"
+hmos_lib_dir="$hmos_source_root/entry/libs"
 
 # 获取文件名
 file_name=${sdk_url##*/}
@@ -62,14 +64,11 @@ install_curl_if_needed || exit 1;
 # 下载文件
 curl -o "$base_dir/$file_name" "$sdk_url" || { echo "文件下载失败！"; exit 1; }
 
-# 创建目标目录（如果不存在）
-mkdir -p "$lib_dir" || { echo "无法创建目录 $lib_dir"; exit 1; }
-
 # 移动文件并重命名
-mv "$base_dir/$file_name" "$lib_dir/AgoraRtcSdk.har" || { echo "文件移动失败！"; exit 1; }
+mv "$base_dir/$file_name" "$hmos_lib_dir/AgoraRtcSdk.har" || { echo "文件移动失败！"; exit 1; }
 
 # 确认文件已移动
-if [ ! -f "$lib_dir/AgoraRtcSdk.har" ]; then
+if [ ! -f "$hmos_lib_dir/AgoraRtcSdk.har" ]; then
     echo "文件移动失败！"
     exit 1
 fi
@@ -94,7 +93,7 @@ rm -rf "./$name_without_extension"
 echo "目录已删除: $name_without_extension"
 
 if [ "$compile_project" = true ]; then
-    cd "$source_root" || { echo "切换到 HarmonyOS 源代码目录失败！"; exit 1; }
+    cd "$hmos_source_root" || { echo "切换到 ApiExample Demo 源代码目录失败！"; exit 1; }
     chmod +x ./cloud_build.sh
     ./cloud_build.sh || exit 1
 fi

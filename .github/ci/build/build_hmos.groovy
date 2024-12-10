@@ -29,50 +29,42 @@ def doBuild(buildVariables) {
     
     // 下载并解压签名文件
     if (params.Package_Publish) {
-        dir(compileConfig.sourceDir) {
-            def signFile = "${env.WORKSPACE}/apiexample-hmos-sign.zip"
-            def extractDir = "${env.WORKSPACE}/signing"
-            
-            // 只在文件/目录存在时才清理
-            echo "[INFO] 检查并清理本地签名文件和解压目录..."
-            if (fileExists(signFile)) {
-                sh "rm -f '${signFile}'"
-            }
-            if (fileExists(extractDir)) {
-                sh "rm -rf '${extractDir}'"
-            }
-            
-            echo "[INFO] 下载签名文件..."
-            loadResources(["apiexample-hmos-sign.zip"], "publish")
-            
-            echo "[INFO] 签名文件路径: ${signFile}"
-            
-            // 使用 fileExists 步骤来检查文件是否存在
-            if (!fileExists(signFile)) {
-                echo "[ERROR] 下载后未找到签名文件: ${signFile}"
-            }
-            
-            // 解压签名文件到自定义目录
-            echo "[INFO] 解压签名文件到 ${extractDir}..."
-            def result = sh(script: "7za x -y '${signFile}' -o'${extractDir}'", returnStatus: true)
-            if (result != 0) {
-                echo "[ERROR] 解压签名文件失败"
-            }
-            
-            echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_PATH=${extractDir}"
-            extraArgs += " SIGN_PATH=${extractDir}"
+        def signFile = "apiexample-hmos-sign.zip"
+        def extractDir = "signing"
+        
+        // 只在文件/目录存在时才清理
+        echo "[INFO] 检查并清理本地签名文件和解压目录..."
+        if (fileExists(signFile)) {
+            sh "rm -f '${signFile}'"
         }
+        if (fileExists(extractDir)) {
+            sh "rm -rf '${extractDir}'"
+        }
+        
+        echo "[INFO] 下载签名文件..."
+        loadResources(["apiexample-hmos-sign.zip"], "publish")
+        
+        echo "[INFO] 签名文件路径: ${signFile}"
+        
+        if (!fileExists(signFile)) {
+            echo "[ERROR] 下载后未找到签名文件: ${signFile}"
+        }
+        
+        echo "[INFO] 解压签名文件到 ${extractDir}..."
+        def result = sh(script: "7za x -y '${signFile}' -o'${extractDir}'", returnStatus: true)
+        if (result != 0) {
+            echo "[ERROR] 解压签名文件失败"
+        }
+        
+        echo "[INFO] 将签名文件路径添加到 extraArgs: SIGN_PATH=${extractDir}"
+        extraArgs += " SIGN_PATH=${extractDir}"
     }
     
     def commandConfig = [
         "command": command,
         "sourceRoot": "${compileConfig.sourceDir}",
         "extraArgs": extraArgs,
-        "docker": docker,
-        "volumes": [
-            "${env.WORKSPACE}:/workspace",
-            "/tmp/jenkins:/tmp/jenkins"
-        ]
+        "docker": docker
     ]
     
     echo "[INFO] 构建配置: ${commandConfig}"
