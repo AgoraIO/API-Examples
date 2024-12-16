@@ -60,10 +60,14 @@ napi_value OriginVideoData::Init(napi_env env, napi_value exports) {
     };
 
     napi_value cons;
-    assert(napi_define_class(env, "OriginVideoData", NAPI_AUTO_LENGTH, New, nullptr, 2, properties, &cons) == napi_ok);
+    napi_status status1 = napi_define_class(env, "OriginVideoData", NAPI_AUTO_LENGTH, New, nullptr, 2, properties, &cons);
+    assert(status1 == napi_ok);
 
-    assert(napi_create_reference(env, cons, 1, &g_origin_video_data_ref) == napi_ok);
-    assert(napi_set_named_property(env, exports, "OriginVideoData", cons) == napi_ok);
+    napi_status status2 = napi_create_reference(env, cons, 1, &g_origin_video_data_ref);
+    assert(status2 == napi_ok);
+
+    napi_status status3 = napi_set_named_property(env, exports, "OriginVideoData", cons);
+    assert(status3 == napi_ok);
     return exports;
 }
 
@@ -71,41 +75,50 @@ napi_value OriginVideoData::New(napi_env env, napi_callback_info info) {
     AG_INFO("OriginVideoData::New called");
 
     napi_value newTarget;
-    assert(napi_get_new_target(env, info, &newTarget) == napi_ok);
+    napi_status status1 = napi_get_new_target(env, info, &newTarget);
+    assert(status1 == napi_ok);
+
     if (newTarget != nullptr) {
         // 使用`new MyObject(...)`调用方式
         size_t argc = 1;
         napi_value args[1];
         napi_value jsThis;
-        assert(napi_get_cb_info(env, info, &argc, args, &jsThis, nullptr) == napi_ok);
+        napi_status status2 = napi_get_cb_info(env, info, &argc, args, &jsThis, nullptr);
+        assert(status2 == napi_ok);
 
         uintptr_t value = 0.0;
         bool loss;
         napi_valuetype valuetype;
-        assert(napi_typeof(env, args[0], &valuetype) == napi_ok);
+        napi_status status3 = napi_typeof(env, args[0], &valuetype);
+        assert(status3 == napi_ok);
+
         if (valuetype != napi_undefined) {
-            assert(napi_get_value_bigint_uint64(env, args[0], &value, &loss) == napi_ok);
+            napi_status status4 = napi_get_value_bigint_uint64(env, args[0], &value, &loss);
+            assert(status4 == napi_ok);
         }
 
         OriginVideoData *obj = new OriginVideoData(value);
-
         obj->env_ = env;
         // 通过napi_wrap将ArkTS对象jsThis与C++对象obj绑定
-        assert(napi_wrap(env, jsThis, reinterpret_cast<void *>(obj), OriginVideoData::Destructor,
-                         nullptr, // finalize_hint
-                         &obj->wrapper_) == napi_ok);
+        napi_status status5 = napi_wrap(env, jsThis, reinterpret_cast<void *>(obj), 
+            OriginVideoData::Destructor, nullptr, &obj->wrapper_);
+        assert(status5 == napi_ok);
 
         return jsThis;
     } else {
         // 使用`MyObject(...)`调用方式
         size_t argc = 1;
         napi_value args[1];
-        assert(napi_get_cb_info(env, info, &argc, args, nullptr, nullptr) == napi_ok && argc == 1);
+        napi_status status6 = napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+        assert(status6 == napi_ok && argc == 1);
 
         napi_value cons;
-        assert(napi_get_reference_value(env, g_origin_video_data_ref, &cons) == napi_ok);
+        napi_status status7 = napi_get_reference_value(env, g_origin_video_data_ref, &cons);
+        assert(status7 == napi_ok);
+
         napi_value instance;
-        assert(napi_new_instance(env, cons, argc, args, &instance) == napi_ok);
+        napi_status status8 = napi_new_instance(env, cons, argc, args, &instance);
+        assert(status8 == napi_ok);
 
         return instance;
     }
@@ -117,16 +130,19 @@ napi_value OriginVideoData::Enable(napi_env env, napi_callback_info info) {
     size_t argc = 1;
     napi_value args[1];
     napi_value jsThis;
-    napi_get_cb_info(env, info, &argc, args, &jsThis, nullptr);
+    napi_status status1 = napi_get_cb_info(env, info, &argc, args, &jsThis, nullptr);
+    assert(status1 == napi_ok);
+
     bool enable;
-    napi_get_value_bool(env, args[0], &enable);
+    napi_status status2 = napi_get_value_bool(env, args[0], &enable);
+    assert(status2 == napi_ok);
 
     OriginVideoData *obj;
     // 通过napi_unwrap将jsThis之前绑定的C++对象取出，并对其进行操作
-    assert(napi_unwrap(env, jsThis, reinterpret_cast<void **>(&obj)) == napi_ok);
+    napi_status status3 = napi_unwrap(env, jsThis, reinterpret_cast<void **>(&obj));
+    assert(status3 == napi_ok);
 
     int ret = -1;
-
     agora::media::IMediaEngine *mediaEngine_ = nullptr;
     obj->rtcEngine_->queryInterface(agora::rtc::AGORA_IID_MEDIA_ENGINE, (void **)&mediaEngine_);
 
@@ -137,21 +153,25 @@ napi_value OriginVideoData::Enable(napi_env env, napi_callback_info info) {
     }
 
     napi_value num;
-    assert(napi_create_int32(env, ret, &num) == napi_ok);
+    napi_status status4 = napi_create_int32(env, ret, &num);
+    assert(status4 == napi_ok);
     return num;
 }
 
 napi_value OriginVideoData::TakeSnapshot(napi_env env, napi_callback_info info) {
     napi_value jsThis;
-    assert(napi_get_cb_info(env, info, nullptr, nullptr, &jsThis, nullptr) == napi_ok);
+    napi_status status1 = napi_get_cb_info(env, info, nullptr, nullptr, &jsThis, nullptr);
+    assert(status1 == napi_ok);
 
     OriginVideoData *obj;
     // 通过napi_unwrap将jsThis之前绑定的C++对象取出，并对其进行操作
-    assert(napi_unwrap(env, jsThis, reinterpret_cast<void **>(&obj)) == napi_ok);
+    napi_status status2 = napi_unwrap(env, jsThis, reinterpret_cast<void **>(&obj));
+    assert(status2 == napi_ok);
 
     obj->takeSnapshot_ = true;
 
     napi_value num;
-    assert(napi_create_int32(env, 0, &num) == napi_ok);
+    napi_status status3 = napi_create_int32(env, 0, &num);
+    assert(status3 == napi_ok);
     return num;
 }
