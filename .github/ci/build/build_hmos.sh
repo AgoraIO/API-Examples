@@ -88,7 +88,9 @@ cp -rf "$base_dir/HarmonyOS_NEXT/${hmos_direction}" "$samples_dir/API-Example" |
 
 # 压缩并清理
 cd "$(dirname "$sdk_sample_dir")" || { echo "切换目录失败！"; exit 1; }
-7za a "${sdk_sample_dir}.zip" "./$(basename "$sdk_sample_dir")" || { echo "压缩失败！"; exit 1; }
+# 生成带时间戳的 ZIP 文件名
+zip_file="APIExample_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").zip"
+7za a "${zip_file}" "./$(basename "$sdk_sample_dir")" || { echo "压缩失败！"; exit 1; }
 rm -rf "./$name_without_extension"
 echo "目录已删除: $name_without_extension"
 
@@ -103,5 +105,5 @@ if [ "$compile_project" = true ]; then
     # 复制签名后的 HAP 文件
     cp -f "${hmos_source_root}/APIExample_"*".hap" "${WORKSPACE}/" || true
     # 复制 ZIP 文件
-    cp -f "${base_dir}/"*.zip "${WORKSPACE}/" || true
+    cp -f "${base_dir}/APIExample_"*".zip" "${WORKSPACE}/" || true
 fi
