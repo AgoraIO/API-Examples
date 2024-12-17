@@ -48,16 +48,29 @@ buildHAP() {
     hvigorw assembleHap --mode module -p product=default -p buildMode=debug --no-daemon
 }
 
-loadSignAndSigned() {
+signedHAP() {
     echo "[INFO] === Starting loadSignAndSigned ==="
     
-    # 使用从 groovy 传来的 SIGN_PATH 环境变量
-    local extract_dir="${SIGN_PATH}"
-    local cert_file=$(find "${extract_dir}" -name "*.cer")
-    local p7b_file=$(find "${extract_dir}" -name "*.p7b")
-    local p12_file=$(find "${extract_dir}" -name "*.p12")
+    # 创建证书目录
+    local config_dir=".ohos/config"
+    mkdir -p "${config_dir}"
     
-    echo "[INFO] 使用签名文件路径: ${extract_dir}"
+    # 下载证书
+    local sign_url="http://10.80.1.174:8070/hmos/apiexample-hmos-sign.zip"
+    local sign_file="${config_dir}/apiexample-hmos-sign.zip"
+    
+    echo "[INFO] 下载签名文件..."
+    curl -o "${sign_file}" "${sign_url}"
+    
+    # 解压证书
+    cd "${config_dir}"
+    7za x -y apiexample-hmos-sign.zip
+    cd - > /dev/null
+    
+    # 使用解压后的证书文件
+    local cert_file=$(find "${config_dir}/sign" -name "*.cer")
+    local p7b_file=$(find "${config_dir}/sign" -name "*.p7b")
+    local p12_file=$(find "${config_dir}/sign" -name "*.p12")
     
     # 检查证书文件是否存在
     if [ ! -f "$cert_file" ] || [ ! -f "$p7b_file" ] || [ ! -f "$p12_file" ]; then
@@ -72,7 +85,7 @@ loadSignAndSigned() {
     
     # 签名打包
     echo "开始签名打包..."
-    java -jar ${COMMANDLINE_TOOL_DIR}/hap-sign-tool.jar sign-app \
+    java -jar ${COMMANDLINE_TOOL_DIR}/sdk/default/openharmony/toolchains/lib/hap-sign-tool.jar sign-app \
         -keyAlias "${HMOS_KEY_PWD}" \
         -signAlg "SHA256withECDSA" \
         -mode "localSign" \
@@ -86,19 +99,17 @@ loadSignAndSigned() {
         -signCode "1"
     
     if [ $? -ne 0 ]; then
-        echo "签名打包失败"
+        echo "[ERROR] HAP 签名失败"
         exit 1
     fi
-    echo "签名打包成功"
     
-    # 检查签名后的文件并清理
-    if [ -f "$signed_hap" ]; then
-        echo "签名后的HAP文件已生成：$signed_hap"
-        rm -f "$unsigned_hap"
-    else
-        echo "错误：签名后的HAP文件未生成"
+    # 检查签名后的文件
+    if [ ! -f "$signed_hap" ]; then
+        echo "[ERROR] 签名后的 HAP 文件未生成"
         exit 1
     fi
+    
+    echo "[INFO] HAP 签名成功: $signed_hap"
 }
 
 function main() {
@@ -106,7 +117,7 @@ function main() {
     init_hdc
     init_ohpm
     buildHAP
-    # loadSignAndSigned
+    signedHAP
 
     local endTime=$(date '+%s')
     local elapsedTime=$(expr $endTime - $startTime)

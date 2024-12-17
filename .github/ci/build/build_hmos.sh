@@ -100,8 +100,8 @@ if [ "$compile_project" = true ]; then
 
     # 复制构建产物
     echo "复制构建产物..."
-    # 复制 HAP 文件
-    cp -f "${hmos_source_root}/entry/build/default/outputs/default/"*.hap "${WORKSPACE}/" || true
+    # 复制签名后的 HAP 文件
+    cp -f "${hmos_source_root}/APIExample_"*".hap" "${WORKSPACE}/" || true
     # 复制 ZIP 文件
     cp -f "${base_dir}/"*.zip "${WORKSPACE}/" || true
 fi
