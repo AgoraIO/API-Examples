@@ -18,9 +18,9 @@ import router from '@ohos.router'
 // Page title bar
 @Component
 export struct TitleBar {
-  private title: Resource = $r('app.media.ic_back');
-  private showBack: boolean = false;
-  private showSetting: boolean = false;
+  title: Resource = $r('app.media.ic_back');
+  showBack: boolean = false;
+  showSetting: boolean = false;
 
   build() {
     Column() {

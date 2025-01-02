@@ -5,15 +5,14 @@
  */
 @Component
 export struct CommonItemSelect {
-  private selects: ResourceStr[] = [];
-  private callback: (index: number, value?: string) => void = () => {
-  };
-  private selectOption: SelectOption[] = [];
-  private name: ResourceStr = '';
-  private testId: string = 'test_itemSelect';
-  private selectIndex: number = 0;
-  private fontSize: Font = { size: 15, weight: FontWeight.Medium };
-  private isItemStyle: boolean = true;
+  selects: ResourceStr[] = [];
+  callback: (index: number, value?: string) => void = () => {};
+  selectOption: SelectOption[] = [];
+  name: ResourceStr = '';
+  testId: string = 'test_itemSelect';
+  selectIndex: number = 0;
+  fontSize: Font = { size: 15, weight: FontWeight.Medium };
+  isItemStyle: boolean = true;
 
   aboutToAppear() {
     this.selects.forEach((selects, index) => {
