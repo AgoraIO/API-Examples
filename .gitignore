@@ -2,3 +2,4 @@ xcuserdata
 .DS_Store
 AgoraRtcKit.framework
 */libs
+/sdk
