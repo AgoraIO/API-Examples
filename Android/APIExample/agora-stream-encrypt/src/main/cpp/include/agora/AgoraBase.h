@@ -428,6 +428,10 @@ enum WARN_CODE_TYPE {
    */
   WARN_ADM_IMPROPER_SETTINGS = 1053,
   /**
+   * 1055: Audio Device Module: The audio device is in a pop state.
+   */
+  WARN_ADM_POP_STATE = 1055,
+  /**
    * 1322: No recording device.
    */
   WARN_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
@@ -2701,9 +2705,17 @@ enum AUDIO_SCENARIO_TYPE {
    */
   AUDIO_SCENARIO_MEETING = 8,
   /**
-   * 9: The number of enumerations.
+   * 9: AI Server.
    */
-  AUDIO_SCENARIO_NUM = 9,
+  AUDIO_SCENARIO_AI_SERVER = 9,
+  /**
+   * 10: AI Client.
+   */
+  AUDIO_SCENARIO_AI_CLIENT = 10,
+  /**
+   * 11: The number of enumerations.
+   */
+  AUDIO_SCENARIO_NUM = 11,
 };
 
 /**
