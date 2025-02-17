@@ -13,7 +13,7 @@ struct SDKRenderMockContainerView: View {
     
     var body: some View {
         HStack {
-            localView.frame(maxWidth: 200)
+            localView
             ForEach(viewModel.remoteRenderViews) { view in
                 view
             }
@@ -77,7 +77,6 @@ struct SDKRenderExample: View {
             sdkRenderViewModel.cleanRtc()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .adaptiveBackground(Color.orange)
     }
 }
 
