@@ -100,7 +100,14 @@ extension PIPViewModel: AVPictureInPictureControllerDelegate {
         guard let vc = pictureInPictureController.contentSource?.activeVideoCallContentViewController, let pipSourceView = backgroundView.pipSourceView else { return }
         
         vc.view.addSubview(pipSourceView)
-        pipSourceView.frame = vc.view.bounds
+        pipSourceView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pipSourceView.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor),
+            pipSourceView.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor),
+            pipSourceView.topAnchor.constraint(equalTo: vc.view.topAnchor),
+            pipSourceView.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
+        ])
+        vc.view.layoutIfNeeded()
     }
     
     func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
@@ -108,6 +115,9 @@ extension PIPViewModel: AVPictureInPictureControllerDelegate {
         
         pipSourceView.removeFromSuperview()
         backgroundView.addSubview(pipSourceView)
+        pipSourceView.frame = backgroundView.bounds
+        pipSourceView.setNeedsLayout()
+        pipSourceView.layoutIfNeeded()
     }
 }
 
