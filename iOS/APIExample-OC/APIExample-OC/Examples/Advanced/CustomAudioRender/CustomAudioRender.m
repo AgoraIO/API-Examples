@@ -94,7 +94,8 @@ const NSUInteger channels = 2;
     NSString *channelName = [self.configs objectForKey:@"channelName"];
     // enable video module and set up video encoding configs
     [self.agoraKit enableAudio];
-    
+    [self.agoraKit setAudioScenario:AgoraAudioScenarioGameStreaming];
+
     // set up local video to render your local camera preview
     AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
     videoCanvas.uid = 0;
@@ -113,7 +114,7 @@ const NSUInteger channels = 2;
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
     AgoraRtcChannelMediaOptions *options = [[AgoraRtcChannelMediaOptions alloc] init];
-    options.publishMicrophoneTrack = NO;
+    options.publishMicrophoneTrack = YES;
     options.publishCameraTrack = NO;
     options.autoSubscribeAudio = YES;
     options.autoSubscribeVideo = NO;
