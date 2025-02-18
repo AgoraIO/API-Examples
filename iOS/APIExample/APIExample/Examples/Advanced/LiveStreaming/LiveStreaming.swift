@@ -197,7 +197,6 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var codingSegment: UISegmentedControl!
     @IBOutlet weak var videoImageContainer: UIView!
     @IBOutlet weak var centerStageContainerView: UIView!
-    @IBOutlet weak var CameraFocalButton: UIButton!
     @IBOutlet weak var cameraStabilizationButton: UIButton?
     @IBOutlet weak var localRenderTextField: UITextField?
     @IBOutlet weak var remoteRenderTextField: UITextField?
@@ -216,7 +215,6 @@ class LiveStreamingMain: BaseViewController {
             codingSegment.isHidden = role == .audience
             videoImageContainer.isHidden = role == .audience
             centerStageContainerView.isHidden = role == .audience
-            CameraFocalButton.isHidden = role == .audience
             localRenderTextField?.isHidden = role == .audience
             cameraStabilizationButton?.isHidden = role == .audience
             takeLocalSnapshot.isHidden = role == .audience
@@ -260,10 +258,6 @@ class LiveStreamingMain: BaseViewController {
         if let engine = configs["engine"] as? AgoraRtcEngineKit {
             agoraKit = engine
             agoraKit.delegate = self
-        }
-        
-        if let key = configs["cameraKey"] as? String, key.isEmpty == false {
-            CameraFocalButton.setTitle(key, for: .normal)
         }
         
         if let isFirstFrame = configs["isFirstFrame"] as? Bool, isFirstFrame == true {
@@ -366,27 +360,6 @@ class LiveStreamingMain: BaseViewController {
     
     @IBAction func onTapGesture(_ ges: UIGestureRecognizer) {
         self.view.endEditing(true)
-    }
-    
-    @IBAction func onTapCameraFocalButton(_ sender: UIButton) {
-        let infos = agoraKit.queryCameraFocalLengthCapability()
-        let pickerView = PickerView()
-        let params = infos?.flatMap({ $0.value })
-        pickerView.dataArray = params?.map({ $0.key })
-        AlertManager.show(view: pickerView, alertPostion: .bottom)
-        pickerView.pickerViewSelectedValueClosure = { [weak self] key in
-            guard let self = self else { return }
-            let type = params?.first(where: { $0.key == key })?.value ?? .default
-            let config = AgoraCameraCapturerConfiguration()
-            config.cameraFocalLengthType = type
-            config.cameraDirection = key.contains("Front camera".localized) ? .front : .rear
-            if config.cameraDirection != self.cameraDirection {
-                self.agoraKit.switchCamera()
-            }
-            sender.setTitle(key, for: .normal)
-            self.agoraKit.setCameraCapturerConfiguration(config)
-            self.cameraDirection = config.cameraDirection
-        }
     }
     
     @IBAction func onTapCenterStage(_ sender: UISwitch) {
