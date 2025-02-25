@@ -354,7 +354,8 @@ private class OriginAudioDataRewriter(
         buffer: ByteBuffer?,
         renderTimeMs: Long,
         avsync_type: Int,
-        rtpTimestamp: Int
+        rtpTimestamp: Int,
+        presentationMs: Long
     ) = false
 
     override fun getObservedAudioFramePosition() =
