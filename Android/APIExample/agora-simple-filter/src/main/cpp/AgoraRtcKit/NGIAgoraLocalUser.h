@@ -1577,7 +1577,7 @@ class ILocalUserObserver {
   /**
    * datastream from this connection.
    */
-  virtual void onStreamMessage(user_id_t userId, int streamId, const char* data, size_t length) {}
+  virtual void onStreamMessage(user_id_t userId, int streamId, const char* data, size_t length, uint64_t sendTs = 0) {}
 
   /**
    * Occurs when the remote user state is updated.
