@@ -115,7 +115,7 @@ static CGFloat CANVAS_HEIGHT = 480;
     
     AgoraVideoEncoderConfiguration *encoderConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(960, 540)
                                                                                                frameRate:(AgoraVideoFrameRateFps15)
-                                                                                                 bitrate:15
+                                                                                                 bitrate:AgoraVideoBitrateStandard
                                                                                          orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
                                                                                               mirrorMode:(AgoraVideoMirrorModeAuto)];
     [self.agoraKit setVideoEncoderConfiguration:encoderConfig];
