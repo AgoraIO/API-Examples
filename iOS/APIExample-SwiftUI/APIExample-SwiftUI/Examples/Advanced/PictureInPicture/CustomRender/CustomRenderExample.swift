@@ -49,7 +49,7 @@ struct CustomRenderExample: View {
         VStack(spacing: 30) {
             PIPDisplayView(viewModel: pipViewModel)
                 .frame(maxWidth: .infinity, maxHeight: 200)
-        
+            
             Button {
                 pipViewModel.togglePiP()
             } label: {
@@ -78,7 +78,6 @@ struct CustomRenderExample: View {
             customRenderViewModel.cleanRtc()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .adaptiveBackground(Color.orange)
     }
 }
 
