@@ -116,7 +116,7 @@
     NSString *channelName = [self.configs objectForKey:@"channelName"];
     NSString *secret = [self.configs objectForKey:@"secret"];
     AgoraEncryptionMode mode = ((NSNumber *)[self.configs objectForKey:@"mode"]).integerValue;
-    BOOL useCustom = ((NSNumber *)[self.configs objectForKey:@"useCustom"]).boolValue;
+    BOOL useCustom = ((NSNumber *)[self.configs objectForKey:@"userCustom"]).boolValue;
     // make myself a broadcaster
     [self.agoraKit setClientRole:(AgoraClientRoleBroadcaster)];
     // enable video module and set up video encoding configs

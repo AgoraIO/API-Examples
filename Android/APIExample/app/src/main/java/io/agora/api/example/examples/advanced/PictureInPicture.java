@@ -210,6 +210,10 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 fl_remote3.removeAllViews();
             }
         } else if (v.getId() == switch_float_window.getId()) {
+            if (Build.VERSION.SDK_INT >= 26 && requireActivity().isInPictureInPictureMode()) {
+                showLongToast("Please exit Picture-in-Picture mode first");
+                return;
+            }
             showFloatWindow();
         } else if (v.getId() == R.id.btn_pip) {
             if (checkPipSupported()) {
@@ -500,7 +504,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     private void showFloatWindow() {
         FragmentActivity context = requireActivity();
         if (FloatWindowHelper.checkPermission(context)) {
-            if (isFloatWindowShowing()) {
+            if (isFloatWindowShowing() || (Build.VERSION.SDK_INT >= 26 && requireActivity().isInPictureInPictureMode())) {
                 return;
             }
             floatWindowView = FloatWindowHelper.createFloatView(context, 50, 50);
@@ -563,6 +567,11 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         if (android.os.Build.VERSION.SDK_INT < 26) {
             return;
         }
+        
+        if(isFloatWindowShowing()) {
+            dismissFloatWindow();
+        }
+        
         requireActivity().enterPictureInPictureMode(pictureInPictureParamsBuilder
                 .setAspectRatio(new Rational(video_layout_container.getWidth(), video_layout_container.getHeight()))
                 .build());
