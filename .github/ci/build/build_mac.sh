@@ -65,7 +65,7 @@ if [ -z "$sdk_url" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
-   mkdir ./$unzip_name/samples
+   mkdir -p ./$unzip_name/samples
    cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
    ls -al ./$unzip_name/samples/API-Example/
 else 
