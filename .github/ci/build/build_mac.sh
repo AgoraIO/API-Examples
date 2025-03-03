@@ -51,6 +51,11 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
+export https_proxy=10.10.114.55:1080
+export http_proxy=10.10.114.55:1080
+export all_proxy=10.10.114.55:1080
+export LANG=en_US.UTF-8
+
 unzip_name=Agora_Native_SDK_for_iOS_FULL
 zip_name=output.zip
 sdk_url_flag=false
@@ -60,7 +65,7 @@ if [ -z "$sdk_url" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
-   mkdir ./$unzip_name/samples
+   mkdir -p ./$unzip_name/samples
    cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
    ls -al ./$unzip_name/samples/API-Example/
 else 

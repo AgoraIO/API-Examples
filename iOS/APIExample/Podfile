@@ -4,7 +4,7 @@
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 def common_pods
-  pod 'AgoraRtcEngine_iOS', '4.5.0'
+  pod 'AgoraRtcEngine_iOS', '4.5.1'
   #pod 'sdk', :path => 'sdk.podspec'
 end
   
@@ -22,9 +22,9 @@ target 'APIExample' do
   pod 'SwiftLint', '~> 0.53.0'
   pod 'SnapKit', '~> 5.7.0'
 
-#  pod 'SenseLib', :path => 'sense.podspec'
-#  pod 'bytedEffect', :path => 'bytedEffect.podspec'
-#  pod 'fuLib', :path => 'fu.podspec'
+  #pod 'SenseLib', :path => 'sense.podspec'
+  #pod 'bytedEffect', :path => 'bytedEffect.podspec'
+  #pod 'fuLib', :path => 'fu.podspec'
 end
 
 target 'Agora-ScreenShare-Extension' do
@@ -39,5 +39,5 @@ target 'SimpleFilter' do
 end
 
 pre_install do |installer|
-#  system("sh .download_script.sh 4.5.0 true")
+#  system("sh .download_script.sh 4.5.1 true")
 end
