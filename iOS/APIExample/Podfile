@@ -4,7 +4,7 @@
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 def common_pods
-  pod 'AgoraRtcEngine_iOS', '4.5.0'
+  pod 'AgoraRtcEngine_iOS', '4.5.1'
   #pod 'sdk', :path => 'sdk.podspec'
 end
   
@@ -39,5 +39,5 @@ target 'SimpleFilter' do
 end
 
 pre_install do |installer|
-#  system("sh .download_script.sh 4.5.0 true")
+#  system("sh .download_script.sh 4.5.1 true")
 end
