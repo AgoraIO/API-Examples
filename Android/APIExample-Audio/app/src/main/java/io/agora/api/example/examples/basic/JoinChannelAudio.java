@@ -716,11 +716,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             PendingIntent activityPendingIntent;
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
-            if (Build.VERSION.SDK_INT >= 23) {
-                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-            } else {
-                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-            }
+            activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
             Notification.Builder builder = new Notification.Builder(this)
                     .addAction(icon, "Back to app", activityPendingIntent)
