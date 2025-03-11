@@ -66,6 +66,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  *
  * @deprecated The impletation of custom has been moved to {@link PushExternalVideoYUV}.             You can refer to {@link PushExternalVideoYUV} example.
  */
+@Deprecated
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = PushExternalVideo.class.getSimpleName();

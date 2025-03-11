@@ -886,7 +886,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 icon = R.mipmap.ic_launcher;
             }
 
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
                 NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.createNotificationChannel(mChannel);
@@ -895,11 +895,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             PendingIntent activityPendingIntent;
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
-            if (Build.VERSION.SDK_INT >= 23) {
-                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-            } else {
-                activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-            }
+            activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
             Notification.Builder builder = new Notification.Builder(this)
                     .addAction(icon, "Back to app", activityPendingIntent)
@@ -909,7 +905,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     .setSmallIcon(icon)
                     .setTicker(name)
                     .setWhen(System.currentTimeMillis());
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setChannelId(CHANNEL_ID);
             }
 

@@ -67,7 +67,7 @@ public class MediaProjectionService extends Service {
             icon = R.mipmap.ic_launcher;
         }
 
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.createNotificationChannel(mChannel);
@@ -81,7 +81,7 @@ public class MediaProjectionService extends Service {
                 .setSmallIcon(icon)
                 .setTicker(name)
                 .setWhen(System.currentTimeMillis());
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId(CHANNEL_ID);
         }
 
