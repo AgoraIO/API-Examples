@@ -15,8 +15,6 @@ public class PermissonUtils {
 
     public static String[] getCommonPermission() {
         List<String> permissionList = new ArrayList<>();
-        permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Manifest.permission.RECORD_AUDIO);
         permissionList.add(Manifest.permission.CAMERA);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

@@ -169,33 +169,29 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (compoundButton.getId() == R.id.screenShare) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                if(b){
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-                    ScreenCaptureParameters parameters = new ScreenCaptureParameters();
-                    parameters.videoCaptureParameters.width = 720;
-                    parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
-                    parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
-                    parameters.captureAudio = true;
-                    // start screen capture and update options
-                    engine.startScreenCapture(parameters);
-                    options.publishScreenCaptureVideo = true;
-                    options.publishCameraTrack = false;
-                    options.publishScreenCaptureAudio = true;
-                    engine.updateChannelMediaOptions(options);
-                    addScreenSharePreview();
-                } else {
-                    // stop screen capture and update options
-                    engine.stopScreenCapture();
-                    options.publishScreenCaptureVideo = false;
-                    engine.updateChannelMediaOptions(options);
-                }
-                screenSharePreview.setEnabled(b);
-                screenSharePreview.setChecked(b);
+            if (b) {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+                ScreenCaptureParameters parameters = new ScreenCaptureParameters();
+                parameters.videoCaptureParameters.width = 720;
+                parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
+                parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
+                parameters.captureAudio = true;
+                // start screen capture and update options
+                engine.startScreenCapture(parameters);
+                options.publishScreenCaptureVideo = true;
+                options.publishCameraTrack = false;
+                options.publishScreenCaptureAudio = true;
+                engine.updateChannelMediaOptions(options);
+                addScreenSharePreview();
             } else {
-                showAlert(getString(R.string.lowversiontip));
+                // stop screen capture and update options
+                engine.stopScreenCapture();
+                options.publishScreenCaptureVideo = false;
+                engine.updateChannelMediaOptions(options);
             }
+            screenSharePreview.setEnabled(b);
+            screenSharePreview.setChecked(b);
         } else if (compoundButton.getId() == R.id.camera) {
             if (b) {
                 ChannelMediaOptions mediaOptions = new ChannelMediaOptions();

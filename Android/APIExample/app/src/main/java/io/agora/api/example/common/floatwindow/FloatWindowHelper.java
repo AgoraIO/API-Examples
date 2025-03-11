@@ -95,19 +95,6 @@ public final class FloatWindowHelper {
      */
     public static boolean checkPermission(Context context) {
         //6.0 版本之后由于 google 增加了对悬浮窗权限的管理，所以方式就统一了
-        if (Build.VERSION.SDK_INT < 23) {
-            if (RomUtils.checkIsMiuiRom()) {
-                return miuiPermissionCheck(context);
-            } else if (RomUtils.checkIsMeizuRom()) {
-                return meizuPermissionCheck(context);
-            } else if (RomUtils.checkIsHuaweiRom()) {
-                return huaweiPermissionCheck(context);
-            } else if (RomUtils.checkIs360Rom()) {
-                return qikuPermissionCheck(context);
-            } else if (RomUtils.checkIsOppoRom()) {
-                return oppoROMPermissionCheck(context);
-            }
-        }
         return commonROMPermissionCheck(context);
     }
 
@@ -117,21 +104,7 @@ public final class FloatWindowHelper {
      * @param context the context
      */
     public static void applyPermission(Context context) {
-        if (Build.VERSION.SDK_INT < 23) {
-            if (RomUtils.checkIsMiuiRom()) {
-                miuiROMPermissionApply(context);
-            } else if (RomUtils.checkIsMeizuRom()) {
-                meizuROMPermissionApply(context);
-            } else if (RomUtils.checkIsHuaweiRom()) {
-                huaweiROMPermissionApply(context);
-            } else if (RomUtils.checkIs360Rom()) {
-                rom360Permissionapply(context);
-            } else if (RomUtils.checkIsOppoRom()) {
-                oppoROMPermissionApply(context);
-            }
-        } else {
-            commonROMPermissionApply(context);
-        }
+        commonROMPermissionApply(context);
     }
 
     /**
@@ -173,14 +146,12 @@ public final class FloatWindowHelper {
             return meizuPermissionCheck(context);
         } else {
             Boolean result = true;
-            if (Build.VERSION.SDK_INT >= 23) {
-                try {
-                    Class clazz = Settings.class;
-                    Method canDrawOverlays = clazz.getDeclaredMethod("canDrawOverlays", Context.class);
-                    result = (Boolean) canDrawOverlays.invoke(null, context);
-                } catch (Exception e) {
-                    Log.e(TAG, Log.getStackTraceString(e));
-                }
+            try {
+                Class clazz = Settings.class;
+                Method canDrawOverlays = clazz.getDeclaredMethod("canDrawOverlays", Context.class);
+                result = (Boolean) canDrawOverlays.invoke(null, context);
+            } catch (Exception e) {
+                Log.e(TAG, Log.getStackTraceString(e));
             }
             return result;
         }
@@ -222,15 +193,13 @@ public final class FloatWindowHelper {
         if (RomUtils.checkIsMeizuRom()) {
             meizuROMPermissionApply(context);
         } else {
-            if (Build.VERSION.SDK_INT >= 23) {
-                showConfirmDialog(context, () -> {
-                    try {
-                        commonROMPermissionApplyInternal(context);
-                    } catch (Exception e) {
-                        Log.e(TAG, Log.getStackTraceString(e));
-                    }
-                });
-            }
+            showConfirmDialog(context, () -> {
+                try {
+                    commonROMPermissionApplyInternal(context);
+                } catch (Exception e) {
+                    Log.e(TAG, Log.getStackTraceString(e));
+                }
+            });
         }
     }
 
