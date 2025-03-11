@@ -611,7 +611,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
     }
 
     private fun processBeautyTexture(videoFrame: VideoFrame): Int{
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Android 8.0以上使用单纹理输入，内部使用HardwareBuffer转nv21
             return processBeautyTextureAPI26(videoFrame)
         }
