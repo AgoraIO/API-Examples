@@ -40,3 +40,10 @@
 
 # exo
 -keep class com.google.android.exoplayer2.**{*;}
+
+# OkHttp
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.codehaus.mojo.animal_sniffer.**
