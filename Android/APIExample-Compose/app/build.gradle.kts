@@ -53,6 +53,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     buildTypes {
         debug {
@@ -69,14 +70,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
+        jvmTarget = "17"
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
@@ -136,8 +134,5 @@ dependencies {
     } else {
         implementation("io.agora.rtc:full-sdk:${agoraSdkVersion}")
         implementation("io.agora.rtc:full-screen-sharing:${agoraSdkVersion}")
-//        implementation(libs.agora.full.sdk)
-//        implementation(libs.agora.full.screen.sharing)
     }
-
 }
