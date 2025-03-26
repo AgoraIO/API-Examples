@@ -33,6 +33,23 @@ class String {
     }
   }
 
+  String(const RteString *other) {
+    c_rte_string = RteStringCreate(nullptr);
+    RteStringInit(c_rte_string, nullptr);
+    RteStringCopy(c_rte_string, other, nullptr);
+  }
+
+  String(const String &other) {
+    c_rte_string = RteStringCreate(nullptr);
+    RteStringInit(c_rte_string, nullptr);
+    RteStringCopy(c_rte_string, other.c_rte_string, nullptr);
+  }
+
+  String(String &&other) {
+    c_rte_string = other.c_rte_string;
+    other.c_rte_string = nullptr;
+  }
+
   ~String() {
     RteStringDeinit(c_rte_string, nullptr);
     RteStringDestroy(c_rte_string, nullptr);
@@ -49,9 +66,10 @@ class String {
     RteStringCopy(c_rte_string, other.c_rte_string, nullptr);
   }
 
-  const char* Cstr() const {
+  const char* CStr() const {
     return RteStringCStr(c_rte_string, nullptr);
   }
+
 
   friend class Config;
   friend class PlayerConfig;

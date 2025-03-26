@@ -237,6 +237,10 @@ enum MEDIA_PLAYER_EVENT {
   /** Triggered when retrying to open media fails
    */
   PLAYER_EVENT_TRY_OPEN_FAILED = 18,
+  /** Triggered when an http redirect occurs
+   * @technical preview 
+   */
+  PLAYER_EVENT_HTTP_REDIRECT = 19,
 };
 
 /**
