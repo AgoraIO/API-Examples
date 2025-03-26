@@ -210,7 +210,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 fl_remote3.removeAllViews();
             }
         } else if (v.getId() == switch_float_window.getId()) {
-            if (Build.VERSION.SDK_INT >= 26 && requireActivity().isInPictureInPictureMode()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requireActivity().isInPictureInPictureMode()) {
                 showLongToast("Please exit Picture-in-Picture mode first");
                 return;
             }
@@ -504,7 +504,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     private void showFloatWindow() {
         FragmentActivity context = requireActivity();
         if (FloatWindowHelper.checkPermission(context)) {
-            if (isFloatWindowShowing() || (Build.VERSION.SDK_INT >= 26 && requireActivity().isInPictureInPictureMode())) {
+            if (isFloatWindowShowing() || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && requireActivity().isInPictureInPictureMode())) {
                 return;
             }
             floatWindowView = FloatWindowHelper.createFloatView(context, 50, 50);
@@ -546,14 +546,14 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
 
 
     private boolean checkPipSupported() {
-        if (Build.VERSION.SDK_INT < 26) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false;
         }
         return requireActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
     }
 
     private boolean checkPipEnabled() {
-        if (android.os.Build.VERSION.SDK_INT < 26) {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false;
         }
         AppOpsManager appOpsManager = requireActivity().getSystemService(AppOpsManager.class);
@@ -564,7 +564,7 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
     }
 
     private void enterPip() {
-        if (android.os.Build.VERSION.SDK_INT < 26) {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
         }
         

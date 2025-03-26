@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.android'
 apply from: "${rootDir.absolutePath}/git-hooks.gradle"
 apply from: 'vendors.gradle'
 
@@ -15,19 +15,16 @@ def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
 
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    namespace "io.agora.api.example"
+    compileSdk 35
 
     defaultConfig {
         applicationId "io.agora.api.example"
-        minSdkVersion 21
-        targetSdkVersion 32
+        minSdkVersion 24
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [
-               AppId: "${applicationId}"
-        ]
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
     }
 
@@ -57,8 +54,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     sourceSets {
@@ -72,14 +72,11 @@ android {
 
     buildFeatures{
         viewBinding true
+        buildConfig true
     }
 
     packagingOptions {
         pickFirst 'lib/*/libc++_shared.so'
-    }
-
-    buildFeatures{
-        viewBinding true
     }
 
     applicationVariants.all {
@@ -121,24 +118,24 @@ dependencies {
     }
 
 
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Java language implementation
-    implementation "androidx.navigation:navigation-fragment:2.5.0"
-    implementation "androidx.navigation:navigation-ui:2.5.0"
+    implementation "androidx.navigation:navigation-fragment:2.7.0"
+    implementation "androidx.navigation:navigation-ui:2.7.0"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
     if (simpleFilter.toBoolean()) {
         implementation project(path: ':agora-simple-filter')
     }
     if (streamEncrypt.toBoolean()) {
         implementation project(path: ':agora-stream-encrypt')
     }
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
     implementation 'de.javagl:obj:0.2.1'
@@ -155,5 +152,5 @@ dependencies {
     implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
 
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.5'
 }

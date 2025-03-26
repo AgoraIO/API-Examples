@@ -129,7 +129,7 @@ class BeautyProcessor : IBeautyProcessor {
                 }
             }
             processSingleBytesInput(input)
-        } else if (input.textureId != null && Build.VERSION.SDK_INT >= 26) {
+        } else if (input.textureId != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if(processMode != ProcessMode.SINGLE_TEXTURE_INPUT){
                 processMode = ProcessMode.SINGLE_TEXTURE_INPUT
                 if (mInputWidth > 0 || mInputHeight > 0) {
