@@ -336,7 +336,7 @@ class ICameraCapturer : public RefCountInterface {
    */
   virtual int setCameraExposureFactor(float value, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
-#if (defined(__APPLE__) && TARGET_OS_IOS)
+#if (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /**
    * Enables or disables the AVCaptureMultiCamSession.
    *

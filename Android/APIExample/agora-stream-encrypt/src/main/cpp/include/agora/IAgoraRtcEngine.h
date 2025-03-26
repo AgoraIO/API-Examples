@@ -812,7 +812,7 @@ enum CLOUD_PROXY_TYPE {
 /** Camera capturer configuration.*/
 struct CameraCapturerConfiguration {
   /** Camera direction settings (for Android/iOS only). See: #CAMERA_DIRECTION. */
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /**
    * The camera direction.
    */
@@ -2122,7 +2122,7 @@ class IRtcEngineEventHandler {
     (void)width;
     (void)height;
   }
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /**
    * Reports the face detection result of the local user.
    *
@@ -4008,7 +4008,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   */
   virtual int stopEchoTest() = 0;
 
-#if defined(__APPLE__) && TARGET_OS_IOS
+#if defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION))
   /** Enables the SDK use AVCaptureMultiCamSession or AVCaptureSession. Applies to iOS 13.0+ only.
    * @param enabled Whether to enable multi-camera when capturing video:
    * - true: Enable multi-camera, and the SDK uses AVCaptureMultiCamSession.
@@ -6706,7 +6706,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int destroyCustomEncodedVideoTrack(video_track_id_t video_track_id) = 0;
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+
+#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+
   /**
    * Switches between front and rear cameras.
    *
@@ -6982,7 +6984,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int setRouteInCommunicationMode(int route) = 0;
 
-#endif  // __ANDROID__ || (__APPLE__ && TARGET_OS_IOS)
+#endif  // __ANDROID__ || (__APPLE__ && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
 
 #if defined(__APPLE__)
   /**
@@ -7018,7 +7020,7 @@ class IRtcEngine : public agora::base::IEngineBase {
     */
   virtual IScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbSize, const SIZE& iconSize, const bool includeScreen) = 0;
 #endif // _WIN32 || (__APPLE__ && !TARGET_OS_IPHONE && TARGET_OS_MAC)
-#if (defined(__APPLE__) && TARGET_OS_IOS)
+#if (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /** Sets the operational permission of the SDK on the audio session.
    *
    * The SDK and the app can both configure the audio session by default. If
@@ -7044,7 +7046,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioSessionOperationRestriction(AUDIO_SESSION_OPERATION_RESTRICTION restriction) = 0;
-#endif // __APPLE__ && TARGET_OS_IOS
+#endif // __APPLE__ && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION))
 
 #if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 
@@ -7185,7 +7187,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int updateScreenCaptureParameters(const ScreenCaptureParameters& captureParams) = 0;
 #endif // _WIN32 || (__APPLE__ && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /**
    * Starts screen sharing.
    *
