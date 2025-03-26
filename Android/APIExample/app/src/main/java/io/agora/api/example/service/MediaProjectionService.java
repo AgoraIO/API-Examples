@@ -3,6 +3,7 @@ package io.agora.api.example.service;// MediaProjectionService.java
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +14,11 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.graphics.drawable.Icon;
 
 import androidx.annotation.Nullable;
 
+import io.agora.api.example.MainActivity;
 import io.agora.api.example.R;
 
 public class MediaProjectionService extends Service {
@@ -26,11 +29,6 @@ public class MediaProjectionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
         Notification notification = getDefaultNotification();
 
         try {
@@ -42,7 +40,6 @@ public class MediaProjectionService extends Service {
         } catch (Exception ex) {
             Log.e(TAG, "", ex);
         }
-        return START_STICKY;
     }
 
     @Nullable
@@ -67,23 +64,38 @@ public class MediaProjectionService extends Service {
             icon = R.mipmap.ic_launcher;
         }
 
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction("io.agora.api.example.ACTION_NOTIFICATION_CLICK");
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        int requestCode = (int) System.currentTimeMillis();
+
+        PendingIntent activityPendingIntent = PendingIntent.getActivity(
+                this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Notification.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.createNotificationChannel(mChannel);
+            builder = new Notification.Builder(this, CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(this);
         }
 
-
-        Notification.Builder builder = new Notification.Builder(this)
-                .setContentText("Screen Sharing ...")
+        builder.setContentTitle("Agora Screen Sharing ...")
+                .setContentText("Tap here to return to the app.")
+                .setContentIntent(activityPendingIntent)
+                .setAutoCancel(true)
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSmallIcon(icon)
-                .setTicker(name)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setWhen(System.currentTimeMillis());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID);
-        }
+
+        Icon iconObj = Icon.createWithResource(this, icon);
+        Notification.Action action = new Notification.Action.Builder(iconObj, "Return to the app", activityPendingIntent).build();
+        builder.addAction(action);
 
         return builder.build();
     }

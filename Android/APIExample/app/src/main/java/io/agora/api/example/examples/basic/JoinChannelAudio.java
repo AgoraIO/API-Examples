@@ -15,6 +15,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -370,11 +372,14 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
 
     private void startRecordingService() {
         if (joined) {
-            Intent intent = new Intent(requireContext(), LocalRecordingService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                requireContext().startForegroundService(intent);
-            } else {
-                requireContext().startService(intent);
+            Context context = getContext();
+            if (context != null) {
+                Intent intent = new Intent(context, LocalRecordingService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent);
+                } else {
+                    context.startService(intent);
+                }
             }
         }
     }
@@ -395,8 +400,11 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     }
 
     private void stopRecordingService() {
-        Intent intent = new Intent(requireContext(), LocalRecordingService.class);
-        requireContext().stopService(intent);
+        Context context = getContext();
+        if (context != null) {
+            Intent intent = new Intent(context, LocalRecordingService.class);
+            requireContext().stopService(intent);
+        }
     }
 
     @Override
@@ -845,7 +853,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
      */
     public static class LocalRecordingService extends Service {
         private static final int NOTIFICATION_ID = 1234567800;
-        private static final String CHANNEL_ID = "audio_channel_id";
+        private static final String CHANNEL_ID = "api_full_audio_channel_id";
 
 
         @Override
@@ -886,31 +894,40 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 icon = R.mipmap.ic_launcher;
             }
 
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setAction("io.agora.api.example.ACTION_NOTIFICATION_CLICK");
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            int requestCode = (int) System.currentTimeMillis();
+
+            PendingIntent activityPendingIntent = PendingIntent.getActivity(
+                    this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            Notification.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
                 NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.createNotificationChannel(mChannel);
+                builder = new Notification.Builder(this, CHANNEL_ID);
+            } else {
+                builder = new Notification.Builder(this);
             }
 
-            PendingIntent activityPendingIntent;
-            Intent intent = new Intent();
-            intent.setClass(this, MainActivity.class);
-            activityPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-
-            Notification.Builder builder = new Notification.Builder(this)
-                    .addAction(icon, "Back to app", activityPendingIntent)
-                    .setContentText("Agora Recording ...")
+            builder.setContentTitle("Agora Recording ...")
+                    .setContentText("Tap here to return to the app.")
+                    .setContentIntent(activityPendingIntent)
+                    .setAutoCancel(true)
                     .setOngoing(true)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setSmallIcon(icon)
-                    .setTicker(name)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setWhen(System.currentTimeMillis());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setChannelId(CHANNEL_ID);
-            }
+
+            Icon iconObj = Icon.createWithResource(this, icon);
+            Notification.Action action = new Notification.Action.Builder(iconObj, "Return to the app", activityPendingIntent).build();
+            builder.addAction(action);
 
             return builder.build();
         }
-
     }
 }
