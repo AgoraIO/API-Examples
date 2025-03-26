@@ -19,8 +19,15 @@ typedef struct RteViewConfig RteViewConfig;
 
 
 typedef enum RteVideoRenderMode {
-    kRteVideoRenderModeHidden,
-    kRteVideoRenderModeFit
+    /**
+     * 0: The hidden mode will fill the entire view. Parts of the image that exceed the view will be
+     * cropped.
+     */
+    kRteVideoRenderModeHidden = 0,
+    /**
+     * 1: The fit mode will render the entire image within the view.
+     */
+    kRteVideoRenderModeFit = 1
 } RteVideoRenderMode;
 
 typedef struct RteCanvasInitialConfig {
