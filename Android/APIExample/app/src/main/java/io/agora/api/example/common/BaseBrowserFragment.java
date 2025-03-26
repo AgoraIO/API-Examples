@@ -200,15 +200,13 @@ public abstract class BaseBrowserFragment extends BaseFragment {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    new AlertDialog.Builder(view.getContext())
-                            .setTitle("Error")
-                            .setMessage(String.format(Locale.US, "%s\n\ncode:%d", error.getDescription().toString(), error.getErrorCode()))
-                            .setPositiveButton(R.string.refresh, (dialog, which) -> {
-                                mWebView.reload();
-                            })
-                            .show();
-                }
+                new AlertDialog.Builder(view.getContext())
+                        .setTitle("Error")
+                        .setMessage(String.format(Locale.US, "%s\n\ncode:%d", error.getDescription().toString(), error.getErrorCode()))
+                        .setPositiveButton(R.string.refresh, (dialog, which) -> {
+                            mWebView.reload();
+                        })
+                        .show();
             }
         });
 

@@ -395,6 +395,8 @@
     <string name="audio_stream_index">AudioStream%d</string>
     <string name="face_capture_authentication">Please contact Shengwang customer service to obtain the face capture certificate and configure it to the AUTHENTICATION constant.</string>
     <string name="notifications_enable_tip">Please turn on notification permission to prevent background recording from being interrupted.</string>
+    <string name="notifications_enable_screen_tip">Please turn on notification permission to prevent background
+        screen sharing from being interrupted.</string>
     <string name="video_metadata">Video Metadata</string>
     <string name="send">Send</string>
     <string name="audio_metadata">Audio Metadata</string>
