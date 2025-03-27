@@ -240,6 +240,7 @@ class StreamEncryption: BaseViewController {
                 config.encryptionMode = selectedEncrption!
                 config.encryptionKey = encryptionSecretField.stringValue
                 config.encryptionKdfSalt = getEncryptionSaltFromServer()
+
                 let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
                 if ret != 0 {
                     // for errors please take a look at:
