@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -323,10 +324,11 @@ fun <T> DropdownMenuRaw(
     onSelected: (Int, Pair<String, T>) -> Unit = { _, _ -> }
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var text by remember {
-        mutableStateOf(
-            options.find { it.second == selectedValue }?.first ?: options.first().first
-        )
+    var text by remember { mutableStateOf(options.find { it.second == selectedValue }?.first ?: options.first().first) }
+
+    // Update text when selectedValue changes
+    LaunchedEffect(selectedValue) {
+        text = options.find { it.second == selectedValue }?.first ?: options.first().first
     }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
