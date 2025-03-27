@@ -299,6 +299,8 @@ class StreamEncryption: BaseViewController {
             )
         } else {
             isProcessing = true
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
+
             agoraKit.disableVideo()
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
                 self.isProcessing = false
