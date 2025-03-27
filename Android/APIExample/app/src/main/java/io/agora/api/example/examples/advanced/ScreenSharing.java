@@ -54,9 +54,6 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 /**
  * This example demonstrates how video can be flexibly switched between the camera stream and the
  * screen share stream during an audio-video call.
@@ -122,7 +119,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         join.setOnClickListener(this);
 
         screenPreview = view.findViewById(R.id.screen_preview);
-        //externalMediaPro = view.findViewById(R.id.media_projection_external);
+        externalMediaPro = view.findViewById(R.id.media_projection_external);
         screenAudio = view.findViewById(R.id.screen_audio);
         screenAudioVolume = view.findViewById(R.id.screen_audio_volume);
         screenScenarioType = view.findViewById(R.id.spinner_screen_scenario_type);
@@ -218,6 +215,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onDestroy() {
+        stopMediaProjectionService();
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -247,23 +245,8 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             }
             screenCaptureParameters.captureAudio = checked;
             engine.updateScreenCaptureParameters(screenCaptureParameters);
-        } /*else if (compoundButton == externalMediaPro) {
-        }*/
-    }
-
-    @Override
-    protected void onBackPressed() {
-        joined = false;
-        stopMediaProjectionService();
-        /*leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null) {
-            engine.leaveChannel();
-            engine.stopScreenCapture();
-            engine.stopPreview();
+        } else if (compoundButton == externalMediaPro) {
         }
-        handler.post(RtcEngine::destroy);
-        engine = null;
-        super.onBackPressed();
     }
 
     @Override
@@ -331,7 +314,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
     }
 
     private void startMediaProjectionService() {
-        if (joined) {
+//        if (joined) {
             Context context = getContext();
             if (context != null) {
                 Intent intent = new Intent(context, MediaProjectionService.class);
@@ -342,7 +325,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                 }
             }
         }
-    }
+//    }
 
     private void stopMediaProjectionService() {
         Context context = getContext();
@@ -353,6 +336,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
     }
 
     private void requestScreenCapture() {
+        startMediaProjectionService();
         Intent intent = mediaProjectionManager.createScreenCaptureIntent();
         mediaProjectionLauncher.launch(intent);
     }
@@ -576,6 +560,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     private void leaveChannel() {
         externalMediaPro.setEnabled(true);
+        stopMediaProjectionService();
         joined = false;
         join.setText(getString(R.string.join));
         fl_local.removeAllViews();
