@@ -216,7 +216,9 @@ class FaceCaptureMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         if (KeyCenter.FaceCaptureLicense ?? "").isEmpty {
-            showAlert(message: "Please contact Agora customer service to obtain a face capture certificate".localized)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.showAlert(message: "Please contact Agora customer service to obtain a face capture certificate".localized)
+            }
         } else {
             // enable face capture
             agoraKit.enableExtension(withVendor: "agora_video_filters_face_capture",
