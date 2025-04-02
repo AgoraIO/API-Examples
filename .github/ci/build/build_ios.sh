@@ -109,7 +109,7 @@ else if [ $generate_project = true ]; then
     cd -
 fi
 
-7za a -tzip APIExamples.zip ${ios_direction}
+7za a -tzip APIExamples.zip -r ${ios_direction} > log.txt
 echo "start move project to workspace"
 mv APIExamples.zip $WORKSPACE/${ios_direction}_${BUILD_NUMBER}.zip
 
