@@ -100,17 +100,7 @@ echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
 if [ $compile_project = true ]; then
-    cd ./$unzip_name/samples/${ios_direction}
-    ./cloud_build.sh || exit 1
-    cd -
-elif [ $generate_project = true ]; then
-    cd ./$unzip_name/samples/${ios_direction}
-    ./cloud_project.sh || exit 1
-    cd -
+	cd ./$unzip_name/samples/${ios_direction}
+	./cloud_build.sh || exit 1
+	cd -
 fi
-
-echo "ios_direction is : $ios_direction"
-# 7za a -tzip APIExamples.zip -r ${ios_direction} > log.txt
-# echo "start move project to workspace"
-# mv APIExamples.zip $WORKSPACE/${ios_direction}_${BUILD_NUMBER}.zip
-
