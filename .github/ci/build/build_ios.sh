@@ -91,7 +91,7 @@ else
    mv ./$unzip_name/samples/${ios_direction}/sdk.podspec ./$unzip_name/ || exit 1
 fi
 
-python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
+# python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
 
 echo "start compress"
 7za a -tzip result.zip -r $unzip_name > log.txt
