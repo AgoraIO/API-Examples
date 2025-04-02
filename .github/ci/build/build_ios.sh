@@ -103,5 +103,13 @@ if [ $compile_project = true ]; then
 	cd ./$unzip_name/samples/${ios_direction}
 	./cloud_build.sh || exit 1
 	cd -
+else if [ $generate_project = true ]; then
+    cd ./$unzip_name/samples/${ios_direction}
+    ./cloud_project.sh || exit 1
+    cd -
 fi
+
+7za a -tzip APIExamples.zip ${ios_direction}
+echo "start move project to workspace"
+mv APIExamples.zip $WORKSPACE/${ios_direction}_${BUILD_NUMBER}.zip
 
