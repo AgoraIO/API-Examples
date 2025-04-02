@@ -42,5 +42,16 @@ echo "project path: $PROJECT_PATH"
 
 pod install --repo-update || exit 1
 
+#工程文件路径
+APP_PATH="$(ls | grep xcworkspace)"
 
+# 项目target名
+TARGET_NAME=${APP_PATH%%.*} 
 
+7za a -tzip ${TARGET_NAME}.zip -r ./* > log.txt
+
+echo "pwd path: $PWD"
+ls -al
+echo "target name: $TARGET_NAME"
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_$(date "+%Y%m%d%H%M%S").zip
+mv ${TARGET_NAME}.zip $OUTPUT_FILE
