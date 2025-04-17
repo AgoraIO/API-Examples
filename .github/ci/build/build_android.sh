@@ -75,9 +75,22 @@ else
 	rm -rf ./$unzip_name/pom
 fi
 mkdir -p ./$unzip_name/rtc/samples 
-cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
-7za a -tzip result.zip -r $unzip_name > log.txt
-mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
+cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/${android_direction} || exit 1
+
+if [ $generate_project = true ]; then
+	if [ $is_cn = true ]; then
+		cd ./$unzip_name/rtc/samples/${android_direction}  || exit 1
+		sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" settings.gradle
+		sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" gradle/wrapper/gradle-wrapper.properties
+		cd $WORKSPACE  # 返回工作目录
+	fi
+
+	7za a -tzip result.zip -r $unzip_name > log.txt
+	mv result.zip $WORKSPACE/${android_direction}_${BUILD_NUMBER}_$zip_name
+else
+	7za a -tzip result.zip -r $unzip_name > log.txt
+	mv result.zip $WORKSPACE/${android_direction}_${BUILD_NUMBER}_$zip_name
+fi
 
 if [ $compile_project = true ]; then
 	# install android sdk
@@ -86,7 +99,7 @@ if [ $compile_project = true ]; then
 	source ~/.bashrc
 	export ANDROID_HOME=/usr/lib/android_sdk
 	echo ANDROID_HOME: $ANDROID_HOME
-	cd ./$unzip_name/rtc/samples/API-Example || exit 1
+	cd ./$unzip_name/rtc/samples/${android_direction}  || exit 1
 	if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
 		./cloud_build.sh false || exit 1
 	else
