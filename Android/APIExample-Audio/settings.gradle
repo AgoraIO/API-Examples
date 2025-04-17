@@ -1,7 +1,12 @@
 pluginManagement {
     repositories {
-        maven { url "https://maven.aliyun.com/repository/public" }
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -9,12 +14,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url "https://maven.aliyun.com/repository/public" }
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.aliyun.com/repository/public" }
     }
 }
-rootProject.name='APIExample-Audio'
+rootProject.name = 'APIExample-Audio'
 include ':app'

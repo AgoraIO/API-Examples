@@ -49,9 +49,11 @@ echo release_version: $release_version
 echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
+
 unzip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT
 zip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT.zip
-if [ -z "$sdk_url" ] || [ "$sdk_url" = "none" ]; then
+
+if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
    echo zip_name: $zip_name
@@ -85,7 +87,7 @@ if [ $compile_project = true ]; then
 	export ANDROID_HOME=/usr/lib/android_sdk
 	echo ANDROID_HOME: $ANDROID_HOME
 	cd ./$unzip_name/rtc/samples/API-Example || exit 1
-	if [ -z "$sdk_url" ] || [ "$sdk_url" = "none" ]; then
+	if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
 		./cloud_build.sh false || exit 1
 	else
 		./cloud_build.sh true || exit 1
