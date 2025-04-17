@@ -1,6 +1,12 @@
 pluginManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -10,14 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
         maven {
             url 'http://maven.faceunity.com/repository/maven-public/'
             allowInsecureProtocol = true
         }
     }
 }
-rootProject.name='APIExample'
+rootProject.name = 'APIExample'
 include ':app'
 if (simpleFilter.toBoolean()) {
     include ':agora-simple-filter'
