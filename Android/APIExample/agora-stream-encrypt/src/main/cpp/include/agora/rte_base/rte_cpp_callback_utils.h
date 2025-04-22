@@ -20,14 +20,31 @@ class SingleUseCallback {
     self_ = nullptr;
   };
 
-  SingleUseCallback(SingleUseCallback&& other){
+  SingleUseCallback(SingleUseCallback<T>& other){
     cb_ = other.cb_;
     cb_data_ = other.cb_data_;
     self_ = other.self_;
 
-    other.cb_ = nullptr;
-    other.cb_data_ = nullptr;
-    other.self_ = nullptr;
+    other.Clear();
+  }
+
+
+  SingleUseCallback(SingleUseCallback<T>&& other){
+    cb_ = other.cb_;
+    cb_data_ = other.cb_data_;
+    self_ = other.self_;
+
+    other.Clear();
+  }
+
+  SingleUseCallback<T> &operator=(SingleUseCallback<T>&& other){
+    cb_ = other.cb_;
+    cb_data_ = other.cb_data_;
+    self_ = other.self_;
+
+    other.Clear();
+
+    return *this;
   }
 
   void Store(T* self, CallbackType cb,  void* cb_data){
