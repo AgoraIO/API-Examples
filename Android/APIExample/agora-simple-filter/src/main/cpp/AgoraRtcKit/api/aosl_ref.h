@@ -28,7 +28,7 @@ typedef struct _internal_ref_od_ *aosl_ref_t;
 
 #define AOSL_REF_INVALID ((aosl_ref_t)(intptr_t)NULL)
 
-#define aosl_ref_invalid(ref) ((int)(intptr_t)(ref) <= 0)
+#define aosl_ref_invalid(ref) ((intptr_t)(ref) <= 0)
 
 
 /**
