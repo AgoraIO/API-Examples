@@ -79,32 +79,15 @@ public class FuDeviceUtils {
      * @param c - Context object for current running activity.
      * @return Total RAM that the device has, or DEVICEINFO_UNKNOWN = -1 in the event of an error.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static long getTotalMemory(Context c) {
         // memInfo.totalMem not supported in pre-Jelly Bean APIs.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-            ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
-            am.getMemoryInfo(memInfo);
-            if (memInfo != null) {
-                return memInfo.totalMem;
-            } else {
-                return DEVICEINFO_UNKNOWN;
-            }
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+        am.getMemoryInfo(memInfo);
+        if (memInfo != null) {
+            return memInfo.totalMem;
         } else {
-            long totalMem = DEVICEINFO_UNKNOWN;
-            try {
-                FileInputStream stream = new FileInputStream("/proc/meminfo");
-                try {
-                    totalMem = parseFileForValue("MemTotal", stream);
-                    totalMem *= 1024;
-                } finally {
-                    stream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return totalMem;
+            return DEVICEINFO_UNKNOWN;
         }
     }
 
@@ -167,13 +150,6 @@ public class FuDeviceUtils {
      * @return Number of CPU cores in the phone, or DEVICEINFO_UKNOWN = -1 in the event of an error.
      */
     public static int getNumberOfCPUCores() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-            // Gingerbread doesn't support giving a single application access to both cores, but a
-            // handful of devices (Atrix 4G and Droid X2 for example) were released with a dual-core
-            // chipset and Gingerbread; that can let an app in the background run without impacting
-            // the foreground application. But for our purposes, it makes them single core.
-            return 1;
-        }
         int cores;
         try {
             cores = getCoresFromFileInfo("/sys/devices/system/cpu/possible");

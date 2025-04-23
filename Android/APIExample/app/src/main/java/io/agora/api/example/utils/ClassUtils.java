@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
@@ -21,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dalvik.system.DexFile;
-import io.agora.api.example.BuildConfig;
 
 /**
  * The type Class utils.
@@ -44,7 +42,7 @@ public final class ClassUtils {
     private static final int VM_WITH_MULTIDEX_VERSION_MINOR = 1;
 
     private static SharedPreferences getMultiDexPreferences(Context context) {
-        return context.getSharedPreferences(PREFS_FILE, Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ? Context.MODE_PRIVATE : Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
+        return context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
     }
 
     /**
@@ -53,7 +51,7 @@ public final class ClassUtils {
      * @param context     the context
      * @param packageName the package name
      * @return Collection of all classes
-     * @throws NameNotFoundException the name not found exception
+     * @throws PackageManager.NameNotFoundException the name not found exception
      * @throws IOException           the io exception
      * @throws InterruptedException  the interrupted exception
      */
@@ -111,7 +109,7 @@ public final class ClassUtils {
      *
      * @param context the application context
      * @return all the dex path
-     * @throws NameNotFoundException the name not found exception
+     * @throws PackageManager.NameNotFoundException the name not found exception
      * @throws IOException           the io exception
      */
     public static List<String> getSourcePaths(Context context) throws PackageManager.NameNotFoundException, IOException {
@@ -144,7 +142,7 @@ public final class ClassUtils {
             }
         }
 
-        if (BuildConfig.DEBUG) { // Search instant run support only debuggable
+        if (io.agora.api.example.BuildConfig.DEBUG) { // Search instant run support only debuggable
             sourcePaths.addAll(tryLoadInstantRunDexFile(applicationInfo));
         }
         return sourcePaths;
@@ -159,7 +157,7 @@ public final class ClassUtils {
     private static List<String> tryLoadInstantRunDexFile(ApplicationInfo applicationInfo) {
         List<String> instantRunSourcePaths = new ArrayList<>();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && null != applicationInfo.splitSourceDirs) {
+        if (null != applicationInfo.splitSourceDirs) {
             // add the split apk, normally for InstantRun, and newest version.
             instantRunSourcePaths.addAll(Arrays.asList(applicationInfo.splitSourceDirs));
             Log.d(TAG, "Found InstantRun support");

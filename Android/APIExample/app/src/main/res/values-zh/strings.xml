@@ -376,6 +376,7 @@
     <string name="audio_stream_index">音轨%d</string>
     <string name="face_capture_authentication">请联系声网客服获取面捕证书并配置到AUTHENTICATION常量上</string>
     <string name="notifications_enable_tip">请打开通知权限，防止后台录音中断</string>
+    <string name="notifications_enable_screen_tip">请打开通知权限，防止后台共享屏幕中断</string>
     <string name="video_metadata">视频元数据</string>
     <string name="send">发送</string>
     <string name="audio_metadata">音频元数据</string>

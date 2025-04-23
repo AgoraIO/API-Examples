@@ -23,3 +23,10 @@
 -keep class io.agora.**{*;}
 -dontwarn javax.**
 -dontwarn com.google.devtools.build.android.**
+
+# OkHttp
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.codehaus.mojo.animal_sniffer.**

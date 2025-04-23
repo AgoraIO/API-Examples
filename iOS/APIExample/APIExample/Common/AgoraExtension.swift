@@ -107,15 +107,15 @@ extension AgoraAudioScenario {
 extension AgoraEncryptionMode {
     func description() -> String {
         switch self {
-        case .AES128GCM2: return "AES128GCM"
-        case .AES256GCM2: return "AES256GCM"
+        case .AES128GCM: return "AES128GCM"
+        case .AES256GCM: return "AES256GCM"
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraEncryptionMode] {
-        return [.AES128GCM2, .AES256GCM2]
+        return [.AES128GCM, .AES256GCM]
     }
 }
 

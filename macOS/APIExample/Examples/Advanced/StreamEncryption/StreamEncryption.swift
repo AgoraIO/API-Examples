@@ -240,6 +240,7 @@ class StreamEncryption: BaseViewController {
                 config.encryptionMode = selectedEncrption!
                 config.encryptionKey = encryptionSecretField.stringValue
                 config.encryptionKdfSalt = getEncryptionSaltFromServer()
+
                 let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
                 if ret != 0 {
                     // for errors please take a look at:
@@ -299,6 +300,8 @@ class StreamEncryption: BaseViewController {
             )
         } else {
             isProcessing = true
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
+
             agoraKit.disableVideo()
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
                 self.isProcessing = false
