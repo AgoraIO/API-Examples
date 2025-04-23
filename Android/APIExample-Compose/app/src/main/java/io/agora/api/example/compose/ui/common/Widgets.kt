@@ -637,7 +637,7 @@ fun <T> RadioGroup(
 fun WidgetsPreview() {
     Column {
         SwitchRaw(
-            "Enable Video",
+            stringResource(R.string.enable_video),
             true,
         )
         // SliderRaw("Bitrate", 0.5f)
