@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dalvik.system.DexFile;
-import io.agora.api.example.BuildConfig;
 
 public class ClassUtils
 {
@@ -160,7 +159,7 @@ public class ClassUtils
             }
         }
 
-        if (BuildConfig.DEBUG)
+        if (io.agora.api.example.BuildConfig.DEBUG)
         { // Search instant run support only debuggable
             sourcePaths.addAll(tryLoadInstantRunDexFile(applicationInfo));
         }

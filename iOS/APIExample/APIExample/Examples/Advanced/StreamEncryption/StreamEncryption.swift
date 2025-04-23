@@ -14,7 +14,7 @@ class StreamEncryptionEntry: UIViewController {
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var encryptSecretField: UITextField!
     @IBOutlet weak var encryptModeBtn: UIButton!
-    var mode: AgoraEncryptionMode = .AES128GCM2
+    var mode: AgoraEncryptionMode = .AES128GCM
     var useCustom: Bool = false
     let identifier = "StreamEncryption"
     

@@ -32,14 +32,9 @@
 #endif
 
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
-#include <functional>
 #include <memory>
-typedef std::function <void (void *arg)> aosl_ref_lambda_f;
-typedef std::function <void (const aosl_ts_t &queued_ts, aosl_refobj_t robj)> aosl_ref_mpq_lambda_f;
-typedef std::function <void (void)> aosl_ref_mpq_lambda_0arg_f;
-typedef std::function <int (int free_only)> aosl_async_prepare_lambda_f;
-typedef std::function <void (int free_only)> aosl_async_resume_lambda_f;
-typedef std::function <void (int err)> aosl_ref_destroy_exec_lambda_f;
+#include <type_traits>
+#include <utility>
 #endif
 
 class aosl_ref_class {
@@ -309,19 +304,25 @@ public:
 		}
 
 	#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
-		int destroy_exec (aosl_ref_destroy_exec_lambda_f &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
+		/* __ref_destroy_exec_lambda_t: void (int err) */
+		template <typename __ref_destroy_exec_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__ref_destroy_exec_lambda_t>()(std::declval<int>()))>::value, int>::type = 0>
+		int destroy_exec (__ref_destroy_exec_lambda_t &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
 		{
-			aosl_ref_destroy_exec_lambda_f *task_obj = new aosl_ref_destroy_exec_lambda_f (std::move (lambda_f));
-			int err = aosl_ref_destroy_exec (ref (), ares, ____ref_destroy_exec_f, 1, task_obj);
+			__ref_destroy_exec_lambda_t *task_obj = new __ref_destroy_exec_lambda_t (std::move (lambda_f));
+			int err = aosl_ref_destroy_exec (ref (), ares, ____ref_destroy_exec_f<typename std::remove_reference<__ref_destroy_exec_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 	private:
+		/* __ref_destroy_exec_lambda_t: void (int err) */
+		template <typename __ref_destroy_exec_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__ref_destroy_exec_lambda_t>()(std::declval<int>()))>::value, int>::type = 0>
 		static void ____ref_destroy_exec_f (int err, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_ref_destroy_exec_lambda_f *task_obj = reinterpret_cast<aosl_ref_destroy_exec_lambda_f *>(argv [0]);
+			__ref_destroy_exec_lambda_t *task_obj = reinterpret_cast<__ref_destroy_exec_lambda_t *>(argv [0]);
 			(*task_obj) (err);
 			delete task_obj;
 		}
@@ -521,130 +522,203 @@ public:
 		/* C++11 lambda encapsulations */
 	#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 	public:
-		int hold (aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		int hold (__local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::hold (____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::hold (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		int read (aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		int read (__local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::read (____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::read (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		int write (aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		int write (__local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::write (____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::write (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		int unsafe (aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		int unsafe (__local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::unsafe (____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int hold (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::hold (ref, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::hold (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int read (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::read (ref, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::read (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int write (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::write (ref, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::write (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int unsafe (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int unsafe (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::unsafe (ref, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int read (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int read (aosl_refobj_t robj, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::read (robj, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::read (robj, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
-		static int unsafe (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+		static int unsafe (aosl_refobj_t robj, __local_lambda_t &&lambda_f)
 		{
-			aosl_ref_lambda_f lambda_obj (std::move (lambda_f));
-			return aosl_ref_t_oop::unsafe (robj, ____ref_f, 1, &lambda_obj);
+			return aosl_ref_t_oop::unsafe (robj, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 	private:
+		/* __local_lambda_t: void (void *arg) */
+		template <typename __local_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
 		static void ____ref_f (void *arg, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_ref_lambda_f *lambda_obj = reinterpret_cast<aosl_ref_lambda_f *>(argv [0]);
-			(*lambda_obj) (arg);
+			(*(__local_lambda_t *)argv [0]) (arg);
 		}
 
 	#ifdef __AOSL_MPQ_H__
 	public:
 		/* MPQ encapsulations */
-		int queue (aosl_mpq_t tq, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		int queue (aosl_mpq_t tq, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_ref_t_oop::queue (tq, dq, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::queue (tq, dq, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		int call (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		int call (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_ref_t_oop::call (q, f_name, ____mpq_f, 2, task_obj, task_result);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::call (q, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 2, task_obj, task_result);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		int run (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		int run (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_ref_t_oop::run (q, AOSL_MPQ_INVALID, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::run (q, AOSL_MPQ_INVALID, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		int queue (aosl_mpq_t tq, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		/**
+		 * Do not use the template parameter with default value style SFINAE for 0 argument lambda case,
+		 * because the buggy MSVC compiler version 14.25.28610 will report:
+		 *  - error C2672: XXX: no matching overloaded function found
+		 *  - error C2783: XXX(YYY): could not deduce template argument for '__formal'
+		 * So, we use the return type style SFINAE here instead.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		queue (aosl_mpq_t tq, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_ref_t_oop::queue (tq, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::queue (tq, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		int call (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		/**
+		 * Do not use the template parameter with default value style SFINAE for 0 argument lambda case,
+		 * because the buggy MSVC compiler version 14.25.28610 will report:
+		 *  - error C2672: XXX: no matching overloaded function found
+		 *  - error C2783: XXX(YYY): could not deduce template argument for '__formal'
+		 * So, we use the return type style SFINAE here instead.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		call (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_ref_t_oop::call (q, f_name, ____mpq_0arg_f, 2, task_obj, task_result);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::call (q, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 2, task_obj, task_result);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		int run (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		/**
+		 * Do not use the template parameter with default value style SFINAE for 0 argument lambda case,
+		 * because the buggy MSVC compiler version 14.25.28610 will report:
+		 *  - error C2672: XXX: no matching overloaded function found
+		 *  - error C2783: XXX(YYY): could not deduce template argument for '__formal'
+		 * So, we use the return type style SFINAE here instead.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		run (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_ref_t_oop::run (q, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::run (q, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
@@ -653,80 +727,109 @@ public:
 
 	#ifdef __AOSL_MPQP_H__
 		/* MPQP encapsulations */
-		aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::queue (qp, dq, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::queue (qp, dq, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::call (qp, f_name, ____mpq_f, 2, task_obj, task_result);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::call (qp, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 2, task_obj, task_result);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::run (qp, AOSL_MPQ_INVALID, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::run (qp, AOSL_MPQ_INVALID, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		template <typename __mpq_lambda_t>
+		int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_ref_t_oop::pool_tail_queue (qp, dq, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::pool_tail_queue (qp, dq, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		aosl_mpq_t queue (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::queue (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::queue (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		call (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::call (qp, f_name, ____mpq_0arg_f, 2, task_obj, task_result);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::call (qp, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 2, task_obj, task_result);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		run (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_ref_t_oop::run (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_ref_t_oop::run (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		template <typename __mpq_0arg_lambda_t>
+		int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_ref_t_oop::pool_tail_queue (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::pool_tail_queue (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
@@ -735,60 +838,87 @@ public:
 	#endif /* __AOSL_MPQP_H__ */
 
 		/* MPQ with specified ref encapsulations */
-		static int queue (aosl_mpq_t tq, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static int queue (aosl_mpq_t tq, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_mpq_queue (tq, dq, ref, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_mpq_queue (tq, dq, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_mpq_call (q, ref, f_name, ____mpq_f, 2, task_obj, task_result);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_mpq_call (q, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 2, task_obj, task_result);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_mpq_run (q, AOSL_MPQ_INVALID, ref, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_mpq_run (q, AOSL_MPQ_INVALID, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static int queue (aosl_mpq_t tq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		queue (aosl_mpq_t tq, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_mpq_queue (tq, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_mpq_queue (tq, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_mpq_call (q, ref, f_name, ____mpq_0arg_f, 2, task_obj, task_result);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_mpq_call (q, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 2, task_obj, task_result);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_mpq_run (q, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_mpq_run (q, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
@@ -797,80 +927,109 @@ public:
 
 	#ifdef __AOSL_MPQP_H__
 		/* MPQP with specified ref encapsulations */
-		static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_queue (qp, dq, ref, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_queue (qp, dq, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_call (qp, ref, f_name, ____mpq_f, 2, task_obj, task_result);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_call (qp, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 2, task_obj, task_result);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_run (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_run (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+		template <typename __mpq_lambda_t>
+		static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_f *task_obj = new aosl_ref_mpq_lambda_f (std::move (task));
-			int err = aosl_mpqp_pool_tail_queue (qp, dq, ref, f_name, ____mpq_f, 1, task_obj);
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_mpqp_pool_tail_queue (qp, dq, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
 			return err;
 		}
 
-		static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_queue (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_queue (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_call (qp, ref, f_name, ____mpq_0arg_f, 2, task_obj, task_result);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_call (qp, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 2, task_obj, task_result);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+		run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			aosl_mpq_t qid = aosl_mpqp_run (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			aosl_mpq_t qid = aosl_mpqp_run (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (aosl_mpq_invalid (qid))
 				delete task_obj;
 
 			return qid;
 		}
 
-		static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+		template <typename __mpq_0arg_lambda_t>
+		static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = new aosl_ref_mpq_lambda_0arg_f (std::move (task));
-			int err = aosl_mpqp_pool_tail_queue (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f, 1, task_obj);
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_mpqp_pool_tail_queue (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
@@ -889,12 +1048,16 @@ public:
 		}
 
 	private:
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()))>::value, int>::type = 0>
 		static void ____mpq_f (const aosl_ts_t *queued_ts_p, aosl_refobj_t robj, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_ref_mpq_lambda_f *task_obj = reinterpret_cast<aosl_ref_mpq_lambda_f *>(argv [0]);
-			aosl_mpq_t done_qid = aosl_mpq_run_func_done_qid ();
+			__mpq_lambda_t *task_obj = reinterpret_cast<__mpq_lambda_t *>(argv [0]);
 			(*task_obj) (*queued_ts_p, robj);
-			if (aosl_mpq_invalid (done_qid) || aosl_is_free_only (robj)) {
+			if (aosl_mpq_invalid (aosl_mpq_run_func_done_qid ()) || aosl_is_free_only (robj)) {
 				/**
 				 * We only free the task object when the running function has no
 				 * done mpq id, due to the task object would be still in use if
@@ -906,13 +1069,15 @@ public:
 			}
 		}
 
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type = 0>
 		static void ____mpq_0arg_f (const aosl_ts_t *queued_ts_p, aosl_refobj_t robj, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_ref_mpq_lambda_0arg_f *task_obj = reinterpret_cast<aosl_ref_mpq_lambda_0arg_f *>(argv [0]);
-			aosl_mpq_t done_qid = aosl_mpq_run_func_done_qid ();
+			__mpq_0arg_lambda_t *task_obj = reinterpret_cast<__mpq_0arg_lambda_t *>(argv [0]);
 			if (!aosl_is_free_only (robj))
 				(*task_obj) ();
-			if (aosl_mpq_invalid (done_qid) || aosl_is_free_only (robj)) {
+			if (aosl_mpq_invalid (aosl_mpq_run_func_done_qid ()) || aosl_is_free_only (robj)) {
 				/**
 				 * We only free the task object when the running function has no
 				 * done mpq id, due to the task object would be still in use if
@@ -932,20 +1097,26 @@ public:
 		 * so we just provide similar equivalent functionals here.
 		 **/
 	public:
-		int prepare (aosl_stack_id_t stack_id, const char *f_name, aosl_async_prepare_lambda_f&& task)
+		/* __async_prepare_lambda_t: int (int free_only) */
+		template <typename __async_prepare_lambda_t,
+			typename std::enable_if<std::is_same<decltype(std::declval<__async_prepare_lambda_t>()(std::declval<int>())), int>::value, int>::type = 0>
+		int prepare (aosl_stack_id_t stack_id, const char *f_name, __async_prepare_lambda_t&& task)
 		{
-			aosl_async_prepare_lambda_f *prepare_f = new aosl_async_prepare_lambda_f (std::move (task));
-			int err = aosl_async_prepare (stack_id, ref (), f_name, ____async_prepare_f, 1, prepare_f);
+			__async_prepare_lambda_t *prepare_f = new __async_prepare_lambda_t (std::move (task));
+			int err = aosl_async_prepare (stack_id, ref (), f_name, ____async_prepare_f<typename std::remove_reference<__async_prepare_lambda_t>::type>, 1, prepare_f);
 			if (err < 0)
 				delete prepare_f;
 
 			return err;
 		}
 
-		static int prepare (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, aosl_async_prepare_lambda_f&& task)
+		/* __async_prepare_lambda_t: int (int free_only) */
+		template <typename __async_prepare_lambda_t,
+			typename std::enable_if<std::is_same<decltype(std::declval<__async_prepare_lambda_t>()(std::declval<int>())), int>::value, int>::type = 0>
+		static int prepare (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, __async_prepare_lambda_t&& task)
 		{
-			aosl_async_prepare_lambda_f *prepare_f = new aosl_async_prepare_lambda_f (std::move (task));
-			int err = aosl_async_prepare (stack_id, ref, f_name, ____async_prepare_f, 1, prepare_f);
+			__async_prepare_lambda_t *prepare_f = new __async_prepare_lambda_t (std::move (task));
+			int err = aosl_async_prepare (stack_id, ref, f_name, ____async_prepare_f<typename std::remove_reference<__async_prepare_lambda_t>::type>, 1, prepare_f);
 			if (err < 0)
 				delete prepare_f;
 
@@ -953,9 +1124,12 @@ public:
 		}
 
 	private:
+		/* __async_prepare_lambda_t: int (int free_only) */
+		template <typename __async_prepare_lambda_t,
+			typename std::enable_if<std::is_same<decltype(std::declval<__async_prepare_lambda_t>()(std::declval<int>())), int>::value, int>::type = 0>
 		static int ____async_prepare_f (int free_only, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_async_prepare_lambda_f *prepare_f = reinterpret_cast<aosl_async_prepare_lambda_f *>(argv [0]);
+			__async_prepare_lambda_t *prepare_f = reinterpret_cast<__async_prepare_lambda_t *>(argv [0]);
 			int err;
 			err = (*prepare_f) (free_only);
 			delete prepare_f;
@@ -963,20 +1137,38 @@ public:
 		}
 
 	public:
-		int resume (aosl_stack_id_t stack_id, const char *f_name, aosl_async_resume_lambda_f&& task)
+		/* __async_resume_lambda_t: void (int free_only) */
+		template <typename __async_resume_lambda_t>
+		/**
+		 * Do not know why this function needs to be changed to the return type style SFINAE, the lambda has one argument, but
+		 * the buggy MSVC compiler version 14.25.28610 also reports the error C2672: XXX: no matching overloaded function found
+		 * really, so change it anyway for now.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		typename std::enable_if<std::is_void<decltype(std::declval<__async_resume_lambda_t>()(std::declval<int>()))>::value, int>::type
+		resume (aosl_stack_id_t stack_id, const char *f_name, __async_resume_lambda_t&& task)
 		{
-			aosl_async_resume_lambda_f *resume_f = new aosl_async_resume_lambda_f (std::move (task));
-			int err = aosl_async_resume (stack_id, ref (), f_name, ____async_resume_f, 1, resume_f);
+			__async_resume_lambda_t *resume_f = new __async_resume_lambda_t (std::move (task));
+			int err = aosl_async_resume (stack_id, ref (), f_name, ____async_resume_f<typename std::remove_reference<__async_resume_lambda_t>::type>, 1, resume_f);
 			if (err < 0)
 				delete resume_f;
 
 			return err;
 		}
 
-		static int resume (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, aosl_async_resume_lambda_f&& task)
+		/* __async_resume_lambda_t: void (int free_only) */
+		template <typename __async_resume_lambda_t>
+		/**
+		 * Do not know why this function needs to be changed to the return type style SFINAE, the lambda has one argument, but
+		 * the buggy MSVC compiler version 14.25.28610 also reports the error C2672: XXX: no matching overloaded function found
+		 * really, so change it anyway for now.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		static typename std::enable_if<std::is_void<decltype(std::declval<__async_resume_lambda_t>()(std::declval<int>()))>::value, int>::type
+		resume (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, __async_resume_lambda_t&& task)
 		{
-			aosl_async_resume_lambda_f *resume_f = new aosl_async_resume_lambda_f (std::move (task));
-			int err = aosl_async_resume (stack_id, ref, f_name, ____async_resume_f, 1, resume_f);
+			__async_resume_lambda_t *resume_f = new __async_resume_lambda_t (std::move (task));
+			int err = aosl_async_resume (stack_id, ref, f_name, ____async_resume_f<typename std::remove_reference<__async_resume_lambda_t>::type>, 1, resume_f);
 			if (err < 0)
 				delete resume_f;
 
@@ -984,9 +1176,18 @@ public:
 		}
 
 	private:
-		static void ____async_resume_f (int free_only, uintptr_t argc, uintptr_t argv [])
+		/* __async_resume_lambda_t: void (int free_only) */
+		template <typename __async_resume_lambda_t>
+		/**
+		 * Do not know why this function needs to be changed to the return type style SFINAE, the lambda has one argument, but
+		 * the buggy MSVC compiler version 14.25.28610 also reports the error C2672: XXX: no matching overloaded function found
+		 * really, so change it anyway for now.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		static typename std::enable_if<std::is_void<decltype(std::declval<__async_resume_lambda_t>()(std::declval<int>()))>::value, void>::type
+		____async_resume_f (int free_only, uintptr_t argc, uintptr_t argv [])
 		{
-			aosl_async_resume_lambda_f *resume_f = reinterpret_cast<aosl_async_resume_lambda_f *>(argv [0]);
+			__async_resume_lambda_t *resume_f = reinterpret_cast<__async_resume_lambda_t *>(argv [0]);
 			(*resume_f) (free_only);
 			delete resume_f;
 		}
@@ -1347,7 +1548,10 @@ public:
 	}
 
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
-	int destroy_exec (aosl_ref_destroy_exec_lambda_f &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
+	/* __ref_destroy_exec_lambda_t: void (int err) */
+	template <typename __ref_destroy_exec_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__ref_destroy_exec_lambda_t>()(std::declval<int>()))>::value, int>::type = 0>
+	int destroy_exec (__ref_destroy_exec_lambda_t &&lambda_f, aosl_ref_t ares = AOSL_REF_INVALID)
 	{
 		return refoop->destroy_exec (std::move (lambda_f), ares);
 	}
@@ -1570,219 +1774,367 @@ public:
 	/* C++11 lambda encapsulations */
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 public:
-	int hold (aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	int hold (__local_lambda_t &&lambda_f)
 	{
 		return refoop->hold (std::move (lambda_f));
 	}
 
-	int read (aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	int read (__local_lambda_t &&lambda_f)
 	{
 		return refoop->read (std::move (lambda_f));
 	}
 
-	int write (aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	int write (__local_lambda_t &&lambda_f)
 	{
 		return refoop->write (std::move (lambda_f));
 	}
 
-	int unsafe (aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	int unsafe (__local_lambda_t &&lambda_f)
 	{
 		return refoop->unsafe (std::move (lambda_f));
 	}
 
-	int maystall (aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	int maystall (__local_lambda_t &&lambda_f)
 	{
 		return refoop->unsafe (std::move (lambda_f));
 	}
 
-	static int hold (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::hold (ref, std::move (lambda_f));
 	}
 
-	static int read (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::read (ref, std::move (lambda_f));
 	}
 
-	static int write (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::write (ref, std::move (lambda_f));
 	}
 
-	static int unsafe (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int unsafe (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::unsafe (ref, std::move (lambda_f));
 	}
 
-	static int maystall (aosl_ref_t ref, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int maystall (aosl_ref_t ref, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::unsafe (ref, std::move (lambda_f));
 	}
 
-	static int read (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int read (aosl_refobj_t robj, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::read (robj, std::move (lambda_f));
 	}
 
-	static int unsafe (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int unsafe (aosl_refobj_t robj, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::unsafe (robj, std::move (lambda_f));
 	}
 
-	static int maystall (aosl_refobj_t robj, aosl_ref_lambda_f &&lambda_f)
+	/* __local_lambda_t: void (void *arg) */
+	template <typename __local_lambda_t,
+		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
+	static int maystall (aosl_refobj_t robj, __local_lambda_t &&lambda_f)
 	{
 		return aosl_ref_t_oop::unsafe (robj, std::move (lambda_f));
 	}
 
 #ifdef __AOSL_MPQ_H__
 public:
-	typedef std::function <void (const aosl_ts_t &queued_ts, aosl_refobj_t robj)> aosl_ref_mpq_lambda_f;
-	typedef std::function <void (void)> aosl_ref_mpq_lambda_0arg_f;
-
 	/* MPQ encapsulations */
-	int queue (aosl_mpq_t tq, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	int queue (aosl_mpq_t tq, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return refoop->queue (tq, dq, f_name, std::move (task));
 	}
 
-	int call (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	int call (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 	{
 		return refoop->call (q, f_name, std::move (task), task_result);
 	}
 
-	int run (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	int run (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return refoop->run (q, f_name, std::move (task));
 	}
 
-	int queue (aosl_mpq_t tq, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	queue (aosl_mpq_t tq, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->queue (tq, f_name, std::move (task));
 	}
 
-	int call (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	call (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 	{
 		return refoop->call (q, f_name, std::move (task), task_result);
 	}
 
-	int run (aosl_mpq_t q, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	run (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->run (q, f_name, std::move (task));
 	}
 
 #ifdef __AOSL_MPQP_H__
 	/* MPQP encapsulations */
-	aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return refoop->queue (qp, dq, f_name, std::move (task));
 	}
 
-	aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 	{
 		return refoop->call (qp, f_name, std::move (task), task_result);
 	}
 
-	aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return refoop->run (qp, f_name, std::move (task));
 	}
 
-	int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	template <typename __mpq_lambda_t>
+	int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return refoop->pool_tail_queue (qp, dq, f_name, std::move (task));
 	}
 
-	aosl_mpq_t queue (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->queue (qp, f_name, std::move (task));
 	}
 
-	aosl_mpq_t call (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	call (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 	{
 		return refoop->call (qp, f_name, std::move (task), task_result);
 	}
 
-	aosl_mpq_t run (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	run (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->run (qp, f_name, std::move (task));
 	}
 
-	int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	template <typename __mpq_0arg_lambda_t>
+	int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->pool_tail_queue (qp, f_name, std::move (task));
 	}
 #endif /* __AOSL_MPQP_H__ */
 
 	/* MPQ with specified ref encapsulations */
-	static int queue (aosl_mpq_t tq, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static int queue (aosl_mpq_t tq, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::queue (tq, dq, ref, f_name, std::move (task));
 	}
 
-	static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 	{
 		return aosl_ref_t_oop::call (q, ref, f_name, std::move (task), task_result);
 	}
 
-	static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (q, ref, f_name, std::move (task));
 	}
 
-	static int queue (aosl_mpq_t tq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	queue (aosl_mpq_t tq, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::queue (tq, ref, f_name, std::move (task));
 	}
 
-	static int call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	call (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 	{
 		return aosl_ref_t_oop::call (q, ref, f_name, std::move (task), task_result);
 	}
 
-	static int run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (q, ref, f_name, std::move (task));
 	}
 
 #ifdef __AOSL_MPQP_H__
 	/* MPQP with specified ref encapsulations */
-	static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::queue (qp, dq, ref, f_name, std::move (task));
 	}
 
-	static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task, void *task_result = NULL)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task, void *task_result = NULL)
 	{
 		return aosl_ref_t_oop::call (qp, ref, f_name, std::move (task), task_result);
 	}
 
-	static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (qp, ref, f_name, std::move (task));
 	}
 
-	static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_f&& task)
+	template <typename __mpq_lambda_t>
+	static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::pool_tail_queue (qp, dq, ref, f_name, std::move (task));
 	}
 
-	static aosl_mpq_t queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::queue (qp, ref, f_name, std::move (task));
 	}
 
-	static aosl_mpq_t call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task, void *task_result = NULL)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	call (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task, void *task_result = NULL)
 	{
 		return aosl_ref_t_oop::call (qp, ref, f_name, std::move (task), task_result);
 	}
 
-	static aosl_mpq_t run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
+	run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (qp, ref, f_name, std::move (task));
 	}
 
-	static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, aosl_ref_mpq_lambda_0arg_f&& task)
+	template <typename __mpq_0arg_lambda_t>
+	static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::pool_tail_queue (qp, ref, f_name, std::move (task));
 	}
@@ -1796,23 +2148,47 @@ public:
 	 * so we just provide similar equivalent functionals here.
 	 **/
 public:
-	int prepare (aosl_stack_id_t stack_id, const char *f_name, aosl_async_prepare_lambda_f&& task)
+	/* __async_prepare_lambda_t: int (int free_only) */
+	template <typename __async_prepare_lambda_t,
+		typename std::enable_if<std::is_same<decltype(std::declval<__async_prepare_lambda_t>()(std::declval<int>())), int>::value, int>::type = 0>
+	int prepare (aosl_stack_id_t stack_id, const char *f_name, __async_prepare_lambda_t&& task)
 	{
 		return refoop->prepare (stack_id, f_name, std::move (task));
 	}
 
-	static int prepare (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, aosl_async_prepare_lambda_f&& task)
+	/* __async_prepare_lambda_t: int (int free_only) */
+	template <typename __async_prepare_lambda_t,
+		typename std::enable_if<std::is_same<decltype(std::declval<__async_prepare_lambda_t>()(std::declval<int>())), int>::value, int>::type = 0>
+	static int prepare (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, __async_prepare_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::prepare (stack_id, ref, f_name, std::move (task));
 	}
 
 public:
-	int resume (aosl_stack_id_t stack_id, const char *f_name, aosl_async_resume_lambda_f&& task)
+	/* __async_resume_lambda_t: void (int free_only) */
+	template <typename __async_resume_lambda_t>
+	/**
+	 * Do not know why this function needs to be changed to the return type style SFINAE, the lambda has one argument, but
+	 * the buggy MSVC compiler version 14.25.28610 also reports the error C2672: XXX: no matching overloaded function found
+	 * really, so change it anyway for now.
+	 * -- Lionfore Hao Apr 15th, 2025
+	 **/
+	typename std::enable_if<std::is_void<decltype(std::declval<__async_resume_lambda_t>()(std::declval<int>()))>::value, int>::type
+	resume (aosl_stack_id_t stack_id, const char *f_name, __async_resume_lambda_t&& task)
 	{
 		return refoop->resume (stack_id, f_name, std::move (task));
 	}
 
-	static int resume (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, aosl_async_resume_lambda_f&& task)
+	/* __async_resume_lambda_t: void (int free_only) */
+	template <typename __async_resume_lambda_t>
+	/**
+	 * Do not know why this function needs to be changed to the return type style SFINAE, the lambda has one argument, but
+	 * the buggy MSVC compiler version 14.25.28610 also reports the error C2672: XXX: no matching overloaded function found
+	 * really, so change it anyway for now.
+	 * -- Lionfore Hao Apr 15th, 2025
+	 **/
+	static typename std::enable_if<std::is_void<decltype(std::declval<__async_resume_lambda_t>()(std::declval<int>()))>::value, int>::type
+	resume (aosl_stack_id_t stack_id, aosl_ref_t ref, const char *f_name, __async_resume_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::resume (stack_id, ref, f_name, std::move (task));
 	}

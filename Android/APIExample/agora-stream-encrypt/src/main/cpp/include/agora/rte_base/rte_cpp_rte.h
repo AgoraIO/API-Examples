@@ -101,7 +101,7 @@ class Config {
   std::string GetAppId(Error *err = nullptr){
     String str;
     RteConfigGetAppId(&c_rte_config, str.get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
-    return std::string(str.Cstr());
+    return std::string(str.CStr());
   }
 
 
@@ -128,7 +128,7 @@ class Config {
   std::string GetLogFolder(Error *err = nullptr){
     String str;
     RteConfigGetLogFolder(&c_rte_config, str.get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
-    return std::string(str.Cstr());
+    return std::string(str.CStr());
   }
 
   /**
@@ -201,7 +201,7 @@ class Config {
   std::string GetCloudProxy(Error *err = nullptr){
     String str;
     RteConfigGetCloudProxy(&c_rte_config, str.get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
-    return std::string(str.Cstr());
+    return std::string(str.CStr());
   }
 
   /**
@@ -230,7 +230,7 @@ class Config {
   std::string GetJsonParameter(Error *err = nullptr){
     String str;
     RteConfigGetJsonParameter(&c_rte_config, str.get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
-    return std::string(str.Cstr());
+    return std::string(str.CStr());
   }
 
  private:
@@ -380,7 +380,7 @@ class Rte {
    * @since v4.4.0
    * @param err Possible return values for ErrorCode:
    *  - kRteOk: Success
-   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has been destroyed or is invalid.
+   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has already been destroyed or is invalid.
    * @return bool Returns the result of destroying the Rte object.
    *  - true: Successfully destroyed.
    *  - false: Failed to destroy.

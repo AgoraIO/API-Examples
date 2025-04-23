@@ -2,7 +2,7 @@
 # platform :ios, '9.0'
 
 def common_pods
-  pod 'AgoraRtcEngine_iOS', '4.5.1'
+  pod 'AgoraRtcEngine_iOS', '4.5.2'
 #  pod 'sdk', :path => 'sdk.podspec'
 end
 
@@ -26,5 +26,5 @@ target 'SimpleFilter' do
 end
 
 pre_install do |installer|
-  # system("sh .download_script.sh 4.5.1 true")
+  # system("sh .download_script.sh 4.5.2 true")
 end

@@ -39,7 +39,7 @@ typedef enum RtePlayerState {
    */
   kRtePlayerStateOpenCompleted,
   /**
-   * 3: Playing state. This state is notified when audience members successfully subscribe to the broadcaster after opening an RTE URL.
+   * 3: Playing state. This state is notified when the url source is playing.
    */
   kRtePlayerStatePlaying,
   /**
@@ -47,7 +47,7 @@ typedef enum RtePlayerState {
    */
   kRtePlayerStatePaused,
   /**
-   * 5: Playback completed state. This state is notified when the broadcaster stops streaming and leaves the live streaming room after playing the rte URL.
+   * 5: Playback completed state. This state is notified when the url source playback completed.
    */
   kRtePlayerStatePlaybackCompleted,
   /**
@@ -69,47 +69,87 @@ typedef enum RtePlayerEvent {
   /**
    * 0: Start seeking to a specified position for playback.
    */
-  kRtePlayerEventSeekBegin,
+  kRtePlayerEventSeekBegin = 0,
   /**
    * 1: Seeking completes.
    */
-  kRtePlayerEventSeekComplete,
+  kRtePlayerEventSeekComplete = 1,
   /**
    * 2: An error occurs when seeking to a new playback position.
    */
-  kRtePlayerEventSeekError,
+  kRtePlayerEventSeekError = 2,
   /**
    * 3: The currently buffered data is not enough to support playback.
    */
-  kRtePlayerEventBufferLow,
+  kRtePlayerEventBufferLow = 3,
   /**
    * 4: The currently buffered data is just enough to support playback.
    */
-  kRtePlayerEventBufferRecover,
+  kRtePlayerEventBufferRecover = 4,
   /**
    * 5: Audio or video playback starts freezing.
    */
-  kRtePlayerEventFreezeStart,
+  kRtePlayerEventFreezeStart = 5,
   /**
    * 6: The audio or video playback resumes without freezing.
    */
-  kRtePlayerEventFreezeStop,
+  kRtePlayerEventFreezeStop = 6,
   /**
    * 7: One loop playback completed.
    */
-  kRtePlayerEventOneLoopPlaybackCompleted,
+  kRtePlayerEventOneLoopPlaybackCompleted = 7,
   /**
    * 8: URL authentication will expire.
    */
-  kRtePlayerEventAuthenticationWillExpire,
+  kRtePlayerEventAuthenticationWillExpire = 8,
   /**
    * 9: When the fallback option is enabled, ABR revert to the audio-only layer due to poor network.
    */
-  kRtePlayerEventAbrFallbackToAudioOnlyLayer,
+  kRtePlayerEventAbrFallbackToAudioOnlyLayer = 9,
   /**
    * 10: ABR recovers from audio-only layer to video layer when fallback option is enabled.
    */
-  kRtePlayerEventAbrRecoverFromAudioOnlyLayer
+  kRtePlayerEventAbrRecoverFromAudioOnlyLayer = 10,
+  /**
+   * 11: Start switching to a new URL.
+   */
+  kRtePlayerEventSwitchBegin = 11,
+  /**
+   * 12: Switching to a new URL completes.
+   */
+  kRtePlayerEventSwitchComplete = 12,
+  /**
+   * 13: An error occurs when switching to a new URL.
+   */
+  kRtePlayerEventSwitchError = 13,
+  /**
+   * 14: The first frame of the video is displayed.
+   */
+  kRtePlayerEventFirstDisplayed = 14,
+  /**
+   * 15: The number of cached files reaches the maximum.
+   */
+  kRtePlayerEventReachCacheFileMaxCount = 15,
+  /**
+   * 16: The size of the cached file reaches the maximum.
+   */
+  kRtePlayerEventReachCacheFileMaxSize = 16,
+  /**
+   * 17: Start trying to open a new URL.
+   */
+  kRtePlayerEventTryOpenStart = 17,
+  /**
+   * 18: Trying to open a new URL succeeds.
+   */
+  kRtePlayerEventTryOpenSucceed = 18, 
+  /**
+   * 19: Trying to open a new URL fails.
+   */
+  kRtePlayerEventTryOpenFailed = 19,
+  /**
+   * 20: Audio track changed.
+   */
+  kRtePlayerEventAudioTrackChanged = 20,
 } RtePlayerEvent;
 
 /**
@@ -200,27 +240,35 @@ typedef struct RtePlayerInfo {
    */
   RtePlayerState state;
   /** 
-   * Reserved parameter.
+   * Duration time of the current media source. This is valid when playing local media files or on-demand streams
    */
   size_t duration;
   /** 
-   * Reserved parameter.
+   * Stream count. This field is only valid when opening a non-RTE URL.
    */
   size_t stream_count;
   /** 
-   * Whether there is an audio stream. When opening an rte URL, it indicates whether the broadcaster has pushed audio.
+   * Whether there is an audio stream. Indicates whether the url source contains the audio stream.
+   * - true: The url source contains the audio stream.
+   * - false: The url source does not contain the audio stream.
    */
   bool has_audio;
   /** 
-   * Whether there is a video stream. When opening an rte URL, it indicates whether the broadcaster has pushed video.
+   * Whether there is a video stream. Indicates whether the url source contains the video stream.
+   * - true: The url source contains the video stream.
+   * - false: The url source does not contain the video stream.
    */
   bool has_video;
   /** 
-   * Whether the audio is muted. Indicates whether the audience has subscribed to the audio stream.
+   * Whether the audio is muted. Indicates whether the receiver end stops receiving the audio stream.
+   * - true: Stop receiving the audio stream.
+   * - false: Continue receiving the audio stream.
    */
   bool is_audio_muted;
   /** 
-   * Whether the video is muted. Indicates whether the audience has subscribed to the video stream.
+   * Whether the video is muted. Indicates whether the receiver end stops receiving the video stream. This field is only valid when you open an RTE URL.
+   * - true: Stop receiving the video stream.
+   * - false: Continue receiving the video stream.
    */
   bool is_video_muted;
   /** 
@@ -232,7 +280,7 @@ typedef struct RtePlayerInfo {
    */
   int video_width;
   /** 
-   * The currently subscribed video layer
+   * The currently subscribed video layer. This field is only valid when you open an RTE URL.
    */
   RteAbrSubscriptionLayer abr_subscription_layer;
   /** 
@@ -240,13 +288,18 @@ typedef struct RtePlayerInfo {
    */
   int audio_sample_rate;
   /** 
-   * Number of audio channels
+   * Number of audio channels.
    */
   int audio_channels;
   /** 
-   * Reserved parameter.
+   * Audio bits per sample. This field is only valid when opening a non-RTE URL.
    */
   int audio_bits_per_sample;
+  /**
+   * The URL being played.
+   */
+  RteString *current_url;
+
 } RtePlayerInfo;
 
 /**
@@ -382,6 +435,7 @@ struct RtePlayerObserver {
 };
 
 AGORA_RTE_API_C void RtePlayerInfoInit(RtePlayerInfo *info, RteError *err);
+AGORA_RTE_API_C void RtePlayerInfoCopy(RtePlayerInfo *dest, const RtePlayerInfo *src, RteError *err);
 AGORA_RTE_API_C void RtePlayerInfoDeinit(RtePlayerInfo *info, RteError *err);
 
 AGORA_RTE_API_C void RtePlayerStatsInit(RtePlayerStats *stats, RteError *err);
@@ -579,6 +633,8 @@ AGORA_RTE_API_C bool RtePlayerStop(RtePlayer *self, RteError *err);
 AGORA_RTE_API_C bool RtePlayerPause(RtePlayer *self, RteError *err);
 AGORA_RTE_API_C bool RtePlayerSeek(RtePlayer *self, uint64_t new_time,
                                   RteError *err);
+
+AGORA_RTE_API_C void RtePlayerSwitchWithUrl(RtePlayer *self, const char* url, bool sync_pts, void (*cb)(RtePlayer *self, void *cb_data, RteError *err), void *cb_data);
                                   
 AGORA_RTE_API_C bool RtePlayerMuteAudio(RtePlayer *self, bool mute, RteError *err);
 AGORA_RTE_API_C bool RtePlayerMuteVideo(RtePlayer *self, bool mute, RteError *err);
