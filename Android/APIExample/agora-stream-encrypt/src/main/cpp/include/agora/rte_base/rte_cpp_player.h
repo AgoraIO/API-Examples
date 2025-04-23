@@ -22,13 +22,209 @@ namespace rte {
 using PlayerState = ::RtePlayerState;
 using PlayerEvent = ::RtePlayerEvent;
 using PlayerMetadataType = ::RtePlayerMetadataType;
-using PlayerInfo = ::RtePlayerInfo;
 using PlayerStats = ::RtePlayerStats;
 using PlayerCustomSourceProvider = ::RtePlayerCustomSourceProvider;
 using AbrSubscriptionLayer = ::RteAbrSubscriptionLayer;
 using AbrFallbackLayer = ::RteAbrFallbackLayer;
 
 class PlayerInitialConfig {};
+
+/**
+ * @brief Player information.
+ * @details When playerInfo changes, it will be notified through the PlayerObserver::onPlayerInfoUpdated callback interface. 
+ * It can also be actively obtained through the Player::GetInfo interface.
+ * @since v4.5.1
+ */
+class PlayerInfo {
+ public:
+  PlayerInfo() { RtePlayerInfoInit(&c_player_info, nullptr); }
+  ~PlayerInfo() { RtePlayerInfoDeinit(&c_player_info, nullptr); }
+
+  PlayerInfo(const RtePlayerInfo* other) {
+    RtePlayerInfoInit(&c_player_info, nullptr);
+    RtePlayerInfoCopy(&c_player_info, other, nullptr);
+  }
+
+  PlayerInfo(const PlayerInfo& other) {
+    RtePlayerInfoInit(&c_player_info, nullptr);
+    RtePlayerInfoCopy(&c_player_info, &other.c_player_info, nullptr);
+  }
+
+  PlayerInfo& operator=(const PlayerInfo& other) {
+    RtePlayerInfoCopy(&c_player_info, &other.c_player_info, nullptr);
+    return *this;
+  }
+
+  PlayerInfo& operator=(const RtePlayerInfo* other) {
+    RtePlayerInfoCopy(&c_player_info, other, nullptr);
+    return *this;
+  }
+
+  /**
+   * @brief Get the current player state
+   * @since v4.5.1
+   * @return RtePlayerState The current player state.
+   */
+  RtePlayerState State() const {
+    return c_player_info.state;
+  }
+
+  /**
+   * @brief Get the duration time of the current media source.
+   * @since v4.5.1
+   * @note This is valid when playing local media files or on-demand streams.
+   * @return size_t The duration time of the current media source, in milliseconds.
+   */
+  size_t Duration() const {
+    return c_player_info.duration;
+  }
+
+  /**
+   * @brief Get The Stream count.
+   * @since v4.5.1
+   * @note This is valid when opening a non-RTE URL.
+   * @return size_t The stream count.
+   */ 
+  size_t StreamCount() const {
+    return c_player_info.stream_count;
+  }
+
+  /**
+   * @brief Whether there is an audio stream.
+   * @since v4.5.1
+   * @details Indicates whether the url source contains the audio stream.
+   * @return bool Whether there is an audio stream.
+   *  - true: The url source contains the audio stream.
+   *  - false: The url source does not contain the audio stream.
+   */
+  bool HasAudio() const {
+    return c_player_info.has_audio;
+  }
+
+  /**
+   * @brief Whether there is a video stream.
+   * @since v4.5.1
+   * @details Indicates whether the url source contains the video stream.
+   * @return bool Whether there is a video stream.
+   *  - true: The url source contains the video stream.
+   *  - false: The url source does not contain the video stream.
+   */
+  bool HasVideo() const {
+    return c_player_info.has_video;
+  }
+
+  /**
+   * @brief Whether player stops receiving the audio stream.
+   * @since v4.5.1
+   * @details Indicates whether the player stops receiving the audio stream.
+   * @return bool Whether player stops receiving the audio stream.
+   *  - true: Stop receiving the audio stream.
+   *  - false: Continue receiving the audio stream.
+   */
+  bool IsAudioMuted() const {
+    return c_player_info.is_audio_muted;
+  }
+
+  /**
+   * @brief Whether player stops receiving the video stream.
+   * @since v4.5.1
+   * @details Indicates whether the player stops receiving the video stream. 
+   * @note This field is only valid when you open an RTE URL.
+   * @return bool Whether player stops receiving the video stream.
+   *  - true: Stop receiving the video stream.
+   *  - false: Continue receiving the video stream.
+   */
+  bool IsVideoMuted() const {
+    return c_player_info.is_video_muted;
+  }
+
+  /**
+   * @brief Get the video resolution height. 
+   * @since v4.5.1
+   * @return int The video resolution height, in pixels.
+   */
+  int VideoHeight() const {
+    return c_player_info.video_height;
+  }
+
+  /**
+   * @brief Get the video resolution width.
+   * @since v4.5.1
+   * @return int The video resolution width, in pixels.
+   */
+  int VideoWidth() const {
+    return c_player_info.video_width;
+  }
+
+  /**
+   * @brief Get the currently subscribed video layer.
+   * @since v4.5.1
+   * @note This field is only valid when you open an RTE URL.
+   * @return RteAbrSubscriptionLayer The currently subscribed video layer.
+   */
+  AbrSubscriptionLayer AbrSubscriptionLayer() const {
+    return c_player_info.abr_subscription_layer;
+  }
+
+  /**
+   * @brief Get the audio sample rate.
+   * @since v4.5.1
+   * @return int The audio sample rate, in Hz.
+   */
+  int AudioSampleRate() const {
+    return c_player_info.audio_sample_rate;
+  }
+
+  /**
+   * @brief Get the number of audio channels.
+   * @since v4.5.1
+   * @return int The number of audio channels.
+   */
+  int AudioChannels() const {
+    return c_player_info.audio_channels;
+  }
+
+  /**
+   * @brief Get the audio bits per sample.
+   * @since v4.5.1
+   * @note This field is only valid when opening a non-RTE URL.
+   * @return int The audio bits per sample, in bits.
+   */
+  int AudioBitsPerSample() const {
+    return c_player_info.audio_bits_per_sample;
+  }
+
+  /**
+   * @brief Get the URL being played.
+   * @since v4.5.1
+   * @return std::string The URL being played.
+   */
+  std::string CurrentUrl() const {
+    String str(c_player_info.current_url);
+    return std::string(str.CStr());
+  }
+
+  /**
+   * @brief Set the current URL.
+   * @technical preview
+   * @param url The current URL.
+   * @return void
+   */
+  void SetCurrentUrl(const std::string& url) {
+    if(c_player_info.current_url != nullptr){
+      RteStringDestroy(c_player_info.current_url, nullptr);
+      c_player_info.current_url = nullptr;
+    }
+
+    c_player_info.current_url = RteStringCreate(nullptr);
+    RteStringInitWithCStr(c_player_info.current_url, url.c_str(), nullptr);
+  }
+
+  ::RtePlayerInfo *get_underlying_impl() { return &c_player_info; }
+
+  private:
+    ::RtePlayerInfo c_player_info;
+};
 
 static void onStateChanged(::RtePlayerObserver *observer,
                           RtePlayerState old_state, RtePlayerState new_state,
@@ -50,7 +246,7 @@ static void onAudioVolumeIndication(::RtePlayerObserver *observer, int32_t volum
 
 
 /**
- * The PlayerObserver class is used to observe the event of Player object.
+ * @brief The PlayerObserver class is used to observe the event of Player object.
  * @since v4.4.0
  */
 class PlayerObserver {
@@ -77,7 +273,7 @@ class PlayerObserver {
   // @}
 
   /**
-   * Player state callback. This function is called when the player state changes.
+   * @brief Player state callback. This function is called when the player state changes.
    * @since v4.4.0
    * @param old_state The old state.
    * @param new_state The new state.
@@ -98,10 +294,13 @@ class PlayerObserver {
                     rte::Error *err) {};
 
   /**
-   * This callback will be triggered when the playback position changed.
+   * @brief Reports current playback progress.This callback will be triggered when the playback position changed.
    * @since v4.4.0
-   * @param curr_time 
-   * @param utc_time 
+   * 
+   * @details The callback occurs once every one second during the playback and reports the current playback progress.
+   * @param curr_time Current playback progress (milisecond).
+   * @param utc_time Current NTP(Network Time Protocol) time (milisecond).
+   * @return void
    */
   virtual void onPositionChanged(uint64_t curr_time,
                       uint64_t utc_time) {};
@@ -148,9 +347,9 @@ class PlayerObserver {
   virtual void onPlayerInfoUpdated(const PlayerInfo *info) {};
 
   /**
-   * Broadcaster audio volume update callback.
+   * Update player current volume
    * @since v4.4.0
-   * @param volume The current volume of the Broadcaster. The value range is [0, 255].
+   * @param volume The current volume of the player. The value range is [0, 255].
    * @return void
    */
   virtual void onAudioVolumeIndication(int32_t volume) {};
@@ -203,7 +402,8 @@ void onMetadata(::RtePlayerObserver *observer, RtePlayerMetadataType type,
 void onPlayerInfoUpdated(::RtePlayerObserver *observer, const RtePlayerInfo *info){
   auto *player_observer = static_cast<PlayerObserver *>(observer->base_observer.me_in_target_lang);
   if (player_observer != nullptr){
-    player_observer->onPlayerInfoUpdated(info);
+    PlayerInfo cpp_info(info);
+    player_observer->onPlayerInfoUpdated(&cpp_info);
   }
 }
 
@@ -271,11 +471,13 @@ class PlayerConfig {
 
   /**
    * Set the playback speed parameter.
-   * @since v4.4.0
-   * @param speed 
-   * @param err
+   * @since v4.5.1
+   * @note You can call this method after calling Player::OpenWithUrl.
+   * @param speed The playback speed. The value range is [50,400].
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidArgument: The speed parameter is set to an illegal value.
    * @return void
-   * @technical preview
    */
   void SetPlaybackSpeed(int32_t speed, Error *err = nullptr) {
     RtePlayerConfigSetPlaybackSpeed(&c_player_config, speed,
@@ -284,10 +486,10 @@ class PlayerConfig {
 
   /**
    * Get the playback speed parameter.
-   * @since v4.4.0
-   * @param err 
-   * @return int32_t
-   * @technical preview
+   * @since v4.5.1
+   * @param err Posible return values for ErrorCode:
+   *   - kRteOk: Success
+   * @return int32_t The value of playback speed.
    */
   int32_t GetPlaybackSpeed(Error *err = nullptr) {
     int32_t speed;
@@ -460,11 +662,12 @@ class PlayerConfig {
 
   /**
    * Set the playout volume parameter.
-   * @since v4.4.0
-   * @param volume 
-   * @param err 
+   * @since v4.5.1
+   * @param volume The volume value to be set. The value range is [0, 400].
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidArgument: The volume parameter is set to an illegal value.
    * @return void
-   * @technical preview
    */
   void SetPlayoutVolume(int32_t volume, Error *err = nullptr) {
     RtePlayerConfigSetPlayoutVolume(&c_player_config, volume,
@@ -473,10 +676,10 @@ class PlayerConfig {
 
   /**
    * Get the playout volume parameter.
-   * @since v4.4.0
-   * @param err 
-   * @return int32_t
-   * @technical preview
+   * @since v4.5.1
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return int32_t The volume value of the player.
    */
   int32_t GetPlayoutVolume(Error *err = nullptr) {
     int32_t volume;
@@ -568,11 +771,15 @@ class PlayerConfig {
 
   /**
    * Set the loop count parameter.
-   * @since v4.4.0
-   * @param count 
-   * @param err 
+   * @since v4.5.1
+   * @param count The number of times looping the media file.
+   *   - 1: Play the media file once.
+   *   - 2: Play the media file twice.
+   *   - -1: Play the media file in a loop indefinitely, until stop() is called.
+   * @param err Posible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: Indicates that the count parameter is set to an illegal value.
    * @return void
-   * @technical preview
    */
   void SetLoopCount(int32_t count, Error *err = nullptr) {
     RtePlayerConfigSetLoopCount(&c_player_config, count,
@@ -581,10 +788,10 @@ class PlayerConfig {
 
   /**
    * Get the loop count parameter.
-   * @since v4.4.0
-   * @param err 
-   * @return int32_t
-   * @technical preview
+   * @since v4.5.1
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return int32_t The number of times looping the media file.
    */
   int32_t GetLoopCount(Error *err = nullptr) {
     int32_t count;
@@ -619,7 +826,7 @@ class PlayerConfig {
     String str;
     RtePlayerConfigGetJsonParameter(&c_player_config, str.get_underlying_impl(),
                                  err != nullptr ? err->get_underlying_impl() : nullptr);
-    return std::string(str.Cstr());
+    return std::string(str.CStr());
   }
 
   /**
@@ -733,13 +940,13 @@ class Player {
   };
 
   /** 
-   * Open URL resource. Currently, only rte URLs are supported, and cdn URLs and files are not supported.
-   * This interface can also be used to refresh the token of an already opened URL.
-   * For URL format definition and token refresh method description, refer to the doc:
+   * Open URL resource. Currently, the rte URLs and cdn URLs and files are supported.
+   * This interface can also be used to refresh the token of an already opened RTE URL.
+   * For RTE URL format definition and token refresh method description, refer to the doc:
    *  https://doc.shengwang.cn/doc/rtc/android/best-practice/playing-url
    * @since v4.4.0
    * @param url The URL resource to open
-   * @param start_time Start time [currently not supported]
+   * @param start_time Set the starting position for playback, in ms.
    * @param cb Callback to asynchronously notify the result of the open operation. If an error occurs during open, it will enter the kRtePlayerStateFailed state. You need to call the Stop method before calling OpenWithUrl again.
    *    @param err Possible return values for ErrorCode. At this time, the new_state value corresponds to kRtePlayerStateFailed.
    *      - kRteOk: Success
@@ -788,6 +995,35 @@ class Player {
     CallbackContext<Player>* callbackCtx = new CallbackContext<Player>(this, cb);
     RtePlayerOpenWithStream(&c_player, stream != nullptr ? &stream->c_rte_stream : nullptr, &CallbackFunc<::RtePlayer, Player>, callbackCtx);
   };
+
+
+  /**
+   * Switch to a new URL. This interface can be used to switch to a new URL during playback.
+   *
+   * @note
+   * - This method is only valid when the player opens a non-RTE URL. 
+   * - Call this method when the sdk returns the player state as kRtePlayerStateOpenCompleted.
+   * 
+   * @since v4.5.1
+   * @param url The new URL to switch to.
+   * @param sync_pts Whether to synchronize the playback position (ms) after the switch operation:
+   *    - true: Synchronize the playback position.  
+   *    - false: (Default)Do not synchronize the playback position.
+   * @param cb Callback to asynchronously notify the result of the switch operation. 
+   *    @param err Possible return values for ErrorCode:
+   *      - kRteOk: Success
+   *      - kRteErrorDefault: Failed to switch to the new URL.
+   *      - kRteErrorInvalidArgument: The passed URL is empty or has an invalid format.
+   *      - kRteErrorInvalidOperation: 
+   *          - The corresponding internal Player object has been destroyed or is invalid.
+   *          - The opened URL is a RTE URL, switch to a new URL is not supported.
+   * @return void 
+   *  
+   */
+  void SwitchWithUrl(const char* url, bool sync_pts, std::function<void(rte::Error* err)> cb){
+    CallbackContext<Player>* callbackCtx = new CallbackContext<Player>(this, cb);
+    RtePlayerSwitchWithUrl(&c_player, url, sync_pts, &CallbackFunc<::RtePlayer, Player>, callbackCtx);
+  }
 
   /**
    * Get player playback statistics.
@@ -863,15 +1099,16 @@ class Player {
 
   /**
    * Seek the playback position.
-   * @since v4.4.0
+   * @since v4.5.1
    * @param new_time The new playback position to seek to.
    * @param err Possible return values for ErrorCode:
    *  - kRteOk: Success
-   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   *  - kRteErrorInvalidOperation: 
+   *    - The corresponding internal Player object has been destroyed or is invalid.
+   *    - The opened URL is an RTE URL, Seek is not supported.
    * @return bool The result of the Seek operation. If it fails, you can check the specific error through err.
    *  - true: Successfully Seek.
    *  - false: Failed to Seek.
-   * @technical preview
    */
   bool Seek(uint64_t new_time, Error *err = nullptr)  {
     return RtePlayerSeek(&c_player, new_time, err != nullptr ? err->get_underlying_impl() : nullptr);
@@ -907,12 +1144,16 @@ class Player {
     return RtePlayerMuteVideo(&c_player, mute, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
+
   /**
    * Get the playback position.
-   * @since v4.4.0
-   * @param err 
-   * @return uint64_t
-   * @technical preview
+   * @since v4.5.1
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidOperation: 
+   *     - The corresponding internal Player object has been destroyed or is invalid.
+   *     - The opened URL is an RTE URL, getPosition is not supported.
+   * @return uint64_t The current playback position, in milliseconds.
    */
   uint64_t GetPosition(Error *err = nullptr){
     return RtePlayerGetPosition(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
@@ -931,7 +1172,7 @@ class Player {
    *  - false: Failed to get the player information.
    */
   bool GetInfo(PlayerInfo *info, Error *err = nullptr){
-    return RtePlayerGetInfo(&c_player, info, err != nullptr ? err->get_underlying_impl() : nullptr);
+    return RtePlayerGetInfo(&c_player, info != nullptr ? info->get_underlying_impl() : nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
@@ -999,6 +1240,7 @@ class Player {
     return RtePlayerUnregisterObserver(&c_player, observer != nullptr ? observer->c_player_observer : nullptr,
                                 err != nullptr ? err->get_underlying_impl() : nullptr);
   }
+
 
  private:
   ::RtePlayer c_player;

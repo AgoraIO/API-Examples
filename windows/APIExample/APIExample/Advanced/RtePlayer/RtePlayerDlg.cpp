@@ -59,7 +59,7 @@ BOOL CRtePlayerDlg::OnInitDialog()
 void CRtePlayerDlg::InitCtrlText()
 {
 	std::string strAppID = GET_APP_ID;
-	std::string str = "ret://" + strAppID + "/";
+	std::string str = "rte://" + strAppID + "/";
 	mRteUrlEc.SetWindowTextW(CA2W(str.c_str()));
 	updateUiState();
 }

@@ -239,20 +239,12 @@ class LocalCompositeGraph: BaseViewController {
                 self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
             } else {
                 isScreenSharing = true
-                let mediaOptions = AgoraRtcChannelMediaOptions()
-//                mediaOptions.publishCameraTrack = false
-//                mediaOptions.publishScreenTrack = true
-                agoraKit.updateChannel(with: mediaOptions)
                 agoraKit.startPreview()
                 setupLocalPreview(isScreenSharing: true)
             }
         } else {
             agoraKit.stopScreenCapture()
             isScreenSharing = false
-            let mediaOptions = AgoraRtcChannelMediaOptions()
-//            mediaOptions.publishCameraTrack = true
-//            mediaOptions.publishScreenTrack = false
-            agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
             setupLocalPreview(isScreenSharing: false)
         }
@@ -288,17 +280,26 @@ class LocalCompositeGraph: BaseViewController {
     private func videoTranscoderHandler(isTranscoder: Bool) {
         if isTranscoder {
             let captureConfig = AgoraCameraCapturerConfiguration()
-            captureConfig.dimensions = videos[1].videocanvas.bounds.size
+            captureConfig.dimensions = CGSize(width: 100, height: 100)
             agoraKit.startCameraCapture(.camera, config: captureConfig)
-            let config = AgoraLocalTranscoderConfiguration()
+            
             let cameraStream = AgoraTranscodingVideoStream()
-            cameraStream.rect = NSRect(origin: NSPoint(x: 250, y: 0), size: NSSize(width: 100, height: 100))
+            cameraStream.rect = NSRect(origin: NSPoint(x: 150, y: 0), size: NSSize(width: 100, height: 100))
             cameraStream.sourceType = .camera
+            
+            let size = NSScreen.main?.visibleFrame.size ?? .zero
+            
             let screenStream = AgoraTranscodingVideoStream()
             screenStream.sourceType = .screen
-            screenStream.rect = NSScreen.main?.visibleFrame ?? .zero
-            config.videoInputStreams = [cameraStream, screenStream]
+            screenStream.rect = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
+            
+            let config = AgoraLocalTranscoderConfiguration()
+            config.videoInputStreams = [screenStream, cameraStream]
+            config.videoOutputConfiguration.dimensions = size
+
             agoraKit.startLocalVideoTranscoder(config)
+            
+            
             let mediaOptions = AgoraRtcChannelMediaOptions()
             mediaOptions.publishTranscodedVideoTrack = true
             agoraKit.updateChannel(with: mediaOptions)

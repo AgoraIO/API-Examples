@@ -11,7 +11,7 @@ object ByteDanceBeautySDK {
 
     private const val TAG = "ByteDanceBeautySDK"
 
-    private val LICENSE_NAME = "Agora_test_20241014_20241214_io.agora.entfull_4.5.0_2060.licbag"
+    private val LICENSE_NAME = "Agora_test_io.agora.entfull.licbag"
     private var storagePath = ""
     private var assetsPath = ""
     private var licensePath = ""

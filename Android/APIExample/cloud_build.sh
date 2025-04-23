@@ -3,6 +3,19 @@
 # cache gradle to /tmp/.gradle
 ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
 
+## use open jdk 17
+SYSTEM=$(uname -s)
+if [ "$SYSTEM" = "Linux" ];then
+if [ ! -d "/tmp/jdk-17.0.2" ];then
+  curl -O https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+  tar zxf openjdk-17.0.2_linux-x64_bin.tar.gz
+  mv jdk-17.0.2 /tmp/
+fi
+export JAVA_HOME=/tmp/jdk-17.0.2
+export PATH=$JAVA_HOME/bin:$PATH
+java --version
+fi
+
 #change android maven to china repos
 sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" settings.gradle
 sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" gradle/wrapper/gradle-wrapper.properties
@@ -42,7 +55,7 @@ fi
 
 
 ## config beauty
-sed -i -e "s#io.agora.api.example#io.agora.entfull#g" app/build.gradle
+sed -i -e "s#applicationId \"io.agora.api.example\"#applicationId \"io.agora.entfull\"#g" app/build.gradle
 rm -f app/build.gradle-e
 cd app/src/main || exit 1
 curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"

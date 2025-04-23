@@ -48,6 +48,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * {@link io.agora.api.example.common.widget.VideoReportLayout}.
  * You can refer to {@link LiveStreaming} or {@link io.agora.api.example.examples.basic.JoinChannelVideo} example.
  */
+@Deprecated
 public class InCallReport extends BaseFragment implements View.OnClickListener {
     private static final String TAG = InCallReport.class.getSimpleName();
 

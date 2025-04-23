@@ -2706,6 +2706,7 @@ enum AUDIO_SCENARIO_TYPE {
   AUDIO_SCENARIO_MEETING = 8,
   /**
    * 9: AI Server.
+   * @technical preview 
    */
   AUDIO_SCENARIO_AI_SERVER = 9,
   /**
@@ -6537,7 +6538,7 @@ enum THREAD_PRIORITY_TYPE {
   CRITICAL = 5,
 };
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
 
 /**
  * The video configuration for the shared screen stream.
