@@ -101,9 +101,15 @@ echo "start move to"
 echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
+if [ $generate_project = true ]; then
+    echo "start generate project"
+    cd ./$unzip_name/samples/${ios_direction}
+    ./cloud_project.sh || exit 1
+    cd -
+fi
+
 if [ $compile_project = true ]; then
 	cd ./$unzip_name/samples/${ios_direction}
 	./cloud_build.sh || exit 1
 	cd -
 fi
-
