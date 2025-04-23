@@ -24,7 +24,7 @@
         android:layout_height="1dp"
         android:background="#eeeeee"/>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_low_latency"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -37,7 +37,7 @@
         android:layout_marginHorizontal="8dp"
         android:background="#eeeeee"/>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_watermark"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -50,7 +50,7 @@
         android:layout_marginHorizontal="8dp"
         android:background="#eeeeee"/>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_low_stream"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -92,7 +92,7 @@
         android:background="#eeeeee"/>
 
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_b_frame"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -106,7 +106,7 @@
         android:layout_marginHorizontal="8dp"
         android:background="#eeeeee"/>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_first_frame"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -183,7 +183,7 @@
         android:layout_marginHorizontal="8dp"
         android:background="#eeeeee"/>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/switch_video_image"
         android:layout_width="match_parent"
         android:layout_height="50dp"

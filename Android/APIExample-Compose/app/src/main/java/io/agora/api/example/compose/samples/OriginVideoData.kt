@@ -31,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.TwoVideoView
@@ -187,7 +189,7 @@ fun OriginVideoData() {
             val allGranted = grantedMap.values.all { it }
             if (allGranted) {
                 // Permission is granted
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = clientRole
@@ -196,7 +198,7 @@ fun OriginVideoData() {
                 }
             } else {
                 // Permission is denied
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -286,7 +288,7 @@ private fun OriginVideoDataView(
             modifier = Modifier.align(Alignment.End).padding(16.dp, 0.dp),
             onClick = onScreenshotClick
         ) {
-            Text(text = "截图")
+            Text(text = stringResource(id = R.string.screenshot))
         }
 
         ChannelNameInput(
@@ -420,7 +422,7 @@ private class OriginVideoDataScreenshotTaker(
             )
             val matrix = Matrix()
             matrix.setRotate(videoFrame.rotation.toFloat())
-            // 围绕原地进行旋转
+            // Rotate around the original position
             val newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false)
             // save to file
             saveBitmap2Gallery(newBitmap)
