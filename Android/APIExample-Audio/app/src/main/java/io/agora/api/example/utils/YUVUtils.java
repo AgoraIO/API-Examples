@@ -184,7 +184,7 @@ public class YUVUtils {
         return out;
     }
     /**
-     * I420转nv21
+     * Convert I420 to NV21
      */
     public static byte[] I420ToNV21(byte[] data, int width, int height) {
         byte[] ret = new byte[data.length];

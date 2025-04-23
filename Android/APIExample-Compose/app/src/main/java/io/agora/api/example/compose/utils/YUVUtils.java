@@ -257,7 +257,7 @@ public final class YUVUtils {
     }
 
     /**
-     * I420转nv21
+     * Convert I420 format to NV21 format
      *
      * @param data   the data
      * @param width  the width

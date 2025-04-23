@@ -101,4 +101,10 @@
     <string name="frame_rate">Frame Rate</string>
     <string name="orientation">Orientation</string>
     <string name="area">Area</string>
+    <string name="screenshot">Screenshot</string>
+    <string name="start_co_hosting">Start Co-hosting</string>
+    <string name="stop_co_hosting">Stop Co-hosting</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="enable_video">Enable Video</string>
 </resources>
