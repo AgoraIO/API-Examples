@@ -38,6 +38,8 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+export PATH=$PATH:/opt/homebrew/bin
+
 xcode_version=$(xcodebuild -version | grep Xcode | awk '{print $2}')
 echo "Xcode Version: $xcode_version"
 echo ios_direction: $ios_direction
