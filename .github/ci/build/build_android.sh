@@ -96,12 +96,6 @@ else
 fi
 
 if [ $compile_project = true ]; then
-	# install android sdk
-	which java
-	java --version
-	source ~/.bashrc
-	export ANDROID_HOME=/usr/lib/android_sdk
-	echo ANDROID_HOME: $ANDROID_HOME
 	cd ./$unzip_name/rtc/samples/API-Example || exit 1
 	if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
 		./cloud_build.sh false || exit 1
