@@ -127,8 +127,18 @@ if [ $compress_apiexample = true ]; then
     global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_APIExample.zip
     echo "cn_des_path: $cn_des_path"
     echo "global_des_path: $global_des_path"
-    mv cn_result.zip $cn_des_path
-    mv global_result.zip $global_des_path
+    echo "Moving cn_result.zip to $cn_des_path..."
+    mv cn_result.zip $cn_des_path 2>&1
+    if [ $? -ne 0 ]; then
+        echo "Failed to move cn_result.zip to $cn_des_path. Error: $(mv cn_result.zip $cn_des_path 2>&1)"
+    fi
+
+    mv global_result.zip $global_des_path 2>&1
+    if [ $? -ne 0 ]; then
+        echo "Failed to move global_result.zip to $global_des_path. Error: $(mv global_result.zip $global_des_path 2>&1)"
+    fi
+    
+    ls -al $WORKSPACE/
 fi 
 
 if [ $compile_project = true ]; then
