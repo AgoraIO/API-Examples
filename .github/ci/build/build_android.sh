@@ -17,6 +17,7 @@
 # 'platform: string',
 # 'BUILD_NUMBER: string',
 # 'WORKSPACE: string'
+# 'compress_apiexample:boolean:false'
 #
 # --- Test Related: ---
 #   PR build, zip test related to test.zip
@@ -49,10 +50,9 @@ echo release_version: $release_version
 echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
-
+echo compress_apiexample: $compress_apiexample
 unzip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT
 zip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT.zip
-
 if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
@@ -74,22 +74,25 @@ else
 	rm ./$unzip_name/rtc/package_size_report.txt
 	rm -rf ./$unzip_name/pom
 fi
+
+# Create API-Example directory and copy files
 mkdir -p ./$unzip_name/rtc/samples 
-cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/${android_direction} || exit 1
+cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
 
-if [ $generate_project = true ]; then
-	if [ $is_cn = true ]; then
-		cd ./$unzip_name/rtc/samples/${android_direction}  || exit 1
-		sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" settings.gradle
-		sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" gradle/wrapper/gradle-wrapper.properties
-		cd $WORKSPACE  # 返回工作目录
-	fi
-
-	7za a -tzip result.zip -r $unzip_name > log.txt
-	mv result.zip $WORKSPACE/${android_direction}_${BUILD_NUMBER}_$zip_name
+# Decide how to package based on compress_apiexample parameter
+if [ "$compress_apiexample" = "true" ]; then
+	# Only compress API-Example code
+	echo "Only compressing API-Example code"
+	mkdir -p ./temp_apiexample/rtc/samples
+	cp -rf ./$unzip_name/rtc/samples/API-Example ./temp_apiexample/rtc/samples/ || exit 1
+	7za a -tzip result.zip -r temp_apiexample > log.txt
+	rm -rf ./temp_apiexample
+	mv result.zip $WORKSPACE/apiExample_${BUILD_NUMBER}_$zip_name
 else
+	# Compress the entire SDK including API-Example
+	echo "Compressing the entire SDK including API-Example"
 	7za a -tzip result.zip -r $unzip_name > log.txt
-	mv result.zip $WORKSPACE/${android_direction}_${BUILD_NUMBER}_$zip_name
+	mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 fi
 
 if [ $compile_project = true ]; then
@@ -99,12 +102,10 @@ if [ $compile_project = true ]; then
 	source ~/.bashrc
 	export ANDROID_HOME=/usr/lib/android_sdk
 	echo ANDROID_HOME: $ANDROID_HOME
-	cd ./$unzip_name/rtc/samples/${android_direction}  || exit 1
+	cd ./$unzip_name/rtc/samples/API-Example || exit 1
 	if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
 		./cloud_build.sh false || exit 1
 	else
 		./cloud_build.sh true || exit 1
 	fi
 fi
-
-
