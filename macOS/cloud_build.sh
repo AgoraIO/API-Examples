@@ -40,6 +40,16 @@ PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 /usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
 
+# SimpleFilter
+# Debug
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
+# Release
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
+
 #修改build number
 # Debug
 /usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
