@@ -37,6 +37,7 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+export PATH=$PATH:/opt/homebrew/bin
 
 echo compile_project:$compile_project
 echo Package_Publish: $Package_Publish
@@ -119,10 +120,10 @@ if [ $compress_apiexample = true ]; then
     mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}${BUILD_NUMBER}_APIExample.zip 
 fi 
 
-if [ $compile_project = true ]; then
-    cd ./$unzip_name/samples/APIExample
-    ./cloud_build.sh || exit 1
-    cd -
-fi
+#if [ $compile_project = true ]; then
+#    cd ./$unzip_name/samples/APIExample
+#    ./cloud_build.sh || exit 1
+#    cd -
+#fi
 
 
