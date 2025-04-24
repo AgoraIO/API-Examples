@@ -16,7 +16,7 @@
         android:layout_gravity="end"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:text="静音"/>
+        android:text="@string/audio_mute"/>
 
     <Switch
         android:id="@+id/switch_blur"
@@ -25,7 +25,7 @@
         android:layout_gravity="end"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:text="Voice Blur"/>
+        android:text="@string/voice_blur"/>
 
     <Switch
         android:id="@+id/switch_airborne"
@@ -34,7 +34,7 @@
         android:layout_gravity="end"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:text="Airborne Simulation"/>
+        android:text="@string/airborne_simulation"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Attenuation"/>
+            android:text="@string/attenuation"/>
 
         <SeekBar
             android:id="@+id/sb_attenuation"

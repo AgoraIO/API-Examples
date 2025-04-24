@@ -399,4 +399,10 @@
     <string name="eglcontext_select_desc">外部EglContext设置</string>
     <string name="channel_empty">频道号为空</string>
     <string name="dest_channel_empty">目标频道号为空</string>
+    <string name="enable_transcoding">是否转码</string>
+    <string name="the_example_feature_tips">此示例演示了如何使用SDK进行语音通话的功能。</string>
+    <string name="audio_mute">静音</string>
+    <string name="voice_blur">声音模糊</string>
+    <string name="airborne_simulation">空气传播模拟</string>
+    <string name="attenuation">衰减系数</string>
 </resources>

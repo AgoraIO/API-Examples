@@ -89,15 +89,15 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         mWebView.setFocusableInTouchMode(true);
         mWebView.setSaveEnabled(true);
 
-        // 硬件加速
+        // Hardware acceleration
         requireActivity().getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-        // WebView 配置
+        // WebView configuration
         WebSettings webSettings = mWebView.getSettings();
 
-        // 后退
+        // Back button handling
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -110,32 +110,32 @@ public abstract class BaseBrowserFragment extends BaseFragment {
             }
         });
 
-        // 缓存相关
-        // mWebView.clearCache(true); // 清除缓存
-        // mWebView.clearHistory(); // 清除历史
-        // mWebView.clearFormData(); // 清除表单数据
-        // 缓存模式
+        // Cache related settings
+        // mWebView.clearCache(true); // Clear cache
+        // mWebView.clearHistory(); // Clear history
+        // mWebView.clearFormData(); // Clear form data
+        // Cache mode
         // LOAD_DEFAULT:
-        // 默认，根据 cache -control 决定是否从网络上取数据
+        // Default, decides whether to fetch from network based on cache-control
         // LOAD_NORMAL:
-        // API level 17 中已经废弃, 从API level 11 开始作用同 LOAD_DEFAULT 模式
+        // Deprecated in API level 17, from API level 11 it functions same as LOAD_DEFAULT
         // LOAD_CACHE_ELSE_NETWORK:
-        // 只要本地有，无论是否过期，或者 no -cache，都使用缓存中的数据
+        // Use cached data if available, regardless of expiration or no-cache
         // LOAD_NO_CACHE:
-        // 不使用缓存，只从网络获取数据
+        // Do not use cache, fetch data from network only
         // LOAD_CACHE_ONLY:
-        // 不使用网络，只读取本地缓存数据
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 设置缓存模式
+        // Do not use network, read only from local cache
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // Set cache mode
 
 
-        // js 相关
-        webSettings.setJavaScriptEnabled(true); // 支持 js。如果碰到后台无法释放 js 导致耗电，应在 onStop 和 onResume 里分别设成 false 和 true
+        // js related
+        webSettings.setJavaScriptEnabled(true); // Support js. If js cannot be released after background, it should be set to false in onStop and true in onResume
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setDomStorageEnabled(true);
-        // mWebView.addJavascriptInterface(new WebAppInterface(this), "android"); // js 接口
+        // mWebView.addJavascriptInterface(new WebAppInterface(this), "android"); // js interface
 
         try {
-            // webSettings.setPluginsEnabled(true); // 支持插件
+            // webSettings.setPluginsEnabled(true); // Support plugins
             Method setPluginsEnabled = webSettings.getClass().getMethod("setPluginsEnabled", Boolean.class);
             setPluginsEnabled.setAccessible(true);
             setPluginsEnabled.invoke(webSettings, true);
@@ -144,16 +144,16 @@ public abstract class BaseBrowserFragment extends BaseFragment {
         }
 
 
-        // 设置自适应屏幕，两者合用
-        webSettings.setUseWideViewPort(true); // 将图片调整到适合 WebView 的大小
-        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        // Set adaptive screen, both are used
+        webSettings.setUseWideViewPort(true); // Adjust image to fit WebView size
+        webSettings.setLoadWithOverviewMode(true); // Scale to screen size
 
-        // 缩放操作
-        webSettings.setSupportZoom(true); // 支持缩放，默认为 true
-        webSettings.setBuiltInZoomControls(true); // 设置内置的缩放控件，若为 false，则该 WebView 不可缩放
-        webSettings.setDisplayZoomControls(false); // 隐藏原生的缩放控件
+        // Scaling operation
+        webSettings.setSupportZoom(true); // Support zoom, default is true
+        webSettings.setBuiltInZoomControls(true); // Set built-in zoom control, if false, this WebView cannot be zoomed
+        webSettings.setDisplayZoomControls(false); // Hide native zoom control
 
-        // 支持同时打开https和http
+        // Support opening https and http at the same time
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         mWebView.setWebChromeClient(new WebChromeClient() {
