@@ -118,11 +118,13 @@ if [ $compress_apiexample = true ]; then
     ./cloud_project.sh || exit 1
     cd -
     echo "start compress api example"
-    7za a -tzip cn_result.zip $cn_dir > log.txt
-    7za a -tzip global_result.zip $global_dir > log.txt     
+    7za a -tzip cn_result.zip $cn_dir
+    7za a -tzip global_result.zip $global_dir    
 
     mv cn_result.zip $WORKSPACE/${apiexample_cn_name}_${sdk_version}_APIExample.zip
     mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}_APIExample.zip 
+    echo "complete compress api example"
+    ls -al
 fi 
 
 if [ $compile_project = true ]; then
