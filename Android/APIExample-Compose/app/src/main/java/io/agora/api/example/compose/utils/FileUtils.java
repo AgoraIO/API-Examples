@@ -53,27 +53,27 @@ public final class FileUtils {
         AssetManager assetManager = context.getAssets();
         try {
             File file = new File(storagePath);
-            if (!file.exists()) { //如果文件夹不存在，则创建新的文件夹
+            if (!file.exists()) { //If the folder does not exist, create a new folder
                 file.mkdirs();
             }
 
-            // 获取assets目录下的所有文件及目录名
+            // Get all file and directory names under the assets directory
             String[] fileNames = assetManager.list(assetsPath);
-            if (fileNames.length > 0) { //如果是目录 apk
+            if (fileNames.length > 0) { //If it is a directory apk
                 for (String fileName : fileNames) {
                     if (!TextUtils.isEmpty(assetsPath)) {
-                        temp = assetsPath + SEPARATOR + fileName; //补全assets资源路径
+                        temp = assetsPath + SEPARATOR + fileName; //Complete the assets resource path
                     }
 
                     String[] childFileNames = assetManager.list(temp);
-                    if (!TextUtils.isEmpty(temp) && childFileNames.length > 0) { //判断是文件还是文件夹：如果是文件夹
+                    if (!TextUtils.isEmpty(temp) && childFileNames.length > 0) { //Determine if it is a file or folder: if it is a folder
                         copyFilesFromAssets(context, temp, storagePath + SEPARATOR + fileName);
-                    } else { //如果是文件
+                    } else { //If it is a file
                         InputStream inputStream = assetManager.open(temp);
                         readInputStream(storagePath + SEPARATOR + fileName, inputStream);
                     }
                 }
-            } else { //如果是文件 doc_test.txt或者apk/app_test.apk
+            } else { //If it is a file doc_test.txt or apk/app_test.apk
                 InputStream inputStream = assetManager.open(assetsPath);
                 if (assetsPath.contains(SEPARATOR)) { //apk/app_test.apk
                     assetsPath = assetsPath.substring(assetsPath.lastIndexOf(SEPARATOR), assetsPath.length());
@@ -87,27 +87,27 @@ public final class FileUtils {
     }
 
     /**
-     * 读取输入流中的数据写入输出流
+     * Read data from input stream and write to output stream
      *
-     * @param storagePath 目标文件路径
-     * @param inputStream 输入流
+     * @param storagePath Target file path
+     * @param inputStream Input stream
      */
     public static void readInputStream(String storagePath, InputStream inputStream) {
         File file = new File(storagePath);
         try {
             if (!file.exists()) {
-                // 1.建立通道对象
+                // 1. Create channel object
                 FileOutputStream fos = new FileOutputStream(file);
-                // 2.定义存储空间
+                // 2. Define storage space
                 byte[] buffer = new byte[inputStream.available()];
-                // 3.开始读文件
+                // 3. Start reading file
                 int lenght = 0;
-                while ((lenght = inputStream.read(buffer)) != -1) { // 循环从输入流读取buffer字节
-                    // 将Buffer中的数据写到outputStream对象中
+                while ((lenght = inputStream.read(buffer)) != -1) { // Loop to read buffer bytes from input stream
+                    // Write the data in the Buffer to the outputStream object
                     fos.write(buffer, 0, lenght);
                 }
-                fos.flush(); // 刷新缓冲区
-                // 4.关闭流
+                fos.flush(); // Flush buffer
+                // 4. Close streams
                 fos.close();
                 inputStream.close();
             }

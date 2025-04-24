@@ -325,7 +325,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                         height);
                 Matrix matrix = new Matrix();
                 matrix.setRotate(videoFrame.getRotation());
-                // 围绕原地进行旋转
+                // Rotate around the original position
                 Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
                 // save to file
                 saveBitmap2Gallery(newBitmap);
