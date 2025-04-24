@@ -120,11 +120,13 @@ if [ $compress_apiexample = true ]; then
     echo "start compress api example"
     7za a -tzip cn_result.zip $cn_dir
     7za a -tzip global_result.zip $global_dir    
+    echo "complete compress api example"
+    echo "current path: `pwd`"
+    ls -al
 
     mv cn_result.zip $WORKSPACE/${apiexample_cn_name}_${sdk_version}_APIExample.zip
     mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}_APIExample.zip 
-    echo "complete compress api example"
-    ls -al
+    
 fi 
 
 if [ $compile_project = true ]; then
