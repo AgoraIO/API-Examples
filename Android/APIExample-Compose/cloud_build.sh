@@ -6,14 +6,31 @@ ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch 
 ## use open jdk 17
 SYSTEM=$(uname -s)
 if [ "$SYSTEM" = "Linux" ];then
-if [ ! -d "/tmp/jdk-17.0.2" ];then
-  curl -O https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
-  tar zxf openjdk-17.0.2_linux-x64_bin.tar.gz
-  mv jdk-17.0.2 /tmp/
+  if [ ! -d "/tmp/jdk-17.0.2" ];then
+    curl -O https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+    tar zxf openjdk-17.0.2_linux-x64_bin.tar.gz
+    mv jdk-17.0.2 /tmp/
+  fi
+  export JAVA_HOME=/tmp/jdk-17.0.2
+  export ANDROID_HOME=/usr/lib/android_sdk
+elif [ "$SYSTEM" = "Darwin" ];then
+  export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+  export ANDROID_HOME=${ANDROID_HOME:-$HOME/Library/Android/sdk}
 fi
-export JAVA_HOME=/tmp/jdk-17.0.2
+
 export PATH=$JAVA_HOME/bin:$PATH
-java --version
+java --version || { echo "Error: Failed to get Java version"; exit 1; }
+
+# Configure environment
+if [ "$SYSTEM" = "Linux" ];then
+  [ -f ~/.bashrc ] && source ~/.bashrc
+else
+  # Try to load zsh config first, if not found then try bash_profile
+  if [ -f ~/.zshrc ]; then
+    source ~/.zshrc
+  elif [ -f ~/.bash_profile ]; then
+    source ~/.bash_profile
+  fi
 fi
 
 #change android maven to china repos
