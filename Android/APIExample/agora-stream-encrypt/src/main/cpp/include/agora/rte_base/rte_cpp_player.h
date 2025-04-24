@@ -73,7 +73,7 @@ class PlayerInfo {
    * @brief Get the duration time of the current media source.
    * @since v4.5.1
    * @note This is valid when playing local media files or on-demand streams.
-   * @return size_t The duration time of the current media source.
+   * @return size_t The duration time of the current media source, in milliseconds.
    */
   size_t Duration() const {
     return c_player_info.duration;
@@ -139,9 +139,9 @@ class PlayerInfo {
   }
 
   /**
-   * @brief Get the video resolution height.
+   * @brief Get the video resolution height. 
    * @since v4.5.1
-   * @return int The video resolution height.
+   * @return int The video resolution height, in pixels.
    */
   int VideoHeight() const {
     return c_player_info.video_height;
@@ -150,7 +150,7 @@ class PlayerInfo {
   /**
    * @brief Get the video resolution width.
    * @since v4.5.1
-   * @return int The video resolution width.
+   * @return int The video resolution width, in pixels.
    */
   int VideoWidth() const {
     return c_player_info.video_width;
@@ -169,7 +169,7 @@ class PlayerInfo {
   /**
    * @brief Get the audio sample rate.
    * @since v4.5.1
-   * @return int The audio sample rate.
+   * @return int The audio sample rate, in Hz.
    */
   int AudioSampleRate() const {
     return c_player_info.audio_sample_rate;
@@ -188,7 +188,7 @@ class PlayerInfo {
    * @brief Get the audio bits per sample.
    * @since v4.5.1
    * @note This field is only valid when opening a non-RTE URL.
-   * @return int The audio bits per sample.
+   * @return int The audio bits per sample, in bits.
    */
   int AudioBitsPerSample() const {
     return c_player_info.audio_bits_per_sample;
@@ -773,11 +773,12 @@ class PlayerConfig {
    * Set the loop count parameter.
    * @since v4.5.1
    * @param count The number of times looping the media file.
-   *   - 0: Play the media file once.
-   *   - 1: Play the media file twice.
+   *   - 1: Play the media file once.
+   *   - 2: Play the media file twice.
    *   - -1: Play the media file in a loop indefinitely, until stop() is called.
    * @param err Posible return values for ErrorCode:
    *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: Indicates that the count parameter is set to an illegal value.
    * @return void
    */
   void SetLoopCount(int32_t count, Error *err = nullptr) {
@@ -1005,7 +1006,7 @@ class Player {
    * 
    * @since v4.5.1
    * @param url The new URL to switch to.
-   * @param sync_pts Whether to synchronize the playback position (ms) before and after the switch:
+   * @param sync_pts Whether to synchronize the playback position (ms) after the switch operation:
    *    - true: Synchronize the playback position.  
    *    - false: (Default)Do not synchronize the playback position.
    * @param cb Callback to asynchronously notify the result of the switch operation. 
@@ -1152,7 +1153,7 @@ class Player {
    *   - kRteErrorInvalidOperation: 
    *     - The corresponding internal Player object has been destroyed or is invalid.
    *     - The opened URL is an RTE URL, getPosition is not supported.
-   * @return uint64_t The current playback position.
+   * @return uint64_t The current playback position, in milliseconds.
    */
   uint64_t GetPosition(Error *err = nullptr){
     return RtePlayerGetPosition(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
