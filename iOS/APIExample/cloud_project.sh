@@ -29,9 +29,9 @@ rm -f vender_fu_iOS.zip
 perl -i -pe "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
 #打开第三方美颜
-perl -i -pe "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
-perl -i -pe "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
-perl -i -pe "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
+perl -i -pe "s#\#pod 'SenseLib'#pod 'SenseLib'#g" Podfile
+perl -i -pe "s#\#pod 'bytedEffect'#pod 'bytedEffect'#g" Podfile
+perl -i -pe "s#\#pod 'fuLib'#pod 'fuLib'#g" Podfile
 
 pod install --repo-update || exit 1
 
