@@ -19,38 +19,38 @@ object SenseTimeBeautySDK {
 
     private const val MODEL_106 = "models/M_SenseME_Face_Video_Template_p_3.9.0.3.model" // 106
     // private const val MODEL_FACE_EXTRA = "models/M_SenseME_Face_Extra_Advanced_Template_p_2.0.0.model" // 282
-    // private const val MODEL_AVATAR_HELP = "models/M_SenseME_Avatar_Help_p_2.3.7.model" // avatar人脸驱动
-    // private const val MODEL_LIPS_PARSING = "models/M_SenseME_MouthOcclusion_p_1.3.0.1.model" // 嘴唇分割
-    // private const val MODEL_HAND = "models/M_SenseME_Hand_p_6.0.8.1.model" // 手势
-    // private const val MODEL_SEGMENT = "models/M_SenseME_Segment_Figure_p_4.14.1.1.model" // 前后背景分割
-    // private const val MODEL_SEGMENT_HAIR = "models/M_SenseME_Segment_Hair_p_4.4.0.model" // 头发分割
-    // private const val MODEL_FACE_OCCLUSION = "models/M_SenseME_FaceOcclusion_p_1.0.7.1.model" // 妆容遮挡
-    // private const val MODEL_SEGMENT_SKY = "models/M_SenseME_Segment_Sky_p_1.1.0.1.model" // 天空分割
-    // private const val MODEL_SEGMENT_SKIN = "models/M_SenseME_Segment_Skin_p_1.0.1.1.model" // 皮肤分割
+    // private const val MODEL_AVATAR_HELP = "models/M_SenseME_Avatar_Help_p_2.3.7.model" // avatar face driving
+    // private const val MODEL_LIPS_PARSING = "models/M_SenseME_MouthOcclusion_p_1.3.0.1.model" // lips segmentation
+    // private const val MODEL_HAND = "models/M_SenseME_Hand_p_6.0.8.1.model" // gesture
+    // private const val MODEL_SEGMENT = "models/M_SenseME_Segment_Figure_p_4.14.1.1.model" // foreground and background segmentation
+    // private const val MODEL_SEGMENT_HAIR = "models/M_SenseME_Segment_Hair_p_4.4.0.model" // hair segmentation
+    // private const val MODEL_FACE_OCCLUSION = "models/M_SenseME_FaceOcclusion_p_1.0.7.1.model" // makeup occlusion
+    // private const val MODEL_SEGMENT_SKY = "models/M_SenseME_Segment_Sky_p_1.1.0.1.model" // sky segmentation
+    // private const val MODEL_SEGMENT_SKIN = "models/M_SenseME_Segment_Skin_p_1.0.1.1.model" // skin segmentation
     // private const val MODEL_3DMESH = "models/M_SenseME_3DMesh_Face2396pt_280kpts_Ear_p_1.1.0v2.model" // 3DMesh
-    // private const val MODEL_HEAD_P_EAR = "models/M_SenseME_Ear_p_1.0.1.1.model" // 搭配 mesh 耳朵模型
-    // private const val MODEL_360HEAD_INSTANCE = "models/M_SenseME_3Dmesh_360Head2396pt_p_1.0.0.1.model" // 360度人头mesh
-    // private const val MODEL_FOOT = "models/M_SenseME_Foot_p_2.10.7.model" // 鞋子检测模型
-    // private const val MODEL_PANT = "models/M_SenseME_Segment_Trousers_p_1.1.10.model" // 裤腿的检测
-    // private const val MODEL_WRIST = "models/M_SenseME_Wrist_p_1.4.0.model" // 试表
-    // private const val MODEL_CLOTH = "models/M_SenseME_Segment_Clothes_p_1.0.2.2.model" // 衣服分割
-    // private const val MODEL_HEAD_INSTANCE = "models/M_SenseME_Segment_Head_Instance_p_1.1.0.1.model" // 实例分割版本
-    // private const val MODEL_HEAD_P_INSTANCE = "models/M_SenseME_Head_p_1.3.0.1.model" // 360度人头-头部模型
-    // private const val MODEL_NAIL = "models/M_SenseME_Nail_p_2.4.0.model" // 指甲检测
+    // private const val MODEL_HEAD_P_EAR = "models/M_SenseME_Ear_p_1.0.1.1.model" // ear model with mesh
+    // private const val MODEL_360HEAD_INSTANCE = "models/M_SenseME_3Dmesh_360Head2396pt_p_1.0.0.1.model" // 360-degree head mesh
+    // private const val MODEL_FOOT = "models/M_SenseME_Foot_p_2.10.7.model" // shoe detection model
+    // private const val MODEL_PANT = "models/M_SenseME_Segment_Trousers_p_1.1.10.model" // trouser leg detection
+    // private const val MODEL_WRIST = "models/M_SenseME_Wrist_p_1.4.0.model" // watch try-on
+    // private const val MODEL_CLOTH = "models/M_SenseME_Segment_Clothes_p_1.0.2.2.model" // clothing segmentation
+    // private const val MODEL_HEAD_INSTANCE = "models/M_SenseME_Segment_Head_Instance_p_1.1.0.1.model" // instance segmentation version
+    // private const val MODEL_HEAD_P_INSTANCE = "models/M_SenseME_Head_p_1.3.0.1.model" // 360-degree head model
+    // private const val MODEL_NAIL = "models/M_SenseME_Nail_p_2.4.0.model" // nail detection
 
     private var stickerPackageId = 0
 
-    // 特效句柄
+    // Effect handle
     private var _mobileEffectNative: STMobileEffectNative? = null
     val mobileEffectNative
         get() = _mobileEffectNative ?: throw RuntimeException("Please initMobileEffect firstly!")
 
-    // 人脸识别句柄
+    // Face recognition handle
     private var _humanActionNative: STMobileHumanActionNative? = null
     val humanActionNative
         get() = _humanActionNative ?: throw RuntimeException("Please initBeautySDK firstly!")
 
-    // 美颜配置
+    // Beauty configuration
     val beautyConfig = BeautyConfig()
 
     private var beautyAPI: SenseTimeBeautyAPI? = null
@@ -125,25 +125,27 @@ object SenseTimeBeautySDK {
             return
         }
 
-        // 其他模型配置
+        // Other model configurations
         // _humanActionNative?.addSubModelFromAssetFile("$resourcePath/$MODEL_FACE_EXTRA", assets)
 
-        // 背景分割羽化程度[0,1](默认值0.35),0 完全不羽化,1羽化程度最高,在strenth较小时,羽化程度基本不变.值越大,前景与背景之间的过度边缘部分越宽.
+        // Background segmentation feathering degree [0,1] (default value 0.35), 0 means no feathering at all, 1 means maximum feathering.
+        // When strength is small, feathering remains basically unchanged. The larger the value, the wider the transition edge between foreground and background.
         // _humanActionNative?.setParam(
         //     STHumanActionParamsType.ST_HUMAN_ACTION_PARAM_BACKGROUND_BLUR_STRENGTH,
         //     0.35f
         // )
-        // 设置face mesh结果输出坐标系,(0: 屏幕坐标系， 1：3d世界坐标系， 2:3d摄像机坐标系,是摄像头透视投影坐标系, 原点在摄像机 默认是0）
+        // Set face mesh result output coordinate system (0: screen coordinate system, 1: 3D world coordinate system, 
+        // 2: 3D camera coordinate system, which is the camera perspective projection coordinate system, with origin at the camera, default is 0)
         // _humanActionNative?.setParam(
         //     STHumanActionParamsType.ST_HUMAN_ACTION_PARAM_FACE_MESH_OUTPUT_FORMAT,
         //     1.0f
         // )
-        // 设置mesh渲染模式
+        // Set mesh rendering mode
         // _humanActionNative?.setParam(
         //     STHumanActionParamsType.ST_HUMAN_ACTION_PARAM_MESH_MODE,
         //     STCommonNative.MESH_CONFIG.toFloat()
         // )
-        // 设置人头实例分割
+        // Set head instance segmentation
         // _humanActionNative?.setParam(
         //     STHumanActionParamsType.ST_HUMAN_ACTION_PARAM_HEAD_SEGMENT_INSTANCE,
         //     1.0f
@@ -167,7 +169,7 @@ object SenseTimeBeautySDK {
     }
 
     open class BeautyConfig {
-        // 磨皮
+        // Smoothing
         var smooth = 0.75f
             set(value) {
                 field = value
@@ -184,7 +186,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 美白
+        // Whitening
         var whiten = 0.75f
             set(value) {
                 field = value
@@ -201,7 +203,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 瘦脸
+        // Face thinning
         var thinFace = 0.3f
             set(value) {
                 field = value
@@ -214,8 +216,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-
-        // 大眼
+        // Eye enlargement
         var enlargeEye = 0.0f
             set(value) {
                 field = value
@@ -228,7 +229,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 红润
+        // Skin redness
         var redden = 0.0f
             set(value) {
                 field = value
@@ -241,8 +242,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-
-        // 瘦颧骨
+        // Cheekbone thinning
         var shrinkCheekbone = 0.3f
             set(value) {
                 field = value
@@ -255,7 +255,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 下颌骨
+        // Jawbone thinning
         var shrinkJawbone = 0.0f
             set(value) {
                 field = value
@@ -268,7 +268,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 美牙
+        // Teeth whitening
         var whiteTeeth = 0.0f
             set(value) {
                 field = value
@@ -281,7 +281,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 额头
+        // Hairline height
         var hairlineHeight = 0.0f
             set(value) {
                 field = value
@@ -294,7 +294,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 瘦鼻
+        // Nose narrowing
         var narrowNose = 0.0f
             set(value) {
                 field = value
@@ -307,7 +307,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 嘴形
+        // Mouth size
         var mouthSize = 0.0f
             set(value) {
                 field = value
@@ -320,8 +320,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-
-        // 下巴
+        // Chin length
         var chinLength = 0.0f
             set(value) {
                 field = value
@@ -333,7 +332,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 亮眼
+        // Bright eyes
         var brightEye = 0.0f
             set(value) {
                 field = value
@@ -346,7 +345,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 祛黑眼圈
+        // Remove dark circles
         var darkCircles = 0.0f
             set(value) {
                 field = value
@@ -359,7 +358,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 祛法令纹
+        // Remove nasolabial folds
         var nasolabialFolds = 0.0f
             set(value) {
                 field = value
@@ -372,7 +371,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 饱和度
+        // Saturation
         var saturation = 0.0f
             set(value) {
                 field = value
@@ -385,7 +384,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 对比度
+        // Contrast
         var contrast = 0.0f
             set(value) {
                 field = value
@@ -398,7 +397,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 锐化
+        // Sharpen
         var sharpen = 0.0f
             set(value) {
                 field = value
@@ -411,8 +410,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-
-        // 清晰度
+        // Clarity
         var clear = 0.0f
             set(value) {
                 field = value
@@ -425,7 +423,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 美妆
+        // Makeup
         var makeUp: MakeUpItem? = null
             set(value) {
                 field = value
@@ -450,7 +448,7 @@ object SenseTimeBeautySDK {
                 }
             }
 
-        // 贴纸
+        // Sticker
         var sticker: StickerItem? = null
             set(value) {
                 field = value

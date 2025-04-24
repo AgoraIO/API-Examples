@@ -71,11 +71,11 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private Button join;
     private Switch shapeBeauty, makeUp, beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_videoEnhance, seek_smoothness, seek_strength, seek_skin;
-    //美妆
+    // Makeup
     private SeekBar sbBrowStrength, sbLashStrength, sbShadowStrength, sbPupilStrength, sbBlushStrength, sbLipStrength;
     private Spinner spinnerBrowStyle, spinnerLashStyle, spinnerShadowStyle, spinnerPupilStyle, spinnerBlushStyle, spinnerLipStyle;
     private Spinner spinnerBrowColor, spinnerLashColor, spinnerShadowColor, spinnerPupilColor, spinnerBlushColor, spinnerLipColor;
-    //美型
+    // Beauty Shape
     private SeekBar sbShapeBeautifyAreaIntensity, sbShapeBeautifyStyleIntensity;
     private Spinner spinnerShapeBeautyArea, spinnerShapeBeautifyStyle;
     private EditText et_channel;
@@ -137,7 +137,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         seek_skin = view.findViewById(R.id.skinProtect);
         seek_skin.setOnSeekBarChangeListener(this);
 
-        //美型
+        // Beauty Shape
         sbShapeBeautifyAreaIntensity = view.findViewById(R.id.sb_shape_beautify_area_intensity);
         sbShapeBeautifyAreaIntensity.setOnSeekBarChangeListener(this);
         sbShapeBeautifyStyleIntensity = view.findViewById(R.id.sb_shape_beautify_style_intensity);
@@ -148,7 +148,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         spinnerShapeBeautifyStyle = view.findViewById(R.id.spinner_shape_beautify_style);
         spinnerShapeBeautifyStyle.setOnItemSelectedListener(this);
 
-        //美妆
+        // Makeup
         sbBrowStrength = view.findViewById(R.id.sb_brow_strength);
         sbBrowStrength.setOnSeekBarChangeListener(this);
         sbLashStrength = view.findViewById(R.id.sb_lash_strength);

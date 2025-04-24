@@ -69,8 +69,8 @@ public class WaveformView extends View {
 
     private void initPainters() {
         mWavePaint = new Paint();
-        mWavePaint.setColor(mWaveColor);// 画笔为color
-        mWavePaint.setStrokeWidth(waveStrokeWidth);// 设置画笔粗细
+        mWavePaint.setColor(mWaveColor);// Set paint color
+        mWavePaint.setStrokeWidth(waveStrokeWidth);// Set paint stroke width
         mWavePaint.setAntiAlias(true);
         mWavePaint.setFilterBitmap(true);
         mWavePaint.setStrokeCap(Paint.Cap.ROUND);
@@ -78,8 +78,8 @@ public class WaveformView extends View {
         Shader shader = new LinearGradient(0, 0, 1000, 0, 0xffffffff, 0xFFe850ee, Shader.TileMode.CLAMP);
         mWavePaint.setShader(shader);
         baseLinePaint = new Paint();
-        baseLinePaint.setColor(mBaseLineColor);// 画笔为color
-        baseLinePaint.setStrokeWidth(1f);// 设置画笔粗细
+        baseLinePaint.setColor(mBaseLineColor);// Set paint color
+        baseLinePaint.setStrokeWidth(1f);// Set paint stroke width
         baseLinePaint.setAntiAlias(true);
         baseLinePaint.setFilterBitmap(true);
         baseLinePaint.setStyle(Paint.Style.FILL);
@@ -145,7 +145,7 @@ public class WaveformView extends View {
     }
 
     /**
-     * 如果改变相应配置  需要刷新相应的paint设置
+     * If you change the corresponding configuration, you need to refresh the paint settings
      */
     public void invalidateNow() {
         initPainters();

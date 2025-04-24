@@ -100,4 +100,10 @@
     <string name="frame_rate">帧率</string>
     <string name="orientation">方向</string>
     <string name="area">区域</string>
+    <string name="screenshot">截图</string>
+    <string name="start_co_hosting">开始连麦</string>
+    <string name="stop_co_hosting">关闭连麦</string>
+    <string name="permission_granted">权限已授予</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="enable_video">启用视频</string>
 </resources>

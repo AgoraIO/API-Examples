@@ -51,7 +51,7 @@
                 android:visibility="invisible"
                 tools:visibility="visible">
 
-                <!--                美型-->
+                <!-- shape beautify-->
                 <Switch
                     android:id="@+id/switch_face_shape_beautify"
                     android:layout_width="wrap_content"
@@ -164,8 +164,7 @@
                         android:progress="50" />
                 </LinearLayout>
 
-                <!--                美妆-->
-                <!--                眉毛-->
+                <!-- face_makeup -->
                 <Switch
                     android:id="@+id/switch_face_makeup"
                     android:layout_width="wrap_content"
@@ -252,8 +251,6 @@
                         android:progress="5" />
                 </LinearLayout>
 
-                <!--                眼睫毛-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -331,9 +328,6 @@
                         android:max="10"
                         android:progress="5" />
                 </LinearLayout>
-
-                <!--                眼影-->
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -414,8 +408,6 @@
                         android:progress="5" />
                 </LinearLayout>
 
-                <!--                瞳孔-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -495,8 +487,6 @@
                         android:progress="5" />
                 </LinearLayout>
 
-                <!--                腮红-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -574,8 +564,6 @@
                         android:max="10"
                         android:progress="5" />
                 </LinearLayout>
-
-                <!--                唇彩-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
