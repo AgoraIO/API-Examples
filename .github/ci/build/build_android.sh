@@ -51,8 +51,10 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 echo compress_apiexample: $compress_apiexample
+
 unzip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT
 zip_name=Agora_Native_SDK_for_Android_FULL_DEFAULT.zip
+
 if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
@@ -79,27 +81,52 @@ fi
 mkdir -p ./$unzip_name/rtc/samples 
 cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
 
+# Define build path variable based on compress_apiexample parameter
+if [ $compress_apiexample = true ]; then
+	build_path="./temp_apiexample"
+	result_file="apiExample_${BUILD_NUMBER}_$zip_name"
+else
+	build_path="./$unzip_name"
+	result_file="withAPIExample_${BUILD_NUMBER}_$zip_name"
+fi
+
 # Decide how to package based on compress_apiexample parameter
-if [ "$compress_apiexample" = "true" ]; then
+if [ $compress_apiexample = true ]; then
 	# Only compress API-Example code
 	echo "Only compressing API-Example code"
 	mkdir -p ./temp_apiexample/rtc/samples
 	cp -rf ./$unzip_name/rtc/samples/API-Example ./temp_apiexample/rtc/samples/ || exit 1
-	7za a -tzip result.zip -r temp_apiexample > log.txt
+	7za a -tzip apiExample_android.zip -r temp_apiexample > log.txt
 	rm -rf ./temp_apiexample
-	mv result.zip $WORKSPACE/apiExample_${BUILD_NUMBER}_$zip_name
+	mv apiExample_android.zip $WORKSPACE/$result_file
 else
 	# Compress the entire SDK including API-Example
 	echo "Compressing the entire SDK including API-Example"
-	7za a -tzip result.zip -r $unzip_name > log.txt
-	mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
+	7za a -tzip apiExample_android_with_sdk.zip -r $unzip_name > log.txt
+	mv apiExample_android_with_sdk.zip $WORKSPACE/$result_file
 fi
 
 if [ $compile_project = true ]; then
-	cd ./$unzip_name/rtc/samples/API-Example || exit 1
+	# Based on compress_apiexample, use the appropriate build path
+	if [ $compress_apiexample = true ]; then
+		echo "Building with API-Example only package"
+		mkdir -p ./temp_apiexample/rtc/samples
+		cp -rf ./$unzip_name/rtc/samples/API-Example ./temp_apiexample/rtc/samples/ || exit 1
+		cd ./temp_apiexample/rtc/samples/API-Example || exit 1
+	else
+		echo "Building with full SDK package"
+		cd ./$unzip_name/rtc/samples/API-Example || exit 1
+	fi
+	
 	if [ -z "$sdk_url" ] || [ "$sdk_url" == "none" ]; then
 		./cloud_build.sh false || exit 1
 	else
 		./cloud_build.sh true || exit 1
+	fi
+	
+	# Cleanup temp directory if needed
+	if [ $compress_apiexample = true ]; then
+		cd ../../../../
+		rm -rf ./temp_apiexample
 	fi
 fi
