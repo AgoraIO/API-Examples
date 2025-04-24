@@ -94,7 +94,7 @@ public final class FloatWindowHelper {
      * @return the boolean
      */
     public static boolean checkPermission(Context context) {
-        //6.0 版本之后由于 google 增加了对悬浮窗权限的管理，所以方式就统一了
+        // After Android 6.0, Google added management for floating window permissions, so the method is unified
         return commonROMPermissionCheck(context);
     }
 
@@ -141,7 +141,7 @@ public final class FloatWindowHelper {
     }
 
     private static boolean commonROMPermissionCheck(Context context) {
-        //最新发现魅族6.0的系统这种方式不好用，天杀的，只有你是奇葩，没办法，单独适配一下
+        // Recently found that this method doesn't work well on Meizu 6.0 system, only this one is special, need to adapt separately
         if (RomUtils.checkIsMeizuRom()) {
             return meizuPermissionCheck(context);
         } else {
@@ -184,12 +184,12 @@ public final class FloatWindowHelper {
     }
 
     /**
-     * 通用 rom 权限申请
+     * Common ROM permission application
      *
      * @param context Context.
      */
     private static void commonROMPermissionApply(final Context context) {
-        //这里也一样，魅族系统需要单独适配
+        // Same here, Meizu system needs to be adapted separately
         if (RomUtils.checkIsMeizuRom()) {
             meizuROMPermissionApply(context);
         } else {
