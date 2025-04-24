@@ -123,20 +123,15 @@ if [ $compress_apiexample = true ]; then
     echo "complete compress api example"
     echo "current path: `pwd`"
     ls -al
-    cn_des_path=$WORKSPACE/${apiexample_cn_name}_${sdk_version}_APIExample.zip
-    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_APIExample.zip
+    cn_des_path=$WORKSPACE/${apiexample_cn_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
+    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
     echo "cn_des_path: $cn_des_path"
-    echo "global_des_path: $global_des_path"
-    echo "Moving cn_result.zip to $cn_des_path..."
-    mv cn_result.zip $cn_des_path 2>&1
-    if [ $? -ne 0 ]; then
-        echo "Failed to move cn_result.zip to $cn_des_path. Error: $(mv cn_result.zip $cn_des_path 2>&1)"
-    fi
+    echo "Moving cn_result.zip to $cn_des_path"
+    mv cn_result.zip $cn_des_path
 
-    mv global_result.zip $global_des_path 2>&1
-    if [ $? -ne 0 ]; then
-        echo "Failed to move global_result.zip to $global_des_path. Error: $(mv global_result.zip $global_des_path 2>&1)"
-    fi
+    echo "global_des_path: $global_des_path"
+    echo "Moving global_result.zip to $global_des_path"
+    mv global_result.zip $global_des_path
     
     ls -al $WORKSPACE/
 fi 
