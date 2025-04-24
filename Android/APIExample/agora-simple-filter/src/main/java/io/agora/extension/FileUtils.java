@@ -14,7 +14,6 @@ import java.util.zip.ZipInputStream;
 public class FileUtils {
 
     /**
-     * 递归拷贝Asset目录中的文件到rootDir中
      * Recursively copy the files in the Asset directory to rootDir
      * @param assets
      * @param path
@@ -87,9 +86,8 @@ public class FileUtils {
 
 
     /**
-     * 解压压缩包
-     * 解压后删除zip文件
-     * unzip the package and delete thd zip file
+     * Unzip the package
+     * After unzipping, delete the zip file
      * @return
      */
     public static boolean unzipAssetFile(Context context, String zipFilePath, File dstDir) {
@@ -139,7 +137,7 @@ public class FileUtils {
                         folder.mkdirs();
 
                     } else {
-                        //否则创建文件,并输出文件的内容
+                        //Otherwise create a file and output its content
                         File file = new File(dstDir, name);
                         file.getParentFile().mkdirs();
                         file.createNewFile();

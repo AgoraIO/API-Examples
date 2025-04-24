@@ -20,31 +20,31 @@ public class AVCallFloatView extends FrameLayout {
     private static final String TAG = "AVCallFloatView";
 
     /**
-     * 记录手指按下时在小悬浮窗的View上的横坐标的值
+     * Record the horizontal coordinate value of the finger press on the small floating window view
      */
     private float xInView;
 
     /**
-     * 记录手指按下时在小悬浮窗的View上的纵坐标的值
+     * Record the vertical coordinate value of the finger press on the small floating window view
      */
     private float yInView;
     /**
-     * 记录当前手指位置在屏幕上的横坐标值
+     * Record the current finger position's horizontal coordinate value on the screen
      */
     private float xInScreen;
 
     /**
-     * 记录当前手指位置在屏幕上的纵坐标值
+     * Record the current finger position's vertical coordinate value on the screen
      */
     private float yInScreen;
 
     /**
-     * 记录手指按下时在屏幕上的横坐标的值
+     * Record the horizontal coordinate value of the finger press on the screen
      */
     private float xDownInScreen;
 
     /**
-     * 记录手指按下时在屏幕上的纵坐标的值
+     * Record the vertical coordinate value of the finger press on the screen
      */
     private float yDownInScreen;
 
@@ -103,16 +103,16 @@ public class AVCallFloatView extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 xInScreen = event.getRawX();
                 yInScreen = event.getRawY();
-                // 手指移动的时候更新小悬浮窗的位置
+                // Update the position of the small floating window when the finger moves
                 updateViewPosition();
                 break;
             case MotionEvent.ACTION_UP:
                 if (Math.abs(xDownInScreen - xInScreen) <= ViewConfiguration.get(getContext()).getScaledTouchSlop()
                         && Math.abs(yDownInScreen - yInScreen) <= ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
-                    // 点击效果
+                    // Click effect
                     Log.d(TAG, "this float window is clicked");
                 } else {
-                    //吸附效果
+                    // Adsorption effect
                     anchorToSide();
                 }
                 break;
@@ -220,7 +220,7 @@ public class AVCallFloatView extends FrameLayout {
     }
 
     private void updateViewPosition() {
-        //增加移动误差
+        //Add movement error
         mParams.x = (int) (xInScreen - xInView);
         mParams.y = (int) (yInScreen - yInView);
         Log.e(TAG, "x  " + mParams.x + "   y  " + mParams.y);

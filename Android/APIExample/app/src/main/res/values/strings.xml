@@ -419,4 +419,10 @@
     <string name="eglcontext_select_desc">External EglContext Settings</string>
     <string name="channel_empty">Channel is empty</string>
     <string name="dest_channel_empty">Destination Channel is empty</string>
+    <string name="enable_transcoding">Transcoding</string>
+    <string name="the_example_feature_tips">This example demonstrates how to use the SDK to implement voice call functionality.</string>
+    <string name="audio_mute">Audio mute</string>
+    <string name="voice_blur">Voice Blur</string>
+    <string name="airborne_simulation">Airborne Simulation</string>
+    <string name="attenuation">Attenuation</string>
 </resources>

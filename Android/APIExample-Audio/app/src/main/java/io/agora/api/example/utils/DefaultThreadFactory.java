@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author zhilong <a href="mailto:zhilong.liu@aliyun.com">Contact me.</a>
  * @version 1.0
- * @since 15/12/25 上午10:51
+ * @since 15/12/25 10:51 AM
  */
 public class DefaultThreadFactory implements ThreadFactory
 {

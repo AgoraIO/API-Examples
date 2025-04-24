@@ -156,7 +156,7 @@ fun JoinMultiChannel() {
                 super.onLocalAudioStateChanged(state, reason)
                 if (state == Constants.LOCAL_AUDIO_STREAM_STATE_STOPPED) {
                     mainHandler.post {
-                        Toast.makeText(context, "麦克风已关闭", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Microphone is turned off", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -174,7 +174,7 @@ fun JoinMultiChannel() {
             val allGranted = grantedMap.values.all { it }
             if (allGranted) {
                 // Permission is granted
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
                 val options = ChannelMediaOptions()
                 options.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 options.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE
@@ -196,7 +196,7 @@ fun JoinMultiChannel() {
                 }
             } else {
                 // Permission is denied
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
             }
         }
 

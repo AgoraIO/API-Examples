@@ -39,7 +39,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * 参考 {@link GLSurfaceView} 实现
+ * {@link android.opengl.GLSurfaceView}
  *
  * @author fkwl5
  */
@@ -89,7 +89,7 @@ public class GLTextureView extends TextureView implements TextureView.SurfaceTex
     public final static int DEBUG_LOG_GL_CALLS = 2;
 
     /**
-     * 构造方法，必须调用 {@link #setRenderer} 才能进行渲染
+     * Constructor, must call {@link #setRenderer} for rendering to occur
      *
      * @param context the context
      */
