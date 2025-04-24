@@ -108,7 +108,7 @@ echo "start move to"
 echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
-if [ $compile_sdk_project = true ]; then
+if [ $compress_apiexample = true ]; then
     sdk_version=$(grep "pod 'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
     echo "sdk_version: $sdk_version"
     
