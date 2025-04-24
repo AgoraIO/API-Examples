@@ -26,12 +26,12 @@ unzip -o vender_fu_iOS.zip
 rm -f vender_fu_iOS.zip
 
 #打开第三方播放器配置
-sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
+perl -i -pe "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
 #打开第三方美颜
-sed -i -e "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
-sed -i -e "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
-sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
+perl -i -pe "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
+perl -i -pe "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
+perl -i -pe "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
 
 pod install --repo-update || exit 1
 
