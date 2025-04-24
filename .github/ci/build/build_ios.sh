@@ -63,6 +63,12 @@ export LANG=en_US.UTF-8
 unzip_name=Agora_Native_SDK_for_iOS_FULL
 zip_name=output.zip
 sdk_url_flag=false
+apiexample_cn_name=Shengwang_Native_SDK_for_iOS
+apiexample_global_name=Agora_Native_SDK_for_iOS
+cn_dir=CN
+global_dir=Global
+
+
 if [ -z "$sdk_url" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
@@ -93,6 +99,7 @@ else
    mv ./$unzip_name/samples/${ios_direction}/sdk.podspec ./$unzip_name/ || exit 1
 fi
 
+
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
 
 echo "start compress"
@@ -101,15 +108,27 @@ echo "start move to"
 echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
-if [ $generate_project = true ]; then
-    echo "start generate project"
-    cd ./$unzip_name/samples/${ios_direction}
+if [ $compile_sdk_project = true ]; then
+    sdk_version=$(grep "pod 'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
+    echo "sdk_version: $sdk_version"
+    
+    mkdir -p $cn_dir $global_dir
+    cp -rf ./iOS/${ios_direction} $cn_dir/
+    cp -rf ./iOS/${ios_direction} $global_dir/
+    cd $cn_dir/${ios_direction}
     ./cloud_project.sh || exit 1
     cd -
-fi
+    echo "start compress api example"
+    7za a -tzip cn_result.zip $cn_dir > log.txt
+    7za a -tzip global_result.zip $global_dir > log.txt     
+
+    mv cn_result.zip $WORKSPACE/${apiexample_cn_name}_${sdk_version}_APIExample.zip
+    mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}_APIExample.zip 
+fi 
 
 if [ $compile_project = true ]; then
 	cd ./$unzip_name/samples/${ios_direction}
 	./cloud_build.sh || exit 1
 	cd -
 fi
+
