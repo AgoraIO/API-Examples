@@ -140,7 +140,7 @@ fun CustomAudioSource() {
             val allGranted = grantedMap.values.all { it }
             if (allGranted) {
                 // Permission is granted
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
                 option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
                 option.publishMicrophoneTrack = false
@@ -150,7 +150,7 @@ fun CustomAudioSource() {
 
             } else {
                 // Permission is denied
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
             }
         }
     CustomAudioSourceView(

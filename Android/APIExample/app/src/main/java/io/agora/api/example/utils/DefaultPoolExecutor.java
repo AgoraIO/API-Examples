@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Executors
  *
  * @version 1.0
- * @since 16 /4/28 下午4:07
+ * @since 16 /4/28 PM 4:07
  */
 public final class DefaultPoolExecutor extends ThreadPoolExecutor {
     private static final String TAG = DefaultPoolExecutor.class.getSimpleName();

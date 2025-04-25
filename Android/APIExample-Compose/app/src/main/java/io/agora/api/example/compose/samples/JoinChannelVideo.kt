@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.VideoGrid
@@ -151,7 +152,7 @@ fun JoinChannelVideo() {
             val allGranted = grantedMap.values.all { it }
             if (allGranted) {
                 // Permission is granted
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
@@ -161,7 +162,7 @@ fun JoinChannelVideo() {
 
             } else {
                 // Permission is denied
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
             }
         }
 
