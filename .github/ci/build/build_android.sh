@@ -87,8 +87,7 @@ fi
 mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
 if [ $compress_apiexample = true ]; then
-	cd ./$unzip_name/rtc/samples/API-Example || exit 1
-	7za a -tzip result_onlyAPIExample.zip -r ./$unzip_name/rtc/samples/API-Example > log1.txt
+	7za a -tzip result_onlyAPIExample.zip -r ./$unzip_name/rtc/samples/API-Example >> log.txt
 	mv result_onlyAPIExample.zip $WORKSPACE/onlyAPIExample_${BUILD_NUMBER}_$zip_name
 fi
 
