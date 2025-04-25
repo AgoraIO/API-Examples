@@ -35,7 +35,7 @@ android {
         properties.load(rootProject.file("local.properties").inputStream())
         val AGORA_APP_ID = properties.getProperty("AGORA_APP_ID", "")
         if (AGORA_APP_ID == "") {
-            throw GradleException("请在项目根目录下local.properties文件里正确配置：AGORA_APP_ID=<您的声网AppId>")
+            throw GradleException("Please configure correctly in the local.properties file in the project root directory: AGORA_APP_ID=<Your Agora AppId>")
         }
         val AGORA_APP_CERT = properties.getProperty("AGORA_APP_CERT", "")
         buildConfigField("String", "AGORA_APP_ID", "\"$AGORA_APP_ID\"")

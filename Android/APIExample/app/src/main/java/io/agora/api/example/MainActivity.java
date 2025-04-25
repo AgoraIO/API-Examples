@@ -1,6 +1,5 @@
 package io.agora.api.example;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,21 +26,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (intent != null) {
-            // 处理从通知栏启动的逻辑
-            // 可以添加特定的标志来识别是否是从通知栏启动
-        }
     }
 
     @Override
