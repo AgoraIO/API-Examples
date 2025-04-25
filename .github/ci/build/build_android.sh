@@ -37,6 +37,7 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+export PATH=$PATH:/opt/homebrew/bin
 
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
