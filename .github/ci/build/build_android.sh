@@ -69,12 +69,20 @@ else
 
 	rm -rf ./$unzip_name/rtc/bin
 	rm -rf ./$unzip_name/rtc/demo
-	rm ./$unzip_name/commits
-	rm ./$unzip_name/spec
+	rm -f ./$unzip_name/.commits
+	rm -f ./$unzip_name/spec
 	rm -rf ./$unzip_name/pom
 fi
-mkdir -p ./$unzip_name/rtc/samples 
-cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
+
+mkdir -p ./$unzip_name/rtc/samples/API-Example || exit 1
+
+if [ -d "./Android/${android_direction}" ]; then
+    cp -rf ./Android/${android_direction}/* ./$unzip_name/rtc/samples/API-Example/ || exit 1
+else
+    echo "Error: Source directory ./Android/${android_direction} does not exist"
+    exit 1
+fi
+
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
