@@ -183,7 +183,7 @@ fun HostAcrossChannel() {
             val allGranted = grantedMap.values.all { it }
             if (allGranted) {
                 // Permission is granted
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
@@ -196,7 +196,7 @@ fun HostAcrossChannel() {
                 }
             } else {
                 // Permission is denied
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_LONG).show()
             }
         }
 

@@ -182,7 +182,6 @@ public class ResourceHelper {
         boolean resourceReady = preferences.getBoolean("resource", false);
         int preVersioncode = preferences.getInt("versionCode", 0);
 
-        // 如果上次已经拷贝过 继续检查版本号
         // Continue to check the version number if it was copied last time
         if (resourceReady && versionCode == preVersioncode){
             return true;
