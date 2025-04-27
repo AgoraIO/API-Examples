@@ -37,6 +37,7 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+export PATH=$PATH:/opt/homebrew/bin
 
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
@@ -68,22 +69,29 @@ else
 
 	rm -rf ./$unzip_name/rtc/bin
 	rm -rf ./$unzip_name/rtc/demo
-	rm ./$unzip_name/rtc/commits
-	rm ./$unzip_name/rtc/package_size_report.txt
+	rm -f ./$unzip_name/.commits
+	rm -f ./$unzip_name/spec
 	rm -rf ./$unzip_name/pom
 fi
-mkdir -p ./$unzip_name/rtc/samples 
-cp -rf ./Android/${android_direction} ./$unzip_name/rtc/samples/API-Example || exit 1
+
+mkdir -p ./$unzip_name/rtc/samples/API-Example || exit 1
+
+if [ -d "./Android/${android_direction}" ]; then
+    cp -rf ./Android/${android_direction}/* ./$unzip_name/rtc/samples/API-Example/ || exit 1
+else
+    echo "Error: Source directory ./Android/${android_direction} does not exist"
+    exit 1
+fi
+
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
+if [ $compress_apiexample = true ]; then
+	7za a -tzip result_onlyAPIExample.zip -r ./$unzip_name/rtc/samples/API-Example >> log.txt
+	mv result_onlyAPIExample.zip $WORKSPACE/onlyAPIExample_${BUILD_NUMBER}_$zip_name
+fi
+
 if [ $compile_project = true ]; then
-	# install android sdk
-	which java
-	java --version
-	source ~/.bashrc
-	export ANDROID_HOME=/usr/lib/android_sdk
-	echo ANDROID_HOME: $ANDROID_HOME
 	cd ./$unzip_name/rtc/samples/API-Example || exit 1
 	if [ -z "$sdk_url" ] || [ "$sdk_url" = "none" ]; then
 		./cloud_build.sh false || exit 1
@@ -91,5 +99,4 @@ if [ $compile_project = true ]; then
 		./cloud_build.sh true || exit 1
 	fi
 fi
-
 
