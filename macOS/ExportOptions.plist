@@ -5,17 +5,17 @@
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>
-	<string>developer-id</string>
+	<string>developer</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.agora.api.examples</key>
-		<string>apiexamplemac</string>
+		<string>AgoraLab2020</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>35CC30DFC3AA90845718DE3E28DFD32DB1A672BF</string>
+	<string>Apple Development</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>teamID</key>
-	<string>YS397FG5PA</string>
+	<string>JDPG69R49Z</string>
 </dict>
 </plist>

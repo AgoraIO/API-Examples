@@ -37,6 +37,7 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+export PATH=$PATH:/opt/homebrew/bin
 
 echo compile_project:$compile_project
 echo Package_Publish: $Package_Publish
@@ -59,6 +60,10 @@ export LANG=en_US.UTF-8
 unzip_name=Agora_Native_SDK_for_iOS_FULL
 zip_name=output.zip
 sdk_url_flag=false
+apiexample_cn_name=Shengwang_Native_SDK_for_Mac
+apiexample_global_name=Agora_Native_SDK_for_Mac
+cn_dir=CN
+global_dir=Global
 
 echo zip_name: $zip_name
 if [ -z "$sdk_url" ]; then
@@ -92,13 +97,33 @@ else
 fi
 
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile $sdk_url_flag
+
+echo "start compress"
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 
-if [ $compile_project = true ]; then
-    cd ./$unzip_name/samples/APIExample
-    ./cloud_build.sh || exit 1
+if [ $compress_apiexample = true ]; then
+    sdk_version=$(grep "pod 'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
+    echo "sdk_version: $sdk_version"
+    
+    mkdir -p $cn_dir $global_dir
+    cp -rf ./iOS/${ios_direction} $cn_dir/
+    cp -rf ./iOS/${ios_direction} $global_dir/
+    cd $cn_dir/${ios_direction}
+    ./cloud_project.sh || exit 1
     cd -
-fi
+    echo "start compress api example"
+    7za a -tzip cn_result.zip $cn_dir > log.txt
+    7za a -tzip global_result.zip $global_dir > log.txt     
+
+    mv cn_result.zip $WORKSPACE/${apiexample_cn_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
+    mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}${BUILD_NUMBER}_APIExample.zip 
+fi 
+
+#if [ $compile_project = true ]; then
+#    cd ./$unzip_name/samples/APIExample
+#    ./cloud_build.sh || exit 1
+#    cd -
+#fi
 
 
