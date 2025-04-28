@@ -173,12 +173,11 @@ static uint32_t bitmapInfoWithPixelFormatType(OSType inputPixelFormat, bool hasA
         uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Big;
         return bitmapInfo;
     }else{
-        NSLog(@"不支持此格式");
+        NSLog(@"Unsupported format");
         return 0;
     }
 }
 
-// alpha的判断
 BOOL CGImageRefContainsAlpha(CGImageRef imageRef) {
     if (!imageRef) {
         return NO;

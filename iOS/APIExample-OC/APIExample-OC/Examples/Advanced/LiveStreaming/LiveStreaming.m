@@ -389,7 +389,7 @@
 
 - (IBAction)onTapDualStreamSwitch:(UISwitch *)sender {
     [self.agoraKit setDualStreamMode:sender.isOn ? AgoraEnableSimulcastStream : AgoraDisableSimulcastStream];
-    self.dualStreamTipsLabel.text = sender.isOn ? @"已开启" : @"默认: 大流";
+    self.dualStreamTipsLabel.text = sender.isOn ? @"Dual stream enabled".localized : @"Default: high stream".localized;
 }
 
 - (IBAction)onTakeSnapshot:(UIButton *)sender {

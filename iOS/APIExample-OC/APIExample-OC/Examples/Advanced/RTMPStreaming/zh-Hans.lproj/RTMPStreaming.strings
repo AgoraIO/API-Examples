@@ -1,6 +1,6 @@
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "EYp-Uv-8h9"; */
-"EYp-Uv-8h9.normalTitle" = "推流";
+"EYp-Uv-8h9.normalTitle" = "Push Stream";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.placeholder" = "Enter channel name";
@@ -9,7 +9,7 @@
 "kbN-ZR-nNn.normalTitle" = "Join";
 
 /* Class = "UILabel"; text = "Transcoding"; ObjectID = "mdz-Cd-XO9"; */
-"mdz-Cd-XO9.text" = "转码";
+"mdz-Cd-XO9.text" = "Transcoding";
 
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
 "p70-sh-D1h.title" = "Join Channel Video";
