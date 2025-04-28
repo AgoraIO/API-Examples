@@ -53,7 +53,7 @@ struct JoinChannelVideoTokenEntry: View {
         .toolbar(content: toobarItems)
     }
     
-    @ToolbarContentBuilder // 使用 @ToolbarContentBuilder 声明
+    @ToolbarContentBuilder // Use @ToolbarContentBuilder to declare
     func toobarItems() -> some ToolbarContent {
         let placement: ToolbarItemPlacement = {
 #if os(iOS) && swift(>=5.7)
