@@ -496,12 +496,10 @@ private let makeupList = [
 // MARK: make up setting
 extension VideoProcessMain {
     @IBAction func onShowMakeUpAction() {
-        // 创建自定义视图控制器
         let customAlertVC = UIViewController()
         customAlertVC.modalPresentationStyle = .overFullScreen
         customAlertVC.view.backgroundColor = .clear
 
-        // 自定义内容视图
         let alertView = UIView()
         alertView.translatesAutoresizingMaskIntoConstraints = false
         alertView.backgroundColor = UIColor.white
@@ -512,7 +510,6 @@ extension VideoProcessMain {
 
         customAlertVC.view.addSubview(alertView)
 
-        // 设置 alertView 的约束
         NSLayoutConstraint.activate([
             alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
             alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
@@ -520,7 +517,6 @@ extension VideoProcessMain {
             alertView.heightAnchor.constraint(equalToConstant: 300)
         ])
 
-        // 创建 scrollView
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         alertView.addSubview(scrollView)
@@ -529,7 +525,7 @@ extension VideoProcessMain {
             scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50)
         ])
 
         let contentView = UIView()
@@ -544,8 +540,6 @@ extension VideoProcessMain {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-
-        // 添加 UILabels 和 UISliders 到 contentView
         var lastLabel: UILabel?
         for i in 0..<makeupList.count {
             let label = UILabel()
@@ -584,7 +578,6 @@ extension VideoProcessMain {
             valueView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(valueView)
             valueView.tag = i + 1000
-            // 设置 label 和 valueView 的约束
             NSLayoutConstraint.activate([
                 label.topAnchor.constraint(equalTo: lastLabel?.bottomAnchor ?? contentView.topAnchor, constant: lastLabel == nil ? 10 : 10),
                 label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
@@ -593,10 +586,9 @@ extension VideoProcessMain {
                 valueView.centerYAnchor.constraint(equalTo: label.centerYAnchor),
                 valueView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
             ])
-            lastLabel = label // 更新 lastLabel
+            lastLabel = label
         }
 
-        // 添加确认按钮
         let confirmButton = UIButton(type: .system)
         confirmButton.setTitle("Sure".localized, for: .normal)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
@@ -604,19 +596,16 @@ extension VideoProcessMain {
 
         alertView.addSubview(confirmButton)
 
-        // 设置确认按钮的约束
         NSLayoutConstraint.activate([
             confirmButton.topAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -40),
             confirmButton.centerXAnchor.constraint(equalTo: alertView.centerXAnchor)
         ])
 
-        // 更新 contentView 的高度约束
         let lastView = lastLabel ?? contentView
         NSLayoutConstraint.activate([
             contentView.bottomAnchor.constraint(equalTo: lastView.bottomAnchor, constant: 10)
         ])
 
-        // 显示自定义视图控制器
         self.present(customAlertVC, animated: true, completion: nil)
     }
     
@@ -646,7 +635,6 @@ extension VideoProcessMain {
     }
     
     @objc func confirmAction() {
-        // 关闭自定义视图控制器
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -729,12 +717,10 @@ extension VideoProcessMain {
     }
     
     @IBAction func onShowFaceShapeAction() {
-        // 创建自定义视图控制器
         let customAlertVC = UIViewController()
         customAlertVC.modalPresentationStyle = .overFullScreen
         customAlertVC.view.backgroundColor = .clear
 
-        // 自定义内容视图
         let alertView = UIView()
         alertView.translatesAutoresizingMaskIntoConstraints = false
         alertView.backgroundColor = UIColor.white
@@ -745,7 +731,6 @@ extension VideoProcessMain {
 
         customAlertVC.view.addSubview(alertView)
 
-        // 设置 alertView 的约束
         NSLayoutConstraint.activate([
             alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
             alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
@@ -753,7 +738,6 @@ extension VideoProcessMain {
             alertView.heightAnchor.constraint(equalToConstant: 300)
         ])
 
-        // 创建 scrollView
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         alertView.addSubview(scrollView)
@@ -762,7 +746,7 @@ extension VideoProcessMain {
             scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50)
         ])
 
         let contentView = UIView()
@@ -777,7 +761,6 @@ extension VideoProcessMain {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
 
-        // 添加 UILabels 和 UISliders 到 contentView
         var lastLabel: UILabel?
         for i in 0..<beautyShapeList.count {
             let label = UILabel()
@@ -817,7 +800,6 @@ extension VideoProcessMain {
             contentView.addSubview(valueView)
             valueView.tag = i + 1000
             
-            // 设置 label 和 valueView 的约束
             NSLayoutConstraint.activate([
                 label.topAnchor.constraint(equalTo: lastLabel?.bottomAnchor ?? contentView.topAnchor, constant: lastLabel == nil ? 10 : 10),
                 label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
@@ -826,10 +808,9 @@ extension VideoProcessMain {
                 valueView.centerYAnchor.constraint(equalTo: label.centerYAnchor),
                 valueView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
             ])
-            lastLabel = label // 更新 lastLabel
+            lastLabel = label
         }
 
-        // 添加确认按钮
         let confirmButton = UIButton(type: .system)
         confirmButton.setTitle("Sure".localized, for: .normal)
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
@@ -837,19 +818,16 @@ extension VideoProcessMain {
 
         alertView.addSubview(confirmButton)
 
-        // 设置确认按钮的约束
         NSLayoutConstraint.activate([
             confirmButton.topAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -40),
             confirmButton.centerXAnchor.constraint(equalTo: alertView.centerXAnchor)
         ])
 
-        // 更新 contentView 的高度约束
         let lastView = lastLabel ?? contentView
         NSLayoutConstraint.activate([
             contentView.bottomAnchor.constraint(equalTo: lastView.bottomAnchor, constant: 10)
         ])
 
-        // 显示自定义视图控制器
         self.present(customAlertVC, animated: true, completion: nil)
     }
     

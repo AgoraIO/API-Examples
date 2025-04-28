@@ -1,7 +1,6 @@
 //  BETimeRecoder.h
 // EffectsARSDK
 
-
 #import <Foundation/Foundation.h>
 
 #if TIME_LOG
@@ -18,12 +17,12 @@
 
 @interface BETimeRecoder : NSObject
 
-//   {zh} / @brief 开始记录耗时     {en} /@Brief start recording time 
-//   {zh} / @param tag 标签     {en} /@param tag 
+// @brief start recording time
+// @param tag
 + (void)record:(NSString *)tag;
 
-//   {zh} / @brief 停止记录耗时     {en} /@Briefing Stop Recording Time-consuming 
-//   {zh} / @param tag 标签     {en} /@param tag 
+// @brief stop recording time
+// @param tag
 + (void)stop:(NSString *)tag;
 
 + (void)be_recordOnce:(NSString *)tag interval:(double)interval;

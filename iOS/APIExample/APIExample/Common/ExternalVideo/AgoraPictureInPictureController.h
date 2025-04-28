@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-//仅支持IOS15以后
 @interface AgoraPictureInPictureController : NSObject
 
 @property (nonatomic, weak) id <AgoraPictureInPictureControllerDelegate>delegate;

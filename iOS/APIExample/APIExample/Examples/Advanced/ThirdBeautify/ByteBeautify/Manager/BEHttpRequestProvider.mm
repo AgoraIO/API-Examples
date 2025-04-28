@@ -2,7 +2,7 @@
 #import <Foundation/Foundation.h>
 
 #if __has_include(<effect-sdk/bef_effect_ai_api.h>)
-// {zh} post请求暂时不需要实现 {en} The post request does not need to be implemented for the time being
+// The post request does not need to be implemented for the time being
 bool BEHttpRequestProvider::getRequest(const EffectsSDK::RequestInfo* requestInfo, EffectsSDK::ResponseInfo& responseInfo)
 {
     return false;

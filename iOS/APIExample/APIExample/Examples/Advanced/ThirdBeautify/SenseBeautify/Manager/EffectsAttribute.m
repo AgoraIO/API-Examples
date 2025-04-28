@@ -80,7 +80,7 @@
                                                        height,
                                                        stride,
                                                        faces,
-                                                       1, // 这里仅取一张脸也就是第一张脸的属性作为演示
+                                                       1, // Here only one face is
                                                        &pAttrArray);
     EFFECTSTIMEPRINT(key, "st_mobile_face_attribute_detect")
     st_mobile_attributes_t attributeDisplay = pAttrArray[0];
@@ -95,26 +95,26 @@
     
     for (int i = 0; i < attribute.attribute_count; i ++) {
         
-        // 读取一条属性
+        // Read one attribute
         st_mobile_attribute_t attributeOne = attribute.p_attributes[i];
         
-        // 获取属性类别
+        // Get attribute category
         const char *attr_category = attributeOne.category;
         const char *attr_label = attributeOne.label;
         
-        // 年龄
+        // Age
         if (0 == strcmp(attr_category, "age")) {
             
             strAge = [NSString stringWithUTF8String:attr_label];
         }
         
-        // 颜值
+        // Attractive
         if (0 == strcmp(attr_category, "attractive")) {
             
             strAttricative = [NSString stringWithUTF8String:attr_label];
         }
         
-        // 性别
+        // Gender
         if (0 == strcmp(attr_category, "gender")) {
             
             if (0 == strcmp(attr_label, "male") ) {
@@ -129,7 +129,7 @@
         }
     }
     
-    NSString *strAttrDescription = [NSString stringWithFormat:@"颜值:%@ 性别:%@ 年龄:%@" , strAttricative , strGender , strAge];
+    NSString *strAttrDescription = [NSString stringWithFormat:@"looks:%@ gender:%@ age:%@" , strAttricative , strGender , strAge];
     
     return strAttrDescription;
 }
@@ -176,7 +176,7 @@
                                                        height,
                                                        stride,
                                                        faces,
-                                                       1, // 这里仅取一张脸也就是第一张脸的属性作为演示
+                                                       1, // Here only the attributes of one face, specifically the first face, are taken as a demonstration
                                                        &pAttrArray);
     if (iRet != ST_OK) {
         NSLog(@"st_mobile_face_attribute_detect error %d", iRet);
@@ -191,13 +191,13 @@
     if (callback) {
         for (int i = 0; i < attribute.attribute_count; i ++) {
             
-            // 读取一条属性
+            // Read one attribute
             st_mobile_attribute_t attributeOne = attribute.p_attributes[i];
             
-            // 获取属性类别
+            // Get attribute category
             const char *attr_category = attributeOne.category;
             const char *attr_label = attributeOne.label;
-            // 性别
+            // Gender
             if (0 == strcmp(attr_category, "gender")) {
                 
                 if (0 == strcmp(attr_label, "male") ) {

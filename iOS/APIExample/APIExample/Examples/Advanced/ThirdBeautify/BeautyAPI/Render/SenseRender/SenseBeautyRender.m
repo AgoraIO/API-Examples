@@ -11,7 +11,6 @@
 
 #if __has_include(Sensetime)
 @property (nonatomic, strong) NSTimer *timer;
-///贴纸id
 @property (nonatomic, assign) int stickerId;
 @property (nonatomic, assign) int filterId;
 #endif
