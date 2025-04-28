@@ -554,7 +554,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         agoraKit.startPreview()
         transcoding.add(user)
 //        agoraKit.updateRtmpTranscoding(transcoding)
-        if !streamingUrl.isEmpty { // join Channel success后发流
+        if !streamingUrl.isEmpty { // send stream after join Channel success
             agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
         }
     }

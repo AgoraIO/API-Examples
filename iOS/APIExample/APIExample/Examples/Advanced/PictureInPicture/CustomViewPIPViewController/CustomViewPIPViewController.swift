@@ -25,7 +25,7 @@ class CustomViewPIPViewController: PIPBaseViewController {
     
     private lazy var pipButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("画中画", for: .normal)
+        button.setTitle("Picture in Picture", for: .normal)
         button.addTarget(self, action: #selector(pipAction), for: .touchUpInside)
         button.backgroundColor = .purple
         return button
@@ -33,7 +33,7 @@ class CustomViewPIPViewController: PIPBaseViewController {
     
     private lazy var sizeButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("切换尺寸", for: .normal)
+        button.setTitle("Switch Size", for: .normal)
         button.addTarget(self, action: #selector(sizeAction), for: .touchUpInside)
         button.backgroundColor = .red
         
@@ -187,7 +187,6 @@ extension CustomViewPIPViewController {
     
     func startBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask {
-            // 结束后台任务的处理代码
             self.endBackgroundTask()
         }
     }

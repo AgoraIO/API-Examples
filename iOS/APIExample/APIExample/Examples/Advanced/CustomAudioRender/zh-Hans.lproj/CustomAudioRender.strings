@@ -1,9 +1,9 @@
 
 /* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "EbX-sK-6UJ"; */
-"EbX-sK-6UJ.title" = "音频自渲染";
+"EbX-sK-6UJ.title" = "Custom Audio Render";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join";

@@ -446,7 +446,7 @@ class LiveStreamingMain: BaseViewController {
     }
     @IBAction func onTapDualStreamSwitch(_ sender: UISwitch) {
         agoraKit.setDualStreamMode(sender.isOn ? .enableSimulcastStream : .disableSimulcastStream)
-        dualStreamTipsLabel.text = sender.isOn ? "已开启": "默认: 大流"
+        dualStreamTipsLabel.text = sender.isOn ? "Enabled": "Default: High Flow"
     }
     
     @IBAction func onTakeSnapshot(_ sender: Any) {

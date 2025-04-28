@@ -1,37 +1,36 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
-"Iy0-Dq-h5x.title" = "加入频道";
+"Iy0-Dq-h5x.title" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
 "VpM-9W-auG.normalTitle" = "Button";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
 "kf0-3f-UI5.normalTitle" = "Button";
 
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "视频实时通话";
+"p70-sh-D1h.title" = "Video Call";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
 "wHl-zh-dFe.normalTitle" = "Button";
 
-"j6s-Pm-fSS.text" = "您还没有开启商汤美颜功能, 请按如下步骤操作:
-1: 在SenseBeautify->Manager->替换SENSEME.lic
-2: 替换license绑定的Bundle identifier
-3: 打开Podfile中 pod 'senseLib' 注释
-4: 在iOS->APIExample目录下创建SenseLib文件夹
-5: 在iOS->APIExample->SenseLib目录下添加remoteSourcesLib文件夹
-6: 在iOS->APIExample->SenseLib目录下添加st_mobile_sdk文件夹
-7: 执行pod install
-8: 重新运行项目查看效果";
+"j6s-Pm-fSS.text" = "You haven't enabled SenseTime Beauty feature yet, please follow these steps:
+1: Replace SENSEME.lic in SenseBeautify->Manager
+2: Replace Bundle identifier bound to the license
+3: Uncomment pod 'senseLib' in Podfile
+4: Create SenseLib folder under iOS->APIExample directory
+5: Add remoteSourcesLib folder under iOS->APIExample->SenseLib directory
+6: Add st_mobile_sdk folder under iOS->APIExample->SenseLib directory
+7: Execute pod install
+8: Rerun the project to see the effect";
 
-"CrL-Yf-Cev.normalTitle" = "美颜";
-"3hp-ZM-MMW.normalTitle" = "美妆";
-"UdR-D4-uNu.normalTitle" = "贴纸";
-"K3f-4k-VQ1.normalTitle" = "滤镜";
-
+"CrL-Yf-Cev.normalTitle" = "Beauty";
+"3hp-ZM-MMW.normalTitle" = "Makeup";
+"UdR-D4-uNu.normalTitle" = "Sticker";
+"K3f-4k-VQ1.normalTitle" = "Filter";

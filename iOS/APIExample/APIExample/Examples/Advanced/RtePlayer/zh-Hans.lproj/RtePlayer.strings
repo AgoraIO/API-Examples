@@ -1,11 +1,11 @@
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
-"Lzz-2R-G7f.text" = "极速直播";
+"Lzz-2R-G7f.text" = "Ultra Low Latency";
 
-"17J-Ix-Qot.normalTitle" = "播放";
-"tqt-S5-7Lt.normalTitle" = "停止";
+"17J-Ix-Qot.normalTitle" = "Play";
+"tqt-S5-7Lt.normalTitle" = "Stop";
 
 
-"BMd-dm-te6.text" = "请用另一台设备作为主播身份开启一个直播频道，并在上述输入框内填入对应频道名。";
+"BMd-dm-te6.text" = "Please use another device as a host to start a live streaming channel, and enter the corresponding channel name in the input box above.";

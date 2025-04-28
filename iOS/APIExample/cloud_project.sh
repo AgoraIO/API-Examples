@@ -9,7 +9,7 @@ if [ "$BUILD_NUMBER" = "" ]; then
 	BUILD_NUMBER=888
 fi
 
-#下载美颜资源
+# Download beauty resource
 echo "start download bytedance resource : $bytedance_lib"
 curl -L -O "$bytedance_lib"
 unzip -o vender_bytedance_iOS.zip
@@ -25,10 +25,10 @@ curl -L -O "$fu_lib"
 unzip -o vender_fu_iOS.zip
 rm -f vender_fu_iOS.zip
 
-#打开第三方播放器配置
+# Enable third-party player configuration
 perl -i -pe "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
-#打开第三方美颜
+# Enable third-party beauty filters
 perl -i -pe "s#\#pod 'SenseLib'#pod 'SenseLib'#g" Podfile
 perl -i -pe "s#\#pod 'bytedEffect'#pod 'bytedEffect'#g" Podfile
 perl -i -pe "s#\#pod 'fuLib'#pod 'fuLib'#g" Podfile

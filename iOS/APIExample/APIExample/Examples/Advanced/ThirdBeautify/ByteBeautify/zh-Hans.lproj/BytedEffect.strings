@@ -1,36 +1,36 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
-"Iy0-Dq-h5x.title" = "加入频道";
+"Iy0-Dq-h5x.title" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
 "VpM-9W-auG.normalTitle" = "Button";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
 "kf0-3f-UI5.normalTitle" = "Button";
 
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "视频实时通话";
+"p70-sh-D1h.title" = "Video Call";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
 "wHl-zh-dFe.normalTitle" = "Button";
 
-"j6s-Pm-fSS.text" = "您还没有开启字节美颜功能, 请按如下步骤操作:
-1: 在ByteBeautify->Manager->Core.h中填写ONLINE_LICENSE_KEY和ONLINE_LICENSE_SECRET
-2: 打开Podfile中 pod 'bytedEffect' 注释
-3: 在iOS->APIExample目录下创建ByteEffectLib文件夹
-4: 在iOS->APIExample->ByteEffectLib目录下添加BytedEffectSDK文件夹
-5: 在iOS->APIExample->ByteEffectLib目录下添加Resource文件夹
-6: 在iOS->APIExample->ByteEffectLib目录下添加libeffect-sdk.a库
-7: 执行pod install
-8: 重新运行项目查看效果";
+"j6s-Pm-fSS.text" = "You haven't enabled Byte Beauty feature yet, please follow these steps:
+1: Fill in ONLINE_LICENSE_KEY and ONLINE_LICENSE_SECRET in ByteBeautify->Manager->Core.h
+2: Uncomment pod 'bytedEffect' in Podfile
+3: Create ByteEffectLib folder under iOS->APIExample directory
+4: Add BytedEffectSDK folder under iOS->APIExample->ByteEffectLib directory
+5: Add Resource folder under iOS->APIExample->ByteEffectLib directory
+6: Add libeffect-sdk.a library under iOS->APIExample->ByteEffectLib directory
+7: Execute pod install
+8: Rerun the project to see the effect";
 
-"8ag-bw-I0V.normalTitle" = "美颜";
-"dow-FW-rpo.normalTitle" = "美妆";
-"dSm-Zl-ccL.normalTitle" = "贴纸";
-"qKk-jv-oyk.normalTitle" = "滤镜";
+"8ag-bw-I0V.normalTitle" = "Beauty";
+"dow-FW-rpo.normalTitle" = "Makeup";
+"dSm-Zl-ccL.normalTitle" = "Sticker";
+"qKk-jv-oyk.normalTitle" = "Filter";
