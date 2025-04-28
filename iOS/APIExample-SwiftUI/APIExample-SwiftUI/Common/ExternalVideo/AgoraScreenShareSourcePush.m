@@ -114,11 +114,11 @@
 ////                                                              interleaved:NO
 ////                                                            channelLayout:chLayout];
 ////
-////    // 创建一个基于上述配置的帧缓存结构
+////    // Create a frame buffer structure based on the above configuration
 ////    AVAudioPCMBuffer *thePCMBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmBuffer frameCapacity:1024];
 ////    thePCMBuffer.frameLength = thePCMBuffer.frameCapacity;
 ////
-////    // 初始化数据区
+////    // Initialize the data area
 ////    for (AVAudioChannelCount ch = 0; ch < pcmBuffer.channelCount; ++ch) {
 ////        memset(thePCMBuffer.floatChannelData[ch], 0, thePCMBuffer.frameLength * pcmBuffer.streamDescription->mBytesPerFrame);
 ////    }
@@ -308,13 +308,6 @@
 //
 //
 //
-///**
-// 读取客户端发送的数据
-//
-// @param sock 客户端的Socket
-// @param data 客户端发送的数据
-// @param tag 当前读取的标记
-// */
 //- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 //{
 //    if (sock == self.videoSocket) {

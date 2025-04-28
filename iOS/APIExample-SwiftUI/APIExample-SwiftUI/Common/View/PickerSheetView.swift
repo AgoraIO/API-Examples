@@ -16,7 +16,7 @@ struct PickerSheetView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Picker("请选择一个选项", selection: $selectedOption) {
+                Picker("Please select an option", selection: $selectedOption) {
                     ForEach(options, id: \.self) { option in
                         Text(option).tag(option)
                     }
@@ -24,12 +24,12 @@ struct PickerSheetView: View {
                 .pickerStyle(WheelPickerStyle())
                 .labelsHidden()
             }
-            .navigationBarTitle("选择器", displayMode: .inline)
+            .navigationBarTitle("Picker", displayMode: .inline)
             .navigationBarItems(
-                leading: Button("取消") {
+                leading: Button("Cancel") {
                     isPresented = false
                 },
-                trailing: Button("确定") {
+                trailing: Button("Save") {
                     onSave(selectedOption)
                     isPresented = false
                 }
