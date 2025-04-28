@@ -114,11 +114,9 @@ int findMagic(char *buffer, int len)
 //                                                              interleaved:NO
 //                                                            channelLayout:chLayout];
 //
-//    // 创建一个基于上述配置的帧缓存结构
 //    AVAudioPCMBuffer *thePCMBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:pcmBuffer frameCapacity:1024];
 //    thePCMBuffer.frameLength = thePCMBuffer.frameCapacity;
 //
-//    // 初始化数据区
 //    for (AVAudioChannelCount ch = 0; ch < pcmBuffer.channelCount; ++ch) {
 //        memset(thePCMBuffer.floatChannelData[ch], 0, thePCMBuffer.frameLength * pcmBuffer.streamDescription->mBytesPerFrame);
 //    }
@@ -309,11 +307,10 @@ int findMagic(char *buffer, int len)
 
 
 /**
- 读取客户端发送的数据
-
- @param sock 客户端的Socket
- @param data 客户端发送的数据
- @param tag 当前读取的标记
+ Read the data sent by the client  
+@param sock The client's Socket  
+@param data The data sent by the client  
+@param tag The current read tag
  */
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
