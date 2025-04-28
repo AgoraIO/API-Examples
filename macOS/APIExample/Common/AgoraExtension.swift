@@ -163,7 +163,7 @@ extension AgoraEncryptionMode {
     }
 }
 
-// dderad: 找不到这个类
+// dderad: Class not found
 //extension AgoraAudioVoiceChanger {
 //    func description() -> String {
 //        switch self {

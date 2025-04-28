@@ -35,7 +35,7 @@ class AgoraPCMPlayer {
     
     func playPCMData(pcmData: UnsafeMutablePointer<UInt8>, count: UInt) {
         guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels),
-              let audioBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count / 4)), // 16位立体声每帧4字节
+              let audioBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count / 4)), 
               let channelData = audioBuffer.floatChannelData else {
             return
         }
