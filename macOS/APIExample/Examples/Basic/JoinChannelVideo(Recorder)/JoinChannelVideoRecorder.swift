@@ -28,12 +28,12 @@ class JoinChannelVideoRecordMain: BaseViewController {
         return path
     }
     private lazy var localRecordButton: NSButton = {
-        let button = NSButton(title: "开始录制", target: self, action: #selector(onClickLocalRecordButton(sender:)))
+        let button = NSButton(title: "Start Recording", target: self, action: #selector(onClickLocalRecordButton(sender:)))
         button.isHidden = true
         return button
     }()
     private lazy var remoteRecordButton: NSButton = {
-        let button = NSButton(title: "开始录制", target: self, action: #selector(onClickRemoteRecordButton(sender:)))
+        let button = NSButton(title: "Start Recording", target: self, action: #selector(onClickRemoteRecordButton(sender:)))
         button.isHidden = true
         return button
     }()

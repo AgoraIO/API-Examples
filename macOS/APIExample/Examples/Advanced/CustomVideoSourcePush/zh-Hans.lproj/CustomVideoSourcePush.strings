@@ -1,18 +1,18 @@
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "KSj-Qd-L7B"; */
-"KSj-Qd-L7B.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "KSj-Qd-L7B"; */
+"KSj-Qd-L7B.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "XQ9-2H-aV1"; */
-"XQ9-2H-aV1.title" = "加入频道";
+"XQ9-2H-aV1.title" = "Join Channel";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "esh-Yv-lrq"; */
-"esh-Yv-lrq.title" = "离开频道";
+"esh-Yv-lrq.title" = "Leave Channel";
 
 /* Class = "NSMenuItem"; title = "1V1"; ObjectID = "lxe-dD-iYs"; */
 "lxe-dD-iYs.title" = "1V1";
 
 /* Class = "NSViewController"; title = "Custom Video Source (Push)"; ObjectID = "sXF-vm-Rrb"; */
-"sXF-vm-Rrb.title" = "音频自采集(Push)";
+"sXF-vm-Rrb.title" = "Custom Video Source (Push)";
 
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "tBU-fM-94k"; */
 "tBU-fM-94k.title" = "1V15";

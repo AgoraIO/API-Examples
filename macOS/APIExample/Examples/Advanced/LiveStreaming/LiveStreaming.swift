@@ -144,7 +144,7 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var selectCanvasColor: Picker!
     private var remoteCanvasColor: UInt32 = 0xff006aff
     func initSelectCanvasColor() {
-        selectCanvasColor.label.stringValue = "默认背景色"
+        selectCanvasColor.label.stringValue = "Default Background Color"
         let colors: [String: UInt32] = ["Red".localized: 0xff0d00ff,
                                         "Blue".localized: 0x0400ffff,
                                         "Pink".localized: 0xff006aff,

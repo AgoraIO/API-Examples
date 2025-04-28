@@ -6,19 +6,19 @@
 "J5P-DD-2lM.title" = "1V1";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "LpP-rx-fDz"; */
-"LpP-rx-fDz.title" = "加入频道";
+"LpP-rx-fDz.title" = "Join Channel";
 
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "Q9k-KS-Bb9"; */
 "Q9k-KS-Bb9.title" = "1V3";
 
 /* Class = "NSViewController"; title = "Custom Audio Render"; ObjectID = "rPb-ur-msx"; */
-"rPb-ur-msx.title" = "音频自渲染";
+"rPb-ur-msx.title" = "Custom Audio Render";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "sav-ba-mHX"; */
-"sav-ba-mHX.title" = "离开频道";
+"sav-ba-mHX.title" = "Leave Channel";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "uZ0-mF-1r9"; */
-"uZ0-mF-1r9.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "uZ0-mF-1r9"; */
+"uZ0-mF-1r9.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "zRn-Ca-xYL"; */
 "zRn-Ca-xYL.title" = "1V15";

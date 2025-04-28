@@ -1,45 +1,45 @@
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "1ik-om-mWj"; */
-"1ik-om-mWj.title" = "加入频道";
+"1ik-om-mWj.title" = "Join Channel";
 
 /* Class = "NSMenuItem"; title = "1V1"; ObjectID = "6f9-0B-egB"; */
 "6f9-0B-egB.title" = "1V1";
 
 /* Class = "NSButtonCell"; title = "Display Share"; ObjectID = "ACV-0l-kRZ"; */
-"ACV-0l-kRZ.title" = "屏幕共享";
+"ACV-0l-kRZ.title" = "Display Share";
 
 /* Class = "NSViewController"; title = "Stream Encryption"; ObjectID = "Gwp-vd-c2J"; */
-"Gwp-vd-c2J.title" = "码流加密";
+"Gwp-vd-c2J.title" = "Stream Encryption";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "Owt-vb-7U9"; */
-"Owt-vb-7U9.title" = "离开频道";
+"Owt-vb-7U9.title" = "Leave Channel";
 
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "S4i-eh-YzK"; */
 "S4i-eh-YzK.title" = "1V3";
 
 /* Class = "NSButtonCell"; title = "Stop Share"; ObjectID = "TlR-ef-9cf"; */
-"TlR-ef-9cf.title" = "停止共享";
+"TlR-ef-9cf.title" = "Stop Share";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "aj5-Fn-je9"; */
-"aj5-Fn-je9.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "aj5-Fn-je9"; */
+"aj5-Fn-je9.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "cxo-X2-S8L"; */
 "cxo-X2-S8L.title" = "1V15";
 
 /* Class = "NSButtonCell"; title = "Window Share"; ObjectID = "ftv-L5-p8U"; */
-"ftv-L5-p8U.title" = "窗口共享";
+"ftv-L5-p8U.title" = "Window Share";
 
 /* Class = "NSButtonCell"; title = "Stop Share"; ObjectID = "ka7-2T-SiW"; */
-"ka7-2T-SiW.title" = "停止共享";
+"ka7-2T-SiW.title" = "Stop Share";
 
 /* Class = "NSMenuItem"; title = "1V8"; ObjectID = "zu1-vg-leG"; */
 "zu1-vg-leG.title" = "1V8";
 
 /* Class = "NSButtonCell"; title = "Share Half Screen"; ObjectID = "0Ao-Fe-BEt"; */
-"0Ao-Fe-BEt.title" = "分享部分区域";
+"0Ao-Fe-BEt.title" = "Share Partial Screen";
 
 /* Class = "NSButtonCell"; title = "Update Config"; ObjectID = "siB-l9-qc1"; */
-"siB-l9-qc1.title" = "更新参数";
+"siB-l9-qc1.title" = "Update Parameters";
 
-"G2K-yC-ti4.title" = "生成缩略图";
-"ghC-jR-1O0.title" = "生成缩略图";
+"G2K-yC-ti4.title" = "Generate Thumbnail";
+"ghC-jR-1O0.title" = "Generate Thumbnail";

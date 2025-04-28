@@ -668,19 +668,16 @@ private let makeupList = [
 // MARK: make up setting
 extension VideoProcess {
     @IBAction func onShowMakeUpAction(_ button: NSButton) {
-        // 创建自定义视图控制器
         let customAlertVC = NSViewController()
         customAlertVC.view.wantsLayer = true
         customAlertVC.view.layer?.backgroundColor = NSColor.black.cgColor
 
-        // 自定义内容视图
         let alertView = NSView()
         alertView.translatesAutoresizingMaskIntoConstraints = false
         alertView.wantsLayer = true
 
         customAlertVC.view.addSubview(alertView)
 
-        // 设置 alertView 的约束
         NSLayoutConstraint.activate([
             alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
             alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
@@ -688,7 +685,6 @@ extension VideoProcess {
             alertView.heightAnchor.constraint(equalToConstant: 300)
         ])
 
-        // 创建 scrollView
         let scrollView = NSScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         alertView.addSubview(scrollView)
@@ -697,7 +693,7 @@ extension VideoProcess {
             scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50)
         ])
 
         let contentView = NSStackView()
@@ -706,7 +702,6 @@ extension VideoProcess {
         contentView.spacing = 10
         scrollView.documentView = contentView
 
-        // 添加 UILabels 和控件到 contentView
         for i in 0..<makeupList.count {
             let label = NSTextField(labelWithString: makeupList[i]["name"] as? String ?? "none")
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -714,14 +709,12 @@ extension VideoProcess {
             label.textColor = NSColor.black
             label.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 2000)")
 
-            // 创建水平堆栈视图
             let horizontalStackView = NSStackView()
             horizontalStackView.orientation = .horizontal
 //            horizontalStackView.alignment = NSLayoutConstraint.Attribute.center
             horizontalStackView.spacing = 10
             horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
 
-            // 添加标签到水平堆栈视图
             horizontalStackView.addArrangedSubview(label)
 
             var valueView: NSView?
@@ -754,7 +747,6 @@ extension VideoProcess {
                 valueView.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 1000)")
             }
 
-            // 将水平堆栈视图添加到内容视图
             contentView.addArrangedSubview(horizontalStackView)
             
             NSLayoutConstraint.activate([
@@ -763,7 +755,6 @@ extension VideoProcess {
             ])
         }
 
-        // 显示自定义视图控制器
         if let window = self.view.window {
             window.contentViewController?.presentAsModalWindow(customAlertVC)
         }
@@ -772,7 +763,7 @@ extension VideoProcess {
     @objc func makeupSliderAction(_ view: NSSlider) {
         let index = (Int(view.identifier?.rawValue ?? "") ?? 0) - 1000
         let key = makeupList[index]["key"] as? String ?? ""
-        makeupParams[key] = view.doubleValue // 使用 doubleValue 代替 value
+        makeupParams[key] = view.doubleValue 
 
         if let label = findViewInSuperview(view.superview, identifier: "\(index + 2000)") as? NSTextField {
             label.stringValue = String(format: "%@[%.3f]", makeupList[index]["name"] as? String ?? "none", view.doubleValue)
@@ -784,20 +775,19 @@ extension VideoProcess {
     @objc func makeupSwitchAction(_ view: NSButton) {
         let index = (Int(view.identifier?.rawValue ?? "") ?? 0) - 1000
         let key = makeupList[index]["key"] as? String ?? ""
-        makeupParams[key] = (view.state == .on) // 使用 .on 来判断开关状态
+        makeupParams[key] = (view.state == .on)
         updateMakeup()
     }
 
     @objc func makeupSegmentAction(_ view: NSSegmentedControl) {
         let index = (Int(view.identifier?.rawValue ?? "") ?? 0) - 1000
         let key = makeupList[index]["key"] as? String ?? ""
-        makeupParams[key] = view.selectedSegment // 使用 selectedSegment 来获取当前选中的索引
+        makeupParams[key] = view.selectedSegment 
         updateMakeup()
     }
 
     @objc func confirmAction() {
-        // 关闭自定义视图控制器
-        self.dismiss(nil) // macOS 中使用 nil 作为动画参数
+        self.dismiss(nil) 
     }
     
     private func updateMakeup() {
@@ -879,19 +869,16 @@ extension VideoProcess {
     }
     
     @IBAction func onShowFaceShapeAction(_ button: NSButton) {
-        // 创建自定义视图控制器
         let customAlertVC = NSViewController()
         customAlertVC.view.wantsLayer = true
         customAlertVC.view.layer?.backgroundColor = NSColor.black.cgColor
 
-        // 自定义内容视图
         let alertView = NSView()
         alertView.translatesAutoresizingMaskIntoConstraints = false
         alertView.wantsLayer = true
 
         customAlertVC.view.addSubview(alertView)
 
-        // 设置 alertView 的约束
         NSLayoutConstraint.activate([
             alertView.centerXAnchor.constraint(equalTo: customAlertVC.view.centerXAnchor),
             alertView.centerYAnchor.constraint(equalTo: customAlertVC.view.centerYAnchor),
@@ -899,7 +886,6 @@ extension VideoProcess {
             alertView.heightAnchor.constraint(equalToConstant: 300)
         ])
 
-        // 创建 scrollView
         let scrollView = NSScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         alertView.addSubview(scrollView)
@@ -908,7 +894,7 @@ extension VideoProcess {
             scrollView.topAnchor.constraint(equalTo: alertView.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50) // 留出按钮位置
+            scrollView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -50)
         ])
 
         let contentView = NSStackView()
@@ -917,7 +903,6 @@ extension VideoProcess {
         contentView.spacing = 10
         scrollView.documentView = contentView
 
-        // 添加 UILabels 和控件到 contentView
         for i in 0..<beautyShapeList.count {
             let label = NSTextField(labelWithString: beautyShapeList[i]["name"] as? String ?? "none")
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -925,14 +910,12 @@ extension VideoProcess {
             label.textColor = NSColor.black
             label.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 2000)")
 
-            // 创建水平堆栈视图
             let horizontalStackView = NSStackView()
             horizontalStackView.orientation = .horizontal
 //            horizontalStackView.alignment = NSLayoutConstraint.Attribute.center
             horizontalStackView.spacing = 10
             horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
 
-            // 添加标签到水平堆栈视图
             horizontalStackView.addArrangedSubview(label)
             
             var valueView: NSView?
@@ -966,7 +949,6 @@ extension VideoProcess {
                 valueView.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(i + 1000)")
             }
 
-            // 将水平堆栈视图添加到内容视图
             contentView.addArrangedSubview(horizontalStackView)
             NSLayoutConstraint.activate([
                 horizontalStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -975,7 +957,6 @@ extension VideoProcess {
             ])
         }
 
-        // 显示自定义视图控制器
         if let window = self.view.window {
             window.contentViewController?.presentAsModalWindow(customAlertVC)
         }
