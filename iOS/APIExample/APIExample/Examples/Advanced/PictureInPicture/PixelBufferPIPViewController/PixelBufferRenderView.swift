@@ -114,7 +114,6 @@ class PixelBufferRenderView: UIView {
             self.layoutDisplayer()
         }
         
-        // 创建 CMVideoFormatDescription
         var videoInfo: CMVideoFormatDescription?
         let status = CMVideoFormatDescriptionCreateForImageBuffer(allocator: kCFAllocatorDefault, 
                                                                   imageBuffer: pixelBuffer,
@@ -124,13 +123,11 @@ class PixelBufferRenderView: UIView {
             return
         }
 
-        // 创建 CMSampleTimingInfo
         var timingInfo = CMSampleTimingInfo()
         timingInfo.duration = CMTime.zero
         timingInfo.decodeTimeStamp = CMTime.invalid
         timingInfo.presentationTimeStamp = CMTime(seconds: CACurrentMediaTime(), preferredTimescale: 1000)
 
-        // 创建 CMSampleBuffer
         var sampleBuffer: CMSampleBuffer?
         let sampleBufferStatus = CMSampleBufferCreateReadyWithImageBuffer(allocator: kCFAllocatorDefault, 
                                                                           imageBuffer: pixelBuffer,
@@ -142,7 +139,6 @@ class PixelBufferRenderView: UIView {
             return
         }
 
-        // 将样本缓冲区排队到显示层
         self.displayLayer.enqueue(sampleBuffer)
         CMSampleBufferInvalidate(sampleBuffer)
     }

@@ -18,42 +18,42 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface Effects : NSObject
-@property (nonatomic, strong) EAGLContext *glContext;
+@property(nonatomic, strong) EAGLContext *glContext;
 #if __has_include("st_mobile_common.h")
-@property (nonatomic) st_handle_t handle;
-@property (nonatomic) st_handle_t hConvertHandle;
+@property(nonatomic) st_handle_t handle;
+@property(nonatomic) st_handle_t hConvertHandle;
 #endif
-@property (nonatomic, assign) uint64_t config;
-@property (nonatomic, assign) GLuint outputTexture;
-@property (nonatomic) CVPixelBufferRef outputPixelBuffer;
-@property (nonatomic) CVOpenGLESTextureRef outputCVTexture;
-@property (nonatomic, assign) int width;
-@property (nonatomic, assign) int height;
-@property (nonatomic) AVCaptureDevicePosition cameraPosition;
+@property(nonatomic, assign) uint64_t config;
+@property(nonatomic, assign) GLuint outputTexture;
+@property(nonatomic) CVPixelBufferRef outputPixelBuffer;
+@property(nonatomic) CVOpenGLESTextureRef outputCVTexture;
+@property(nonatomic, assign) int width;
+@property(nonatomic, assign) int height;
+@property(nonatomic) AVCaptureDevicePosition cameraPosition;
 
 - (instancetype)initWithType:(EffectsType)type context:(EAGLContext *)glContext;
 
-/// 设置当前EAGLContext
-/// @param glContext 当前GLContext
-- (void)setCurrentEAGLContext:(EAGLContext*)glContext;
+/// Set current EAGLContext
+/// @param glContext Current GLContext
+- (void)setCurrentEAGLContext:(EAGLContext *)glContext;
 
 #if __has_include("st_mobile_common.h")
-/// 设置特效
-/// @param type 特效类型
-/// @param path 特效素材路径
+/// Set effect
+/// @param type Effect type
+/// @param path Effect resource path
 - (st_result_t)setEffectType:(st_effect_beauty_type_t)type path:(NSString *)path;
 
 - (st_result_t)setEffectType:(st_effect_beauty_type_t)type model:(int)model;
 
-/// 设置特效程度值
-/// @param type 特效类型
-/// @param value 强度值
+/// Set effect intensity value
+/// @param type Effect type
+/// @param value Intensity value
 - (st_result_t)setEffectType:(st_effect_beauty_type_t)type value:(float)value;
 
-/// 设置风格强度
+/// Set style intensity
 /// @param packageId packageID
-/// @param type 类型
-/// @param value 强度值
+/// @param type Type
+/// @param value Intensity value
 - (st_result_t)setPackageId:(int)packageId groupType:(st_effect_beauty_group_t)type strength:(float)value;
 
 - (st_result_t)setTryon:(st_effect_tryon_info_t *)tryonInfo andTryonType:(st_effect_beauty_type_t)tryonType;
@@ -75,50 +75,49 @@ NS_ASSUME_NONNULL_BEGIN
 - (st_result_t)disableOverlap:(BOOL)isDisableOverlap;
 - (st_result_t)disableModuleReorder:(BOOL)isDisableModuleReorder;
 
-/// 设置贴纸
-/// @param stickerPath stickerPath 2D贴纸
-/// @param callback 回调Block
+/// Set sticker
+/// @param stickerPath stickerPath 2D sticker
+/// @param callback Callback Block
 - (void)setStickerWithPath:(NSString *)stickerPath
-                  callBack:(void(^)(st_result_t state, int stickerId, uint64_t action))callback;
+                  callBack:(void (^)(st_result_t state, int stickerId, uint64_t action))callback;
 
-- (void)setStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
+- (void)setStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void (^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
 
-/// 添加贴纸
-/// @param stickerPath stickerPath 贴纸资源路径
-/// @param callback 回调Block
+/// Add sticker
+/// @param stickerPath Sticker resource path
+/// @param callback Callback Block
 - (void)addStickerWithPath:(NSString *)stickerPath
-                  callBack:(void(^)(st_result_t state, int sticker, uint64_t action))callback;
+                  callBack:(void (^)(st_result_t state, int sticker, uint64_t action))callback;
 
-- (void)addStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
+- (void)addStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void (^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
 
--(void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void(^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
+- (void)changeStickerWithPath:(NSString *)stickerPath callBackCustomEventIncluded:(void (^)(st_result_t state, int stickerId, uint64_t action, uint64_t customEvent))callback;
 
-/// 获取获取素材的贴纸信息
+/// Get sticker information from resource
 /// @param package_id package_id
-/// @param modules 贴纸信息
--(st_result_t)getModulesInPackage:(int)package_id modules:(st_effect_module_info_t*)modules;
+/// @param modules Sticker information
+- (st_result_t)getModulesInPackage:(int)package_id modules:(st_effect_module_info_t *)modules;
 
-/// 设置贴纸信息
-/// @param module_info 贴纸信息
--(st_result_t)setModuleInfo:(st_effect_module_info_t *)module_info;
+/// Set sticker information
+/// @param module_info Sticker information
+- (st_result_t)setModuleInfo:(st_effect_module_info_t *)module_info;
 
-/// 重新播放贴纸
+/// Replay sticker
 /// @param packageId packageId
--(void)replayStickerWithPackage:(int)packageId;
+- (void)replayStickerWithPackage:(int)packageId;
 
+/// Get information about overlapping beauty effects
+/// @param callback Callback block
+- (void)getOverLap:(void (^)(st_effect_beauty_info_t *beauty_info))callback;
 
-/// 获取覆盖生效的美颜的信息
-/// @param callback 回调block
-- (void)getOverLap:(void(^)(st_effect_beauty_info_t *beauty_info))callback;
-
-/// 获取覆盖生效的美颜的信息
+/// Get information about overlapping beauty effects
 - (st_effect_beauty_info_t *)getOverlapInfo:(int *)count;
 
-/// 移除贴纸
-/// @param stickerId 贴纸Id
+/// Remove sticker
+/// @param stickerId Sticker Id
 - (st_result_t)removeSticker:(int)stickerId;
 
-/// 清空贴纸
+/// Clear all stickers
 - (st_result_t)cleareStickers;
 
 - (uint64_t)getDetectConfig;
@@ -127,7 +126,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (uint64_t)getAnimalDetectConfig;
 
 - (GLuint)processTexture:(GLuint)inputTexture
-               inputData:(unsigned char*)inputData
+               inputData:(unsigned char *)inputData
              inputFormat:(st_pixel_format)inputFormat
            outputTexture:(GLuint)outputTexture
                    width:(int)width
@@ -142,7 +141,7 @@ NS_ASSUME_NONNULL_BEGIN
                outBuffer:(unsigned char *)img_out;
 
 - (GLuint)processTexture:(GLuint)inputTexture
-               inputData:(unsigned char*)inputData
+               inputData:(unsigned char *)inputData
              inputFormat:(st_pixel_format)inputFormat
            outputTexture:(GLuint)outputTexture
                    width:(int)width
@@ -161,9 +160,9 @@ NS_ASSUME_NONNULL_BEGIN
                     rgba:(GLuint)texture
                     size:(CGSize)size;
 
--(st_result_t)setParam:(st_effect_param_t)param andValue:(float)value;
+- (st_result_t)setParam:(st_effect_param_t)param andValue:(float)value;
 
--(st_result_t)setFaceMeshList:(st_mobile_face_mesh_list_t)mesh_list;
+- (st_result_t)setFaceMeshList:(st_mobile_face_mesh_list_t)mesh_list;
 
 #endif
 

@@ -23,7 +23,7 @@
 @property (nonatomic, strong, readwrite) EAGLContext *glContext;
 @property (nonatomic) UIDeviceOrientation deviceOrientation;
 @property (nonatomic) dispatch_queue_t renderQueue;
-///贴纸id
+
 @property (nonatomic, assign) int stickerId;
 @property (nonatomic, copy) NSString *stickerPath;
 @property (nonatomic, assign) int filterId;
@@ -118,7 +118,7 @@
     if (!self.effectsProcess) {
         return pixelBuffer;
     }
-    // 设置 OpenGL 环境 , 需要与初始化 SDK 时一致
+
     if ([EAGLContext currentContext] != self.glContext) {
         [EAGLContext setCurrentContext:self.glContext];
     }
@@ -152,7 +152,6 @@
                                                      humanAction:&detectResult
                                                     animalResult:nil];
     if (ret != ST_OK) {
-        NSLog(@"人脸检测失败");
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
         return pixelBuffer;
     }

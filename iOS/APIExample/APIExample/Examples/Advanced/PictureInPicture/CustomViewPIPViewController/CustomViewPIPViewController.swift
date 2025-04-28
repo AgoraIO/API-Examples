@@ -176,13 +176,13 @@ extension CustomViewPIPViewController {
         }
     }
     
-    // MARK: - 进入前后台
+
     @objc private func handleEnterForeground() {
-        print("进入前台")
+
     }
     
     @objc private func handleEnterBackground() {
-        print("进入后台")
+
     }
     
     func startBackgroundTask() {

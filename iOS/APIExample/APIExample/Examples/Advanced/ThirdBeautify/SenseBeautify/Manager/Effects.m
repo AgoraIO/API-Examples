@@ -144,7 +144,7 @@
             break;
     }
     st_mobile_effect_set_param(handle, EFFECT_PARAM_MAX_MEMORY_BUDGET_MB, 1000.0);
-//    st_mobile_effect_set_param(handle, EFFECT_PARAM_QUATERNION_SMOOTH_FRAME, 5.0); /// x< 设置相机姿态平滑参数，表示平滑多少帧, 越大延迟越高，抖动越微弱
+//    st_mobile_effect_set_param(handle, EFFECT_PARAM_QUATERNION_SMOOTH_FRAME, 5.0); /// x< Set the camera pose smoothing parameter, indicating how many frames to smooth. The higher the value, the greater the latency and the weaker the jitter.
             
     if (ret != ST_OK) {
         NSLog(@"st_mobile_effect_create_handle %d", ret);
@@ -499,7 +499,7 @@
                 inputEvent.camera_quat.y = motion.attitude.quaternion.y;
                 inputEvent.camera_quat.z = motion.attitude.quaternion.z;
                 inputEvent.camera_quat.w = motion.attitude.quaternion.w;
-            } else { // 获取默认相机四元数
+            } else { // Get the default camera quaternion
                 st_quaternion_t p_default_quat;
                 ret = st_mobile_effect_get_default_camera_quaternion(self.handle, self.cameraPosition == AVCaptureDevicePositionFront, &p_default_quat);
                 if (ret != ST_OK) {
@@ -618,7 +618,7 @@
 st_result_t _modul_state_change_callback(st_handle_t handle, const st_effect_module_info_t* p_module_info) {
     if (p_module_info->type == EFFECT_MODULE_GAN_IMAGE) { // GAN
 //        _gan_modul_state_change_callback(handle, p_module_info);
-    } else if (p_module_info->type == EFFECT_MODULE_SEGMENT) { // 绿幕分割
+    } else if (p_module_info->type == EFFECT_MODULE_SEGMENT) {
 //        _segment_modul_state_change_callback(handle, p_module_info);
     }
     return ST_OK;

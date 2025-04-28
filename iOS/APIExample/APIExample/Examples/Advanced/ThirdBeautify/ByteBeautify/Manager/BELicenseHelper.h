@@ -1,7 +1,6 @@
 //  BEEffectResourceHelper.h
 //  Effect
 
-
 #ifndef BELicenseHelper_h
 #define BELicenseHelper_h
 
@@ -13,33 +12,33 @@ typedef NS_ENUM(NSInteger, LICENSE_MODE_ENUM) {
 };
 
 @protocol BELicenseProvider <NSObject>
-//   {zh} / @brief 授权文件路径     {en} /@brief authorization file path
+// @Briefing authorization file path
 - (const char *)licensePath;
-//   {zh} / @brief 授权文件路径, 更新license     {en} /@brief authorization file path, update
+// @Briefing authorization file path, update
 - (const char *)updateLicensePath;
-//   {zh} / @brief 授权模式， 0:离线  1:在线     {en} /@brief authorization file path
-- (LICENSE_MODE_ENUM) licenseMode;
+// @Briefing authorization mode, 0: offline  1: online
+- (LICENSE_MODE_ENUM)licenseMode;
 
-- (int) errorCode;
+- (int)errorCode;
 
-- (bool)checkLicenseResult:(NSString*) msg;
+- (bool)checkLicenseResult:(NSString *)msg;
 
-- (bool)checkLicenseOK:(const char *) filePath;
+- (bool)checkLicenseOK:(const char *)filePath;
 
 - (bool)deleteCacheFile;
 
 - (bool)checkLicense;
 @end
 
-@interface BELicenseHelper : NSObject<BELicenseProvider>
+@interface BELicenseHelper : NSObject <BELicenseProvider>
 
-@property (atomic, readwrite) int errorCode;
+@property(atomic, readwrite) int errorCode;
 
-@property (atomic, readwrite) NSString* errorMsg;
+@property(atomic, readwrite) NSString *errorMsg;
 
-+(instancetype) shareInstance;
++ (instancetype)shareInstance;
 
-- (void)setParam:(NSString*)key value:(NSString*) value;
+- (void)setParam:(NSString *)key value:(NSString *)value;
 
 @end
 
