@@ -40,7 +40,7 @@ class BaseViewController: AGViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             // Location information is required on the iPad.
             alertVC.popoverPresentationController?.sourceView = self.view 
-            alertVC.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0) // 设置源矩形
+            alertVC.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         }
         present(alertVC, animated: true, completion: nil)
     }

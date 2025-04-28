@@ -119,12 +119,12 @@
             
             if (0 == strcmp(attr_label, "male") ) {
                 
-                strGender = @"男";
+                strGender = @"Male";
             }
             
             if (0 == strcmp(attr_label, "female") ) {
                 
-                strGender = @"女";
+                strGender = @"Female";
             }
         }
     }

@@ -155,7 +155,7 @@ static FUManager *shareManager = NULL;
     NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
     NSString *path = [bundle pathForResource:[NSString stringWithFormat:@"贴纸/%@", stickerName] ofType:@"bundle"];
     if (!path) {
-        NSLog(@"FaceUnity：找不到贴纸路径");
+        NSLog(@"FaceUnity：Sticker path not found");
         return;
     }
 #if __has_include(<FURenderKit/FURenderKit.h>)

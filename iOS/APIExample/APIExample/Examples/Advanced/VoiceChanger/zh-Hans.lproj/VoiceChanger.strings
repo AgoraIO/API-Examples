@@ -1,36 +1,36 @@
 
 /* Class = "UILabel"; text = "BandGain"; ObjectID = "1Y2-Oo-uXg"; */
-"1Y2-Oo-uXg.text" = "波段区间增益";
+"1Y2-Oo-uXg.text" = "Band Gain";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "3nP-Fh-fTT"; */
 "3nP-Fh-fTT.normalTitle" = "Button";
 
 /* Class = "UILabel"; text = "ReverbValue"; ObjectID = "5YF-rQ-jpm"; */
-"5YF-rQ-jpm.text" = "混响值";
+"5YF-rQ-jpm.text" = "Reverb Value";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "9l7-uP-OVe"; */
 "9l7-uP-OVe.normalTitle" = "Button";
 
 /* Class = "UILabel"; text = "ReverbKey"; ObjectID = "CNw-fg-lwN"; */
-"CNw-fg-lwN.text" = "混响属性";
+"CNw-fg-lwN.text" = "Reverb Property";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Cnn-JW-gFk"; */
 "Cnn-JW-gFk.normalTitle" = "Button";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UILabel"; text = "Customize Voice Effects"; ObjectID = "Glv-Ys-lDb"; */
-"Glv-Ys-lDb.text" = "自定义音效";
+"Glv-Ys-lDb.text" = "Customize Voice Effects";
 
 /* Class = "UIButton"; normalTitle = "Change Voice"; ObjectID = "IgY-un-YoE"; */
-"IgY-un-YoE.normalTitle" = "变声";
+"IgY-un-YoE.normalTitle" = "Change Voice";
 
 /* Class = "UIViewController"; title = "VoiceChanger"; ObjectID = "Isk-Yn-Sjt"; */
-"Isk-Yn-Sjt.title" = "美声/音效";
+"Isk-Yn-Sjt.title" = "Voice Beautifier/Effects";
 
 /* Class = "UILabel"; text = "Pitch"; ObjectID = "J9L-hL-6cu"; */
-"J9L-hL-6cu.text" = "音调";
+"J9L-hL-6cu.text" = "Pitch";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Ry4-kh-SCQ"; */
 "Ry4-kh-SCQ.normalTitle" = "Button";
@@ -42,10 +42,10 @@
 "dJC-qv-NZE.normalTitle" = "Button";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join Channel";
 
 /* Class = "UILabel"; text = "BandFreq"; ObjectID = "m8A-hY-ceu"; */
-"m8A-hY-ceu.text" = "波段频率";
+"m8A-hY-ceu.text" = "Band Frequency";
 
 /* Class = "UILabel"; text = "Voice Beautifier & Effects Preset"; ObjectID = "qQS-En-EUC"; */
-"qQS-En-EUC.text" = "美声/音效预设";
+"qQS-En-EUC.text" = "Voice Beautifier & Effects Preset";
