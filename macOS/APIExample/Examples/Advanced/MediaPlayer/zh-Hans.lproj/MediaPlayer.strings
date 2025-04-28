@@ -1,29 +1,29 @@
 
 /* Class = "NSButtonCell"; title = "Stop"; ObjectID = "5JL-UH-JLr"; */
-"5JL-UH-JLr.title" = "停止";
+"5JL-UH-JLr.title" = "Stop";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
 "BP9-4w-AfJ.title" = "Box";
 
 /* Class = "NSButtonCell"; title = "Pause"; ObjectID = "D7O-6d-Yj4"; */
-"D7O-6d-Yj4.title" = "暂停";
+"D7O-6d-Yj4.title" = "Pause";
 
 /* Class = "NSButtonCell"; title = "Stp Pushing"; ObjectID = "F6H-KV-6va"; */
-"F6H-KV-6va.title" = "停止推流";
+"F6H-KV-6va.title" = "Stop Pushing";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
-"Lhu-U1-6qh.title" = "加入频道";
+"Lhu-U1-6qh.title" = "Join Channel";
 
 /* Class = "NSButtonCell"; title = "Start Pushing"; ObjectID = "TUJ-eJ-Vx7"; */
-"TUJ-eJ-Vx7.title" = "开始推流";
+"TUJ-eJ-Vx7.title" = "Start Pushing";
 
 /* Class = "NSViewController"; title = "Media Player"; ObjectID = "YjT-yy-DnJ"; */
 "YjT-yy-DnJ.title" = "Media Player";
 
 /* Class = "NSButtonCell"; title = "Play"; ObjectID = "a6R-z9-GrM"; */
-"a6R-z9-GrM.title" = "播放";
+"a6R-z9-GrM.title" = "Play";
 
-"GkQ-Np-rjU.title" = "播放音轨";
-"E2w-Ng-jzG.title" = "推送音轨";
-"C42-tM-xyI.title" = "音轨1";
-"bh9-p5-hnL.title" = "音轨1";
+"GkQ-Np-rjU.title" = "Play Audio Track";
+"E2w-Ng-jzG.title" = "Push Audio Track";
+"C42-tM-xyI.title" = "Audio Track 1";
+"bh9-p5-hnL.title" = "Audio Track 1";

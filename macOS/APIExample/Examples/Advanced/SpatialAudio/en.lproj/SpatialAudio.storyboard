@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,9 +14,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="917" height="667"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UvV-gm-It5">
-                                <rect key="frame" x="68" y="621" width="231" height="19"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="请移动红色图标体验3D音频效果" id="0XP-YK-KuI">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UvV-gm-It5">
+                                <rect key="frame" x="68" y="621" width="417" height="19"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Please move the red icon to experience the 3D audio effect." id="0XP-YK-KuI">
                                     <font key="font" metaFont="system" size="15"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -28,9 +28,9 @@
                                     <rect key="frame" x="1" y="1" width="61" height="112"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M5w-Rw-ISS">
-                                            <rect key="frame" x="4" y="6" width="31" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="房间" id="wB6-0F-DcM">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M5w-Rw-ISS">
+                                            <rect key="frame" x="4" y="6" width="36" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="room" id="wB6-0F-DcM">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -69,14 +69,14 @@
                                 </connections>
                             </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="ZXw-xt-NSo" userLabel="remote user 1">
-                                <rect key="frame" x="13" y="20" width="49" height="23"/>
+                                <rect key="frame" x="13" y="20" width="51" height="23"/>
                                 <buttonCell key="cell" type="square" title="123" bezelStyle="shadowlessSquare" image="spatial_remote" imagePosition="left" alignment="center" inset="2" id="q1C-6O-FWQ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="DqJ-rL-rws" userLabel="remote user 2">
-                                <rect key="frame" x="646" y="20" width="49" height="23"/>
+                                <rect key="frame" x="644" y="20" width="51" height="23"/>
                                 <buttonCell key="cell" type="square" title="123" bezelStyle="shadowlessSquare" image="spatial_remote" imagePosition="left" alignment="center" inset="2" id="ujV-mS-k6K">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -92,7 +92,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="185" height="650"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nK0-iB-vMh">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nK0-iB-vMh">
                                                     <rect key="frame" x="18" y="72" width="54" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Channel" id="8kK-yU-WUO">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -100,7 +100,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pXc-he-PX6">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pXc-he-PX6">
                                                     <rect key="frame" x="20" y="43" width="165" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Please Input Channel" drawsBackground="YES" id="Seb-dp-fRr">
                                                         <font key="font" metaFont="system"/>
@@ -118,7 +118,7 @@
                                                         <action selector="startBtnClicked:" target="bU7-R8-ocO" id="r7V-tY-Cty"/>
                                                     </connections>
                                                 </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z7z-IF-MFP">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z7z-IF-MFP">
                                                     <rect key="frame" x="20" y="621" width="45" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="barrier" id="DuM-M6-we2">
                                                         <font key="font" metaFont="system"/>
@@ -138,7 +138,7 @@
                                                         <action selector="onTapMicSwitch:" target="bU7-R8-ocO" id="WYm-CA-Fiq"/>
                                                     </connections>
                                                 </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="egT-xS-Dv3">
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="egT-xS-Dv3">
                                                     <rect key="frame" x="20" y="588" width="26" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Mic" id="dgP-7k-2RR">
                                                         <font key="font" metaFont="system"/>
@@ -147,32 +147,32 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SjH-JN-zgg">
-                                                    <rect key="frame" x="0.0" y="269" width="185" height="302"/>
+                                                    <rect key="frame" x="0.0" y="257" width="185" height="314"/>
                                                     <subviews>
                                                         <box boxType="custom" borderWidth="0.0" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="UVp-jP-AeX">
-                                                            <rect key="frame" x="0.0" y="155" width="185" height="147"/>
+                                                            <rect key="frame" x="0.0" y="161" width="185" height="153"/>
                                                             <view key="contentView" id="ERh-Sb-MTq">
-                                                                <rect key="frame" x="0.0" y="0.0" width="185" height="147"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="185" height="153"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r6b-pf-l1X">
-                                                                        <rect key="frame" x="18" y="125" width="35" height="16"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r6b-pf-l1X">
+                                                                        <rect key="frame" x="18" y="131" width="35" height="16"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Mute" id="SPa-zU-xrL">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-oB-7pY">
-                                                                        <rect key="frame" x="18" y="94" width="65" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-oB-7pY">
+                                                                        <rect key="frame" x="18" y="97" width="65" height="20"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Voice Blur" id="i8Q-uY-ZPE">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jrs-zX-5ri">
-                                                                        <rect key="frame" x="18" y="65" width="123" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jrs-zX-5ri">
+                                                                        <rect key="frame" x="18" y="68" width="123" height="17"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Airborne Simulation" id="w1T-YB-klu">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -180,32 +180,32 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="mkd-kx-YZ8">
-                                                                        <rect key="frame" x="145" y="119" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="120" width="42" height="31"/>
                                                                         <connections>
                                                                             <action selector="onTapMuteSwitch:" target="bU7-R8-ocO" id="jTb-fv-X0S"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="RLA-3j-4qn">
-                                                                        <rect key="frame" x="145" y="88" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="89" width="42" height="26"/>
                                                                         <connections>
                                                                             <action selector="onTapVoiceBlurSwitch:" target="bU7-R8-ocO" id="PrV-9B-99V"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="FlA-Vw-no5">
-                                                                        <rect key="frame" x="145" y="59" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="60" width="42" height="26"/>
                                                                         <connections>
                                                                             <action selector="onTapAirborneSwitch:" target="bU7-R8-ocO" id="QFN-SC-oNV"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fjd-5o-HhS">
-                                                                        <rect key="frame" x="18" y="6" width="169" height="27"/>
+                                                                        <rect key="frame" x="18" y="6" width="169" height="28"/>
                                                                         <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.10000000000000001" tickMarkPosition="above" sliderType="linear" id="Atp-ad-bgU"/>
                                                                         <connections>
                                                                             <action selector="onTapAttenuationSlider:" target="bU7-R8-ocO" id="aV7-57-a1p"/>
                                                                         </connections>
                                                                     </slider>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LWK-RQ-7Tg">
-                                                                        <rect key="frame" x="18" y="39" width="74" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LWK-RQ-7Tg">
+                                                                        <rect key="frame" x="18" y="40" width="74" height="19"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Attenuatuin" id="Olg-lx-iDF">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -243,29 +243,29 @@
                                                             </view>
                                                         </box>
                                                         <box boxType="custom" borderWidth="0.0" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Zpd-F6-3hM">
-                                                            <rect key="frame" x="0.0" y="0.0" width="185" height="147"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="185" height="153"/>
                                                             <view key="contentView" id="2cT-Ha-PL9">
-                                                                <rect key="frame" x="0.0" y="0.0" width="185" height="147"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="185" height="153"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2DT-n7-c9b">
-                                                                        <rect key="frame" x="18" y="125" width="35" height="16"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2DT-n7-c9b">
+                                                                        <rect key="frame" x="18" y="131" width="35" height="16"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Mute" id="e6q-8k-QYN">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0A7-TF-A5X">
-                                                                        <rect key="frame" x="18" y="94" width="65" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0A7-TF-A5X">
+                                                                        <rect key="frame" x="18" y="97" width="65" height="20"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Voice Blur" id="dps-1x-WRS">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LWb-mE-aW2">
-                                                                        <rect key="frame" x="18" y="65" width="123" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LWb-mE-aW2">
+                                                                        <rect key="frame" x="18" y="68" width="123" height="17"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Airborne Simulation" id="XQd-ik-fGe">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -273,32 +273,32 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="E6f-YM-y47">
-                                                                        <rect key="frame" x="145" y="119" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="120" width="42" height="31"/>
                                                                         <connections>
                                                                             <action selector="onTapMuteSwitch:" target="bU7-R8-ocO" id="k31-gd-MvA"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="GGt-hu-iE3">
-                                                                        <rect key="frame" x="145" y="88" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="89" width="42" height="26"/>
                                                                         <connections>
                                                                             <action selector="onTapVoiceBlurSwitch:" target="bU7-R8-ocO" id="pAJ-HP-Mla"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="y37-gi-DBZ">
-                                                                        <rect key="frame" x="145" y="59" width="42" height="26"/>
+                                                                        <rect key="frame" x="145" y="60" width="42" height="26"/>
                                                                         <connections>
                                                                             <action selector="onTapAirborneSwitch:" target="bU7-R8-ocO" id="3bG-hM-yUc"/>
                                                                         </connections>
                                                                     </switch>
                                                                     <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="btH-0A-wLJ">
-                                                                        <rect key="frame" x="18" y="6" width="169" height="27"/>
+                                                                        <rect key="frame" x="18" y="6" width="169" height="28"/>
                                                                         <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.10000000000000001" tickMarkPosition="above" sliderType="linear" id="FGi-mO-1Rk"/>
                                                                         <connections>
                                                                             <action selector="onTapAttenuationSlider:" target="bU7-R8-ocO" id="vCl-q3-czR"/>
                                                                         </connections>
                                                                     </slider>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J87-Kn-Cpu">
-                                                                        <rect key="frame" x="18" y="39" width="74" height="17"/>
+                                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J87-Kn-Cpu">
+                                                                        <rect key="frame" x="18" y="40" width="74" height="19"/>
                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Attenuatuin" id="Rvd-Eg-yDs">
                                                                             <font key="font" usesAppearanceFont="YES"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

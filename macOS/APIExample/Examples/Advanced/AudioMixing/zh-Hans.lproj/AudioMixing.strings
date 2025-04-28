@@ -1,6 +1,6 @@
 
 /* Class = "NSButtonCell"; title = "Resume"; ObjectID = "8GX-mr-P4n"; */
-"8GX-mr-P4n.title" = "恢复播放";
+"8GX-mr-P4n.title" = "Resume";
 
 /* Class = "NSTextFieldCell"; title = "00 : 00"; ObjectID = "8Kf-Su-NKI"; */
 "8Kf-Su-NKI.title" = "00 : 00";
@@ -9,70 +9,70 @@
 "8bV-OK-zbc.title" = "1V15";
 
 /* Class = "NSTextFieldCell"; title = "Audio Effect Controls"; ObjectID = "EBL-gG-Ubf"; */
-"EBL-gG-Ubf.title" = "音效控制";
+"EBL-gG-Ubf.title" = "Audio Effect Controls";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "EhX-UJ-wov"; */
-"EhX-UJ-wov.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "EhX-UJ-wov"; */
+"EhX-UJ-wov.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSButtonCell"; title = "Play"; ObjectID = "IUe-EM-mfG"; */
-"IUe-EM-mfG.title" = "播放";
+"IUe-EM-mfG.title" = "Play";
 
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "J6a-ul-c2H"; */
 "J6a-ul-c2H.title" = "1V3";
 
 /* Class = "NSButtonCell"; title = "Pause"; ObjectID = "LgF-bS-HZ9"; */
-"LgF-bS-HZ9.title" = "暂停";
+"LgF-bS-HZ9.title" = "Pause";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "P4E-oB-5Di"; */
-"P4E-oB-5Di.title" = "加入频道";
+"P4E-oB-5Di.title" = "Join Channel";
 
 /* Class = "NSButtonCell"; title = "Stop"; ObjectID = "PAO-8S-8lX"; */
-"PAO-8S-8lX.title" = "停止";
+"PAO-8S-8lX.title" = "Stop";
 
 /* Class = "NSButtonCell"; title = "Resume"; ObjectID = "R5O-SE-8mk"; */
-"R5O-SE-8mk.title" = "恢复播放";
+"R5O-SE-8mk.title" = "Resume";
 
 /* Class = "NSMenuItem"; title = "1V1"; ObjectID = "ch0-OR-L16"; */
 "ch0-OR-L16.title" = "1V1";
 
 /* Class = "NSButtonCell"; title = "Stop"; ObjectID = "eUh-bN-yCK"; */
-"eUh-bN-yCK.title" = "停止";
+"eUh-bN-yCK.title" = "Stop";
 
 /* Class = "NSMenuItem"; title = "1V8"; ObjectID = "gWk-wf-hPu"; */
 "gWk-wf-hPu.title" = "1V8";
 
 /* Class = "NSTextFieldCell"; title = "Mixing Volume"; ObjectID = "hQ4-2Z-Twn"; */
-"hQ4-2Z-Twn.title" = "混音音量";
+"hQ4-2Z-Twn.title" = "Mixing Volume";
 
 /* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
 "jAv-ZA-ecf.title" = "Join Channel Audio";
 
 /* Class = "NSTextFieldCell"; title = "Effect Volume"; ObjectID = "kh5-ZD-Sm3"; */
-"kh5-ZD-Sm3.title" = "音效音量";
+"kh5-ZD-Sm3.title" = "Effect Volume";
 
 /* Class = "NSTextFieldCell"; title = "Mixing Playback Volume"; ObjectID = "m1U-uA-7L4"; */
-"m1U-uA-7L4.title" = "混音播放音量";
+"m1U-uA-7L4.title" = "Mixing Playback Volume";
 
 /* Class = "NSButtonCell"; title = "Pause"; ObjectID = "mcr-Pl-O4W"; */
-"mcr-Pl-O4W.title" = "暂停";
+"mcr-Pl-O4W.title" = "Pause";
 
 /* Class = "NSTextFieldCell"; title = "Mixing Publish Volume"; ObjectID = "pHa-mK-6Ko"; */
-"pHa-mK-6Ko.title" = "混音发布音量";
+"pHa-mK-6Ko.title" = "Mixing Publish Volume";
 
 /* Class = "NSButtonCell"; title = "Start"; ObjectID = "pNA-hI-TUH"; */
-"pNA-hI-TUH.title" = "开始混音";
+"pNA-hI-TUH.title" = "Start Mixing";
 
 /* Class = "NSTextFieldCell"; title = "Audio Mixing Controls"; ObjectID = "sLt-IU-VEu"; */
-"sLt-IU-VEu.title" = "混音控制";
+"sLt-IU-VEu.title" = "Audio Mixing Controls";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
-"szu-uz-G6W.title" = "离开频道";
+"szu-uz-G6W.title" = "Leave Channel";
 
 /* Class = "NSTextFieldCell"; title = "Loop Back Recording"; ObjectID = "8qO-PU-Fev"; */
-"8qO-PU-Fev.title" = "系统音频混音";
+"8qO-PU-Fev.title" = "System Audio Mixing";
 
 /* Class = "NSButtonCell"; title = "enable"; ObjectID = "SNu-S9-xaT"; */
-"SNu-S9-xaT.title" = "开启";
+"SNu-S9-xaT.title" = "Enable";
 
 /* Class = "NSButtonCell"; title = "disable"; ObjectID = "OcI-Tl-32x"; */
-"OcI-Tl-32x.title" = "关闭";
+"OcI-Tl-32x.title" = "Disable";

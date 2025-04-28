@@ -3,10 +3,10 @@
 "I4o-9l-2Vv.title" = "Box";
 
 /* Class = "NSButtonCell"; title = "Send"; ObjectID = "eYM-ow-8en"; */
-"eYM-ow-8en.title" = "发送";
+"eYM-ow-8en.title" = "Send";
 
 /* Class = "NSTextFieldCell"; title = "Received Messages"; ObjectID = "mGf-09-ljc"; */
-"mGf-09-ljc.title" = "收到的消息";
+"mGf-09-ljc.title" = "Received Messages";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "mmH-hT-gAv"; */
-"mmH-hT-gAv.title" = "加入频道";
+"mmH-hT-gAv.title" = "Join Channel";

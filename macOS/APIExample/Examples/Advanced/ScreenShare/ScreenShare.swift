@@ -237,7 +237,6 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            // 增加勾边功能
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
