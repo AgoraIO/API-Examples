@@ -1,12 +1,12 @@
 
 /* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "AmK-zc-ByT"; */
-"AmK-zc-ByT.title" = "加入频道";
+"AmK-zc-ByT.title" = "Join Channel";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "cAG-6V-STC"; */
-"cAG-6V-STC.title" = "画中画";
+"cAG-6V-STC.title" = "Picture in Picture";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join";

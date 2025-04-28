@@ -14,7 +14,6 @@ fi
 
 cd ${PROJECT_PATH}
 
-#下载美颜资源
 echo "start download bytedance resource : $bytedance_lib"
 curl -L -O "$bytedance_lib"
 unzip -o vender_bytedance_iOS.zip
@@ -30,10 +29,10 @@ curl -L -O "$fu_lib"
 unzip -o vender_fu_iOS.zip
 rm -f vender_fu_iOS.zip
 
-#打开第三方播放器配置
+# Enable third-party player configuration
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
-#打开第三方美颜
+# Enable third-party beauty filters
 sed -i -e "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
 sed -i -e "s#\#  pod 'bytedEffect'#  pod 'bytedEffect'#g" Podfile
 sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
@@ -44,18 +43,18 @@ echo "project path: $PROJECT_PATH"
 
 pod install --repo-update || exit 1
 
-# 打包环境
+# Build environment
 CONFIGURATION="Debug"
 
-#工程文件路径
+# Project file path
 APP_PATH="$(ls | grep xcworkspace)"
 
-# 项目target名
+# Project target name
 TARGET_NAME=${APP_PATH%%.*} 
 
 KEYCENTER_PATH=$TARGET_NAME/Common/KeyCenter.swift
 
-#工程配置路径
+# Project configuration path
 PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 
 # Debug
@@ -70,7 +69,7 @@ PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 /usr/libexec/PlistBuddy -c "Set :objects:03D13BF82448758C00B599B3:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:03D13BF82448758C00B599B3:buildSettings:PRODUCT_BUNDLE_IDENTIFIER io.agora.entfull" $PBXPROJ_PATH
 
-# 屏幕共享Extension
+# Screen Share Extension
 # Debug
 /usr/libexec/PlistBuddy -c "Set :objects:0339BEB825205B80007D4FDD:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:0339BEB825205B80007D4FDD:buildSettings:DEVELOPMENT_TEAM 'JDPG69R49Z'" $PBXPROJ_PATH
@@ -93,7 +92,7 @@ PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
 
-#修改build number
+# Modify build number
 # Debug
 /usr/libexec/PlistBuddy -c "Set :objects:03D13BF72448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
 
@@ -103,7 +102,7 @@ PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 MODIFIED_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :objects:03D13BF72448758C00B599B3:buildSettings:PRODUCT_BUNDLE_IDENTIFIER" "$PBXPROJ_PATH")
 echo "Modified Bundle Identifier: $MODIFIED_BUNDLE_ID"
 
-# 读取APPID环境变量
+# Read APPID environment variable
 echo AGORA_APP_ID: $APP_ID
 
 echo PROJECT_PATH: $PROJECT_PATH
@@ -111,56 +110,56 @@ echo TARGET_NAME: $TARGET_NAME
 echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
-#修改Keycenter文件
+# Modify Keycenter file
 sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
 rm -f ${KEYCENTER_PATH}-e
 
 # Xcode clean
 xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
 
-# 时间戳
+# Timestamp
 CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 
-# 归档路径
+# Archive path
 ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
-# 编译环境
+# Build environment
 
-# plist路径
+# Plist path
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 
-# 修改ExportOptions.plist
-# 修改 io.agora.api.examples 的值
+# Modify ExportOptions.plist
+# Modify io.agora.api.examples value
 echo "start modify ExportOption.plist"
-# 先获取原始值
+# Get original values
 value1=$(/usr/libexec/PlistBuddy -c "Print :provisioningProfiles:io.agora.api.examples" "$PLIST_PATH")
 value2=$(/usr/libexec/PlistBuddy -c "Print :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension" "$PLIST_PATH")
 
-# 删除原始键
+# Delete original keys
 /usr/libexec/PlistBuddy -c "Delete :provisioningProfiles:io.agora.api.examples" "$PLIST_PATH"
 /usr/libexec/PlistBuddy -c "Delete :provisioningProfiles:io.agora.api.examples.Agora-ScreenShare-Extension" "$PLIST_PATH"
 
-# 添加新键和值
+# Add new keys and values
 /usr/libexec/PlistBuddy -c "Add :provisioningProfiles:io.agora.entfull string $value1" "$PLIST_PATH"
 /usr/libexec/PlistBuddy -c "Add :provisioningProfiles:io.agora.entfull.Agora-ScreenShare-Extension string $value2" "$PLIST_PATH"
 
-# 打印修改后的 provisioningProfiles 值
-echo "修改后的 provisioningProfiles 值："
+# Print modified provisioningProfiles values
+echo "Modified provisioningProfiles values:"
 /usr/libexec/PlistBuddy -c "Print :provisioningProfiles" "$PLIST_PATH"
 
 echo "start xcode build, appPath: $APP_PATH, target: $TARGET_NAME, config: $CONFIGURATION, archivePath: $ARCHIVE_PATH"
 
-# archive 这边使用的工作区间 也可以使用project
+# archive using workspace (can also use project)
 xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit 1
 
 echo "xcode build finished"
 
 cd ${WORKSPACE}
 
-# 压缩archive
+# Compress archive
 7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
 
-# 签名
+# Sign
 echo "start export, targetName: $TARGET_NAME, bundleNumber: $BUILD_NUMBER, plistPath: $PLIST_PATH"
 # sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
@@ -174,5 +173,3 @@ mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
 rm -rf *.xcarchive
 rm -rf *.xcarchive.zip
 echo OUTPUT_FILE: $OUTPUT_FILE
-
-

@@ -3,19 +3,19 @@
 "4et-fL-YHJ.text" = "00 : 00";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "Leb-Wc-wyE"; */
-"Leb-Wc-wyE.normalTitle" = "发流";
+"Leb-Wc-wyE.normalTitle" = "Publish";
 
 /* Class = "UIButton"; normalTitle = "Open"; ObjectID = "bBH-Cp-zvD"; */
-"bBH-Cp-zvD.normalTitle" = "打开";
+"bBH-Cp-zvD.normalTitle" = "Open";
 
 /* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "gpl-j7-fNe"; */
-"gpl-j7-fNe.normalTitle" = "暂停";
+"gpl-j7-fNe.normalTitle" = "Pause";
 
 /* Class = "UIButton"; normalTitle = "Unpublish"; ObjectID = "grZ-Qq-vYc"; */
-"grZ-Qq-vYc.normalTitle" = "停止发流";
+"grZ-Qq-vYc.normalTitle" = "Unpublish";
 
 /* Class = "UITextField"; text = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4"; ObjectID = "jtM-0I-8yU"; */
 "jtM-0I-8yU.text" = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
@@ -24,27 +24,26 @@
 "jxp-ZN-2yG.title" = "Join Channel Audio";
 
 /* Class = "UILabel"; text = "Publish Volume"; ObjectID = "kIh-KH-AhZ"; */
-"kIh-KH-AhZ.text" = "发流音量";
+"kIh-KH-AhZ.text" = "Publish Volume";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join Channel";
 
 /* Class = "UILabel"; text = "Playout Volume"; ObjectID = "nDn-o2-Vmd"; */
-"nDn-o2-Vmd.text" = "播放音量";
+"nDn-o2-Vmd.text" = "Playout Volume";
 
 /* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "uBn-Om-6Vs"; */
-"uBn-Om-6Vs.normalTitle" = "停止";
+"uBn-Om-6Vs.normalTitle" = "Stop";
 
 /* Class = "UIButton"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
-"vdv-zd-3aD.normalTitle" = "播放";
-
+"vdv-zd-3aD.normalTitle" = "Play";
 
 /* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "vfb-Ay-x4e"; */
-"vfb-Ay-x4e.normalTitle" = "发流";
+"vfb-Ay-x4e.normalTitle" = "Publish";
 
-"vm5-sM-0Lw.normalTitle" = "停止发流";
+"vm5-sM-0Lw.normalTitle" = "Unpublish";
 
-"aiy-MM-lxz.text" = "播放音轨:";
-"uFn-ej-UAH.normalTitle" = "音轨1";
-"0lb-hX-kmd.text" = "推送音轨:";
-"RyY-Fu-0JL.normalTitle" = "音轨1";
+"aiy-MM-lxz.text" = "Play Track:";
+"uFn-ej-UAH.normalTitle" = "Track 1";
+"0lb-hX-kmd.text" = "Publish Track:";
+"RyY-Fu-0JL.normalTitle" = "Track 1";

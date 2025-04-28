@@ -11,6 +11,6 @@
 /* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "pjq-Wh-4Ys"; */
 "pjq-Wh-4Ys.title" = "Join Channel Video";
 
-"xi9-eb-Hiz.normalTitle" = "销毁Track";
-"zBJ-mw-TwL.normalTitle" = "创建采集Track(编码)";
-"Her-yf-kmE.normalTitle" = "创建采集Track";
+"xi9-eb-Hiz.normalTitle" = "Destroy Track";
+"zBJ-mw-TwL.normalTitle" = "Create Capture Track (Encoded)";
+"Her-yf-kmE.normalTitle" = "Create Capture Track";
