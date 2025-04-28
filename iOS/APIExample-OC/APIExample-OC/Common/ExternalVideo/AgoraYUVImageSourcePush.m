@@ -40,19 +40,12 @@
 
 - (void) initTimer {
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
-    /**
-     定时器设置
-     @param  定时器
-     @param  什么时候开始
-     @param  定时器延迟多久
-     @param  每隔几秒执行
-     @param  允许多少误差
-     */
-    //GCD要求传入纳秒，所以要用秒乘以NSEC_PER_SEC
+  
+    // GCD requires nanoseconds to be passed in, so multiply seconds by NSEC_PER_SEC
     dispatch_source_set_timer(
                               self.timer,
-                              dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC),//开始事件,从 0 秒后开始
-                              self.frameRate / 100.0 * NSEC_PER_SEC,//间隔 秒
+                              dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC),//Start event, start after 0 seconds
+                              self.frameRate / 100.0 * NSEC_PER_SEC,//Interval in seconds
                               0
                               );
 }
