@@ -15,29 +15,28 @@
 
 @end
 
-
 @protocol FUManagerProtocol <NSObject>
 
-//用于检测是否有ai人脸和人形
+/// Used to detect if there is an AI face and human shape
 - (void)faceUnityManagerCheckAI;
 
 @end
 
 @interface FUManager : NSObject <VideoFilterDelegate>
 
-@property (nonatomic, weak) id<FUManagerProtocol>delegate;
+@property(nonatomic, weak) id<FUManagerProtocol> delegate;
 
 + (FUManager *)shareManager;
 
-/// 销毁全部道具
+/// Destroy all items
 - (void)destoryItems;
 
-/// 更新美颜磨皮效果（根据人脸检测置信度设置不同磨皮效果）
+/// Update beauty blur effect (set different blur effects based on face detection confidence)
 - (void)updateBeautyBlurEffect;
 
-- (void)setBuauty: (BOOL)isSelected;
-- (void)setMakeup: (BOOL)isSelected;
-- (void)setSticker: (BOOL)isSelected;
-- (void)setFilter: (BOOL)isSelected;
+- (void)setBuauty:(BOOL)isSelected;
+- (void)setMakeup:(BOOL)isSelected;
+- (void)setSticker:(BOOL)isSelected;
+- (void)setFilter:(BOOL)isSelected;
 
 @end

@@ -37,10 +37,9 @@ class BaseViewController: AGViewController {
     }
     
     func presentAlertViewController(_ alertVC: UIAlertController) {
-        // 判断设备类型
         if UIDevice.current.userInterfaceIdiom == .pad {
-            // iPad 上需要提供位置信息
-            alertVC.popoverPresentationController?.sourceView = self.view // 设置源视图
+            // Location information is required on the iPad.
+            alertVC.popoverPresentationController?.sourceView = self.view 
             alertVC.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0) // 设置源矩形
         }
         present(alertVC, animated: true, completion: nil)

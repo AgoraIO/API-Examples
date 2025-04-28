@@ -23,13 +23,11 @@ class JoinChannelVideoTokenEntry: BaseViewController {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTapViewHandler))
         view.addGestureRecognizer(tap)
-        // 注册键盘出现通知
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(notification:)),
                                                name: UIApplication.keyboardWillShowNotification,
                                                object: nil)
         
-        // 注册键盘隐藏通知
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(notification:)),
                                                name: UIApplication.keyboardWillHideNotification,
@@ -49,7 +47,7 @@ class JoinChannelVideoTokenEntry: BaseViewController {
     private func onTapViewHandler() {
         view.endEditing(true)
     }
-    // 键盘显示
+
     @objc
     private func keyboardWillShow(notification: Notification) {
         containerViewYCons.constant = -150
@@ -57,7 +55,7 @@ class JoinChannelVideoTokenEntry: BaseViewController {
             self.view.layoutIfNeeded()
         }
     }
-    // 键盘隐藏
+
     @objc
     private func keyboardWillHide(notification: Notification) {
         containerViewYCons.constant = -56

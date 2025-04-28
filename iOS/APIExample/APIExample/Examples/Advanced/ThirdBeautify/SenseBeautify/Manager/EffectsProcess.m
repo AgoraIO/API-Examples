@@ -98,8 +98,8 @@
     return self;
 }
 
-/// 鉴权
-/// @param licensePath 授权文件路径
+/// Authorize
+/// @param licensePath License file path
 + (BOOL)authorizeWithLicensePath:(NSString *)licensePath{
     if ([EffectsLicense authorizeWithLicensePath:licensePath]) {
         [EffectsToken sharedInstance].bAuthrize = YES;
@@ -109,8 +109,8 @@
     return [EffectsToken sharedInstance].bAuthrize;
 }
 
-/// 鉴权
-/// @param licenseData 授权文件数据
+/// Authorize
+/// @param licenseData License file data
 + (BOOL)authorizeWithLicenseData:(NSData *)licenseData{
     if ([EffectsLicense authorizeWithLicenseData:licenseData]) {
         [EffectsToken sharedInstance].bAuthrize = YES;
@@ -1150,7 +1150,6 @@
 
 - (void)solvePaddingImage:(Byte *)pImage width:(int)iWidth height:(int)iHeight bytesPerRow:(int *)pBytesPerRow
 {
-    //pBytesPerRow 每行字节数
     int iBytesPerPixel = *pBytesPerRow / iWidth;
     int iBytesPerRowCopied = iWidth * iBytesPerPixel;
     int iCopiedImageSize = sizeof(Byte) * iWidth * iBytesPerPixel * iHeight;

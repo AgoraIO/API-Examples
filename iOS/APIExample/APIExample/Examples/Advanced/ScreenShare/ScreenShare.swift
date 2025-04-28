@@ -332,7 +332,6 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
             option.publishCameraTrack = UIScreen.main.isCaptured
             agoraKit.updateChannel(with: option)
     
-            // 开始屏幕共享后, 如果想自动隐藏系统界面, 需要配置scheme, 使用scheme唤醒自身的方式关闭系统界面
             // If you want to hide the system interface automatically after you start screen sharing,
             // you need to configure scheme and use scheme to wake up the system interface
             UIApplication.shared.open(URL(string: "APIExample://") ?? URL(fileURLWithPath: "APIExample://"))
@@ -372,22 +371,18 @@ extension ScreenShareMain: UIPickerViewDataSource, UIPickerViewDelegate {
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("我选择了第"+"\(row)"+"行")
+        print("pick"+"\(row)"+"row")
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         "\(fpsDataSources[row])fps"
     }
 
-//    // TODO: 可以设置哪一行显示特定的样式
+//    //
 //    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-//        // 创建一个对象
 //        let specificView = UIView.init()
 //        specificView.frame = CGRect.init(x: 10, y: 5, width: 100, height: 60)
 //        specificView.backgroundColor = UIColor.magenta
-//        /**
-//         创建一个标题
-//         */
 //        let specificLable = UILabel.init(frame: CGRect.init(x: 5, y: 0, width: 90, height: 60))
 //        specificLable.text = (SourceData[row] as! String)
 //        specificLable.textColor = UIColor.white

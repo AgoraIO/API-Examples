@@ -99,7 +99,7 @@ static const bool USE_PIPELINE = YES;
 - (int)initTask {
 #if __has_include(<effect-sdk/bef_effect_ai_api.h>)
     _effectOn = true;
-    _glContext = [EAGLContext currentContext];  // 运行在主线程，使用的是self.glView.context
+    _glContext = [EAGLContext currentContext];  // Running on the main thread, using self.glView.context
     if (_glContext == nil) {
         NSLog(@"initTask is not run in thread with glContext!!!");
         _glContext = [BEGLUtils createContextWithDefaultAPI:kEAGLRenderingAPIOpenGLES3];
@@ -747,13 +747,13 @@ static const bool USE_PIPELINE = YES;
         buf.format = BE_RGBA;
         BEImageUtils* imageUtils = [BEImageUtils new];
         UIImage* img = [imageUtils transforBufferToUIImage:buf];
-        // {zh} 由于img的数据地址与buffer一样，需要深拷贝结果图 {en} Since the data address of img is the same as that of buffer, deep copy of the result graph is required
+        // Since the data address of img is the same as that of buffer, deep copy of the result graph is required
         UIGraphicsBeginImageContext(img.size);
         [img drawInRect:CGRectMake(0, 0, img.size.width, img.size.height)];
         UIImage *copiedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        // {zh} 释放贴纸内部buffer {en} Release sticker internal buffer
+        // Release sticker internal buffer
         bef_effect_ai_release_captured_image(_handle, pImage);
         return copiedImage;
     }
@@ -797,8 +797,8 @@ static const bool USE_PIPELINE = YES;
     return [self sendMsg:BEEffectTakingPictures arg1:1 arg2:0 arg3:0];
 }
 
-// {zh} / @brief 开启或关闭强制人脸检测 {en} /@brief Enable or disable forced face detection
-// {zh} /detection YES 开启人脸检测 NO关闭人脸检测 {en} /detection YES on face detection NO off face detection
+// @Briefing Enable or disable forced face detection
+// @Details detection YES on face detection NO off face detection
 - (void)forcedFaceDetection:(BOOL)detection
 {
     bef_effect_result_t ret = bef_effect_ai_set_algorithm_force_detect(_handle,detection);
