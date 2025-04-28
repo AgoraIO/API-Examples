@@ -92,7 +92,7 @@
             i++;
         }
     });
-    //启动定时器
+
     dispatch_resume(self.timer);
 }
 
