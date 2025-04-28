@@ -106,7 +106,7 @@ st_result_t addSubModel(st_handle_t handle, NSString* file) {
             NSString *fullPath = [modelPath stringByAppendingPathComponent:file];
             
             state = st_mobile_human_action_add_sub_model(_hDetector, fullPath.UTF8String);
-            if ([fullPath containsString:@"Skin"]) { // 皮肤分割
+            if ([fullPath containsString:@"Skin"]) { 
                 [EFGlobalSingleton sharedInstance].efHasSegmentCapability = state != ST_E_NO_CAPABILITY;
             }
             if (state != ST_OK) {
