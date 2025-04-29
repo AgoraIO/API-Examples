@@ -222,7 +222,7 @@ struct LiveStreaming: View {
                 
                 if liveStreamRTCKit.role == .broadcaster {
                     //centerStage, camera focus
-                    HStack {
+                    VStack {
                         Toggle("CenterStage", isOn: $centerStage)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: centerStage) { newValue in
@@ -277,7 +277,7 @@ struct LiveStreaming: View {
                     .adaptiveBackground(.gray.opacity(0.3))
                     
                     //B-frame, encoding method    
-                    HStack {
+                    VStack {
                         Toggle("B Fps".localized, isOn: $bFpsState)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: bFpsState) { newValue in
