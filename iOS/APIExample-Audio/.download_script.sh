@@ -10,13 +10,12 @@ fi
 
 rm -rf libs
 
-# 使用curl命令下载文件
 echo 'download Agora RTC SDK...'
 curl -o "$zip_filename" "$url"
 
 unzip $zip_filename
 
-folder_name=$(unzip -qql $zip_filename | head -n1 | tr -s ' ' | cut -d' ' -f5-)  # 获取文件夹名称
+folder_name=$(unzip -qql $zip_filename | head -n1 | tr -s ' ' | cut -d' ' -f5-) 
 mv "${folder_name}libs" .
 
 rm -rf $zip_filename

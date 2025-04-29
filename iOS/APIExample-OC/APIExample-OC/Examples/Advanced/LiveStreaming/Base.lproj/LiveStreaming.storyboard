@@ -118,9 +118,9 @@
                                 <rect key="frame" x="14" y="328" width="386" height="32"/>
                                 <color key="backgroundColor" name="videoPlaceholder"/>
                                 <segments>
-                                    <segment title="自动"/>
-                                    <segment title="软编"/>
-                                    <segment title="硬编"/>
+                                    <segment title="auto"/>
+                                    <segment title="soft"/>
+                                    <segment title="hard"/>
                                 </segments>
                                 <color key="tintColor" systemColor="systemGray6Color"/>
                                 <color key="selectedSegmentTintColor" systemColor="systemBackgroundColor"/>
@@ -181,7 +181,7 @@
                                     <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="B4X-AK-dYt"/>
                                 </connections>
                             </button>
-                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CN0-n0-1Gh" userLabel="B帧">
+                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CN0-n0-1Gh" userLabel="B frame">
                                 <rect key="frame" x="20" y="438" width="195" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="B frame" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3M-Tw-nzd">
