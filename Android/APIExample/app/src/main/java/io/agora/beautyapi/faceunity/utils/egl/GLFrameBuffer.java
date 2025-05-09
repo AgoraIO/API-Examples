@@ -115,9 +115,9 @@ public class GLFrameBuffer {
 
         synchronized (EglBase.lock){
             if(textureType == GLES11Ext.GL_TEXTURE_EXTERNAL_OES){
-                drawer.drawOes(textureId,0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight,0);
+                drawer.drawOes(textureId, 0,matrix, mWidth, mHeight, 0, 0, mWidth, mHeight,0);
             }else{
-                drawer.drawRgb(textureId,0, matrix, mWidth, mHeight, 0, 0, mWidth, mHeight,0);
+                drawer.drawRgb(textureId, 0,matrix, mWidth, mHeight, 0, 0, mWidth, mHeight,0);
             }
         }
 
