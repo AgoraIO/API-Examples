@@ -42,8 +42,7 @@ class TextureProcessHelper(
     private val glFrameBuffer = GLFrameBuffer()
     private val futureQueue = ConcurrentLinkedQueue<Future<Int>>()
     private val workerThread = Executors.newSingleThreadExecutor()
-    private val eglContextHelper =
-        EGLContextHelper()
+    private val eglContextHelper = EGLContextHelper()
     private var eglContextBase: EGLContext? = null
     private var isReleased = false
     private var filter: ((GLTextureBufferQueue.TextureOut) -> Int)? = null
