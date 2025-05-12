@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if required hooks are installed
+if [ ! -f ".git/hooks/commit-msg" ] || [ ! -x ".git/hooks/commit-msg" ]; then
+    echo "============================================================"
+    echo "Note: Git hooks for checking Chinese characters in commit messages are not installed."
+    echo "Please run the following commands to install:"
+    echo ""
+    echo "  1. Install pre-commit:"
+    echo "     pip install pre-commit"
+    echo ""
+    echo "  2. Install pre-commit hook:"
+    echo "     pre-commit install"
+    echo ""
+    echo "  3. Install commit-msg hook:"
+    echo "     pre-commit install --hook-type commit-msg"
+    echo "     cp .git-hooks/check-commit-message.sh .git/hooks/commit-msg"
+    echo "     chmod +x .git/hooks/commit-msg"
+    echo ""
+    echo "These hooks will help detect sensitive information leaks and Chinese characters in commit messages."
+    echo "============================================================"
+fi
+
+# Ensure the hook itself is executable
+if [ -f ".git-hooks/check-commit-message.sh" ] && [ ! -x ".git-hooks/check-commit-message.sh" ]; then
+    chmod +x .git-hooks/check-commit-message.sh
+fi 
