@@ -1,0 +1,142 @@
+title = "gitleaks config"
+
+# Gitleaks rules are defined by regular expressions and entropy ranges.
+# Some secrets have unique signatures which make detecting those secrets easy.
+# Examples of those secrets would be GitLab Personal Access Tokens, AWS keys, and GitHub Access Tokens.
+# All these examples have defined prefixes like `glpat`, `AKIA`, `ghp_`, etc.
+#
+# Other secrets might just be a hash which means we need to write more complex rules to verify
+# that what we are matching is a secret.
+#
+# Here is an example of a semi-generic secret
+#
+#   discord_client_secret = "8dyfuiRyq=vVc3RRr_edRk-fK__JItpZ"
+#
+# We can write a regular expression to capture the variable name (identifier),
+# the assignment symbol (like '=' or ':='), and finally the actual secret.
+# The structure of a rule to match this example secret is below:
+#
+#                                                           Beginning string
+#                                                               quotation
+#                                                                   │            End string quotation
+#                                                                   │                      │
+#                                                                   ▼                      ▼
+#    (?i)(discord[a-z0-9_ .\-,]{0,25})(=|>|:=|\|\|:|<=|=>|:).{0,5}['\"]([a-z0-9=_\-]{32})['\"]
+#
+#                   ▲                              ▲                                ▲
+#                   │                              │                                │
+#                   │                              │                                │
+#              identifier                  assignment symbol
+#                                                                                Secret
+#
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "chinese-characters"
+description = "Detecting Chinese characters"
+regex = '''[\p{Han}]+'''
+tags = ["chinese"]
+
+[[rules]]
+id = "chinese-comments"
+description = "Detect Chinese comments"
+regex = '''(//|#|/\*|\*).*[\p{Han}]+'''
+tags = ["chinese", "comments"]
+
+[[rules]]
+id = "agora-app-id-pattern"
+description = "Agora App ID Pattern"
+regex = '''(?i)(AGORA_APP_ID|AG_APP_ID|static\s+let\s+AppId:\s+String|static\s+let\s+AG_APP_ID:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,32})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "agora-app-certificate-pattern"
+description = "Agora App Certificate Pattern"
+regex = '''(?i)(AGORA_APP_CERTIFICATE|AG_APP_CERTIFICATE|static\s+let\s+Certificate:\s+String\?|static\s+let\s+AG_APP_CERTIFICATE:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,32})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "basic-auth-key"
+description = "Basic Auth Key"
+regex = '''(?i)(BASIC_AUTH_KEY|static\s+let\s+BASIC_AUTH_KEY:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z\-_=]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "basic-auth-secret"
+description = "Basic Auth Secret"
+regex = '''(?i)(BASIC_AUTH_SECRET|static\s+let\s+BASIC_AUTH_SECRET:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z\-_=]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "llm-api-key"
+description = "LLM API Key"
+regex = '''(?i)(LLM_API_KEY|static\s+let\s+LLM_API_KEY:\s+String)(\s*=\s*)(?:['"]?([a-zA-Z0-9\-_]{1,100})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "llm-url-with-key"
+description = "LLM URL with API Key"
+regex = '''(?i)(LLM_URL|static\s+let\s+LLM_URL:\s+String)(\s*=\s*)['"]?(https?:\/\/[^\s'"]+?(?:api_key|apikey|token|secret|password|key)=[^\s'"&]+)['"]?'''
+secretGroup = 3
+
+[[rules]]
+id = "tts-key-pattern"
+description = "TTS API Key in Parameters"
+regex = '''(?i)(TTS_PARAMS|static\s+let\s+TTS_PARAMS)(\s*=\s*)(?:['"]?.*["']key["']:\s*["']([a-zA-Z0-9\-_]{1,64})["'].*['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "im-app-key-pattern"
+description = "IM App Key Pattern"
+regex = '''(?i)(IM_APP_KEY|static\s+var\s+IMAppKey:\s+String\?)(\s*=\s*)(?:['"]?([0-9a-zA-Z#]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "im-client-id-pattern"
+description = "IM Client ID Pattern"
+regex = '''(?i)(IM_APP_CLIENT_ID|static\s+var\s+IMClientId:\s+String\?)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "im-client-secret-pattern"
+description = "IM Client Secret Pattern"
+regex = '''(?i)(IM_APP_CLIENT_SECRET|static\s+var\s+IMClientSecret:\s+String\?)(\s*=\s*)(?:['"]?([0-9a-zA-Z\-_=]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "restful-api-key-pattern"
+description = "Restful API Key Pattern"
+regex = '''(?i)(RESTFUL_API_KEY|static\s+let\s+RestfulApiKey:\s+String\?)(\s*=\s*)(?:['"]?([0-9a-zA-Z\-_=]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "restful-api-secret-pattern"
+description = "Restful API Secret Pattern"
+regex = '''(?i)(RESTFUL_API_SECRET|static\s+let\s+RestfulApiSecret:\s+String\?)(\s*=\s*)(?:['"]?([0-9a-zA-Z\-_=]{1,64})['"]?)'''
+secretGroup = 3
+
+[[rules]]
+id = "openai-api-key"
+description = "OpenAI API Key Pattern"
+regex = '''(?i)sk-(live|test|proj)-[0-9a-zA-Z]{24,48}'''
+
+[allowlist]
+description = "global allow lists"
+regexes = ['''219-09-9999''', '''078-05-1120''', '''(9[0-9]{2}|666)-\d{2}-\d{4}''']
+paths = [
+    '''gitleaks.toml''',
+    '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket)$''',
+    '''(go.mod|go.sum)$''',
+    '''iOS/.*\.strings''',
+    '''iOS/.*\.lproj/.*''',
+    '''iOS/Scenes/ConvoAI/.*''',
+    '''.*\.strings$''',
+    '''.*\.strings''',
+    '''.*\/zh-Hans\.lproj\/.*''',
+    '''.*\/zh-Hant\.lproj\/.*''',
+    '''.*\/zh\.lproj\/.*''',
+    '''iOS/Pods/.*''',
+    '''README\.md'''
+]
