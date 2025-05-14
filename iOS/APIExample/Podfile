@@ -22,7 +22,7 @@ target 'APIExample' do
   pod 'SwiftLint', '~> 0.53.0'
   pod 'SnapKit', '~> 5.7.0'
 
-  #pod 'fuLib', :path => 'fu.podspec'
+  #  pod 'fuLib', :path => 'fu.podspec'
 end
 
 target 'Agora-ScreenShare-Extension' do
