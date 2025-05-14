@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
+        args: ["--config=.gitleaks.toml"]
+  
+  - repo: local
+    hooks:
+      - id: check-commit-message
+        name: Check commit message for Chinese characters
+        description: Ensures commit messages do not contain Chinese characters
+        entry: .git-hooks/check-commit-message.sh
+        language: script
+        stages: [commit-msg]
