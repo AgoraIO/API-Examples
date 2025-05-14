@@ -22,8 +22,6 @@ target 'APIExample' do
   pod 'SwiftLint', '~> 0.53.0'
   pod 'SnapKit', '~> 5.7.0'
 
-  #pod 'SenseLib', :path => 'sense.podspec'
-  #pod 'bytedEffect', :path => 'bytedEffect.podspec'
   #pod 'fuLib', :path => 'fu.podspec'
 end
 

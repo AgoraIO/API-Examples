@@ -21,7 +21,7 @@ class KeyCenter: NSObject {
      then the APP ID can be found in the project detail page.
      */
     @objc
-    static let AppId: String = "aab8b8f5a8cd4469a63042fcfafe7063"
+    static let AppId: String = ""
 
     /**
      Certificate.
@@ -32,7 +32,6 @@ class KeyCenter: NSObject {
      PS: It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
      */
     static let Certificate: String? = nil
-    
     
     static let FaceCaptureLicense: String? = nil
 }
