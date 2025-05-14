@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Check if gitleaks is configured
+if ! command -v gitleaks &> /dev/null; then
+    echo "============================================================"
+    echo "Gitleaks not detected. This is a required tool to prevent sensitive information leaks."
+    echo "Please install gitleaks first: https://github.com/gitleaks/gitleaks#installing"
+    echo "After installation, run: ./.git-hooks/install-hooks.sh"
+    echo "============================================================"
+    exit 1
+fi
+
+# Check for sensitive information
+if [ -f ".gitleaks.toml" ]; then
+    gitleaks detect --source . --config .gitleaks.toml
+    if [ $? -ne 0 ]; then
+        echo "Gitleaks detected sensitive information. Commit rejected."
+        echo "Please review the output above and remove sensitive information."
+        exit 1
+    fi
+else
+    echo "No .gitleaks.toml configuration file found, skipping sensitive information check."
+fi
+
+exit 0
