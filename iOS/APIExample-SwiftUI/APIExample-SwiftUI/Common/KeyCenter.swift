@@ -21,7 +21,7 @@ class KeyCenter: NSObject {
      then the APP ID can be found in the project detail page.
      */
     @objc
-    static let AppId: String = <#APPID#>
+    static let AppId: String = <#YOUR AppId#>
 
     /**
      Certificate.
