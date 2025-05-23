@@ -1,12 +1,15 @@
 repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.2
-    hooks:
-      - id: gitleaks
-        args: ["--config=.gitleaks.toml"]
-  
   - repo: local
     hooks:
+      - id: gitleaks
+        name: Detect hardcoded secrets
+        description: Ensures no secrets are committed
+        entry: gitleaks protect
+        args: ["--config=.gitleaks.toml", "--staged", "--verbose"]
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      
       - id: check-commit-message
         name: Check commit message for Chinese characters
         description: Ensures commit messages do not contain Chinese characters
