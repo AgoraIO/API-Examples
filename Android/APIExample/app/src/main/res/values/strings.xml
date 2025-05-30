@@ -129,10 +129,13 @@
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
     <string name="item_third_party_beauty">Third-party beauty</string>
+    <string name="item_agora_beauty">Agora beauty 2.0</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
     <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
     <string name="item_face_capture">Face Capture</string>
+    <string name="item_simulcast">Simulcast</string>
+    <string name="item_multipath">Multipath</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -201,10 +204,13 @@
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
+    <string name="agora_beauty">his example demonstrates how to integrate agora beauty 2.0.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
     <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
     <string name="transparent_rendering">This example demonstrates how to use transparent rendering.</string>
     <string name="tip_ultra_live_streaming_with_url">This example demonstrates how to use ultra live stream with url.</string>
+    <string name="tip_simulcast">This example demonstrates how to use Simulcast</string>
+    <string name="tip_multipath">This example demonstrates how to use Multipath</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -244,7 +250,11 @@
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
+    <string name="beauty_group_filter">Filter</string>
+    <string name="beauty_filter_style">Filter Style</string>
+    <string name="beauty_filter_strength">Filter Strength</string>
     <string name="face_makeup">Makeup</string>
+    <string name="face_makeup_style">Makeup Style</string>
     <string name="shape_beautify">Shape Beautify</string>
     <string name="shape_beautify_area">Shape Beautify Area</string>
     <string name="shape_beautify_area_intensity">Shape Beautify Area Intensity</string>
@@ -268,14 +278,27 @@
     <string name="lip_style">Lip Style</string>
     <string name="lip_color">Lip Color</string>
     <string name="lip_strength">Lip Strength</string>
+    <string name="facial_style">Facial Style</string>
+    <string name="facial_strength">Facial Strength</string>
+    <string name="wocan_style">Wocan Style</string>
+    <string name="wocan_strength">Wocan Strength</string>
+    <string name="basic_beautify">Basic Beautify</string>
     <string name="face_beautify">Face Beautify</string>
     <string name="lightening">Lightening</string>
     <string name="redness">Redness</string>
     <string name="sharpness">Sharpness</string>
-    <string name="lightness_enhance">Lightening Enhance</string>
-    <string name="lightness_enhance_rtc">Lightening Enhance(RTC)</string>
+    <string name="contrast_strength">Light</string>
+    <string name="contrast">Light Type</string>
+    <string name="contrast_low">Low</string>
+    <string name="contrast_normal">Normal</string>
+    <string name="contrast_high">High</string>
+    <string name="eye_pouch">Eye Pouch</string>
+    <string name="brighten_eye">Brighten Eye</string>
+    <string name="nasolabial_fold">Nasolabial Fold</string>
+    <string name="whiten_teeth">Whiten Teeth</string>
+    <string name="exposure_enhancement">Lightening Enhance</string>
+    <string name="exposure_enhancement_rtc">Lightening Enhance(RTC)</string>
     <string name="colorful_enhance">Colorful Enhance</string>
-    <string name="video_enhance_light">Light</string>
     <string name="colorful_enhance_rtc">Colorful Enhance(RTC)</string>
     <string name="smoothness">Smoothness</string>
     <string name="video_denoise">Video Denoise</string>
@@ -353,6 +376,7 @@
     <string name="open_in_browser">Open in default browser</string>
     <string name="refresh">Refresh</string>
     <string name="save">Save</string>
+    <string name="reset">Reset</string>
     <string name="app_id_empty">The App ID is empty!</string>
     <string name="item_beauty_scenetime">SceneTimeBeauty</string>
     <string name="media_player_error">Media player error: %s</string>
@@ -425,4 +449,11 @@
     <string name="voice_blur">Voice Blur</string>
     <string name="airborne_simulation">Airborne Simulation</string>
     <string name="attenuation">Attenuation</string>
+    <string name="role">Role</string>
+    <string name="join_as_host">Host</string>
+    <string name="join_as_audience">Audience</string>
+    <string name="enable_multipath">Multipath</string>
+    <string name="multipath_mode">Multipath Mode</string>
+    <string name="multipath_type">Multipath Type</string>
+    <string name="set_layers_config">Set Layers Config(Maximum 3)</string>
 </resources>
