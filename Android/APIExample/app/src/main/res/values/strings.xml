@@ -255,6 +255,9 @@
     <string name="beauty_filter_strength">Filter Strength</string>
     <string name="face_makeup">Makeup</string>
     <string name="face_makeup_style">Makeup Style</string>
+    <string name="face_makeup_filter">Makeup Filter</string>
+    <string name="face_makeup_filter_strength">Makeup Filter Strength</string>
+    <string name="face_makeup_disable_tips">Please turn on the makeup style</string>
     <string name="shape_beautify">Shape Beautify</string>
     <string name="shape_beautify_area">Shape Beautify Area</string>
     <string name="shape_beautify_area_intensity">Shape Beautify Area Intensity</string>

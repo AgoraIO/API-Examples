@@ -138,5 +138,6 @@ paths = [
     '''.*\/zh-Hant\.lproj\/.*''',
     '''.*\/zh\.lproj\/.*''',
     '''iOS/Pods/.*''',
-    '''README\.md'''
+    '''README\.md''',
+    '''Android/.*/res/values(-zh)?/(strings|arrays)\.xml'''
 ]
