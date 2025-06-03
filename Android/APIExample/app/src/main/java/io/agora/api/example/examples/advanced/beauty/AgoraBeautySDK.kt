@@ -471,11 +471,22 @@ object AgoraBeautySDK {
                 effectObj.setVideoEffectFloatParam("makeup_options", "lipStrength", value)
             }
 
-        // Filter switch
-        var filterEnable: Boolean = false
-            get() = videoEffectObject?.getVideoEffectBoolParam("filter_effect_option", "enable") ?: false
+        // makeup Filter switch
+        var makeupFilterEnable: Boolean = false
+            get() = videoEffectObject?.getVideoEffectBoolParam("style_makeup_option", "filterEnable") ?: false
             set(value) {
                 field = value
+                val effectObj = videoEffectObject ?: return
+                effectObj.setVideoEffectBoolParam("style_makeup_option", "filterEnable", value)
+            }
+
+        // makeup filter strength
+        var makeupFilterStrength = 0.5f
+            get() = videoEffectObject?.getVideoEffectFloatParam("style_makeup_option", "filterStrength") ?: 0.5f
+            set(value) {
+                field = value
+                val effectObj = videoEffectObject ?: return
+                effectObj.setVideoEffectFloatParam("style_makeup_option", "filterStrength", value)
             }
 
         // Filter
@@ -494,6 +505,13 @@ object AgoraBeautySDK {
                 }
             }
 
+        // Beauty node filter enable
+        var filterEnable: Boolean = false
+            get() = videoEffectObject?.getVideoEffectBoolParam("filter_effect_option", "enable") ?: false
+            set(value) {
+                field = value
+            }
+
         // Filter intensity
         var filterStrength = 0.5f
             get() = videoEffectObject?.getVideoEffectFloatParam("filter_effect_option", "strength") ?: 0.5f
@@ -504,17 +522,6 @@ object AgoraBeautySDK {
             }
 
         internal fun reset() {
-//            smoothness = 0.9f
-//            lightness = 0.9f
-//            redness = 1.0f
-//            contrast = 1
-//            sharpness = 1.0f
-//            contrastStrength = 1.0f
-//            eyePouch = 0.5f
-//            brightenEye = 0.9f
-//            nasolabialFold = 0.5f
-//            whitenTeeth = 0.7f
-
             beautyShapeStyle = null
             beautyMakeupStyle = null
             beautyFilter = null
