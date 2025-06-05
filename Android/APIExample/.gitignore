@@ -22,3 +22,6 @@ Test/
 agora-rtc-sdk.jar
 AgoraScreenShareExtension.aar
 /release
+/agora-simple-filter/src/main/agoraLibs/
+/agora-simple-filter/src/main/libs/
+/agora-stream-encrypt/src/main/agoraLibs/
