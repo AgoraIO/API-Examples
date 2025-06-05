@@ -89,9 +89,9 @@ follows:
 Since version 4.0.0, Agora SDK provides an Extension Interface Framework. Developers could publish their own video/audio extension to Agora Extension Market. In this project includes a sample SimpleFilter example, by default it is disabled.
 In order to enable it, you could do as follows:
 
-1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
+1. Download [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/libs
 ```text
-Android/APIExample/agora-simple-filter/src/main/jniLibs
+Android/APIExample/agora-simple-filter/src/main/libs
 ├── arm64-v8a
 └── armeabi-v7a
 ```
