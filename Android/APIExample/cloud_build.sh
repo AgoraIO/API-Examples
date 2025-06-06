@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 
-# cache gradle to /tmp/.gradle
-ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
-
 ## use open jdk 17
 SYSTEM=$(uname -s)
 if [ "$SYSTEM" = "Linux" ];then

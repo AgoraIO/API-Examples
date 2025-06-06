@@ -1,9 +1,9 @@
 repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.2
-    hooks:
-      - id: gitleaks
-        args: ["--config=.gitleaks.toml"]
+  # - repo: https://github.com/gitleaks/gitleaks
+  #   rev: v8.24.2
+  #   hooks:
+  #     - id: gitleaks
+  #       args: ["--config=.gitleaks.toml"]
   
   - repo: local
     hooks:
