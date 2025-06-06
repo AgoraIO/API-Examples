@@ -66,7 +66,12 @@ else
 	curl -o $zip_name $sdk_url || exit 1
 	7za x ./$zip_name -y > log.txt
 
-	unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
+	# Support top-level directory name containing 'Agora' or 'Shengwang'
+	unzip_name=`ls -S -d */ | grep -E 'Agora|Shengwang' | head -n 1 | sed 's/\///g'`
+	if [ -z "$unzip_name" ]; then
+		echo "Error: Unzipped directory not found. The SDK package structure may be invalid or the top-level directory does not contain 'Agora' or 'Shengwang'"
+		exit 1
+	fi
 	echo unzip_name: $unzip_name
 
 	rm -rf ./$unzip_name/rtc/bin
