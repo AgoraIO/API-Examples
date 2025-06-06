@@ -97,7 +97,7 @@ mv result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
 if [ $compress_apiexample = true ]; then
 	onlyCodeZipName=${android_direction}_onlyCode.zip
 	7za a -tzip $onlyCodeZipName -r ./$unzip_name/rtc/samples/${android_direction} >> log.txt
-	mv $onlyCodeZipName $WORKSPACE/onlyCode_${BUILD_NUMBER}_$zip_name
+	mv $onlyCodeZipName $WORKSPACE/APIExample_onlyCode_${BUILD_NUMBER}_$zip_name
 fi
 
 if [ $compile_project = true ]; then
