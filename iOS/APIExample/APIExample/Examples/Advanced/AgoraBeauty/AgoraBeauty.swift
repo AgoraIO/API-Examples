@@ -534,7 +534,7 @@ extension AgoraBeautyMain {
         let key = makeupList[index]["key"] as? String ?? ""
         let state = view.isOn
         if state {
-            beautyManager.beautyMakeupStyle = "default makeup style".localized
+//            beautyManager.beautyMakeupStyle = "default makeup style".localized
         }
         makeupParams[key] = state
         beautyManager.makeUpEnable = state
