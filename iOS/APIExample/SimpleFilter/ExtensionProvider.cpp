@@ -47,7 +47,7 @@ namespace agora {
             return audioFilter;
         }
 
-        agora_refptr<agora::rtc::IVideoSinkBase> ExtensionProvider::createVideoSink(const char* name) {
+        agora_refptr<agora::rtc::IExtensionVideoSink> ExtensionProvider::createVideoSink(const char* name) {
             return nullptr;
         }
 

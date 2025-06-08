@@ -124,6 +124,7 @@
 "Screen Share + Camera" = "Screen Share + Camera";
 "please input channel name!" = "Please enter channel name!";
 "Video Process" = "Video Enhancement";
+"Agora Beauty" = "Agora Beauty";
 "Rhythm Player" = "Virtual Metronome";
 "Spatial Audio" = "Spatial Audio";
 "Please move the red icon to experience the 3D audio effect" = "Please move the red icon to experience 3D audio effect";
@@ -267,3 +268,4 @@
 "Face Shape Area Mouth Scale" = "Mouth Scale";
 
 "Live Channel Name" = "Live Channel Name";
+"default makeup style" = "学妹妆";

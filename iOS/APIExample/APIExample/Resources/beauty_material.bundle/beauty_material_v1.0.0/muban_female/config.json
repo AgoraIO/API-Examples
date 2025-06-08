@@ -1,0 +1,29 @@
+{
+    "beauty_effect_option": {
+        "enable": true,
+        "smoothness": 0.5,
+        "lightness": 0.7,
+        "redness": 0.5,
+        "contrast": 2,
+        "sharpness": 0.0
+    },
+    "face_shape_beauty_option": {
+        "enable": true,
+        "style": 0,
+        "intensity": 50
+    },
+    "face_shape_area_option": [
+        {
+            "area": 100,
+            "strength": 50
+        },
+        {
+            "area": 200,
+            "strength": 50
+        },
+        {
+            "area": 400,
+            "strength": 20
+        }
+    ]
+}
