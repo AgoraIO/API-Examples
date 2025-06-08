@@ -59,6 +59,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
             MenuItem(name: "Local Composite Graph".localized, storyboard: "LocalCompositeGraph", controller: ""),
             MenuItem(name: "Video Process".localized, storyboard: "VideoProcess", controller: "VideoProcess"),
+            MenuItem(name: "Agora Beauty".localized, storyboard: "AgoraBeauty", controller: "AgoraBeauty"),
             MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),

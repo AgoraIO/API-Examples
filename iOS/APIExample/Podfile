@@ -4,8 +4,8 @@
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 def common_pods
-  pod 'AgoraRtcEngine_iOS', '4.5.2'
-  #pod 'sdk', :path => 'sdk.podspec'
+#  pod 'AgoraRtcEngine_iOS', '4.5.2'
+  pod 'sdk', :path => 'sdk.podspec'
 end
   
 target 'APIExample' do
@@ -19,7 +19,7 @@ target 'APIExample' do
   # If you need to test the compatibility of SDK with the "AudioRouter" of the third-party player, you can use ijkplayer or MobileVLCKit
   #  pod 'ijkplayer', '~> 1.1.3'
   #  pod 'MobileVLCKit', '3.5.1'
-  pod 'SwiftLint', '~> 0.53.0'
+#  pod 'SwiftLint', '~> 0.53.0'
   pod 'SnapKit', '~> 5.7.0'
 
   #  pod 'fuLib', :path => 'fu.podspec'
