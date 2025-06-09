@@ -122,7 +122,8 @@ using namespace agora::media;
 
 #define EID_ON_FACE_INFO	0x00000039
 #define EID_ON_RECV_AUDIO_METADATA				0x0000003A
-
+#define EID_MULTIPATH_STATS 0x0000003B
+#define EID_NETWORK_TYPE_CHANGED 0x0000003C
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;

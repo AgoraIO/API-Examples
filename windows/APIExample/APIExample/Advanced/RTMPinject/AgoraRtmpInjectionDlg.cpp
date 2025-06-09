@@ -12,7 +12,7 @@ note:
     is called without a user ID specified. The server will automatically assign one
 parameters:
     channel:channel name.
-    uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+    uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
     Otherwise, use the ID automatically assigned by the Agora server.
     elapsed: The Time from the joinChannel until this event occurred (ms).
 */
@@ -76,7 +76,7 @@ note:
 parameters:
     uid: remote user/anchor ID for newly added channel.
     elapsed: The joinChannel is called from the local user to the delay triggered
-    by the callback£¨ms).
+    by the callbackï¿½ï¿½ms).
 */
 void CAgoraRtmpInjectionRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
@@ -228,7 +228,7 @@ void CAgoraRtmpInjectionDlg::UnInitAgora()
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
         //release engine.
-        m_rtcEngine->release(true);
+        m_rtcEngine->release(nullptr);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
     }
@@ -413,39 +413,39 @@ LRESULT CAgoraRtmpInjectionDlg::OnEIDStreamInjectedStatus(WPARAM wParam, LPARAM 
     switch ((INJECT_STREAM_STATUS)lParam)
     {
     case INJECT_STREAM_STATUS_START_SUCCESS:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStartSucc, 0);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStartSucc, 0);
         break;
     case INJECT_STREAM_STATUS_START_ALREADY_EXISTS:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectExist, 1);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectExist, 1);
         break;
     case INJECT_STREAM_STATUS_START_UNAUTHORIZED:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStartUnAuth, 2);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStartUnAuth, 2);
         break;
     case INJECT_STREAM_STATUS_START_TIMEDOUT:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStartTimeout, 3);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStartTimeout, 3);
         break;
 
     case INJECT_STREAM_STATUS_START_FAILED:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStartFailed, 4);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStartFailed, 4);
         break;
     case INJECT_STREAM_STATUS_STOP_SUCCESS:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStopSuccess, 5);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStopSuccess, 5);
         break;
     case INJECT_STREAM_STATUS_STOP_NOT_FOUND:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectNotFound, 6);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectNotFound, 6);
         break;
     case INJECT_STREAM_STATUS_STOP_UNAUTHORIZED:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStopUnAuth, 7);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStopUnAuth, 7);
         break;
 
     case INJECT_STREAM_STATUS_STOP_TIMEDOUT:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStopTimeout, 8);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStopTimeout, 8);
         break;
     case INJECT_STREAM_STATUS_STOP_FAILED:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectStopFailed, 9);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectStopFailed, 9);
         break;
     case INJECT_STREAM_STATUS_BROKEN:
-        strInfo.Format(_T("%s, err: %d¡£"), agoraInjectBroken, 10);
+        strInfo.Format(_T("%s, err: %dï¿½ï¿½"), agoraInjectBroken, 10);
         break;
     default:
         break;

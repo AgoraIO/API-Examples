@@ -118,6 +118,15 @@
     <Filter Include="Advanced\TransparentBg">
       <UniqueIdentifier>{2a74c488-9982-4577-8594-8320c71beb6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\Beauty2.0">
+      <UniqueIdentifier>{221f9de2-f7b5-4d9f-8275-a660d1259cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\Multipath">
+      <UniqueIdentifier>{97807267-2591-43c9-b24c-03042bf71158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\Simulcast">
+      <UniqueIdentifier>{3be0c114-2815-4e14-885d-a666411338db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -282,6 +291,18 @@
     <ClInclude Include="Advanced\Beauty\CDlgBeautyEx.h">
       <Filter>Advanced\Beauty</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\Beauty2.0\CDlgBeauty2.0.h">
+      <Filter>Advanced\Beauty2.0</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\Beauty2.0\CDlgBeautyEx2.0.h">
+      <Filter>Advanced\Beauty2.0</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\Multipath\CMultipathDlg.h">
+      <Filter>Advanced\Multipath</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\Simulcast\CSimulcastDlg.h">
+      <Filter>Advanced\Simulcast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -439,6 +460,24 @@
     </ClCompile>
     <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty2.0\CDlgBeauty2.0.cpp">
+      <Filter>Advanced\Beauty2.0</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty2.0\CDlgBeautyEx2.0.cpp">
+      <Filter>Advanced\Beauty2.0</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Multipath\CMultipathDlg.cpp">
+      <Filter>Advanced\Multipath</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Simulcast\CSimulcastDlg.cpp">
+      <Filter>Advanced\Simulcast</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
