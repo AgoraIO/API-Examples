@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CustomRenderMockContainerView: View {
-    @ObservedObject var viewModel: CustomRenderViewModel
+struct PixelBufferRenderMockContainerView: View {
+    @ObservedObject var viewModel: PixelBufferRenderViewModel
 
     var localView = PixelBufferCustomRenderView()
     
@@ -23,24 +23,24 @@ struct CustomRenderMockContainerView: View {
 }
 
 @available(iOS 15.0, *)
-struct CustomRenderExample: View {
+struct PixelBufferRenderExample: View {
     @State var configs: [String: Any]
     
     //mock data
-    @StateObject private var customRenderViewModel: CustomRenderViewModel
+    @StateObject private var customRenderViewModel: PixelBufferRenderViewModel
     
     //pip controller
     @StateObject private var pipViewModel: PIPViewModel
     
-    let myContainerView: CustomRenderMockContainerView
+    let myContainerView: PixelBufferRenderMockContainerView
 
     init(configs: [String: Any]) {
         _configs = State(initialValue: configs)
         
-        let viewModel = CustomRenderViewModel(configs: configs)
+        let viewModel = PixelBufferRenderViewModel(configs: configs)
         _customRenderViewModel = StateObject(wrappedValue: viewModel)
         
-        myContainerView = CustomRenderMockContainerView(viewModel: viewModel)
+        myContainerView = PixelBufferRenderMockContainerView(viewModel: viewModel)
         let pipSourceView = UIHostingController(rootView: myContainerView).view!
         _pipViewModel = StateObject(wrappedValue: PIPViewModel(pipSourceView: pipSourceView))
     }
@@ -84,7 +84,7 @@ struct CustomRenderExample: View {
 struct CustomRenderExamplePreviews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            CustomRenderExample(configs: [:])
+            PixelBufferRenderExample(configs: [:])
         } else {
             // Fallback on earlier versions
         }
