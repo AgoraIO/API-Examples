@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Multipath-->
+        <scene sceneID="1C3-1Q-LI5">
+            <objects>
+                <viewController title="Multipath" storyboardIdentifier="Multipath" id="zLf-Ex-oud" customClass="MultipathMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="4hf-dg-iFM">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="fby-v7-FIJ" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="mLO-hw-40L"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Foa-Iu-KWB">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZE6-WZ-0O8">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="Y3A-24-0o3">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="l9M-v2-U1Z">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view id="6i1-vk-Tbe" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="421" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="Lwi-x7-gXz">
+                                                    <rect key="frame" x="236" y="325" width="42" height="26"/>
+                                                    <connections>
+                                                        <action selector="onClickMultipathSwitch:" target="zLf-Ex-oud" id="Vt2-3l-vzb"/>
+                                                    </connections>
+                                                </switch>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KGD-I6-PKR">
+                                                    <rect key="frame" x="25" y="331" width="106" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Enable Multipath" id="Vkx-Fw-cJJ">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <view id="5UX-4c-O42" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="373" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="KGD-I6-PKR" firstAttribute="baseline" secondItem="Lwi-x7-gXz" secondAttribute="firstBaseline" id="5yK-Eb-XMp"/>
+                                                <constraint firstItem="Lwi-x7-gXz" firstAttribute="leading" secondItem="KGD-I6-PKR" secondAttribute="trailing" constant="109" id="TUK-cI-dyK"/>
+                                                <constraint firstItem="KGD-I6-PKR" firstAttribute="baseline" secondItem="Lwi-x7-gXz" secondAttribute="baseline" id="ab2-LQ-75t"/>
+                                                <constraint firstItem="KGD-I6-PKR" firstAttribute="leading" secondItem="l9M-v2-U1Z" secondAttribute="leading" constant="27" id="f0A-2i-iia"/>
+                                                <constraint firstItem="KGD-I6-PKR" firstAttribute="top" secondItem="5UX-4c-O42" secondAttribute="bottom" constant="26" id="oBi-61-4iU"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="khf-XR-Q9x">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="sSw-yT-Sfr">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="AaY-nf-6bC">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="VFI-bh-YF8">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="EJd-Bd-Goe" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CS3-Kj-Lpq">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PJX-oJ-utz">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onVideoCallButtonPressed:" target="zLf-Ex-oud" id="PPT-IJ-HNA"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="CS3-Kj-Lpq" secondAttribute="bottom" constant="14" id="4nP-Jf-Uwc"/>
+                                        <constraint firstItem="CS3-Kj-Lpq" firstAttribute="top" secondItem="EJd-Bd-Goe" secondAttribute="bottom" constant="9" id="79T-zb-Vsr"/>
+                                        <constraint firstItem="CS3-Kj-Lpq" firstAttribute="leading" secondItem="VFI-bh-YF8" secondAttribute="leading" constant="33" id="KBu-PQ-Cm4"/>
+                                        <constraint firstItem="CS3-Kj-Lpq" firstAttribute="centerX" secondItem="EJd-Bd-Goe" secondAttribute="centerX" id="z5U-ft-k12"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="kPx-PA-443"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="leading" secondItem="4hf-dg-iFM" secondAttribute="leading" id="0aK-cM-QKE"/>
+                            <constraint firstAttribute="trailing" secondItem="AaY-nf-6bC" secondAttribute="trailing" id="1Jh-cJ-c0U"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="bottom" secondItem="Foa-Iu-KWB" secondAttribute="bottom" id="5p2-jB-hna"/>
+                            <constraint firstAttribute="bottom" secondItem="fby-v7-FIJ" secondAttribute="bottom" id="K4G-rm-zzC"/>
+                            <constraint firstItem="ZE6-WZ-0O8" firstAttribute="leading" secondItem="fby-v7-FIJ" secondAttribute="trailing" id="Qtw-qb-UZh"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="top" secondItem="Foa-Iu-KWB" secondAttribute="top" id="SbE-K2-YDf"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="top" secondItem="4hf-dg-iFM" secondAttribute="top" id="ZqZ-I7-ZOM"/>
+                            <constraint firstItem="AaY-nf-6bC" firstAttribute="leading" secondItem="ZE6-WZ-0O8" secondAttribute="leading" id="bHK-if-8oL"/>
+                            <constraint firstItem="AaY-nf-6bC" firstAttribute="trailing" secondItem="ZE6-WZ-0O8" secondAttribute="trailing" id="fac-mh-TYs"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="bottom" secondItem="Foa-Iu-KWB" secondAttribute="bottom" id="hJX-Y2-16k"/>
+                            <constraint firstAttribute="trailing" secondItem="fby-v7-FIJ" secondAttribute="trailing" constant="314" id="nwe-6f-dMT"/>
+                            <constraint firstItem="Foa-Iu-KWB" firstAttribute="bottom" secondItem="AaY-nf-6bC" secondAttribute="bottom" id="qie-GE-nvF"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="trailing" secondItem="Foa-Iu-KWB" secondAttribute="trailing" id="tg3-PH-rlb"/>
+                            <constraint firstAttribute="bottom" secondItem="ZE6-WZ-0O8" secondAttribute="bottom" constant="102" id="yf2-oZ-bDQ"/>
+                            <constraint firstItem="fby-v7-FIJ" firstAttribute="top" secondItem="ZE6-WZ-0O8" secondAttribute="top" id="zCR-M7-Ss9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="Container" destination="fby-v7-FIJ" id="juc-7s-DOF"/>
+                        <outlet property="channelField" destination="EJd-Bd-Goe" id="0A4-WA-Fi1"/>
+                        <outlet property="joinChannelButton" destination="CS3-Kj-Lpq" id="hPB-xL-Tpw"/>
+                        <outlet property="selectModePicker" destination="6i1-vk-Tbe" id="IFb-zT-hrH"/>
+                        <outlet property="selectRolePicker" destination="5UX-4c-O42" id="Prj-iq-HRi"/>
+                    </connections>
+                </viewController>
+                <customObject id="U7A-ml-cmh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1097" y="41"/>
+        </scene>
+    </scenes>
+</document>
