@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Simulcast-->
+        <scene sceneID="IQq-K4-O4W">
+            <objects>
+                <viewController title="Simulcast" storyboardIdentifier="Simulcast" id="Nyy-xX-po7" customClass="SimulcastMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="NOI-49-7sk">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="i89-rz-3UQ" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="2Xj-Wp-6h2"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="cLI-qf-SE3">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39z-jx-FF1">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="21N-ow-H1s">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="5wL-ud-KDy">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <subviews>
+                                                <view id="b9f-4P-NZl" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="418" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="NMd-E6-CdJ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="314" height="217"/>
+                                                    <subviews>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="Q2W-Hy-Afu">
+                                                            <rect key="frame" x="18" y="144" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="onClickSimulcastSwitch:" target="Nyy-xX-po7" id="0lH-ig-Len"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lsA-5r-N3X">
+                                                            <rect key="frame" x="81" y="149" width="114" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Layer1:720p30fps" id="nJw-cK-RYU">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="9y1-Nq-572">
+                                                            <rect key="frame" x="18" y="102" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="tXQ-cr-cjW"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bnm-pD-T5v">
+                                                            <rect key="frame" x="81" y="107" width="114" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Layer2:540p15fps" id="UJX-xR-w0P">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="IvQ-z5-RhI">
+                                                            <rect key="frame" x="18" y="60" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="gwB-UJ-dwY"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LaT-Pm-qBY">
+                                                            <rect key="frame" x="81" y="65" width="114" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Layer3:360p15fps" id="4r1-Ls-YfS">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="vMY-iB-kRb">
+                                                            <rect key="frame" x="18" y="18" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="fex-ly-g5G"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bEy-Kr-2ng">
+                                                            <rect key="frame" x="81" y="23" width="113" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Layer4:270p15fps" id="8mp-Eu-o0G">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9j-ep-dXt">
+                                                            <rect key="frame" x="18" y="188" width="188" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Set Layers Config(Maxmum 3)" id="CI0-1k-Bf7">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="bEy-Kr-2ng" firstAttribute="centerY" secondItem="vMY-iB-kRb" secondAttribute="centerY" id="1lE-Ek-Dk7"/>
+                                                        <constraint firstItem="lsA-5r-N3X" firstAttribute="leading" secondItem="Q2W-Hy-Afu" secondAttribute="trailing" constant="25" id="3AK-pv-Pyd"/>
+                                                        <constraint firstItem="LaT-Pm-qBY" firstAttribute="centerY" secondItem="IvQ-z5-RhI" secondAttribute="centerY" id="3TR-vm-iRC"/>
+                                                        <constraint firstItem="I9j-ep-dXt" firstAttribute="top" secondItem="NMd-E6-CdJ" secondAttribute="top" constant="13" id="3dQ-m7-ZKw"/>
+                                                        <constraint firstItem="9y1-Nq-572" firstAttribute="top" secondItem="Q2W-Hy-Afu" secondAttribute="bottom" constant="20" id="50c-ee-MHg"/>
+                                                        <constraint firstItem="Q2W-Hy-Afu" firstAttribute="leading" secondItem="I9j-ep-dXt" secondAttribute="leading" id="7Rj-MQ-3Xe"/>
+                                                        <constraint firstItem="Q2W-Hy-Afu" firstAttribute="top" secondItem="I9j-ep-dXt" secondAttribute="bottom" constant="20" id="8Oc-eI-bLF"/>
+                                                        <constraint firstItem="LaT-Pm-qBY" firstAttribute="leading" secondItem="IvQ-z5-RhI" secondAttribute="trailing" constant="25" id="9Ik-iv-1qF"/>
+                                                        <constraint firstItem="9y1-Nq-572" firstAttribute="leading" secondItem="vMY-iB-kRb" secondAttribute="leading" id="Dja-ob-kXO"/>
+                                                        <constraint firstItem="bnm-pD-T5v" firstAttribute="centerY" secondItem="9y1-Nq-572" secondAttribute="centerY" id="LsX-Mc-i1Z"/>
+                                                        <constraint firstAttribute="bottom" secondItem="vMY-iB-kRb" secondAttribute="bottom" constant="20" symbolic="YES" id="VWJ-SA-2nC"/>
+                                                        <constraint firstItem="bnm-pD-T5v" firstAttribute="leading" secondItem="9y1-Nq-572" secondAttribute="trailing" constant="25" id="ZeP-Es-gAb"/>
+                                                        <constraint firstItem="I9j-ep-dXt" firstAttribute="leading" secondItem="NMd-E6-CdJ" secondAttribute="leading" constant="20" id="btq-Py-6Ku"/>
+                                                        <constraint firstItem="IvQ-z5-RhI" firstAttribute="leading" secondItem="vMY-iB-kRb" secondAttribute="leading" id="e1z-bx-IaH"/>
+                                                        <constraint firstItem="lsA-5r-N3X" firstAttribute="centerY" secondItem="Q2W-Hy-Afu" secondAttribute="centerY" id="e5I-fc-ypA"/>
+                                                        <constraint firstItem="vMY-iB-kRb" firstAttribute="top" secondItem="IvQ-z5-RhI" secondAttribute="bottom" constant="20" id="ePn-le-obZ"/>
+                                                        <constraint firstItem="bEy-Kr-2ng" firstAttribute="leading" secondItem="vMY-iB-kRb" secondAttribute="trailing" constant="25" id="j3A-bi-NHq"/>
+                                                        <constraint firstItem="IvQ-z5-RhI" firstAttribute="top" secondItem="9y1-Nq-572" secondAttribute="bottom" constant="20" id="mbf-hR-uhw"/>
+                                                        <constraint firstItem="vMY-iB-kRb" firstAttribute="leading" secondItem="NMd-E6-CdJ" secondAttribute="leading" constant="20" symbolic="YES" id="rzE-5m-lVK"/>
+                                                    </constraints>
+                                                </customView>
+                                                <view id="WS2-dE-7g5" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="360" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="NMd-E6-CdJ" secondAttribute="trailing" id="S6p-b4-c3S"/>
+                                                <constraint firstItem="NMd-E6-CdJ" firstAttribute="leading" secondItem="5wL-ud-KDy" secondAttribute="leading" id="ZUK-yi-EVT"/>
+                                                <constraint firstAttribute="bottom" secondItem="NMd-E6-CdJ" secondAttribute="bottom" id="is8-Tf-Ggf"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="O2Q-Rk-Lhg">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="X9m-4v-9Dt">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="yeh-Nx-xDB">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="eWs-R6-3Gv">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="dUf-An-YlC" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="35y-Cl-xtF">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tfR-14-W9p">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onVideoCallButtonPressed:" target="Nyy-xX-po7" id="YxJ-xZ-x21"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="35y-Cl-xtF" secondAttribute="bottom" constant="14" id="3po-ww-UTj"/>
+                                        <constraint firstItem="35y-Cl-xtF" firstAttribute="leading" secondItem="eWs-R6-3Gv" secondAttribute="leading" constant="33" id="CEU-84-Z1t"/>
+                                        <constraint firstItem="35y-Cl-xtF" firstAttribute="top" secondItem="dUf-An-YlC" secondAttribute="bottom" constant="9" id="HBG-wn-HFL"/>
+                                        <constraint firstItem="35y-Cl-xtF" firstAttribute="centerX" secondItem="dUf-An-YlC" secondAttribute="centerX" id="ZdN-Xw-Vjh"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="O82-n0-FaD"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="leading" secondItem="NOI-49-7sk" secondAttribute="leading" id="5RG-lq-KXz"/>
+                            <constraint firstItem="yeh-Nx-xDB" firstAttribute="leading" secondItem="39z-jx-FF1" secondAttribute="leading" id="74i-70-hM1"/>
+                            <constraint firstAttribute="bottom" secondItem="i89-rz-3UQ" secondAttribute="bottom" id="FCA-HA-ZUh"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="top" secondItem="39z-jx-FF1" secondAttribute="top" id="L2K-gk-x6S"/>
+                            <constraint firstAttribute="trailing" secondItem="i89-rz-3UQ" secondAttribute="trailing" constant="314" id="MVh-rC-XSG"/>
+                            <constraint firstItem="cLI-qf-SE3" firstAttribute="bottom" secondItem="yeh-Nx-xDB" secondAttribute="bottom" id="NI8-wq-oYq"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="bottom" secondItem="cLI-qf-SE3" secondAttribute="bottom" id="RJG-cM-Du2"/>
+                            <constraint firstItem="yeh-Nx-xDB" firstAttribute="trailing" secondItem="39z-jx-FF1" secondAttribute="trailing" id="WAB-HV-rDq"/>
+                            <constraint firstItem="39z-jx-FF1" firstAttribute="leading" secondItem="i89-rz-3UQ" secondAttribute="trailing" id="XFT-K6-3bv"/>
+                            <constraint firstAttribute="trailing" secondItem="yeh-Nx-xDB" secondAttribute="trailing" id="ecC-6U-omb"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="trailing" secondItem="cLI-qf-SE3" secondAttribute="trailing" id="gRZ-AM-yNs"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="top" secondItem="NOI-49-7sk" secondAttribute="top" id="pGw-0F-oOx"/>
+                            <constraint firstAttribute="bottom" secondItem="39z-jx-FF1" secondAttribute="bottom" constant="102" id="qDi-eh-ajZ"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="bottom" secondItem="cLI-qf-SE3" secondAttribute="bottom" id="vfA-Po-o2u"/>
+                            <constraint firstItem="i89-rz-3UQ" firstAttribute="top" secondItem="cLI-qf-SE3" secondAttribute="top" id="z2w-Q0-yzA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="Container" destination="i89-rz-3UQ" id="lxG-BN-gPO"/>
+                        <outlet property="channelField" destination="dUf-An-YlC" id="J2c-aK-RPa"/>
+                        <outlet property="hostLayerConfigView" destination="NMd-E6-CdJ" id="ZFd-gw-7ZL"/>
+                        <outlet property="joinChannelButton" destination="35y-Cl-xtF" id="g3c-Tx-0og"/>
+                        <outlet property="layer1Switch" destination="Q2W-Hy-Afu" id="bvQ-BI-Fjw"/>
+                        <outlet property="layer2Switch" destination="9y1-Nq-572" id="9bo-IY-6EL"/>
+                        <outlet property="layer3Switch" destination="IvQ-z5-RhI" id="uKj-s1-WdJ"/>
+                        <outlet property="layer4Switch" destination="vMY-iB-kRb" id="Jom-Lf-Gs9"/>
+                        <outlet property="selectLayerPicker" destination="WS2-dE-7g5" id="dLE-eX-JXW"/>
+                        <outlet property="selectRolePicker" destination="b9f-4P-NZl" id="5Av-R1-Cbc"/>
+                    </connections>
+                </viewController>
+                <customObject id="Zou-p5-ecp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="162" y="-21"/>
+        </scene>
+    </scenes>
+</document>

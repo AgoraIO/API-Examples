@@ -15,6 +15,7 @@ struct StatisticsInfo {
         var videoStats : AgoraRtcLocalVideoStats?
         var audioStats : AgoraRtcLocalAudioStats?
         var audioVolume : UInt?
+        var multipathStats : AgoraMultipathStats?
     }
     
     struct RemoteInfo {
@@ -141,6 +142,20 @@ struct StatisticsInfo {
         metaInfo = data
     }
     
+    mutating func updateMultipathStats(_ stats: AgoraMultipathStats) {
+        guard self.type.isLocal else {
+            return
+        }
+        switch type {
+        case .local(let info):
+            var new = info
+            new.multipathStats = stats
+            self.type = .local(new)
+        default:
+            break
+        }
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -167,6 +182,10 @@ struct StatisticsInfo {
                 results.append("ASend: \(audioStats.sentBitrate)kbps")
                 results.append("CPU: \(channelStats.cpuAppUsage)%/\(channelStats.cpuTotalUsage)%")
                 results.append("Send Loss: \(channelStats.txPacketLossRate)%")
+            }
+            
+            if let multipathStats = info.multipathStats {
+                results.append("Multi Path: \(multipathStats.activePathNum)")
             }
         } else {
             if let volume = info.audioVolume {

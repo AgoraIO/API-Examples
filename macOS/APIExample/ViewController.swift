@@ -54,6 +54,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Multi Camera Sourece".localized, identifier: "menuCell", controller: "MultiCameraSourece", storyboard: "MultiCameraSourece"),
         MenuItem(name: "Face Capture".localized, identifier: "menuCell", controller: "FaceCapture", storyboard: "FaceCapture"),
         MenuItem(name: "URL Streaming(RTE Player)".localized, identifier: "menuCell", controller: "RtePlayer", storyboard: "RtePlayer"),
+        MenuItem(name: "Simulcast".localized, identifier: "menuCell", controller: "Simulcast", storyboard: "Simulcast"),
+        MenuItem(name: "Multipath".localized, identifier: "menuCell", controller: "Multipath", storyboard: "Multipath"),
     ]
     
     @IBOutlet weak var tableView:NSTableView!
