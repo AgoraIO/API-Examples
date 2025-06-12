@@ -42,7 +42,7 @@ protocol CustomRenderRTCProtocol {
     @class      SDKRenderRTC
     @abstract   RTC management class, handle RTC connection, video view data management (view based on PixelBufferRenderView self-rendering), channel management
  */
-class CustomRenderRTC: NSObject, ObservableObject , CustomRenderRTCProtocol{
+class PixelBufferRenderRTC: NSObject, ObservableObject , CustomRenderRTCProtocol{
     var videoFrameDelegte: AgoraVideoFrameDelegate?
     
     private var uid: UInt = 0
@@ -71,7 +71,7 @@ class CustomRenderRTC: NSObject, ObservableObject , CustomRenderRTCProtocol{
     }
 }
 
-extension CustomRenderRTC: AgoraVideoFrameDelegate {
+extension PixelBufferRenderRTC: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         if let localView = localView, let pixelBuffer = videoFrame.pixelBuffer {
             localView.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height)
