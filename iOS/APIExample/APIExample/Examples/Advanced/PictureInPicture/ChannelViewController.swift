@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChannelViewController<T:PIPBaseViewController>: UIViewController {
     lazy var textField: UITextField = {
