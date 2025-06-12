@@ -228,8 +228,6 @@
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
 		F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */; };
 		F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CE2CA295D7007813BB /* ChannelViewController.swift */; };
-		F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */; };
-		F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */; };
 		F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */; };
 		F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */; };
 		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
@@ -590,8 +588,6 @@
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PictureInPicture.storyboard; sourceTree = "<group>"; };
 		F728B9CE2CA295D7007813BB /* ChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
-		F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPService.swift; sourceTree = "<group>"; };
-		F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewPIPViewController.swift; sourceTree = "<group>"; };
 		F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPBaseViewController.swift; sourceTree = "<group>"; };
 		F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
 		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
@@ -1273,7 +1269,6 @@
 			isa = PBXGroup;
 			children = (
 				F728B9CE2CA295D7007813BB /* ChannelViewController.swift */,
-				F728B9D12CA295D7007813BB /* CustomViewPIPViewController */,
 				F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */,
 				F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */,
 				F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */,
@@ -1516,15 +1511,6 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		F728B9D12CA295D7007813BB /* CustomViewPIPViewController */ = {
-			isa = PBXGroup;
-			children = (
-				F728B9CF2CA295D7007813BB /* CustomViewPIPService.swift */,
-				F728B9D02CA295D7007813BB /* CustomViewPIPViewController.swift */,
-			);
-			path = CustomViewPIPViewController;
-			sourceTree = "<group>";
-		};
 		F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1613,7 +1599,6 @@
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
 				E76F80122AF0A7A200CCB9D6 /* ShellScript */,
-				EA59815E58120166C6FD72B5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1898,23 +1883,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" \n";
 		};
-		EA59815E58120166C6FD72B5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1940,7 +1908,6 @@
 				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
 				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
 				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
-				F728B9D92CA295D7007813BB /* CustomViewPIPService.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */,
 				E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */,
@@ -2044,7 +2011,6 @@
 				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
-				F728B9DA2CA295D7007813BB /* CustomViewPIPViewController.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
@@ -2639,7 +2605,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2673,7 +2639,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2829,7 +2795,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2900,7 +2866,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2969,7 +2935,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -3006,7 +2972,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = G726234S43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

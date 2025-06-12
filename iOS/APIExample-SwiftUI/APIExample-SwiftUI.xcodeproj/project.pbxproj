@@ -92,14 +92,11 @@
 		4C9309C22CBA91530085EFF9 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309722CBA91520085EFF9 /* JoinMultiChannel.swift */; };
 		4C9309C32CBA91530085EFF9 /* JoinMultiChannelRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309732CBA91520085EFF9 /* JoinMultiChannelRTC.swift */; };
 		4C9309C42CBA91530085EFF9 /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309752CBA91530085EFF9 /* PictureInPicture.swift */; };
-		4C9309C52CBA91530085EFF9 /* SDKRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */; };
-		4C9309C62CBA91530085EFF9 /* SDKRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */; };
-		4C9309C72CBA91530085EFF9 /* SDKRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */; };
 		4C9309C82CBA91530085EFF9 /* PIPDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097B2CBA91530085EFF9 /* PIPDisplayView.swift */; };
 		4C9309C92CBA91530085EFF9 /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097C2CBA91530085EFF9 /* PixelBufferRenderView.swift */; };
-		4C9309CA2CBA91530085EFF9 /* CustomRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */; };
-		4C9309CB2CBA91530085EFF9 /* CustomRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */; };
-		4C9309CC2CBA91530085EFF9 /* CustomRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */; };
+		4C9309CA2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097E2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift */; };
+		4C9309CB2CBA91530085EFF9 /* PixelBufferRenderRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93097F2CBA91530085EFF9 /* PixelBufferRenderRTC.swift */; };
+		4C9309CC2CBA91530085EFF9 /* PixelBufferRenderExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309802CBA91530085EFF9 /* PixelBufferRenderExample.swift */; };
 		4C9309CD2CBA91530085EFF9 /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309822CBA91530085EFF9 /* VideoMetadata.swift */; };
 		4C9309CE2CBA91530085EFF9 /* VideoMetaDataRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309832CBA91530085EFF9 /* VideoMetaDataRTC.swift */; };
 		4C9309CF2CBA91530085EFF9 /* RTMPStreamRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309852CBA91530085EFF9 /* RTMPStreamRTC.swift */; };
@@ -269,14 +266,11 @@
 		4C9309722CBA91520085EFF9 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		4C9309732CBA91520085EFF9 /* JoinMultiChannelRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannelRTC.swift; sourceTree = "<group>"; };
 		4C9309752CBA91530085EFF9 /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
-		4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderRTC.swift; sourceTree = "<group>"; };
-		4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderViewModel.swift; sourceTree = "<group>"; };
-		4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKRenderExample.swift; sourceTree = "<group>"; };
 		4C93097B2CBA91530085EFF9 /* PIPDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PIPDisplayView.swift; sourceTree = "<group>"; };
 		4C93097C2CBA91530085EFF9 /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
-		4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderViewModel.swift; sourceTree = "<group>"; };
-		4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderRTC.swift; sourceTree = "<group>"; };
-		4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRenderExample.swift; sourceTree = "<group>"; };
+		4C93097E2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderViewModel.swift; sourceTree = "<group>"; };
+		4C93097F2CBA91530085EFF9 /* PixelBufferRenderRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderRTC.swift; sourceTree = "<group>"; };
+		4C9309802CBA91530085EFF9 /* PixelBufferRenderExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderExample.swift; sourceTree = "<group>"; };
 		4C9309822CBA91530085EFF9 /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
 		4C9309832CBA91530085EFF9 /* VideoMetaDataRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetaDataRTC.swift; sourceTree = "<group>"; };
 		4C9309852CBA91530085EFF9 /* RTMPStreamRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreamRTC.swift; sourceTree = "<group>"; };
@@ -760,21 +754,10 @@
 			isa = PBXGroup;
 			children = (
 				4C9309752CBA91530085EFF9 /* PictureInPicture.swift */,
-				4C9309762CBA91530085EFF9 /* SDKRender */,
 				4C93097A2CBA91530085EFF9 /* PIPCommon */,
 				4C93097D2CBA91530085EFF9 /* CustomRender */,
 			);
 			path = PictureInPicture;
-			sourceTree = "<group>";
-		};
-		4C9309762CBA91530085EFF9 /* SDKRender */ = {
-			isa = PBXGroup;
-			children = (
-				4C9309772CBA91530085EFF9 /* SDKRenderRTC.swift */,
-				4C9309782CBA91530085EFF9 /* SDKRenderViewModel.swift */,
-				4C9309792CBA91530085EFF9 /* SDKRenderExample.swift */,
-			);
-			path = SDKRender;
 			sourceTree = "<group>";
 		};
 		4C93097A2CBA91530085EFF9 /* PIPCommon */ = {
@@ -789,9 +772,9 @@
 		4C93097D2CBA91530085EFF9 /* CustomRender */ = {
 			isa = PBXGroup;
 			children = (
-				4C93097E2CBA91530085EFF9 /* CustomRenderViewModel.swift */,
-				4C93097F2CBA91530085EFF9 /* CustomRenderRTC.swift */,
-				4C9309802CBA91530085EFF9 /* CustomRenderExample.swift */,
+				4C93097E2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift */,
+				4C93097F2CBA91530085EFF9 /* PixelBufferRenderRTC.swift */,
+				4C9309802CBA91530085EFF9 /* PixelBufferRenderExample.swift */,
 			);
 			path = CustomRender;
 			sourceTree = "<group>";
@@ -1100,7 +1083,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C93076A2CB961150085EFF9 /* CircularBuffer.c in Sources */,
-				4C9309CA2CBA91530085EFF9 /* CustomRenderViewModel.swift in Sources */,
+				4C9309CA2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift in Sources */,
 				4C9309D52CBA91530085EFF9 /* AudioWaveformRTC.swift in Sources */,
 				4C9309CE2CBA91530085EFF9 /* VideoMetaDataRTC.swift in Sources */,
 				4C9309C12CBA91530085EFF9 /* CustomPCMAudioSource.swift in Sources */,
@@ -1113,7 +1096,7 @@
 				4C93077A2CB961150085EFF9 /* VideoUIView.swift in Sources */,
 				4C9309B92CBA91530085EFF9 /* LiveStreaming.swift in Sources */,
 				4C9307FC2CBA6F790085EFF9 /* JoinChannelAudio.swift in Sources */,
-				4C9309CB2CBA91530085EFF9 /* CustomRenderRTC.swift in Sources */,
+				4C9309CB2CBA91530085EFF9 /* PixelBufferRenderRTC.swift in Sources */,
 				4C9309D12CBA91530085EFF9 /* CustomAudioRender.swift in Sources */,
 				4C93076E2CB961150085EFF9 /* KFMP4Demuxer.m in Sources */,
 				4C9309C22CBA91530085EFF9 /* JoinMultiChannel.swift in Sources */,
@@ -1122,7 +1105,7 @@
 				4C9309C92CBA91530085EFF9 /* PixelBufferRenderView.swift in Sources */,
 				4C93075D2CB961150085EFF9 /* AgoraCustomEncryption.mm in Sources */,
 				4C9307652CB961150085EFF9 /* AgoraCameraSourcePush.swift in Sources */,
-				4C9309CC2CBA91530085EFF9 /* CustomRenderExample.swift in Sources */,
+				4C9309CC2CBA91530085EFF9 /* PixelBufferRenderExample.swift in Sources */,
 				4C9308012CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift in Sources */,
 				4C9309DC2CBA91530085EFF9 /* VoiceChanger.swift in Sources */,
 				4C93076F2CB961150085EFF9 /* MediaUtils.m in Sources */,
@@ -1139,7 +1122,6 @@
 				4C9309ED2CBA95530085EFF9 /* SpatialAudioRTC.swift in Sources */,
 				4C9309DA2CBA91530085EFF9 /* RhythmPlayerRTC.swift in Sources */,
 				4C9309BB2CBA91530085EFF9 /* CreateDataStream.swift in Sources */,
-				4C9309C62CBA91530085EFF9 /* SDKRenderViewModel.swift in Sources */,
 				4C9309B62CBA91530085EFF9 /* MutliCameraRTC.swift in Sources */,
 				4C93077D2CB961150085EFF9 /* KeyCenter.swift in Sources */,
 				4C9307692CB961150085EFF9 /* AgoraMetalShader.metal in Sources */,
@@ -1154,7 +1136,6 @@
 				4C9307612CB961150085EFF9 /* NetworkManager.swift in Sources */,
 				4C9307C52CB961160085EFF9 /* APIExample_SwiftUIApp.swift in Sources */,
 				4C9309DB2CBA91530085EFF9 /* VoiceChangerRTC.swift in Sources */,
-				4C9309C72CBA91530085EFF9 /* SDKRenderExample.swift in Sources */,
 				F73B018D2CC10E240077B7D2 /* ViewExtensions.swift in Sources */,
 				4C9309AB2CBA91530085EFF9 /* RawAudioDataRTC.swift in Sources */,
 				4C9307752CB961150085EFF9 /* AgoraPcmSourcePush.swift in Sources */,
@@ -1174,7 +1155,6 @@
 				4C93075E2CB961150085EFF9 /* SettingsView.swift in Sources */,
 				4C93080C2CBA712F0085EFF9 /* JoinChannelVideoToken.swift in Sources */,
 				4C9309BA2CBA91530085EFF9 /* LiveStreamingRTC.swift in Sources */,
-				4C9309C52CBA91530085EFF9 /* SDKRenderRTC.swift in Sources */,
 				4C9309E42CBA91530085EFF9 /* ContentInspect.swift in Sources */,
 				4C9309D92CBA91530085EFF9 /* RhythmPlayer.swift in Sources */,
 				4C9307622CB961150085EFF9 /* JSONObject.swift in Sources */,
