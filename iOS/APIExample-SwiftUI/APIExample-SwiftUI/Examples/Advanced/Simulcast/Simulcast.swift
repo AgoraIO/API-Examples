@@ -64,13 +64,44 @@ struct Simulcast: View {
     @State private var layer1Enabled = true
     @State private var layer2Enabled = true
     @State private var layer3Enabled = true
-    @State private var layer4Enabled = true
+    @State private var layer4Enabled = false
     @State private var selectedLayer = 0
     
     @ObservedObject private var agoraKit = SimulcastRTC()
     
     var localView = VideoView(type: .local, audioOnly: false)
     var remoteView = VideoView(type: .remote, audioOnly: false)
+    
+    private func getEnabledLayersCount() -> Int {
+        var count = 0
+        if layer1Enabled { count += 1 }
+        if layer2Enabled { count += 1 }
+        if layer3Enabled { count += 1 }
+        if layer4Enabled { count += 1 }
+        return count
+    }
+    
+    private func handleLayerToggle(layer: AgoraStreamLayerIndex, isEnabled: Bool) {
+        let currentCount = getEnabledLayersCount()
+        if isEnabled && currentCount > 3 {
+            // If there are already 3 layers enabled and a new layer is enabled, disallow it
+            // Reset the toggle state
+            switch layer {
+            case .layer1:
+                layer1Enabled = false
+            case .layer2:
+                layer2Enabled = false
+            case .layer3:
+                layer3Enabled = false
+            case .layer4:
+                layer4Enabled = false
+            default:
+                return
+            }
+            return
+        }
+        agoraKit.updateSimulcastConfig(layer: layer, enable: isEnabled)
+    }
     
     var body: some View {
         VStack {
@@ -84,22 +115,26 @@ struct Simulcast: View {
                 if roleIndex == 0 {
                     Spacer()
                     // Broadcaster controls
-                    VStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Set Layers Config(Maximum 3)".localized)
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 4)
                         Toggle("Layer1:720p30fps", isOn: $layer1Enabled)
-                            .onChange(of: layer1Enabled) { _ in
-                                agoraKit.updateSimulcastConfig(layer: .layer1, enable: layer1Enabled)
+                            .onChange(of: layer1Enabled) { newValue in
+                                handleLayerToggle(layer: .layer1, isEnabled: newValue)
                             }
                         Toggle("Layer2:540p15fps", isOn: $layer2Enabled)
-                            .onChange(of: layer2Enabled) { _ in
-                                agoraKit.updateSimulcastConfig(layer: .layer2, enable: layer2Enabled)
+                            .onChange(of: layer2Enabled) { newValue in
+                                handleLayerToggle(layer: .layer2, isEnabled: newValue)
                             }
                         Toggle("Layer3:360p15fps", isOn: $layer3Enabled)
-                            .onChange(of: layer3Enabled) { _ in
-                                agoraKit.updateSimulcastConfig(layer: .layer3, enable: layer3Enabled)
+                            .onChange(of: layer3Enabled) { newValue in
+                                handleLayerToggle(layer: .layer3, isEnabled: newValue)
                             }
                         Toggle("Layer4:270p15fps", isOn: $layer4Enabled)
-                            .onChange(of: layer4Enabled) { _ in
-                                agoraKit.updateSimulcastConfig(layer: .layer4, enable: layer4Enabled)
+                            .onChange(of: layer4Enabled) { newValue in
+                                handleLayerToggle(layer: .layer4, isEnabled: newValue)
                             }
                     }
                     .padding()
