@@ -7,27 +7,21 @@
 
 import SwiftUI
 
-enum PipType {
-    case sdkRender, customRender
-}
-
 struct PipItem: Identifiable {
     let id = UUID()
     var name: String
-    var type: PipType
 }
 
 struct PictureInPictureEntry: View {
     var items: [PipItem] = [
-        PipItem(name: "PIP Custom Render", type: .customRender),
-        PipItem(name: "PIP RTC SDK Render", type: .sdkRender)
+        PipItem(name: "Pixel Buffer Render"),
     ]
     
     var body: some View {
         List {
             ForEach(items) { item in
                 NavigationLink(destination: {
-                    let entry = PictureInPictureJoinEntry(pipType: item.type)
+                    let entry = PictureInPictureJoinEntry()
                     entry.navigationTitle(item.name)
                 }) {
                     Text(item.name)
@@ -38,7 +32,6 @@ struct PictureInPictureEntry: View {
 }
 
 struct PictureInPictureJoinEntry: View {
-    var pipType: PipType
     @State private var channelName: String = ""
     @State private var isActive = false
     @State private var configs: [String: Any] = [:]
@@ -54,22 +47,12 @@ struct PictureInPictureJoinEntry: View {
                 Text("Join Channel")
             }.disabled(channelName.isEmpty)
             Spacer()
-            if pipType == .sdkRender {
-                if #available(iOS 15.0, *) {
-                    NavigationLink(destination: sdkRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
-                        EmptyView()
-                    }
-                } else {
-                    // Fallback on earlier versions
+            if #available(iOS 15.0, *) {
+                NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
+                    EmptyView()
                 }
             } else {
-                if #available(iOS 15.0, *) {
-                    NavigationLink(destination: customRenderView().navigationTitle(channelName).navigationBarTitleDisplayMode(.inline), isActive: $isActive) {
-                        EmptyView()
-                    }
-                } else {
-                    // Fallback on earlier versions
-                }
+                // Fallback on earlier versions
             }
             
             Spacer()
@@ -78,19 +61,14 @@ struct PictureInPictureJoinEntry: View {
     }
     
     @available(iOS 15.0, *)
-    private func customRenderView() -> CustomRenderExample {
-        return CustomRenderExample(configs: configs)
-    }
-    
-    @available(iOS 15.0, *)
-    private func sdkRenderView() -> SDKRenderExample{
-        return SDKRenderExample(configs: configs)
+    private func customRenderView() -> PixelBufferRenderExample {
+        return PixelBufferRenderExample(configs: configs)
     }
     
 }
 
 struct PictureInPictureJoinEntryPreviews: PreviewProvider {
     static var previews: some View {
-        PictureInPictureJoinEntry(pipType: .customRender)
+        PictureInPictureJoinEntry()
     }
 }
