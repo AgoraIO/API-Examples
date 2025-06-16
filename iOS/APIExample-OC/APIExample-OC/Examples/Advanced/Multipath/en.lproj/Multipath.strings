@@ -1,0 +1,33 @@
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "CQP-o3-nsl"; */
+"CQP-o3-nsl.text" = "Mode";
+
+/* Class = "UISegmentedControl"; CnA-Yb-o6A.segmentTitles[0] = "dynamic"; ObjectID = "CnA-Yb-o6A"; */
+"CnA-Yb-o6A.segmentTitles[0]" = "dynamic";
+
+/* Class = "UISegmentedControl"; CnA-Yb-o6A.segmentTitles[1] = "duplicate"; ObjectID = "CnA-Yb-o6A"; */
+"CnA-Yb-o6A.segmentTitles[1]" = "duplicate";
+
+/* Class = "UILabel"; text = "Role"; ObjectID = "G2E-c3-kzq"; */
+"G2E-c3-kzq.text" = "Role";
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "Nh9-6c-VAa"; */
+"Nh9-6c-VAa.text" = "Mode";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "VTF-4P-n1I"; */
+"VTF-4P-n1I.placeholder" = "Enter channel name";
+
+/* Class = "UILabel"; text = "--"; ObjectID = "mcr-bl-bnc"; */
+"mcr-bl-bnc.text" = "--";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "sd1-uc-igv"; */
+"sd1-uc-igv.normalTitle" = "Join";
+
+/* Class = "UISegmentedControl"; vn7-ux-djR.segmentTitles[0] = "broadcaster"; ObjectID = "vn7-ux-djR"; */
+"vn7-ux-djR.segmentTitles[0]" = "broadcaster";
+
+/* Class = "UISegmentedControl"; vn7-ux-djR.segmentTitles[1] = "audience"; ObjectID = "vn7-ux-djR"; */
+"vn7-ux-djR.segmentTitles[1]" = "audience";
+
+/* Class = "UILabel"; text = "Enable"; ObjectID = "yx2-9h-YtM"; */
+"yx2-9h-YtM.text" = "Enable";
