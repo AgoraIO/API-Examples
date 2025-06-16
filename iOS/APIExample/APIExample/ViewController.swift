@@ -76,7 +76,9 @@ class ViewController: AGViewController {
             MenuItem(name: "Audio Waveform".localized, storyboard: "AudioWaveform", controller: ""),
             MenuItem(name: "Face Capture".localized, storyboard: "FaceCapture", controller: ""),
             MenuItem(name: "Transparent Render".localized, storyboard: "TransparentRender", controller: ""),
-            MenuItem(name: "URL Streaming(RTE Player)".localized, storyboard: "RtePlayer", controller: "")
+            MenuItem(name: "URL Streaming(RTE Player)".localized, storyboard: "RtePlayer", controller: ""),
+            MenuItem(name: "Simulcast".localized, storyboard: "Simulcast", controller: "SimulcasthEntry"),
+            MenuItem(name: "Multipath".localized, storyboard: "Multipath", controller: "MultipathEntry"),
         ])
     ]
     override func viewDidLoad() {

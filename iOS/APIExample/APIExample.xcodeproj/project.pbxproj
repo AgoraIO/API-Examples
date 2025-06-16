@@ -132,6 +132,10 @@
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
+		ABB399F12DF9605B00AF5033 /* Multipath.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB399E72DF9605B00AF5033 /* Multipath.swift */; };
+		ABB399F22DF9605B00AF5033 /* Simulcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB399EC2DF9605B00AF5033 /* Simulcast.swift */; };
+		ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */; };
+		ABB399F42DF9605B00AF5033 /* Simulcast.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		DD6DCEE22CBD1D68008D7B72 /* hlg-hdr.yuv in Resources */ = {isa = PBXBuildFile; fileRef = DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */; };
@@ -438,6 +442,12 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		AB8473EC2DF960D800B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
+		ABB399E72DF9605B00AF5033 /* Multipath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multipath.swift; sourceTree = "<group>"; };
+		ABB399E82DF9605B00AF5033 /* Multipath.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Multipath.storyboard; path = Base.lproj/Multipath.storyboard; sourceTree = "<group>"; };
+		ABB399EC2DF9605B00AF5033 /* Simulcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulcast.swift; sourceTree = "<group>"; };
+		ABB399ED2DF9605B00AF5033 /* Simulcast.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Simulcast.storyboard; path = Base.lproj/Simulcast.storyboard; sourceTree = "<group>"; };
+		ABB399F62DF9608700AF5033 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "hlg-hdr.yuv"; sourceTree = "<group>"; };
@@ -1067,6 +1077,8 @@
 			isa = PBXGroup;
 			children = (
 				F73478602DE59CE10030C0CE /* AgoraBeauty */,
+				ABB399EB2DF9605B00AF5033 /* Multipath */,
+				ABB399F02DF9605B00AF5033 /* Simulcast */,
 				DDFD50242C205BDF0050B344 /* TransparentRender */,
 				E7883AE32B074746003CCF44 /* FaceCapture */,
 				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
@@ -1121,6 +1133,24 @@
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ABB399EB2DF9605B00AF5033 /* Multipath */ = {
+			isa = PBXGroup;
+			children = (
+				ABB399E72DF9605B00AF5033 /* Multipath.swift */,
+				ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */,
+			);
+			path = Multipath;
+			sourceTree = "<group>";
+		};
+		ABB399F02DF9605B00AF5033 /* Simulcast */ = {
+			isa = PBXGroup;
+			children = (
+				ABB399EC2DF9605B00AF5033 /* Simulcast.swift */,
+				ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */,
+			);
+			path = Simulcast;
 			sourceTree = "<group>";
 		};
 		DD6ED7F02CB69FFB007B3B5D /* LocalCompositeGraph */ = {
@@ -1560,6 +1590,8 @@
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
+				ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */,
+				ABB399F42DF9605B00AF5033 /* Simulcast.storyboard in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				F73479212DF5CA140030C0CE /* AgoraBeauty.strings in Resources */,
@@ -1772,6 +1804,8 @@
 				E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */,
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				ABB399F12DF9605B00AF5033 /* Multipath.swift in Sources */,
+				ABB399F22DF9605B00AF5033 /* Simulcast.swift in Sources */,
 				E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
@@ -2195,6 +2229,24 @@
 			name = Popover.storyboard;
 			sourceTree = "<group>";
 		};
+		ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ABB399E82DF9605B00AF5033 /* Multipath.storyboard */,
+				ABB399F62DF9608700AF5033 /* en */,
+			);
+			name = Multipath.storyboard;
+			sourceTree = "<group>";
+		};
+		ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ABB399ED2DF9605B00AF5033 /* Simulcast.storyboard */,
+				AB8473EC2DF960D800B4DB73 /* en */,
+			);
+			name = Simulcast.storyboard;
+			sourceTree = "<group>";
+		};
 		DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2424,7 +2476,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2458,7 +2510,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2614,7 +2666,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2685,7 +2737,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2754,7 +2806,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2791,7 +2843,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

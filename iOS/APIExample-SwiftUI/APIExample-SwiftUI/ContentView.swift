@@ -91,7 +91,11 @@ struct ContentView: View {
             MenuItem(name: "Audio Waveform".localized,
                      view: AnyView(AudioWaveformEntry())),
             MenuItem(name: "Face Capture".localized,
-                     view: AnyView(FaceCaptureEntry()))
+                     view: AnyView(FaceCaptureEntry())),
+            MenuItem(name: "Simulcast".localized,
+                     view: AnyView(SimulcastEntry())),
+            MenuItem(name: "Multipath".localized,
+                     view: AnyView(MultipathEntry()))
         ])
     ]
 
