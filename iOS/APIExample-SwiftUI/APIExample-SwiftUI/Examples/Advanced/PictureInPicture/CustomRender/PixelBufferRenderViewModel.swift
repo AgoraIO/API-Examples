@@ -11,10 +11,10 @@ import Foundation
     @class      CustomRenderViewModel（
     @abstract   This type has nothing to do with PIP and only simulates the implementation of rtc services for service reference and can be modified according to the service
  */
-class CustomRenderViewModel: NSObject, ObservableObject {
+class PixelBufferRenderViewModel: NSObject, ObservableObject {
     @Published var remoteRenderViews: [PixelBufferCustomRenderView] = []
     private var isJoined = false
-    var customRenderRtc: CustomRenderRTC
+    var customRenderRtc: PixelBufferRenderRTC
     var configs: [String: Any]
     
     private lazy var rtcConfig: AgoraRtcEngineConfig = {
@@ -40,7 +40,7 @@ class CustomRenderViewModel: NSObject, ObservableObject {
     }()
     
     init(configs: [String: Any]) {
-        self.customRenderRtc = CustomRenderRTC()
+        self.customRenderRtc = PixelBufferRenderRTC()
         self.configs = configs
         super.init()
     }
@@ -88,7 +88,7 @@ class CustomRenderViewModel: NSObject, ObservableObject {
     }
 }
 
-extension CustomRenderViewModel: AgoraRtcEngineDelegate {
+extension PixelBufferRenderViewModel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
     }
