@@ -67,9 +67,9 @@ class SimulcastRTC: NSObject, ObservableObject {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.clientRoleType = GlobalSettings.shared.getUserRole()
+        option.publishCameraTrack = (roleIndex == 0)
+        option.publishMicrophoneTrack = (roleIndex == 0)
+        option.clientRoleType = (roleIndex == 0) ? .broadcaster : .audience
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -123,7 +123,7 @@ class SimulcastRTC: NSObject, ObservableObject {
         simulcastConfig.configs[layer4_index].dimensions.width = 480
         simulcastConfig.configs[layer4_index].dimensions.height = 270
         simulcastConfig.configs[layer4_index].framerate = 15
-        simulcastConfig.configs[layer4_index].enable = true
+        simulcastConfig.configs[layer4_index].enable = false
         
         let ret = agoraKit.setSimulcastConfig(simulcastConfig)
         LogUtils.log(message: "setSimulcastConfig: \(String(describing: ret))", level: .info)
