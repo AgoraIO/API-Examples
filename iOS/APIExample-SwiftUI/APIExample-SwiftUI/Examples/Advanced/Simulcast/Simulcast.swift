@@ -98,6 +98,7 @@ struct Simulcast: View {
             default:
                 return
             }
+            ToastView.show(text: "Maxmum 3 layers can be selected".localized)
             return
         }
         agoraKit.updateSimulcastConfig(layer: layer, enable: isEnabled)
