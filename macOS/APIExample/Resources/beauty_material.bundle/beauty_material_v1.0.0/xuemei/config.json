@@ -1,0 +1,27 @@
+{
+    "makeup_options": {
+        "enable_mu": true,
+        "resPath": "../../resource",
+        "browStyle": 2,
+        "browColor": 2,
+        "browStrength": 1.0,
+        "lashStyle": 5,
+        "lashColor": 1,
+        "lashStrength": 1.0,
+        "shadowStyle": 6,
+        "shadowStrength": 1.0,
+        "pupilStyle": 2,
+        "pupilStrength": 1.0,
+        "blushStyle": 2,
+        "blushColor": 5,
+        "blushStrength": 1.0,
+        "lipStyle": 2,
+        "lipColor": 5,
+        "lipStrength": 1.0
+    },
+    "filter_effect_option": {
+        "enable": true,
+        "path": "../../resource/filters/xuemei.png",
+        "strength": 0.5
+    }
+}

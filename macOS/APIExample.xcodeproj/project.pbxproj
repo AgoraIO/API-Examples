@@ -156,6 +156,11 @@
 		E7AD0E0029CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DFB29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.strings */; };
 		E7AD0E0129CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DFD29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard */; };
 		E7AD0E0229CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */; };
+		F7453DBC2E03BCA5008DDFC8 /* beauty_material.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F7453DBB2E03BCA5008DDFC8 /* beauty_material.bundle */; };
+		F7F28B922E03BADD003B150D /* VideoProcess.strings in Resources */ = {isa = PBXBuildFile; fileRef = F7F28B902E03BADD003B150D /* VideoProcess.strings */; };
+		F7F28B932E03BADD003B150D /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7F28B8B2E03BADD003B150D /* AgoraBeauty.storyboard */; };
+		F7F28B942E03BADD003B150D /* AgoraBeautyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F28B8D2E03BADD003B150D /* AgoraBeautyManager.swift */; };
+		F7F28B952E03BADD003B150D /* AgoraBeauty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F28B8C2E03BADD003B150D /* AgoraBeauty.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -359,6 +364,12 @@
 		E7AD0DFC29CDA4F100C9A4B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourcePushMulti.strings"; sourceTree = "<group>"; };
 		E7AD0DFE29CDA4F100C9A4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePushMulti.storyboard; sourceTree = "<group>"; };
 		E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePushMulti.swift; sourceTree = "<group>"; };
+		F7453DBB2E03BCA5008DDFC8 /* beauty_material.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = beauty_material.bundle; sourceTree = "<group>"; };
+		F7F28B8A2E03BADD003B150D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AgoraBeauty.storyboard; sourceTree = "<group>"; };
+		F7F28B8C2E03BADD003B150D /* AgoraBeauty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeauty.swift; sourceTree = "<group>"; };
+		F7F28B8D2E03BADD003B150D /* AgoraBeautyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeautyManager.swift; sourceTree = "<group>"; };
+		F7F28B8E2E03BADD003B150D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
+		F7F28B8F2E03BADD003B150D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -538,6 +549,7 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F7453DBB2E03BCA5008DDFC8 /* beauty_material.bundle */,
 				DD33C1AF2CBFBF4E0046F50C /* hlg-hdr.yuv */,
 				E7AD0DF829CD84F800C9A4B0 /* sample.mov */,
 				E77D54D528F56D3A00D51C1E /* sample.yuv */,
@@ -563,6 +575,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F7F28B912E03BADD003B150D /* AgoraBeauty */,
 				ABB399D92DF9559000AF5033 /* Multipath */,
 				ABB399DE2DF9559000AF5033 /* Simulcast */,
 				DD33C1A92CBF9DEA0046F50C /* RtePlayer */,
@@ -962,6 +975,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F7F28B912E03BADD003B150D /* AgoraBeauty */ = {
+			isa = PBXGroup;
+			children = (
+				F7F28B8B2E03BADD003B150D /* AgoraBeauty.storyboard */,
+				F7F28B8C2E03BADD003B150D /* AgoraBeauty.swift */,
+				F7F28B8D2E03BADD003B150D /* AgoraBeautyManager.swift */,
+				F7F28B902E03BADD003B150D /* VideoProcess.strings */,
+			);
+			path = AgoraBeauty;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1094,6 +1118,8 @@
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */,
 				E7AD0E0129CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard in Resources */,
+				F7F28B922E03BADD003B150D /* VideoProcess.strings in Resources */,
+				F7F28B932E03BADD003B150D /* AgoraBeauty.storyboard in Resources */,
 				E7AD0DF729CAF78C00C9A4B0 /* LocalCompositeGraph.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
@@ -1117,6 +1143,7 @@
 				E7883AE02B046CB8003CCF44 /* FaceCapture.strings in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
 				DD33C1AA2CBF9DEA0046F50C /* RtePlayer.storyboard in Resources */,
+				F7453DBC2E03BCA5008DDFC8 /* beauty_material.bundle in Resources */,
 				E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */,
@@ -1237,6 +1264,8 @@
 				034C626425257EA600296ECF /* GlobalSettings.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
 				57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */,
+				F7F28B942E03BADD003B150D /* AgoraBeautyManager.swift in Sources */,
+				F7F28B952E03BADD003B150D /* AgoraBeauty.swift in Sources */,
 				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
 				034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */,
 				5770E2DF258CDCA600812A80 /* Picker.swift in Sources */,
@@ -1652,6 +1681,23 @@
 			name = CustomVideoSourcePushMulti.storyboard;
 			sourceTree = "<group>";
 		};
+		F7F28B8B2E03BADD003B150D /* AgoraBeauty.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7F28B8A2E03BADD003B150D /* Base */,
+			);
+			name = AgoraBeauty.storyboard;
+			sourceTree = "<group>";
+		};
+		F7F28B902E03BADD003B150D /* VideoProcess.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7F28B8E2E03BADD003B150D /* en */,
+				F7F28B8F2E03BADD003B150D /* zh-Hans */,
+			);
+			name = VideoProcess.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1782,7 +1828,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.20220311.37381;
-				DEVELOPMENT_TEAM = 48TB6ZZL5S;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = "";
@@ -1814,7 +1860,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.20220311.37381;
-				DEVELOPMENT_TEAM = 48TB6ZZL5S;
+				DEVELOPMENT_TEAM = G726234S43;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = "";
