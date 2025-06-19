@@ -1,0 +1,47 @@
+
+/* Class = "NSTextFieldCell"; title = "Low light Enhancement"; ObjectID = "11E-tR-tFb"; */
+"11E-tR-tFb.title" = "Low light Enhancement";
+
+/* Class = "NSTextFieldCell"; title = "美颜"; ObjectID = "4WO-Em-0Qq"; */
+"4WO-Em-0Qq.title" = "Beauty";
+
+/* Class = "NSTextFieldCell"; title = "Strength"; ObjectID = "7PH-4u-nrD"; */
+"7PH-4u-nrD.title" = "Strength";
+
+/* Class = "NSTextFieldCell"; title = "红润"; ObjectID = "85x-Bt-HuU"; */
+"85x-Bt-HuU.title" = "Ruddy";
+
+/* Class = "NSTextFieldCell"; title = "Color Enhancement"; ObjectID = "97m-MF-3to"; */
+"97m-MF-3to.title" = "Color Enhancement";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "Join";
+
+/* Class = "NSViewController"; title = "Video Process"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "Video Process";
+
+/* Class = "NSTextFieldCell"; title = "锐利"; ObjectID = "ZOR-gO-Ji2"; */
+"ZOR-gO-Ji2.title" = "Sharp";
+
+/* Class = "NSTextFieldCell"; title = "Skin Protect"; ObjectID = "ozL-f1-AXZ"; */
+"ozL-f1-AXZ.title" = "Skin Protect";
+
+/* Class = "NSTextFieldCell"; title = "Video Denoise"; ObjectID = "plA-5C-vDg"; */
+"plA-5C-vDg.title" = "Video Denoise";
+
+/* Class = "NSTextFieldCell"; title = "美白"; ObjectID = "q1I-U0-llK"; */
+"q1I-U0-llK.title" = "Lightening";
+
+/* Class = "NSTextFieldCell"; title = "平滑"; ObjectID = "sFK-pV-vaj"; */
+"sFK-pV-vaj.title" = "Smoothing";
+
+"AAl-Un-v63.title" = "Whitening";
+
+/* Class = "NSButtonCell"; normalTitle = "Face Shape"; ObjectID = "9VS-Ox-yEZ"; */
+"9VS-Ox-yEZ.title" = "Face Shape";
+
+/* Class = "NSButtonCell"; normalTitle = "Make Up"; ObjectID = "8aS-7m-YP7"; */
+"8aS-7m-YP7.title" = "Make Up";
