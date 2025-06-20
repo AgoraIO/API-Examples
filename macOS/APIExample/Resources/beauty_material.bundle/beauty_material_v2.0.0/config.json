@@ -1,0 +1,21 @@
+{
+    "engine_option": {
+        "identifier": "agora_beauty_material_200",
+        "version": "2.0.0",
+        "aspect": "16:9",
+        "preferred_fps": 24
+    },
+    "user_interface_option": {
+        "模板女": "muban_female/",
+        "模板男": "muban_male/",
+        "模板自然": "muban_natural/",
+        "学姐妆": "xuejie/",
+        "学妹妆": "xuemei/",
+        "原生": "yuansheng/",
+        "冷白": "lengbai/",
+        "嫩白": "nenbai/"
+    },
+    "beauty_config" : "模板女",
+    "makeup_config" : "学妹妆",
+    "filter_config" : "原生"
+}
