@@ -57,7 +57,7 @@
                                                         <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="9y1-Nq-572">
                                                             <rect key="frame" x="18" y="102" width="42" height="25"/>
                                                             <connections>
-                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="tXQ-cr-cjW"/>
+                                                                <action selector="onClickSimulcastSwitch:" target="Nyy-xX-po7" id="UGe-ct-fCb"/>
                                                             </connections>
                                                         </switch>
                                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bnm-pD-T5v">
@@ -71,7 +71,7 @@
                                                         <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="IvQ-z5-RhI">
                                                             <rect key="frame" x="18" y="60" width="42" height="25"/>
                                                             <connections>
-                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="gwB-UJ-dwY"/>
+                                                                <action selector="onClickSimulcastSwitch:" target="Nyy-xX-po7" id="Nod-2K-W4g"/>
                                                             </connections>
                                                         </switch>
                                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LaT-Pm-qBY">
@@ -85,7 +85,7 @@
                                                         <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="vMY-iB-kRb">
                                                             <rect key="frame" x="18" y="18" width="42" height="25"/>
                                                             <connections>
-                                                                <action selector="onClickMultipathSwitch:" target="Nyy-xX-po7" id="fex-ly-g5G"/>
+                                                                <action selector="onClickSimulcastSwitch:" target="Nyy-xX-po7" id="2bE-SX-kOE"/>
                                                             </connections>
                                                         </switch>
                                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bEy-Kr-2ng">
