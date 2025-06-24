@@ -23,6 +23,8 @@ class IMediaStreamingSourceObserver;
 
 /**
  * @brief The error code of streaming source
+ * 
+ * @deprecated Since version 4.6.0, this feature has been turned off by default.
  *
  */
 enum STREAMING_SRC_ERR {
@@ -54,6 +56,8 @@ enum STREAMING_SRC_ERR {
 
 /**
  * @brief The state machine of Streaming Source
+ * 
+ * @deprecated Since version 4.6.0, this feature has been turned off by default.
  *
  */
 enum STREAMING_SRC_STATE {
@@ -69,6 +73,8 @@ enum STREAMING_SRC_STATE {
 
 /**
  * @brief The input SEI data
+ * 
+ * @deprecated Since version 4.6.0, this feature has been turned off by default.
  *
  */
 struct InputSeiData {
@@ -85,6 +91,8 @@ struct InputSeiData {
  * @brief The IMediaStreamingSource class provides access to a media streaming source demuxer. 
  *        To playout multiple stream sources simultaneously,
  *        create multiple media stream source objects.
+ * 
+ * @deprecated Since version 4.6.0, this feature has been turned off by default.
  */
 class IMediaStreamingSource : public RefCountInterface {
 public:
@@ -270,6 +278,8 @@ public:
 
 /**
   * @brief  This observer interface of media streaming source
+  * 
+  * @deprecated Since version 4.6.0, this feature has been turned off by default.
   */
 class IMediaStreamingSourceObserver {
   public:
