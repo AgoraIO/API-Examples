@@ -25,12 +25,12 @@ static const int kAdmMaxGuidSize = 128;
 static const int kIntervalInMillseconds = 200;
 
 
-#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) 
+#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(__linux__)
 /**
  * The struct of AudioDeviceInfo.
  *
  * @note
- * This struct applies to Windows and macOS only.
+ * This struct applies to Windows,macOS and Linux.
  */
 struct AudioDeviceInfo {
   /**
@@ -299,7 +299,7 @@ public:
    */
   virtual int getRecordAudioParameters(AudioParameters* params) const = 0;
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined (__OHOS__)
   /**
    * Sets the default audio routing.
    *
@@ -352,9 +352,9 @@ public:
    * - < 0: Failure.
    */
   virtual int getCurrentRouting(AudioRoute& route) = 0;
-#endif  // __ANDROID__ || TARGET_OS_IPHONE
+#endif  // __ANDROID__ || TARGET_OS_IPHONE || __OHOS__
 
-#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) 
+#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(__linux__)
   /**
    * Gets the index numbers of all audio playout devices.
    *

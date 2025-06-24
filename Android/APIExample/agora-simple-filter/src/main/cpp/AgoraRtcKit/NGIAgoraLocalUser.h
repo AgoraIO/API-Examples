@@ -651,13 +651,13 @@ class ILocalUser {
    * - 2: Stereo.
    * @param sampleRateHz The sample rate (Hz) of the audio frame in the `onPlaybackAudioFrameBeforeMixing` callback. You can
    * set it as 8000, 16000, 32000, 44100, or 48000.
-   *
+   * @param samplesPerCall The number of samples of the audio frame.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
   virtual int setPlaybackAudioFrameBeforeMixingParameters(size_t numberOfChannels,
-                                                          uint32_t sampleRateHz, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+                                                          uint32_t sampleRateHz, int samplesPerCall = 0, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Registers an audio frame observer.
@@ -1587,6 +1587,22 @@ class ILocalUserObserver {
   virtual void onUserStateChanged(user_id_t userId, uint32_t state){}
 
   virtual void onVideoRenderingTracingResult(user_id_t user_id, MEDIA_TRACE_EVENT currentState, VideoRenderingTracingInfo tracingInfo) {}
+
+  /** Occurs when receive rdt message.
+   *
+   * @param userId Remote uid.
+   * @param type Rdt stream type.
+   * @param data data The pointer to the sent data.
+   * @param length length The length of the sent data.
+   */
+  virtual void onRdtMessage(user_id_t userId, RdtStreamType type, const char *data, size_t length) {}
+
+  /** Occurs when rdt state changed with userId.
+   *
+   * @param userId Remote uid.
+   * @param state  rdt state.
+   */
+  virtual void onRdtStateChanged(user_id_t userId, RdtState state) {}
 };
 
 class IVideoFrameObserver2 {

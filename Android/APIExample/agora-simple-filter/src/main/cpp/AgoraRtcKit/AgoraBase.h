@@ -709,6 +709,40 @@ enum ERROR_CODE_TYPE {
   ERR_PCMSEND_BUFFEROVERFLOW = 201,  // buffer overflow, the pcm send rate too quickly
 
   /// @cond
+  // RDT error code: 250~270
+  /**
+   * 250: The user does not exist
+   * @technical preview
+   */
+  ERR_RDT_USER_NOT_EXIST = 250,
+  /**
+   * 251: The RDT state with the user is not ready
+   * @technical preview
+   */
+  ERR_RDT_USER_NOT_READY = 251,
+  /**
+   * 252: The RDT data stream is blocked
+   * @technical preview
+   */
+  ERR_RDT_DATA_BLOCKED = 252,
+  /**
+   * 253: The RDT CMD stream exceeds the limit (size <= 256 Bytes, freq <= 100/sec)
+   * @technical preview
+   */
+  ERR_RDT_CMD_EXCEED_LIMIT = 253,
+  /**
+   * 254: The RDT DATA stream exceeds the limit (size <= 128 KBytes, speed <= 4 Mbps)
+   * @technical preview
+   */
+  ERR_RDT_DATA_EXCEED_LIMIT = 254,
+  /**
+   * 255: The RDT encryption error. The SDK Failed to process RDT data encryption/decryption
+   * @technical preview
+   */
+  ERR_RDT_ENCRYPTION = 255,
+  /// @endcond
+
+  /// @cond
   // signaling: 400~600
   ERR_LOGIN_ALREADY_LOGIN = 428,
 
@@ -1445,12 +1479,12 @@ enum WATERMARK_FIT_MODE {
    * Use the `positionInLandscapeMode` and `positionInPortraitMode` values you set in
    * #WatermarkOptions. The settings in `WatermarkRatio` are invalid.
    */
-  FIT_MODE_COVER_POSITION,
+  FIT_MODE_COVER_POSITION = 0,
   /**
    * Use the value you set in `WatermarkRatio`. The settings in `positionInLandscapeMode` and
    * `positionInPortraitMode` in `WatermarkOptions` are invalid.
    */
-  FIT_MODE_USE_IMAGE_RATIO
+  FIT_MODE_USE_IMAGE_RATIO = 1,
 };
 
 /**
@@ -1951,42 +1985,44 @@ struct VideoEncoderConfiguration {
    * prioritizes the video quality (a higher bitrate). Therefore, We recommend setting this
    * parameter as #STANDARD_BITRATE.
    *
-   * | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps) | Live Bitrate (Kbps)|
-   * |------------------------|------------------|---------------------|--------------------|
-   * | 160 * 120              | 15               | 65                  | 110                |
-   * | 120 * 120              | 15               | 50                  | 90                 |
-   * | 320 * 180              | 15               | 140                 | 240                |
-   * | 180 * 180              | 15               | 100                 | 160                |
-   * | 240 * 180              | 15               | 120                 | 200                |
-   * | 320 * 240              | 15               | 200                 | 300                |
-   * | 240 * 240              | 15               | 140                 | 240                |
-   * | 424 * 240              | 15               | 220                 | 370                |
-   * | 640 * 360              | 15               | 400                 | 680                |
-   * | 360 * 360              | 15               | 260                 | 440                |
-   * | 640 * 360              | 30               | 600                 | 1030               |
-   * | 360 * 360              | 30               | 400                 | 670                |
-   * | 480 * 360              | 15               | 320                 | 550                |
-   * | 480 * 360              | 30               | 490                 | 830                |
-   * | 640 * 480              | 15               | 500                 | 750                |
-   * | 480 * 480              | 15               | 400                 | 680                |
-   * | 640 * 480              | 30               | 750                 | 1130               |
-   * | 480 * 480              | 30               | 600                 | 1030               |
-   * | 848 * 480              | 15               | 610                 | 920                |
-   * | 848 * 480              | 30               | 930                 | 1400               |
-   * | 640 * 480              | 10               | 400                 | 600                |
-   * | 960 * 540              | 15               | 750                 | 1100               |
-   * | 960 * 540              | 30               | 1110                | 1670               |
-   * | 1280 * 720             | 15               | 1130                | 1600               |
-   * | 1280 * 720             | 30               | 1710                | 2400               |
-   * | 960 * 720              | 15               | 910                 | 1280               |
-   * | 960 * 720              | 30               | 1380                | 2000               |
-   * | 1920 * 1080            | 15               | 2080                | 2500               |
-   * | 1920 * 1080            | 30               | 3150                | 3780               |
-   * | 1920 * 1080            | 60               | 4780                | 5730               |
-   * | 2560 * 1440            | 30               | 4850                | 4850               |
-   * | 2560 * 1440            | 60               | 7350                | 7350               |
-   * | 3840 * 2160            | 30               | 8910                | 8910               |
-   * | 3840 * 2160            | 60               | 13500               | 13500              |
+   * | Resolution             | Frame Rate (fps) | Maximum Bitrate (Kbps) |
+   * |------------------------|------------------|------------------------|
+   * | 120 * 120              | 15               | 150                    |
+   * | 120 * 160              | 15               | 186                    |
+   * | 180 * 180              | 15               | 270                    |
+   * | 180 * 240              | 15               | 336                    |
+   * | 180 * 320              | 15               | 420                    |
+   * | 240 * 240              | 15               | 420                    |
+   * | 240 * 320              | 15               | 522                    |
+   * | 240 * 424              | 15               | 648                    |
+   * | 360 * 360              | 15               | 774                    |
+   * | 360 * 360              | 30               | 1162                   |
+   * | 360 * 480              | 15               | 966                    |
+   * | 360 * 480              | 30               | 1407                   |
+   * | 360 * 640              | 15               | 1200                   |
+   * | 360 * 640              | 30               | 1696                   |
+   * | 480 * 480              | 15               | 1200                   |
+   * | 480 * 480              | 30               | 1696                   |
+   * | 480 * 640              | 10               | 1164                   |
+   * | 480 * 640              | 15               | 1445                   |
+   * | 480 * 640              | 30               | 2041                   |
+   * | 480 * 848              | 15               | 1735                   |
+   * | 480 * 848              | 30               | 2445                   |
+   * | 540 * 960              | 15               | 2029                   |
+   * | 540 * 960              | 30               | 2852                   |
+   * | 720 * 960              | 15               | 2443                   |
+   * | 720 * 960              | 30               | 3434                   |
+   * | 720 * 1280             | 15               | 2938                   |
+   * | 720 * 1280             | 30               | 4113                   |
+   * | 1080 * 1920            | 15               | 4914                   |
+   * | 1080 * 1920            | 30               | 6819                   |
+   * | 1080 * 1920            | 60               | 9380                   |
+   * | 2560 * 1440            | 15               | 7040                   |
+   * | 2560 * 1440            | 30               | 9700                   |
+   * | 2560 * 1440            | 60               | 13230                  |
+   * | 3840 * 2160            | 15               | 11550                  |
+   * | 3840 * 2160            | 30               | 15726                  |
+   * | 3840 * 2160            | 60               | 21133                  |
    */
   int bitrate;
 
@@ -2154,6 +2190,7 @@ struct SimulcastStreamConfig {
 
 /**
  * The configuration of the multi-layer video stream.
+ * @since v4.6.0
  */
 struct SimulcastConfig {
   /**
@@ -2161,38 +2198,41 @@ struct SimulcastConfig {
    */
   enum StreamLayerIndex {
    /**
-    * 0: video stream index of layer_1
+    * 0: The video stream of layer_1, which has a lower resolution and bitrate than STREAM_HIGH.
     */
    STREAM_LAYER_1 = 0,
    /**
-    * 1: video stream index of layer_2
+    * 1: The video stream of layer_2, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_1.
     */
    STREAM_LAYER_2 = 1,
    /**
-    * 2: video stream index of layer_3
+    * 2: The video stream of layer_3, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_2.
     */
    STREAM_LAYER_3 = 2,
    /**
-    * 3: video stream index of layer_4
+    * 3: The video stream of layer_4, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_3.
     */
    STREAM_LAYER_4 = 3,
    /**
-    * 4: video stream index of layer_5
+    * 4: The video stream of layer_5, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_4.
     */
    STREAM_LAYER_5 = 4,
    /**
-    * 5: video stream index of layer_6
+    * 5: The video stream of layer_6, which has a lower resolution and bitrate than VIDEO_STREAM_LAYER_5.
     */
    STREAM_LAYER_6 = 5,
    /**
-    * 6: video stream index of low
+    * 6: The low-quality video stream, which has the lowest resolution and bitrate.
     */
    STREAM_LOW = 6,
    /**
-    * 7: max count of video stream layers
+    * 7: Max count of video stream layers
     */
    STREAM_LAYER_COUNT_MAX = 7
   };
+  /**
+   * The configuration of a specific layer in the multi-layer video stream.
+   */
   struct StreamLayerConfig {
     /**
      * The video frame dimension. The default value is 0.
@@ -2204,6 +2244,8 @@ struct SimulcastConfig {
     int framerate;
     /**
      * Whether to enable the corresponding layer of video stream. The default value is false.
+     * - true: Enable the corresponding layer of video stream
+     * - false: (Default) Disable the corresponding layer of video stream
      */
     bool enable;
     StreamLayerConfig() : dimensions(0, 0), framerate(0), enable(false) {}
@@ -2213,6 +2255,27 @@ struct SimulcastConfig {
    * The array of StreamLayerConfig, which contains STREAM_LAYER_COUNT_MAX layers of video stream at most.
    */
   StreamLayerConfig configs[STREAM_LAYER_COUNT_MAX];
+  /**
+   * Whether to enable fallback publishing. When set to true, it allows dynamic disabling of multiple streams when the performance or network of the publishing end is poor. The order of disabling is layer1->layer6.
+   * - true: Enable fallback publishing.
+   * - false: (Default) Disable fallback publishing.
+   * 
+   * @details The system guarantees that even under poor network conditions or limited 
+   * device capabilities, at least the major stream and lowest-resolution minor stream 
+   * will be maintained for basic video continuity. 
+   * 
+   */
+  bool publish_fallback_enable;
+  /**
+   * Whether to enable on-demand publishing. When set to true, a simulcast layer will only be published
+   * when there are subscribers requesting that layer.
+   * - true: (Default) Enable on-demand publishing.
+   * - false: Disable on-demand publishing. All enabled simulcast layers will be published regardless
+   * of subscription status.
+   */
+  bool publish_on_demand;
+  
+  SimulcastConfig(): publish_fallback_enable(false), publish_on_demand(true) {}
 };
 /**
  * The location of the target area relative to the screen or window. If you do not set this parameter,
@@ -2304,12 +2367,305 @@ struct WatermarkOptions {
    * The adaptation mode of the watermark. See #WATERMARK_FIT_MODE for details.
    */
   WATERMARK_FIT_MODE mode;
+  /**
+   * The z-order of the watermark image. The default value is 0.
+   */
+  int zOrder;
 
   WatermarkOptions()
       : visibleInPreview(true),
         positionInLandscapeMode(0, 0, 0, 0),
         positionInPortraitMode(0, 0, 0, 0),
-        mode(FIT_MODE_COVER_POSITION) {}
+        mode(FIT_MODE_COVER_POSITION),
+        zOrder(0) {}
+};
+
+/**
+ * @brief The source type of the watermark.
+ * 
+ * @since 4.6.0
+ */
+enum WATERMARK_SOURCE_TYPE {
+  /**
+   * 0: The watermark source is an image.
+   */
+  IMAGE = 0,
+  /**
+   * 1: The watermark source is a buffer.
+   */
+  BUFFER = 1,
+  /**
+   * 2: The watermark source is a literal.
+   *
+   * @note This is only supported in linux platform.
+   */
+  LITERAL = 2,
+  /**
+   * 3: The watermark source is a timestamp.
+   *
+   * @note This is only supported in linux platform.
+   */
+  TIMESTAMPS = 3,
+};
+
+/**
+ * @brief The definition of the WatermarkTimestamp struct.
+ *
+ * @since 4.6.0
+ * @note This is only supported in linux platform.
+ */
+struct WatermarkTimestamp{
+  /**
+   * The font size of the timestamp. The default value is 10.
+   */
+  int fontSize;
+  /**
+   * The path of the font file for the timestamp. The default value is NULL.
+   * The font file should be a .ttf file. If not set, the SDK uses the system default font if available.
+   * 
+   * @note If used asynchronously, copy the path to memory that will not be released.
+   */
+  const char* fontFilePath;
+  /**
+   * The stroke width of the timestamp. The default value is 1.
+   */
+  int strokeWidth;
+  /**
+   * The format of the timestamp. The default is '%F %X'.
+   * The format follows the standard C library function strftime. You can find in the website: 
+   * https://cplusplus.com/reference/ctime/strftime/?kw=strftime
+   * 
+   * @note If used asynchronously, copy the format string to memory that will not be released.
+   */
+  const char* format;
+
+  WatermarkTimestamp() : fontSize(10), fontFilePath(NULL), strokeWidth(1), format(NULL) {}
+};
+
+/**
+ * @brief The definition of the WatermarkLiteral struct.
+ *
+ * @since 4.6.0
+ * @note This is only supported in linux platform..
+ */
+struct WatermarkLiteral {
+  
+  /**
+   * The font size of the literal. The default value is 10.
+   */
+  int fontSize;
+  /**
+   * The stroke width of the literal. The default value is 1.
+   */
+  int strokeWidth;
+  /**
+   * The literal content of the watermark. The default value is NULL.
+   * 
+   * @note If used asynchronously, copy the string to memory that will not be released.
+   */
+  const char* wmLiteral;
+  /**
+   * The path of the font file for the literal. The default value is NULL.
+   * The font file should be a .ttf file. If not set, the SDK uses the system default font if available.
+   * 
+   * @note If used asynchronously, copy the string to memory that will not be released.
+   */
+  const char* fontFilePath;
+
+  WatermarkLiteral() : wmLiteral(NULL), fontFilePath(NULL), fontSize(10), strokeWidth(1) {}
+};
+
+/**
+ * @brief Defines the configuration for a buffer watermark.
+ *
+ * @since 4.6.0
+ */
+struct WatermarkBuffer {
+  
+  /**
+   * The width of the watermark buffer.
+   */
+  int width;
+  /**
+   * The height of the watermark buffer.
+   */
+  int height;
+  /**
+   * The length of the watermark buffer.
+   */
+  int length;
+  /**
+   * The format of the watermark buffer. The default value is #VIDEO_PIXEL_I420.
+   * Currently supports: #VIDEO_PIXEL_I420, #VIDEO_PIXEL_RGBA, #VIDEO_PIXEL_BGRA, and #VIDEO_PIXEL_NV21.
+   */
+  media::base::VIDEO_PIXEL_FORMAT format;
+
+  /**
+   * The buffer data of the watermark.
+   * 
+   * @note If used asynchronously, copy the buffer to memory that will not be released.
+   */
+  const uint8_t* buffer;
+
+  WatermarkBuffer() : buffer(NULL), width(0), height(0), length(0), format(media::base::VIDEO_PIXEL_I420) {}
+};
+
+/**
+ * @brief Defines the configuration for a watermark.
+ *
+ * @since 4.6.0
+ */
+struct WatermarkConfig {
+  /**
+   * The unique identifier of the watermark. It is recommended to use a UUID.
+   */
+  const char* id;
+  /**
+   * The watermark source type. See #WATERMARK_SOURCE_TYPE for details.
+   */
+  WATERMARK_SOURCE_TYPE type;
+  union {
+    /**
+     * The watermark buffer. See WatermarkBuffer.
+     */
+    WatermarkBuffer buffer;
+    /**
+     * The watermark timestamp. See WatermarkTimestamp.
+     * 
+     * @note This is only supported in linux platform.
+     */
+    WatermarkTimestamp timestamp;
+    /**
+     * The watermark literal. See WatermarkLiteral.
+     *
+     * @note This is only supported in linux platform.
+     */
+    WatermarkLiteral literal;
+    /**
+     * The URL of the image file for the watermark. The default value is NULL.
+     * 
+     * @note If used asynchronously, copy the URL to memory that will not be released.
+     */
+    const char* imageUrl;
+  };
+  
+  /**
+   * The options of the watermark. See WatermarkOptions.
+   */
+  WatermarkOptions options;
+
+  WatermarkConfig() : id(NULL), type(IMAGE), imageUrl(NULL) {}
+};
+
+/**
+ * @brief Defines how data is transmitted across multiple network paths.
+ *
+ * @since 4.6.0
+ */
+enum MultipathMode {
+  /**
+    * Duplicate mode, the same piece of data is redundantly transmitted over all available paths.
+    */
+  Duplicate= 0,
+  /**
+   * Dynamic mode, the data is transmitted only over the path that the internal algorithm determines to be optimal for transmission quality.
+   */ 
+  Dynamic
+};
+
+/**
+ * @brief Defines the types of network paths used in multipath transmission.
+ *
+ * @since 4.6.0
+ */ 
+enum MultipathType {
+  /**
+   * The local area network (LAN) path.
+   */
+  LAN = 0,
+  /**
+   * The Wi-Fi path.
+   */
+  WIFI,
+  /**
+   * The mobile network path.
+   */
+  Mobile,
+  /**
+   * An unknown or unspecified network path.
+   */
+  Unknown = 99
+};
+
+/**
+ * @brief Contains statistics for a specific network path in multipath transmission.
+ *
+ * @since 4.6.0
+ */
+struct PathStats {
+  /**
+   * The type of the path.
+   */
+  MultipathType type;
+  /**
+   * The transmission bitrate of the path.
+   */
+  int txKBitRate;
+  /**
+   * The receiving bitrate of the path.
+   */
+  int rxKBitRate;
+  PathStats() : type(Unknown), txKBitRate(0), rxKBitRate(0) {}
+  PathStats(MultipathType t, int tx, int rx) : type(t), txKBitRate(tx), rxKBitRate(rx) {}
+};
+
+/**
+ * @brief Aggregates statistics for all network paths used in multipath transmission.
+ *
+ * @since 4.6.0
+ */
+struct MultipathStats {
+  /**
+   * The number of bytes transmitted over the LAN path.
+   */
+  uint32_t lanTxBytes;
+  /**
+   * The number of bytes received over the LAN path.
+   */
+  uint32_t lanRxBytes;
+  /**
+   * The number of bytes transmitted over the Wi-Fi path.
+   */
+  uint32_t wifiTxBytes;
+  /**
+   * The number of bytes received over the Wi-Fi path.
+   */
+  uint32_t wifiRxBytes;
+  /**
+   * The number of bytes transmitted over the mobile network path.
+   */
+  uint32_t mobileTxBytes;
+  /**
+   * The number of bytes received over the mobile network path.
+   */
+  uint32_t mobileRxBytes;
+  /**
+   * The number of active paths.
+   */
+  int activePathNum;
+  /**
+   * “An array of statistics for each active path.
+   */
+  const PathStats* pathStats;
+  MultipathStats()
+      : lanTxBytes(0),
+        lanRxBytes(0),
+        wifiTxBytes(0),
+        wifiRxBytes(0),
+        mobileTxBytes(0),
+        mobileRxBytes(0),
+        activePathNum(0),
+        pathStats(nullptr) {}
 };
 
 /**
@@ -2475,6 +2831,13 @@ struct RtcStats {
    * The packet loss rate of receiver(audience).
    */
   int rxPacketLossRate;
+  /**
+   * The local network acceleration state.
+   * A value of 1 indicates that local network acceleration is active, while 0 indicates it is inactive.
+   * @technical preview
+   */
+  int lanAccelerateState;
+
   RtcStats()
       : duration(0),
         txBytes(0),
@@ -2508,7 +2871,8 @@ struct RtcStats {
         firstVideoKeyFrameDecodedDurationAfterUnmute(0),
         firstVideoKeyFrameRenderedDurationAfterUnmute(0),
         txPacketLossRate(0),
-        rxPacketLossRate(0) {}
+        rxPacketLossRate(0),
+        lanAccelerateState(0) {}
 };
 
 /**
@@ -2706,7 +3070,7 @@ enum AUDIO_SCENARIO_TYPE {
   AUDIO_SCENARIO_MEETING = 8,
   /**
    * 9: AI Server.
-   * @technical preview 
+   * @technical preview
    */
   AUDIO_SCENARIO_AI_SERVER = 9,
   /**
@@ -3120,7 +3484,14 @@ enum LOCAL_VIDEO_STREAM_REASON {
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_RESUMED = 29,
   /** 30: The shared display has been disconnected */
   LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_DISPLAY_DISCONNECTED = 30,
-
+  /* 30: (HMOS only) ScreenCapture stopped by user */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_STOPPED_BY_USER = 31,
+  /* 31: (HMOS only) ScreenCapture interrupted by other screen capture */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_INTERRUPTED_BY_OTHER = 32,
+  /* 32: (HMOS only) ScreenCapture stopped by SIM call */
+  LOCAL_VIDEO_STREAM_REASON_SCREEN_CAPTURE_STOPPED_BY_CALL = 33,
+  /* 34: HDR Video Source fallback to SDR */
+  LOCAL_AUDIO_STREAM_REASON_VIDEO_SOURCE_HDR_TO_SDR = 34,
 };
 
 /**
@@ -4555,62 +4926,6 @@ enum CLIENT_ROLE_CHANGE_FAILED_REASON {
 };
 
 /**
- * The reason of notifying the user of a message.
- */
-enum WLACC_MESSAGE_REASON {
-  /**
-   * WIFI signal is weak.
-   */
-  WLACC_MESSAGE_REASON_WEAK_SIGNAL = 0,
-  /**
-   * Channel congestion.
-   */
-  WLACC_MESSAGE_REASON_CHANNEL_CONGESTION = 1,
-};
-
-/**
- * Suggest an action for the user.
- */
-enum WLACC_SUGGEST_ACTION {
-  /**
-   * Please get close to AP.
-   */
-  WLACC_SUGGEST_ACTION_CLOSE_TO_WIFI = 0,
-  /**
-   * The user is advised to connect to the prompted SSID.
-   */
-  WLACC_SUGGEST_ACTION_CONNECT_SSID = 1,
-  /**
-   * The user is advised to check whether the AP supports 5G band and enable 5G band (the aciton
-   * link is attached), or purchases an AP that supports 5G. AP does not support 5G band.
-   */
-  WLACC_SUGGEST_ACTION_CHECK_5G = 2,
-  /**
-   * The user is advised to change the SSID of the 2.4G or 5G band (the aciton link is attached).
-   * The SSID of the 2.4G band AP is the same as that of the 5G band.
-   */
-  WLACC_SUGGEST_ACTION_MODIFY_SSID = 3,
-};
-
-/**
- * Indicator optimization degree.
- */
-struct WlAccStats {
-  /**
-   * End-to-end delay optimization percentage.
-   */
-  unsigned short e2eDelayPercent;
-  /**
-   * Frozen Ratio optimization percentage.
-   */
-  unsigned short frozenRatioPercent;
-  /**
-   * Loss Rate optimization percentage.
-   */
-  unsigned short lossRatePercent;
-};
-
-/**
  * The network type.
  */
 enum NETWORK_TYPE {
@@ -4849,51 +5164,221 @@ struct BeautyOptions {
         sharpnessLevel(0) {}
 };
 
-/** Face shape area options. This structure defines options for facial adjustments on different facial areas.
+/** 
+ * @brief Face shape area options. This structure defines options for facial adjustments on different facial areas.
  *
- * @technical preview
+ * @since v4.4.0
  */
 struct FaceShapeAreaOptions {
-  /** The specific facial area to be adjusted.
-    */
+  /**
+   * @brief The specific facial area to be adjusted.
+   *
+   * @since v4.4.0
+   */
   enum FACE_SHAPE_AREA {
     /** (Default) Invalid area. */
     FACE_SHAPE_AREA_NONE = -1,
-    /** Head Scale, reduces the size of head. */
-    FACE_SHAPE_AREA_HEADSCALE = 0,
-    /** Forehead, adjusts the size of forehead. */
-    FACE_SHAPE_AREA_FOREHEAD = 1,
-    /** Face Contour, slims the facial contour. */
-    FACE_SHAPE_AREA_FACECONTOUR = 2,
-    /** Face Length, adjusts the length of face. */
-    FACE_SHAPE_AREA_FACELENGTH = 3,
-    /** Face Width, narrows the width of face. */
-    FACE_SHAPE_AREA_FACEWIDTH = 4,
-    /** Cheekbone, adjusts the size of cheekbone. */
-    FACE_SHAPE_AREA_CHEEKBONE = 5,
-    /** Cheek, adjusts the size of cheek. */
-    FACE_SHAPE_AREA_CHEEK = 6,
-    /** Chin, adjusts the length of chin. */
-    FACE_SHAPE_AREA_CHIN = 7,
-    /** Eye Scale, adjusts the size of eyes. */
-    FACE_SHAPE_AREA_EYESCALE = 8,
-    /** Nose Length, adjusts the length of nose. */
-    FACE_SHAPE_AREA_NOSELENGTH = 9,
-    /** Nose Width, adjusts the width of nose. */
-    FACE_SHAPE_AREA_NOSEWIDTH = 10,
-    /** Mouth Scale, adjusts the size of mouth. */
-    FACE_SHAPE_AREA_MOUTHSCALE = 11,
+    /** 
+     * Head Scale, reduces the size of the head. 
+     * The value range is [0, 100]. The default value is 50.
+     * The larger the value, the stronger the head reduction effect.
+     */
+    FACE_SHAPE_AREA_HEADSCALE = 100,
+    /** 
+     * Forehead, adjusts the size of the forehead.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the forehead effect.
+     */
+    FACE_SHAPE_AREA_FOREHEAD = 101,
+    /** 
+     * Face Contour, slims the facial contour.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the facial contour reduction effect.
+     */
+    FACE_SHAPE_AREA_FACECONTOUR = 102,
+    /** 
+     * Face Length, adjusts the length of the face.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the face length effect, negative values indicate the opposite direction.
+     */
+    FACE_SHAPE_AREA_FACELENGTH = 103,
+    /** 
+     * Face Width, narrows the width of the face.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the face width reduction effect. 
+     */
+    FACE_SHAPE_AREA_FACEWIDTH = 104,
+    /** 
+     * Cheekbone, adjusts the size of the cheekbone.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the cheekbone effect.
+     */
+    FACE_SHAPE_AREA_CHEEKBONE = 105,
+    /** 
+     * Cheek, adjusts the size of the cheek.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the cheek effect.
+     */
+    FACE_SHAPE_AREA_CHEEK = 106,
+    /** 
+     * Mandible, slims the mandible.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the mandible effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_MANDIBLE = 107,
+    /** 
+     * Chin, adjusts the length of the chin. 
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the chin effect, negative values indicate the opposite direction.
+    */
+    FACE_SHAPE_AREA_CHIN = 108,
+    /** 
+     * Eye Scale, adjusts the size of the eyes.
+     * The value range is [0, 100]. The default value is 50.
+     * The larger the value, the stronger the eye size effect.
+     */
+    FACE_SHAPE_AREA_EYESCALE = 200,
+    /** 
+     * Eye Distance, adjusts the distance between the two eyes.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the eye distance effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEDISTANCE = 201,
+    /** 
+     * Eye Position, adjusts the upper and lower position of the eyes.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the eye position effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEPOSITION = 202,
+    /** 
+     * Lower Eyelid, adjusts the downward position of the eyelids.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the lower eyelid effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_LOWEREYELID = 203,
+    /** 
+     * Eye Pupils, adjusts the size of the pupils.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the eye pupils effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEPUPILS = 204,
+    /** 
+     * Eye Inner Corner, adjusts the inner corners of the eyes.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the eye inner corner effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEINNERCORNER = 205,
+    /** 
+     * Eye Outer Corner, adjusts the outer corners of the eyes.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the eye outer corner effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEOUTERCORNER = 206,
+    /** 
+     * Nose Length, adjusts the length of the nose. 
+     * The value range is [-100, 100]. The default value is 0.
+     */
+    FACE_SHAPE_AREA_NOSELENGTH = 300,
+    /** 
+     * Nose Width, adjusts the width of the nose. 
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the nose width effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSEWIDTH = 301,
+    /** 
+     * Nose Wing, adjusts the size of the nose wings.
+     * The value range is [0, 100]. The default value is 10.
+     * The larger the value, the stronger the nose wing effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSEWING = 302,
+    /** 
+     * Nose Root, adjusts the size of the nose root.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the nose root effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSEROOT = 303,
+    /** 
+     * Nose Bridge, adjusts the size of the nose bridge.
+     * The value range is [0, 100]. The default value is 50.
+     * The larger the value, the stronger the nose bridge effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSEBRIDGE = 304,
+    /** 
+     * Nose Tip, adjusts the size of the nose tip.
+     * The value range is [0, 100]. The default value is 50.
+     * The larger the value, the stronger the nose tip effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSETIP = 305,
+    /** 
+     * Nose General, adjusts the overall size of the nose.
+     * The value range is [-100, 100]. The default value is 50.
+     * The larger the absolute value, the stronger the nose general effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_NOSEGENERAL = 306,
+    /** 
+     * Mouth Scale, adjusts the size of the mouth.
+     * The value range is [-100, 100]. The default value is 20.
+     * The larger the absolute value, the stronger the mouth size effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_MOUTHSCALE = 400,
+    /** 
+     * Mouth Position, adjusts the position of the mouth.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the mouth position effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_MOUTHPOSITION = 401,
+    /** 
+     * Mouth Smile, adjusts the degree of the mouth's smile.
+     * The value range is [0, 100]. The default value is 30.
+     * The larger the value, the stronger the mouth smile effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_MOUTHSMILE = 402,
+    /** 
+     * Mouth Lip, adjusts the size of the lips.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the stronger the mouth lip effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_MOUTHLIP = 403,
+    /** 
+     * Eyebrow Position, adjusts the position of the eyebrows.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the absolute value, the stronger the eyebrow position effect, negative values indicate the opposite direction.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEBROWPOSITION = 500,
+    /** 
+     * Eyebrow Thickness, adjusts the thickness of the eyebrows.
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the value, the stronger the eyebrow thickness effect.
+     * @since v4.6.0
+     */
+    FACE_SHAPE_AREA_EYEBROWTHICKNESS = 501,
   };
   
   /** The specific facial area to be adjusted, See #FACE_SHAPE_AREA.
     */
   FACE_SHAPE_AREA shapeArea;
   
-  /** The intensity of the pinching effect applied to the specified facial area.
-   * For the following area values: #FACE_SHAPE_AREA_FOREHEAD, #FACE_SHAPE_AREA_FACELENGTH, #FACE_SHAPE_AREA_CHIN, #FACE_SHAPE_AREA_NOSELENGTH, #FACE_SHAPE_AREA_NOSEWIDTH, #FACE_SHAPE_AREA_MOUTHSCALE, the value ranges from -100 to 100.
-   * The default value is 0. The greater the absolute value, the stronger the intensity applied to the specified facial area, and negative values indicate the opposite direction.
-   * For enumeration values other than the above, the value ranges from 0 to 100. The default value is 0. The greater the value, the stronger the intensity applied to the specified facial area.
-    */
+  /** 
+   * The intensity of the pinching effect applied to the specified facial area.
+   */
   int shapeIntensity;
   
   FaceShapeAreaOptions(FACE_SHAPE_AREA shapeArea, int areaIntensity) : shapeArea(shapeArea), shapeIntensity(areaIntensity) {}
@@ -4901,18 +5386,30 @@ struct FaceShapeAreaOptions {
   FaceShapeAreaOptions() : shapeArea(FACE_SHAPE_AREA_NONE), shapeIntensity(0) {}
 };
 
-/** Face shape beauty options. This structure defines options for facial adjustments of different facial styles.
+/** @brief Face shape beauty options. This structure defines options for facial adjustments of different facial styles.
  *
- * @technical preview
+ * @since v4.4.0
  */
 struct FaceShapeBeautyOptions {
-  /** The face shape style.
-    */
+  /**
+   * @brief The face shape beauty style options.
+   *
+   * @since v4.4.0
+   */
   enum FACE_SHAPE_BEAUTY_STYLE {
-    /** (Default) Female face shape style. */
-    FACE_SHAPE_BEAUTY_STYLE_FEMALE = 0,
-    /** Male face shape style. */
-    FACE_SHAPE_BEAUTY_STYLE_MALE = 1,
+  /**
+   * (Default) Female face shape style.
+   */
+  FACE_SHAPE_BEAUTY_STYLE_FEMALE = 0,
+  /**
+   * Male face shape style.
+   */
+  FACE_SHAPE_BEAUTY_STYLE_MALE = 1,
+  /**
+   * A natural-looking face shape style that applies minimal modification to facial features.
+   * @since v4.6.0
+   */
+  FACE_SHAPE_BEAUTY_STYLE_NATURAL = 2,
   };
   
   /** The face shape style, See #FACE_SHAPE_BEAUTY_STYLE.
@@ -5161,16 +5658,23 @@ struct VirtualBackgroundSource {
 
 struct SegmentationProperty {
   enum SEG_MODEL_TYPE {
-
     SEG_MODEL_AI = 1,
     SEG_MODEL_GREEN = 2
+  };
+
+  enum SCREEN_COLOR_TYPE {
+    SCREEN_COLOR_AUTO = 0,
+    SCREEN_COLOR_GREEN = 1,
+    SCREEN_COLOR_BLUE = 2
   };
 
   SEG_MODEL_TYPE modelType;
 
   float greenCapacity;
 
-  SegmentationProperty() : modelType(SEG_MODEL_AI), greenCapacity(0.5) {}
+  SCREEN_COLOR_TYPE screenColorType;
+
+  SegmentationProperty() : modelType(SEG_MODEL_AI), greenCapacity(0.5), screenColorType(SCREEN_COLOR_AUTO) {}
 };
 
 /** The type of custom audio track
@@ -6368,6 +6872,47 @@ enum UPLOAD_ERROR_REASON {
   UPLOAD_SERVER_ERROR = 2,
 };
 
+/**
+ * Error codes for renewing a token.
+ *
+ * These error codes indicate the result of calling renewToken.
+ * @since 4.6.0
+ */
+enum RENEW_TOKEN_ERROR_CODE {
+  /**
+   * 0: The token is renewed successfully.
+   */
+  RENEW_TOKEN_SUCCESS = 0,
+  /**
+   * 1: It is recommended that the user generate a new token and retry renewToken.
+   */
+  RENEW_TOKEN_FAILURE = 1,
+  /**
+   * 2: The token renewal failed because the provided token has expired. 
+   * It is recommended that the user generate a new token with a longer expiration time and retry renewToken.
+   */
+  RENEW_TOKEN_TOKEN_EXPIRED = 2,
+  /**
+   * 3: The token renewal failed because the provided token is invalid.
+   * It is recommended that the user check the token generation process, generate a new token, and retry renewToken.
+   */
+  RENEW_TOKEN_INVALID_TOKEN = 3,
+  /**
+   * 4: The token renewal failed because the channel name in the token does not match the current channel.
+   * It is recommended that the user check the channel name, generate a new token, and retry renewToken.
+   */
+  RENEW_TOKEN_INVALID_CHANNEL_NAME = 4,
+  /**
+   * 5: The token renewal failed because the app ID in the token does not match the current app ID.
+   * It is recommended that the user check the app ID, generate a new token, and retry renewToken.
+   */
+  RENEW_TOKEN_INCONSISTENT_APPID = 5,
+  /**
+   * 6: The token renewal was canceled because a new request was made, and the previous one was canceled.
+   */
+  RENEW_TOKEN_CANCELED_BY_NEW_REQUEST = 6,
+};
+
 /** The type of the device permission.
  */
 enum PERMISSION_TYPE {
@@ -6538,7 +7083,7 @@ enum THREAD_PRIORITY_TYPE {
   CRITICAL = 5,
 };
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(__OHOS__)
 
 /**
  * The video configuration for the shared screen stream.
@@ -6828,6 +7373,63 @@ struct RecorderStreamInfo {
       : channelId(channelId), uid(uid), type(RTC) {}
   RecorderStreamInfo(const char* channelId, uid_t uid, RecorderStreamType type)
       : channelId(channelId), uid(uid), type(type) {}
+};
+
+/**
+ * @brief Reliable Data Transmission Tunnel message stream type
+ *
+ * @technical preview
+ */
+enum RdtStreamType {
+  /**
+   * Command stream type.
+   * Characterized by: reliability, high priority, and not affected by congestion control.
+   * Transmission limits: a maximum of 256 bytes per packet, and 100 packets per second.
+   */
+  RDT_STREAM_CMD,
+  /**
+   * Data stream type.
+   * Characterized by: reliability, low priority, and affected by congestion control.
+   * Transmission limits: a maximum of 128 KBytes per packet, with a rate of 4 Mbps.
+   */
+  RDT_STREAM_DATA,
+  /**
+   * Reliable Data Transmission stream type count
+   */
+  RDT_STREAM_COUNT,
+};
+
+/**
+ * @brief Reliable Data Transmission tunnel state
+ *
+ * @technical preview
+ */
+enum RdtState {
+  /**
+   * The RDT tunnel is in the initial or is closed.
+   */
+  RDT_STATE_CLOSED,
+  /**
+   * The RDT tunnel is open, and data can only be sent in this state.
+   */
+  RDT_STATE_OPENED,
+  /**
+   * The send buffer of the RDT tunnel is full. RDT_STREAM_DATA cannot be sent,
+   * but RDT_STREAM_CMD can be sent, as the latter is not affected by congestion control.
+   */
+  RDT_STATE_BLOCKED,
+  /**
+   * The RDT tunnel is in a suspended state because SDK has disconnected.
+   * It will automatically resume to the RDT_STATE_OPENED state after rejoining the channel.
+   */
+  RDT_STATE_PENDING,
+  /**
+   * The RDT channel is broken, and the data being sent and received will be cleared.
+   * It will automatically resume to the RDT_STATE_OPENED state later.
+   * Reason for occurrence: The remote user actively called the API to leave the
+   * channel and then rejoined the channel, without being detected by this end.
+   */
+  RDT_STATE_BROKEN,
 };
 }  // namespace rtc
 
