@@ -53,9 +53,9 @@ else
     cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
     curl -o opencv4.zip https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
     unzip opencv4.zip
-    mkdir -p agora-simple-filter/src/main/libs
-    mv arm64-v8a agora-simple-filter/src/main/libs
-    mv armeabi-v7a agora-simple-filter/src/main/libs
+    mkdir -p agora-simple-filter/src/main/jniLibs
+    mv arm64-v8a agora-simple-filter/src/main/jniLibs
+    mv armeabi-v7a agora-simple-filter/src/main/jniLibs
     sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
     rm -f agora-simple-filter/src/main/cpp/CMakeLists.txt-e
 

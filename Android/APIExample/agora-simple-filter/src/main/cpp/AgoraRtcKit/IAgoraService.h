@@ -752,7 +752,7 @@ class IAgoraService {
       const rtc::SenderOptions& options,
       const char* id = OPTIONAL_NULLPTR) = 0;
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
   /**
    * Creates a local video track object with a screen capture source extension and returns the pointer.
    *
@@ -917,7 +917,7 @@ class IAgoraService {
    */
   virtual const char* getExtensionId(const char* provider_name, const char* extension_name) = 0;
 
-#if defined (_WIN32) || defined(__linux__) || defined(__ANDROID__)
+#if defined (_WIN32) ||  defined(__linux__) || defined(__ANDROID__)
   /**
    * @brief load the dynamic library of the extension
    * 

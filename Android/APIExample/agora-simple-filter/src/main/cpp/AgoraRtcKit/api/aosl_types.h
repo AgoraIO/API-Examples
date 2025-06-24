@@ -66,8 +66,8 @@ static __inline__ int aosl_fd_invalid (aosl_fd_t fd)
 #if defined (_WIN32)
 /**
  * We MUST include 'winsock2.h' before any occurrence
- * of including 'windows.h', the fucking Windows has
- * the fucking issue that many definitions would be
+ * of including 'windows.h', the Microsoft Windows has
+ * the stupid issue that many definitions would be
  * complained redefinition if not so.
  * -- Lionfore Hao Sep 25th, 2018
  **/

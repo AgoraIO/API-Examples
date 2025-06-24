@@ -48,9 +48,9 @@ public:
 		aosl_ref_t_oop ();
 
 	public:
-		static aosl_ref_t_oop *create (void *arg = NULL, aosl_ref_dtor_t dtor = NULL, bool caller_free = true)
+		static aosl_ref_t_oop *create (void *arg = NULL, aosl_ref_dtor_t dtor = NULL, bool destroy_wait = true)
 		{
-			return (aosl_ref_t_oop *)aosl_ref_create (arg, dtor, (int)caller_free);
+			return (aosl_ref_t_oop *)aosl_ref_create (arg, dtor, (int)destroy_wait);
 		}
 
 		static aosl_ref_t_oop *from_aosl_ref_t (aosl_ref_t ref)
@@ -68,70 +68,79 @@ public:
 			return (aosl_ref_t)this;
 		}
 
-		int hold (aosl_ref_func_t f, uintptr_t argc, ...)
+		aosl_ref_magic_t magic () const
+		{
+			aosl_ref_magic_t m;
+			if (aosl_ref_magic (ref (), &m) < 0)
+				return AOSL_REF_MAGIC_INVALID;
+
+			return m;
+		}
+
+		int hold (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_hold_args (ref (), f, argc, args);
+			err = aosl_ref_magic_hold_args (ref (), magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		int hold_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
+		int hold_args (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_hold_args (ref (), f, argc, args);
+			return aosl_ref_magic_hold_args (ref (), magic, f, argc, args);
 		}
 
-		int hold_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		int hold_argv (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_hold_argv (ref (), f, argc, argv);
+			return aosl_ref_magic_hold_argv (ref (), magic, f, argc, argv);
 		}
 
-		int read (aosl_ref_func_t f, uintptr_t argc, ...)
+		int read (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_read_args (ref (), f, argc, args);
+			err = aosl_ref_magic_read_args (ref (), magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		int read_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
+		int read_args (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_read_args (ref (), f, argc, args);
+			return aosl_ref_magic_read_args (ref (), magic, f, argc, args);
 		}
 
-		int read_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		int read_argv (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_read_argv (ref (), f, argc, argv);
+			return aosl_ref_magic_read_argv (ref (), magic, f, argc, argv);
 		}
 
-		int write (aosl_ref_func_t f, uintptr_t argc, ...)
+		int write (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_write_args (ref (), f, argc, args);
+			err = aosl_ref_magic_write_args (ref (), magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		int write_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
+		int write_args (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_write_args (ref (), f, argc, args);
+			return aosl_ref_magic_write_args (ref (), magic, f, argc, args);
 		}
 
-		int write_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		int write_argv (aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_write_argv (ref (), f, argc, argv);
+			return aosl_ref_magic_write_argv (ref (), magic, f, argc, argv);
 		}
 
 		int unsafe (aosl_ref_func_t f, uintptr_t argc, ...)
@@ -157,70 +166,70 @@ public:
 		}
 
 		/* The static version of member functions */
-		static int hold (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+		static int hold (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_hold_args (ref, f, argc, args);
+			err = aosl_ref_magic_hold_args (ref, magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		static int hold_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+		static int hold_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_hold_args (ref, f, argc, args);
+			return aosl_ref_magic_hold_args (ref, magic, f, argc, args);
 		}
 
-		static int hold_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		static int hold_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_hold_argv (ref, f, argc, argv);
+			return aosl_ref_magic_hold_argv (ref, magic, f, argc, argv);
 		}
 
-		static int read (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+		static int read (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_read_args (ref, f, argc, args);
+			err = aosl_ref_magic_read_args (ref, magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		static int read_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+		static int read_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_read_args (ref, f, argc, args);
+			return aosl_ref_magic_read_args (ref, magic, f, argc, args);
 		}
 
-		static int read_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		static int read_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_read_argv (ref, f, argc, argv);
+			return aosl_ref_magic_read_argv (ref, magic, f, argc, argv);
 		}
 
-		static int write (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+		static int write (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 		{
 			va_list args;
 			int err;
 
 			va_start (args, argc);
-			err = aosl_ref_write_args (ref, f, argc, args);
+			err = aosl_ref_magic_write_args (ref, magic, f, argc, args);
 			va_end (args);
 
 			return err;
 		}
 
-		static int write_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+		static int write_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 		{
-			return aosl_ref_write_args (ref, f, argc, args);
+			return aosl_ref_magic_write_args (ref, magic, f, argc, args);
 		}
 
-		static int write_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+		static int write_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 		{
-			return aosl_ref_write_argv (ref, f, argc, argv);
+			return aosl_ref_magic_write_argv (ref, magic, f, argc, argv);
 		}
 
 		static int unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
@@ -412,6 +421,28 @@ public:
 			return aosl_mpq_run_data (q, dq, ref (), f_name, f, len, data);
 		}
 
+		int exec (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
+		{
+			va_list args;
+			int err;
+
+			va_start (args, argc);
+			err = aosl_mpq_exec_args (q, ref (), f_name, f, argc, args);
+			va_end (args);
+
+			return err;
+		}
+
+		int exec_args (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, va_list args)
+		{
+			return aosl_mpq_exec_args (q, ref (), f_name, f, argc, args);
+		}
+
+		int exec_argv (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, uintptr_t *argv)
+		{
+			return aosl_mpq_exec_argv (q, ref (), f_name, f, argc, argv);
+		}
+
 	#ifdef __AOSL_MPQP_H__
 		/* MPQP relative encapsulations */
 		aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
@@ -494,28 +525,6 @@ public:
 		{
 			return aosl_mpqp_run_data (qp, dq, ref (), f_name, f, len, data);
 		}
-
-		int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
-		{
-			va_list args;
-			int err;
-
-			va_start (args, argc);
-			err = aosl_mpqp_pool_tail_queue_args (qp, dq, ref (), f_name, f, argc, args);
-			va_end (args);
-
-			return err;
-		}
-
-		int pool_tail_queue_args (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, va_list args)
-		{
-			return aosl_mpqp_pool_tail_queue_args (qp, dq, ref (), f_name, f, argc, args);
-		}
-
-		int pool_tail_queue_argv (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, uintptr_t *argv)
-		{
-			return aosl_mpqp_pool_tail_queue_argv (qp, dq, ref (), f_name, f, argc, argv);
-		}
 	#endif /* __AOSL_MPQP_H__ */
 	#endif /* __AOSL_MPQ_H__ */
 
@@ -525,25 +534,25 @@ public:
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		int hold (__local_lambda_t &&lambda_f)
+		int hold (__local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::hold (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::hold (magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		int read (__local_lambda_t &&lambda_f)
+		int read (__local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::read (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::read (magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		int write (__local_lambda_t &&lambda_f)
+		int write (__local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::write (____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::write (magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
@@ -557,25 +566,25 @@ public:
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+		static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::hold (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::hold (ref, magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+		static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::read (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::read (ref, magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
 		template <typename __local_lambda_t,
 			typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-		static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+		static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 		{
-			return aosl_ref_t_oop::write (ref, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
+			return aosl_ref_t_oop::write (ref, magic, ____ref_f<typename std::remove_reference<__local_lambda_t>::type>, 1, &lambda_f);
 		}
 
 		/* __local_lambda_t: void (void *arg) */
@@ -662,6 +671,22 @@ public:
 			return err;
 		}
 
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		int exec (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task)
+		{
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::exec (q, f_name, ____mpq_exec_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
+			if (err < 0)
+				delete task_obj;
+
+			return err;
+		}
+
 		/* __mpq_0arg_lambda_t: void (void) */
 		template <typename __mpq_0arg_lambda_t>
 		/**
@@ -725,6 +750,27 @@ public:
 			return err;
 		}
 
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		/**
+		 * Do not use the template parameter with default value style SFINAE for 0 argument lambda case,
+		 * because the buggy MSVC compiler version 14.25.28610 will report:
+		 *  - error C2672: XXX: no matching overloaded function found
+		 *  - error C2783: XXX(YYY): could not deduce template argument for '__formal'
+		 * So, we use the return type style SFINAE here instead.
+		 * -- Lionfore Hao Apr 15th, 2025
+		 **/
+		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		exec (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task)
+		{
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_ref_t_oop::exec (q, f_name, ____mpq_exec_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
+			if (err < 0)
+				delete task_obj;
+
+			return err;
+		}
+
 	#ifdef __AOSL_MPQP_H__
 		/* MPQP encapsulations */
 		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
@@ -775,17 +821,6 @@ public:
 			return qid;
 		}
 
-		template <typename __mpq_lambda_t>
-		int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
-		{
-			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
-			int err = aosl_ref_t_oop::pool_tail_queue (qp, dq, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
-			if (err < 0)
-				delete task_obj;
-
-			return err;
-		}
-
 		/* __mpq_0arg_lambda_t: void (void) */
 		template <typename __mpq_0arg_lambda_t>
 		typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
@@ -823,17 +858,6 @@ public:
 				delete task_obj;
 
 			return qid;
-		}
-
-		template <typename __mpq_0arg_lambda_t>
-		int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
-		{
-			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
-			int err = aosl_ref_t_oop::pool_tail_queue (qp, AOSL_MPQ_INVALID, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
-			if (err < 0)
-				delete task_obj;
-
-			return err;
 		}
 	#endif /* __AOSL_MPQP_H__ */
 
@@ -886,6 +910,22 @@ public:
 			return err;
 		}
 
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+				typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+					std::declval<const aosl_ts_t &>(),
+					std::declval<aosl_refobj_t>()
+				))>::value, int>::type = 0>
+		static int exec (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
+		{
+			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
+			int err = aosl_mpq_exec (q, ref, f_name, ____mpq_exec_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
+			if (err < 0)
+				delete task_obj;
+
+			return err;
+		}
+
 		/* __mpq_0arg_lambda_t: void (void) */
 		template <typename __mpq_0arg_lambda_t>
 		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
@@ -919,6 +959,19 @@ public:
 		{
 			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
 			int err = aosl_mpq_run (q, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
+			if (err < 0)
+				delete task_obj;
+
+			return err;
+		}
+
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t>
+		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+		exec (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
+		{
+			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
+			int err = aosl_mpq_exec (q, ref, f_name, ____mpq_exec_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
 			if (err < 0)
 				delete task_obj;
 
@@ -975,17 +1028,6 @@ public:
 			return qid;
 		}
 
-		template <typename __mpq_lambda_t>
-		static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
-		{
-			__mpq_lambda_t *task_obj = new __mpq_lambda_t (std::move (task));
-			int err = aosl_mpqp_pool_tail_queue (qp, dq, ref, f_name, ____mpq_f<typename std::remove_reference<__mpq_lambda_t>::type>, 1, task_obj);
-			if (err < 0)
-				delete task_obj;
-
-			return err;
-		}
-
 		/* __mpq_0arg_lambda_t: void (void) */
 		template <typename __mpq_0arg_lambda_t>
 		static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
@@ -1024,17 +1066,6 @@ public:
 
 			return qid;
 		}
-
-		template <typename __mpq_0arg_lambda_t>
-		static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
-		{
-			__mpq_0arg_lambda_t *task_obj = new __mpq_0arg_lambda_t (std::move (task));
-			int err = aosl_mpqp_pool_tail_queue (qp, AOSL_MPQ_INVALID, ref, f_name, ____mpq_0arg_f<typename std::remove_reference<__mpq_0arg_lambda_t>::type>, 1, task_obj);
-			if (err < 0)
-				delete task_obj;
-
-			return err;
-		}
 	#endif /* __AOSL_MPQP_H__ */
 
 		static void *call_result_var_addr (void)
@@ -1057,7 +1088,7 @@ public:
 		{
 			__mpq_lambda_t *task_obj = reinterpret_cast<__mpq_lambda_t *>(argv [0]);
 			(*task_obj) (*queued_ts_p, robj);
-			if (aosl_mpq_invalid (aosl_mpq_run_func_done_qid ()) || aosl_is_free_only (robj)) {
+			if (aosl_is_free_only (robj) || aosl_mpq_invalid (aosl_mpq_run_func_done_qid ())) {
 				/**
 				 * We only free the task object when the running function has no
 				 * done mpq id, due to the task object would be still in use if
@@ -1077,7 +1108,7 @@ public:
 			__mpq_0arg_lambda_t *task_obj = reinterpret_cast<__mpq_0arg_lambda_t *>(argv [0]);
 			if (!aosl_is_free_only (robj))
 				(*task_obj) ();
-			if (aosl_mpq_invalid (aosl_mpq_run_func_done_qid ()) || aosl_is_free_only (robj)) {
+			if (aosl_is_free_only (robj) || aosl_mpq_invalid (aosl_mpq_run_func_done_qid ())) {
 				/**
 				 * We only free the task object when the running function has no
 				 * done mpq id, due to the task object would be still in use if
@@ -1087,6 +1118,29 @@ public:
 				 **/
 				delete task_obj;
 			}
+		}
+
+		/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+		template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()))>::value, int>::type = 0>
+		static void ____mpq_exec_f (const aosl_ts_t *queued_ts_p, aosl_refobj_t robj, uintptr_t argc, uintptr_t argv [])
+		{
+			__mpq_lambda_t *task_obj = reinterpret_cast<__mpq_lambda_t *>(argv [0]);
+			(*task_obj) (*queued_ts_p, robj);
+			delete task_obj;
+		}
+
+		/* __mpq_0arg_lambda_t: void (void) */
+		template <typename __mpq_0arg_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type = 0>
+		static void ____mpq_exec_0arg_f (const aosl_ts_t *queued_ts_p, aosl_refobj_t robj, uintptr_t argc, uintptr_t argv [])
+		{
+			__mpq_0arg_lambda_t *task_obj = reinterpret_cast<__mpq_0arg_lambda_t *>(argv [0]);
+			if (!aosl_is_free_only (robj))
+				(*task_obj) ();
+			delete task_obj;
 		}
 	#endif /* __AOSL_MPQ_H__ */
 
@@ -1209,23 +1263,31 @@ public:
 
 private:
 	aosl_ref_t_oop *refoop;
+	aosl_ref_magic_t refmagic;
 
 public:
-	aosl_ref_class (bool caller_free = true)
+	aosl_ref_class (bool destroy_wait = true)
 	{
-		refoop = aosl_ref_t_oop::create (this, __dtor, caller_free);
+		refoop = aosl_ref_t_oop::create (this, __dtor, destroy_wait);
 		if (aosl_ref_invalid (refoop))
 			abort ();
+
+		if (aosl_ref_magic (refoop->ref (), &refmagic) < 0)
+			refmagic = AOSL_REF_MAGIC_INVALID;
 	}
 
 	aosl_ref_class (aosl_ref_t_oop *obj)
 	{
 		refoop = obj;
+		if (aosl_ref_magic (obj->ref (), &refmagic) < 0)
+			refmagic = AOSL_REF_MAGIC_INVALID;
 	}
 
 	aosl_ref_class (aosl_ref_t ref)
 	{
 		refoop = aosl_ref_t_oop::from_aosl_ref_t (ref);
+		if (aosl_ref_magic (ref, &refmagic) < 0)
+			refmagic = AOSL_REF_MAGIC_INVALID;
 	}
 
 	aosl_ref_t_oop *ref_oop () const
@@ -1238,13 +1300,18 @@ public:
 		return refoop->ref ();
 	}
 
+	aosl_ref_magic_t magic () const
+	{
+		return refoop->magic ();
+	}
+
 	int hold (aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = refoop->hold_args (f, argc, args);
+		err = refoop->hold_args (refmagic, f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1252,12 +1319,12 @@ public:
 
 	int hold_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return refoop->hold_args (f, argc, args);
+		return refoop->hold_args (refmagic, f, argc, args);
 	}
 
 	int hold_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return refoop->hold_argv (f, argc, argv);
+		return refoop->hold_argv (refmagic, f, argc, argv);
 	}
 
 	int read (aosl_ref_func_t f, uintptr_t argc, ...)
@@ -1266,7 +1333,7 @@ public:
 		int err;
 
 		va_start (args, argc);
-		err = refoop->read_args (f, argc, args);
+		err = refoop->read_args (refmagic, f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1274,12 +1341,12 @@ public:
 
 	int read_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return refoop->read_args (f, argc, args);
+		return refoop->read_args (refmagic, f, argc, args);
 	}
 
 	int read_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return refoop->read_argv (f, argc, argv);
+		return refoop->read_argv (refmagic, f, argc, argv);
 	}
 
 	int write (aosl_ref_func_t f, uintptr_t argc, ...)
@@ -1288,7 +1355,7 @@ public:
 		int err;
 
 		va_start (args, argc);
-		err = refoop->write_args (f, argc, args);
+		err = refoop->write_args (refmagic, f, argc, args);
 		va_end (args);
 
 		return err;
@@ -1296,12 +1363,12 @@ public:
 
 	int write_args (aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return refoop->write_args (f, argc, args);
+		return refoop->write_args (refmagic, f, argc, args);
 	}
 
 	int write_argv (aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return refoop->write_argv (f, argc, argv);
+		return refoop->write_argv (refmagic, f, argc, argv);
 	}
 
 	int unsafe (aosl_ref_func_t f, uintptr_t argc, ...)
@@ -1349,70 +1416,70 @@ public:
 	}
 
 	/* The static version of member functions */
-	static int hold (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+	static int hold (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = aosl_ref_t_oop::hold_args (ref, f, argc, args);
+		err = aosl_ref_t_oop::hold_args (ref, magic, f, argc, args);
 		va_end (args);
 
 		return err;
 	}
 
-	static int hold_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+	static int hold_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return aosl_ref_t_oop::hold_args (ref, f, argc, args);
+		return aosl_ref_t_oop::hold_args (ref, magic, f, argc, args);
 	}
 
-	static int hold_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	static int hold_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return aosl_ref_t_oop::hold_argv (ref, f, argc, argv);
+		return aosl_ref_t_oop::hold_argv (ref, magic, f, argc, argv);
 	}
 
-	static int read (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+	static int read (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = aosl_ref_t_oop::read_args (ref, f, argc, args);
+		err = aosl_ref_t_oop::read_args (ref, magic, f, argc, args);
 		va_end (args);
 
 		return err;
 	}
 
-	static int read_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+	static int read_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return aosl_ref_t_oop::read_args (ref, f, argc, args);
+		return aosl_ref_t_oop::read_args (ref, magic, f, argc, args);
 	}
 
-	static int read_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	static int read_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return aosl_ref_t_oop::read_argv (ref, f, argc, argv);
+		return aosl_ref_t_oop::read_argv (ref, magic, f, argc, argv);
 	}
 
-	static int write (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
+	static int write (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...)
 	{
 		va_list args;
 		int err;
 
 		va_start (args, argc);
-		err = aosl_ref_t_oop::write_args (ref, f, argc, args);
+		err = aosl_ref_t_oop::write_args (ref, magic, f, argc, args);
 		va_end (args);
 
 		return err;
 	}
 
-	static int write_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args)
+	static int write_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args)
 	{
-		return aosl_ref_t_oop::write_args (ref, f, argc, args);
+		return aosl_ref_t_oop::write_args (ref, magic, f, argc, args);
 	}
 
-	static int write_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
+	static int write_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv [])
 	{
-		return aosl_ref_t_oop::write_argv (ref, f, argc, argv);
+		return aosl_ref_t_oop::write_argv (ref, magic, f, argc, argv);
 	}
 
 	static int unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...)
@@ -1538,13 +1605,24 @@ public:
 
 	int destroy (bool do_delete = true)
 	{
-		int err = refoop->destroy (do_delete);
-		if (err < 0 && do_delete) {
-			::delete this;
-			return 0;
+		if (!aosl_ref_invalid (refoop->ref ())) {
+			/**
+			 * if the ref is valid, then just call the destroy
+			 * function and do not delete this object directly
+			 * even the return value indicates failure.
+			 **/
+			return refoop->destroy (do_delete);
 		}
 
-		return err;
+		if (do_delete) {
+			/**
+			 * delete this object directly only when the ref
+			 * is invalid and the do_delete argument is true.
+			 **/
+			::delete this;
+		}
+
+		return 0;
 	}
 
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
@@ -1664,6 +1742,28 @@ public:
 		return refoop->run_data (q, dq, f_name, f, len, data);
 	}
 
+	int exec (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
+	{
+		va_list args;
+		int err;
+
+		va_start (args, argc);
+		err = refoop->exec_args (q, f_name, f, argc, args);
+		va_end (args);
+
+		return err;
+	}
+
+	int exec_args (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, va_list args)
+	{
+		return refoop->exec_args (q, f_name, f, argc, args);
+	}
+
+	int exec_argv (aosl_mpq_t q, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, uintptr_t *argv)
+	{
+		return refoop->exec_argv (q, f_name, f, argc, argv);
+	}
+
 #ifdef __AOSL_MPQP_H__
 	/* MPQP relative encapsulations */
 	aosl_mpq_t queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
@@ -1746,28 +1846,6 @@ public:
 	{
 		return refoop->run_data (qp, dq, f_name, f, len, data);
 	}
-
-	int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, ...)
-	{
-		va_list args;
-		int err;
-
-		va_start (args, argc);
-		err = refoop->pool_tail_queue_args (qp, dq, f_name, f, argc, args);
-		va_end (args);
-
-		return err;
-	}
-
-	int pool_tail_queue_args (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, va_list args)
-	{
-		return refoop->pool_tail_queue_args (qp, dq, f_name, f, argc, args);
-	}
-
-	int pool_tail_queue_argv (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, aosl_mpq_func_argv_t f, uintptr_t argc, uintptr_t *argv)
-	{
-		return refoop->pool_tail_queue_argv (qp, dq, f_name, f, argc, argv);
-	}
 #endif /* __AOSL_MPQP_H__ */
 #endif /* __AOSL_MPQ_H__ */
 
@@ -1779,7 +1857,7 @@ public:
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
 	int hold (__local_lambda_t &&lambda_f)
 	{
-		return refoop->hold (std::move (lambda_f));
+		return refoop->hold (std::move (lambda_f), refmagic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
@@ -1787,7 +1865,7 @@ public:
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
 	int read (__local_lambda_t &&lambda_f)
 	{
-		return refoop->read (std::move (lambda_f));
+		return refoop->read (std::move (lambda_f), refmagic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
@@ -1795,7 +1873,7 @@ public:
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
 	int write (__local_lambda_t &&lambda_f)
 	{
-		return refoop->write (std::move (lambda_f));
+		return refoop->write (std::move (lambda_f), refmagic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
@@ -1817,25 +1895,25 @@ public:
 	/* __local_lambda_t: void (void *arg) */
 	template <typename __local_lambda_t,
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-	static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+	static int hold (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 	{
-		return aosl_ref_t_oop::hold (ref, std::move (lambda_f));
+		return aosl_ref_t_oop::hold (ref, std::move (lambda_f), magic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
 	template <typename __local_lambda_t,
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-	static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+	static int read (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 	{
-		return aosl_ref_t_oop::read (ref, std::move (lambda_f));
+		return aosl_ref_t_oop::read (ref, std::move (lambda_f), magic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
 	template <typename __local_lambda_t,
 		typename std::enable_if<std::is_void<decltype(std::declval<__local_lambda_t>()(std::declval<void *>()))>::value, int>::type = 0>
-	static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f)
+	static int write (aosl_ref_t ref, __local_lambda_t &&lambda_f, aosl_ref_magic_t magic = AOSL_REF_MAGIC_INVALID)
 	{
-		return aosl_ref_t_oop::write (ref, std::move (lambda_f));
+		return aosl_ref_t_oop::write (ref, std::move (lambda_f), magic);
 	}
 
 	/* __local_lambda_t: void (void *arg) */
@@ -1914,6 +1992,17 @@ public:
 		return refoop->run (q, f_name, std::move (task));
 	}
 
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	int exec (aosl_mpq_t q, const char *f_name, __mpq_lambda_t&& task)
+	{
+		return refoop->exec (q, f_name, std::move (task));
+	}
+
 	/* __mpq_0arg_lambda_t: void (void) */
 	template <typename __mpq_0arg_lambda_t>
 	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
@@ -1936,6 +2025,14 @@ public:
 	run (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->run (q, f_name, std::move (task));
+	}
+
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	exec (aosl_mpq_t q, const char *f_name, __mpq_0arg_lambda_t&& task)
+	{
+		return refoop->exec (q, f_name, std::move (task));
 	}
 
 #ifdef __AOSL_MPQP_H__
@@ -1973,12 +2070,6 @@ public:
 		return refoop->run (qp, f_name, std::move (task));
 	}
 
-	template <typename __mpq_lambda_t>
-	int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, const char *f_name, __mpq_lambda_t&& task)
-	{
-		return refoop->pool_tail_queue (qp, dq, f_name, std::move (task));
-	}
-
 	/* __mpq_0arg_lambda_t: void (void) */
 	template <typename __mpq_0arg_lambda_t>
 	typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
@@ -2001,12 +2092,6 @@ public:
 	run (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return refoop->run (qp, f_name, std::move (task));
-	}
-
-	template <typename __mpq_0arg_lambda_t>
-	int pool_tail_queue (aosl_mpqp_t qp, const char *f_name, __mpq_0arg_lambda_t&& task)
-	{
-		return refoop->pool_tail_queue (qp, f_name, std::move (task));
 	}
 #endif /* __AOSL_MPQP_H__ */
 
@@ -2044,6 +2129,17 @@ public:
 		return aosl_ref_t_oop::run (q, ref, f_name, std::move (task));
 	}
 
+	/* __mpq_lambda_t: void (const aosl_ts_t &queued_ts, aosl_refobj_t robj) */
+	template <typename __mpq_lambda_t,
+			typename std::enable_if<std::is_void<decltype(std::declval<__mpq_lambda_t>()(
+				std::declval<const aosl_ts_t &>(),
+				std::declval<aosl_refobj_t>()
+			))>::value, int>::type = 0>
+	static int exec (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
+	{
+		return aosl_ref_t_oop::exec (q, ref, f_name, std::move (task));
+	}
+
 	/* __mpq_0arg_lambda_t: void (void) */
 	template <typename __mpq_0arg_lambda_t>
 	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
@@ -2066,6 +2162,14 @@ public:
 	run (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (q, ref, f_name, std::move (task));
+	}
+
+	/* __mpq_0arg_lambda_t: void (void) */
+	template <typename __mpq_0arg_lambda_t>
+	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, int>::type
+	exec (aosl_mpq_t q, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
+	{
+		return aosl_ref_t_oop::exec (q, ref, f_name, std::move (task));
 	}
 
 #ifdef __AOSL_MPQP_H__
@@ -2103,12 +2207,6 @@ public:
 		return aosl_ref_t_oop::run (qp, ref, f_name, std::move (task));
 	}
 
-	template <typename __mpq_lambda_t>
-	static int pool_tail_queue (aosl_mpqp_t qp, aosl_mpq_t dq, aosl_ref_t ref, const char *f_name, __mpq_lambda_t&& task)
-	{
-		return aosl_ref_t_oop::pool_tail_queue (qp, dq, ref, f_name, std::move (task));
-	}
-
 	/* __mpq_0arg_lambda_t: void (void) */
 	template <typename __mpq_0arg_lambda_t>
 	static typename std::enable_if<std::is_void<decltype(std::declval<__mpq_0arg_lambda_t>()())>::value, aosl_mpq_t>::type
@@ -2131,12 +2229,6 @@ public:
 	run (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
 	{
 		return aosl_ref_t_oop::run (qp, ref, f_name, std::move (task));
-	}
-
-	template <typename __mpq_0arg_lambda_t>
-	static int pool_tail_queue (aosl_mpqp_t qp, aosl_ref_t ref, const char *f_name, __mpq_0arg_lambda_t&& task)
-	{
-		return aosl_ref_t_oop::pool_tail_queue (qp, ref, f_name, std::move (task));
 	}
 #endif /* __AOSL_MPQP_H__ */
 #endif /* __AOSL_MPQ_H__ */
@@ -2253,26 +2345,37 @@ public:
 
 	void reset (T_ref_cls *p = NULL)
 	{
-		T_ref_cls *old = _ptr;
-
-		/**
-		 * We do the destroy and not delete the object
-		 * before we set the pointer to the new value,
-		 * this is very important to make sure that no
-		 * any async operation is executing.
-		 **/
-		if (old != NULL)
-			old->destroy (false/* not delete */);
-
-		_ptr = p;
-
-		/**
-		 * The destroy with delete operation must be
-		 * the last action, and don't touch any member
-		 * of this object anymore after it.
-		 **/
-		if (old != NULL)
-			old->destroy (true/* do delete */);
+		if (_ptr != p) {
+			if (_ptr != NULL) {
+	/* C++11 lambda encapsulations */
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+				/**
+				 * We employ unsafe function to make sure we can
+				 * still access this unique ptr object after the
+				 * destroy, because unsafe function holds a ref
+				 * of the object, so the memory of the object is
+				 * still accessible.
+				 * Please be careful that only the unsafe action
+				 * is allowed after the ref object has already
+				 * been destroyed internally, so do not use hold
+				 * here, otherwise would lead to the destroy not
+				 * being executed.
+				 **/
+				_ptr->unsafe ([&] (void *arg) {
+					_ptr->destroy (true/* do delete */);
+					_ptr = p;
+				});
+#else
+				_ptr->unsafe (____ref_reset_f, 2, this, p);
+#endif
+			} else {
+				/**
+				 * If the unique ptr pointer is empty, then we
+				 * just set it to the new pointer directly.
+				 **/
+				_ptr = p;
+			}
+		}
 	}
 
 	~aosl_ref_unique_ptr ()
@@ -2296,6 +2399,14 @@ public:
 private:
 	aosl_ref_unique_ptr (const aosl_ref_unique_ptr &);
 	aosl_ref_unique_ptr &operator = (const aosl_ref_unique_ptr &);
+
+	static void ____ref_reset_f (void *arg, uintptr_t argc, uintptr_t argv [])
+	{
+		aosl_ref_unique_ptr *__this = (aosl_ref_unique_ptr *)argv [0];
+		T_ref_cls *p = (T_ref_cls *)argv [1];
+		__this->_ptr->destroy (true/* do delete */);
+		__this->_ptr = p;
+	}
 #endif /* C++11 */
 };
 

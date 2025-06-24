@@ -24,12 +24,14 @@ struct MixerLayoutConfig {
   float alpha;
   bool mirror;
   const char* image_path; // url of the place holder picture
+  VIDEO_ORIENTATION rotation; 
 
-  MixerLayoutConfig() : x(0), y(0), width(0), height(0), zOrder(0), alpha(1.0), mirror(false), image_path(NULL) {}
-  MixerLayoutConfig(int ox, int oy, int w, int h, int order) : x(ox), y(oy), width(w), height(h), zOrder(order), alpha(1.0), mirror(false), image_path(NULL) {}
+  MixerLayoutConfig() : x(0), y(0), width(0), height(0), zOrder(0), alpha(1.0), mirror(false), image_path(NULL), rotation(VIDEO_ORIENTATION::VIDEO_ORIENTATION_0) {}
+  MixerLayoutConfig(int ox, int oy, int w, int h, int order) : x(ox), y(oy), width(w), height(h), zOrder(order), alpha(1.0), mirror(false), image_path(NULL), rotation(VIDEO_ORIENTATION::VIDEO_ORIENTATION_0) {}
 };
 
 enum ImageType {
+  kUnknownPic,
   kPng,
   kJpeg,
   kGif
