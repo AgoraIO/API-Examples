@@ -505,8 +505,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             engine.setFilterEffectOptions(isChecked, filterEffectOptions);
         } else if (buttonView.getId() == lightness2.getId()) {
             LowLightEnhanceOptions options = new LowLightEnhanceOptions();
-            options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST;
-            options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_AUTO;
+            options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY;
+            options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_MANUAL;
             engine.setLowlightEnhanceOptions(isChecked, options);
         } else if (buttonView.getId() == colorful2.getId()) {
             setColorEnhance(isChecked);

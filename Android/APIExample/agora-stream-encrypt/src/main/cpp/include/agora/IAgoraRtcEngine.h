@@ -239,8 +239,7 @@ enum STREAM_FALLBACK_OPTIONS {
   STREAM_FALLBACK_OPTION_DISABLED = 0,
   /** 1: (Default) Under poor network conditions, the receiver SDK will receive
      agora::rtc::VIDEO_STREAM_LOW. You can only set this option in
-     RtcEngineParameters::setRemoteSubscribeFallbackOption. Nothing happens when
-     you set this in RtcEngineParameters::setLocalPublishFallbackOption. */
+     RtcEngineParameters::setRemoteSubscribeFallbackOption. */
   STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW = 1,
   /** 2: Under poor network conditions, the SDK may receive agora::rtc::VIDEO_STREAM_LOW first,
      then agora::rtc::VIDEO_STREAM_LAYER_1 to agora::rtc::VIDEO_STREAM_LAYER_6 if the related layer exists.
@@ -439,6 +438,18 @@ struct RemoteAudioStats
   uint32_t plcCount;
 
   /**
+   * @technical preview
+   * The number of times the remote audio stream has experienced freezing.
+   */
+  uint32_t frozenCntByCustom;
+
+  /**
+   * @technical preview
+   * The total duration (ms) that the remote audio stream has been in a frozen state.
+   */
+  uint32_t frozenTimeByCustom;
+
+  /**
    * The total time (ms) when the remote user neither stops sending the audio
    * stream nor disables the audio module after joining the channel.
    */
@@ -478,6 +489,8 @@ struct RemoteAudioStats
         mosValue(0),
         frozenRateByCustomPlcCount(0),
         plcCount(0),
+        frozenCntByCustom(0),
+        frozenTimeByCustom(0),
         totalActiveTime(0),
         publishDuration(0),
         qoeQuality(0),
@@ -562,9 +575,9 @@ struct RemoteVideoStats {
    */
   int publishDuration;
   /**
-   * The quality of the remote video stream in the reported interval. 
-   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method. 
-   * The return value range is [0, 500]. 
+   * The quality of the remote video stream in the reported interval.
+   * The quality is determined by the Agora real-time video MOS (Mean Opinion Score) measurement method.
+   * The return value range is [0, 500].
    * Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the video quality.
    * @note For textured video data, this parameter always returns 0.
    */
@@ -812,7 +825,7 @@ enum CLOUD_PROXY_TYPE {
 /** Camera capturer configuration.*/
 struct CameraCapturerConfiguration {
   /** Camera direction settings (for Android/iOS only). See: #CAMERA_DIRECTION. */
-#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(__OHOS__)
   /**
    * The camera direction.
    */
@@ -883,7 +896,7 @@ struct ScreenCaptureConfiguration {
   ScreenCaptureConfiguration() : isCaptureWindow(false), displayId(0), windowId(0) {}
 };
 
-#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
+#if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)|| (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
 /** The size of the screen shot to the screen or window.
  */
 struct SIZE {
@@ -899,7 +912,7 @@ struct SIZE {
 };
 #endif
 
-#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
+#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
 /**
  * The image content of the thumbnail or icon.
  * @note The default image is in the RGBA format. If you need to use another format, you need to convert the image on
@@ -1089,7 +1102,7 @@ struct ChannelMediaOptions {
    */
   Optional<bool> publishMicrophoneTrack;
 
-  #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+  #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
   /**
    * Whether to publish the video track of the screen capturer:
    * - `true`: Publish the video track of the screen capture.
@@ -1277,9 +1290,49 @@ struct ChannelMediaOptions {
 
   /** Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
       Pointer to the set parameters in a JSON string.
-    * @technical preview 
+    * @technical preview
    */
   Optional<const char*> parameters;
+
+  /**
+   * Whether to enable multipath transmission.
+   * - `true`: Enable multipath transmission.
+   * - `false`: Disable multipath transmission.
+   *
+   * @since 4.6.0
+   */
+  Optional<bool> enableMultipath;
+
+  /**
+   * The mode for uplink multipath transmission.
+   * This defines how the uplink multipath is managed.
+   *
+   * @note Ensure you set `enableMultipath` to `true` when using this parameter.
+   *
+   * @since 4.6.0
+   */
+  Optional<MultipathMode> uplinkMultipathMode;
+
+  /**
+   * The mode for downlink multipath transmission.
+   * This defines how the downlink multipath is managed.
+   *
+   * @note Ensure you set `enableMultipath` to `true` when using this parameter.
+   *
+   * @since 4.6.0
+   */
+  Optional<MultipathMode> downlinkMultipathMode;
+
+  /**
+   * The preferred type of multipath transmission.
+   * This allows the user to specify a preferred multipath type.
+   *
+   * @note Ensure you set `enableMultipath` to `true` when using this parameter.
+   * This parameter is only effective when you set `MultipathMode` to `Dynamic`.
+   *
+   * @since 4.6.0
+   */
+  Optional<MultipathType> preferMultipathType;
 
   ChannelMediaOptions() {}
   ~ChannelMediaOptions() {}
@@ -1290,9 +1343,9 @@ struct ChannelMediaOptions {
       SET_FROM(publishCameraTrack);
       SET_FROM(publishSecondaryCameraTrack);
       SET_FROM(publishThirdCameraTrack);
-      SET_FROM(publishFourthCameraTrack);      
+      SET_FROM(publishFourthCameraTrack);
       SET_FROM(publishMicrophoneTrack);
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
       SET_FROM(publishScreenCaptureVideo);
       SET_FROM(publishScreenCaptureAudio);
 #else
@@ -1327,6 +1380,10 @@ struct ChannelMediaOptions {
       SET_FROM(isAudioFilterable);
       SET_FROM(isInteractiveAudience);
       SET_FROM(parameters);
+      SET_FROM(enableMultipath);
+      SET_FROM(uplinkMultipathMode);
+      SET_FROM(downlinkMultipathMode);
+      SET_FROM(preferMultipathType);
 #undef SET_FROM
   }
 
@@ -1341,7 +1398,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishThirdCameraTrack);
       ADD_COMPARE(publishFourthCameraTrack);
       ADD_COMPARE(publishMicrophoneTrack);
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
       ADD_COMPARE(publishScreenCaptureVideo);
       ADD_COMPARE(publishScreenCaptureAudio);
 #else
@@ -1376,6 +1433,10 @@ struct ChannelMediaOptions {
       ADD_COMPARE(isAudioFilterable);
       ADD_COMPARE(isInteractiveAudience);
       ADD_COMPARE(parameters);
+      ADD_COMPARE(enableMultipath);
+      ADD_COMPARE(uplinkMultipathMode);
+      ADD_COMPARE(downlinkMultipathMode);
+      ADD_COMPARE(preferMultipathType);
       END_COMPARE();
 
 #undef BEGIN_COMPARE
@@ -1393,7 +1454,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishThirdCameraTrack);
         REPLACE_BY(publishFourthCameraTrack);
         REPLACE_BY(publishMicrophoneTrack);
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
         REPLACE_BY(publishScreenCaptureVideo);
         REPLACE_BY(publishScreenCaptureAudio);
 #else
@@ -1428,6 +1489,10 @@ struct ChannelMediaOptions {
         REPLACE_BY(isAudioFilterable);
         REPLACE_BY(isInteractiveAudience);
         REPLACE_BY(parameters);
+        REPLACE_BY(enableMultipath);
+        REPLACE_BY(uplinkMultipathMode);
+        REPLACE_BY(downlinkMultipathMode);
+        REPLACE_BY(preferMultipathType);
 #undef REPLACE_BY
     }
     return *this;
@@ -1754,17 +1819,6 @@ class IRtcEngineEventHandler {
   }
 
   /**
-   * Occurs when downlink network info is updated.
-   *
-   * This callback is used for notifying user to switch major/minor stream if needed.
-   *
-   * @param info The downlink network info collections.
-   */
-  virtual void onDownlinkNetworkInfoUpdated(const DownlinkNetworkInfo& info) {
-    (void)info;
-  }
-
-  /**
    * Reports the last-mile network quality of the local user.
    *
    * This callback reports the last-mile network conditions of the local user before the user joins
@@ -1846,7 +1900,7 @@ class IRtcEngineEventHandler {
     (void)width;
     (void)height;
     (void)rotation;
-  }  
+  }
 
   /** Occurs when the local video stream state changes.
    *
@@ -1886,7 +1940,7 @@ class IRtcEngineEventHandler {
    * @note This callback does not work properly when the number of users (in the voice/video call
    * channel) or hosts (in the live streaming channel) in the channel exceeds 17.
    *
-   * @param uid The ID of the user whose video state has changed.
+   * @param uid The ID of the remote user or broadcaster who leaves the channel or drops offline.
    * @param state The remote video state: #REMOTE_VIDEO_STATE.
    * @param reason The reason of the remote video state change: #REMOTE_VIDEO_STATE_REASON.
    * @param elapsed The time elapsed (ms) from the local client calling `joinChannel` until this callback is triggered.
@@ -2122,7 +2176,7 @@ class IRtcEngineEventHandler {
     (void)width;
     (void)height;
   }
-#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(__OHOS__)
   /**
    * Reports the face detection result of the local user.
    *
@@ -2265,6 +2319,56 @@ class IRtcEngineEventHandler {
   }
 
   /**
+   * @brief Occurs when the local user receives data via Reliable Data Transmission (RDT) from a remote user.
+   *
+   * @technical preview
+   *
+   * @details The SDK triggers this callback when the user receives the data stream that another user sends
+   *          by calling the \ref agora::rtc::IRtcEngine::sendRdtMessage "sendRdtMessage" method.
+   *
+   * @param userId ID of the user who sends the data.
+   * @param type The RDT stream type. See RdtStreamType.
+   * @param data The data received.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onRdtMessage(uid_t userId, RdtStreamType type, const char *data, size_t length) {
+    (void)userId;
+    (void)type;
+    (void)data;
+    (void)length;
+  };
+
+  /**
+   * @brief Occurs when the RDT tunnel state changed
+   *
+   * @technical preview
+   *
+   * @param userId ID of the user who sends the data.
+   * @param state The RDT tunnel state. See RdtState.
+   */
+  virtual void onRdtStateChanged(uid_t userId, RdtState state) {
+    (void)userId;
+    (void)state;
+  }
+
+  /**
+   * @brief Occurs when the local user receives media control message sent by a remote user.
+   *
+   * @technical preview
+   *
+   * @details The SDK triggers this callback when the user receives data sent by a remote user using the sendMediaControlMessage method.
+   *
+   * @param userId ID of the user who sends the data.
+   * @param data The data received.
+   * @param length The length (byte) of the data.
+   */
+  virtual void onMediaControlMessage(uid_t userId, const char* data, size_t length) {
+    (void)userId;
+    (void)data;
+    (void)length;
+  }
+
+  /**
    * Occurs when the token expires.
    *
    * When the token expires during a call, the SDK triggers this callback to remind the app to renew the token.
@@ -2401,7 +2505,7 @@ class IRtcEngineEventHandler {
    *
    * @param userId The ID of the active speaker. A `uid` of 0 means the local user.
    */
-  virtual void onActiveSpeaker(uid_t uid) { 
+  virtual void onActiveSpeaker(uid_t uid) {
     (void)uid;
   }
 
@@ -2566,23 +2670,6 @@ class IRtcEngineEventHandler {
   }
 
   /**
-   * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or
-   * switches back to video stream after the network conditions improve.
-   *
-   * If you call `setLocalPublishFallbackOption` and set `option` as `STREAM_FALLBACK_OPTION_AUDIO_ONLY(2)`, this
-   * callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink
-   * conditions, or when the audio stream switches back to the video after the uplink network condition improves.
-   * Once the published stream falls back to audio only, the remote app receives the `onRemoteVideoStateChanged` callback.
-   *
-   * @param isFallbackOrRecover Whether the published stream fell back to audio-only or switched back to the video:
-   * - `true`: The published stream fell back to audio-only due to poor network conditions.
-   * - `false`: The published stream switched back to the video after the network conditions improved.
-   */
-  virtual void onLocalPublishFallbackToAudioOnly(bool isFallbackOrRecover) {
-    (void)isFallbackOrRecover;
-  }
-
-  /**
    * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or
    * switches back to video stream after the network conditions improve.
    *
@@ -2663,28 +2750,6 @@ class IRtcEngineEventHandler {
     (void)reason;
   }
 
-  /** Occurs when the WIFI message need be sent to the user.
-   *
-   * @param reason The reason of notifying the user of a message.
-   * @param action Suggest an action for the user.
-   * @param wlAccMsg The message content of notifying the user.
-   */
-  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
-    (void)reason;
-    (void)action;
-    (void)wlAccMsg;
-  }
-
-  /** Occurs when SDK statistics wifi acceleration optimization effect.
-   *
-   * @param currentStats Instantaneous value of optimization effect.
-   * @param averageStats Average value of cumulative optimization effect.
-   */
-  virtual void onWlAccStats(const WlAccStats& currentStats, const WlAccStats& averageStats) {
-    (void)currentStats;
-    (void)averageStats;
-  }
-
   /** Occurs when the local network type changes.
    *
    * This callback occurs when the connection state of the local user changes. You can get the
@@ -2762,7 +2827,7 @@ class IRtcEngineEventHandler {
 
   /**
    * Reports the tracing result of video rendering event of the user.
-   * 
+   *
    * @param uid The user ID.
    * @param currentEvent The current event of the tracing result: #MEDIA_TRACE_EVENT.
    * @param tracingInfo The tracing result: #VideoRenderingTracingInfo.
@@ -2885,19 +2950,19 @@ class IRtcEngineEventHandler {
    * @param uid ID of the remote user.
    * @param metadata The pointer of metadata
    * @param length Size of metadata
-   * @technical preview 
+   * @technical preview
    */
   virtual void onAudioMetadataReceived(uid_t uid, const char* metadata, size_t length) {
     (void)uid;
     (void)metadata;
     (void)length;
   }
-    
+
   /**
    * The event callback of the extension.
    *
    * To listen for events while the extension is running, you need to register this callback.
-   * 
+   *
    * @param context The context of the extension.
    * @param key The key of the extension.
    * @param value The value of the extension key.
@@ -2910,9 +2975,9 @@ class IRtcEngineEventHandler {
 
   /**
    * Occurs when the extension is enabled.
-   * 
+   *
    * After a successful creation of filter , the extension triggers this callback.
-   * 
+   *
    * @param context The context of the extension.
    */
   virtual void onExtensionStartedWithContext(const ExtensionContext &context) {
@@ -2921,9 +2986,9 @@ class IRtcEngineEventHandler {
 
   /**
    * Occurs when the extension is disabled.
-   * 
+   *
    * After a successful destroy filter, the extension triggers this callback.
-   * 
+   *
    * @param context The context of the extension.
    */
   virtual void onExtensionStoppedWithContext(const ExtensionContext &context) {
@@ -2932,7 +2997,7 @@ class IRtcEngineEventHandler {
 
   /**
    * Occurs when the extension runs incorrectly.
-   * 
+   *
    * When the extension runs in error, the extension triggers
    * this callback and reports the error code and reason.
    *
@@ -2953,6 +3018,35 @@ class IRtcEngineEventHandler {
    * @param code The error code.
    */
   virtual void onSetRtmFlagResult(int code) {
+    (void)code;
+  }
+
+  /**
+   * @brief Report the multipath transmission statistics
+   *
+   * @post This callback is triggered after you set `enableMultipath` to `true` to enable multipath transmission.
+   *
+   * @since 4.6.0
+   *
+   * @param stats The multipath statistics. See the MultipathStats structure for details.
+   */  virtual void onMultipathStats(const MultipathStats& stats) {
+    (void)stats;
+  }
+
+  /**
+   * @brief Reports the result of calling renewToken.
+   * @since 4.6.0
+   * 
+   *  Occurs when a user renews the token.
+   *
+   * This callback notifies the app of the result after the user calls `renewToken` to renew the token. 
+   * The app can obtain the result of the `renewToken` call from this callback.
+   *
+   * @param token The token.
+   * @param code The error code.
+   */
+  virtual void onRenewTokenResult(const char* token, RENEW_TOKEN_ERROR_CODE code) {
+    (void)token;
     (void)code;
   }
 };
@@ -3042,7 +3136,7 @@ class IVideoDeviceManager {
    */
   virtual int getDevice(char deviceIdUTF8[MAX_DEVICE_ID_LENGTH]) = 0;
 
-#if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
+#if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__)) || \
     (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
   /**
    * Gets the number of video formats supported by the specified video capture device.
@@ -3109,6 +3203,185 @@ class IVideoDeviceManager {
    * Releases all the resources occupied by the `IVideoDeviceManager` object.
    */
   virtual void release() = 0;
+};
+
+/**
+ * @brief Provides methods to manage and configure video effects, such as beauty, style makeup, and filter.
+ *
+ * @since v4.6.0
+ */
+class IVideoEffectObject : public RefCountInterface {
+ public:
+  virtual ~IVideoEffectObject() {}
+  
+  /**
+   * @brief Types of video effect nodes that can be applied.
+   *
+   * @since v4.6.0
+   */
+  enum class VIDEO_EFFECT_NODE_ID : uint32_t {
+    /** Beauty effect node. */
+    BEAUTY       = 1U << 0,
+    /** Style makeup effect node. */
+    STYLE_MAKEUP = 1U << 1,
+    /** Filter effect node. */
+    FILTER       = 1U << 2,
+  };
+  
+  /**
+   * @brief Actions that can be performed on video effect nodes.
+   *
+   * @since v4.6.0
+   */
+  enum VIDEO_EFFECT_ACTION {
+    /** Save the current parameters of the video effect. */
+    SAVE = 1,
+    /** Reset the video effect to its default parameters. */
+    RESET = 2,
+  };
+
+  /**
+   * @brief Adds or updates video effects with specified node ID and template.
+   *
+   * @since v4.6.0
+   *
+   * @param nodeId The unique identifier or combination of video effect nodes. See #VIDEO_EFFECT_NODE_ID
+   *               Example:
+   *               - Single effect: `VIDEO_EFFECT_NODE_ID::BEAUTY`
+   *               - Combined effects: `VIDEO_EFFECT_NODE_ID::BEAUTY | VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP`
+   * 
+   * @note Priority Rules:
+   * - The `STYLE_MAKEUP` node takes precedence over `FILTER` parameters.
+   * - To apply `FILTER` parameters, first remove the `STYLE_MAKEUP` node:
+   *   @code{.cpp}
+   *   removeVideoEffect(VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP);
+   *   addOrUpdateVideoEffect(VIDEO_EFFECT_NODE_ID::FILTER, "template name");
+   *   @endcode
+   *
+   * @param templateName The name of the effect template. If set to null or an empty string, the SDK loads the default configuration from the resource bundle.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure. The specific error code can provide more details about the failure.
+   */
+  virtual int addOrUpdateVideoEffect(uint32_t nodeId, const char* templateName) = 0;
+
+  /**
+   * @brief Removes a video effect with specified node ID.
+   *
+   * @since v4.6.0
+   *
+   * @param nodeId The unique identifier of the video effect node to remove. See #VIDEO_EFFECT_NODE_ID
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int removeVideoEffect(uint32_t nodeId) = 0;
+
+  /**
+   * @brief Performs an action on a specified video effect node.
+   *
+   * @since v4.6.0
+   *
+   * @param nodeId The unique identifier of the video effect node. See #VIDEO_EFFECT_NODE_ID
+   * @param actionId The action to perform on the video effect. See #VIDEO_EFFECT_ACTION
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int performVideoEffectAction(uint32_t nodeId, VIDEO_EFFECT_ACTION actionId) = 0;
+
+  /**
+   * @brief Sets a float parameter for the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   * @param param The float value to set.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setVideoEffectFloatParam(const char* option, const char* key, float param) = 0;
+
+  /**
+   * @brief Sets an integer parameter for the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   * @param param The integer value to set.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setVideoEffectIntParam(const char* option, const char* key, int param) = 0;
+
+  /**
+   * @brief Sets a boolean parameter for the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   * @param param The boolean value to set.
+   * - true: Enable the option.
+   * - false: Disable the option.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setVideoEffectBoolParam(const char* option, const char* key, bool param) = 0;
+
+  /**
+   * @brief Gets a float parameter from the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   *
+   * @return
+   * - The float value of the parameter if it exists.
+   * - 0.0f if the parameter does not exist or an error occurs.
+   */
+  virtual float getVideoEffectFloatParam(const char* option, const char* key) = 0;
+
+  /**
+   * @brief Gets an integer parameter from the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   *
+   * @return
+   * - The integer value of the parameter if it exists.
+   * - 0 if the parameter does not exist or an error occurs.
+   */
+  virtual int getVideoEffectIntParam(const char* option, const char* key) = 0;
+
+  /**
+   * @brief Gets a boolean parameter from the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the parameter.
+   * @param key The key name of the parameter.
+   *
+   * @return
+   * - true: The parameter is enabled.
+   * - false: The parameter is disabled or does not exist.
+   */
+  virtual bool getVideoEffectBoolParam(const char* option, const char* key) = 0;
+
 };
 
 /**
@@ -3183,7 +3456,7 @@ struct RtcEngineContext {
   Optional<THREAD_PRIORITY_TYPE> threadPriority;
 
   /**
-   * Whether to use egl context in the current thread as sdk‘s root egl context,
+   * Whether to use egl context in the current thread as sdk's root egl context,
    * which is shared by all egl related modules. eg. camera capture, video renderer.
    *
    * @note
@@ -3334,6 +3607,8 @@ enum DIRECT_CDN_STREAMING_STATE {
 
 /**
  * The statistics of the Direct Cdn Streams.
+ * 
+ * @deprecated v4.6.0.
  */
 struct DirectCdnStreamingStats {
     /**
@@ -3364,6 +3639,8 @@ struct DirectCdnStreamingStats {
 
 /**
  * The event handler for direct cdn streaming
+ * 
+ * @deprecated v4.6.0.
  *
  */
 class IDirectCdnStreamingEventHandler {
@@ -3389,6 +3666,8 @@ class IDirectCdnStreamingEventHandler {
 
 /**
  * The channel media options.
+ * 
+ * @deprecated v4.6.0.
  */
 struct DirectCdnStreamingMediaOptions {
   /**
@@ -3526,6 +3805,13 @@ class IMediaPlayer;
 class IMediaRecorder;
 
 /**
+ * @since v4.6.0
+ * @brief Occurs when the `IRtcEngine` is released.
+ * @post This callback is triggered when the `release` method is called to asynchronously release the `IRtcEngine` object.
+ */
+using RtcEngineReleaseCallback = void(*)();
+
+/**
  * The IRtcEngine class, which is the basic interface of the Agora SDK that implements the core functions of real-time communication.
  *
  * `IRtcEngine` provides the main methods that your app can call.
@@ -3547,15 +3833,16 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @note If you want to create a new `IRtcEngine` instance after destroying the current one, ensure
    * that you wait till the `release` method execution to complete.
    *
-   * @param sync Determines whether this method is a synchronous call.
-   * - `true`: This method is a synchronous call, which means that the result of this method call
-   * returns after the IRtcEngine object resources are released. Do not call this method
+   * @param callback An optional function pointer of `RtcEngineReleaseCallback`. It determines
+   * whether this method is a synchronous call.
+   * - `non-nullptr`: This method is an asynchronous call. The result returns immediately even when the
+   * `IRtcEngine` object resources are not released, and `onEngineReleased` callback will be triggered
+   * when engine is released.
+   * - `nullptr`: This method is a synchronous call, which means that the result of this method call
+   * returns after the `IRtcEngine` object resources are released. Do not call this method
    * in any callback generated by the SDK, or it may result in a deadlock.
-   * - `false`: This method is an asynchronous call. The result returns immediately even when the
-   * IRtcEngine object resources are not released.
-   *
    */
-  AGORA_CPP_API static void release(bool sync = false);
+  AGORA_CPP_API static void release(RtcEngineReleaseCallback callback = nullptr);
 
   /**
    * Initializes `IRtcEngine`.
@@ -3606,7 +3893,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @param codec_info An array of the codec cap information: CodecCapInfo.
    * @param size The array size.
-   * @return 
+   * @return
    * 0: Success.
    * < 0: Failure.
    */
@@ -3615,10 +3902,10 @@ class IRtcEngine : public agora::base::IEngineBase {
     /**
    * Queries the score of the current device.
    *
-   * @return 
+   * @return
    * > 0: If the value is greater than 0, it means that the device score has been retrieved and represents the score value.
    * Most devices score between 60-100, with higher scores indicating better performance.
-   * 
+   *
    * < 0: Failure.
    */
   virtual int queryDeviceScore() = 0;
@@ -3909,6 +4196,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * Under the following circumstances, generate a new token on your server, and then call this method to
    * renew it. Failure to do so results in the SDK disconnecting from the server.
+   * The SDK triggers the \ref IRtcEngineEventHandler::onRenewTokenResult "onRenewTokenResult" callback after the token is renewed.
    * - The \ref IRtcEngineEventHandler onTokenPrivilegeWillExpire "onTokenPrivilegeWillExpire" callback is triggered;
    * - The \ref IRtcEngineEventHandler::onRequestToken "onRequestToken" callback is triggered;
    * - The `ERR_TOKEN_EXPIRED(-109)` error is reported.
@@ -4008,7 +4296,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   */
   virtual int stopEchoTest() = 0;
 
-#if defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION))
+#if defined(__APPLE__) && TARGET_OS_IOS
   /** Enables the SDK use AVCaptureMultiCamSession or AVCaptureSession. Applies to iOS 13.0+ only.
    * @param enabled Whether to enable multi-camera when capturing video:
    * - true: Enable multi-camera, and the SDK uses AVCaptureMultiCamSession.
@@ -4171,7 +4459,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param options Sets the face shape area option. See FaceShapeAreaOptions.
    */
   virtual int setFaceShapeAreaOptions(const FaceShapeAreaOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
-  
+
   /** Gets the face shape beauty options.
    *
    * @note Call this method after calling the \ref IRtcEngine::enableVideo "enableVideo" method.
@@ -4179,7 +4467,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param options Gets the face shape beauty option. See FaceShapeBeautyOptions.
    */
   virtual int getFaceShapeBeautyOptions(FaceShapeBeautyOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
-  
+
   /** Gets the face shape area options.
    *
    * @note Call this method after calling the \ref IRtcEngine::enableVideo "enableVideo" method.
@@ -4188,7 +4476,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param options Gets the face area beauty option. See FaceShapeAreaOptions.
    */
   virtual int getFaceShapeAreaOptions(agora::rtc::FaceShapeAreaOptions::FACE_SHAPE_AREA shapeArea, FaceShapeAreaOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
-  
+
   /**
    * Sets filter effect options.
    *
@@ -4215,6 +4503,35 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int setFilterEffectOptions(bool enabled, const FilterEffectOptions& options, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
 
+
+  /**
+   * @brief Creates a video effect object and returns its pointer.
+   *
+   * @since v4.6.0
+   *
+   * @param bundlePath The path of the video effect bundle.
+   * @param type The media source type. See #MEDIA_SOURCE_TYPE.
+   *
+   * @return 
+   * - The pointer to \ref rtc::IVideoEffectObject "IVideoEffectObject", if the method call succeeds.
+   * - A null pointer, if the method call fails.
+   */
+  virtual agora_refptr<IVideoEffectObject> createVideoEffectObject(const char* bundlePath, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
+  
+
+  /**
+   * @brief Destroys a video effect object.
+   *
+   * @since v4.6.0
+   *
+   * @param videoEffectObject The pointer to \ref rtc::IVideoEffectObject.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int destroyVideoEffectObject(agora_refptr<IVideoEffectObject> videoEffectObject) = 0;
+  
   /**
    * Sets low-light enhancement.
    *
@@ -4440,7 +4757,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int disableAudio() = 0;
-  
+
   /**
    * Sets the audio parameters and application scenarios.
    *
@@ -4551,9 +4868,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    - If you call muteAllRemoteAudioStreams(true) after joining a channel, the
    local use stops receiving any audio stream from any user in the channel,
    including any user who joins the channel after you call this method.
-   - If you call muteAllRemoteAudioStreams(true) after leaving a channel, the
-   local user does not receive any audio stream the next time the user joins a
-   channel.
+   - If you call muteAllRemoteAudioStreams(true) after leaving a channel,
+   the local user does not receive any audio stream the next time the user
+   joins a channel.
 
    After you successfully call muteAllRemoteAudioStreams(true), you can take
    the following actions:
@@ -4950,7 +5267,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Creates a media recorder object and return its pointer.
    *
    * @param info The RecorderStreamInfo object. It contains the user ID and the channel name.
-   * 
+   *
    * @return
    * - The pointer to \ref rtc::IMediaRecorder "IMediaRecorder",
    *   if the method call succeeds.
@@ -5236,7 +5553,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioMixingPlaybackSpeed(int speed) = 0;
-  
+
   /**
    * Gets the volume of audio effects.
    *
@@ -5815,8 +6132,8 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /** Changes the voice formant ratio for local speaker.
 
-  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0. 
-  The lower the value, the deeper the sound, and the higher the value, the more it 
+  @param formantRatio The voice formant ratio. The value ranges between -1.0 and 1.0.
+  The lower the value, the deeper the sound, and the higher the value, the more it
   sounds like a child. The default value is 0.0 (the local user's voice will not be changed).
 
   @return
@@ -5886,7 +6203,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /** **DEPRECATED** Specifies an SDK output log file.
    *
-   * The log file records all log data for the SDK’s operation. Ensure that the
+   * The log file records all log data for the SDK's operation. Ensure that the
    * directory for the log file exists and is writable.
    *
    * @note
@@ -6135,9 +6452,16 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Sets the multi-layer video stream configuration.
    *
-   * If multi-layer is configured, the subscriber can choose to receive the coresponding layer
+   * When users expect the same UID to send multiple streams of different resolutions, they can achieve this by calling setSimulcastConfig
+   * 
+   * If multi-layer is configured, the subscriber can choose to receive the corresponding layer
    * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
-   *
+   * 
+   * @details This method allows a broadcaster to simultaneously transmit multiple video streams 
+   * with different resolutions. The configuration supports enabling up to four layers 
+   * simultaneously: one major stream (highest resolution) and three additional simulcast 
+   * streams. 
+   * 
    * @param simulcastConfig
    * - The configuration for multi-layer video stream. It includes seven layers, ranging from
    *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
@@ -6145,7 +6469,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   * @technical preview
+   * @since v4.6.0
    */
   virtual int setSimulcastConfig(const SimulcastConfig& simulcastConfig) = 0;
 
@@ -6283,6 +6607,25 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setPlaybackAudioFrameBeforeMixingParameters(int sampleRate, int channel) = 0;
 
   /**
+   * Sets the audio playback format before mixing in the
+   * \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrameBeforeMixing "onPlaybackAudioFrameBeforeMixing"
+   * callback.
+   *
+   * @param sampleRate The sample rate (Hz) of the audio data returned in
+   * `onPlaybackAudioFrameBeforeMixing`, which can set be as 8000, 16000, 32000, 44100, or 48000.
+   * @param channel Number of channels of the audio data returned in `onPlaybackAudioFrameBeforeMixing`,
+   * which can be set as 1 or 2:
+   * - 1: Mono
+   * - 2: Stereo
+   * @param samplesPerCall Sampling points in the called data returned in
+   * `onPlaybackAudioFrameBeforeMixing`. For example, it is usually set as 1024 for stream pushing.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setPlaybackAudioFrameBeforeMixingParameters(int sampleRate, int channel, int samplesPerCall) = 0;
+
+  /**
    * Enable the audio spectrum monitor.
    *
    * @param intervalInMS Sets the time interval(ms) between two consecutive audio spectrum callback.
@@ -6392,29 +6735,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int adjustUserPlaybackSignalVolume(uid_t uid, int volume) = 0;
-
-  /** Sets the fallback option for the published video stream based on the network conditions.
-
-   If `option` is set as #STREAM_FALLBACK_OPTION_AUDIO_ONLY (2), the SDK will:
-
-   - Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
-   - Re-enable the video when the network conditions improve.
-
-   When the published video stream falls back to audio only or when the audio-only stream switches back to the video, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onLocalPublishFallbackToAudioOnly "onLocalPublishFallbackToAudioOnly" callback.
-
-   @note
-   - Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the published video stream falls back to audio only.
-   - Ensure that you call this method before joining a channel.
-
-   @param option Sets the fallback option for the published video stream:
-   - #STREAM_FALLBACK_OPTION_DISABLED (0): (Default) No fallback behavior for the published video stream when the uplink network condition is poor. The stream quality is not guaranteed.
-   - #STREAM_FALLBACK_OPTION_AUDIO_ONLY (2): The published video stream falls back to audio only when the uplink network condition is poor.
-
-   @return
-   - 0: Success.
-   - < 0: Failure.
-   */
-  virtual int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option) = 0;
 
   /** Sets the fallback option for the remotely subscribed video stream based on the network conditions.
 
@@ -6569,7 +6889,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int setInEarMonitoringVolume(int volume) = 0;
 
-#if defined (_WIN32) || defined(__linux__) || defined(__ANDROID__)
+#if defined(_WIN32) || defined(__linux__) || defined(__ANDROID__)
   virtual int loadExtensionProvider(const char* path, bool unload_after_use = false) = 0;
 #endif
 
@@ -6706,9 +7026,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int destroyCustomEncodedVideoTrack(video_track_id_t video_track_id) = 0;
 
-
-#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
-
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(__OHOS__)
   /**
    * Switches between front and rear cameras.
    *
@@ -6983,8 +7301,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    @return meanless, route switch result is pass through CallbackOnRoutingChanged
    */
   virtual int setRouteInCommunicationMode(int route) = 0;
-
-#endif  // __ANDROID__ || (__APPLE__ && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#endif  // __ANDROID__ || (__APPLE__ && TARGET_OS_IOS) || __OHOS__
 
 #if defined(__APPLE__)
   /**
@@ -7007,7 +7324,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int enableCameraCenterStage(bool enabled) = 0;
 #endif
 
-#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
+#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)|| (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
   /** Get \ref ScreenCaptureSourceInfo list including available windows and screens.
     *
     * @param thumbSize Set expected size for thumb, image will be scaled accordingly. For windows, SIZE is defined in windef.h.
@@ -7020,7 +7337,7 @@ class IRtcEngine : public agora::base::IEngineBase {
     */
   virtual IScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbSize, const SIZE& iconSize, const bool includeScreen) = 0;
 #endif // _WIN32 || (__APPLE__ && !TARGET_OS_IPHONE && TARGET_OS_MAC)
-#if (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if (defined(__APPLE__) && TARGET_OS_IOS)
   /** Sets the operational permission of the SDK on the audio session.
    *
    * The SDK and the app can both configure the audio session by default. If
@@ -7046,9 +7363,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int setAudioSessionOperationRestriction(AUDIO_SESSION_OPERATION_RESTRICTION restriction) = 0;
-#endif // __APPLE__ && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION))
+#endif // __APPLE__ && TARGET_OS_IOS
 
-#if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IPHONE && TARGET_OS_MAC)
+#if defined(_WIN32) || (defined(__APPLE__) && !TARGET_OS_IPHONE && TARGET_OS_MAC) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
 
   /** Shares the whole or part of a screen by specifying the display ID.
 
@@ -7114,7 +7431,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int getAudioDeviceInfo(DeviceInfo& deviceInfo) = 0;
 #endif  // __ANDROID__
 
-#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
+#if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
 
  /** Shares the whole or part of a window by specifying the window ID.
   *
@@ -7187,7 +7504,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int updateScreenCaptureParameters(const ScreenCaptureParameters& captureParams) = 0;
 #endif // _WIN32 || (__APPLE__ && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(__OHOS__)
   /**
    * Starts screen sharing.
    *
@@ -7209,12 +7526,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int updateScreenCapture(const ScreenCaptureParameters2& captureParams) = 0;
-    
+
    /**
    * Queries the ability of screen sharing to support the maximum frame rate.
    *
    * @since v4.2.0
-   * 
+   *
    * @return
    * - 0: support 15 fps, Low devices.
    * - 1: support 30 fps, Usually low - to mid-range devices.
@@ -7225,11 +7542,11 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * Query all focal attributes supported by the camera.
-   * 
+   *
    * @param focalLengthInfos The camera supports the collection of focal segments.Ensure the size of array is not less than 8.
-   * 
+   *
    * @param size The camera supports the size of the focal segment set. Ensure the size is not less than 8.
-   * 
+   *
    * @return
    * - 0: Success.
    * - < 0: Failure..
@@ -7245,19 +7562,19 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param mediaProjection MediaProjection is an Android class that provides access to screen capture and recording capabiliies.
    *
    * @note
-   * Additional MediaProjection is primarily used for specific scenarios, 
+   * Additional MediaProjection is primarily used for specific scenarios,
    * such as IOT custom devices or subprocess screen sharing.
    *
    * @return
    * - 0: Success.
    * - < 0: Failure.
-   * @technical preview 
+   * @technical preview
    */
   virtual int setExternalMediaProjection(void* mediaProjection) = 0;
 #endif
 #endif
 
-#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__)
+#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || (defined(__linux__) && !defined(__ANDROID__) && !defined (__OHOS__))
   /**
    * Sets the screen sharing scenario.
    *
@@ -7275,7 +7592,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - ERR_NOT_INITIALIZED (7): You have not initialized IRtcEngine when set screencapture scenario.
    */
   virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
-  
+
   /**
    * Stops the screen sharing.
    *
@@ -7437,7 +7754,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    stream.
    */
   virtual int updateLocalAudioMixerConfiguration(const LocalAudioMixerConfiguration& config) = 0;
- 
+
   /**
    * Stops a mixed audio track.
    *
@@ -7446,7 +7763,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    *   - #ERR_NOT_INITIALIZED (7): You have not initialized the RTC engine when publishing the
    * stream.
-   */  
+   */
   virtual int stopLocalAudioMixer() = 0;
 
   /**
@@ -7511,7 +7828,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Stop sharing the screen.
    *
    * After calling `startScreenCapture`, you can call this method to stop sharing the first screen.
-   * 
+   *
    * @param sourceType source type of screen. See #VIDEO_SOURCE_TYPE.
    * @return
    * - 0: Success.
@@ -7643,6 +7960,35 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int sendStreamMessage(int streamId, const char* data, size_t length) = 0;
 
+  /**
+   * @brief Send Reliable message to remote uid in channel.
+   *
+   * @technical preview
+   *
+   * @param uid remote user id.
+   * @param type Reliable Data Transmission tunnel message type. See RdtStreamType
+   * @param data The pointer to the sent data.
+   * @param length The length of the sent data.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int sendRdtMessage(uid_t uid, RdtStreamType type, const char *data, size_t length) = 0;
+
+  /**
+   * @brief Send media control message
+   *
+   * @technical preview
+   *
+   * @param uid Remote user id. In particular, if the uid is set to 0, it means broadcasting the message to the entire channel.
+   * @param data The pointer to the sent data.
+   * @param length The length of the sent data, max 1024.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int sendMediaControlMessage(uid_t uid, const char* data, size_t length) = 0;
+
   /** **DEPRECATED** Adds a watermark image to the local video or CDN live stream.
 
    This method is not recommend, Use \ref agora::rtc::IRtcEngine::addVideoWatermark(const char* watermarkUrl, const WatermarkOptions& options) "addVideoWatermark"2 instead.
@@ -7690,8 +8036,40 @@ class IRtcEngine : public agora::base::IEngineBase {
    @return int
    - 0: Success.
    - < 0: Failure.
+
+   @deprecated Use addVideoWatermarkEx(const WatermarkConfig& config, const RtcConnection& connection) instead.
    */
   virtual int addVideoWatermark(const char* watermarkUrl, const WatermarkOptions& options) = 0;
+
+  /**
+   * @brief Add a watermark image to the local video.
+   *
+   * @details This method allows you to overlay a watermark image on the local video stream. You can configure the watermark's position, size, and visibility in preview using the WatermarkConfig structure.
+   *
+   * @since 4.6.0
+   *
+   * @param config The watermark configuration, including image path, position, size, and visibility options.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int addVideoWatermark(const WatermarkConfig& configs) = 0;
+
+  /**
+   * @brief Remove a watermark image from the local video.
+   *
+   * @details This method removes a previously added watermark from the local video stream using its unique ID.
+   *
+   * @since 4.6.0
+   *
+   * @param id The watermark ID to be removed. This ID should match the one used when adding the watermark.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int removeVideoWatermark(const char* id) = 0;
 
   /** Removes the watermark image on the video stream added by
   addVideoWatermark().
@@ -8082,6 +8460,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @note
    * Must call this api before "startDirectCdnStreaming"
+   * 
+   * @deprecated v4.6.0.
    *
    * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels:
    * #AUDIO_PROFILE_TYPE.
@@ -8096,6 +8476,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * Each configuration profile corresponds to a set of video parameters, including
    * the resolution, frame rate, and bitrate.
+   * 
+   * @deprecated v4.6.0.
    *
    * @note
    * Must call this api before "startDirectCdnStreaming"
@@ -8109,12 +8491,14 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setDirectCdnStreamingVideoConfiguration(const VideoEncoderConfiguration& config) = 0;
 
   /** Start direct cdn streaming
+   * 
+   * @deprecated v4.6.0.
    *
    * @param eventHandler A pointer to the direct cdn streaming event handler: \ref agora::rtc::IDirectCdnStreamingEventHandler
    * "IDirectCdnStreamingEventHandler".
    * @param publishUrl The url of the cdn used to publish the stream.
    * @param options The direct cdn streaming media options: DirectCdnStreamingMediaOptions.
-   * This API must pass an audio-related option, and temporarily cannot pass more than one. 
+   * This API must pass an audio-related option, and temporarily cannot pass more than one.
    * For video-related options, you can either choose to not pass any, or only one.
    *
    * @return
@@ -8125,6 +8509,8 @@ class IRtcEngine : public agora::base::IEngineBase {
                                       const char* publishUrl, const DirectCdnStreamingMediaOptions& options) = 0;
 
   /** Stop direct cdn streaming
+   * 
+   * @deprecated v4.6.0.
    *
    * @note
    * This method is synchronous.
@@ -8136,6 +8522,8 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int stopDirectCdnStreaming() = 0;
 
   /** Change the media source during the pushing
+   * 
+   * @deprecated v4.6.0.
    *
    * @note
    * This method is temporarily not supported.
@@ -8317,7 +8705,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setAdvancedAudioOptions(AdvancedAudioOptions& options, int sourceType = 0) = 0;
 
   /** Bind local user and a remote user as an audio&video sync group. The remote user is defined by cid and uid.
-   *  There’s a usage limit that local user must be a video stream sender. On the receiver side, media streams from same sync group will be time-synced
+   *  There's a usage limit that local user must be a video stream sender. On the receiver side, media streams from same sync group will be time-synced
    *
    * @param channelId The channel id
    * @param uid The user ID of the remote user to be bound with (local user)
@@ -8360,23 +8748,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int64_t getCurrentMonotonicTimeInMs() = 0;
-
-  /**
-   * Turns WIFI acceleration on or off.
-   *
-   * @note
-   * - This method is called before and after joining a channel.
-   * - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
-   *
-   * @param enabled
-   * - true：Turn WIFI acceleration on.
-   * - false：Turn WIFI acceleration off.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableWirelessAccelerate(bool enabled) = 0;
 
   /**
   * get network type value
@@ -8440,7 +8811,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual uint64_t getNtpWallTimeInMs() = 0;
 
-  /** 
+  /**
    * @brief Whether the target feature is available for the device.
    * @since v4.3.0
    * @param type The feature type. See FeatureType.
@@ -8461,7 +8832,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @technical preview
   */
   virtual int sendAudioMetadata(const char* metadata, size_t length) = 0;
-  
+
   /**
    * @brief Queries the HDR capability of the video module
    * @param videoModule The video module. See VIDEO_MODULE_TYPE
@@ -8495,11 +8866,11 @@ enum MEDIA_DEVICE_STATE_TYPE {
   /** 2: The device is disabled.
    */
   MEDIA_DEVICE_STATE_DISABLED = 2,
-  
+
   /** 3: The device is plugged in.
    */
   MEDIA_DEVICE_STATE_PLUGGED_IN = 3,
-  
+
   /** 4: The device is not present.
    */
   MEDIA_DEVICE_STATE_NOT_PRESENT = 4,

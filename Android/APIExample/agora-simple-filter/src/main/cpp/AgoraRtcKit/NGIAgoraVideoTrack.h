@@ -1,4 +1,3 @@
-
 // Copyright (c) 2019 Agora.io. All rights reserved
 
 // This program is confidential and proprietary to Agora.io.
@@ -67,6 +66,9 @@ struct StreamLayerConfigInternal {
 struct SimulcastConfigInternal {
    StreamLayerConfigInternal simulcastlayerConfigs[STREAM_LAYER_COUNT_MAX];
   
+  bool publish_fallback_enable;
+  bool publish_on_demand;
+  
   void reset() {
     for (int i = STREAM_LAYER_1; i < STREAM_LAYER_COUNT_MAX; i++) {
       simulcastlayerConfigs[i].reset();
@@ -77,12 +79,14 @@ struct SimulcastConfigInternal {
     for (int i = 0; i < STREAM_LAYER_COUNT_MAX; i++) {
       if (simulcastlayerConfigs[i] == rhs.simulcastlayerConfigs[i]) {
         continue;
-      } else {
-        return false;
       }
+      return false;
     }
-    return true;
+    return publish_fallback_enable == rhs.publish_fallback_enable &&
+           publish_on_demand == rhs.publish_on_demand;
   }
+  
+  SimulcastConfigInternal(): publish_fallback_enable(false), publish_on_demand(true) {}
 };
 
 enum VideoTrackType {
@@ -204,6 +208,28 @@ class IVideoTrack : public RefCountInterface {
    */
   virtual int getFilterProperty(const char* id, const char* key, char* json_value, size_t buf_size, aosl_ref_t ares = AOSL_REF_INVALID) { return -1; }
 
+  /**
+   * Registers an \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
+   *
+   * You need to implement the `IVideoEncodedFrameObserver` class in this method. Once you successfully register
+   * the encoded image receiver, the SDK triggers the \ref agora::rtc::IVideoEncodedFrameObserver::onEncodedVideoFrameReceived "onEncodedVideoFrameReceived" callback when it receives the
+   * encoded video image.
+   *
+   * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver, aosl_ref_t ares = AOSL_REF_INVALID) {return -1;};
+  /**
+   * Releases the \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
+   * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver) {return -1;};
+
  protected:
   ~IVideoTrack() {}
 };
@@ -323,6 +349,8 @@ struct LocalVideoTrackStats {
   
   SimulcastStreamProfile simulcast_stream_profile[STREAM_LAYER_COUNT_MAX];
 
+  uint8_t hdr_stream_encoder;
+
   LocalVideoTrackStats() : number_of_streams(0),
                            bytes_major_stream(0),
                            bytes_minor_stream(0),
@@ -349,7 +377,8 @@ struct LocalVideoTrackStats {
                            uplink_cost_time_ms(0),
                            quality_adapt_indication(ADAPT_NONE),
                            txPacketLossRate(0),
-                           capture_brightness_level(CAPTURE_BRIGHTNESS_LEVEL_INVALID) {}
+                           capture_brightness_level(CAPTURE_BRIGHTNESS_LEVEL_INVALID),
+                           hdr_stream_encoder(0)  {}
 };
 
 /**
@@ -566,27 +595,6 @@ class IRemoteVideoTrack : public IVideoTrack {
    * - `false`: Failure.
    */
   virtual bool getTrackInfo(VideoTrackInfo& info) = 0;
-  /**
-   * Registers an \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
-   *
-   * You need to implement the `IVideoEncodedFrameObserver` class in this method. Once you successfully register
-   * the encoded image receiver, the SDK triggers the \ref agora::rtc::IVideoEncodedFrameObserver::onEncodedVideoFrameReceived "onEncodedVideoFrameReceived" callback when it receives the
-   * encoded video image.
-   *
-   * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int registerVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-  /**
-   * Releases the \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
-   * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int unregisterVideoEncodedFrameObserver(agora::media::IVideoEncodedFrameObserver* encodedObserver) = 0;
 
   /**
    * Registers an \ref agora::rtc::IMediaPacketReceiver "IMediaPacketReceiver" object.

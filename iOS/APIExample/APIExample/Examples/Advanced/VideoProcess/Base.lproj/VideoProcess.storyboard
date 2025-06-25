@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -415,19 +415,6 @@
                                     <action selector="onChangeVirtualBgSegment:" destination="jKA-9Y-IUF" eventType="valueChanged" id="xbN-1c-01P"/>
                                 </connections>
                             </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVk-N0-Zza">
-                                <rect key="frame" x="280" y="588" width="74" height="35"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="mrf-oJ-kYs"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Make Up">
-                                    <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="onShowMakeUpAction" destination="jKA-9Y-IUF" eventType="touchUpInside" id="h9p-tE-ngt"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Nld-X4-Zcy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -438,7 +425,6 @@
                             <constraint firstItem="oeC-rg-Fjj" firstAttribute="leading" secondItem="0Op-5A-oxl" secondAttribute="leading" id="92B-kw-FIj"/>
                             <constraint firstItem="W0Y-Vm-X3Y" firstAttribute="centerY" secondItem="0Op-5A-oxl" secondAttribute="centerY" constant="1" id="94w-YK-0Ml"/>
                             <constraint firstItem="ocB-CG-vnH" firstAttribute="top" secondItem="0Op-5A-oxl" secondAttribute="bottom" constant="11" id="ETG-lq-9km"/>
-                            <constraint firstItem="Nld-X4-Zcy" firstAttribute="trailing" secondItem="FVk-N0-Zza" secondAttribute="trailing" constant="21" id="IYO-ZL-Rl6"/>
                             <constraint firstItem="IQr-5t-5Li" firstAttribute="top" secondItem="Nld-X4-Zcy" secondAttribute="top" id="KkA-eb-4nn"/>
                             <constraint firstItem="0Op-5A-oxl" firstAttribute="leading" secondItem="Nld-X4-Zcy" secondAttribute="leading" constant="18" id="M9Y-LC-nJs"/>
                             <constraint firstItem="IQr-5t-5Li" firstAttribute="trailing" secondItem="Nld-X4-Zcy" secondAttribute="trailing" id="PCc-6r-ctV"/>
@@ -451,8 +437,6 @@
                             <constraint firstItem="B1h-vc-Ktj" firstAttribute="trailing" secondItem="oeC-rg-Fjj" secondAttribute="trailing" id="dFl-wQ-POd"/>
                             <constraint firstItem="B1h-vc-Ktj" firstAttribute="leading" secondItem="oeC-rg-Fjj" secondAttribute="leading" id="gcq-OI-AA2"/>
                             <constraint firstItem="DZl-zb-qBA" firstAttribute="leading" secondItem="Kbb-Wz-bo8" secondAttribute="leading" id="iAD-Nq-hS4"/>
-                            <constraint firstItem="FVk-N0-Zza" firstAttribute="centerY" secondItem="Qhf-Ob-NYA" secondAttribute="centerY" id="j7n-Ye-3Fb"/>
-                            <constraint firstItem="FVk-N0-Zza" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qhf-Ob-NYA" secondAttribute="trailing" constant="8" symbolic="YES" id="kE8-Nt-mF0"/>
                             <constraint firstItem="RiO-Eg-x0D" firstAttribute="top" secondItem="dbp-ZR-iav" secondAttribute="bottom" constant="8.5" id="kg8-Cr-fVb"/>
                             <constraint firstItem="IQr-5t-5Li" firstAttribute="leading" secondItem="Nld-X4-Zcy" secondAttribute="leading" id="kr1-Ml-DNh"/>
                             <constraint firstItem="Kbb-Wz-bo8" firstAttribute="leading" secondItem="Cdl-89-b0G" secondAttribute="leading" id="mzx-Mq-0wN"/>
@@ -493,7 +477,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
