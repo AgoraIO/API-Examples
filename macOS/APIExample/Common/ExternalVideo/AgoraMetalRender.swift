@@ -41,6 +41,7 @@ class AgoraMetalRender: NSView {
     fileprivate var renderPipelineState: MTLRenderPipelineState?
     fileprivate let semaphore = DispatchSemaphore(value: 1)
     fileprivate var metalDevice = MTLCreateSystemDefaultDevice()
+    fileprivate var rotation = AgoraVideoRotation.rotationNone
 #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
     fileprivate var metalView: MTKView!
     fileprivate var textureCache: CVMetalTextureCache?
@@ -119,6 +120,7 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
             return false
         }
+        self.rotation = rotation
         guard let pixelBuffer = videoFrame.pixelBuffer else { return false }
         
         let res = semaphore.wait(timeout: .now() + 0.1)
@@ -242,9 +244,9 @@ extension AgoraMetalRender: MTKViewDelegate {
         let size = CGSize(width: width, height: height)
         
         let mirror = mirrorDataSource?.renderViewShouldMirror(renderView: self) ?? false
-        if let renderedCoordinates = AgoraVideoRotation.rotationNone.renderedCoordinates(mirror: mirror,
-                                                                                         videoSize: size,
-                                                                                         viewSize: viewSize) {
+        if let renderedCoordinates = self.rotation.renderedCoordinates(mirror: mirror,
+                                                                       videoSize: size,
+                                                                       viewSize: viewSize) {
             let byteLength = 4 * MemoryLayout.size(ofValue: renderedCoordinates[0])
             vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [.storageModeShared])
         }
