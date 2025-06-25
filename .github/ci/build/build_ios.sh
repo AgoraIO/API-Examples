@@ -80,7 +80,7 @@ else
    echo zip_name: $zip_name
    curl -o $zip_name $sdk_url || exit 1
    7za x ./$zip_name -y > log.txt
-   unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
+   unzip_name=`ls -S -d */ | egrep 'Agora|Shengwang' | sed 's/\///g'`
    echo unzip_name: $unzip_name
    rm -rf ./$unzip_name/bin
    rm -f ./$unzip_name/commits

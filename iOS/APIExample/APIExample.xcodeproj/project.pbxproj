@@ -125,9 +125,6 @@
 		8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC751D2273E502700552265 /* LiveStreaming.storyboard */; };
 		8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D4273E502700552265 /* LiveStreaming.swift */; };
 		8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D9273E57C900552265 /* VideoProcess.swift */; };
-		8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */; };
-		8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */; };
-		8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -429,10 +426,6 @@
 		8BC751D3273E502700552265 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
 		8BC751D4273E502700552265 /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		8BC751D9273E57C900552265 /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
-		8BE7ABBD279E065000DFBCEF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
-		8BE7ABBE279E065000DFBCEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
-		8BE7ABC0279E065000DFBCEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
-		8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusionCDN.swift; sourceTree = "<group>"; };
 		8BF2243D275FA1A500B65EF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleFilter.strings"; sourceTree = "<group>"; };
 		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1048,16 +1041,6 @@
 			path = VideoProcess;
 			sourceTree = "<group>";
 		};
-		8BE7ABBB279E065000DFBCEF /* FusionCDN */ = {
-			isa = PBXGroup;
-			children = (
-				8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */,
-				8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */,
-				8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */,
-			);
-			path = FusionCDN;
-			sourceTree = "<group>";
-		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -1085,7 +1068,6 @@
 				E72055F02900F8370030E6D1 /* KtvCopyrightMusic */,
 				E728B84128B5FFCB00674A4A /* PictureInPicture */,
 				E7899BD62861673600851463 /* CreateDataStream */,
-				8BE7ABBB279E065000DFBCEF /* FusionCDN */,
 				8B5E5B4E274CB6640040E97D /* RhythmPlayer */,
 				8BC751D8273E578D00552265 /* VideoProcess */,
 				8BC751CF273E502700552265 /* LiveStreaming */,
@@ -1370,86 +1352,6 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		E7A49D0129067F8300F06DD4 /* SenseBeautify */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D0729067F8300F06DD4 /* Manager */,
-				E7A49D0429067F8300F06DD4 /* SenseBeautifyVC.h */,
-				E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */,
-				E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */,
-				E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */,
-			);
-			path = SenseBeautify;
-			sourceTree = "<group>";
-		};
-		E7A49D0729067F8300F06DD4 /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D192907DD7800F06DD4 /* Effects.h */,
-				E7A49D182907DD7800F06DD4 /* Effects.m */,
-				E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */,
-				E7A49D292907DEE600F06DD4 /* EFMotionManager.m */,
-				F73B01D62CCB862A0077B7D2 /* EFGlobalSingleton.h */,
-				F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */,
-				E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */,
-				F73B01D12CCB7EE20077B7D2 /* EffectMacro.h */,
-				E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */,
-				E7A49D162907DD2600F06DD4 /* EffectsLicense.h */,
-				E7A49D152907DD2600F06DD4 /* EffectsLicense.m */,
-				E7A49D122907DC2700F06DD4 /* EffectsProcess.h */,
-				E7A49D132907DC2700F06DD4 /* EffectsProcess.m */,
-				E7A49D272907DDFF00F06DD4 /* EffectsDetector.h */,
-				E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */,
-				E7A49D212907DD9A00F06DD4 /* EffectsCommonObject.h */,
-				E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */,
-				E7A49D1F2907DD8F00F06DD4 /* EffectsAttribute.h */,
-				E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */,
-				E7A49D0F2907D9C800F06DD4 /* VideoProcessingManager.h */,
-				E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
-		E7A49D38290907E200F06DD4 /* ByteBeautify */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D3E290907E200F06DD4 /* Manager */,
-				E7A49D39290907E200F06DD4 /* BytedEffect.strings */,
-				E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */,
-				E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */,
-				E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */,
-			);
-			path = ByteBeautify;
-			sourceTree = "<group>";
-		};
-		E7A49D3E290907E200F06DD4 /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D5E290910A000F06DD4 /* Core.h */,
-				E7A49D5F290910A100F06DD4 /* macro.h */,
-				E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */,
-				E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */,
-				F73B01CD2CCB7E730077B7D2 /* BEGLUtils.h */,
-				F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */,
-				F73B01CA2CCB7E720077B7D2 /* BETimeRecoder.h */,
-				F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */,
-				F73B01C92CCB7E720077B7D2 /* Config.h */,
-				E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */,
-				E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */,
-				E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */,
-				E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */,
-				E7A49D582909103500F06DD4 /* BEGLTexture.h */,
-				E7A49D592909103500F06DD4 /* BEGLTexture.m */,
-				E7A49D552909101D00F06DD4 /* BEImageUtils.h */,
-				E7A49D562909101D00F06DD4 /* BEImageUtils.m */,
-				E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */,
-				E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */,
-				E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */,
-				E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
 		F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1652,7 +1554,6 @@
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
 				F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */,
-				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
@@ -1665,7 +1566,6 @@
 				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
 				E7883AE92B074746003CCF44 /* FaceCapture.strings in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
-				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				E7163F8A29651D8900EBBD55 /* AR.scnassets in Resources */,
 				E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */,
@@ -1917,7 +1817,6 @@
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
 				F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
-				8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */,
 				57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				67450169282D5D8B00E79F2F /* ContentInspect.swift in Sources */,
@@ -2265,23 +2164,6 @@
 				8BC751D3273E502700552265 /* Base */,
 			);
 			name = LiveStreaming.storyboard;
-			sourceTree = "<group>";
-		};
-		8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8BE7ABBD279E065000DFBCEF /* zh-Hans */,
-				8BE7ABBE279E065000DFBCEF /* en */,
-			);
-			name = FusionCDN.strings;
-			sourceTree = "<group>";
-		};
-		8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8BE7ABC0279E065000DFBCEF /* Base */,
-			);
-			name = FusionCDN.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
