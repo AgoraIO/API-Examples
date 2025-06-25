@@ -113,7 +113,7 @@ class ICameraCapturer : public RefCountInterface {
   };
 
  public:
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE) || defined (__OHOS__)
   /**
    * Sets the camera source.
    *
@@ -336,7 +336,7 @@ class ICameraCapturer : public RefCountInterface {
    */
   virtual int setCameraExposureFactor(float value, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
-#if (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
+#if (defined(__APPLE__) && TARGET_OS_IOS)
   /**
    * Enables or disables the AVCaptureMultiCamSession.
    *
@@ -382,7 +382,7 @@ class ICameraCapturer : public RefCountInterface {
   virtual int setCameraStabilizationMode(CAMERA_STABILIZATION_MODE mode) = 0;
 #endif
   
-#elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
+#elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__) && !defined (__OHOS__)) || \
     (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 
   /**
