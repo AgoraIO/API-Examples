@@ -55,7 +55,6 @@
     MenuSection *anvancedSection = [[MenuSection alloc] initWithName:@"Anvanced" rows:@[
         [[MenuItem alloc]initWithName:@"Live Streaming".localized storyboard:@"LiveStreaming" controller:@"LiveStreaming"],
         [[MenuItem alloc]initWithName:@"RTMP Streaming".localized storyboard:@"RTMPStreaming" controller:@""],
-        [[MenuItem alloc]initWithName:@"Fusion CDN Streaming".localized storyboard:@"FusionCDN" controller:@"FusionCDN"],
         [[MenuItem alloc]initWithName:@"Video Metadata".localized storyboard:@"VideoMetadata" controller:@""],
         [[MenuItem alloc]initWithName:@"Voice Changer".localized storyboard:@"VoiceChanger" controller:@""],
         [[MenuItem alloc]initWithName:@"Custom Audio Source".localized storyboard:@"CustomPcmAudioSource" controller:@""],

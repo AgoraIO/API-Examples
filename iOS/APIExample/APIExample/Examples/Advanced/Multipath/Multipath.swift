@@ -93,7 +93,6 @@ class MultipathViewController: BaseViewController {
             // you have to call startPreview to see local video
             agoraKit.startPreview()
         }
-                
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -129,6 +128,9 @@ class MultipathViewController: BaseViewController {
     @IBAction func onClickMultipathSwitch(_ sender: UISwitch) {
         channelMediaOption.enableMultipath = sender.isOn
         agoraKit.updateChannel(with: channelMediaOption)
+        if !sender.isOn {
+            localVideo.statsInfo?.updateMultipathStats(nil)
+        }
     }
 }
 

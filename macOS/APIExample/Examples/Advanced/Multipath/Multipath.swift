@@ -230,6 +230,9 @@ class MultipathMain: BaseViewController {
         let isOn = (sender.state == .on)
         channelMediaOption.enableMultipath = isOn
         let ret = agoraKit.updateChannel(with: channelMediaOption)
+        if isOn {
+            videos[0].statsInfo?.updateMultipathStats(nil)
+        }
         LogUtils.log(message: "updateChannel Multipath ret: \(ret) isOn: \(isOn)", level: .info)
     }
 }
