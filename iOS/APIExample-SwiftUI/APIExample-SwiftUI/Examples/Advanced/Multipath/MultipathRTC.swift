@@ -96,6 +96,9 @@ class MultipathRTC: NSObject, ObservableObject {
     func updateMultipath(enabled: Bool) {
         channelMediaOption.enableMultipath = enabled
         agoraKit.updateChannel(with: channelMediaOption)
+        if !enabled {
+            localView?.statsInfo?.updateMultipathStats(nil)
+        }
     }
 }
 

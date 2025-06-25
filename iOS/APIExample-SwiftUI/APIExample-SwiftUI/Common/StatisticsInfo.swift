@@ -91,7 +91,7 @@ struct StatisticsInfo {
         }
     }
     
-    mutating func updateMultipathStats(_ stats: AgoraMultipathStats) {
+    mutating func updateMultipathStats(_ stats: AgoraMultipathStats?) {
         guard self.type.isLocal else {
             return
         }
