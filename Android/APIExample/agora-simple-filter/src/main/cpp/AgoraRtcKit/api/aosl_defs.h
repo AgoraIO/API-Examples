@@ -137,6 +137,50 @@ __asm__ (".section __TEXT,__const\n\t" \
 #define AOSL_BIN_SIZE(v) ((size_t)((unsigned char *)&v##_bin_end - (unsigned char *)&v##_bin_begin))
 #endif
 
+#if defined (__GNUC__)
+#define __aosl_deprecated__ __attribute__ ((deprecated))
+#elif defined (_MSC_VER)
+#define __aosl_deprecated__ __declspec (deprecated)
+#else
+#define __aosl_deprecated__
+#endif
+
+
+#if defined (__GNUC__)
+#define AOSL_DEFINE_NAMED_ENTRY(what, name, entry) \
+	static void __attribute__  ((constructor, used)) _##name##_##what##_ctor (void) \
+	{ \
+		if (aosl_##what##_register (#name, entry) < 0) \
+			abort (); \
+	} \
+\
+	static void __attribute__  ((destructor, used)) _##name##_##what##_dtor (void) \
+	{ \
+		if (aosl_##what##_unregister (#name) < 0) \
+			abort (); \
+	}
+#elif defined (_MSC_VER)
+#pragma section (".CRT$XIG", long, read)
+
+#define AOSL_DEFINE_NAMED_ENTRY(what, name, entry) \
+	static void _##name##_##what##_dtor (void) \
+	{ \
+		if (aosl_##what##_unregister (#name) < 0) \
+			abort (); \
+	} \
+\
+	static int _##name##_##what##_ctor (void) \
+	{ \
+		if (aosl_##what##_register (#name, entry) < 0) \
+			abort (); \
+		atexit (_##name##_##what##_dtor); \
+		return 0; \
+	} \
+	__declspec(allocate(".CRT$XIG")) int (*_##name##_##what##_ctor_f) (void) = _##name##_##what##_ctor;
+#else
+#error Unsupported Toolchain!
+#endif
+
 
 #ifdef __cplusplus
 }

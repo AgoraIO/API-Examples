@@ -105,7 +105,7 @@ namespace agora {
         // Agora SDK will call this method to set video plug-in properties
         int ExtensionVideoFilter::setProperty(const char *key, const void *buf,
                                                  size_t buf_size) {
-            PRINTF_INFO("setProperty  %s  %s", key, buf);
+            PRINTF_INFO("setProperty  %s  %p", key, buf);
             std::string stringParameter((char*)buf);
             waterMarkProcessor_->setParameters(stringParameter);
             return 0;

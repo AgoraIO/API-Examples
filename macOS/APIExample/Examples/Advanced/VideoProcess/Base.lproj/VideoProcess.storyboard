@@ -238,17 +238,6 @@
                                                         <action selector="onWhinteningSliderChange:" target="YjT-yy-DnJ" id="GtV-9D-XdJ"/>
                                                     </connections>
                                                 </slider>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvM-Pt-uFi" userLabel="Make up">
-                                                    <rect key="frame" x="19" y="0.0" width="88" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Make Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8aS-7m-YP7">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onShowMakeUpAction:" target="YjT-yy-DnJ" id="8hZ-Wo-umn"/>
-                                                    </connections>
-                                                </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xSp-Ye-Fs9" userLabel="Face Shape">
                                                     <rect key="frame" x="104" y="0.0" width="105" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
