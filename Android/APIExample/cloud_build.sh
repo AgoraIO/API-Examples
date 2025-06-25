@@ -56,7 +56,6 @@ else
     mkdir -p agora-simple-filter/src/main/jniLibs
     mv arm64-v8a agora-simple-filter/src/main/jniLibs
     mv armeabi-v7a agora-simple-filter/src/main/jniLibs
-    sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
     rm -f agora-simple-filter/src/main/cpp/CMakeLists.txt-e
 
     ## config agora stream encrypt
