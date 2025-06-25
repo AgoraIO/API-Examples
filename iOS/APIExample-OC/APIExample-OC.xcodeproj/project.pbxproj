@@ -52,9 +52,6 @@
 		E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE7E2A612683009947CF /* LiveStreaming.storyboard */; };
 		E70ADEA72A64E230009947CF /* RTMPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEA52A64E230009947CF /* RTMPStreaming.m */; };
 		E70ADEA82A64EA5C009947CF /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEAA2A64EA5C009947CF /* RTMPStreaming.storyboard */; };
-		E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEB82A64ED3A009947CF /* FusionCDN.strings */; };
-		E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEBB2A64ED3A009947CF /* FusionCDN.m */; };
-		E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */; };
 		E70ADEC62A66306F009947CF /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */; };
 		E70ADEC72A66306F009947CF /* VideoMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEC52A66306F009947CF /* VideoMetadata.m */; };
 		E70ADECC2A663A06009947CF /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC92A663A06009947CF /* VoiceChanger.storyboard */; };
@@ -250,11 +247,6 @@
 		E70ADEA52A64E230009947CF /* RTMPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTMPStreaming.m; sourceTree = "<group>"; };
 		E70ADEAB2A64EA69009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
 		E70ADEAC2A64EA75009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
-		E70ADEB92A64ED3A009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
-		E70ADEBA2A64ED3A009947CF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
-		E70ADEBB2A64ED3A009947CF /* FusionCDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FusionCDN.m; sourceTree = "<group>"; };
-		E70ADEBD2A64ED3A009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
-		E70ADEBE2A64ED3A009947CF /* FusionCDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FusionCDN.h; sourceTree = "<group>"; };
 		E70ADEC32A66306F009947CF /* VideoMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMetadata.h; sourceTree = "<group>"; };
 		E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoMetadata.storyboard; sourceTree = "<group>"; };
 		E70ADEC52A66306F009947CF /* VideoMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMetadata.m; sourceTree = "<group>"; };
@@ -523,7 +515,6 @@
 				E70ADED42A6A2BE6009947CF /* CustomPcmAudioSource */,
 				E70ADEC82A663A06009947CF /* VoiceChanger */,
 				E70ADEC22A66306F009947CF /* VideoMetadata */,
-				E70ADEB72A64ED3A009947CF /* FusionCDN */,
 				E70ADEA22A64E230009947CF /* RTMPStreaming */,
 				E70ADE712A60EC74009947CF /* LiveStreaming */,
 			);
@@ -655,17 +646,6 @@
 				E70ADEA52A64E230009947CF /* RTMPStreaming.m */,
 			);
 			path = RTMPStreaming;
-			sourceTree = "<group>";
-		};
-		E70ADEB72A64ED3A009947CF /* FusionCDN */ = {
-			isa = PBXGroup;
-			children = (
-				E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */,
-				E70ADEB82A64ED3A009947CF /* FusionCDN.strings */,
-				E70ADEBE2A64ED3A009947CF /* FusionCDN.h */,
-				E70ADEBB2A64ED3A009947CF /* FusionCDN.m */,
-			);
-			path = FusionCDN;
 			sourceTree = "<group>";
 		};
 		E70ADEC22A66306F009947CF /* VideoMetadata */ = {
@@ -1142,9 +1122,7 @@
 				E7361F5F2A6E60B100925BD6 /* RawVideoData.storyboard in Resources */,
 				E72F61F22A73B93200C963D2 /* MediaChannelRelay.storyboard in Resources */,
 				E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */,
-				E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */,
 				E72F620B2A78B31B00C963D2 /* MutliCamera.storyboard in Resources */,
-				E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */,
 				E70ADE162A5D026E009947CF /* sample.yuv in Resources */,
 				E70ADE152A5D026E009947CF /* agora-logo.png in Resources */,
 				E72F61832A70C71200C963D2 /* JoinMultiChannel.storyboard in Resources */,
@@ -1322,7 +1300,6 @@
 				E7361F492A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m in Sources */,
 				E70ADE3E2A5D4D05009947CF /* ToastView.swift in Sources */,
 				E7361F592A6E5E9300925BD6 /* RawAudioData.m in Sources */,
-				E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */,
 				E70ADEF42A6A72C6009947CF /* AudioWriteToFile.m in Sources */,
 				E72F62002A7796A200C963D2 /* SpatialAudioActionSheet.swift in Sources */,
 				E72F61A52A710AB200C963D2 /* MediaPlayer.m in Sources */,
@@ -1449,23 +1426,6 @@
 				E70ADEAC2A64EA75009947CF /* zh-Hans */,
 			);
 			name = RTMPStreaming.storyboard;
-			sourceTree = "<group>";
-		};
-		E70ADEB82A64ED3A009947CF /* FusionCDN.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E70ADEB92A64ED3A009947CF /* zh-Hans */,
-				E70ADEBA2A64ED3A009947CF /* en */,
-			);
-			name = FusionCDN.strings;
-			sourceTree = "<group>";
-		};
-		E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E70ADEBD2A64ED3A009947CF /* Base */,
-			);
-			name = FusionCDN.storyboard;
 			sourceTree = "<group>";
 		};
 		E72F61902A70F9B700C963D2 /* StreamEncryption.storyboard */ = {
