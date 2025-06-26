@@ -184,13 +184,13 @@ bool CDlgBeauty2::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 
-
 	CString strInfo;
 	ret = m_rtcEngine->enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 	strInfo.Format(_T("enableExtension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_video_filters_clear_vision"));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("clear_vision"));
+	
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
@@ -216,10 +216,14 @@ bool CDlgBeauty2::InitAgora()
 
 	return true;
 }
+
 //UnInitialize the Agora SDK
 void CDlgBeauty2::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		// 清理美颜资源
+		CleanupBeautyResources();
+		
 		if (m_joinChannel) {
 			//leave channel primary camera
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -250,6 +254,22 @@ void CDlgBeauty2::UnInitAgora()
 	}
 }
 
+void CDlgBeauty2::CleanupBeautyResources()
+{
+	if (m_videoEffectObject && m_rtcEngine) {
+		// 销毁VideoEffectObject
+		m_rtcEngine->destroyVideoEffectObject(m_videoEffectObject);
+		m_videoEffectObject = nullptr;
+		
+		// 禁用扩展
+		m_rtcEngine->enableExtension(
+			"agora_video_filters_clear_vision", 
+			"clear_vision", 
+			false,
+			agora::media::PRIMARY_CAMERA_SOURCE
+		);
+	}
+}
 
 //Initialize the Ctrl Text.
 void CDlgBeauty2::InitCtrlText()
@@ -343,7 +363,6 @@ BOOL CDlgBeauty2::OnInitDialog()
 	ResumeStatus();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-
 }
 
 void CDlgBeauty2::SetBeauty()
@@ -526,11 +545,22 @@ void CDlgBeauty2::OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult)
 void CDlgBeauty2::OnBnClickedCheckExtention()
 {
 	int checked = mCkExtention.GetCheck();
-	if (checked)
-	{
-		mBeautyDlgEx->ShowWindow(SW_SHOW);
+	if (checked) {
+		if (mBeautyDlgEx) {
+			mBeautyDlgEx->ShowWindow(SW_SHOW);
+		}
+	} else {
+		if (mBeautyDlgEx) {
+			mBeautyDlgEx->ShowWindow(SW_HIDE);
+		}
 	}
-	else {
-		mBeautyDlgEx->ShowWindow(SW_HIDE);
-	}
+}
+
+CString CDlgBeauty2::GetExePath()
+{
+	TCHAR szPath[MAX_PATH];
+	GetModuleFileName(NULL, szPath, MAX_PATH);
+	CString strExePath = szPath;
+	int nPos = strExePath.ReverseFind('\\');
+	return strExePath.Left(nPos);  // 去掉exe文件名，得到目录路径
 }

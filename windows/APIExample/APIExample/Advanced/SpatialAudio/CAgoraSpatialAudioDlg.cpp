@@ -691,11 +691,9 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam) {
 
 	if (m_mediaPlayerLeft.get() != nullptr) {
 		m_mediaPlayerLeft->stop();
-		m_mediaPlayerLeft.reset();
 	}
 	if (m_mediaPlayerRight.get() != nullptr) {
 		m_mediaPlayerRight->stop();
-		m_mediaPlayerRight.reset();
 	}
 
 	remoteLeftUid = 0;

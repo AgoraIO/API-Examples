@@ -24,7 +24,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -73,9 +73,13 @@ protected:
 private:
 	void SetBeauty();
 	void SetColorful();
+	void InitializeBeautyResources();
+	void CleanupBeautyResources();
+	CString GetExePath();
 	bool m_initialize = false;
 	bool m_joinChannel = false;
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
+	agora::rtc::IVideoEffectObject* m_videoEffectObject = nullptr;
 	CBeautyEventHandler2 m_eventHandler;
 	CAGVideoWnd m_videoWnds[2];
 	CDlgBeautyEx2* mBeautyDlgEx;
