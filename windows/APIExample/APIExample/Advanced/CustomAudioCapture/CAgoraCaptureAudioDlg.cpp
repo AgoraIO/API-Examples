@@ -538,6 +538,10 @@ BOOL CAgoraCaptureAduioDlg::OnInitDialog()
 	m_renderAudioInfo.sampleRate = 44100;
 	m_renderAudioInfo.channels = 2;
 	m_renderAudioInfo.sampleByte = 2;
+	
+	// Hide the Start Render button
+	m_btnSetAudioRender.ShowWindow(SW_HIDE);
+	
 	return TRUE;
 }
 

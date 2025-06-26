@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "AGVideoWnd.h"
 
 class CDlgBeauty2;
@@ -61,30 +60,6 @@ struct MakeupOptions2
 	{
 		reset();
 	}
-	//to json string
-	std::string toJsonString()
-	{
-		std::string jsonStr = "{\"enable_mu\":";
-		jsonStr += enable_mu ? "true" : "false";
-		jsonStr += ",\"browStyle\":" + std::to_string(browStyle);
-		jsonStr += ",\"browColor\":" + std::to_string(browColor);
-		jsonStr += ",\"browStrength\":" + std::to_string(browStrength);
-		jsonStr += ",\"lashStyle\":" + std::to_string(lashStyle);
-		jsonStr += ",\"lashColor\":" + std::to_string(lashColor);
-		jsonStr += ",\"lashStrength\":" + std::to_string(lashStrength);
-		jsonStr += ",\"shadowStyle\":" + std::to_string(shadowStyle);
-		jsonStr += ",\"shadowStrength\":" + std::to_string(shadowStrength);
-		jsonStr += ",\"pupilStyle\":" + std::to_string(pupilStyle);
-		jsonStr += ",\"pupilStrength\":" + std::to_string(pupilStrength);
-		jsonStr += ",\"blushStyle\":" + std::to_string(blushStyle);
-		jsonStr += ",\"blushColor\":" + std::to_string(blushColor);
-		jsonStr += ",\"blushStrength\":" + std::to_string(blushStrength);
-		jsonStr += ",\"lipStyle\":" + std::to_string(lipStyle);
-		jsonStr += ",\"lipColor\":" + std::to_string(lipColor);
-		jsonStr += ",\"lipStrength\":" + std::to_string(lipStrength);
-		jsonStr += "}";
-		return jsonStr;
-	}
 
 };
 
@@ -93,7 +68,7 @@ class CDlgBeautyEx2 : public CDialogEx
 	DECLARE_DYNAMIC(CDlgBeautyEx2)
 
 public:
-	CDlgBeautyEx2(CWnd* pParent = nullptr); // standard constructor
+	CDlgBeautyEx2(CWnd* pParent = nullptr);
 	virtual ~CDlgBeautyEx2();
 	enum
 	{
@@ -106,8 +81,20 @@ private:
 	MakeupOptions2 m_makeupOptions;
 	FaceShapeAreaOptions m_faceShapeAreaOptions;
 	FaceShapeBeautyOptions m_faceShapeBeautyOptions;
+	
+	// 使用智能指针管理VideoEffectObject
+	agora_refptr<agora::rtc::IVideoEffectObject> m_videoEffectObjectRef;
+
+	// 辅助方法声明
+	std::string GetFaceShapeAreaParamName(FaceShapeAreaOptions::FACE_SHAPE_AREA area);
+	int MapUIToResourceId(const CString& resourceType, int uiIndex);
+	void InitializeBeautyResources();
+	void CleanupBeautyResources();
+	void HideFaceShapeControls();
+	CString GetExePath();
+
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClose();
 	DECLARE_MESSAGE_MAP()
@@ -117,7 +104,12 @@ public:
 	void InitCtrlText();
 	void InitCtrlData();
 	void SetBeauty();
+	
+	// 移除SetVideoEffectObject方法，改为内部创建
+	void ApplyMakeupEffect();
+	void ApplyFaceShapeEffect();
 
+	// UI控件成员变量
 	CButton mCbMakeup;
 	CComboBox mDdBrowColor;
 	CComboBox mDdBrowStyle;
@@ -140,6 +132,8 @@ public:
 	CSliderCtrl mSdShapeAreaIntensity;
 	CComboBox mDdShapeStyle;
 	CSliderCtrl mSdShapeStyleIntensity;
+	
+	// 消息处理函数
 	afx_msg void OnBnClickedCheckMakeUp();
 	afx_msg void OnCbnSelchangeComboBrowColor();
 	afx_msg void OnNMCustomdrawSliderBrowStrength(NMHDR* pNMHDR, LRESULT* pResult);
