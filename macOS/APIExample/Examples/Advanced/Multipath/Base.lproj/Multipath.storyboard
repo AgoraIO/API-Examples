@@ -38,7 +38,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="Lwi-x7-gXz">
-                                                    <rect key="frame" x="236" y="325" width="42" height="26"/>
+                                                    <rect key="frame" x="236" y="323" width="42" height="26"/>
                                                     <connections>
                                                         <action selector="onClickMultipathSwitch:" target="zLf-Ex-oud" id="Vt2-3l-vzb"/>
                                                     </connections>
@@ -132,6 +132,7 @@
                         <outlet property="Container" destination="fby-v7-FIJ" id="juc-7s-DOF"/>
                         <outlet property="channelField" destination="EJd-Bd-Goe" id="0A4-WA-Fi1"/>
                         <outlet property="joinChannelButton" destination="CS3-Kj-Lpq" id="hPB-xL-Tpw"/>
+                        <outlet property="multipathSwitch" destination="Lwi-x7-gXz" id="9kP-Wc-zh7"/>
                         <outlet property="selectModePicker" destination="6i1-vk-Tbe" id="IFb-zT-hrH"/>
                         <outlet property="selectRolePicker" destination="5UX-4c-O42" id="Prj-iq-HRi"/>
                     </connections>
