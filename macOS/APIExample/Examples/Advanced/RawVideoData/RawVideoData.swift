@@ -120,8 +120,8 @@ extension RawVideoData: AgoraVideoFrameDelegate {
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if isSnapShoting, let pixelBuffer = videoFrame.pixelBuffer {
             isSnapShoting = false
-            let image = MediaUtils.pixelBuffer(toImage: pixelBuffer)
-            
+            let image = MediaUtils.pixelBuffer(toImage: pixelBuffer, withRotationDegrees: CGFloat(videoFrame.rotation))
+
             DispatchQueue.main.async {
                 self.imageView.image = image
             }

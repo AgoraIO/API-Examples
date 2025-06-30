@@ -35,6 +35,9 @@ class MultipathMain: BaseViewController {
             return nil
         }
     }
+    
+    @IBOutlet weak var multipathSwitch: NSSwitch!
+    
     func initSelectRolePicker() {
         selectRolePicker.label.stringValue = "Role".localized
         selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
@@ -179,7 +182,7 @@ class MultipathMain: BaseViewController {
             channelMediaOption.publishCameraTrack = role == .broadcaster
             channelMediaOption.publishMicrophoneTrack = role == .broadcaster
             channelMediaOption.clientRoleType = role
-            channelMediaOption.enableMultipath = true
+            channelMediaOption.enableMultipath = (multipathSwitch.state == .on)
             channelMediaOption.uplinkMultipathMode = (selectModePicker.picker.indexOfSelectedItem == 0) ? .dynamic : .duplicate
             channelMediaOption.downlinkMultipathMode = (selectModePicker.picker.indexOfSelectedItem == 0) ? .dynamic : .duplicate
             channelMediaOption.autoSubscribeVideo = true
@@ -230,7 +233,7 @@ class MultipathMain: BaseViewController {
         let isOn = (sender.state == .on)
         channelMediaOption.enableMultipath = isOn
         let ret = agoraKit.updateChannel(with: channelMediaOption)
-        if isOn {
+        if !isOn {
             videos[0].statsInfo?.updateMultipathStats(nil)
         }
         LogUtils.log(message: "updateChannel Multipath ret: \(ret) isOn: \(isOn)", level: .info)
