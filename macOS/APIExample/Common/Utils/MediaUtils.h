@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CVPixelBufferRef)i420ToPixelBuffer:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height;
 
-+ (NSImage *)pixelBufferToImage: (CVPixelBufferRef)pixelBuffer;
++ (NSImage *)pixelBufferToImage:(CVPixelBufferRef)pixelBuffer withRotationDegrees:(CGFloat)angleInDegrees;
 
 + (NSData *)dataFromPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
