@@ -63,6 +63,8 @@ public class SendDataStream extends BaseFragment implements View.OnClickListener
      */
     private byte[] data;
 
+    private int streamId;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -197,9 +199,17 @@ public class SendDataStream extends BaseFragment implements View.OnClickListener
              * {@link SendDataStream#iMetadataObserver}.
              * The metadata here can be flexibly replaced according to your own business.*/
             data = String.valueOf(new Date().toString()).getBytes(Charset.forName("UTF-8"));
-            int streamId = engine.createDataStream(true, true);
-            engine.sendStreamMessage(streamId, data);
+            sendStreamMessage(data);
         }
+    }
+
+    private void sendStreamMessage(byte[] data){
+        if (streamId == 0) {
+            // You can call this method to create a data stream and improve the reliability and ordering of data transmission.
+            // https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengine.html#api_irtcengine_createdatastream
+            streamId = engine.createDataStream(true, true);
+        }
+        engine.sendStreamMessage(streamId, data);
     }
 
     private void joinChannel(String channelId) {
