@@ -52,13 +52,8 @@
 #include "CConfig.h"
 #include "Language.h"
 #include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
 #include <chrono>
 #include <random>
-#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.dll.lib")
 #pragma comment(lib, "libagora_segmentation_extension.dll.lib")
 //#pragma comment(lib, "libagora_video_process.dll.lib")
