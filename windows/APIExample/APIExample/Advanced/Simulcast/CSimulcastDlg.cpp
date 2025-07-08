@@ -36,9 +36,7 @@ void CSimulcastRtcEngineEventHandler::onLeaveChannel(const RtcStats &stats)
 void CSimulcastRtcEngineEventHandler::onRemoteVideoStats(const RemoteVideoStats &stats)
 {
     if (m_hMsgHanlder) {
-        RemoteVideoStats* s = new RemoteVideoStats;
-        *s = stats;
-        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATS), (WPARAM)s, 0);
+        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATS), (WPARAM)&stats, 0);
     }
 }
 
@@ -237,7 +235,6 @@ void CSimulcastDlg::UnInitAgora()
 
 void CSimulcastDlg::ResumeStatus()
 {
-    InitAgora();
     m_lstInfo.ResetContent();
     m_cmbRole.SetCurSel(0);
     m_joinChannel = false;
@@ -493,7 +490,6 @@ void CSimulcastDlg::OnShowWindow(BOOL bShow, UINT nStatus)
     CDialogEx::OnShowWindow(bShow, nStatus);
     if (bShow)//bShwo is true ,show window
     {
-        InitAgora();
         RenderLocalVideo();
     }
     else {

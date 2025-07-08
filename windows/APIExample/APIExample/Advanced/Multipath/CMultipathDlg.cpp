@@ -116,7 +116,6 @@ BOOL CMultipathDlg::OnInitDialog()
     m_chkEnableMultipath.SetCheck(BST_UNCHECKED);
     
     InitCtrlText();
-    InitAgora();
     
     return TRUE;
 }
@@ -353,7 +352,6 @@ void CMultipathDlg::OnShowWindow(BOOL bShow, UINT nStatus)
     CDialogEx::OnShowWindow(bShow, nStatus);
     if (bShow) // bShow is true, show window
     {
-        InitAgora();
         RenderLocalVideo();
     }
     else {
