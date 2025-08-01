@@ -43,6 +43,7 @@ import io.agora.base.VideoFrame.I420Buffer
 import io.agora.base.VideoFrame.SourceType
 import io.agora.base.VideoFrame.TextureBuffer
 import io.agora.base.internal.video.EglBase
+import io.agora.base.internal.video.TextureBufferPool
 import io.agora.base.internal.video.YuvHelper
 import io.agora.beautyapi.faceunity.utils.APIReporter
 import io.agora.beautyapi.faceunity.utils.APIType
@@ -684,6 +685,8 @@ class FaceUnityBeautyAPIImpl : FaceUnityBeautyAPI, IVideoFrameObserver {
 
         return texBufferHelper.invoke {
             val fuRenderKit = config?.fuRenderKit ?: return@invoke -1
+
+            TextureBufferPool.waitFenceSignal2(textureBuffer.fenceObject, "BeautyProcess")
 
             transformGLFrameBuffer.setSize(width, height)
             transformGLFrameBuffer.resetTransform()
