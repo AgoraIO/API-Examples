@@ -52,7 +52,7 @@ echo pwd: %cd%
 echo sdk_url: %sdk_url%
 
 
-set zip_name=Agora_Native_SDK_for_Windows_FULL_DEFAULT.zip
+set zip_name=Shengwang_Native_SDK_for_Windows_FULL_DEFAULT.zip
 if %compile_project% EQU false goto SKIP_DOWNLOAD
 set zip_name=%sdk_url%
 :LOOP
@@ -73,27 +73,27 @@ curl %sdk_url% -o %zip_name%
 REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
 dir
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
-del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
-del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
+rmdir /S /Q Shengwang_Native_SDK_for_Windows_FULL\demo
+del /F /Q Shengwang_Native_SDK_for_Windows_FULL\commits
+del /F /Q Shengwang_Native_SDK_for_Windows_FULL\package_size_report.txt
 :SKIP_DOWNLOAD
 
 
-mkdir Agora_Native_SDK_for_Windows_FULL\samples
-mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
+mkdir Shengwang_Native_SDK_for_Windows_FULL\samples
+mkdir Shengwang_Native_SDK_for_Windows_FULL\samples\API-example
 rmdir /S /Q windows\cicd
 del /F /Q windows\APIExample\ci.py
-xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
-dir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
-7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
+xcopy /Y /E windows\APIExample Shengwang_Native_SDK_for_Windows_FULL\samples\API-example
+xcopy /Y /E windows\README.md Shengwang_Native_SDK_for_Windows_FULL\samples\API-example
+xcopy /Y /E windows\README.zh.md Shengwang_Native_SDK_for_Windows_FULL\samples\API-example
+rmdir /S /Q Shengwang_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
+dir Shengwang_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
+7z a -tzip result.zip -r Shengwang_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%BUILD_NUMBER%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
 if %compile_project% EQU false goto FINAL
-cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
+cd Shengwang_Native_SDK_for_Windows_FULL\samples\API-example
 call cloud_build.bat
 :FINAL
