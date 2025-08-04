@@ -108,15 +108,15 @@ else
 fi
 
 # 读取APPID环境变量
-echo AGORA_APP_ID:$APP_ID
-echo $AGORA_APP_ID
+echo "[build_ios_ipa.sh] AGORA_APP_ID from env: $APP_ID"
 
-echo PROJECT_PATH: $PROJECT_PATH
-echo TARGET_NAME: $TARGET_NAME
-echo KEYCENTER_PATH: $KEYCENTER_PATH
-echo APP_PATH: $APP_PATH
+echo "[build_ios_ipa.sh] PROJECT_PATH: $PROJECT_PATH"
+echo "[build_ios_ipa.sh] TARGET_NAME: $TARGET_NAME"
+echo "[build_ios_ipa.sh] KEYCENTER_PATH: $KEYCENTER_PATH"
+echo "[build_ios_ipa.sh] APP_PATH: $APP_PATH"
 
 #修改Keycenter文件
+echo "[build_ios_ipa.sh] Calling modify_ios_keycenter.py to update keys."
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0
 
 # Xcode clean
@@ -162,6 +162,7 @@ rm -rf *.zip
 rm -rf ${PAYLOAD_PATH}
 
 #复原Keycenter文件
+echo "[build_ios_ipa.sh] Calling modify_ios_keycenter.py to restore keys."
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
 
 
