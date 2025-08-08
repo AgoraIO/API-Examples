@@ -63,7 +63,7 @@ echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
 # Modify Keycenter file
-sed -i -e "s#<\#APPID\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
+sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
 rm -f ${KEYCENTER_PATH}-e
 
 # Xcode clean
