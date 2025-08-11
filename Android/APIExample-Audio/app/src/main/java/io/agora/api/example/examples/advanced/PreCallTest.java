@@ -24,6 +24,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.model.StatisticsInfo;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.EchoTestConfiguration;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -160,36 +161,44 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             btn_lastmile.setText("Testing ...");
         }
         else if (v.getId() == R.id.btn_echo){
-            num = 0;
-            engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-            EchoTestConfiguration config = new EchoTestConfiguration();
-            config.enableVideo = false;
-            config.enableAudio = true;
-            config.intervalInSeconds = MAX_COUNT_DOWN;
-            config.channelId = (new Random().nextInt(10000) + 100000) + "";
-            engine.startEchoTest(config);
-            btn_echo.setEnabled(false);
-            btn_echo.setText("Recording on Microphone ...");
-            echoTimer = new Timer(true);
-            echoTimer.schedule(new TimerTask(){
-                public void run() {
-                    num++;
-                    if(num >= MAX_COUNT_DOWN * 2){
-                        handler.post(() -> {
-                            btn_echo.setEnabled(true);
-                            btn_echo.setText(R.string.start);
-                        });
-                        engine.stopEchoTest();
-                        echoTimer.cancel();
-                    }
-                    else if(num >= MAX_COUNT_DOWN) {
-                        handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
-                    }
-                    else{
-                        handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
-                    }
+            String channelId = "AudioEchoTest" + (new Random().nextInt(1000) + 10000);
+            TokenUtils.genToken(requireContext(), channelId, 0, ret -> {
+                if (ret == null) {
+                    showAlert("Gen token error");
+                    return;
                 }
-            }, 1000, 1000);
+                num = 0;
+                engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+                EchoTestConfiguration config = new EchoTestConfiguration();
+                config.enableVideo = false;
+                config.enableAudio = true;
+                config.intervalInSeconds = MAX_COUNT_DOWN;
+                config.channelId = channelId;
+                config.token = ret;
+                engine.startEchoTest(config);
+                btn_echo.setEnabled(false);
+                btn_echo.setText("Recording on Microphone ...");
+                echoTimer = new Timer(true);
+                echoTimer.schedule(new TimerTask(){
+                    public void run() {
+                        num++;
+                        if(num >= MAX_COUNT_DOWN * 2){
+                            handler.post(() -> {
+                                btn_echo.setEnabled(true);
+                                btn_echo.setText(R.string.start);
+                            });
+                            engine.stopEchoTest();
+                            echoTimer.cancel();
+                        }
+                        else if(num >= MAX_COUNT_DOWN) {
+                            handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
+                        }
+                        else{
+                            handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
+                        }
+                    }
+                }, 1000, 1000);
+            });
         }
     }
 

@@ -162,7 +162,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             btn_lastmile.setText("Testing ...");
         } else if (v.getId() == R.id.btn_echo) {
             String channelId = "AudioEchoTest" + (new Random().nextInt(1000) + 10000);
-            TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+            TokenUtils.genToken(requireContext(), channelId, 0, ret -> {
                 if (ret == null) {
                     showAlert("Gen token error");
                     return;
@@ -200,7 +200,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             });
         } else if (v.getId() == R.id.btn_echo_video) {
             String channelId = "VideoEchoTest" + (new Random().nextInt(1000) + 10000);
-            TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+            TokenUtils.genToken(requireContext(), channelId, 0, ret -> {
                 if (ret == null) {
                     showAlert("Gen token error");
                     return;
