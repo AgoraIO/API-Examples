@@ -31,6 +31,8 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
+import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.data.MediaPlayerSource;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -63,6 +65,8 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
     private Switch switchTransparentBackground;
     private EditText et_channel;
     private RtcEngine engine;
+
+    private IMediaPlayer mediaPlayer;
     private int myUid;
     private boolean joined = false;
 
@@ -135,11 +139,22 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
                 // This api can only be used in the private media server scenario, otherwise some problems may occur.
                 engine.setLocalAccessPoint(localAccessPointConfiguration);
             }
+            createMediaPlayer();
         }
         catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+    }
+
+    private void createMediaPlayer() {
+        mediaPlayer = engine.createMediaPlayer();
+        MediaPlayerSource source = new MediaPlayerSource();
+        source.setUrl("https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4");
+        source.setAutoPlay(false);
+        mediaPlayer.setLoopCount(-1);
+        mediaPlayer.openWithMediaSource(source);
+        mediaPlayer.adjustPlayoutVolume(0);
     }
 
     @Override
@@ -151,6 +166,10 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
             engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_TRANSCODED);
             engine.stopCameraCapture(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
             engine.stopScreenCapture();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.destroy();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -168,6 +187,7 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
                 joinChannel(channelId);
             } else {
                 joined = false;
+                mediaPlayer.pause();
                 /*After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -188,7 +208,6 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
                 engine.leaveChannel();
                 engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_TRANSCODED);
                 engine.stopCameraCapture(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
-                engine.stopScreenCapture();
                 join.setText(getString(R.string.join));
                 videoReportLayout.removeAllViews();
             }
@@ -223,11 +242,11 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
 
 
         engine.startCameraCapture(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY, new CameraCapturerConfiguration(CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT));
-        ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
-        screenCaptureParameters.captureVideo = true;
-        screenCaptureParameters.videoCaptureParameters.width = width;
-        screenCaptureParameters.videoCaptureParameters.height = height;
-        engine.startScreenCapture(screenCaptureParameters);
+//        ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
+//        screenCaptureParameters.captureVideo = true;
+//        screenCaptureParameters.videoCaptureParameters.width = width;
+//        screenCaptureParameters.videoCaptureParameters.height = height;
+//        engine.startScreenCapture(screenCaptureParameters);
 
 
         LocalTranscoderConfiguration config = new LocalTranscoderConfiguration();
@@ -238,6 +257,15 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
         );
         config.transcodingVideoStreams = new ArrayList<>();
+
+        LocalTranscoderConfiguration.TranscodingVideoStream playerStream = new LocalTranscoderConfiguration.TranscodingVideoStream();
+        playerStream.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_MEDIA_PLAYER;
+        playerStream.mediaPlayerId = mediaPlayer.getMediaPlayerId();
+        playerStream.width = width;
+        playerStream.height = height;
+        playerStream.zOrder = 1;
+        config.transcodingVideoStreams.add(playerStream);
+        mediaPlayer.play();
 
 
         LocalTranscoderConfiguration.TranscodingVideoStream screenStream = new LocalTranscoderConfiguration.TranscodingVideoStream();
