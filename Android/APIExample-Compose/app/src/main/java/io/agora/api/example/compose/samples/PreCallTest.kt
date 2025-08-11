@@ -38,6 +38,7 @@ import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.VideoCell
+import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.Constants
 import io.agora.rtc2.EchoTestConfiguration
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -155,16 +156,24 @@ fun PreCallTest() {
         },
         onAudioEchoPretestClick = {
             isAudioEchoPretesting = true
-            val config = EchoTestConfiguration()
-            config.enableVideo = false
-            config.enableAudio = true
-            config.intervalInSeconds = ECHO_TEST_INTERVAL_IN_SECONDS
-            config.channelId = "AudioEchoTest" + (Random().nextInt(1000) + 10000)
-            rtcEngine.startEchoTest(config)
-            handler.postDelayed({
-                isAudioEchoPretesting = false
-                rtcEngine.stopEchoTest()
-            }, ECHO_TEST_INTERVAL_IN_SECONDS * 2 * 1000L)
+            val channelId =  "AudioEchoTest" + (Random().nextInt(1000) + 10000)
+            TokenUtils.genToken(channelId, 0) { token ->
+                if (token == null) {
+                    Toast.makeText(context, "Gen token error", Toast.LENGTH_LONG).show()
+                    return@genToken
+                }
+                val config = EchoTestConfiguration()
+                config.enableVideo = false
+                config.enableAudio = true
+                config.intervalInSeconds = ECHO_TEST_INTERVAL_IN_SECONDS
+                config.channelId = channelId
+                config.token = token
+                rtcEngine.startEchoTest(config)
+                handler.postDelayed({
+                    isAudioEchoPretesting = false
+                    rtcEngine.stopEchoTest()
+                }, ECHO_TEST_INTERVAL_IN_SECONDS * 2 * 1000L)
+            }
         },
         onVideoEchoPretestClick = {
             isVideoEchoPretesting = true
@@ -174,13 +183,21 @@ fun PreCallTest() {
             }, ECHO_TEST_INTERVAL_IN_SECONDS * 2 * 1000L)
         },
         onVideoEchoViewCreated = {
-            val config = EchoTestConfiguration()
-            config.enableVideo = true
-            config.view = it as? SurfaceView
-            config.enableAudio = false
-            config.intervalInSeconds = ECHO_TEST_INTERVAL_IN_SECONDS
-            config.channelId = "VideoEchoTest" + (Random().nextInt(1000) + 10000)
-            rtcEngine.startEchoTest(config)
+            val channelId =  "VideoEchoTest" + (Random().nextInt(1000) + 10000)
+            TokenUtils.genToken(channelId, 0) { token ->
+                if (token == null) {
+                    Toast.makeText(context, "Gen token error", Toast.LENGTH_LONG).show()
+                    return@genToken
+                }
+                val config = EchoTestConfiguration()
+                config.enableVideo = true
+                config.view = it as? SurfaceView
+                config.enableAudio = false
+                config.intervalInSeconds = ECHO_TEST_INTERVAL_IN_SECONDS
+                config.channelId = channelId
+                config.token = token
+                rtcEngine.startEchoTest(config)
+            }
         }
     )
 }
