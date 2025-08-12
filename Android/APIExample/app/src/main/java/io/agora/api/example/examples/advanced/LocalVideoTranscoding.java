@@ -240,19 +240,10 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-
-        engine.startCameraCapture(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY, new CameraCapturerConfiguration(CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT));
-//        ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
-//        screenCaptureParameters.captureVideo = true;
-//        screenCaptureParameters.videoCaptureParameters.width = width;
-//        screenCaptureParameters.videoCaptureParameters.height = height;
-//        engine.startScreenCapture(screenCaptureParameters);
-
-
         LocalTranscoderConfiguration config = new LocalTranscoderConfiguration();
         config.videoOutputConfiguration = new VideoEncoderConfiguration(
                 new VideoEncoderConfiguration.VideoDimensions(width, height),
-                VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24,
+                VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
         );
@@ -267,14 +258,6 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         config.transcodingVideoStreams.add(playerStream);
         mediaPlayer.play();
 
-
-        LocalTranscoderConfiguration.TranscodingVideoStream screenStream = new LocalTranscoderConfiguration.TranscodingVideoStream();
-        screenStream.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY;
-        screenStream.width = width;
-        screenStream.height = height;
-        screenStream.zOrder = 1;
-        config.transcodingVideoStreams.add(screenStream);
-
         LocalTranscoderConfiguration.TranscodingVideoStream cameraStream = new LocalTranscoderConfiguration.TranscodingVideoStream();
         cameraStream.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY;
         cameraStream.width = width / 2;
@@ -284,6 +267,8 @@ public class LocalVideoTranscoding extends BaseFragment implements View.OnClickL
         cameraStream.zOrder = 2;
         cameraStream.mirror = true;
         config.transcodingVideoStreams.add(cameraStream);
+
+        engine.startCameraCapture(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY, new CameraCapturerConfiguration(CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT));
 
         engine.startLocalVideoTranscoder(config);
 
