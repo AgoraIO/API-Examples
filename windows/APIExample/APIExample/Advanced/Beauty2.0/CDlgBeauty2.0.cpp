@@ -1,32 +1,32 @@
-﻿// CDlgBeauty.cpp: 
+// CDlgBeauty.cpp: 
 //
 
 #include "stdafx.h"
 #include "APIExample.h"
-#include "CDlgBeauty.h"
+#include "CDlgBeauty2.0.h"
 #include "afxdialogex.h"
 
 // CDlgBeauty 
 
-IMPLEMENT_DYNAMIC(CDlgBeauty, CDialogEx)
+IMPLEMENT_DYNAMIC(CDlgBeauty2, CDialogEx)
 
-CDlgBeauty::CDlgBeauty(CWnd* pParent /*=nullptr*/)
+CDlgBeauty2::CDlgBeauty2(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
 {
-	mBeautyDlgEx = new CDlgBeautyEx();
+	mBeautyDlgEx = new CDlgBeautyEx2();
 }
 
-CDlgBeauty::~CDlgBeauty()
+CDlgBeauty2::~CDlgBeauty2()
 {
 	if (mBeautyDlgEx)
 	{
 		delete mBeautyDlgEx;
 		mBeautyDlgEx = nullptr;
 	}
-		
+
 }
 
-void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
+void CDlgBeauty2::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
@@ -59,32 +59,32 @@ void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CDlgBeauty::OnBnClickedButtonJoinchannel)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CDlgBeauty::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CDlgBeauty::OnEIDJoinChannelSuccess)
-	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CDlgBeauty::OnBnClickedCheckBeautyEnable)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_REDNESS, &CDlgBeauty::OnNMCustomdrawSliderRedness)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_LIGHTENING, &CDlgBeauty::OnThumbposchangingSliderLightening)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_SMOOTHNESS, &CDlgBeauty::OnNMCustomdrawSliderSmoothness)
-	ON_CBN_SELCHANGE(IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, &CDlgBeauty::OnSelchangeComboBeauteLighteningContrastLevel)
-	ON_BN_CLICKED(IDC_CHECK_ENHANCE, &CDlgBeauty::OnBnClickedCheckEnhance)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_STRENGTH, &CDlgBeauty::OnCustomdrawSliderStrength)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_SKIN_PROTECT, &CDlgBeauty::OnCustomdrawSliderSkinProtect)
-	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CDlgBeauty::OnBnClickedCheckVideoDenoise)
-	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE2, &CDlgBeauty::OnBnClickedCheckVideoDenoise2)
-	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty::OnBnClickedCheckLowlight)
+BEGIN_MESSAGE_MAP(CDlgBeauty2, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CDlgBeauty2::OnBnClickedButtonJoinchannel)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CDlgBeauty2::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CDlgBeauty2::OnEIDJoinChannelSuccess)
+	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CDlgBeauty2::OnBnClickedCheckBeautyEnable)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_REDNESS, &CDlgBeauty2::OnNMCustomdrawSliderRedness)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_LIGHTENING, &CDlgBeauty2::OnThumbposchangingSliderLightening)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_SMOOTHNESS, &CDlgBeauty2::OnNMCustomdrawSliderSmoothness)
+	ON_CBN_SELCHANGE(IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, &CDlgBeauty2::OnSelchangeComboBeauteLighteningContrastLevel)
+	ON_BN_CLICKED(IDC_CHECK_ENHANCE, &CDlgBeauty2::OnBnClickedCheckEnhance)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_STRENGTH, &CDlgBeauty2::OnCustomdrawSliderStrength)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_SKIN_PROTECT, &CDlgBeauty2::OnCustomdrawSliderSkinProtect)
+	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CDlgBeauty2::OnBnClickedCheckVideoDenoise)
+	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE2, &CDlgBeauty2::OnBnClickedCheckVideoDenoise2)
+	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty2::OnBnClickedCheckLowlight)
 	ON_WM_SHOWWINDOW()
-	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_VIRTUAL_BG_BLUR, IDC_RADIO_VIRTUAL_BG_IMAGE, &CDlgBeauty::OnBnClickedStaticVirtualBgChoose)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_BRIHTNESS, &CDlgBeauty::OnNMCustomdrawSliderBrihtness)
-	ON_BN_CLICKED(IDC_CHECK_EXTENTION, &CDlgBeauty::OnBnClickedCheckExtention)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_VIRTUAL_BG_BLUR, IDC_RADIO_VIRTUAL_BG_IMAGE, &CDlgBeauty2::OnBnClickedStaticVirtualBgChoose)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_BRIHTNESS, &CDlgBeauty2::OnNMCustomdrawSliderBrihtness)
+	ON_BN_CLICKED(IDC_CHECK_EXTENTION, &CDlgBeauty2::OnBnClickedCheckExtention)
 END_MESSAGE_MAP()
 
 
 // CDlgBeauty message hand;er
 
 
-void CDlgBeauty::OnBnClickedButtonJoinchannel()
+void CDlgBeauty2::OnBnClickedButtonJoinchannel()
 {
 	if (!m_joinChannel) {
 		CString strChannelName;
@@ -111,7 +111,7 @@ void CDlgBeauty::OnBnClickedButtonJoinchannel()
 		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
-	
+
 		//join channel
 		agora::rtc::ChannelMediaOptions op;
 		op.publishCameraTrack = true;
@@ -136,7 +136,7 @@ void CDlgBeauty::OnBnClickedButtonJoinchannel()
 	m_joinChannel = !m_joinChannel;
 }
 
-void CDlgBeauty::OnShowWindow(BOOL bShow, UINT nStatus)
+void CDlgBeauty2::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 
@@ -156,7 +156,7 @@ void CDlgBeauty::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 }
 
-bool CDlgBeauty::InitAgora()
+bool CDlgBeauty2::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -184,13 +184,13 @@ bool CDlgBeauty::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 
-
 	CString strInfo;
 	ret = m_rtcEngine->enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 	strInfo.Format(_T("enableExtension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_video_filters_clear_vision"));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("clear_vision"));
+	
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
@@ -202,7 +202,7 @@ bool CDlgBeauty::InitAgora()
 
 	//start preview
 	CameraCapturerConfiguration config;
-	
+
 	m_rtcEngine->startPreview();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
 
@@ -216,10 +216,13 @@ bool CDlgBeauty::InitAgora()
 
 	return true;
 }
+
 //UnInitialize the Agora SDK
-void CDlgBeauty::UnInitAgora()
+void CDlgBeauty2::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		CleanupBeautyResources();
+		
 		if (m_joinChannel) {
 			//leave channel primary camera
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -231,7 +234,7 @@ void CDlgBeauty::UnInitAgora()
 			//stop screen capture
 			m_rtcEngine->stopScreenCapture();
 			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("stop screen capture"));
-			
+
 			m_joinChannel = false;
 			m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 		}
@@ -245,14 +248,28 @@ void CDlgBeauty::UnInitAgora()
 			m_rtcEngine->release(nullptr);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		}
-		
+
 		m_rtcEngine = NULL;
 	}
 }
 
+void CDlgBeauty2::CleanupBeautyResources()
+{
+	if (m_videoEffectObject && m_rtcEngine) {
+		m_rtcEngine->destroyVideoEffectObject(m_videoEffectObject);
+		m_videoEffectObject = nullptr;
+		
+		m_rtcEngine->enableExtension(
+			"agora_video_filters_clear_vision", 
+			"clear_vision", 
+			false,
+			agora::media::PRIMARY_CAMERA_SOURCE
+		);
+	}
+}
 
 //Initialize the Ctrl Text.
-void CDlgBeauty::InitCtrlText()
+void CDlgBeauty2::InitCtrlText()
 {
 	m_cmbContrast.ResetContent();
 	m_cmbContrast.InsertString(0, L"CONTRAST_LOW");
@@ -263,13 +280,13 @@ void CDlgBeauty::InitCtrlText()
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 }
 
-void CDlgBeauty::UpdateExtentCbState(bool isCheck)
+void CDlgBeauty2::UpdateExtentCbState(bool isCheck)
 {
 	mCkExtention.SetCheck(isCheck);
 }
 
 // resume window status.
-void CDlgBeauty::ResumeStatus()
+void CDlgBeauty2::ResumeStatus()
 {
 	m_staVideoArea.ShowWindow(SW_SHOW);
 	RECT rcArea;
@@ -281,7 +298,7 @@ void CDlgBeauty::ResumeStatus()
 	m_videoWnds[1].ShowWindow(SW_HIDE);
 
 	m_lstInfo.ResetContent();
-	
+
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_edtChannel.SetWindowText(_T(""));
 	m_joinChannel = false;
@@ -300,11 +317,11 @@ void CDlgBeauty::ResumeStatus()
 	m_sldSmoothness.SetPos(0);
 
 	mSliderBright.SetRange(0, 100);
-	
+
 }
 
 
-LRESULT CDlgBeauty::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBeauty2::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)wParam;
 
@@ -315,7 +332,7 @@ LRESULT CDlgBeauty::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_LEAVE_CHANNEL message window handler.
-LRESULT CDlgBeauty::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBeauty2::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)wParam;
 
@@ -326,11 +343,11 @@ LRESULT CDlgBeauty::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-BOOL CDlgBeauty::OnInitDialog()
+BOOL CDlgBeauty2::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	mBeautyDlgEx->Create(CDlgBeautyEx::IDD);
-	mBeautyDlgEx->initData(&m_initialize, &m_rtcEngine,this);
+	mBeautyDlgEx->Create(CDlgBeautyEx2::IDD);
+	mBeautyDlgEx->initData(&m_initialize, &m_rtcEngine, this);
 	mBeautyDlgEx->InitCtrlText();
 	InitCtrlText();
 	for (int i = 0; i < 2; ++i) {
@@ -342,13 +359,10 @@ BOOL CDlgBeauty::OnInitDialog()
 	m_imgPath = cs2utf8(strPath);
 	ResumeStatus();
 
-	mCkExtention.ShowWindow(SW_HIDE);
-
 	return TRUE;  // return TRUE unless you set the focus to a control
-				 
 }
 
-void CDlgBeauty::SetBeauty()
+void CDlgBeauty2::SetBeauty()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -375,7 +389,7 @@ void CDlgBeauty::SetBeauty()
 	}
 }
 
-void CDlgBeauty::SetColorful()
+void CDlgBeauty2::SetColorful()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -384,63 +398,55 @@ void CDlgBeauty::SetColorful()
 	options.skinProtectLevel = m_sldSkin.GetPos() / 100.f;
 	options.strengthLevel = m_sldLength.GetPos() / 100.f;
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"strength\":%f, \"skinProtect\": %f}",
-		m_chkEnhance.GetCheck()!=0, m_sldLength.GetPos()/100.f, m_sldSkin.GetPos()/100.f );
+		m_chkEnhance.GetCheck() != 0, m_sldLength.GetPos() / 100.f, m_sldSkin.GetPos() / 100.f);
 	m_rtcEngine->setColorEnhanceOptions(m_chkEnhance.GetCheck() != 0, options);
 }
 
-void CDlgBeauty::OnBnClickedCheckBeautyEnable()
+void CDlgBeauty2::OnBnClickedCheckBeautyEnable()
 {
 	SetBeauty();
 }
 
 
-void CDlgBeauty::OnNMCustomdrawSliderRedness(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	
-	*pResult = 0;
-	SetBeauty();
-}
-
-
-void CDlgBeauty::OnThumbposchangingSliderLightening(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	NMTRBTHUMBPOSCHANGING *pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING *>(pNMHDR);
-	
-	*pResult = 0;
-	SetBeauty();
-}
-
-
-void CDlgBeauty::OnNMCustomdrawSliderSmoothness(NMHDR *pNMHDR, LRESULT *pResult)
+void CDlgBeauty2::OnNMCustomdrawSliderRedness(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+
+	*pResult = 0;
+	SetBeauty();
+}
+
+
+void CDlgBeauty2::OnThumbposchangingSliderLightening(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTRBTHUMBPOSCHANGING* pNMTPC = reinterpret_cast<NMTRBTHUMBPOSCHANGING*>(pNMHDR);
+
+	*pResult = 0;
+	SetBeauty();
+}
+
+
+void CDlgBeauty2::OnNMCustomdrawSliderSmoothness(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	SetBeauty();
 	*pResult = 0;
 }
 
 
-void CDlgBeauty::OnSelchangeComboBeauteLighteningContrastLevel()
+void CDlgBeauty2::OnSelchangeComboBeauteLighteningContrastLevel()
 {
 	SetBeauty();
 }
 
 
-void CDlgBeauty::OnBnClickedCheckEnhance()
+void CDlgBeauty2::OnBnClickedCheckEnhance()
 {
 	SetColorful();
 }
 
 
-void CDlgBeauty::OnCustomdrawSliderStrength(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	SetColorful();
-	*pResult = 0;
-}
-
-
-void CDlgBeauty::OnCustomdrawSliderSkinProtect(NMHDR *pNMHDR, LRESULT *pResult)
+void CDlgBeauty2::OnCustomdrawSliderStrength(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	SetColorful();
@@ -448,7 +454,15 @@ void CDlgBeauty::OnCustomdrawSliderSkinProtect(NMHDR *pNMHDR, LRESULT *pResult)
 }
 
 
-void CDlgBeauty::OnBnClickedCheckVideoDenoise()
+void CDlgBeauty2::OnCustomdrawSliderSkinProtect(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	SetColorful();
+	*pResult = 0;
+}
+
+
+void CDlgBeauty2::OnBnClickedCheckVideoDenoise()
 {
 	char szJson[512] = { 0 };
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"mode\":%d, \"level\": %d}",
@@ -460,7 +474,7 @@ void CDlgBeauty::OnBnClickedCheckVideoDenoise()
 }
 
 
-void CDlgBeauty::OnBnClickedCheckVideoDenoise2()
+void CDlgBeauty2::OnBnClickedCheckVideoDenoise2()
 {
 	agora::rtc::SegmentationProperty property;
 	agora::rtc::VirtualBackgroundSource background;
@@ -479,7 +493,7 @@ void CDlgBeauty::OnBnClickedCheckVideoDenoise2()
 	//
 }
 
-void CDlgBeauty::OnBnClickedCheckLowlight()
+void CDlgBeauty2::OnBnClickedCheckLowlight()
 {
 	char szJson[512] = { 0 };
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"mode\":%d, \"level\": %d}",
@@ -491,7 +505,7 @@ void CDlgBeauty::OnBnClickedCheckLowlight()
 
 
 
-void CDlgBeauty::OnBnClickedStaticVirtualBgChoose(UINT idCtl)
+void CDlgBeauty2::OnBnClickedStaticVirtualBgChoose(UINT idCtl)
 {
 	int isChecked = m_chkVirtual.GetCheck();
 	if (isChecked && m_rtcEngine) {
@@ -517,7 +531,7 @@ void CDlgBeauty::OnBnClickedStaticVirtualBgChoose(UINT idCtl)
 }
 
 
-void CDlgBeauty::OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult)
+void CDlgBeauty2::OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	SetBeauty();
@@ -525,14 +539,25 @@ void CDlgBeauty::OnNMCustomdrawSliderBrihtness(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-void CDlgBeauty::OnBnClickedCheckExtention()
+void CDlgBeauty2::OnBnClickedCheckExtention()
 {
 	int checked = mCkExtention.GetCheck();
-	if (checked)
-	{
-		mBeautyDlgEx->ShowWindow(SW_SHOW);
+	if (checked) {
+		if (mBeautyDlgEx) {
+			mBeautyDlgEx->ShowWindow(SW_SHOW);
+		}
+	} else {
+		if (mBeautyDlgEx) {
+			mBeautyDlgEx->ShowWindow(SW_HIDE);
+		}
 	}
-	else {
-		mBeautyDlgEx->ShowWindow(SW_HIDE);
-	}
+}
+
+CString CDlgBeauty2::GetExePath()
+{
+	TCHAR szPath[MAX_PATH];
+	GetModuleFileName(NULL, szPath, MAX_PATH);
+	CString strExePath = szPath;
+	int nPos = strExePath.ReverseFind('\\');
+	return strExePath.Left(nPos);
 }
