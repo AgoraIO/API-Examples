@@ -140,7 +140,6 @@ void CSimulcastDlg::CreateAllVideoWnds()
 
 void CSimulcastDlg::ResetVideoView()
 {
-    // 隐藏视频区域背景
     m_videoArea.ShowWindow(SW_HIDE);
     
     CRect rcArea;

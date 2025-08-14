@@ -82,10 +82,8 @@ private:
 	FaceShapeAreaOptions m_faceShapeAreaOptions;
 	FaceShapeBeautyOptions m_faceShapeBeautyOptions;
 	
-	// 使用智能指针管理VideoEffectObject
 	agora_refptr<agora::rtc::IVideoEffectObject> m_videoEffectObjectRef;
 
-	// 辅助方法声明
 	std::string GetFaceShapeAreaParamName(FaceShapeAreaOptions::FACE_SHAPE_AREA area);
 	int MapUIToResourceId(const CString& resourceType, int uiIndex);
 	void InitializeBeautyResources();
@@ -105,11 +103,9 @@ public:
 	void InitCtrlData();
 	void SetBeauty();
 	
-	// 移除SetVideoEffectObject方法，改为内部创建
 	void ApplyMakeupEffect();
 	void ApplyFaceShapeEffect();
 
-	// UI控件成员变量
 	CButton mCbMakeup;
 	CComboBox mDdBrowColor;
 	CComboBox mDdBrowStyle;
@@ -133,7 +129,6 @@ public:
 	CComboBox mDdShapeStyle;
 	CSliderCtrl mSdShapeStyleIntensity;
 	
-	// 消息处理函数
 	afx_msg void OnBnClickedCheckMakeUp();
 	afx_msg void OnCbnSelchangeComboBrowColor();
 	afx_msg void OnNMCustomdrawSliderBrowStrength(NMHDR* pNMHDR, LRESULT* pResult);

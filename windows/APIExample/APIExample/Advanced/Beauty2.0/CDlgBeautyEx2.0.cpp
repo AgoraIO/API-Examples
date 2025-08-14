@@ -72,10 +72,8 @@ BOOL CDlgBeautyEx2::OnInitDialog()
 
 	InitCtrlText();
 	
-	// 暂时隐藏脸部塑形相关的UI控件
 	HideFaceShapeControls();
 	
-	// 如果引擎已经初始化，创建美颜资源
 	if (m_initialize && *m_initialize && m_rtcEngine && *m_rtcEngine) {
 		InitializeBeautyResources();
 	}
@@ -96,12 +94,10 @@ void CDlgBeautyEx2::InitializeBeautyResources()
 		return;
 	}
 	
-	// 如果已经创建过，直接返回
 	if (m_videoEffectObjectRef) {
 		return;
 	}
 	
-	// 1. 启用扩展
 	int ret = (*m_rtcEngine)->enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
 	if (ret != 0) {
 		CString strMsg;
@@ -110,14 +106,11 @@ void CDlgBeautyEx2::InitializeBeautyResources()
 		return;
 	}
 	
-	// 2. 设置参数优化
 	(*m_rtcEngine)->setParameters("{\"rtc.video.yuvconverter_enable_hardware_buffer\":true}");
 	
-	// 3. 获取美颜资源路径
 	CString strExePath = GetExePath();
 	CString strModelPath = strExePath + _T("\\beauty_agora\\beauty_material.bundle\\beauty_material_v2.0.0");
 	
-	// 检查路径是否存在
 	if (!PathFileExists(strModelPath)) {
 		CString strMsg;
 		strMsg.Format(_T("Beauty resource path not exist: %s"), strModelPath);
@@ -125,7 +118,6 @@ void CDlgBeautyEx2::InitializeBeautyResources()
 		return;
 	}
 	
-	// 4. 创建VideoEffectObject - 使用智能指针
 	std::string modelPath = cs2utf8(strModelPath);
 	m_videoEffectObjectRef = (*m_rtcEngine)->createVideoEffectObject(
 		modelPath.c_str(),
@@ -147,13 +139,12 @@ CString CDlgBeautyEx2::GetExePath()
 	GetModuleFileName(NULL, szPath, MAX_PATH);
 	CString strExePath = szPath;
 	int nPos = strExePath.ReverseFind('\\');
-	return strExePath.Left(nPos);  // 去掉exe文件名，得到目录路径
+	return strExePath.Left(nPos);
 }
 
 void CDlgBeautyEx2::CleanupBeautyResources()
 {
 	if (m_videoEffectObjectRef && m_rtcEngine && *m_rtcEngine) {
-		// 禁用扩展
 		(*m_rtcEngine)->enableExtension(
 			"agora_video_filters_clear_vision", 
 			"clear_vision", 
@@ -161,14 +152,12 @@ void CDlgBeautyEx2::CleanupBeautyResources()
 			agora::media::PRIMARY_CAMERA_SOURCE
 		);
 		
-		// 智能指针自动管理生命周期
 		m_videoEffectObjectRef = nullptr;
 	}
 }
 
 void CDlgBeautyEx2::OnClose()
 {
-	// 清理资源
 	CleanupBeautyResources();
 	
 	if (m_beautyDlg) {
@@ -224,12 +213,11 @@ void CDlgBeautyEx2::InitCtrlData()
 // set control text from config.
 void CDlgBeautyEx2::InitCtrlText()
 {
-	//make up - 根据实际资源文件映射
 	mDdBrowStyle.ResetContent();
-	mDdBrowStyle.InsertString(0, TEXT("CLOSE"));           // 0 - 关闭
-	mDdBrowStyle.InsertString(1, TEXT("eyebrow001"));      // 1 - eyebrow001.txt
-	mDdBrowStyle.InsertString(2, TEXT("eyebrow002"));      // 2 - eyebrow002.txt
-	mDdBrowStyle.InsertString(3, TEXT("eyebrow003"));      // 3 - eyebrow003.txt
+	mDdBrowStyle.InsertString(0, TEXT("CLOSE"));
+	mDdBrowStyle.InsertString(1, TEXT("eyebrow001"));
+	mDdBrowStyle.InsertString(2, TEXT("eyebrow002"));
+	mDdBrowStyle.InsertString(3, TEXT("eyebrow003"));
 	
 	mDdBrowColor.ResetContent();
 	mDdBrowColor.InsertString(0, TEXT("Brown"));
@@ -237,9 +225,9 @@ void CDlgBeautyEx2::InitCtrlText()
 	mDdBrowColor.InsertString(2, TEXT("Dark Brown"));
 
 	mDdLashStyle.ResetContent();
-	mDdLashStyle.InsertString(0, TEXT("CLOSE"));           // 0 - 关闭
-	mDdLashStyle.InsertString(1, TEXT("eyelash003"));      // 映射到3
-	mDdLashStyle.InsertString(2, TEXT("eyelash005"));      // 映射到5
+	mDdLashStyle.InsertString(0, TEXT("CLOSE"));
+	mDdLashStyle.InsertString(1, TEXT("eyelash003"));
+	mDdLashStyle.InsertString(2, TEXT("eyelash005"));
 	
 	mDdLashColor.ResetContent();
 	mDdLashColor.InsertString(0, TEXT("Black"));
@@ -247,20 +235,20 @@ void CDlgBeautyEx2::InitCtrlText()
 	mDdLashColor.InsertString(2, TEXT("Blue"));
 
 	mDdShadowStyle.ResetContent();
-	mDdShadowStyle.InsertString(0, TEXT("CLOSE"));         // 0 - 关闭
-	mDdShadowStyle.InsertString(1, TEXT("eyeshadow001"));  // 映射到1
-	mDdShadowStyle.InsertString(2, TEXT("eyeshadow006"));  // 映射到6
+	mDdShadowStyle.InsertString(0, TEXT("CLOSE"));
+	mDdShadowStyle.InsertString(1, TEXT("eyeshadow001"));
+	mDdShadowStyle.InsertString(2, TEXT("eyeshadow006"));
 
 	mDdPupilStyle.ResetContent();
-	mDdPupilStyle.InsertString(0, TEXT("CLOSE"));          // 0 - 关闭
-	mDdPupilStyle.InsertString(1, TEXT("facial002"));      // 映射到2
+	mDdPupilStyle.InsertString(0, TEXT("CLOSE"));
+	mDdPupilStyle.InsertString(1, TEXT("facial002"));
 
 	mDdBlushStyle.ResetContent();
-	mDdBlushStyle.InsertString(0, TEXT("CLOSE"));          // 0 - 关闭
-	mDdBlushStyle.InsertString(1, TEXT("blush001"));       // 映射到1
-	mDdBlushStyle.InsertString(2, TEXT("blush002"));       // 映射到2
-	mDdBlushStyle.InsertString(3, TEXT("blush004"));       // 映射到4
-	mDdBlushStyle.InsertString(4, TEXT("blush009"));       // 映射到9
+	mDdBlushStyle.InsertString(0, TEXT("CLOSE"));
+	mDdBlushStyle.InsertString(1, TEXT("blush001"));
+	mDdBlushStyle.InsertString(2, TEXT("blush002"));
+	mDdBlushStyle.InsertString(3, TEXT("blush004"));
+	mDdBlushStyle.InsertString(4, TEXT("blush009"));
 	
 	mDdBlushColor.ResetContent();
 	mDdBlushColor.InsertString(0, TEXT("Pink"));
@@ -307,59 +295,45 @@ void CDlgBeautyEx2::InitCtrlText()
 }
 
 void CDlgBeautyEx2::HideFaceShapeControls()
-{
-	// 隐藏脸部塑形相关的控件 - 使用实际存在的控件ID
-	
-	// 隐藏美颜塑形复选框
+{	
 	CWnd* pShapeCheckbox = GetDlgItem(IDC_CHECK_BEAUTY_SHAPE);
 	if (pShapeCheckbox) {
 		pShapeCheckbox->ShowWindow(SW_HIDE);
 	}
 	
-	// 隐藏脸部塑形区域下拉框
 	CWnd* pShapeAreaCombo = GetDlgItem(IDC_COMBO_FACE_SHAPE_AREA);
 	if (pShapeAreaCombo) {
 		pShapeAreaCombo->ShowWindow(SW_HIDE);
 	}
 	
-	// 隐藏脸部塑形风格下拉框  
 	CWnd* pShapeStyleCombo = GetDlgItem(IDC_COMBO_FACE_SHAPE_STYLE);
 	if (pShapeStyleCombo) {
 		pShapeStyleCombo->ShowWindow(SW_HIDE);
 	}
 	
-	// 隐藏塑形区域强度滑块
 	CWnd* pShapeAreaIntensitySlider = GetDlgItem(IDC_SLIDER__SHAPE_AREA_INTENSITY);
 	if (pShapeAreaIntensitySlider) {
 		pShapeAreaIntensitySlider->ShowWindow(SW_HIDE);
 	}
 	
-	// 隐藏塑形风格强度滑块
 	CWnd* pShapeStyleIntensitySlider = GetDlgItem(IDC_SLIDER__SHAPE_STYLE_INTENSITY);
 	if (pShapeStyleIntensitySlider) {
 		pShapeStyleIntensitySlider->ShowWindow(SW_HIDE);
 	}
-	
-	// 隐藏相关的静态文本标签（需要根据实际资源文件中的ID调整）
-	// 这些ID需要根据您的.rc资源文件中的实际定义来确定
 }
 
 void CDlgBeautyEx2::SetBeauty()
 {
-	// 如果还没有创建VideoEffectObject，先创建
 	if (!m_videoEffectObjectRef) {
 		InitializeBeautyResources();
 	}
 	
-	// 检查是否创建成功
 	if (!m_videoEffectObjectRef) {
 		AfxMessageBox(_T("VideoEffectObject not created successfully"));
 		return;
 	}
 	
-	// 只应用化妆效果，暂时不应用脸部塑形
 	ApplyMakeupEffect();
-	// ApplyFaceShapeEffect(); // 暂时注释掉
 }
 
 void CDlgBeautyEx2::ApplyMakeupEffect()
@@ -369,7 +343,6 @@ void CDlgBeautyEx2::ApplyMakeupEffect()
 	}
 	
 	try {
-		// 添加或更新化妆节点
 		int ret = m_videoEffectObjectRef->addOrUpdateVideoEffect(
 			static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP),
 			""
@@ -382,51 +355,43 @@ void CDlgBeautyEx2::ApplyMakeupEffect()
 			return;
 		}
 		
-		// 启用化妆功能
 		m_videoEffectObjectRef->setVideoEffectBoolParam("makeup_options", "enable_mu", m_makeupOptions.enable_mu);
 		
 		if (m_makeupOptions.enable_mu) {
-			// // 打印下m_makeupOptions的所有参数
-			// CString strParams;
-			// strParams.Format(_T("browStyle: %d, browColor: %d, browStrength: %f, lashStyle: %d, lashColor: %d, lashStrength: %f, shadowStyle: %d, shadowStrength: %f, pupilStyle: %d, pupilStrength: %f, blushStyle: %d, blushColor: %d, blushStrength: %f, lipStyle: %d, lipColor: %d, lipStrength: %f"),
-			// 	m_makeupOptions.browStyle, m_makeupOptions.browColor, m_makeupOptions.browStrength,
-			// 	m_makeupOptions.lashStyle, m_makeupOptions.lashColor, m_makeupOptions.lashStrength,
-			// 	m_makeupOptions.shadowStyle, m_makeupOptions.shadowStrength,
-			// 	m_makeupOptions.pupilStyle, m_makeupOptions.pupilStrength, 
-			// 	m_makeupOptions.blushStyle, m_makeupOptions.blushColor, m_makeupOptions.blushStrength,
-			// 	m_makeupOptions.lipStyle, m_makeupOptions.lipColor, m_makeupOptions.lipStrength
-			// );
-			// AfxMessageBox(strParams);
+			CString strParams;
+			strParams.Format(_T("browStyle: %d, browColor: %d, browStrength: %f, lashStyle: %d, lashColor: %d, lashStrength: %f, shadowStyle: %d, shadowStrength: %f, pupilStyle: %d, pupilStrength: %f, blushStyle: %d, blushColor: %d, blushStrength: %f, lipStyle: %d, lipColor: %d, lipStrength: %f\n"),
+				m_makeupOptions.browStyle, m_makeupOptions.browColor, m_makeupOptions.browStrength,
+				m_makeupOptions.lashStyle, m_makeupOptions.lashColor, m_makeupOptions.lashStrength,
+				m_makeupOptions.shadowStyle, m_makeupOptions.shadowStrength,
+				m_makeupOptions.pupilStyle, m_makeupOptions.pupilStrength, 
+				m_makeupOptions.blushStyle, m_makeupOptions.blushColor, m_makeupOptions.blushStrength,
+				m_makeupOptions.lipStyle, m_makeupOptions.lipColor, m_makeupOptions.lipStrength
+			);
+			OutputDebugString(strParams);
 			
-			// 眉毛参数 - 使用映射后的值
 			int browStyleId = MapUIToResourceId(_T("eyebrow"), m_makeupOptions.browStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "browStyle", browStyleId);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "browColor", m_makeupOptions.browColor);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "browStrength", m_makeupOptions.browStrength);
 			
-			// 睫毛参数 - 使用映射后的值
 			int lashStyleId = MapUIToResourceId(_T("eyelash"), m_makeupOptions.lashStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "lashStyle", lashStyleId);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "lashColor", m_makeupOptions.lashColor);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "lashStrength", m_makeupOptions.lashStrength);
 			
-			// 眼影参数 - 使用映射后的值
 			int shadowStyleId = MapUIToResourceId(_T("eyeshadow"), m_makeupOptions.shadowStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "shadowStyle", shadowStyleId);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "shadowStrength", m_makeupOptions.shadowStrength);
 			
-			// 美瞳参数 - 使用映射后的值
 			int pupilStyleId = MapUIToResourceId(_T("pupil"), m_makeupOptions.pupilStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "pupilStyle", pupilStyleId);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "pupilStrength", m_makeupOptions.pupilStrength);
 			
-			// 腮红参数 - 使用映射后的值
 			int blushStyleId = MapUIToResourceId(_T("blush"), m_makeupOptions.blushStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "blushStyle", blushStyleId);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "blushColor", m_makeupOptions.blushColor);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "blushStrength", m_makeupOptions.blushStrength);
 			
-			// 口红参数 - 直接使用UI值
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "lipStyle", m_makeupOptions.lipStyle);
 			m_videoEffectObjectRef->setVideoEffectIntParam("makeup_options", "lipColor", m_makeupOptions.lipColor);
 			m_videoEffectObjectRef->setVideoEffectFloatParam("makeup_options", "lipStrength", m_makeupOptions.lipStrength);
@@ -443,7 +408,6 @@ void CDlgBeautyEx2::ApplyFaceShapeEffect()
 	}
 	
 	try {
-		// 添加或更新脸部塑形节点 - 应该使用BEAUTY节点而非FACE_SHAPE
 		int ret = m_videoEffectObjectRef->addOrUpdateVideoEffect(
 			static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::BEAUTY),
 			""
@@ -453,14 +417,11 @@ void CDlgBeautyEx2::ApplyFaceShapeEffect()
 			return;
 		}
 		
-		// 应用脸部塑形参数 - 根据文档修正选项组名称
 		if (m_faceShapeAreaOptions.shapeArea != FaceShapeAreaOptions::FACE_SHAPE_AREA_NONE) {
 			std::string paramName = GetFaceShapeAreaParamName(m_faceShapeAreaOptions.shapeArea);
-			// 注意：这里使用具体的参数名而不是face_shape选项组
 			m_videoEffectObjectRef->setVideoEffectFloatParam("face_buffing_option", paramName.c_str(), m_faceShapeAreaOptions.shapeIntensity / 100.0f);
 		}
 		
-		// 应用整体脸型风格 - 根据文档使用face_shape_beauty_option
 		if (m_faceShapeBeautyOptions.shapeStyle != FaceShapeBeautyOptions::FACE_SHAPE_BEAUTY_STYLE_FEMALE) {
 			m_videoEffectObjectRef->setVideoEffectBoolParam("face_shape_beauty_option", "enable", true);
 			m_videoEffectObjectRef->setVideoEffectIntParam("face_shape_beauty_option", "intensity", static_cast<int>(m_faceShapeBeautyOptions.styleIntensity));
@@ -470,7 +431,6 @@ void CDlgBeautyEx2::ApplyFaceShapeEffect()
 	}
 }
 
-// 辅助方法：将脸部区域枚举转换为参数名称
 std::string CDlgBeautyEx2::GetFaceShapeAreaParamName(FaceShapeAreaOptions::FACE_SHAPE_AREA area)
 {
 	switch (area) {
@@ -653,33 +613,27 @@ void CDlgBeautyEx2::OnCbnSelchangeComboFaceShapeStyle()
 	SetBeauty();
 }
 
-// 添加映射函数
 int CDlgBeautyEx2::MapUIToResourceId(const CString& resourceType, int uiIndex)
 {
 	if (resourceType == _T("eyebrow")) {
-		// 眉毛: 0->0, 1->1, 2->2, 3->3
 		return uiIndex;
 	}
 	else if (resourceType == _T("eyelash")) {
-		// 睫毛: 0->0, 1->3, 2->5
 		int lashMapping[] = {0, 3, 5};
 		return (uiIndex < 3) ? lashMapping[uiIndex] : 0;
 	}
 	else if (resourceType == _T("eyeshadow")) {
-		// 眼影: 0->0, 1->1, 2->6
 		int shadowMapping[] = {0, 1, 6};
 		return (uiIndex < 3) ? shadowMapping[uiIndex] : 0;
 	}
 	else if (resourceType == _T("blush")) {
-		// 腮红: 0->0, 1->1, 2->2, 3->4, 4->9
 		int blushMapping[] = {0, 1, 2, 4, 9};
 		return (uiIndex < 5) ? blushMapping[uiIndex] : 0;
 	}
 	else if (resourceType == _T("pupil")) {
-		// 美瞳: 0->0, 1->2 (假设使用facial002)
 		int pupilMapping[] = {0, 2};
 		return (uiIndex < 2) ? pupilMapping[uiIndex] : 0;
 	}
 	
-	return uiIndex; // 默认直接映射
+	return uiIndex;
 }
