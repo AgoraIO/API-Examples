@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ Éú³ÉµÄ°üº¬ÎÄ¼þ¡£
-// ¹© APIExample.rc Ê¹ÓÃ
+// Microsoft Visual C++ ï¿½ï¿½ï¿½ÉµÄ°ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+// ï¿½ï¿½ APIExample.rc Ê¹ï¿½ï¿½
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -54,6 +54,8 @@
 #define IDD_DIALOG_BEAUTY1              178
 #define IDD_DIALOG_VIDEO_ENHANCE        178
 #define IDD_DIALOG_BEAUTY_EX            178
+#define IDD_DIALOG_MULTIPATH            179
+#define IDD_DIALOG_SIMULCAST			180
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -461,14 +463,28 @@
 #define IDC_COMBO_LIP_COLOR             1181
 #define IDC_COMBO_FACE_SHAPE_AREA       1182
 #define IDC_SLIDER__SHAPE_AREA_INTENSITY 1183
+#define IDC_LIST_INFO_MULTIPATH         1184
+#define IDC_COMBO_MULTIPATH_MODE        1185
+#define IDC_STATIC_MULTIPATH_MODE       1186
+#define IDC_LIST_INFO_SIMULCAST         1187
+#define IDC_CHECK_LAYER1                1188
+#define IDC_CHECK_LAYER2                1189
+#define IDC_CHECK_LAYER3                1190
+#define IDC_CHECK_LAYER4                1191
+#define IDC_COMBO_LAYER_SELECT          1192
+#define IDC_STATIC_LAYER_TITLE          1193
+#define IDC_STATIC_LAYER_SELECT         1194
+#define IDC_BASEWND_VIDEO_SIMULCAST     1195
+#define IDC_CHECK_ENABLE_MULTIPATH		1196
+#define IDC_STATIC_ENABLE_MULTIPATH		1197
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        181
+#define _APS_NEXT_RESOURCE_VALUE        182
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1169
+#define _APS_NEXT_CONTROL_VALUE         1198
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

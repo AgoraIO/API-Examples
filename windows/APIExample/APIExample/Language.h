@@ -48,6 +48,7 @@ extern wchar_t advancedAudioVolume[INFO_LEN];
 extern wchar_t advancedReportInCall[INFO_LEN];
 extern wchar_t advancedRegionConn[INFO_LEN];
 extern wchar_t advancedCrossChannel[INFO_LEN];
+extern wchar_t advancedSimulcast[INFO_LEN];
 extern wchar_t advancedMediaEncrypt[INFO_LEN];
 
 
@@ -338,6 +339,7 @@ extern wchar_t SpatialAudioMoveInfo[INFO_LEN];
 extern wchar_t SpatialAudioPrepareInfo[INFO_LEN];
 // beauty
 extern wchar_t beautyFace[INFO_LEN];
+extern wchar_t beautyFace2[INFO_LEN];
 
 extern wchar_t mediaRecorderStartRecording[INFO_LEN];
 extern wchar_t mediaRecorderStopRecording[INFO_LEN];
@@ -364,5 +366,7 @@ extern wchar_t CrossChannelCtrlCrossChannel[INFO_LEN];
 extern wchar_t CrossChannelCrossChannelList[INFO_LEN];
 extern wchar_t CrossChannelCtrlToken[INFO_LEN];
 extern wchar_t CrossChannelCtrlUid[INFO_LEN];
+
+extern wchar_t Multipath[INFO_LEN];
 
 
