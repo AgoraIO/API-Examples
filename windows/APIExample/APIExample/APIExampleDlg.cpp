@@ -1,4 +1,3 @@
-
 // APIExampleDlg.cpp : implementation file
 //
 
@@ -250,6 +249,7 @@ void CAPIExampleDlg::InitSceneDialog()
 	m_vecAdvanced.push_back(advancedMediaEncrypt);
 	m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
 	m_vecAdvanced.push_back(beautyFace);
+	m_vecAdvanced.push_back(beautyFace2);
 	m_vecAdvanced.push_back(advancedBeautyAudio);
 	m_vecAdvanced.push_back(SpatialAudio);
 	m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
@@ -259,6 +259,8 @@ void CAPIExampleDlg::InitSceneDialog()
 	//transparent bg
 	m_vecAdvanced.push_back(TransparentBackground);
 	m_vecAdvanced.push_back(RteUrlPlayer);
+	m_vecAdvanced.push_back(Multipath);
+	m_vecAdvanced.push_back(advancedSimulcast);
 
 	//inject
 	m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
@@ -374,6 +376,10 @@ void CAPIExampleDlg::InitSceneDialog()
 	m_pDlgBeauty->Create(CDlgBeauty::IDD);
 	m_pDlgBeauty->MoveWindow(&rcWnd);
 
+	m_pDlgBeauty2 = new CDlgBeauty2(&m_staMainArea);
+	m_pDlgBeauty2->Create(CDlgBeauty2::IDD);
+	m_pDlgBeauty2->MoveWindow(&rcWnd);
+
 
 	// spatial audio
 	m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
@@ -401,6 +407,16 @@ void CAPIExampleDlg::InitSceneDialog()
 	m_RtePlayer = new CRtePlayerDlg(&m_staMainArea);
 	m_RtePlayer->Create(CRtePlayerDlg::IDD);
 	m_RtePlayer->MoveWindow(&rcWnd);
+
+	// mulit path
+	m_pMultipathDlg = new CMultipathDlg(&m_staMainArea);
+	m_pMultipathDlg->Create(CMultipathDlg::IDD);
+	m_pMultipathDlg->MoveWindow(&rcWnd);
+
+	// simulcast
+	m_pSimulcastDlg = new CSimulcastDlg(&m_staMainArea);
+	m_pSimulcastDlg->Create(CSimulcastDlg::IDD);
+	m_pSimulcastDlg->MoveWindow(&rcWnd);
 	
 }
 
@@ -640,6 +656,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pDlgBeauty->InitAgora();
 		m_pDlgBeauty->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(beautyFace2) == 0) {
+		m_pDlgBeauty2->InitAgora();
+		m_pDlgBeauty2->ShowWindow(SW_SHOW);
+	}
 	else if (selectedText.Compare(SpatialAudio) == 0) {
 		m_pSpatialAudioDlg->InitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_SHOW);
@@ -655,6 +675,14 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	else if (selectedText.Compare(RteUrlPlayer) == 0) {
 		m_RtePlayer->InitAgora();
 		m_RtePlayer->ShowWindow(SW_SHOW);
+	}
+	else if (selectedText.Compare(Multipath) == 0) {
+		m_pMultipathDlg->InitAgora();
+		m_pMultipathDlg->ShowWindow(SW_SHOW);
+	}
+	else if (selectedText.Compare(advancedSimulcast) == 0) {
+		m_pSimulcastDlg->InitAgora();
+		m_pSimulcastDlg->ShowWindow(SW_SHOW);
 	}
 	
 	//Sleep(500);
@@ -777,6 +805,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pDlgBeauty->UnInitAgora();
 		m_pDlgBeauty->ShowWindow(SW_HIDE);
 	}
+	else if (str.Compare(beautyFace2) == 0) {
+		m_pDlgBeauty2->UnInitAgora();
+		m_pDlgBeauty2->ShowWindow(SW_HIDE);
+	}
 	else if (str.Compare(SpatialAudio) == 0) {
 		m_pSpatialAudioDlg->UnInitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_HIDE);
@@ -792,6 +824,14 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(RteUrlPlayer) == 0) {
 		m_RtePlayer->UnInitAgora();
 		m_RtePlayer->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(Multipath) == 0) {
+		m_pMultipathDlg->UnInitAgora();
+		m_pMultipathDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedSimulcast) == 0) {
+		m_pSimulcastDlg->UnInitAgora();
+		m_pSimulcastDlg->ShowWindow(SW_HIDE);
 	}
 	//Sleep(500);
 }

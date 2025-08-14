@@ -173,7 +173,7 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		m_agAudioCaptureDevice.engine_ = NULL;
 		//release engine.
 		if (m_initialize) {
-			m_rtcEngine->release(true);
+			m_rtcEngine->release(nullptr);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		}
 		m_rtcEngine = NULL;
@@ -538,6 +538,10 @@ BOOL CAgoraCaptureAduioDlg::OnInitDialog()
 	m_renderAudioInfo.sampleRate = 44100;
 	m_renderAudioInfo.channels = 2;
 	m_renderAudioInfo.sampleByte = 2;
+	
+	// Hide the Start Render button
+	m_btnSetAudioRender.ShowWindow(SW_HIDE);
+	
 	return TRUE;
 }
 

@@ -162,7 +162,7 @@ void CAgoraEffectDlg::UnInitAgora()
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		//release engine.
-		m_rtcEngine->release(true);
+		m_rtcEngine->release(nullptr);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
 	}

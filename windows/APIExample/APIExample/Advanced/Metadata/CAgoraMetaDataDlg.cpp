@@ -79,7 +79,7 @@ note:
     is called without a user ID specified. The server will automatically assign one
 parameters:
     channel:channel name.
-    uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+    uid: user IDï¿½ï¿½If the UID is specified in the joinChannel, that ID is returned here;
     Otherwise, use the ID automatically assigned by the Agora server.
     elapsed: The Time from the joinChannel until this event occurred (ms).
 */
@@ -100,7 +100,7 @@ note:
 parameters:
     uid: remote user/anchor ID for newly added channel.
     elapsed: The joinChannel is called from the local user to the delay triggered
-    by the callback£¨ms).
+    by the callbackï¿½ï¿½ms).
 */
 void CAgoraMetaDataEventHanlder::onUserJoined(uid_t uid, int elapsed) {
     if (m_hMsgHanlder) {
@@ -355,7 +355,7 @@ void CAgoraMetaDataDlg::UnInitAgora()
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
         //release engine.
         if (m_initialize) {
-            m_rtcEngine->release(true);
+            m_rtcEngine->release(nullptr);
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         }
         m_rtcEngine = NULL;

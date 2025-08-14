@@ -304,6 +304,7 @@ wchar_t liveBraodcastingFristFrameTipContent[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingVideoImage[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
+wchar_t beautyFace2[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
 wchar_t SpatialAudioInitInfo[INFO_LEN] = { 0 };
 wchar_t SpatialAudioMoveInfo[INFO_LEN] = { 0 };
@@ -336,6 +337,9 @@ wchar_t CrossChannelCtrlCrossChannel[INFO_LEN] = { 0 };
 wchar_t CrossChannelCrossChannelList[INFO_LEN] = { 0 };
 wchar_t CrossChannelCtrlToken[INFO_LEN] = { 0 };
 wchar_t CrossChannelCtrlUid[INFO_LEN] = { 0 };
+
+wchar_t Multipath[INFO_LEN] = { 0 };
+wchar_t advancedSimulcast[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -506,6 +510,7 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedReportInCall, INFO_LEN, Str(_T("Advanced.ReportInCall")));
 	_tcscpy_s(advancedRegionConn, INFO_LEN, Str(_T("Advanced.RegionConn")));
 	_tcscpy_s(advancedCrossChannel, INFO_LEN, Str(_T("Advanced.CrossChannel")));
+	_tcscpy_s(advancedSimulcast, INFO_LEN, Str(_T("Advanced.Simulcast")));
 	_tcscpy_s(advancedMediaEncrypt, INFO_LEN, Str(_T("Advanced.MediaEncrypt")));
 
     //agora
@@ -772,7 +777,7 @@ void InitKeyInfomation()
 	_tcscpy_s(liveBraodcastingVideoImage, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.VideoImage")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
-
+	_tcscpy_s(beautyFace2, INFO_LEN, Str(_T("Beauty.Face.2")));
 	
     _tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param1")));
     _tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param2")));
@@ -811,7 +816,7 @@ void InitKeyInfomation()
 	_tcscpy_s(CrossChannelStopMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StopMediaRelay")));
 	_tcscpy_s(CrossChannelUpdateMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.UpdateMediaRelay")));
 
-
+	_tcscpy_s(Multipath, INFO_LEN, Str(_T("Advanced.Multipath")));
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
