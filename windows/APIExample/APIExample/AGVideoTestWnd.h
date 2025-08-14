@@ -13,9 +13,8 @@ public:
 
 	HWND GetVideoSafeHwnd() { return m_wndVideoWnd.GetSafeHwnd(); };
 
-	// 音量条指示
 
-	void SetVolbarColor(DWORD dwFreeColor = RGB(184, 184, 184), DWORD dwBusyColor = RGB(0, 255, 0), DWORD dwBackColor = RGB(0, 0, 0));	// 设定空闲颜色
+	void SetVolbarColor(DWORD dwFreeColor = RGB(184, 184, 184), DWORD dwBusyColor = RGB(0, 255, 0), DWORD dwBackColor = RGB(0, 0, 0));
 	void SetVolRange(int nRange = 100);
 	void SetCurVol(int nCurVol = 0);
 

@@ -221,7 +221,6 @@ bool CDlgBeauty2::InitAgora()
 void CDlgBeauty2::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		// 清理美颜资源
 		CleanupBeautyResources();
 		
 		if (m_joinChannel) {
@@ -257,11 +256,9 @@ void CDlgBeauty2::UnInitAgora()
 void CDlgBeauty2::CleanupBeautyResources()
 {
 	if (m_videoEffectObject && m_rtcEngine) {
-		// 销毁VideoEffectObject
 		m_rtcEngine->destroyVideoEffectObject(m_videoEffectObject);
 		m_videoEffectObject = nullptr;
 		
-		// 禁用扩展
 		m_rtcEngine->enableExtension(
 			"agora_video_filters_clear_vision", 
 			"clear_vision", 
@@ -562,5 +559,5 @@ CString CDlgBeauty2::GetExePath()
 	GetModuleFileName(NULL, szPath, MAX_PATH);
 	CString strExePath = szPath;
 	int nPos = strExePath.ReverseFind('\\');
-	return strExePath.Left(nPos);  // 去掉exe文件名，得到目录路径
+	return strExePath.Left(nPos);
 }
