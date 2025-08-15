@@ -33,11 +33,11 @@ if (-not (Test-Path sdk)){
 	    (New-Object System.Net.WebClient).DownloadFile($agora_sdk,$agora_des)
 	    Unblock-File $agora_des
 	    Expand-Archive -Path $agora_des -DestinationPath . -Force 
-	    Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\x86\*  sdk
-	    Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\x86_64\*  sdk\x64
-	    Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\high_level_api\include\*  sdk\high_level_api\include
+	    Move-Item Shengwang_Native_SDK_for_Windows_FULL\sdk\x86\*  sdk
+	    Move-Item Shengwang_Native_SDK_for_Windows_FULL\sdk\x86_64\*  sdk\x64
+	    Move-Item Shengwang_Native_SDK_for_Windows_FULL\sdk\high_level_api\include\*  sdk\high_level_api\include
 	    Remove-Item  $agora_des -Recurse -Force
-	    Remove-Item  Agora_Native_SDK_for_Windows_FULL -Recurse -Force
+	    Remove-Item  Shengwang_Native_SDK_for_Windows_FULL -Recurse -Force
     }
 }
 
