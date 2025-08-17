@@ -341,7 +341,7 @@ BOOL CDlgBeauty::OnInitDialog()
 	CString strPath = GetExePath() + _T("\\agora.png");
 	m_imgPath = cs2utf8(strPath);
 	ResumeStatus();
-
+	mCkExtention.ShowWindow(SW_HIDE);
 	return TRUE;  // return TRUE unless you set the focus to a control
 				 
 }
