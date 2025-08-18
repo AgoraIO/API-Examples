@@ -97,6 +97,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +146,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV\;$(solutionDir)ThirdParty\Boost;$(solutionDir)ThirdParty\libFFmpeg\include;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,6 +191,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -240,6 +243,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
