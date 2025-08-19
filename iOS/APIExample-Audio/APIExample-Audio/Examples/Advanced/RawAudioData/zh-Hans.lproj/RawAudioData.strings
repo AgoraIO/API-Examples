@@ -1,6 +1,6 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GGI-Cu-Sy1"; */
-"GGI-Cu-Sy1.placeholder" = "输入频道名";
+"GGI-Cu-Sy1.placeholder" = "Enter channel name";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "yhH-81-equ"; */
-"yhH-81-equ.normalTitle" = "加入频道";
+"yhH-81-equ.normalTitle" = "Join Channel";

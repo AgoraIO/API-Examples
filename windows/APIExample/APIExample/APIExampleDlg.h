@@ -27,6 +27,7 @@
 #include "Advanced/MediaPlayer/CAgoraMediaPlayer.h"
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include "Advanced/Beauty/CDlgBeauty.h"
+#include "Advanced/Beauty2.0/CDlgBeauty2.0.h"
 #include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
 #include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
 #include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
@@ -36,6 +37,8 @@
 #include "Advanced/TransparentBg/TransparentBgDialog.h"
 #include "Advanced/RtePlayer/RtePlayerDlg.h"
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
+#include "Advanced/Multipath/CMultipathDlg.h"
+#include "Advanced/Simulcast/CSimulcastDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -111,7 +114,10 @@ private:
     MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
     CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
     CAgoraCrossChannelDlg       *m_pAgoraCrossChannelDlg = nullptr;
+    CMultipathDlg               *m_pMultipathDlg = nullptr;
+    CSimulcastDlg               *m_pSimulcastDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
+    CDlgBeauty2 * m_pDlgBeauty2 = nullptr;
     CTransparentBgDlg* m_TransparentDlg = nullptr;
     CRtePlayerDlg* m_RtePlayer = nullptr;
     CString m_preSelectedItemText = _T("");

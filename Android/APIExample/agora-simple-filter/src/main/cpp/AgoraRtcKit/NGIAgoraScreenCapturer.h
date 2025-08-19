@@ -18,12 +18,12 @@ namespace rtc {
  */
 class IScreenCapturer : public RefCountInterface {
  public:
-#if defined (_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
+#if defined (_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
   /**
    * Initializes the screen capturer by specifying a display ID.
    *
    * @note
-   * This method applies to macOS only.
+   * This method applies to macOS windows linux.
    *
    * This method shares a whole or part of a screen specified by the display ID.
    * @param displayId The display ID of the screen to be shared. This parameter specifies which screen you want
@@ -39,7 +39,7 @@ class IScreenCapturer : public RefCountInterface {
   virtual int initWithDisplayId(int64_t displayId, const Rectangle& regionRect) = 0;
 #endif
  
-#if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__))
+#if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
   /**
    * Initializes the screen capturer by specifying a screen Rect.
    *
@@ -142,7 +142,7 @@ class IScreenCapturer : public RefCountInterface {
   ~IScreenCapturer() {}
 };
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE) || defined (__OHOS__)
 class IScreenCapturer2 : public RefCountInterface {
  public:
   /**

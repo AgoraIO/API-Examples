@@ -19,10 +19,12 @@ gradlew.bat
 androidTest/
 Test/
 authpack.java
+src/main/assets/beauty_agora
 src/main/assets/beauty_bytedance
 src/main/assets/beauty_faceunity
 src/main/assets/beauty_sensetime
 !src/main/assets/beauty_bytedance/PLACEHOLDER
 !src/main/assets/beauty_faceunity/PLACEHOLDER
 !src/main/assets/beauty_sensetime/PLACEHOLDER
+!src/main/assets/beauty_agora/PLACEHOLDER
 libs

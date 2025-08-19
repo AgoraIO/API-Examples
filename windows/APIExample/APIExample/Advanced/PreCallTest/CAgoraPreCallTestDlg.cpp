@@ -138,7 +138,7 @@ void CAgoraPreCallTestDlg::UnInitAgora()
 			m_videoDeviceManager->release();
 
 			//release engine.
-			m_rtcEngine->release(true);
+			m_rtcEngine->release(nullptr);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		}
 		

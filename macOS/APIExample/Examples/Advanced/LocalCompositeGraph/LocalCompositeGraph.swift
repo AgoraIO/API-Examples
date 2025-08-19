@@ -196,23 +196,22 @@ class LocalCompositeGraph: BaseViewController {
     }
     
     private func createFile() {
-        //在桌面上创建一个文件
+        //Create a file on the desktop
         let manager = FileManager.default
         let urlForDocument = manager.urls( for: .desktopDirectory,
                                               in:.userDomainMask)
         let url = urlForDocument[0]
         createFile(name:"test.txt", fileBaseUrl: url)
     }
-    //根据文件名和路径创建文件
     func createFile(name:String, fileBaseUrl:URL){
         let manager = FileManager.default
         let file = fileBaseUrl.appendingPathComponent(name)
         let exist = manager.fileExists(atPath: file.path)
         if !exist {
-            //在文件中随便写入一些内容
+            //Write some random content in the file.
             let data = Data(base64Encoded:"aGVsbG8gd29ybGQ=" ,options:.ignoreUnknownCharacters)
             let createSuccess = manager.createFile(atPath: file.path, contents:data,attributes:nil)
-            print("文件创建结果: \(createSuccess)")
+            print("File creation result: \(createSuccess)")
         }
     }
     
@@ -226,7 +225,7 @@ class LocalCompositeGraph: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            // 增加勾边功能
+            // Add border highlight function
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
@@ -327,7 +326,7 @@ class LocalCompositeGraph: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            // 增加勾边功能
+            // Add border highlight function
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true

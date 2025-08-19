@@ -71,7 +71,7 @@
     [self.cameraButton setTitle:@"Open Rear Camera".localized forState:(UIControlStateNormal)];
     // layout render view
     [self.localView setPlaceholder:@"Local Host".localized];
-    [self.remoteView setPlaceholder:@"第二路摄像头".localized];
+    [self.remoteView setPlaceholder:@"Second Camera".localized];
     [self.containerView layoutStream:@[self.localView, self.remoteView]];
     
     // set up agora instance when view loaded

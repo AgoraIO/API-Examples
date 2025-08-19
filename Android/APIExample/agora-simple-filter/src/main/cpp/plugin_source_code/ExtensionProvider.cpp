@@ -47,14 +47,14 @@ namespace agora {
             return videoFilter;
         }
 
-        // Create a video plug-in. After the SDK calls this method, you need to return the IAudioFilter instance
+
         agora_refptr<agora::rtc::IAudioFilter> ExtensionProvider::createAudioFilter(const char* name) {
             PRINTF_INFO("ExtensionProvider::createAudioFilter %s", name);
             auto audioFilter = new agora::RefCountedObject<agora::extension::ExtensionAudioFilter>(name, audioProcessor_);
             return audioFilter;
         }
 
-        agora_refptr<agora::rtc::IVideoSinkBase> ExtensionProvider::createVideoSink(const char* name) {
+        agora_refptr<rtc::IExtensionVideoSink> ExtensionProvider::createVideoSink(const char* name) {
             return nullptr;
         }
 

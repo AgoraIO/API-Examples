@@ -42,12 +42,9 @@
 }
 
 - (void)presentAlertViewController:(UIAlertController*)alertVC {
-    
-    // 判断设备类型
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        // iPad 上需要提供位置信息
-        alertVC.popoverPresentationController.sourceView = self.view; // 设置源视图
-        alertVC.popoverPresentationController.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0); // 设置源矩形
+        alertVC.popoverPresentationController.sourceView = self.view;
+        alertVC.popoverPresentationController.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0);
     }
     [self presentViewController:alertVC animated:YES completion:nil];
 }
@@ -168,7 +165,6 @@
 #if DEBUG
     NSLog(@"%@", logString);
 #endif
-    // 写入文件
     NSString *logFile = [NSString stringWithFormat:@"%@/APIExample_log.txt", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
     [self checkLogFileSizeWithPath: logFile];
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:logFile];
@@ -192,7 +188,7 @@
     if (fileAttributes) {
         NSNumber *fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
         long long fileSize = [fileSizeNumber longLongValue];
-        if (fileSize > 1024 * 1024 * 2) { // 文件大于2M
+        if (fileSize > 1024 * 1024 * 2) { // File size exceeds 2MB
             [fileManager removeItemAtPath:filePath error:&error];
         }
     }

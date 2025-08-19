@@ -3,7 +3,7 @@
 "3mR-iP-I85.title" = "NO";
 
 /* Class = "NSTextFieldCell"; title = "Local user speaking status:"; ObjectID = "6jk-Ev-4bY"; */
-"6jk-Ev-4bY.title" = "是否说话:";
+"6jk-Ev-4bY.title" = "Is speaking:";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "B4L-Fw-EuA"; */
 "B4L-Fw-EuA.title" = "Join";
@@ -12,7 +12,7 @@
 "QrQ-dw-wre.title" = "NO";
 
 /* Class = "NSTextFieldCell"; title = "Active Remote Speaker:"; ObjectID = "hda-m2-IVQ"; */
-"hda-m2-IVQ.title" = "活跃用户:";
+"hda-m2-IVQ.title" = "Active Users:";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "j41-op-nLI"; */
 "j41-op-nLI.title" = "Box";

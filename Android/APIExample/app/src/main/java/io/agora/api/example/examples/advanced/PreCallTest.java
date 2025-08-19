@@ -22,6 +22,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.model.StatisticsInfo;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ClientRoleOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.EchoTestConfiguration;
@@ -160,52 +161,68 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             btn_lastmile.setEnabled(false);
             btn_lastmile.setText("Testing ...");
         } else if (v.getId() == R.id.btn_echo) {
-            EchoTestConfiguration config = new EchoTestConfiguration();
-            config.enableVideo = false;
-            config.enableAudio = true;
-            config.intervalInSeconds = MAX_COUNT_DOWN;
-            config.channelId = "AudioEchoTest" + (new Random().nextInt(1000) + 10000);
-            engine.startEchoTest(config);
-            btn_echo_audio.setEnabled(false);
-            btn_echo_audio.setText("Recording on Microphone ...");
-            btn_echo_video.setEnabled(false);
-            btn_echo_audio.post(new Runnable() {
-                int countDownNum = 0;
-
-                @Override
-                public void run() {
-                    countDownNum++;
-                    if (countDownNum >= MAX_COUNT_DOWN * 2) {
-                        btn_echo_video.setEnabled(true);
-                        btn_echo_audio.setEnabled(true);
-                        btn_echo_audio.setText(R.string.start);
-                        engine.stopEchoTest();
-                    } else if (countDownNum >= MAX_COUNT_DOWN) {
-                        btn_echo_audio.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - countDownNum) + "Seconds");
-                        btn_echo_audio.postDelayed(this, 1000);
-                    } else {
-                        btn_echo_audio.setText("Recording with " + (MAX_COUNT_DOWN - countDownNum) + "Seconds");
-                        btn_echo_audio.postDelayed(this, 1000);
-                    }
+            String channelId = "AudioEchoTest" + (new Random().nextInt(1000) + 10000);
+            TokenUtils.genToken(requireContext(), channelId, 0, ret -> {
+                if (ret == null) {
+                    showAlert("Gen token error");
+                    return;
                 }
+                EchoTestConfiguration config = new EchoTestConfiguration();
+                config.enableVideo = false;
+                config.enableAudio = true;
+                config.intervalInSeconds = MAX_COUNT_DOWN;
+                config.channelId = channelId;
+                config.token = ret;
+                engine.startEchoTest(config);
+                btn_echo_audio.setEnabled(false);
+                btn_echo_audio.setText("Recording on Microphone ...");
+                btn_echo_video.setEnabled(false);
+                btn_echo_audio.post(new Runnable() {
+                    int countDownNum = 0;
+
+                    @Override
+                    public void run() {
+                        countDownNum++;
+                        if (countDownNum >= MAX_COUNT_DOWN * 2) {
+                            btn_echo_video.setEnabled(true);
+                            btn_echo_audio.setEnabled(true);
+                            btn_echo_audio.setText(R.string.start);
+                            engine.stopEchoTest();
+                        } else if (countDownNum >= MAX_COUNT_DOWN) {
+                            btn_echo_audio.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - countDownNum) + "Seconds");
+                            btn_echo_audio.postDelayed(this, 1000);
+                        } else {
+                            btn_echo_audio.setText("Recording with " + (MAX_COUNT_DOWN - countDownNum) + "Seconds");
+                            btn_echo_audio.postDelayed(this, 1000);
+                        }
+                    }
+                });
             });
         } else if (v.getId() == R.id.btn_echo_video) {
-            EchoTestConfiguration config = new EchoTestConfiguration();
-            config.enableVideo = true;
-            config.view = requireView().findViewById(R.id.surfaceView);
-            config.enableAudio = false;
-            config.intervalInSeconds = MAX_COUNT_DOWN;
-            config.channelId = "VideoEchoTest" + (new Random().nextInt(1000) + 10000);
-            engine.startEchoTest(config);
-            btn_echo_audio.setEnabled(false);
-            btn_echo_video.setEnabled(false);
-            btn_echo_video.setText(R.string.stop);
-            btn_echo_video.postDelayed(() -> {
-                btn_echo_video.setEnabled(true);
-                btn_echo_audio.setEnabled(true);
-                btn_echo_video.setText(R.string.start);
-                engine.stopEchoTest();
-            }, MAX_COUNT_DOWN * 2 * 1000);
+            String channelId = "VideoEchoTest" + (new Random().nextInt(1000) + 10000);
+            TokenUtils.genToken(requireContext(), channelId, 0, ret -> {
+                if (ret == null) {
+                    showAlert("Gen token error");
+                    return;
+                }
+                EchoTestConfiguration config = new EchoTestConfiguration();
+                config.enableVideo = true;
+                config.view = requireView().findViewById(R.id.surfaceView);
+                config.enableAudio = false;
+                config.intervalInSeconds = MAX_COUNT_DOWN;
+                config.channelId = channelId;
+                config.token = ret;
+                engine.startEchoTest(config);
+                btn_echo_audio.setEnabled(false);
+                btn_echo_video.setEnabled(false);
+                btn_echo_video.setText(R.string.stop);
+                btn_echo_video.postDelayed(() -> {
+                    btn_echo_video.setEnabled(true);
+                    btn_echo_audio.setEnabled(true);
+                    btn_echo_video.setText(R.string.start);
+                    engine.stopEchoTest();
+                }, MAX_COUNT_DOWN * 2 * 1000);
+            });
         }
     }
 

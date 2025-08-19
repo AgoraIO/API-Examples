@@ -13,7 +13,7 @@
 @property (nonatomic, strong) NSMutableArray * itemLineLayers;
 @property (nonatomic) CGFloat itemHeight;
 @property (nonatomic) CGFloat itemWidth;
-@property (nonatomic) CGFloat lineWidth;//自适应
+@property (nonatomic) CGFloat lineWidth;
 
 @property (nonatomic, strong) CADisplayLink *displayLink;
 
@@ -53,7 +53,7 @@
     
     NSLog(@"setup");
 
-    self.numberOfItems = 20.f;//偶数
+    self.numberOfItems = 20.f;//even number
 
     self.itemColor = [UIColor colorWithRed:255/255.f green:0/255.f blue:255/255.f alpha:1.0];
 

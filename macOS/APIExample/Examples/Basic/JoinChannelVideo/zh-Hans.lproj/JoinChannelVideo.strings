@@ -1,6 +1,6 @@
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "4rc-r1-Ay6"; */
-"4rc-r1-Ay6.title" = "离开频道";
+"4rc-r1-Ay6.title" = "Leave Channel";
 
 /* Class = "NSMenuItem"; title = "1V1"; ObjectID = "Iws-j3-l2h"; */
 "Iws-j3-l2h.title" = "1V1";
@@ -8,17 +8,17 @@
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "Mmi-d8-vOm"; */
 "Mmi-d8-vOm.title" = "1V15";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "PtD-n2-sEW"; */
-"PtD-n2-sEW.placeholderString" = "输入频道号";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "PtD-n2-sEW"; */
+"PtD-n2-sEW.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "VNU-so-ajb"; */
 "VNU-so-ajb.title" = "1V3";
 
 /* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "实时视频通话/直播";
+"YjT-yy-DnJ.title" = "Real-time Video Call/Live Streaming";
 
 /* Class = "NSMenuItem"; title = "1V8"; ObjectID = "cH4-ft-u77"; */
 "cH4-ft-u77.title" = "1V8";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "guU-jX-Wkg"; */
-"guU-jX-Wkg.title" = "加入频道";
+"guU-jX-Wkg.title" = "Join Channel";

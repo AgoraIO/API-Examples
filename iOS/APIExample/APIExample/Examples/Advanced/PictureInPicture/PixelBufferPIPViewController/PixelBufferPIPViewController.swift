@@ -21,7 +21,7 @@ class PixelBufferPIPViewController: PIPBaseViewController {
 
     private lazy var pipButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("画中画", for: .normal)
+        button.setTitle("Picture in Picture", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(pipAction), for: .touchUpInside)
         
@@ -30,7 +30,7 @@ class PixelBufferPIPViewController: PIPBaseViewController {
     
     private lazy var sizeButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("切换尺寸", for: .normal)
+        button.setTitle("Switch size", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(sizeAction), for: .touchUpInside)
         

@@ -1,0 +1,42 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "5e2-Co-Njw"; */
+"5e2-Co-Njw.placeholder" = "Enter channel name";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "6Gh-RS-A4a"; */
+"6Gh-RS-A4a.normalTitle" = "Join";
+
+/* Class = "UISegmentedControl"; Ndo-QX-Iu2.segmentTitles[0] = "broadcaster"; ObjectID = "Ndo-QX-Iu2"; */
+"Ndo-QX-Iu2.segmentTitles[0]" = "broadcaster";
+
+/* Class = "UISegmentedControl"; Ndo-QX-Iu2.segmentTitles[1] = "audience"; ObjectID = "Ndo-QX-Iu2"; */
+"Ndo-QX-Iu2.segmentTitles[1]" = "audience";
+
+/* Class = "UISegmentedControl"; U1z-4a-YlJ.segmentTitles[0] = "layer1"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[0]" = "layer1";
+
+/* Class = "UISegmentedControl"; U1z-4a-YlJ.segmentTitles[1] = "layer2"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[1]" = "layer2";
+
+/* Class = "UISegmentedControl"; U1z-4a-YlJ.segmentTitles[2] = "layer3"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[2]" = "layer3";
+
+/* Class = "UISegmentedControl"; U1z-4a-YlJ.segmentTitles[3] = "layer4"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[3]" = "layer4";
+
+/* Class = "UILabel"; text = "Layer1:720p30fps"; ObjectID = "UWR-35-F2N"; */
+"UWR-35-F2N.text" = "Layer1:720p30fps";
+
+/* Class = "UILabel"; text = "Set Layers Config(Maxmum 3)"; ObjectID = "hpC-Ye-fr0"; */
+"hpC-Ye-fr0.text" = "Set Layers Config(Maxmum 3)";
+
+/* Class = "UILabel"; text = "Role"; ObjectID = "jqT-oo-y5b"; */
+"jqT-oo-y5b.text" = "Role";
+
+/* Class = "UILabel"; text = "Layer3:360p15fps"; ObjectID = "rVA-VO-4Uc"; */
+"rVA-VO-4Uc.text" = "Layer3:360p15fps";
+
+/* Class = "UILabel"; text = "Layer4:270p15fps"; ObjectID = "sxa-4Z-Tbn"; */
+"sxa-4Z-Tbn.text" = "Layer4:270p15fps";
+
+/* Class = "UILabel"; text = "Layer2:540p15fps"; ObjectID = "vWw-Mu-4r1"; */
+"vWw-Mu-4r1.text" = "Layer2:540p15fps";

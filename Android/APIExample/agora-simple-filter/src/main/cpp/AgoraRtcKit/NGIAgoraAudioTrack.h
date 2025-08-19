@@ -11,6 +11,14 @@
 #include "AgoraBase.h"
 #include <api/cpp/aosl_ares_class.h>
 
+#ifndef OPTIONAL_OVERRIDE
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
+#define OPTIONAL_OVERRIDE override
+#else
+#define OPTIONAL_OVERRIDE
+#endif
+#endif
+
 // FIXME(Ender): use this class instead of AudioSendStream as local track
 namespace agora {
 namespace rtc {
@@ -38,6 +46,11 @@ struct AudioSinkWants {
   AudioSinkWants(int sampleRate, size_t chs) : samplesPerSec(sampleRate),
                                                channels(chs) {}
   AudioSinkWants(int sampleRate, size_t chs, int trackNum) : samplesPerSec(sampleRate), channels(chs) {}                                            
+};
+
+enum AudioTrackType {
+  LOCAL_AUDIO_TRACK,
+  REMOTE_AUDIO_TRACK,
 };
 
 /**
@@ -206,6 +219,13 @@ class IAudioTrack : public RefCountInterface {
    * - `false`: Failure.
    */
   virtual bool removeAudioSink(agora_refptr<IAudioSinkBase> sink, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  /**
+   * Get the track type of the audio track
+   * @return
+   * - AudioTrackType
+   */
+  virtual AudioTrackType getType() = 0;
+
 };
 
 /**
@@ -416,6 +436,13 @@ class ILocalAudioTrack : public IAudioTrack {
    * - < 0: Failure.
    */
   virtual int ClearSenderBuffer() = 0;
+  /**
+   * Get the track type of the audio track
+   * @return
+   * - AudioTrackType
+   */
+  virtual AudioTrackType getType() OPTIONAL_OVERRIDE { return LOCAL_AUDIO_TRACK; }
+
 
  protected:
   ~ILocalAudioTrack() {}
@@ -551,6 +578,15 @@ struct RemoteAudioTrackStats {
    *  The time of 200 ms frozen in 2 seconds
    */
   uint16_t frozen_time_200_ms;
+
+  /**
+   *  The count of frozen in 2 seconds
+   */
+  uint16_t frozen_count_by_custom;
+  /**
+   *  The time of frozen in 2 seconds
+   */
+  uint16_t frozen_time_ms_by_custom;
   /**
    *  The full time of 80 ms frozen in 2 seconds
    */
@@ -648,6 +684,8 @@ struct RemoteAudioTrackStats {
     frozen_time_200_ms(0),
     full_frozen_time_80_ms(0),
     full_frozen_time_200_ms(0),
+    frozen_count_by_custom(0),
+    frozen_time_ms_by_custom(0),
     delay_estimate_ms(0),
     mos_value(0),
     frozen_rate_by_custom_plc_count(0),
@@ -903,6 +941,9 @@ class IRemoteAudioTrack : public IAudioTrack {
    - < 0: Failure.
    */
   virtual int setRemoteUserSpatialAudioParams(const agora::SpatialAudioParams& params, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
+  virtual AudioTrackType getType() OPTIONAL_OVERRIDE { return REMOTE_AUDIO_TRACK; }
+  
 };
 
 }  // namespace rtc

@@ -125,6 +125,10 @@
 		4C9309E82CBA91530085EFF9 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309AA2CBA91530085EFF9 /* AudioMixing.swift */; };
 		4C9309EC2CBA95530085EFF9 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309EA2CBA95530085EFF9 /* SpatialAudio.swift */; };
 		4C9309ED2CBA95530085EFF9 /* SpatialAudioRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309EB2CBA95530085EFF9 /* SpatialAudioRTC.swift */; };
+		AB8474252DF9D1BD00B4DB73 /* SimulcastRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8474232DF9D1BD00B4DB73 /* SimulcastRTC.swift */; };
+		AB8474262DF9D1BD00B4DB73 /* MultipathRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8474202DF9D1BD00B4DB73 /* MultipathRTC.swift */; };
+		AB8474272DF9D1BD00B4DB73 /* Multipath.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB84741F2DF9D1BD00B4DB73 /* Multipath.swift */; };
+		AB8474282DF9D1BD00B4DB73 /* Simulcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8474222DF9D1BD00B4DB73 /* Simulcast.swift */; };
 		B47E9CD9BABE21C5B5B1ED09 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7585632841723316B616C1AB /* Pods_Agora_ScreenShare_Extension.framework */; };
 		F73B016B2CBA1AC60077B7D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */; };
 		F73B016C2CBA1ADE0077B7D2 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306B32CB961150085EFF9 /* JSONObject.swift */; };
@@ -300,6 +304,10 @@
 		4C9309EA2CBA95530085EFF9 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
 		4C9309EB2CBA95530085EFF9 /* SpatialAudioRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudioRTC.swift; sourceTree = "<group>"; };
 		7585632841723316B616C1AB /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB84741F2DF9D1BD00B4DB73 /* Multipath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multipath.swift; sourceTree = "<group>"; };
+		AB8474202DF9D1BD00B4DB73 /* MultipathRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipathRTC.swift; sourceTree = "<group>"; };
+		AB8474222DF9D1BD00B4DB73 /* Simulcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulcast.swift; sourceTree = "<group>"; };
+		AB8474232DF9D1BD00B4DB73 /* SimulcastRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulcastRTC.swift; sourceTree = "<group>"; };
 		D7DAC714DCF967FD618502DC /* Pods-APIExample-SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		E633FB65347D029555FE8BDB /* Pods_APIExample_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -602,6 +610,8 @@
 		4C9308122CBA7F9B0085EFF9 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				AB8474212DF9D1BD00B4DB73 /* Multipath */,
+				AB8474242DF9D1BD00B4DB73 /* Simulcast */,
 				4C9309E92CBA95530085EFF9 /* SpatialAudio */,
 				4C9309572CBA91520085EFF9 /* ARKit */,
 				4C9309A82CBA91530085EFF9 /* AudioMixing */,
@@ -905,6 +915,24 @@
 			path = SpatialAudio;
 			sourceTree = "<group>";
 		};
+		AB8474212DF9D1BD00B4DB73 /* Multipath */ = {
+			isa = PBXGroup;
+			children = (
+				AB84741F2DF9D1BD00B4DB73 /* Multipath.swift */,
+				AB8474202DF9D1BD00B4DB73 /* MultipathRTC.swift */,
+			);
+			path = Multipath;
+			sourceTree = "<group>";
+		};
+		AB8474242DF9D1BD00B4DB73 /* Simulcast */ = {
+			isa = PBXGroup;
+			children = (
+				AB8474222DF9D1BD00B4DB73 /* Simulcast.swift */,
+				AB8474232DF9D1BD00B4DB73 /* SimulcastRTC.swift */,
+			);
+			path = Simulcast;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1104,6 +1132,10 @@
 				4C9307772CB961150085EFF9 /* UIView+CSshortFrame.m in Sources */,
 				4C9309C92CBA91530085EFF9 /* PixelBufferRenderView.swift in Sources */,
 				4C93075D2CB961150085EFF9 /* AgoraCustomEncryption.mm in Sources */,
+				AB8474252DF9D1BD00B4DB73 /* SimulcastRTC.swift in Sources */,
+				AB8474262DF9D1BD00B4DB73 /* MultipathRTC.swift in Sources */,
+				AB8474272DF9D1BD00B4DB73 /* Multipath.swift in Sources */,
+				AB8474282DF9D1BD00B4DB73 /* Simulcast.swift in Sources */,
 				4C9307652CB961150085EFF9 /* AgoraCameraSourcePush.swift in Sources */,
 				4C9309CC2CBA91530085EFF9 /* PixelBufferRenderExample.swift in Sources */,
 				4C9308012CBA6F8D0085EFF9 /* JoinChannelVideoRTC.swift in Sources */,
@@ -1336,7 +1368,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1375,7 +1407,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"APIExample-SwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1410,7 +1442,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -1441,7 +1473,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";

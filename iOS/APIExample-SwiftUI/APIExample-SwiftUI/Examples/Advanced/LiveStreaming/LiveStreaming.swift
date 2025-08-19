@@ -32,7 +32,7 @@ struct LiveStreamingEntry: View {
                 .padding()
                 .padding(.bottom, 10)
             
-            //默认背景色
+            //Default background color
             HStack {
                 Text("Default background Color".localized)
                 Picker("", selection: $selectedColor) {
@@ -42,7 +42,7 @@ struct LiveStreamingEntry: View {
                 }
             }
             
-            //首帧出图
+            //First frame optimization
             Toggle("First Frame Optimization", isOn: $firstFrameToggleIsOn)
                 .padding(.bottom, 10)
                 .alert(isPresented: $firstFrameToggleIsOn) {
@@ -54,13 +54,13 @@ struct LiveStreamingEntry: View {
                 }
                 .fixedSize()
             
-            //预加载
+            //Preload
             Button(preloadIsOn ? "cancel preload".localized : "preload Channel".localized) {
                 preloadIsOn.toggle()
             }
             .padding(.bottom, 10)
     
-            //相机
+            //Camera
             HStack {
                 Text("Camera Selected".localized)
                 Button(selectedCamertOption) {
@@ -147,7 +147,7 @@ struct LiveStreamingEntry: View {
             presentationMode.wrappedValue.dismiss()
         }) {
             HStack {
-                Image(systemName: "chevron.left") // 自定义返回按钮图标
+                Image(systemName: "chevron.left") // Custom back button icon
             }
         })
         .navigationBarTitleDisplayMode(.inline)
@@ -204,7 +204,7 @@ struct LiveStreaming: View {
                         }
                 }
        
-                //防抖
+                //Anti-shake
                 HStack {
                     Text("anti shake".localized)
                         .adaptiveForegroundStyle(.white)
@@ -221,8 +221,8 @@ struct LiveStreaming: View {
                 .padding(.top, 30)
                 
                 if liveStreamRTCKit.role == .broadcaster {
-                    //centerStage, 相机对焦
-                    HStack {
+                    //centerStage, camera focus
+                    VStack {
                         Toggle("CenterStage", isOn: $centerStage)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: centerStage) { newValue in
@@ -276,8 +276,8 @@ struct LiveStreaming: View {
                     .fixedSize()
                     .adaptiveBackground(.gray.opacity(0.3))
                     
-                    //B帧，编码方式
-                    HStack {
+                    //B-frame, encoding method    
+                    VStack {
                         Toggle("B Fps".localized, isOn: $bFpsState)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: bFpsState) { newValue in
@@ -310,7 +310,7 @@ struct LiveStreaming: View {
                     .fixedSize()
                     .adaptiveBackground(.gray.opacity(0.3))
                     
-                    //水印， 垫片推流
+                    //Watermark, gasket push flow
                     HStack {
                         Toggle("Water Mark".localized, isOn: $waterMarkState)
                             .adaptiveForegroundStyle(.white)
@@ -346,7 +346,7 @@ struct LiveStreaming: View {
                     .adaptiveBackground(.gray.opacity(0.3))
                 }
                 
-                //截图，大小流
+                //Screenshot, dual stream
                 HStack {
                     Button("screenshot".localized) {
                         showSnapshot = true
@@ -383,7 +383,7 @@ struct LiveStreaming: View {
                 .fixedSize()
                 .adaptiveBackground(.gray.opacity(0.3))
                 
-                //极速直播, 连麦
+                //Live streaming at lightning speed, real-time interaction
                 HStack {
                     if liveStreamRTCKit.showUltraLowEntry {
                         Toggle("Fast Live".localized, isOn: $fastLiveState)
