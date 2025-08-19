@@ -228,37 +228,37 @@
         <item>@string/faceunity_beauty</item>
     </string-array>
 
-    <string-array name="encoder_type" >
+    <string-array name="encoder_type">
         <item>Auto</item>
         <item>Hardware</item>
         <item>Software</item>
     </string-array>
-    <string-array name="screen_scenario_type" >
+    <string-array name="screen_scenario_type">
         <item>SCREEN_SCENARIO_DOCUMENT</item>
         <item>SCREEN_SCENARIO_GAMING</item>
         <item>SCREEN_SCENARIO_VIDEO</item>
     </string-array>
-    <string-array name="push_buffer_type" >
+    <string-array name="push_buffer_type">
         <item>I420</item>
         <item>NV21</item>
         <item>NV12</item>
         <item>Texture2D</item>
     </string-array>
 
-    <string-array name="render_mode" >
+    <string-array name="render_mode">
         <item>@string/render_mode_hidden</item>
         <item>@string/render_mode_fit</item>
         <item>@string/render_mode_adaptive</item>
     </string-array>
 
-    <string-array name="channel_profile" >
+    <string-array name="channel_profile">
         <item>@string/channel_profile_communication</item>
         <item>@string/channel_profile_live_broadcasting</item>
         <item>@string/channel_profile_game</item>
         <item>@string/channel_profile_cloud_gaming</item>
         <item>@string/channel_profile_communication_1v1</item>
     </string-array>
-    <string-array name="audio_route" >
+    <string-array name="audio_route">
         <item>@string/audio_route_speakerphone</item>
         <item>@string/audio_route_earpiece</item>
         <item>@string/audio_route_headset</item>
@@ -292,17 +292,17 @@
         <item>VOICE_AI_TUNER_DREAMY_FEMALE_SINGING</item>
     </string-array>
 
-    <string-array name="beauty_style_type" >
+    <string-array name="beauty_style_type">
         <item>Close</item>
         <item>Type 1</item>
         <item>Type 2</item>
     </string-array>
-    <string-array name="beauty_style_color_2" >
+    <string-array name="beauty_style_color_2">
         <item>Close</item>
         <item>Black</item>
         <item>Brown</item>
     </string-array>
-    <string-array name="beauty_style_color_5" >
+    <string-array name="beauty_style_color_5">
         <item>None</item>
         <item>No. 1 color</item>
         <item>No. 2 color</item>
@@ -311,7 +311,7 @@
         <item>No. 5 color</item>
     </string-array>
 
-    <string-array name="shape_beauty_area" >
+    <string-array name="shape_beauty_area">
         <item>FACE_SHAPE_AREA_NONE</item>
         <item>FACE_SHAPE_AREA_HEADSCALE</item>
         <item>FACE_SHAPE_AREA_FOREHEAD</item>
@@ -343,4 +343,101 @@
         <item>VIDEO_MODULE_POSITION_POST_CAPTURER_ORIGIN</item>
     </string-array>
 
+    <string-array name="shape_beauty_area2">
+        <item>FACE_SHAPE_AREA_NONE</item>
+        <item>FACE_SHAPE_AREA_HEADSCALE</item>
+        <item>FACE_SHAPE_AREA_FOREHEAD</item>
+        <item>FACE_SHAPE_AREA_FACECONTOUR</item>
+        <item>FACE_SHAPE_AREA_FACELENGTH</item>
+        <item>FACE_SHAPE_AREA_FACEWIDTH</item>
+        <item>FACE_SHAPE_AREA_CHEEKBONE</item>
+        <item>FACE_SHAPE_AREA_CHEEK</item>
+        <item>FACE_SHAPE_AREA_MANDIBLE</item>
+        <item>FACE_SHAPE_AREA_CHIN</item>
+        <item>FACE_SHAPE_AREA_EYESCALE</item>
+        <item>FACE_SHAPE_AREA_EYEDISTANCE</item>
+        <item>FACE_SHAPE_AREA_EYEPOSITION</item>
+        <item>FACE_SHAPE_AREA_EYELID</item>
+        <item>FACE_SHAPE_AREA_EYEPUPILS</item>
+        <item>FACE_SHAPE_AREA_EYEINNERCORNER</item>
+        <item>FACE_SHAPE_AREA_EYEOUTERCORNER</item>
+        <item>FACE_SHAPE_AREA_NOSELENGTH</item>
+        <item>FACE_SHAPE_AREA_NOSEWIDTH</item>
+        <item>FACE_SHAPE_AREA_NOSEWING</item>
+        <item>FACE_SHAPE_AREA_NOSEROOT</item>
+        <item>FACE_SHAPE_AREA_NOSEBRIDGE</item>
+        <item>FACE_SHAPE_AREA_NOSETIP</item>
+        <item>FACE_SHAPE_AREA_NOSEGENERAL</item>
+        <item>FACE_SHAPE_AREA_MOUTHSCALE</item>
+        <item>FACE_SHAPE_AREA_MOUTHPOSITION</item>
+        <item>FACE_SHAPE_AREA_MOUTHSMILE</item>
+        <item>FACE_SHAPE_AREA_MOUTHLIP</item>
+        <item>FACE_SHAPE_AREA_EYEBROWPOSITION</item>
+        <item>FACE_SHAPE_AREA_EYEBROWTHICKNESS</item>
+    </string-array>
+
+    <string-array name="makeup_area_type2">
+        <item>Close</item>
+        <item>Type 1</item>
+        <item>Type 2</item>
+    </string-array>
+    <string-array name="makeup_area_type3">
+        <item>Close</item>
+        <item>Type 1</item>
+        <item>Type 2</item>
+        <item>Type 3</item>
+    </string-array>
+    <string-array name="makeup_area_type4">
+        <item>Close</item>
+        <item>Type 1</item>
+        <item>Type 2</item>
+        <item>Type 3</item>
+        <item>Type 4</item>
+    </string-array>
+
+    <string-array name="agora_beauty_style">
+        <item>模板女</item>
+        <item>模板男</item>
+        <item>模板自然</item>
+    </string-array>
+
+    <string-array name="agora_makeup_style">
+        <item>学妹妆</item>
+        <item>学姐妆</item>
+    </string-array>
+
+    <string-array name="agora_filter_style">
+        <item>原生</item>
+        <item>冷白</item>
+        <item>嫩白</item>
+    </string-array>
+
+    <string-array name="layer_mode">
+        <item>Host</item>
+        <item>Audience</item>
+    </string-array>
+
+    <string-array name="role_type">
+        <item>Host</item>
+        <item>Audience</item>
+    </string-array>
+
+    <string-array name="multipath_mode">
+        <item>MULTIPATH_MODE_DUPLICATE</item>
+        <item>MULTIPATH_MODE_DYNAMIC</item>
+    </string-array>
+
+    <string-array name="multipath_type">
+        <item>MULTIPATH_TYPE_LAN</item>
+        <item>MULTIPATH_TYPE_WIFI</item>
+        <item>MULTIPATH_TYPE_MOBILE</item>
+        <item>MULTIPATH_TYPE_UNKNOWN</item>
+    </string-array>
+
+    <string-array name="video_stream_layer">
+        <item>VIDEO_STREAM_LAYER_1</item>
+        <item>VIDEO_STREAM_LAYER_2</item>
+        <item>VIDEO_STREAM_LAYER_3</item>
+        <item>VIDEO_STREAM_LAYER_4</item>
+    </string-array>
 </resources>

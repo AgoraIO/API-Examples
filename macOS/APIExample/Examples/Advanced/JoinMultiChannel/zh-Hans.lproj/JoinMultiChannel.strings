@@ -1,27 +1,27 @@
 
 /* Class = "NSTextFieldCell"; placeholderString = "Channel Name 2"; ObjectID = "Ab2-sI-Ld3"; */
-"Ab2-sI-Ld3.placeholderString" = "输入频道名2";
+"Ab2-sI-Ld3.placeholderString" = "Enter Channel Name 2";
 
 /* Class = "NSButtonCell"; title = "Unpublish"; ObjectID = "Hvn-10-7hC"; */
-"Hvn-10-7hC.title" = "停止发流";
+"Hvn-10-7hC.title" = "Stop Publishing";
 
 /* Class = "NSViewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
 "IBJ-wZ-9Xx.title" = "Join Multiple Channels";
 
 /* Class = "NSButtonCell"; title = "Publish"; ObjectID = "Rau-85-whm"; */
-"Rau-85-whm.title" = "发流";
+"Rau-85-whm.title" = "Publish";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "Xtr-fU-GZ5"; */
-"Xtr-fU-GZ5.title" = "离开频道";
+"Xtr-fU-GZ5.title" = "Leave Channel";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "Zjl-Vt-wOj"; */
-"Zjl-Vt-wOj.title" = "加入频道";
+"Zjl-Vt-wOj.title" = "Join Channel";
 
 /* Class = "NSTextFieldCell"; placeholderString = "Channel Name 1"; ObjectID = "p0a-zy-yqS"; */
-"p0a-zy-yqS.placeholderString" = "输入频道名1";
+"p0a-zy-yqS.placeholderString" = "Enter Channel Name 1";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "ttd-9y-14q"; */
-"ttd-9y-14q.title" = "离开Ex频道";
+"ttd-9y-14q.title" = "Leave Ex Channel";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "u6j-cJ-1Pe"; */
-"OwT-ZJ-qpk.title" = "加入Ex频道";
+"OwT-ZJ-qpk.title" = "Join Ex Channel";

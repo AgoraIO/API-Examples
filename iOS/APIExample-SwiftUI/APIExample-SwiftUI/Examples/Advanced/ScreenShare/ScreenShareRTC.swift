@@ -207,9 +207,7 @@ extension ScreenShareRTC: AgoraRtcEngineDelegate {
             option.publishCameraTrack = UIScreen.main.isCaptured
             agoraKit.updateChannel(with: option)
     
-            // 开始屏幕共享后, 如果想自动隐藏系统界面, 需要配置scheme, 使用scheme唤醒自身的方式关闭系统界面
-            // If you want to hide the system interface automatically after you start screen sharing,
-            // you need to configure scheme and use scheme to wake up the system interface
+            // After starting screen sharing, if you want to automatically hide the system interface, you need to configure scheme and use scheme to wake up the system interface
             UIApplication.shared.open(URL(string: "APIExample-SwiftUI://") ?? URL(fileURLWithPath: "APIExample-SwiftUI://"))
             
         default: break

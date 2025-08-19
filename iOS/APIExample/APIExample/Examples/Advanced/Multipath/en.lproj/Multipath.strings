@@ -1,0 +1,33 @@
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "Aj6-Sb-j94"; */
+"Aj6-Sb-j94.normalTitle" = "Join";
+
+/* Class = "UISegmentedControl"; CML-iH-ibw.segmentTitles[0] = "dynamic"; ObjectID = "CML-iH-ibw"; */
+"CML-iH-ibw.segmentTitles[0]" = "dynamic";
+
+/* Class = "UISegmentedControl"; CML-iH-ibw.segmentTitles[1] = "duplicate"; ObjectID = "CML-iH-ibw"; */
+"CML-iH-ibw.segmentTitles[1]" = "duplicate";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "MXy-q7-Lw1"; */
+"MXy-q7-Lw1.placeholder" = "Enter channel name";
+
+/* Class = "UILabel"; text = "Role"; ObjectID = "SZV-qE-Gkr"; */
+"SZV-qE-Gkr.text" = "Role";
+
+/* Class = "UISegmentedControl"; ZN9-AJ-E6q.segmentTitles[0] = "broadcaster"; ObjectID = "ZN9-AJ-E6q"; */
+"ZN9-AJ-E6q.segmentTitles[0]" = "broadcaster";
+
+/* Class = "UISegmentedControl"; ZN9-AJ-E6q.segmentTitles[1] = "audience"; ObjectID = "ZN9-AJ-E6q"; */
+"ZN9-AJ-E6q.segmentTitles[1]" = "audience";
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "bS9-S0-EPi"; */
+"bS9-S0-EPi.text" = "Mode";
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "bpJ-Vp-hgx"; */
+"bpJ-Vp-hgx.text" = "Mode";
+
+/* Class = "UILabel"; text = "Enable"; ObjectID = "uhi-SI-yNG"; */
+"uhi-SI-yNG.text" = "Enable";
+
+/* Class = "UILabel"; text = "--"; ObjectID = "xBn-Nn-sEv"; */
+"xBn-Nn-sEv.text" = "--";

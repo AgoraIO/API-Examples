@@ -34,24 +34,24 @@
     CMSimpleQueueRef _videoQueue;
 }
 @property (nonatomic, strong, readwrite) KFDemuxerConfig* config;
-@property (nonatomic, strong) AVAssetReader *demuxReader; // 解封装器实例。
-@property (nonatomic, strong) AVAssetReaderTrackOutput *readerAudioOutput; // Demuxer 的音频输出。
-@property (nonatomic, strong) AVAssetReaderTrackOutput *readerVideoOutput; // Demuxer 的视频输出。
+@property (nonatomic, strong) AVAssetReader *demuxReader; // Demuxer instance
+@property (nonatomic, strong) AVAssetReaderTrackOutput *readerAudioOutput; // Audio output of demuxer
+@property (nonatomic, strong) AVAssetReaderTrackOutput *readerVideoOutput; // Video output of demuxer
 @property (nonatomic, strong) dispatch_queue_t demuxerQueue;
 @property (nonatomic, strong) dispatch_semaphore_t demuxerSemaphore;
 @property (nonatomic, strong) dispatch_semaphore_t audioQueueSemaphore;
 @property (nonatomic, strong) dispatch_semaphore_t videoQueueSemaphore;
-@property (nonatomic, assign) CMTime lastAudioCopyNextTime; // 上一次拷贝的音频采样的时间戳。
-@property (nonatomic, assign) CMTime lastVideoCopyNextTime; // 上一次拷贝的视频采样的时间戳。
-@property (nonatomic, assign, readwrite) BOOL hasAudioTrack; // 是否包含音频数据。
-@property (nonatomic, assign, readwrite) BOOL hasVideoTrack; // 是否包含视频数据。
-@property (nonatomic, assign, readwrite) CGSize videoSize; // 视频大小。
-@property (nonatomic, assign, readwrite) CMTime duration; // 媒体时长。
-@property (nonatomic, assign, readwrite) CMVideoCodecType codecType; // 编码类型。
-@property (nonatomic, assign, readwrite) KFMP4DemuxerStatus demuxerStatus; // 解封装器状态。
-@property (nonatomic, assign, readwrite) BOOL audioEOF; // 是否音频结束。
-@property (nonatomic, assign, readwrite) BOOL videoEOF; // 是否视频结束。
-@property (nonatomic, assign, readwrite) CGAffineTransform preferredTransform; // 图像的变换信息。比如：视频图像旋转。
+@property (nonatomic, assign) CMTime lastAudioCopyNextTime; // Timestamp of last copied audio sample
+@property (nonatomic, assign) CMTime lastVideoCopyNextTime; // Timestamp of last copied video sample
+@property (nonatomic, assign, readwrite) BOOL hasAudioTrack; // Whether contains audio data
+@property (nonatomic, assign, readwrite) BOOL hasVideoTrack; // Whether contains video data
+@property (nonatomic, assign, readwrite) CGSize videoSize; // Video size
+@property (nonatomic, assign, readwrite) CMTime duration; // Media duration
+@property (nonatomic, assign, readwrite) CMVideoCodecType codecType; // Codec type
+@property (nonatomic, assign, readwrite) KFMP4DemuxerStatus demuxerStatus; // Demuxer status
+@property (nonatomic, assign, readwrite) BOOL audioEOF; // Whether audio has ended
+@property (nonatomic, assign, readwrite) BOOL videoEOF; // Whether video has ended
+@property (nonatomic, assign, readwrite) CGAffineTransform preferredTransform; // Image transform info, e.g. video rotation
 @end
 
 @implementation KFMP4Demuxer
@@ -72,19 +72,19 @@
 }
 
 - (void)dealloc {
-    // 清理状态机。
+    // Clean up state machine
     if (self.demuxerStatus == KFMP4DemuxerStatusRunning) {
         self.demuxerStatus = KFMP4DemuxerStatusCancelled;
     }
     
-    // 清理解封装器实例。
+    // Clean up demuxer instance
     dispatch_semaphore_wait(_demuxerSemaphore, DISPATCH_TIME_FOREVER);
     if (self.demuxReader && self.demuxReader.status == AVAssetReaderStatusReading) {
         [self.demuxReader cancelReading];
     }
     dispatch_semaphore_signal(_demuxerSemaphore);
     
-    // 清理音频数据队列。
+    // Clean up audio data queue
     dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
     while (CMSimpleQueueGetCount(_audioQueue) > 0) {
         CMSampleBufferRef sampleBuffer = (CMSampleBufferRef)CMSimpleQueueDequeue(_audioQueue);
@@ -92,7 +92,7 @@
     }
     dispatch_semaphore_signal(_audioQueueSemaphore);
     
-    // 清理视频数据队列。
+    // Clean up video data queue
     dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);
     while (CMSimpleQueueGetCount(_videoQueue) > 0) {
         CMSampleBufferRef sampleBuffer = (CMSampleBufferRef)CMSimpleQueueDequeue(_videoQueue);
@@ -107,7 +107,7 @@
     dispatch_async(_demuxerQueue, ^{
         dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
         
-        // 在第一次开始读数据时，创建解封装器实例。
+        // Create demuxer instance when first starting to read data
         if (!weakSelf.demuxReader) {
             NSError *error;
             [weakSelf _setupDemuxReader:&error];
@@ -116,7 +116,7 @@
             weakSelf.demuxerStatus = error ? KFMP4DemuxerStatusFailed : KFMP4DemuxerStatusRunning;
             dispatch_semaphore_signal(weakSelf.demuxerSemaphore);
             if (error == nil) {
-                // Demuxer 启动成功后，就可以从它里面获取解封装后的数据了。
+                // After demuxer starts successfully, we can get demuxed data from it
                 [weakSelf fetchAndSaveDemuxedData];
             } else {
                 NSLog(@"KFMP4Demuxer error: %zi %@", error.code, error.localizedDescription);
@@ -135,7 +135,7 @@
         if (weakSelf.demuxerSemaphore == nil) { return; }
         dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
         
-        // 取消读数据。
+        // Cancel reading data
         if (weakSelf.demuxReader && weakSelf.demuxReader.status == AVAssetReaderStatusReading) {
             [weakSelf.demuxReader cancelReading];
         }
@@ -146,7 +146,7 @@
 }
 
 - (BOOL)hasAudioSampleBuffer {
-    // 是否还有音频数据。
+    // Whether there is more audio data
     if (self.hasAudioTrack && self.demuxerStatus == KFMP4DemuxerStatusRunning && !self.audioEOF) {
         int32_t audioCount = 0;
         dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
@@ -162,30 +162,30 @@
 }
 
 - (CMSampleBufferRef)copyNextAudioSampleBuffer CF_RETURNS_RETAINED {
-    // 拷贝下一份音频采样。
+    // Copy next audio sample
     CMSampleBufferRef sampleBuffer = NULL;
     while (!sampleBuffer && self.demuxerStatus == KFMP4DemuxerStatusRunning && !self.audioEOF) {
-        // 先从缓冲队列取数据。
+        // First try to get data from buffer queue
         dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
         if (CMSimpleQueueGetCount(_audioQueue) > 0) {
             sampleBuffer = (CMSampleBufferRef) CMSimpleQueueDequeue(_audioQueue);
         }
         dispatch_semaphore_signal(_audioQueueSemaphore);
         
-        // 缓冲队列没有数据，就同步加载一下试试。
+        // If buffer queue has no data, try synchronous loading
         if (!sampleBuffer && self.demuxerStatus == KFMP4DemuxerStatusRunning) {
             [self _syncLoadNextSampleBuffer];
         }
     }
     
-    // 异步加载一下，先缓冲到数据队列中，等下次取。
+    // Load asynchronously to buffer data in queue for next time
     [self _asyncLoadNextSampleBuffer];
     
     return sampleBuffer;
 }
 
 - (BOOL)hasVideoSampleBuffer {
-    // 是否还有视频数据。
+    // Whether there is more video data
     if (self.hasVideoTrack && self.demuxerStatus == KFMP4DemuxerStatusRunning && !self.videoEOF) {
         int32_t videoCount = 0;
         dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);
@@ -201,23 +201,23 @@
 }
 
 - (CMSampleBufferRef)copyNextVideoSampleBuffer CF_RETURNS_RETAINED {
-    // 拷贝下一份视频采样。
+    // Copy next video sample
     CMSampleBufferRef sampleBuffer = NULL;
     while (!sampleBuffer && self.demuxerStatus == KFMP4DemuxerStatusRunning && !self.videoEOF) {
-        // 先从缓冲队列取数据。
+        // First try to get data from buffer queue
         dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);
         if (CMSimpleQueueGetCount(_videoQueue) > 0) {
             sampleBuffer = (CMSampleBufferRef) CMSimpleQueueDequeue(_videoQueue);
         }
         dispatch_semaphore_signal(_videoQueueSemaphore);
         
-        // 缓冲队列没有数据，就同步加载一下试试。
+        // If buffer queue has no data, try synchronous loading
         if (!sampleBuffer && self.demuxerStatus == KFMP4DemuxerStatusRunning) {
             [self _syncLoadNextSampleBuffer];
         }
     }
     
-    // 异步加载一下，先缓冲到数据队列中，等下次取。
+    // Load asynchronously to buffer data in queue for next time
     [self _asyncLoadNextSampleBuffer];
     
     return sampleBuffer;
@@ -225,7 +225,7 @@
 
 #pragma mark - Utility
 - (void)fetchAndSaveDemuxedData {
-    // 异步地从 Demuxer 获取解封装后的 H.264/H.265 编码数据。
+    // Asynchronously get H.264/H.265 encoded data from demuxer
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         while (self.hasVideoSampleBuffer) {
             CMSampleBufferRef videoBuffer = [self copyNextVideoSampleBuffer];
@@ -241,17 +241,17 @@
 }
 
 - (KFVideoPacketExtraData *)getPacketExtraData:(CMSampleBufferRef)sampleBuffer {
-    // 从 CMSampleBuffer 中获取 extra data。
+    // Get extra data from CMSampleBuffer
     if (!sampleBuffer) {
         return nil;
     }
     
-    // 获取编码类型。
+    // Get codec type
     CMVideoCodecType codecType = CMVideoFormatDescriptionGetCodecType(CMSampleBufferGetFormatDescription(sampleBuffer));
     
     KFVideoPacketExtraData *extraData = nil;
     if (codecType == kCMVideoCodecType_H264) {
-        // 获取 H.264 的 extra data：sps、pps。
+        // Get H.264 extra data: sps, pps
         CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
         size_t sparameterSetSize, sparameterSetCount;
         const uint8_t *sparameterSet;
@@ -267,7 +267,7 @@
             }
         }
     } else if (codecType == kCMVideoCodecType_HEVC) {
-        // 获取 H.265 的 extra data：vps、sps、pps。
+        // Get H.265 extra data: vps, sps, pps
         CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
         size_t vparameterSetSize, vparameterSetCount;
         const uint8_t *vparameterSet;
@@ -290,7 +290,7 @@
                 }
             }
         } else {
-            // 其他编码格式。
+            // Other codec formats
         }
     }
     
@@ -308,24 +308,24 @@
         return NO;
     }
     
-    // 检测 sampleBuffer 是否是关键帧。
+    // Check if sampleBuffer is a keyframe
     BOOL keyframe = !CFDictionaryContainsKey(dic, kCMSampleAttachmentKey_NotSync);
     
     return keyframe;
 }
 
 - (void)saveSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    // 将编码数据存储为文件。
-    // iOS 的 VideoToolbox 编码和解码只支持 AVCC/HVCC 的码流格式。但是 Android 的 MediaCodec 只支持 AnnexB 的码流格式。这里我们做一下两种格式的转换示范，将 AVCC/HVCC 格式的码流转换为 AnnexB 再存储。
-    // 1、AVCC/HVCC 码流格式：[extradata]|[length][NALU]|[length][NALU]|...
-    // VPS、SPS、PPS 不用 NALU 来存储，而是存储在 extradata 中；每个 NALU 前有个 length 字段表示这个 NALU 的长度（不包含 length 字段），length 字段通常是 4 字节。
-    // 2、AnnexB 码流格式：[startcode][NALU]|[startcode][NALU]|...
-    // 每个 NAL 前要添加起始码：0x00000001；VPS、SPS、PPS 也都用这样的 NALU 来存储，一般在码流最前面。
+    // Save encoded data to file
+    // iOS VideoToolbox encoding and decoding only supports AVCC/HVCC stream format. But Android MediaCodec only supports AnnexB stream format. Here we demonstrate converting between the two formats by converting AVCC/HVCC format stream to AnnexB before saving.
+    // 1. AVCC/HVCC stream format: [extradata]|[length][NALU]|[length][NALU]|...
+    // VPS, SPS, PPS are not stored in NALUs but in extradata; each NALU has a length field indicating its length (not including length field), length field is usually 4 bytes.
+    // 2. AnnexB stream format: [startcode][NALU]|[startcode][NALU]|...
+    // Each NAL needs start code: 0x00000001; VPS, SPS, PPS are also stored in NALUs like this, usually at the beginning of the stream.
     if (sampleBuffer) {
         NSMutableData *resultData = [NSMutableData new];
         uint8_t nalPartition[] = {0x00, 0x00, 0x00, 0x01};
         
-        // 关键帧前添加 vps（H.265)、sps、pps。这里要注意顺序别乱了。
+        // Add vps (H.265), sps, pps before keyframe. Note the order must not be changed.
         if ([self isKeyFrame:sampleBuffer]) {
             KFVideoPacketExtraData *extraData = [self getPacketExtraData:sampleBuffer];
             if (extraData.vps) {
@@ -338,7 +338,7 @@
             [resultData appendData:extraData.pps];
         }
         
-        // 获取编码数据。这里的数据是 AVCC/HVCC 格式的。
+        // Get encoded data. The data here is in AVCC/HVCC format.
         CMBlockBufferRef dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
         size_t length, totalLength;
         char *dataPointer;
@@ -346,19 +346,19 @@
         if (statusCodeRet == noErr) {
             size_t bufferOffset = 0;
             static const int NALULengthHeaderLength = 4;
-            // 拷贝编码数据。
+            // Copy encoded data
             while (bufferOffset < totalLength - NALULengthHeaderLength) {
-                // 通过 length 字段获取当前这个 NALU 的长度。
+                // Get length of current NALU through length field
                 uint32_t NALUnitLength = 0;
                 memcpy(&NALUnitLength, dataPointer + bufferOffset, NALULengthHeaderLength);
                 NALUnitLength = CFSwapInt32BigToHost(NALUnitLength);
                 
-                // 拷贝 AnnexB 起始码字节。
+                // Copy AnnexB start code bytes
                 [resultData appendData:[NSData dataWithBytes:nalPartition length:4]];
-                // 拷贝这个 NALU 的字节。
+                // Copy bytes of this NALU
                 [resultData appendData:[NSData dataWithBytes:(dataPointer + bufferOffset + NALULengthHeaderLength) length:NALUnitLength]];
                 
-                // 步进。
+                // Step forward
                 bufferOffset += NALULengthHeaderLength + NALUnitLength;
             }
         }
@@ -375,40 +375,40 @@
         return;
     }
     
-    // 1、创建解封装器实例。
-    // 使用 AVAssetReader 作为解封装器。解封装的目标是 config 中的 AVAsset 资源。
+    // 1. Create demuxer instance
+    // Use AVAssetReader as demuxer. The target to demux is the AVAsset resource in config.
     _demuxReader = [[AVAssetReader alloc] initWithAsset:self.config.asset error:error];
     if (!_demuxReader) {
         return;
     }
     
-    // 2、获取时间信息。
+    // 2. Get time information
     _duration = [self.config.asset duration];
     
-    // 3、处理待解封装的资源中的视频。
+    // 3. Handle video in resource to be demuxed
     if (self.config.demuxerType & KFMediaVideo) {
-        // 取出视频轨道。
+        // Get video track
         AVAssetTrack *videoTrack = [[self.config.asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
         _hasVideoTrack = videoTrack ? YES : NO;
         if (_hasVideoTrack) {
-            // 获取图像变换信息。
+            // Get image transform info
             _preferredTransform = videoTrack.preferredTransform;
             
-            // 获取图像大小。要应用上图像变换信息。
+            // Get image size. Need to apply image transform info.
             _videoSize = CGSizeApplyAffineTransform(videoTrack.naturalSize, videoTrack.preferredTransform);
             _videoSize = CGSizeMake(fabs(_videoSize.width), fabs(_videoSize.height));
             
-            // 获取编码格式。
+            // Get codec format
             CMVideoFormatDescriptionRef formatDescription = (__bridge CMVideoFormatDescriptionRef)[[videoTrack formatDescriptions] firstObject];
             if (formatDescription) {
                 _codecType = CMVideoFormatDescriptionGetCodecType(formatDescription);
             }
             
-            // 基于轨道创建视频输出。
+            // Create video output based on track
             _readerVideoOutput = [[AVAssetReaderTrackOutput alloc] initWithTrack:videoTrack outputSettings:nil];
-            _readerVideoOutput.alwaysCopiesSampleData = NO; // 避免总是做数据拷贝，影响性能。
+            _readerVideoOutput.alwaysCopiesSampleData = NO; // Avoid always copying data which affects performance
             
-            // 给解封装器绑定视频输出。
+            // Bind video output to demuxer
             if ([_demuxReader canAddOutput:_readerVideoOutput]) {
                 [_demuxReader addOutput:_readerVideoOutput];
             } else {
@@ -418,17 +418,17 @@
         }
     }
     
-    // 4、处理待解封装的资源中的音频。
+    // 4. Handle audio in resource to be demuxed
     if (self.config.demuxerType & KFMediaAudio) {
-        // 取出音频轨道。
+        // Get audio track
         AVAssetTrack *audioTrack = [[self.config.asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
         _hasAudioTrack = audioTrack ? YES : NO;
         if (_hasAudioTrack) {
-            // 基于轨道创建音频输出。
+            // Create audio output based on track
             _readerAudioOutput = [[AVAssetReaderTrackOutput alloc] initWithTrack:audioTrack outputSettings:nil];
-            _readerAudioOutput.alwaysCopiesSampleData = NO; // 避免总是做数据拷贝，影响性能。
+            _readerAudioOutput.alwaysCopiesSampleData = NO; // Avoid always copying data which affects performance
             
-            // 给解封装器绑定音频输出。
+            // Bind audio output to demuxer
             if ([_demuxReader canAddOutput:_readerAudioOutput]) {
                 [_demuxReader addOutput:_readerAudioOutput];
             } else {
@@ -438,13 +438,13 @@
         }
     }
     
-    // 5、音频和视频数据都没有，就报错。
+    // 5. Report error if no audio and video data
     if (!_hasVideoTrack && !_hasAudioTrack) {
         *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:KFMP4DemuxerBadFileError userInfo:nil];
         return;
     }
     
-    // 6、启动解封装。
+    // 6. Start demuxing
     BOOL startSuccess = [self.demuxReader startReading];
     if (!startSuccess) {
         *error = self.demuxReader.error;
@@ -452,7 +452,7 @@
 }
 
 - (void)_asyncLoadNextSampleBuffer {
-    // 异步加载下一份采样数据。
+    // Load next sample data asynchronously
     __weak typeof(self) weakSelf = self;
     dispatch_async(_demuxerQueue, ^{
         dispatch_semaphore_wait(weakSelf.demuxerSemaphore, DISPATCH_TIME_FOREVER);
@@ -462,7 +462,7 @@
 }
 
 - (void)_syncLoadNextSampleBuffer {
-    // 同步加载下一份采样数据。
+    // Load next sample data synchronously
     dispatch_semaphore_wait(self.demuxerSemaphore, DISPATCH_TIME_FOREVER);
     [self _loadNextSampleBuffer];
     dispatch_semaphore_signal(self.demuxerSemaphore);
@@ -473,34 +473,34 @@
         return;
     }
     
-    // 1、根据解封装器的状态，处理异常情况。
+    // 1. Handle exceptions based on demuxer status
     if (self.demuxReader.status == AVAssetWriterStatusCompleted) {
         self.demuxerStatus = KFMP4DemuxerStatusCompleted;
         return;
     } else if (self.demuxReader.status == AVAssetWriterStatusFailed) {
 #if TARGET_OS_IPHONE
         if (self.demuxReader.error.code == AVErrorOperationInterrupted) {
-            // 如果当前解封装器的状态是被打断而失败，就尝试重新创建一下。
+            // If current demuxer status is failed due to interruption, try recreating it
             NSError *error;
             [self _setupDemuxReader:&error];
             if (!error) {
-                // 同时做一下恢复处理。
+                // Also do recovery processing
                 [self _resumeLastTime];
             }
         }
 #else
         if (self.demuxReader.error.code == AVErrorUnknown) {
-            // 如果当前解封装器的状态是被打断而失败，就尝试重新创建一下。
+            // If current demuxer status is failed due to interruption, try recreating it
             NSError *error;
             [self _setupDemuxReader:&error];
             if (!error) {
-                // 同时做一下恢复处理。
+                // Also do recovery processing
                 [self _resumeLastTime];
             }
         }
 #endif
         if (self.demuxReader.status == AVAssetWriterStatusFailed) {
-            // 如果状态依然是失败，就上报错误。
+            // If status is still failed, report error
             self.demuxerStatus = KFMP4DemuxerStatusFailed;
             if (self.errorCallBack) {
                 NSError *error = self.demuxReader.error;
@@ -511,28 +511,28 @@
             return;
         }
     } else if (self.demuxReader.status == AVAssetWriterStatusCancelled) {
-        // 如果状态是取消，就直接 return。
+        // If status is cancelled, just return
         self.demuxerStatus = KFMP4DemuxerStatusCancelled;
         return;
     }
     
-    // 2、解封装器状态正常，加载下一份采样数据。
+    // 2. Demuxer status is normal, load next sample data
     BOOL audioNeedLoad = (self.config.demuxerType & KFMediaAudio) && !self.audioEOF;
     BOOL videoNeedLoad = (self.config.demuxerType & KFMediaVideo) && !self.videoEOF;
     while (self.demuxReader && self.demuxReader.status == AVAssetReaderStatusReading && (audioNeedLoad || videoNeedLoad)) {
-        // 加载音频数据。
+        // Load audio data
         if (audioNeedLoad) {
             dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
             int32_t audioCount = CMSimpleQueueGetCount(_audioQueue);
             dispatch_semaphore_signal(_audioQueueSemaphore);
             if (audioCount < KFMP4DemuxerQueueMaxCount) {
-                // 从音频输出源读取音频数据。
+                // Read audio data from audio output source
                 CMSampleBufferRef next = [self.readerAudioOutput copyNextSampleBuffer];
                 if (next) {
                     if (!CMSampleBufferGetDataBuffer(next)) {
                         CFRelease(next);
                     } else {
-                        // 将数据从音频输出源 readerAudioOutput 拷贝到缓冲队列 _audioQueue 中。
+                        // Copy data from audio output source readerAudioOutput to buffer queue _audioQueue
                         self.lastAudioCopyNextTime = CMSampleBufferGetPresentationTimeStamp(next);
                         dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
                         CMSimpleQueueEnqueue(_audioQueue, next);
@@ -548,19 +548,19 @@
             }
         }
         
-        // 加载视频数据。
+        // Load video data
         if (videoNeedLoad) {
             dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);
             int32_t videoCount = CMSimpleQueueGetCount(_videoQueue);
             dispatch_semaphore_signal(_videoQueueSemaphore);
             if (videoCount < KFMP4DemuxerQueueMaxCount) {
-                // 从视频输出源读取视频数据。
+                // Read video data from video output source
                 CMSampleBufferRef next = [self.readerVideoOutput copyNextSampleBuffer];
                 if (next) {
                     if (!CMSampleBufferGetDataBuffer(next)) {
                         CFRelease(next);
                     } else {
-                        // 将数据从视频输出源 readerVideoOutput 拷贝到缓冲队列 _videoQueue 中。
+                        // Copy data from video output source readerVideoOutput to buffer queue _videoQueue
                         self.lastVideoCopyNextTime = CMSampleBufferGetDecodeTimeStamp(next);
                         dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);
                         CMSimpleQueueEnqueue(_videoQueue, next);
@@ -579,16 +579,16 @@
 }
 
 - (void)_resumeLastTime {
-    // 对于异常中断后的处理，需要根据记录的时间戳 _lastAudioCopyNextTime/_lastVideoCopyNextTime 做恢复操作。
+    // For handling after abnormal interruption, need to do recovery based on recorded timestamps _lastAudioCopyNextTime/_lastVideoCopyNextTime
     BOOL audioNeedLoad = (_lastAudioCopyNextTime.value > 0) && !self.audioEOF;
     BOOL videoNeedLoad = (_lastVideoCopyNextTime.value > 0) && !self.videoEOF;
     while (self.demuxReader && self.demuxReader.status == AVAssetReaderStatusReading && (audioNeedLoad || videoNeedLoad)) {
         if (audioNeedLoad) {
-            // 从音频输出源读取音频数据。
+            // Read audio data from audio output source
             CMSampleBufferRef next = [self.readerAudioOutput copyNextSampleBuffer];
             if (next) {
                 if (CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(next)) <= CMTimeGetSeconds(_lastAudioCopyNextTime) || !CMSampleBufferGetDataBuffer(next)) {
-                    // 从输出源取出的数据时间戳小于上次标记的时间，则表示这份采样数据已经处理过了。
+                    // The data timestamp extracted from the output source is less than the last marked time, indicating that this sample data has been processed.
                     CFRelease(next);
                 } else {
                     dispatch_semaphore_wait(_audioQueueSemaphore, DISPATCH_TIME_FOREVER);
@@ -603,11 +603,11 @@
         }
         
         if (videoNeedLoad) {
-            // 从视频输出源读取视频数据。
+            // Read video data from video output source
             CMSampleBufferRef next = [self.readerVideoOutput copyNextSampleBuffer];
             if (next) {
                 if (CMTimeGetSeconds(CMSampleBufferGetDecodeTimeStamp(next)) <= CMTimeGetSeconds(_lastVideoCopyNextTime) || !CMSampleBufferGetDataBuffer(next)) {
-                    // 从输出源取出的数据时间戳小于上次标记的时间，则表示这份采样数据已经处理过了。
+                    // The data timestamp extracted from the output source is less than the last marked time, indicating that this sample data has been processed.
                     CFRelease(next);
                 } else {
                     dispatch_semaphore_wait(_videoQueueSemaphore, DISPATCH_TIME_FOREVER);

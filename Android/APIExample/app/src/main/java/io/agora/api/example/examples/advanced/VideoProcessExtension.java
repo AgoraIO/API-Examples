@@ -69,12 +69,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private FrameLayout fl_local, fl_remote;
     private LinearLayout controlPanel;
     private Button join;
-    private Switch shapeBeauty, makeUp, beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
+    private Switch shapeBeauty, beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_videoEnhance, seek_smoothness, seek_strength, seek_skin;
-    // Makeup
-    private SeekBar sbBrowStrength, sbLashStrength, sbShadowStrength, sbPupilStrength, sbBlushStrength, sbLipStrength;
-    private Spinner spinnerBrowStyle, spinnerLashStyle, spinnerShadowStyle, spinnerPupilStyle, spinnerBlushStyle, spinnerLipStyle;
-    private Spinner spinnerBrowColor, spinnerLashColor, spinnerShadowColor, spinnerPupilColor, spinnerBlushColor, spinnerLipColor;
     // Beauty Shape
     private SeekBar sbShapeBeautifyAreaIntensity, sbShapeBeautifyStyleIntensity;
     private Spinner spinnerShapeBeautyArea, spinnerShapeBeautifyStyle;
@@ -85,7 +81,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private boolean joined = false;
     private BeautyOptions beautyOptions = new BeautyOptions();
     private FilterEffectOptions filterEffectOptions = new FilterEffectOptions();
-    private MpOptions makeUpOptions = new MpOptions();
     private FaceShapeBeautyOptions faceShapeBeautyOptions = new FaceShapeBeautyOptions();
     private FaceShapeAreaOptions faceShapeAreaOptions = new FaceShapeAreaOptions();
     private double skinProtect = 1.0;
@@ -110,8 +105,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         controlPanel = view.findViewById(R.id.controlPanel);
         shapeBeauty = view.findViewById(R.id.switch_face_shape_beautify);
         shapeBeauty.setOnCheckedChangeListener(this);
-        makeUp = view.findViewById(R.id.switch_face_makeup);
-        makeUp.setOnCheckedChangeListener(this);
         beauty = view.findViewById(R.id.switch_face_beautify);
         beauty.setOnCheckedChangeListener(this);
         lightness2 = view.findViewById(R.id.switch_lightness2);
@@ -147,49 +140,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         spinnerShapeBeautyArea.setOnItemSelectedListener(this);
         spinnerShapeBeautifyStyle = view.findViewById(R.id.spinner_shape_beautify_style);
         spinnerShapeBeautifyStyle.setOnItemSelectedListener(this);
-
-        // Makeup
-        sbBrowStrength = view.findViewById(R.id.sb_brow_strength);
-        sbBrowStrength.setOnSeekBarChangeListener(this);
-        sbLashStrength = view.findViewById(R.id.sb_lash_strength);
-        sbLashStrength.setOnSeekBarChangeListener(this);
-        sbShadowStrength = view.findViewById(R.id.sb_shadow_strength);
-        sbShadowStrength.setOnSeekBarChangeListener(this);
-        sbPupilStrength = view.findViewById(R.id.sb_pupil_strength);
-        sbPupilStrength.setOnSeekBarChangeListener(this);
-        sbBlushStrength = view.findViewById(R.id.sb_blush_strength);
-        sbBlushStrength.setOnSeekBarChangeListener(this);
-        sbLipStrength = view.findViewById(R.id.sb_lip_strength);
-        sbLipStrength.setOnSeekBarChangeListener(this);
-
-        spinnerBrowStyle = view.findViewById(R.id.spinner_brow_style);
-        spinnerLashStyle = view.findViewById(R.id.spinner_lash_style);
-        spinnerShadowStyle = view.findViewById(R.id.spinner_shadow_style);
-        spinnerPupilStyle = view.findViewById(R.id.spinner_pupil_style);
-        spinnerBlushStyle = view.findViewById(R.id.spinner_blush_style);
-        spinnerLipStyle = view.findViewById(R.id.spinner_lip_style);
-
-        spinnerBrowColor = view.findViewById(R.id.spinner_brow_color);
-        spinnerLashColor = view.findViewById(R.id.spinner_lash_color);
-        spinnerShadowColor = view.findViewById(R.id.spinner_shadow_color);
-        spinnerPupilColor = view.findViewById(R.id.spinner_pupil_color);
-        spinnerBlushColor = view.findViewById(R.id.spinner_blush_color);
-        spinnerLipColor = view.findViewById(R.id.spinner_lip_color);
-
-        spinnerBrowStyle.setOnItemSelectedListener(this);
-        spinnerLashStyle.setOnItemSelectedListener(this);
-        spinnerShadowStyle.setOnItemSelectedListener(this);
-        spinnerPupilStyle.setOnItemSelectedListener(this);
-        spinnerBlushStyle.setOnItemSelectedListener(this);
-        spinnerLipStyle.setOnItemSelectedListener(this);
-
-        spinnerBrowColor.setOnItemSelectedListener(this);
-        spinnerLashColor.setOnItemSelectedListener(this);
-        spinnerShadowColor.setOnItemSelectedListener(this);
-        spinnerPupilColor.setOnItemSelectedListener(this);
-        spinnerBlushColor.setOnItemSelectedListener(this);
-        spinnerLipColor.setOnItemSelectedListener(this);
-
 
         virtualBgType = view.findViewById(R.id.virtual_bg_type);
         virtualBgType.setOnCheckedChangeListener((group, checkedId) -> {
@@ -280,7 +230,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             }
 
             engine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true);
-            updateExtensionProperty();
             updateFaceShapeBeautyStyleOptions();
         } catch (Exception e) {
             e.printStackTrace();
@@ -298,12 +247,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private void updateFaceShapeBeautyStyleOptions() {
         if (engine != null) {
             engine.setFaceShapeBeautyOptions(shapeBeauty.isChecked(), faceShapeBeautyOptions);
-        }
-    }
-
-    private void updateExtensionProperty() {
-        if (engine != null) {
-            engine.setExtensionProperty("agora_video_filters_clear_vision", "clear_vision", "makeup_options", makeUpOptions.toJson(), Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE);
         }
     }
 
@@ -425,7 +368,38 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
 
         switch (parent.getId()) {
             case R.id.spinner_shape_beauty_area:
-                faceShapeAreaOptions.shapeArea = position - 1;
+                faceShapeAreaOptions.shapeArea = switch (position) {
+                    case 1 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_HEADSCALE;
+                    case 2 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_FOREHEAD;
+                    case 3 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_FACECONTOUR;
+                    case 4 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_FACELENGTH;
+                    case 5 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_FACEWIDTH;
+                    case 6 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_CHEEKBONE;
+                    case 7 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_CHEEK;
+                    case 8 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_MANDIBLE;
+                    case 9 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_CHIN;
+                    case 10 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYESCALE;
+                    case 11 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEDISTANCE;
+                    case 12 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEPOSITION;
+                    case 13 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYELID;
+                    case 14 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEPUPILS;
+                    case 15 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEINNERCORNER;
+                    case 16 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEOUTERCORNER;
+                    case 17 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSELENGTH;
+                    case 18 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSEWIDTH;
+                    case 19 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSEWING;
+                    case 20 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSEROOT;
+                    case 21 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSEBRIDGE;
+                    case 22 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSETIP;
+                    case 23 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NOSEGENERAL;
+                    case 24 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_MOUTHSCALE;
+                    case 25 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_MOUTHPOSITION;
+                    case 26 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_MOUTHSMILE;
+                    case 27 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_MOUTHLIP;
+                    case 28 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEBROWPOSITION;
+                    case 29 -> FaceShapeAreaOptions.FACE_SHAPE_AREA_EYEBROWTHICKNESS;
+                    default -> FaceShapeAreaOptions.FACE_SHAPE_AREA_NONE;
+                };
                 //get origin beauty option params
                 FaceShapeAreaOptions originOptions = engine.getFaceShapeAreaOptions(faceShapeAreaOptions.shapeArea);
                 if (originOptions != null) {
@@ -438,38 +412,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 faceShapeBeautyOptions.shapeStyle = position;
                 updateFaceShapeBeautyStyleOptions();
                 return;
-            case R.id.spinner_brow_style:
-                makeUpOptions.browStyle = position;
-                break;
-            case R.id.spinner_lash_style:
-                makeUpOptions.lashStyle = position;
-                break;
-            case R.id.spinner_shadow_style:
-                makeUpOptions.shadowStyle = position;
-                break;
-            case R.id.spinner_pupil_style:
-                makeUpOptions.pupilStyle = position;
-                break;
-            case R.id.spinner_blush_style:
-                makeUpOptions.blushStyle = position;
-                break;
-            case R.id.spinner_lip_style:
-                makeUpOptions.lipStyle = position;
-                break;
-            case R.id.spinner_brow_color:
-                makeUpOptions.browColor = position;
-                break;
-            case R.id.spinner_lash_color:
-                makeUpOptions.lashColor = position;
-                break;
-            case R.id.spinner_blush_color:
-                makeUpOptions.blushColor = position;
-                break;
-            case R.id.spinner_lip_color:
-                makeUpOptions.lipColor = position;
-                break;
         }
-        updateExtensionProperty();
     }
 
     @Override
@@ -486,15 +429,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 return;
             }
             updateFaceShapeBeautyStyleOptions();
-        } else if (buttonView.getId() == makeUp.getId()) {
-            if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
-                buttonView.setChecked(false);
-                Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            makeUpOptions.enable_mu = isChecked;
-            updateExtensionProperty();
-        } else if (buttonView.getId() == beauty.getId()) {
+        }  else if (buttonView.getId() == beauty.getId()) {
             if (isChecked && !engine.isFeatureAvailableOnDevice(Constants.FEATURE_VIDEO_BEAUTY_EFFECT)) {
                 buttonView.setChecked(false);
                 Toast.makeText(requireContext(), R.string.feature_unavailable, Toast.LENGTH_SHORT).show();
@@ -505,8 +440,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             engine.setFilterEffectOptions(isChecked, filterEffectOptions);
         } else if (buttonView.getId() == lightness2.getId()) {
             LowLightEnhanceOptions options = new LowLightEnhanceOptions();
-            options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST;
-            options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_AUTO;
+            options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY;
+            options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_MANUAL;
             engine.setLowlightEnhanceOptions(isChecked, options);
         } else if (buttonView.getId() == colorful2.getId()) {
             setColorEnhance(isChecked);
@@ -541,24 +476,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         } else if (seekBar.getId() == sbShapeBeautifyStyleIntensity.getId()) {
             faceShapeBeautyOptions.styleIntensity = progress;
             updateFaceShapeBeautyStyleOptions();
-        } else if (seekBar.getId() == sbBrowStrength.getId()) {
-            makeUpOptions.browStrength = value;
-            updateExtensionProperty();
-        } else if (seekBar.getId() == sbLashStrength.getId()) {
-            makeUpOptions.lashStrength = value;
-            updateExtensionProperty();
-        } else if (seekBar.getId() == sbShadowStrength.getId()) {
-            makeUpOptions.shadowStrength = value;
-            updateExtensionProperty();
-        } else if (seekBar.getId() == sbPupilStrength.getId()) {
-            makeUpOptions.pupilStrength = value;
-            updateExtensionProperty();
-        } else if (seekBar.getId() == sbBlushStrength.getId()) {
-            makeUpOptions.blushStrength = value;
-            updateExtensionProperty();
-        } else if (seekBar.getId() == sbLipStrength.getId()) {
-            makeUpOptions.lipStrength = value;
-            updateExtensionProperty();
         } else if (seekBar.getId() == seek_lightness.getId()) {
             beautyOptions.lighteningLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);

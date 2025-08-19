@@ -56,4 +56,4 @@ def doPublish(buildVariables) {
     sh "rm -rf *.zip *.ipa || true"
 }
 
-pipelineLoad(this, "ApiExample", "build", "ios", "apiexample_mac")
+pipelineLoad(this, "ApiExample", "build", "ios", "RTC-Sample")

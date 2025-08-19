@@ -1,21 +1,21 @@
 
 /* Class = "UITextField"; placeholder = "Enter target relay channel name"; ObjectID = "3YW-GH-fI0"; */
-"3YW-GH-fI0.placeholder" = "输入流转发目标频道名";
+"3YW-GH-fI0.placeholder" = "Enter target relay channel name";
 
 /* Class = "UILabel"; text = "Send stream to another channel"; ObjectID = "Dpm-6U-Jeq"; */
-"Dpm-6U-Jeq.text" = "发送流到另一个频道";
+"Dpm-6U-Jeq.text" = "Send stream to another channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "G86-Jn-fzE"; */
-"G86-Jn-fzE.normalTitle" = "暂停";
+"G86-Jn-fzE.normalTitle" = "Pause";
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "K2D-T9-l6m"; */
-"K2D-T9-l6m.normalTitle" = "转发";
+"K2D-T9-l6m.normalTitle" = "Relay";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "NsB-pv-Uey"; */
-"NsB-pv-Uey.normalTitle" = "恢复";
+"NsB-pv-Uey.normalTitle" = "Resume";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "Join";
@@ -24,4 +24,4 @@
 "p70-sh-D1h.title" = "Media Channel Relay";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "rua-c8-U0p"; */
-"rua-c8-U0p.normalTitle" = "停止";
+"rua-c8-U0p.normalTitle" = "Stop";

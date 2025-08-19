@@ -172,7 +172,7 @@ class AudioWaveformMain: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        // 关闭耳返
+
         agoraKit.enable(inEarMonitoring: false)
         agoraKit.disableAudio()
         agoraKit.disableVideo()

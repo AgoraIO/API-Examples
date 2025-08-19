@@ -148,7 +148,7 @@ public class EGLContextHelper {
             EGL10.EGL_ALPHA_SIZE, mAlphaSize,
             EGL10.EGL_DEPTH_SIZE, mDepthSize,
             EGL10.EGL_STENCIL_SIZE, mStencilSize,
-            EGL10.EGL_RENDERABLE_TYPE, mRenderType,//egl版本  2.0
+            EGL10.EGL_RENDERABLE_TYPE, mRenderType,// EGL version 2.0
             EGL10.EGL_NONE};
 
     public void release() {

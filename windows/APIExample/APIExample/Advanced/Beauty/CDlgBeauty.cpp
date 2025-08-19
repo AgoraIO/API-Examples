@@ -242,7 +242,7 @@ void CDlgBeauty::UnInitAgora()
 
 		//release engine.
 		if (m_initialize) {
-			m_rtcEngine->release(true);
+			m_rtcEngine->release(nullptr);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		}
 		
@@ -341,6 +341,8 @@ BOOL CDlgBeauty::OnInitDialog()
 	CString strPath = GetExePath() + _T("\\agora.png");
 	m_imgPath = cs2utf8(strPath);
 	ResumeStatus();
+
+	mCkExtention.ShowWindow(SW_HIDE);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				 

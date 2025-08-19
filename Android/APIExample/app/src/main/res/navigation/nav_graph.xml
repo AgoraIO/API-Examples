@@ -35,9 +35,9 @@
         <action
             android:id="@+id/action_mainFragment_to_RTCToRTMP"
             app:destination="@id/RTCToRTMP" />
-        <action
-            android:id="@+id/action_mainFragment_to_CDNStreaming"
-            app:destination="@id/CDNStreaming" />
+<!--        <action-->
+<!--            android:id="@+id/action_mainFragment_to_CDNStreaming"-->
+<!--            app:destination="@id/CDNStreaming" />-->
         <action
             android:id="@+id/action_mainFragment_to_MediaMetadata"
             app:destination="@id/MediaMetadata" />
@@ -141,6 +141,9 @@
             android:id="@+id/action_mainFragment_to_third_party_beauty"
             app:destination="@id/thirdPartyBeauty" />
         <action
+            android:id="@+id/action_mainFragment_agora_beauty"
+            app:destination="@id/AgoraBeauty" />
+        <action
             android:id="@+id/action_mainFragment_to_face_capture"
             app:destination="@id/faceCapture" />
         <action
@@ -149,6 +152,12 @@
         <action
             android:id="@+id/action_mainFragment_to_url_live_stream"
             app:destination="@id/urlLiveStream" />
+        <action
+            android:id="@+id/action_mainFragment_to_simulcast"
+            app:destination="@id/simulcast" />
+        <action
+            android:id="@+id/action_mainFragment_to_multipath"
+            app:destination="@id/multipath" />
     </fragment>
 
     <fragment
@@ -166,20 +175,20 @@
         android:name="io.agora.api.example.examples.basic.JoinChannelVideoByToken"
         android:label="@string/item_joinvideo_by_token"
         tools:layout="@layout/fragment_joinchannel_video_by_token" />
-    <fragment
-        android:id="@+id/CDNStreaming"
-        android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
-        android:label="@string/item_rtmpstreaming"
-        tools:layout="@layout/fragment_cdn_entry">
-        <action
-            android:id="@+id/action_cdn_streaming_to_audience"
-            app:destination="@id/CDNAudience" />
+<!--    <fragment-->
+<!--        android:id="@+id/CDNStreaming"-->
+<!--        android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"-->
+<!--        android:label="@string/item_rtmpstreaming"-->
+<!--        tools:layout="@layout/fragment_cdn_entry">-->
+<!--        <action-->
+<!--            android:id="@+id/action_cdn_streaming_to_audience"-->
+<!--            app:destination="@id/CDNAudience" />-->
 
-        <action
-            android:id="@+id/action_cdn_streaming_to_host"
-            app:destination="@id/CDNHost" />
+<!--        <action-->
+<!--            android:id="@+id/action_cdn_streaming_to_host"-->
+<!--            app:destination="@id/CDNHost" />-->
 
-    </fragment>
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/thirdPartyBeauty"
@@ -188,24 +197,9 @@
         tools:layout="@layout/fragment_third_party_beauty">
 
         <action
-            android:id="@+id/action_third_party_beauty_to_scene_time"
-            app:destination="@id/SceneTimeBeauty" />
-
-        <action
             android:id="@+id/action_third_party_beauty_to_faceunity"
             app:destination="@id/FaceUnityBeauty" />
-
-        <action
-            android:id="@+id/action_third_party_beauty_to_bytedance"
-            app:destination="@id/ByteDanceBeauty" />
-
     </fragment>
-
-    <fragment
-        android:id="@+id/SceneTimeBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.SenseTimeBeauty"
-        android:label="@string/scenetime_beauty"
-        tools:layout="@layout/fragment_beauty_scenetime" />
 
     <fragment
         android:id="@+id/FaceUnityBeauty"
@@ -214,27 +208,26 @@
         tools:layout="@layout/fragment_beauty_faceunity" />
 
     <fragment
-        android:id="@+id/ByteDanceBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.ByteDanceBeauty"
-        android:label="@string/bytedance_beauty"
-        tools:layout="@layout/fragment_beauty_bytedance" />
-
+        android:id="@+id/AgoraBeauty"
+        android:name="io.agora.api.example.examples.advanced.AgoraBeauty"
+        android:label="@string/item_agora_beauty"
+        tools:layout="@layout/fragment_agora_beauty" />
 
     <fragment
         android:id="@+id/RTCToRTMP"
         android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
         android:label="@string/item_rtctortmp"
         tools:layout="@layout/fragment_rtmp_streaming" />
-    <fragment
-        android:id="@+id/CDNHost"
-        android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"
-        android:label="@string/item_rtmpstreaming"
-        tools:layout="@layout/fragment_cdn_host" />
-    <fragment
-        android:id="@+id/CDNAudience"
-        android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"
-        android:label="@string/item_rtmpstreaming"
-        tools:layout="@layout/fragment_cdn_audience" />
+<!--    <fragment-->
+<!--        android:id="@+id/CDNHost"-->
+<!--        android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"-->
+<!--        android:label="@string/item_rtmpstreaming"-->
+<!--        tools:layout="@layout/fragment_cdn_host" />-->
+<!--    <fragment-->
+<!--        android:id="@+id/CDNAudience"-->
+<!--        android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"-->
+<!--        android:label="@string/item_rtmpstreaming"-->
+<!--        tools:layout="@layout/fragment_cdn_audience" />-->
     <fragment
         android:id="@+id/MediaMetadata"
         android:name="io.agora.api.example.examples.advanced.MediaMetadata"
@@ -450,5 +443,17 @@
         android:name="io.agora.api.example.examples.advanced.UrlLiveStream"
         android:label="@string/ultra_live_streaming_with_url"
         tools:layout="@layout/fragment_url_live_stream" />
+
+    <fragment
+        android:id="@+id/simulcast"
+        android:name="io.agora.api.example.examples.advanced.Simulcast"
+        android:label="@string/item_simulcast"
+        tools:layout="@layout/fragment_simulcast" />
+
+    <fragment
+        android:id="@+id/multipath"
+        android:name="io.agora.api.example.examples.advanced.Multipath"
+        android:label="@string/item_multipath"
+        tools:layout="@layout/fragment_multipath" />
 
 </navigation>

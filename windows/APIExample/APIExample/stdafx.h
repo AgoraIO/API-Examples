@@ -52,13 +52,8 @@
 #include "CConfig.h"
 #include "Language.h"
 #include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
 #include <chrono>
 #include <random>
-#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.dll.lib")
 #pragma comment(lib, "libagora_segmentation_extension.dll.lib")
 //#pragma comment(lib, "libagora_video_process.dll.lib")
@@ -122,7 +117,8 @@ using namespace agora::media;
 
 #define EID_ON_FACE_INFO	0x00000039
 #define EID_ON_RECV_AUDIO_METADATA				0x0000003A
-
+#define EID_MULTIPATH_STATS 0x0000003B
+#define EID_NETWORK_TYPE_CHANGED 0x0000003C
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;

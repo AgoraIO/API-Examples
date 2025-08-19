@@ -20,7 +20,7 @@ class PictureInPicture: UITableViewController {
     lazy var dataArray: [Model<PIPBaseViewController>] = {
         if #available(iOS 15.0, *) {
             return [
-                Model<PIPBaseViewController>(title: "多人视频自渲染", cls: PixelBufferPIPViewController.self)
+                Model<PIPBaseViewController>(title: "Multi-person pixbuf rendering", cls: PixelBufferPIPViewController.self)
             ]
         } else {
             // Fallback on earlier versions

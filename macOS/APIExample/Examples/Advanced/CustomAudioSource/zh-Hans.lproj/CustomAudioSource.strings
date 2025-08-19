@@ -3,24 +3,24 @@
 "5Bj-Be-5dr.title" = "1V3";
 
 /* Class = "NSViewController"; title = "Custom Audio Source"; ObjectID = "8Q5-xy-D8A"; */
-"8Q5-xy-D8A.title" = "音频自采集";
+"8Q5-xy-D8A.title" = "Custom Audio Source";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "9hh-5D-rEK"; */
-"9hh-5D-rEK.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "9hh-5D-rEK"; */
+"9hh-5D-rEK.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSMenuItem"; title = "1V8"; ObjectID = "CkQ-CH-Xcd"; */
 "CkQ-CH-Xcd.title" = "1V8";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "MCC-IO-OYe"; */
-"MCC-IO-OYe.title" = "加入频道";
+"MCC-IO-OYe.title" = "Join Channel";
 
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "Wpu-17-eWW"; */
 "Wpu-17-eWW.title" = "1V15";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "dNt-Gv-ohJ"; */
-"dNt-Gv-ohJ.title" = "离开频道";
+"dNt-Gv-ohJ.title" = "Leave Channel";
 
 /* Class = "NSMenuItem"; title = "1V1"; ObjectID = "yKw-5m-DrZ"; */
 "yKw-5m-DrZ.title" = "1V1";
 
-"UzT-xh-vr5.title" = "播放本地PCM";
+"UzT-xh-vr5.title" = "Play Local PCM";

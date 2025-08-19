@@ -264,9 +264,8 @@ private fun VideoProcessExtensionView(
             item {
                 SwitchRaw(title = stringResource(id = R.string.low_light_enhance)) {
                     val options = LowLightEnhanceOptions()
-                    options.lowlightEnhanceLevel =
-                        LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST
-                    options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_AUTO
+                    options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY
+                    options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_MANUAL
                     rtcEngine?.setLowlightEnhanceOptions(it, options)
                 }
             }

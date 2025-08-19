@@ -100,7 +100,7 @@ void CAgoraAudioMixingDlg::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		//release engine.
 		if (m_initialize) {
-			m_rtcEngine->release(true);
+			m_rtcEngine->release(nullptr);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		}
 		m_rtcEngine = NULL;

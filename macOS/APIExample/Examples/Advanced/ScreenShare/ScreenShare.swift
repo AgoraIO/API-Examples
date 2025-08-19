@@ -135,8 +135,8 @@ class ScreenShare: BaseViewController {
      --- DisplayHint Picker ---
      */
     @IBOutlet weak var selectExcludeWindowPicker: Picker!
-    var excludeWindowlist:[Window] = []
-    var selecteExcludedWindow: Window? {
+    var excludeWindowlist:[AgoraScreenCaptureSourceInfo] = []
+    var selecteExcludedWindow: AgoraScreenCaptureSourceInfo? {
         let index = self.selectExcludeWindowPicker.indexOfSelectedItem - 1
         if index >= 0 && index < excludeWindowlist.count {
             return excludeWindowlist[index]
@@ -146,8 +146,15 @@ class ScreenShare: BaseViewController {
     }
     func initSelectExcludeWindowPicker() {
         selectExcludeWindowPicker.label.stringValue = "Exclude Window".localized
-        excludeWindowlist = windowManager.items.filter({$0.type == .window})
-        let windows = ["none"] + excludeWindowlist.map {"\($0.name ?? "Unknown")(\($0.id))"}
+        
+        let sources = agoraKit.getScreenCaptureSources(withThumbSize: .zero, iconSize: .zero, includeScreen: false)
+        
+        excludeWindowlist = sources?.filter { source in
+            return source.type == .window &&
+                   !source.sourceName.isEmpty
+        } ?? []
+        
+        let windows = ["none"] + excludeWindowlist.map {"\($0.sourceName)(\($0.sourceId))"}
         selectExcludeWindowPicker.picker.addItems(withTitles: windows)
 
         selectExcludeWindowPicker.onSelectChanged { [weak self] in
@@ -156,18 +163,17 @@ class ScreenShare: BaseViewController {
                 return
             }
             let captureParams = AgoraScreenCaptureParameters()
-            captureParams.excludeWindowList = self.selecteExcludedWindow?.id == nil ? [] : [self.selecteExcludedWindow?.id ?? ""]
+            captureParams.excludeWindowList = self.selecteExcludedWindow?.sourceId == nil ? [] : [String(self.selecteExcludedWindow?.sourceId ?? 0)]
             self.agoraKit.updateScreenCaptureParameters(captureParams)
         }
     }
     
-    var windowManager: WindowList = WindowList()
-    var windowlist:[Window] = [], screenlist:[Window] = []
+    var windowlist:[AgoraScreenCaptureSourceInfo] = [], screenlist:[AgoraScreenCaptureSourceInfo] = []
     /**
      --- Screen Picker ---
      */
     @IBOutlet weak var selectScreenPicker: Picker!
-    var selectedScreen: Window? {
+    var selectedScreen: AgoraScreenCaptureSourceInfo? {
         let index = self.selectScreenPicker.indexOfSelectedItem
         if index >= 0 && index < screenlist.count {
             return screenlist[index]
@@ -176,9 +182,15 @@ class ScreenShare: BaseViewController {
         }
     }
     func initSelectScreenPicker() {
-        screenlist = windowManager.items.filter({$0.type == .screen})
+        let sources = agoraKit.getScreenCaptureSources(withThumbSize: .zero, iconSize: .zero, includeScreen: true)
+        
+        screenlist = sources?.filter { source in
+            return source.type == .screen &&
+                   !source.sourceName.isEmpty
+        } ?? []
+        
         selectScreenPicker.label.stringValue = "Screen Share".localized
-        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.sourceName)(\($0.sourceId))"})
     }
     var isScreenSharing: Bool = false {
         didSet {
@@ -237,18 +249,18 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            // 增加勾边功能
+            // add highlight border
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
             
             var result: Int32 = 0
-            if selecteExcludedWindow?.id == nil {
-                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
+            if selecteExcludedWindow?.sourceId == nil {
+                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.sourceId), regionRect: .zero, captureParams: params)
             } else {
                 let captureParams = AgoraScreenCaptureParameters()
-                captureParams.excludeWindowList = [selecteExcludedWindow?.id ?? ""]
-                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: captureParams)
+                captureParams.excludeWindowList = [String(selecteExcludedWindow?.sourceId ?? 0)]
+                result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.sourceId), regionRect: .zero, captureParams: captureParams)
             }
             if result != 0 {
                 // Usually happens with invalid parameters
@@ -280,7 +292,7 @@ class ScreenShare: BaseViewController {
      --- Window Picker ---
      */
     @IBOutlet weak var selectWindowPicker: Picker!
-    var selectedWindow: Window? {
+    var selectedWindow: AgoraScreenCaptureSourceInfo? {
         let index = self.selectWindowPicker.indexOfSelectedItem
         if index >= 0 && index < windowlist.count {
             return windowlist[index]
@@ -289,9 +301,15 @@ class ScreenShare: BaseViewController {
         }
     }
     func initSelectWindowPicker() {
-        windowlist = windowManager.items.filter({$0.type == .window})
+        let sources = agoraKit.getScreenCaptureSources(withThumbSize: .zero, iconSize: .zero, includeScreen: false)
+        
+        windowlist = sources?.filter { source in
+            return source.type == .window &&
+                   !source.sourceName.isEmpty
+        } ?? []
+        
         selectWindowPicker.label.stringValue = "Window Share".localized
-        selectWindowPicker.picker.addItems(withTitles: windowlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+        selectWindowPicker.picker.addItems(withTitles: windowlist.map {"\($0.sourceName)(\($0.sourceId))"})
     }
     var isWindowSharing: Bool = false {
         didSet {
@@ -320,12 +338,11 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            // 增加勾边功能
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
 
-            let result = agoraKit.startScreenCapture(byWindowId: UInt32(window.id), regionRect: .zero, captureParams: params)
+            let result = agoraKit.startScreenCapture(byWindowId: UInt32(window.sourceId), regionRect: .zero, captureParams: params)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -410,8 +427,6 @@ class ScreenShare: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // prepare window manager and list
-        windowManager.getList()
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId

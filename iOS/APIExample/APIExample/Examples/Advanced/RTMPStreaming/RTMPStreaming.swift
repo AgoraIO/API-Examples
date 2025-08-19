@@ -302,7 +302,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
         } else if state == .failure {
-//            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errCode.rawValue)")
+            
         } else if state == .idle {
             self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
             isPublished = false

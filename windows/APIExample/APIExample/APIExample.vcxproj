@@ -97,6 +97,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +146,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV\;$(solutionDir)ThirdParty\Boost;$(solutionDir)ThirdParty\libFFmpeg\include;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,6 +191,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -240,6 +243,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(solutionDir)ThirdParty\Boost;$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libFFmpeg\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -280,8 +284,12 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
+    <ClInclude Include="Advanced\Beauty2.0\CDlgBeauty2.0.h" />
+    <ClInclude Include="Advanced\Beauty2.0\CDlgBeautyEx2.0.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CDlgBeauty.h" />
+    <ClCompile Include="Advanced\Beauty2.0\CDlgBeauty2.0.cpp" />
+    <ClCompile Include="Advanced\Beauty2.0\CDlgBeautyEx2.0.cpp" />
     <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
     <ClInclude Include="Advanced\Beauty\CDlgBeautyEx.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
@@ -294,6 +302,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
     <ClInclude Include="Advanced\MediaRecorder\CAgoraMediaRecorder.h" />
     <ClInclude Include="Advanced\Metadata\CAgoraMetaDataDlg.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
+    <ClInclude Include="Advanced\Multipath\CMultipathDlg.h" />
     <ClInclude Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
@@ -306,6 +315,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
+    <ClInclude Include="Advanced\Simulcast\CSimulcastDlg.h" />
     <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h" />
     <ClInclude Include="Advanced\TransparentBg\TransparentBgDialog.h" />
     <ClInclude Include="AGVideoTestWnd.h" />
@@ -351,6 +361,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
     <ClCompile Include="Advanced\MediaRecorder\CAgoraMediaRecorder.cpp" />
     <ClCompile Include="Advanced\Metadata\CAgoraMetaDataDlg.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
+    <ClCompile Include="Advanced\Multipath\CMultipathDlg.cpp" />
     <ClCompile Include="Advanced\MultiVideoSourceTracks\MultiVideoSourceTracks.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
@@ -363,6 +374,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
+    <ClCompile Include="Advanced\Simulcast\CSimulcastDlg.cpp" />
     <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp" />
     <ClCompile Include="Advanced\TransparentBg\TransparentBgDialog.cpp" />
     <ClCompile Include="AGVideoTestWnd.cpp" />

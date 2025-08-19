@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ÖÐÎÄ(¼òÌå£¬ÖÐ¹ú) resources
+// ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½å£¬ï¿½Ð¹ï¿½) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -839,6 +839,44 @@ BEGIN
     CONTROL         "",IDC_SLIDER__SHAPE_AREA_INTENSITY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,346,35,100,15
 END
 
+IDD_DIALOG_MULTIPATH DIALOGEX 0, 0, 632, 400
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Role:",IDC_STATIC_ROLE,14,14,25,8
+    COMBOBOX        IDC_COMBO_ROLE,45,12,80,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Channel:",IDC_STATIC_CHANNELNAME,14,35,35,8
+    EDITTEXT        IDC_EDIT_CHANNELNAME,55,33,100,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Join Channel",IDC_BUTTON_JOINCHANNEL,170,32,70,16
+    LTEXT           "Multipath Mode:",IDC_STATIC_MULTIPATH_MODE,14,56,60,8
+    COMBOBOX        IDC_COMBO_MULTIPATH_MODE,80,54,80,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Enable Multipath:",IDC_STATIC_ENABLE_MULTIPATH,170,56,60,8
+    CONTROL         "",IDC_CHECK_ENABLE_MULTIPATH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,240,55,15,10
+    CONTROL         "",IDC_STATIC_VIDEO,"Static",SS_BLACKFRAME,14,80,400,200
+    LISTBOX         IDC_LIST_INFO_MULTIPATH,430,80,180,200,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DIALOG_SIMULCAST DIALOGEX 0, 0, 632, 400
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_STATIC_VIDEO,0,0,483,283
+    LISTBOX         IDC_LIST_INFO_SIMULCAST,495,0,137,283,LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_ROLE,52,323,60,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Client Role",IDC_STATIC_ROLE,7,324,41,10
+    LTEXT           "Channel Name",IDC_STATIC_CHANNELNAME,16,298,48,8
+    EDITTEXT        IDC_EDIT_CHANNELNAME,75,296,129,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "JoinChannel",IDC_BUTTON_JOINCHANNEL,211,295,50,14
+    
+    LTEXT           "Simulcast Layers:",IDC_STATIC_LAYER_TITLE,130,324,70,8
+    CONTROL         "Layer 1 (High)",IDC_CHECK_LAYER1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,210,320,70,10
+    CONTROL         "Layer 2 (Medium)",IDC_CHECK_LAYER2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,290,320,80,10
+    CONTROL         "Layer 3 (Low)",IDC_CHECK_LAYER3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,210,335,70,10
+    CONTROL         "Layer 4 (Ultra Low)",IDC_CHECK_LAYER4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,290,335,80,10
+    
+    LTEXT           "Select Layer:",IDC_STATIC_LAYER_SELECT,130,324,50,8
+    COMBOBOX        IDC_COMBO_LAYER_SELECT,190,322,80,60,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1374,12 +1412,12 @@ IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
 IDR_WAVE1               WAVE                    "res\\audiomixing.wav"
 
-#endif    // ÖÐÎÄ(¼òÌå£¬ÖÐ¹ú) resources
+#endif    // ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½å£¬ï¿½Ð¹ï¿½) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Ó¢Óï(ÃÀ¹ú) resources
+// Ó¢ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -1505,7 +1543,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // Ó¢Óï(ÃÀ¹ú) resources
+#endif    // Ó¢ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

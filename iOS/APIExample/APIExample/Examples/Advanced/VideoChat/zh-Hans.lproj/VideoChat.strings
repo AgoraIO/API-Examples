@@ -1,9 +1,9 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "02W-eg-RJa"; */
-"02W-eg-RJa.placeholder" = "输入频道名";
+"02W-eg-RJa.placeholder" = "Enter channel name";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "Ct9-Ey-CTP"; */
-"Ct9-Ey-CTP.normalTitle" = "加入频道";
+"Ct9-Ey-CTP.normalTitle" = "Join Channel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ZJg-We-nJi"; */
 "ZJg-We-nJi.normalTitle" = "Button";

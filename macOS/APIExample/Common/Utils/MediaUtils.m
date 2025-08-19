@@ -140,18 +140,18 @@
     return finalImage;
 }
 
-+ (NSImage *)pixelBufferToImage: (CVPixelBufferRef)pixelBuffer {
-    size_t width = CVPixelBufferGetHeight(pixelBuffer);
-    size_t height = CVPixelBufferGetWidth(pixelBuffer);
-    
++ (NSImage *)pixelBufferToImage:(CVPixelBufferRef)pixelBuffer withRotationDegrees:(CGFloat)angleInDegrees {
     CIImage *coreImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    CGFloat angleInRadians = -angleInDegrees * (M_PI / 180);
+    
+    CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(angleInRadians);
+    CIImage *rotatedImage = [coreImage imageByApplyingTransform:rotationTransform];
+    
     CIContext *temporaryContext = [CIContext contextWithOptions:nil];
-    CGImageRef videoImage = [temporaryContext createCGImage:coreImage
-                                                   fromRect:CGRectMake(0, 0, height, width)];
+    CGImageRef videoImage = [temporaryContext createCGImage:rotatedImage fromRect:[rotatedImage extent]];
     
-    NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size: CGSizeMake(width, height)];
+    NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size:NSZeroSize];
     
-    //    CVPixelBufferRelease(pixelBuffer);
     CGImageRelease(videoImage);
     return finalImage;
 }

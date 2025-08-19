@@ -25,7 +25,7 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class TokenUtils {
-    private final String TAG = "TokenGenerator";
+    private static final String TAG = "TokenGenerator";
     private final static OkHttpClient client;
 
     static {
@@ -36,6 +36,28 @@ public class TokenUtils {
                 .build();
     }
 
+    public static void genToken(Context context, String channelName, int uid, OnTokenGenCallback<String> onGetToken) {
+        String cert = context.getString(R.string.agora_app_certificate);
+        if (cert.isEmpty()) {
+            onGetToken.onTokenGen("");
+        } else {
+            gen(context.getString(R.string.agora_app_id), context.getString(R.string.agora_app_certificate), channelName, uid, ret -> {
+                if (onGetToken != null) {
+                    runOnUiThread(() -> {
+                        onGetToken.onTokenGen(ret);
+                    });
+                }
+            }, ret -> {
+                Log.e(TAG, "for requesting token error.", ret);
+                if (onGetToken != null) {
+                    runOnUiThread(() -> {
+                        onGetToken.onTokenGen(null);
+                    });
+                }
+            });
+        }
+    }
+
     public static void gen(Context context, String channelName,  int uid, OnTokenGenCallback<String> onGetToken){
         gen(context.getString(R.string.agora_app_id), context.getString(R.string.agora_app_certificate), channelName, uid, ret -> {
             if(onGetToken != null){
@@ -44,7 +66,7 @@ public class TokenUtils {
                 });
             }
         }, ret -> {
-            Log.e("TAG", "for requesting token error, use config token instead.");
+            Log.e(TAG, "for requesting token error, use config token instead.");
             if (onGetToken != null) {
                 runOnUiThread(() -> {
                     onGetToken.onTokenGen(null);

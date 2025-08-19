@@ -11,7 +11,7 @@ import SnapKit
 class ChannelViewController<T:PIPBaseViewController>: UIViewController {
     lazy var textField: UITextField = {
         let t = UITextField()
-        t.placeholder = "输入房间号"
+        t.placeholder = "Enter room number"
         t.borderStyle = .line
         t.backgroundColor = .orange
         return t
@@ -21,7 +21,7 @@ class ChannelViewController<T:PIPBaseViewController>: UIViewController {
     
     lazy var button: UIButton = {
         let b = UIButton(type: .custom)
-        b.setTitle("加入房间", for: .normal)
+        b.setTitle("Join", for: .normal)
         b.setTitleColor(.blue, for: .normal)
         b.addTarget(self, action: #selector(joinAction), for: .touchUpInside)
         return b

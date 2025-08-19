@@ -7,7 +7,7 @@
 #pragma once
 
 #include "AgoraRefPtr.h"
-#include "NGIAgoraMediaNode.h"
+#include "AgoraExtensions.h"
 #include "AgoraExtensionVersion.h"
 
 namespace agora {
@@ -94,9 +94,17 @@ class IExtensionProvider : public RefCountInterface {
      * Used to modify video data betweent adapter and encoder
      */
     VIDEO_PRE_ENCODER_FILTER = 20003,
+    /*
+     * Used to encode video data
+     */
+    VIDEO_ENCODER = 20004,
+    /*
+     * Used to decode video encoded image
+     */
+    VIDEO_DECODER = 20005,
     UNKNOWN = 0xFFFF,
   };
-
+  
   struct ExtensionMetaInfo {
     EXTENSION_TYPE type;
     const char* extension_name;
@@ -117,8 +125,8 @@ class IExtensionProvider : public RefCountInterface {
   virtual agora_refptr<IExtensionVideoFilter> createVideoFilter(const char* name) {
     return NULL;
   }
-
-  virtual agora_refptr<IVideoSinkBase> createVideoSink(const char* name) {
+  
+  virtual agora_refptr<IExtensionVideoSink> createVideoSink(const char* name) {
     return NULL;
   }
   
@@ -131,6 +139,30 @@ class IExtensionProvider : public RefCountInterface {
 class IExtensionProviderV2 : public IExtensionProvider {
  public:
   virtual void getExtensionVersion(const char* extension_name, ExtensionVersion& version) = 0;
+};
+
+class IExtensionVideoCodecProvider : public IExtensionProvider {
+ public:
+  struct ExtensionVideoCodecInfo {
+    VIDEO_CODEC_TYPE codec_type;
+    bool is_hw_accelerated;
+  };
+  
+  ExtensionVideoCodecInfo video_codec_info;
+};
+
+class IExtensionVideoEncoderProvider : public IExtensionVideoCodecProvider {
+ public:
+  virtual agora_refptr<IExtensionVideoEncoder> createVideoEncoder(const char* name) {
+    return NULL;
+  }
+};
+
+class IExtensionVideoDecoderProvider : public IExtensionVideoCodecProvider {
+ public:
+  virtual agora_refptr<IExtensionVideoDecoder> createVideoDecoder(const char* name) {
+    return NULL;
+  }
 };
 
 }  // namespace rtc

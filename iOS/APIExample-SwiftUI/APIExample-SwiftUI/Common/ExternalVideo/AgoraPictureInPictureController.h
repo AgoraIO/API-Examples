@@ -17,19 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-//仅支持IOS15以后
+// Only supports iOS 15 and later
 @interface AgoraPictureInPictureController : NSObject
 
-@property (nonatomic, weak) id <AgoraPictureInPictureControllerDelegate>delegate;
+@property(nonatomic, weak) id<AgoraPictureInPictureControllerDelegate> delegate;
 
-@property (nonatomic, strong, readonly) AVPictureInPictureController *pipController;
+@property(nonatomic, strong, readonly) AVPictureInPictureController *pipController;
 
-@property (nonatomic, strong, readonly) AgoraSampleBufferRender *displayView;
+@property(nonatomic, strong, readonly) AgoraSampleBufferRender *displayView;
 
 - (instancetype)initWithDisplayView:(AgoraSampleBufferRender *)displayView;
 
 - (void)releasePIP;
-    
+
 @end
 
 NS_ASSUME_NONNULL_END

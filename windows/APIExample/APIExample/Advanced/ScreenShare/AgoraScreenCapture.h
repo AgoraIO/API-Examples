@@ -118,7 +118,7 @@ class CAgoraScreenCapture : public CDialogEx
     DECLARE_DYNAMIC(CAgoraScreenCapture)
 
 public:
-    CAgoraScreenCapture(CWnd* pParent = nullptr);   // 标准构造函数
+    CAgoraScreenCapture(CWnd* pParent = nullptr);
     virtual ~CAgoraScreenCapture();
 
     //Initialize the Agora SDK
@@ -126,7 +126,6 @@ public:
     //UnInitialize the Agora SDK
     void UnInitAgora();
 
-    // 对话框数据
     enum { IDD = IDD_DIALOG_SCREEN_SHARE };
     
 

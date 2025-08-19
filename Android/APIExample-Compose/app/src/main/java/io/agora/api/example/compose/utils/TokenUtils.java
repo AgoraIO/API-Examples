@@ -42,6 +42,28 @@ public final class TokenUtils {
                 .build();
     }
 
+    public static void genToken(String channelName, int uid, OnTokenGenCallback<String> onGetToken) {
+        String cert = BuildConfig.AGORA_APP_CERT;
+        if (cert.isEmpty()) {
+            onGetToken.onTokenGen("");
+        } else {
+            gen(BuildConfig.AGORA_APP_ID, BuildConfig.AGORA_APP_CERT, channelName, uid, ret -> {
+                if (onGetToken != null) {
+                    runOnUiThread(() -> {
+                        onGetToken.onTokenGen(ret);
+                    });
+                }
+            }, ret -> {
+                Log.e(TAG, "for requesting token error.", ret);
+                if (onGetToken != null) {
+                    runOnUiThread(() -> {
+                        onGetToken.onTokenGen(null);
+                    });
+                }
+            });
+        }
+    }
+
     /**
      * Gen.
      *

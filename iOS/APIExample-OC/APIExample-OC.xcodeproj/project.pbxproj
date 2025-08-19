@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		749177BD2429C778B3C6D520 /* Pods_APIExample_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D931C433C0CD269F3C3323D /* Pods_APIExample_OC.framework */; };
 		961E8DCA7B4A6B12564DDC18 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */; };
+		AB8474172DF9CD7900B4DB73 /* Multipath.m in Sources */ = {isa = PBXBuildFile; fileRef = AB84740C2DF9CD7900B4DB73 /* Multipath.m */; };
+		AB8474182DF9CD7900B4DB73 /* Simulcast.m in Sources */ = {isa = PBXBuildFile; fileRef = AB8474122DF9CD7900B4DB73 /* Simulcast.m */; };
+		AB8474192DF9CD7900B4DB73 /* Multipath.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB84740F2DF9CD7900B4DB73 /* Multipath.storyboard */; };
+		AB84741A2DF9CD7900B4DB73 /* Simulcast.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB8474152DF9CD7900B4DB73 /* Simulcast.storyboard */; };
 		C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
 		DD8A1F7F2CA50749001CEC51 /* AgoraPCMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F7E2CA50749001CEC51 /* AgoraPCMPlayer.m */; };
 		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
@@ -48,9 +52,6 @@
 		E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADE7E2A612683009947CF /* LiveStreaming.storyboard */; };
 		E70ADEA72A64E230009947CF /* RTMPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEA52A64E230009947CF /* RTMPStreaming.m */; };
 		E70ADEA82A64EA5C009947CF /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEAA2A64EA5C009947CF /* RTMPStreaming.storyboard */; };
-		E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEB82A64ED3A009947CF /* FusionCDN.strings */; };
-		E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEBB2A64ED3A009947CF /* FusionCDN.m */; };
-		E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */; };
 		E70ADEC62A66306F009947CF /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */; };
 		E70ADEC72A66306F009947CF /* VideoMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADEC52A66306F009947CF /* VideoMetadata.m */; };
 		E70ADECC2A663A06009947CF /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADEC92A663A06009947CF /* VoiceChanger.storyboard */; };
@@ -176,6 +177,14 @@
 		6D0773F7A8BA9611CF846635 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E437BC9AAAA1A6431B353C9 /* Pods-APIExample-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-OC.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-OC/Pods-APIExample-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		A0C8D95022D679A807C9CA1F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		AB84740B2DF9CD7900B4DB73 /* Multipath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Multipath.h; sourceTree = "<group>"; };
+		AB84740C2DF9CD7900B4DB73 /* Multipath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Multipath.m; sourceTree = "<group>"; };
+		AB84740D2DF9CD7900B4DB73 /* Multipath.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Multipath.storyboard; path = Base.lproj/Multipath.storyboard; sourceTree = "<group>"; };
+		AB8474112DF9CD7900B4DB73 /* Simulcast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Simulcast.h; sourceTree = "<group>"; };
+		AB8474122DF9CD7900B4DB73 /* Simulcast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Simulcast.m; sourceTree = "<group>"; };
+		AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Simulcast.storyboard; path = Base.lproj/Simulcast.storyboard; sourceTree = "<group>"; };
+		AB84741C2DF9CD9300B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
+		AB84741E2DF9CD9B00B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
 		B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
@@ -238,11 +247,6 @@
 		E70ADEA52A64E230009947CF /* RTMPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTMPStreaming.m; sourceTree = "<group>"; };
 		E70ADEAB2A64EA69009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
 		E70ADEAC2A64EA75009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
-		E70ADEB92A64ED3A009947CF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
-		E70ADEBA2A64ED3A009947CF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
-		E70ADEBB2A64ED3A009947CF /* FusionCDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FusionCDN.m; sourceTree = "<group>"; };
-		E70ADEBD2A64ED3A009947CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
-		E70ADEBE2A64ED3A009947CF /* FusionCDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FusionCDN.h; sourceTree = "<group>"; };
 		E70ADEC32A66306F009947CF /* VideoMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMetadata.h; sourceTree = "<group>"; };
 		E70ADEC42A66306F009947CF /* VideoMetadata.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoMetadata.storyboard; sourceTree = "<group>"; };
 		E70ADEC52A66306F009947CF /* VideoMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMetadata.m; sourceTree = "<group>"; };
@@ -401,6 +405,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB8474102DF9CD7900B4DB73 /* Multipath */ = {
+			isa = PBXGroup;
+			children = (
+				AB84740B2DF9CD7900B4DB73 /* Multipath.h */,
+				AB84740C2DF9CD7900B4DB73 /* Multipath.m */,
+				AB84740F2DF9CD7900B4DB73 /* Multipath.storyboard */,
+			);
+			path = Multipath;
+			sourceTree = "<group>";
+		};
+		AB8474162DF9CD7900B4DB73 /* Simulcast */ = {
+			isa = PBXGroup;
+			children = (
+				AB8474112DF9CD7900B4DB73 /* Simulcast.h */,
+				AB8474122DF9CD7900B4DB73 /* Simulcast.m */,
+				AB8474152DF9CD7900B4DB73 /* Simulcast.storyboard */,
+			);
+			path = Simulcast;
+			sourceTree = "<group>";
+		};
 		E70ADDE32A5D004F009947CF = {
 			isa = PBXGroup;
 			children = (
@@ -467,6 +491,8 @@
 		E70ADE0A2A5D009D009947CF /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				AB8474102DF9CD7900B4DB73 /* Multipath */,
+				AB8474162DF9CD7900B4DB73 /* Simulcast */,
 				E72F62072A78B31B00C963D2 /* MutliCamera */,
 				E72F62012A77A63D00C963D2 /* ContentInspect */,
 				E72F61F72A778ADC00C963D2 /* SpatialAudio */,
@@ -489,7 +515,6 @@
 				E70ADED42A6A2BE6009947CF /* CustomPcmAudioSource */,
 				E70ADEC82A663A06009947CF /* VoiceChanger */,
 				E70ADEC22A66306F009947CF /* VideoMetadata */,
-				E70ADEB72A64ED3A009947CF /* FusionCDN */,
 				E70ADEA22A64E230009947CF /* RTMPStreaming */,
 				E70ADE712A60EC74009947CF /* LiveStreaming */,
 			);
@@ -621,17 +646,6 @@
 				E70ADEA52A64E230009947CF /* RTMPStreaming.m */,
 			);
 			path = RTMPStreaming;
-			sourceTree = "<group>";
-		};
-		E70ADEB72A64ED3A009947CF /* FusionCDN */ = {
-			isa = PBXGroup;
-			children = (
-				E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */,
-				E70ADEB82A64ED3A009947CF /* FusionCDN.strings */,
-				E70ADEBE2A64ED3A009947CF /* FusionCDN.h */,
-				E70ADEBB2A64ED3A009947CF /* FusionCDN.m */,
-			);
-			path = FusionCDN;
 			sourceTree = "<group>";
 		};
 		E70ADEC22A66306F009947CF /* VideoMetadata */ = {
@@ -1108,9 +1122,7 @@
 				E7361F5F2A6E60B100925BD6 /* RawVideoData.storyboard in Resources */,
 				E72F61F22A73B93200C963D2 /* MediaChannelRelay.storyboard in Resources */,
 				E70ADE7C2A612683009947CF /* LiveStreaming.storyboard in Resources */,
-				E70ADEC12A64ED3A009947CF /* FusionCDN.storyboard in Resources */,
 				E72F620B2A78B31B00C963D2 /* MutliCamera.storyboard in Resources */,
-				E70ADEBF2A64ED3A009947CF /* FusionCDN.strings in Resources */,
 				E70ADE162A5D026E009947CF /* sample.yuv in Resources */,
 				E70ADE152A5D026E009947CF /* agora-logo.png in Resources */,
 				E72F61832A70C71200C963D2 /* JoinMultiChannel.storyboard in Resources */,
@@ -1138,6 +1150,8 @@
 				E70ADE362A5D41C9009947CF /* VideoView.xib in Resources */,
 				E7361F532A6E5C2100925BD6 /* VideoViewMetal.xib in Resources */,
 				E7361F652A6E64FB00925BD6 /* PictureInPicture.storyboard in Resources */,
+				AB8474192DF9CD7900B4DB73 /* Multipath.storyboard in Resources */,
+				AB84741A2DF9CD7900B4DB73 /* Simulcast.storyboard in Resources */,
 				E72F618E2A70F9B700C963D2 /* StreamEncryption.storyboard in Resources */,
 				E70ADE172A5D026E009947CF /* audiomixing.mp3 in Resources */,
 				E72F61EA2A73A25F00C963D2 /* CreateDataStream.storyboard in Resources */,
@@ -1265,6 +1279,8 @@
 				E70ADEE22A6A7177009947CF /* CustomAudioRender.m in Sources */,
 				E7361F482A6E4CF500925BD6 /* CircularBuffer.c in Sources */,
 				E72F61DB2A7258F800C963D2 /* VideoProcess.m in Sources */,
+				AB8474172DF9CD7900B4DB73 /* Multipath.m in Sources */,
+				AB8474182DF9CD7900B4DB73 /* Simulcast.m in Sources */,
 				E70ADE1F2A5D0368009947CF /* MediaUtils.m in Sources */,
 				E70ADEDD2A6A2D7D009947CF /* AgoraPCMSourcePush.m in Sources */,
 				E70ADE202A5D0368009947CF /* BundleUtil.m in Sources */,
@@ -1284,7 +1300,6 @@
 				E7361F492A6E4CF500925BD6 /* AgoraYUVImageSourcePush.m in Sources */,
 				E70ADE3E2A5D4D05009947CF /* ToastView.swift in Sources */,
 				E7361F592A6E5E9300925BD6 /* RawAudioData.m in Sources */,
-				E70ADEC02A64ED3A009947CF /* FusionCDN.m in Sources */,
 				E70ADEF42A6A72C6009947CF /* AudioWriteToFile.m in Sources */,
 				E72F62002A7796A200C963D2 /* SpatialAudioActionSheet.swift in Sources */,
 				E72F61A52A710AB200C963D2 /* MediaPlayer.m in Sources */,
@@ -1353,6 +1368,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		AB84740F2DF9CD7900B4DB73 /* Multipath.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB84740D2DF9CD7900B4DB73 /* Multipath.storyboard */,
+				AB84741C2DF9CD9300B4DB73 /* en */,
+			);
+			name = Multipath.storyboard;
+			sourceTree = "<group>";
+		};
+		AB8474152DF9CD7900B4DB73 /* Simulcast.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */,
+				AB84741E2DF9CD9B00B4DB73 /* en */,
+			);
+			name = Simulcast.storyboard;
+			sourceTree = "<group>";
+		};
 		E70ADDF82A5D004F009947CF /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1393,23 +1426,6 @@
 				E70ADEAC2A64EA75009947CF /* zh-Hans */,
 			);
 			name = RTMPStreaming.storyboard;
-			sourceTree = "<group>";
-		};
-		E70ADEB82A64ED3A009947CF /* FusionCDN.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E70ADEB92A64ED3A009947CF /* zh-Hans */,
-				E70ADEBA2A64ED3A009947CF /* en */,
-			);
-			name = FusionCDN.strings;
-			sourceTree = "<group>";
-		};
-		E70ADEBC2A64ED3A009947CF /* FusionCDN.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E70ADEBD2A64ED3A009947CF /* Base */,
-			);
-			name = FusionCDN.storyboard;
 			sourceTree = "<group>";
 		};
 		E72F61902A70F9B700C963D2 /* StreamEncryption.storyboard */ = {
@@ -1571,11 +1587,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "APIExample-OC/Info.plist";
@@ -1596,7 +1610,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1616,11 +1629,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "APIExample-OC/Info.plist";
@@ -1641,7 +1652,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1657,11 +1667,9 @@
 			baseConfigurationReference = B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
@@ -1677,7 +1685,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1689,11 +1696,9 @@
 			baseConfigurationReference = C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = YS397FG5PA;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension-OC/Info.plist";
@@ -1709,7 +1714,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = wildcard;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1724,10 +1728,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1771,10 +1775,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

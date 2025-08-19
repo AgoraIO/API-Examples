@@ -33,19 +33,11 @@ class ThirdBeautifyEntry: BaseViewController {
         
         let actionSheetVC = UIAlertController(title: "Third Beautify".localized, message: nil, preferredStyle: .actionSheet)
         
-        let sense = UIAlertAction(title: "Sense Beautify".localized, style: .default) { _ in
-            self.jumpHandler(type: .sense)
-        }
         let fu = UIAlertAction(title: "FU Beautify".localized, style: .default) { _ in
             self.jumpHandler(type: .fu)
         }
-        let bytedEffect = UIAlertAction(title: "Byted Effect".localized, style: .default) { _ in
-            self.jumpHandler(type: .bytedEffect)
-        }
         let cancel = UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil)
-        actionSheetVC.addAction(sense)
         actionSheetVC.addAction(fu)
-        actionSheetVC.addAction(bytedEffect)
         actionSheetVC.addAction(cancel)
 //        present(actionSheetVC, animated: true, completion: nil)
         presentAlertViewController(actionSheetVC)
