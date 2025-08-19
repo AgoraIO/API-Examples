@@ -1,27 +1,27 @@
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
-"Lzz-2R-G7f.text" = "极速直播";
+"Lzz-2R-G7f.text" = "Ultra Low Latency";
 
 /* Class = "UILabel"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
-"XcJ-am-UAb.text" = "连麦";
+"XcJ-am-UAb.text" = "Co-host";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
-"w4q-aT-JBc.normalTitle" = "本地截图";
-"lpn-6Z-VV3.normalTitle" = "远端截图";
+"kbN-ZR-nNn.normalTitle" = "Join";
+"w4q-aT-JBc.normalTitle" = "Local Snapshot";
+"lpn-6Z-VV3.normalTitle" = "Remote Snapshot";
 
-"ohV-am-Acd.text" = "首帧出图";
+"ohV-am-Acd.text" = "First Frame";
 
-"Q0N-nV-bez.normalTitle" = "默认背景色";
+"Q0N-nV-bez.normalTitle" = "Default Background";
 
-"S19-UR-C2c.normalTitle" = "预加载";
-"8kn-Rl-VMd.text" = "垫片推流";
-"dZm-Rf-imt.normalTitle" = "相机对焦";
-"ug1-fz-GYz.normalTitle" = "相机对焦";
+"S19-UR-C2c.normalTitle" = "Preload";
+"8kn-Rl-VMd.text" = "Placeholder Stream";
+"dZm-Rf-imt.normalTitle" = "Camera Focus";
+"ug1-fz-GYz.normalTitle" = "Camera Focus";
 
-"ZB2-jf-zOV.normalTitle" = "视频业务场景";
+"ZB2-jf-zOV.normalTitle" = "Video Business Scenario";
 
-"tOf-AP-HSe.placeholder" = "本地渲染帧率(1-60)，默认15";
-"UFF-wU-Wze.placeholder" = "远端渲染帧率(1-60)，默认15";
+"tOf-AP-HSe.placeholder" = "Local render frame rate (1-60), default 15";
+"UFF-wU-Wze.placeholder" = "Remote render frame rate (1-60), default 15";

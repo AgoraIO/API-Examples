@@ -25,20 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)presentAlertViewController:(UIAlertController*)alertVC;
 @end
 
-// 布局模块
 @interface UIView (VideoContainerLayout)
 - (void)layoutStream:(NSArray <UIView *>*)views;
 @end
 
 
-// 多语言
 @interface NSString (Localized)
 
 - (NSString *)localized;
 
 @end
 
-// 封装日志模块
 typedef NS_ENUM(NSInteger, LogLevel) {
     LogLevelInfo,
     LogLevelError,

@@ -112,6 +112,24 @@ public class VideoReportLayout extends FrameLayout {
     }
 
     /**
+     * Set local audio stats.
+     *
+     * @param stats the stats
+     */
+    public void setLocalAudioStats(IRtcEngineEventHandler.LocalAudioStats stats, String... args) {
+        statisticsInfo.setLocalAudioStats(stats);
+        String reportText = statisticsInfo.getLocalVideoStats();
+        StringBuilder builder = new StringBuilder(reportText);
+        for (String arg : args) {
+            builder.append(",")
+                    .append("\n")
+                    .append(arg);
+        }
+        setReportText(builder.toString());
+    }
+
+
+    /**
      * Set local video stats.
      *
      * @param stats the stats
@@ -122,6 +140,26 @@ public class VideoReportLayout extends FrameLayout {
         }
         statisticsInfo.setLocalVideoStats(stats);
         setReportText(statisticsInfo.getLocalVideoStats());
+    }
+
+    /**
+     * Set local video stats.
+     *
+     * @param stats the stats
+     */
+    public void setLocalVideoStats(IRtcEngineEventHandler.LocalVideoStats stats, String... args) {
+        if (stats.uid != reportUid) {
+            return;
+        }
+        statisticsInfo.setLocalVideoStats(stats);
+        String reportText = statisticsInfo.getLocalVideoStats();
+        StringBuilder builder = new StringBuilder(reportText);
+        for (String arg : args) {
+            builder.append(",")
+                    .append("\n")
+                    .append(arg);
+        }
+        setReportText(builder.toString());
     }
 
     /**
@@ -138,6 +176,27 @@ public class VideoReportLayout extends FrameLayout {
     }
 
     /**
+     * Set remote audio stats.
+     *
+     * @param stats the stats
+     */
+    public void setRemoteAudioStats(IRtcEngineEventHandler.RemoteAudioStats stats, String... args) {
+        if (stats.uid != reportUid) {
+            return;
+        }
+        statisticsInfo.setRemoteAudioStats(stats);
+        String reportText = statisticsInfo.getRemoteVideoStats();
+        StringBuilder builder = new StringBuilder(reportText);
+        for (String arg : args) {
+            builder.append(",")
+                    .append("\n")
+                    .append(arg);
+        }
+        setReportText(builder.toString());
+    }
+
+
+    /**
      * Set remote video stats.
      *
      * @param stats the stats
@@ -150,6 +209,25 @@ public class VideoReportLayout extends FrameLayout {
         setReportText(statisticsInfo.getRemoteVideoStats());
     }
 
+    /**
+     * Set remote video stats.
+     *
+     * @param stats the stats
+     */
+    public void setRemoteVideoStats(IRtcEngineEventHandler.RemoteVideoStats stats, String... args) {
+        if (stats.uid != reportUid) {
+            return;
+        }
+        statisticsInfo.setRemoteVideoStats(stats);
+        String reportText = statisticsInfo.getRemoteVideoStats();
+        StringBuilder builder = new StringBuilder(reportText);
+        for (String arg : args) {
+            builder.append(",")
+                    .append("\n")
+                    .append(arg);
+        }
+        setReportText(builder.toString());
+    }
 
     private void setReportText(String reportText) {
         if (reportTextView != null) {

@@ -125,13 +125,14 @@
 		8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC751D2273E502700552265 /* LiveStreaming.storyboard */; };
 		8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D4273E502700552265 /* LiveStreaming.swift */; };
 		8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D9273E57C900552265 /* VideoProcess.swift */; };
-		8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */; };
-		8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */; };
-		8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
+		ABB399F12DF9605B00AF5033 /* Multipath.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB399E72DF9605B00AF5033 /* Multipath.swift */; };
+		ABB399F22DF9605B00AF5033 /* Simulcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB399EC2DF9605B00AF5033 /* Simulcast.swift */; };
+		ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */; };
+		ABB399F42DF9605B00AF5033 /* Simulcast.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		DD6DCEE22CBD1D68008D7B72 /* hlg-hdr.yuv in Resources */ = {isa = PBXBuildFile; fileRef = DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */; };
@@ -178,8 +179,6 @@
 		E74877BB28A23C1A00CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
 		E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877C928A2611C00CA2F58 /* ToastView.swift */; };
 		E76347D02AAEF4AF005D130F /* FUBeautyRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E76347BE2AAEF4AF005D130F /* FUBeautyRender.m */; };
-		E76347D12AAEF4AF005D130F /* SenseBeautyRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E76347C22AAEF4AF005D130F /* SenseBeautyRender.m */; };
-		E76347D22AAEF4AF005D130F /* BytesBeautyRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E76347C42AAEF4AF005D130F /* BytesBeautyRender.m */; };
 		E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = E76347C72AAEF4AF005D130F /* BeautyAPI.m */; };
 		E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = E77902652A484A8A008791AD /* KFMP4Demuxer.m */; };
 		E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */; };
@@ -201,29 +200,7 @@
 		E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CF429029E0000F06DD4 /* FUBeautify.storyboard */; };
 		E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */; };
 		E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CF829029E0000F06DD4 /* FUManager.m */; };
-		E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */; };
-		E7A49D0A29067F8300F06DD4 /* SenseBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */; };
-		E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */; };
-		E7A49D112907D9C800F06DD4 /* VideoProcessingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */; };
-		E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D132907DC2700F06DD4 /* EffectsProcess.m */; };
-		E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D152907DD2600F06DD4 /* EffectsLicense.m */; };
-		E7A49D1A2907DD7800F06DD4 /* Effects.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D182907DD7800F06DD4 /* Effects.m */; };
-		E7A49D1D2907DD8400F06DD4 /* EffectsAnimal.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */; };
-		E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */; };
-		E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */; };
-		E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */; };
-		E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D292907DEE600F06DD4 /* EFMotionManager.m */; };
 		E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D332907E74A00F06DD4 /* BundleUtil.m */; };
-		E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D39290907E200F06DD4 /* BytedEffect.strings */; };
-		E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */; };
-		E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */; };
-		E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */; };
-		E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */; };
-		E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D562909101D00F06DD4 /* BEImageUtils.m */; };
-		E7A49D5A2909103600F06DD4 /* BEGLTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D592909103500F06DD4 /* BEGLTexture.m */; };
-		E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */; };
-		E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */; };
-		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
 		F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */; };
@@ -233,10 +210,12 @@
 		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
 		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
 		F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = F728B9DF2CA29625007813BB /* PictureInPicture.strings */; };
-		F73B01CE2CCB7E730077B7D2 /* BETimeRecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */; };
-		F73B01CF2CCB7E730077B7D2 /* BEGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */; };
+		F734791C2DF5C9CD0030C0CE /* beauty_material.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */; };
+		F734791E2DF5CA0D0030C0CE /* AgoraBeauty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */; };
+		F73479212DF5CA140030C0CE /* AgoraBeauty.strings in Resources */ = {isa = PBXBuildFile; fileRef = F734791F2DF5CA140030C0CE /* AgoraBeauty.strings */; };
+		F73479242DF5CA820030C0CE /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */; };
+		F73479262DF5CAEB0030C0CE /* AgoraBeautyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */; };
 		F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01D32CCB84590077B7D2 /* APIReporter.m */; };
-		F73B01D82CCB862A0077B7D2 /* EFGlobalSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -447,10 +426,6 @@
 		8BC751D3273E502700552265 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
 		8BC751D4273E502700552265 /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		8BC751D9273E57C900552265 /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
-		8BE7ABBD279E065000DFBCEF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
-		8BE7ABBE279E065000DFBCEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
-		8BE7ABC0279E065000DFBCEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
-		8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusionCDN.swift; sourceTree = "<group>"; };
 		8BF2243D275FA1A500B65EF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleFilter.strings"; sourceTree = "<group>"; };
 		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -458,6 +433,12 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		AB8473EC2DF960D800B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
+		ABB399E72DF9605B00AF5033 /* Multipath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multipath.swift; sourceTree = "<group>"; };
+		ABB399E82DF9605B00AF5033 /* Multipath.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Multipath.storyboard; path = Base.lproj/Multipath.storyboard; sourceTree = "<group>"; };
+		ABB399EC2DF9605B00AF5033 /* Simulcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulcast.swift; sourceTree = "<group>"; };
+		ABB399ED2DF9605B00AF5033 /* Simulcast.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Simulcast.storyboard; path = Base.lproj/Simulcast.storyboard; sourceTree = "<group>"; };
+		ABB399F62DF9608700AF5033 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "hlg-hdr.yuv"; sourceTree = "<group>"; };
@@ -507,10 +488,6 @@
 		E76347B82AAEF4AF005D130F /* BeautyAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeautyAPI.h; sourceTree = "<group>"; };
 		E76347BE2AAEF4AF005D130F /* FUBeautyRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUBeautyRender.m; sourceTree = "<group>"; };
 		E76347BF2AAEF4AF005D130F /* FUBeautyRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUBeautyRender.h; sourceTree = "<group>"; };
-		E76347C12AAEF4AF005D130F /* SenseBeautyRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SenseBeautyRender.h; sourceTree = "<group>"; };
-		E76347C22AAEF4AF005D130F /* SenseBeautyRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SenseBeautyRender.m; sourceTree = "<group>"; };
-		E76347C42AAEF4AF005D130F /* BytesBeautyRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BytesBeautyRender.m; sourceTree = "<group>"; };
-		E76347C52AAEF4AF005D130F /* BytesBeautyRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BytesBeautyRender.h; sourceTree = "<group>"; };
 		E76347C72AAEF4AF005D130F /* BeautyAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeautyAPI.m; sourceTree = "<group>"; };
 		E77902652A484A8A008791AD /* KFMP4Demuxer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KFMP4Demuxer.m; sourceTree = "<group>"; };
 		E77902662A484A8A008791AD /* KFMP4Demuxer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KFMP4Demuxer.h; sourceTree = "<group>"; };
@@ -536,51 +513,9 @@
 		E7A49CF629029E0000F06DD4 /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
 		E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUBeautifyVC.m; sourceTree = "<group>"; };
 		E7A49CF829029E0000F06DD4 /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
-		E7A49D0329067F8300F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SenseBeautify.strings"; sourceTree = "<group>"; };
-		E7A49D0429067F8300F06DD4 /* SenseBeautifyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SenseBeautifyVC.h; sourceTree = "<group>"; };
-		E7A49D0629067F8300F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SenseBeautify.storyboard; sourceTree = "<group>"; };
-		E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SenseBeautifyVC.m; sourceTree = "<group>"; };
-		E7A49D0F2907D9C800F06DD4 /* VideoProcessingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoProcessingManager.h; sourceTree = "<group>"; };
-		E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProcessingManager.m; sourceTree = "<group>"; };
-		E7A49D122907DC2700F06DD4 /* EffectsProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsProcess.h; sourceTree = "<group>"; };
-		E7A49D132907DC2700F06DD4 /* EffectsProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsProcess.m; sourceTree = "<group>"; };
-		E7A49D152907DD2600F06DD4 /* EffectsLicense.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsLicense.m; sourceTree = "<group>"; };
-		E7A49D162907DD2600F06DD4 /* EffectsLicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsLicense.h; sourceTree = "<group>"; };
-		E7A49D182907DD7800F06DD4 /* Effects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Effects.m; sourceTree = "<group>"; };
-		E7A49D192907DD7800F06DD4 /* Effects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Effects.h; sourceTree = "<group>"; };
-		E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsAnimal.h; sourceTree = "<group>"; };
-		E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsAnimal.m; sourceTree = "<group>"; };
-		E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsAttribute.m; sourceTree = "<group>"; };
-		E7A49D1F2907DD8F00F06DD4 /* EffectsAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsAttribute.h; sourceTree = "<group>"; };
-		E7A49D212907DD9A00F06DD4 /* EffectsCommonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsCommonObject.h; sourceTree = "<group>"; };
-		E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsCommonObject.m; sourceTree = "<group>"; };
-		E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsDetector.m; sourceTree = "<group>"; };
-		E7A49D272907DDFF00F06DD4 /* EffectsDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsDetector.h; sourceTree = "<group>"; };
-		E7A49D292907DEE600F06DD4 /* EFMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMotionManager.m; sourceTree = "<group>"; };
-		E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMotionManager.h; sourceTree = "<group>"; };
 		E7A49D2E2907E68800F06DD4 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		E7A49D322907E74A00F06DD4 /* BundleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BundleUtil.h; sourceTree = "<group>"; };
 		E7A49D332907E74A00F06DD4 /* BundleUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BundleUtil.m; sourceTree = "<group>"; };
-		E7A49D3A290907E200F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/BytedEffect.strings"; sourceTree = "<group>"; };
-		E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BytedEffectVC.m; sourceTree = "<group>"; };
-		E7A49D3D290907E200F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BytedEffect.storyboard; sourceTree = "<group>"; };
-		E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BytedEffectVC.h; sourceTree = "<group>"; };
-		E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectManager.h; sourceTree = "<group>"; };
-		E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEEffectManager.mm; sourceTree = "<group>"; };
-		E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BELicenseHelper.h; sourceTree = "<group>"; };
-		E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BELicenseHelper.mm; sourceTree = "<group>"; };
-		E7A49D552909101D00F06DD4 /* BEImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEImageUtils.h; sourceTree = "<group>"; };
-		E7A49D562909101D00F06DD4 /* BEImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEImageUtils.m; sourceTree = "<group>"; };
-		E7A49D582909103500F06DD4 /* BEGLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEGLTexture.h; sourceTree = "<group>"; };
-		E7A49D592909103500F06DD4 /* BEGLTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEGLTexture.m; sourceTree = "<group>"; };
-		E7A49D5E290910A000F06DD4 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
-		E7A49D5F290910A100F06DD4 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
-		E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEOpenGLRenderHelper.m; sourceTree = "<group>"; };
-		E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEOpenGLRenderHelper.h; sourceTree = "<group>"; };
-		E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEHttpRequestProvider.h; sourceTree = "<group>"; };
-		E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEHttpRequestProvider.mm; sourceTree = "<group>"; };
-		E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectResourceHelper.h; sourceTree = "<group>"; };
-		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
 		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
 		E7AD0DE029C85FFB00C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
 		E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
@@ -593,16 +528,13 @@
 		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
 		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
 		F728B9DF2CA29625007813BB /* PictureInPicture.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = PictureInPicture.strings; sourceTree = "<group>"; };
-		F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BETimeRecoder.m; sourceTree = "<group>"; };
-		F73B01C92CCB7E720077B7D2 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
-		F73B01CA2CCB7E720077B7D2 /* BETimeRecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BETimeRecoder.h; sourceTree = "<group>"; };
-		F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEGLUtils.m; sourceTree = "<group>"; };
-		F73B01CD2CCB7E730077B7D2 /* BEGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEGLUtils.h; sourceTree = "<group>"; };
-		F73B01D12CCB7EE20077B7D2 /* EffectMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectMacro.h; sourceTree = "<group>"; };
+		F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = beauty_material.bundle; sourceTree = "<group>"; };
+		F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeauty.swift; sourceTree = "<group>"; };
+		F73479202DF5CA140030C0CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AgoraBeauty.strings"; sourceTree = "<group>"; };
+		F73479232DF5CA820030C0CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AgoraBeauty.storyboard; sourceTree = "<group>"; };
+		F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeautyManager.swift; sourceTree = "<group>"; };
 		F73B01D22CCB84590077B7D2 /* APIReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIReporter.h; sourceTree = "<group>"; };
 		F73B01D32CCB84590077B7D2 /* APIReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIReporter.m; sourceTree = "<group>"; };
-		F73B01D62CCB862A0077B7D2 /* EFGlobalSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGlobalSingleton.h; sourceTree = "<group>"; };
-		F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGlobalSingleton.m; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -868,6 +800,7 @@
 			isa = PBXGroup;
 			children = (
 				DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */,
+				F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */,
 				DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */,
 				8B349FE22681E2CE007247F2 /* agora-logo.png */,
 				576CA80925A9CC3A0091520B /* output.raw */,
@@ -1108,16 +1041,6 @@
 			path = VideoProcess;
 			sourceTree = "<group>";
 		};
-		8BE7ABBB279E065000DFBCEF /* FusionCDN */ = {
-			isa = PBXGroup;
-			children = (
-				8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */,
-				8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */,
-				8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */,
-			);
-			path = FusionCDN;
-			sourceTree = "<group>";
-		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -1132,6 +1055,9 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F73478602DE59CE10030C0CE /* AgoraBeauty */,
+				ABB399EB2DF9605B00AF5033 /* Multipath */,
+				ABB399F02DF9605B00AF5033 /* Simulcast */,
 				DDFD50242C205BDF0050B344 /* TransparentRender */,
 				E7883AE32B074746003CCF44 /* FaceCapture */,
 				E726BFFD2A96FD3A006870E2 /* AudioWaveform */,
@@ -1142,7 +1068,6 @@
 				E72055F02900F8370030E6D1 /* KtvCopyrightMusic */,
 				E728B84128B5FFCB00674A4A /* PictureInPicture */,
 				E7899BD62861673600851463 /* CreateDataStream */,
-				8BE7ABBB279E065000DFBCEF /* FusionCDN */,
 				8B5E5B4E274CB6640040E97D /* RhythmPlayer */,
 				8BC751D8273E578D00552265 /* VideoProcess */,
 				8BC751CF273E502700552265 /* LiveStreaming */,
@@ -1186,6 +1111,24 @@
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ABB399EB2DF9605B00AF5033 /* Multipath */ = {
+			isa = PBXGroup;
+			children = (
+				ABB399E72DF9605B00AF5033 /* Multipath.swift */,
+				ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */,
+			);
+			path = Multipath;
+			sourceTree = "<group>";
+		};
+		ABB399F02DF9605B00AF5033 /* Simulcast */ = {
+			isa = PBXGroup;
+			children = (
+				ABB399EC2DF9605B00AF5033 /* Simulcast.swift */,
+				ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */,
+			);
+			path = Simulcast;
 			sourceTree = "<group>";
 		};
 		DD6ED7F02CB69FFB007B3B5D /* LocalCompositeGraph */ = {
@@ -1324,8 +1267,6 @@
 			isa = PBXGroup;
 			children = (
 				E76347BD2AAEF4AF005D130F /* FURender */,
-				E76347C02AAEF4AF005D130F /* SenseRender */,
-				E76347C32AAEF4AF005D130F /* BytesRender */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -1337,24 +1278,6 @@
 				E76347BF2AAEF4AF005D130F /* FUBeautyRender.h */,
 			);
 			path = FURender;
-			sourceTree = "<group>";
-		};
-		E76347C02AAEF4AF005D130F /* SenseRender */ = {
-			isa = PBXGroup;
-			children = (
-				E76347C12AAEF4AF005D130F /* SenseBeautyRender.h */,
-				E76347C22AAEF4AF005D130F /* SenseBeautyRender.m */,
-			);
-			path = SenseRender;
-			sourceTree = "<group>";
-		};
-		E76347C32AAEF4AF005D130F /* BytesRender */ = {
-			isa = PBXGroup;
-			children = (
-				E76347C42AAEF4AF005D130F /* BytesBeautyRender.m */,
-				E76347C52AAEF4AF005D130F /* BytesBeautyRender.h */,
-			);
-			path = BytesRender;
 			sourceTree = "<group>";
 		};
 		E77D54C128F55E9100D51C1E /* JoinChannelVideo(Token) */ = {
@@ -1403,8 +1326,6 @@
 				E76347B62AAEF4AF005D130F /* BeautyAPI */,
 				E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */,
 				E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */,
-				E7A49D38290907E200F06DD4 /* ByteBeautify */,
-				E7A49D0129067F8300F06DD4 /* SenseBeautify */,
 				E7A49CEF29029E0000F06DD4 /* FUBeautify */,
 			);
 			path = ThirdBeautify;
@@ -1431,86 +1352,6 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		E7A49D0129067F8300F06DD4 /* SenseBeautify */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D0729067F8300F06DD4 /* Manager */,
-				E7A49D0429067F8300F06DD4 /* SenseBeautifyVC.h */,
-				E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */,
-				E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */,
-				E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */,
-			);
-			path = SenseBeautify;
-			sourceTree = "<group>";
-		};
-		E7A49D0729067F8300F06DD4 /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D192907DD7800F06DD4 /* Effects.h */,
-				E7A49D182907DD7800F06DD4 /* Effects.m */,
-				E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */,
-				E7A49D292907DEE600F06DD4 /* EFMotionManager.m */,
-				F73B01D62CCB862A0077B7D2 /* EFGlobalSingleton.h */,
-				F73B01D72CCB862A0077B7D2 /* EFGlobalSingleton.m */,
-				E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */,
-				F73B01D12CCB7EE20077B7D2 /* EffectMacro.h */,
-				E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */,
-				E7A49D162907DD2600F06DD4 /* EffectsLicense.h */,
-				E7A49D152907DD2600F06DD4 /* EffectsLicense.m */,
-				E7A49D122907DC2700F06DD4 /* EffectsProcess.h */,
-				E7A49D132907DC2700F06DD4 /* EffectsProcess.m */,
-				E7A49D272907DDFF00F06DD4 /* EffectsDetector.h */,
-				E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */,
-				E7A49D212907DD9A00F06DD4 /* EffectsCommonObject.h */,
-				E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */,
-				E7A49D1F2907DD8F00F06DD4 /* EffectsAttribute.h */,
-				E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */,
-				E7A49D0F2907D9C800F06DD4 /* VideoProcessingManager.h */,
-				E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
-		E7A49D38290907E200F06DD4 /* ByteBeautify */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D3E290907E200F06DD4 /* Manager */,
-				E7A49D39290907E200F06DD4 /* BytedEffect.strings */,
-				E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */,
-				E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */,
-				E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */,
-			);
-			path = ByteBeautify;
-			sourceTree = "<group>";
-		};
-		E7A49D3E290907E200F06DD4 /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				E7A49D5E290910A000F06DD4 /* Core.h */,
-				E7A49D5F290910A100F06DD4 /* macro.h */,
-				E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */,
-				E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */,
-				F73B01CD2CCB7E730077B7D2 /* BEGLUtils.h */,
-				F73B01CC2CCB7E730077B7D2 /* BEGLUtils.m */,
-				F73B01CA2CCB7E720077B7D2 /* BETimeRecoder.h */,
-				F73B01C82CCB7E720077B7D2 /* BETimeRecoder.m */,
-				F73B01C92CCB7E720077B7D2 /* Config.h */,
-				E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */,
-				E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */,
-				E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */,
-				E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */,
-				E7A49D582909103500F06DD4 /* BEGLTexture.h */,
-				E7A49D592909103500F06DD4 /* BEGLTexture.m */,
-				E7A49D552909101D00F06DD4 /* BEImageUtils.h */,
-				E7A49D562909101D00F06DD4 /* BEImageUtils.m */,
-				E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */,
-				E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */,
-				E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */,
-				E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
 		F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1519,6 +1360,17 @@
 				F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */,
 			);
 			path = PixelBufferPIPViewController;
+			sourceTree = "<group>";
+		};
+		F73478602DE59CE10030C0CE /* AgoraBeauty */ = {
+			isa = PBXGroup;
+			children = (
+				F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */,
+				F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */,
+				F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */,
+				F734791F2DF5CA140030C0CE /* AgoraBeauty.strings */,
+			);
+			path = AgoraBeauty;
 			sourceTree = "<group>";
 		};
 		F73B01D42CCB84590077B7D2 /* Report */ = {
@@ -1694,7 +1546,6 @@
 				E74788AD29C7FB6900CD7415 /* JoinChannelVideoRecorder.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
-				E7A49D0A29067F8300F06DD4 /* SenseBeautify.storyboard in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
@@ -1703,24 +1554,23 @@
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				E726C0032A96FD3A006870E2 /* AudioWaveform.strings in Resources */,
 				F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */,
-				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				E728B85828B86B0700674A4A /* CustomVideoSourcePushMulti.strings in Resources */,
+				ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */,
+				ABB399F42DF9605B00AF5033 /* Simulcast.storyboard in Resources */,
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
+				F73479212DF5CA140030C0CE /* AgoraBeauty.strings in Resources */,
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
 				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
-				E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */,
 				E7883AE92B074746003CCF44 /* FaceCapture.strings in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
-				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				E7163F8A29651D8900EBBD55 /* AR.scnassets in Resources */,
 				E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
-				E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */,
 				E74788AC29C7FB6900CD7415 /* JoinChannelVideoRecorder.strings in Resources */,
 				E7A49CFC29029E0000F06DD4 /* FUBeautify.strings in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
@@ -1728,6 +1578,7 @@
 				8BC751D5273E502700552265 /* LiveStreaming.strings in Resources */,
 				8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */,
 				E728B85928B86B0700674A4A /* CustomVideoSourcePushMulti.storyboard in Resources */,
+				F73479242DF5CA820030C0CE /* AgoraBeauty.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				03414B5525546DEC00AB114D /* frames0.yuv in Resources */,
 				E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */,
@@ -1740,7 +1591,6 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */,
 				576CA80A25A9CC3A0091520B /* output.raw in Resources */,
-				E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
 				E7163F832964149800EBBD55 /* ARKit.storyboard in Resources */,
 				8BA5459526AFEC8D00ED4295 /* SimpleFilter.storyboard in Resources */,
@@ -1749,6 +1599,7 @@
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
 				8BA5459426AFEC8D00ED4295 /* SimpleFilter.strings in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
+				F734791C2DF5C9CD0030C0CE /* beauty_material.bundle in Resources */,
 				E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */,
 				E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */,
 				E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */,
@@ -1881,7 +1732,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" \n";
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1905,33 +1756,27 @@
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
 				E726BFFB2A949F70006870E2 /* AudioRouterPlayer.swift in Sources */,
-				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
-				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
 				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
-				E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */,
 				E76347D32AAEF4AF005D130F /* BeautyAPI.m in Sources */,
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
-				E7A49D1A2907DD7800F06DD4 /* Effects.m in Sources */,
 				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
-				E7A49D112907D9C800F06DD4 /* VideoProcessingManager.m in Sources */,
-				E7A49D1D2907DD8400F06DD4 /* EffectsAnimal.m in Sources */,
 				E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */,
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				ABB399F12DF9605B00AF5033 /* Multipath.swift in Sources */,
+				ABB399F22DF9605B00AF5033 /* Simulcast.swift in Sources */,
 				E726C0052A96FD3A006870E2 /* AudioWaveform.swift in Sources */,
-				E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */,
-				E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
-				E76347D22AAEF4AF005D130F /* BytesBeautyRender.m in Sources */,
 				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
+				F734791E2DF5CA0D0030C0CE /* AgoraBeauty.swift in Sources */,
 				6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
@@ -1946,21 +1791,14 @@
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
 				DDCED0362CBAA093004B1C9D /* RtePlayer.swift in Sources */,
 				E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */,
-				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
-				E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */,
 				DD71821E2CBBDF1000523123 /* PlayerObserver.swift in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
-				E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
-				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
 				F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */,
-				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
 				DDFD50262C205BF20050B344 /* TransparentRender.swift in Sources */,
-				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
-				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
 				F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */,
 				E721600F28D3314B006431BD /* AlertManager.swift in Sources */,
@@ -1970,17 +1808,15 @@
 				E7163F822964149800EBBD55 /* ARKit.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
 				033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */,
+				F73479262DF5CAEB0030C0CE /* AgoraBeautyManager.swift in Sources */,
 				67B8C7B028056B7600195106 /* RawVideoData.swift in Sources */,
 				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				E726C0082A96FF15006870E2 /* ZSNBoxingView.m in Sources */,
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
-				F73B01D82CCB862A0077B7D2 /* EFGlobalSingleton.m in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
-				E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */,
 				F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
-				8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */,
 				57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				67450169282D5D8B00E79F2F /* ContentInspect.swift in Sources */,
@@ -1990,24 +1826,19 @@
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
-				E7A49D5A2909103600F06DD4 /* BEGLTexture.m in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
-				E76347D12AAEF4AF005D130F /* SenseBeautyRender.m in Sources */,
 				8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */,
 				E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */,
 				E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */,
 				5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
-				E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
-				F73B01CE2CCB7E730077B7D2 /* BETimeRecoder.m in Sources */,
 				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				E7163F88296414F700EBBD55 /* ARVideoRenderer.swift in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
 				E76347D02AAEF4AF005D130F /* FUBeautyRender.m in Sources */,
-				F73B01CF2CCB7E730077B7D2 /* BEGLUtils.m in Sources */,
 				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				E77902672A484A8A008791AD /* KFMP4Demuxer.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
@@ -2335,29 +2166,30 @@
 			name = LiveStreaming.storyboard;
 			sourceTree = "<group>";
 		};
-		8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8BE7ABBD279E065000DFBCEF /* zh-Hans */,
-				8BE7ABBE279E065000DFBCEF /* en */,
-			);
-			name = FusionCDN.strings;
-			sourceTree = "<group>";
-		};
-		8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8BE7ABC0279E065000DFBCEF /* Base */,
-			);
-			name = FusionCDN.storyboard;
-			sourceTree = "<group>";
-		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A7CA48C324553CF600507435 /* Base */,
 			);
 			name = Popover.storyboard;
+			sourceTree = "<group>";
+		};
+		ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ABB399E82DF9605B00AF5033 /* Multipath.storyboard */,
+				ABB399F62DF9608700AF5033 /* en */,
+			);
+			name = Multipath.storyboard;
+			sourceTree = "<group>";
+		};
+		ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ABB399ED2DF9605B00AF5033 /* Simulcast.storyboard */,
+				AB8473EC2DF960D800B4DB73 /* en */,
+			);
+			name = Simulcast.storyboard;
 			sourceTree = "<group>";
 		};
 		DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */ = {
@@ -2562,36 +2394,20 @@
 			name = FUBeautify.storyboard;
 			sourceTree = "<group>";
 		};
-		E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */ = {
+		F734791F2DF5CA140030C0CE /* AgoraBeauty.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E7A49D0329067F8300F06DD4 /* zh-Hans */,
+				F73479202DF5CA140030C0CE /* zh-Hans */,
 			);
-			name = SenseBeautify.strings;
+			name = AgoraBeauty.strings;
 			sourceTree = "<group>";
 		};
-		E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */ = {
+		F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E7A49D0629067F8300F06DD4 /* Base */,
+				F73479232DF5CA820030C0CE /* Base */,
 			);
-			name = SenseBeautify.storyboard;
-			sourceTree = "<group>";
-		};
-		E7A49D39290907E200F06DD4 /* BytedEffect.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E7A49D3A290907E200F06DD4 /* zh-Hans */,
-			);
-			name = BytedEffect.strings;
-			sourceTree = "<group>";
-		};
-		E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E7A49D3D290907E200F06DD4 /* Base */,
-			);
-			name = BytedEffect.storyboard;
+			name = AgoraBeauty.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

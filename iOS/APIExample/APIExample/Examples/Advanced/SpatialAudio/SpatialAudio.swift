@@ -306,7 +306,7 @@ class SpatialAudioActionSheet: UIView {
     var onTapAttenuationSilderClosure: ((Float) -> Void)?
     private lazy var muteLabel: UILabel = {
         let label = UILabel()
-        label.text = "静音".localized
+        label.text = "mute".localized
         return label
     }()
     private lazy var voiceBlurLabel: UILabel = {

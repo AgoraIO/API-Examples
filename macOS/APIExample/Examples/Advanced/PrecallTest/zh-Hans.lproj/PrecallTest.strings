@@ -1,47 +1,47 @@
 
 /* Class = "NSButtonCell"; title = "Stop Test"; ObjectID = "4f3-Ea-NwT"; */
-"4f3-Ea-NwT.title" = "停止测试";
+"4f3-Ea-NwT.title" = "Stop Test";
 
 /* Class = "NSButtonCell"; title = "Start Test"; ObjectID = "4z6-Jy-1cc"; */
-"4z6-Jy-1cc.title" = "开始测试";
+"4z6-Jy-1cc.title" = "Start Test";
 
 /* Class = "NSButtonCell"; title = "Start Test"; ObjectID = "5jA-zT-2bv"; */
-"5jA-zT-2bv.title" = "开始测试";
+"5jA-zT-2bv.title" = "Start Test";
 
 /* Class = "NSButtonCell"; title = "Stop Audio Device Loopback Test"; ObjectID = "BJO-I0-Opi"; */
-"BJO-I0-Opi.title" = "停止本地音频回路测试";
+"BJO-I0-Opi.title" = "Stop Audio Device Loopback Test";
 
 /* Class = "NSTextFieldCell"; title = "Please say something.."; ObjectID = "BPe-Gx-enC"; */
-"BPe-Gx-enC.title" = "尝试说一些话...";
+"BPe-Gx-enC.title" = "Please say something...";
 
 /* Class = "NSViewController"; title = "Custom Video Source(MediaIO)"; ObjectID = "Gwp-vd-c2J"; */
-"Gwp-vd-c2J.title" = "通话前测试";
+"Gwp-vd-c2J.title" = "Precall Test";
 
 /* Class = "NSTextFieldCell"; title = "10"; ObjectID = "L6F-q4-SNZ"; */
 "L6F-q4-SNZ.title" = "10";
 
 /* Class = "NSTextFieldCell"; title = "Now you should hear what you said..."; ObjectID = "Yjn-ei-T3i"; */
-"Yjn-ei-T3i.title" = "现在你应该能听到前10秒的声音...";
+"Yjn-ei-T3i.title" = "Now you should hear what you said in the last 10 seconds...";
 
 /* Class = "NSTextFieldCell"; title = "10"; ObjectID = "aQJ-oH-NdD"; */
 "aQJ-oH-NdD.title" = "10";
 
 /* Class = "NSButtonCell"; title = "Stop Test"; ObjectID = "bGT-vl-2FZ"; */
-"bGT-vl-2FZ.title" = "停止测试";
+"bGT-vl-2FZ.title" = "Stop Test";
 
 /* Class = "NSButtonCell"; title = "Start Echo Test"; ObjectID = "cTC-4D-0SS"; */
-"cTC-4D-0SS.title" = "开始回声测试";
+"cTC-4D-0SS.title" = "Start Echo Test";
 
-"Nkf-bY-zGl.title" = "开始视频回路测试";
+"Nkf-bY-zGl.title" = "Start Video Loopback Test";
 
 /* Class = "NSButtonCell"; title = "Start Audio Device Loopback Test"; ObjectID = "fhC-uz-lo8"; */
-"fhC-uz-lo8.title" = "开始本地音频回路测试";
+"fhC-uz-lo8.title" = "Start Audio Device Loopback Test";
 
 /* Class = "NSButtonCell"; title = "Start Lastmile Test"; ObjectID = "flT-Cc-shZ"; */
-"flT-Cc-shZ.title" = "开始Lastmile网络测试";
+"flT-Cc-shZ.title" = "Start Lastmile Network Test";
 
 /* Class = "NSButtonCell"; title = "Stop Test"; ObjectID = "oar-3q-rdY"; */
-"oar-3q-rdY.title" = "停止测试";
+"oar-3q-rdY.title" = "Stop Test";
 
 /* Class = "NSButtonCell"; title = "Start Test"; ObjectID = "xsZ-UP-eoO"; */
-"xsZ-UP-eoO.title" = "开始测试";
+"xsZ-UP-eoO.title" = "Start Test";

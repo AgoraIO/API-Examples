@@ -12,7 +12,7 @@ set(agora-lib-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/li
 link_libraries(${agora-lib-so})
 
 #link opencv so
-set(opencv-lib-so ${PROJECT_SOURCE_DIR}/../libs/${CMAKE_ANDROID_ARCH_ABI}/libopencv_java4.so)
+set(opencv-lib-so ${PROJECT_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libopencv_java4.so)
 link_libraries(${opencv-lib-so})
 
 #opencv inc

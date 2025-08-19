@@ -27,7 +27,7 @@ namespace agora {
             void enumerateExtensions(ExtensionMetaInfo* extension_list, int& extension_count) override;
             agora_refptr<rtc::IAudioFilter> createAudioFilter(const char* name) override;
             agora_refptr<rtc::IExtensionVideoFilter> createVideoFilter(const char* name) override;
-            agora_refptr<rtc::IVideoSinkBase> createVideoSink(const char* name) override;
+            agora_refptr<rtc::IExtensionVideoSink> createVideoSink(const char* name) override;
         };
     }
 }

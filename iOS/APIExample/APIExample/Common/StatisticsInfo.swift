@@ -14,6 +14,7 @@ struct StatisticsInfo {
         var channelStats = AgoraChannelStats()
         var videoStats = AgoraRtcLocalVideoStats()
         var audioStats = AgoraRtcLocalAudioStats()
+        var multipathStats: AgoraMultipathStats?
     }
     
     struct RemoteInfo {
@@ -44,6 +45,20 @@ struct StatisticsInfo {
     
     init(type: StatisticsType) {
         self.type = type
+    }
+    
+    mutating func updateMultipathStats(_ stats: AgoraMultipathStats?) {
+        guard self.type.isLocal else {
+            return
+        }
+        switch type {
+        case .local(let info):
+            var new = info
+            new.multipathStats = stats
+            self.type = .local(new)
+        default:
+            break
+        }
     }
     
     mutating func updateChannelStats(_ stats: AgoraChannelStats) {
@@ -156,7 +171,7 @@ struct StatisticsInfo {
         let firstFrame = "firstFrameTime: \(firstFrameElapsedTime)"
         
         if audioOnly {
-            let array = firstFrameElapsedTime > 0 
+            let array = firstFrameElapsedTime > 0
             ? [firstFrame, lastmile, audioSend, cpu, aSendLoss]
             : [lastmile, audioSend, cpu, aSendLoss]
             return array.joined(separator: "\n")
@@ -166,6 +181,10 @@ struct StatisticsInfo {
         : [localUid, dimensionFps, lastmile, videoSend, audioSend, cpu, vSendLoss, aSendLoss]
         if let metaInfo = metaInfo {
             array.append(metaInfo)
+        }
+        if let state = info.multipathStats {
+            let multipath = "Multi Path: \(state.activePathNum)"
+            array.append(multipath)
         }
         return array.joined(separator: "\n")
     }
@@ -194,7 +213,7 @@ struct StatisticsInfo {
             : [audioRecv, audioLoss, aquality]
             return array.joined(separator: "\n")
         }
-        var array = firstFrameElapsedTime > 0 
+        var array = firstFrameElapsedTime > 0
         ? [uid, firstFrame, dimensionFpsBit, videoRecv, audioRecv, videoLoss, audioLoss, aquality, preloadTime]
         : [uid, dimensionFpsBit, videoRecv, audioRecv, videoLoss, audioLoss, aquality, preloadTime]
         if preloadElapsedTime <= 0 {

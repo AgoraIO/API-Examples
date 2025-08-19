@@ -445,7 +445,7 @@ void CTransparentBgDlg::UnInitAgora()
 
         if (m_initialize)
         {
-            m_rtcEngine->release(true);
+            m_rtcEngine->release(nullptr);
         }
         m_rtcEngine = NULL;
 

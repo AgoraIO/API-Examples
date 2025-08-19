@@ -47,14 +47,33 @@ typedef void (*aosl_ref_dtor_t) (void *arg);
  *              arg: the parameter attached with the reference object;
  *             dtor: the ref object destructor function, which will be invoked when
  *                   the ref object is deleted;
- *      caller_free:
- *            none-0 guarantee the ref object relatives must be freed in the caller thread
- *                 0 the ref object relatives could be freed in any thread
+ *     destroy_wait:
+ *            none-0 the destroy caller will wait other threads to release the ref object;
+ *                 0 the destroy caller will not wait other threads;
  * Return value:
  *         the ref object id, please use aosl_ref_invalid macro to check whether failed.
  **/
-extern __aosl_api__ aosl_ref_t aosl_ref_create (void *arg, aosl_ref_dtor_t dtor, int caller_free);
+extern __aosl_api__ aosl_ref_t aosl_ref_create (void *arg, aosl_ref_dtor_t dtor, int destroy_wait);
 
+/**
+ * Returns the total ref objects count.
+ **/
+extern __aosl_api__ int aosl_ref_count (void);
+
+
+typedef uintptr_t aosl_ref_magic_t;
+#define AOSL_REF_MAGIC_INVALID ((aosl_ref_magic_t)0)
+
+/**
+ * Retrieve the reference object magic function prototype.
+ * Parameters:
+ *              ref: the ref object id;
+ *            magic: the variable address for storing the magic;
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_ref_magic (aosl_ref_t ref, aosl_ref_magic_t *magic);
 
 /**
  * The ref object callback function prototype.
@@ -85,7 +104,7 @@ extern __aosl_api__ int aosl_ref_hold_args (aosl_ref_t ref, aosl_ref_func_t f, u
 extern __aosl_api__ int aosl_ref_hold_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
- * Hold the ref object and read lock it, then invoke the specified callback function.
+ * Read lock the ref object and read lock it, then invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
@@ -100,7 +119,7 @@ extern __aosl_api__ int aosl_ref_read_args (aosl_ref_t ref, aosl_ref_func_t f, u
 extern __aosl_api__ int aosl_ref_read_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
- * Hold the ref object and write lock it, then invoke the specified callback function.
+ * Write lock the ref object and write lock it, then invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
@@ -115,7 +134,55 @@ extern __aosl_api__ int aosl_ref_write_args (aosl_ref_t ref, aosl_ref_func_t f, 
 extern __aosl_api__ int aosl_ref_write_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
- * Hold the ref object and set it unsafe, then invoke the specified callback function.
+ * Hold the ref object with the saved magic, and invoke the specified callback function.
+ * Parameters:
+ *            ref: the ref object id;
+ *          magic: the saved magic variable address;
+ *              f: the callback function;
+ *           argc: the args count
+ *            ...: variable args
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_ref_magic_hold (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...);
+extern __aosl_api__ int aosl_ref_magic_hold_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args);
+extern __aosl_api__ int aosl_ref_magic_hold_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
+
+/**
+ * Read lock the ref object with the saved magic, and invoke the specified callback function.
+ * Parameters:
+ *            ref: the ref object id;
+ *          magic: the saved magic variable address;
+ *              f: the callback function;
+ *           argc: the args count
+ *            ...: variable args
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_ref_magic_read (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...);
+extern __aosl_api__ int aosl_ref_magic_read_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args);
+extern __aosl_api__ int aosl_ref_magic_read_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
+
+/**
+ * Write lock the ref object with the saved magic, and invoke the specified callback function.
+ * Parameters:
+ *            ref: the ref object id;
+ *          magic: the saved magic variable address;
+ *              f: the callback function;
+ *           argc: the args count
+ *            ...: variable args
+ * Return value:
+ *            0: success
+ *           <0: failure with aosl_errno set
+ **/
+extern __aosl_api__ int aosl_ref_magic_write (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, ...);
+extern __aosl_api__ int aosl_ref_magic_write_args (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, va_list args);
+extern __aosl_api__ int aosl_ref_magic_write_argv (aosl_ref_t ref, aosl_ref_magic_t magic, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
+
+/**
+ * Potential read unlock the ref object and set it unsafe, then invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
@@ -130,7 +197,7 @@ extern __aosl_api__ int aosl_ref_unsafe_args (aosl_ref_t ref, aosl_ref_func_t f,
 extern __aosl_api__ int aosl_ref_unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, uintptr_t argv []);
 
 /**
- * Hold the ref object and set it maystall, then invoke the specified callback function.
+ * Potential read unlock the ref object and set it maystall, then invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
  *              f: the callback function;
@@ -167,6 +234,15 @@ extern __aosl_api__ void *aosl_refobj_arg (aosl_refobj_t robj);
  *      the ref id.
  **/
 extern __aosl_api__ aosl_ref_t aosl_refobj_id (aosl_refobj_t robj);
+
+/**
+ * Get the ref magic of the specified ref object.
+ * Parameters:
+ *      robj: the reference object;
+ * Return value:
+ *      the ref magic.
+ **/
+extern __aosl_api__ aosl_ref_magic_t aosl_refobj_magic (aosl_refobj_t robj);
 
 /**
  * Make sure read lock the ref object specified by robj, then invoke the specified callback function.
@@ -223,7 +299,7 @@ extern __aosl_api__ int aosl_refobj_maystall_argv (aosl_refobj_t robj, aosl_ref_
  *           0: not read locked
  *   none zero: read locked by calling thread
  **/
-extern __aosl_api__ int aosl_ref_locked (aosl_ref_t ref);
+extern __aosl_api__ int aosl_ref_rdlocked (aosl_ref_t ref);
 
 /**
  * Set the living scope ref object of the specified ref object.
@@ -320,6 +396,23 @@ extern __aosl_api__ int aosl_ref_destroy_exec_args (aosl_ref_t ref, aosl_ref_t a
  **/
 extern __aosl_api__ int aosl_ref_destroy_exec_argv (aosl_ref_t ref, aosl_ref_t ares, aosl_ref_destroy_exec_f f, uintptr_t argc, uintptr_t argv []);
 
+/**
+ * Get the top ref object id of the ref stack.
+ * Parameter:
+ *      none.
+ * Return value:
+ *      the top ref object id, AOSL_REF_INVALID if the ref stack is empty.
+ **/
+extern __aosl_api__ aosl_ref_t aosl_ref_stack_top (void);
+
+/**
+ * Get the top ref object of the ref stack.
+ * Parameter:
+ *      none.
+ * Return value:
+ *      the top ref object, NULL if the ref stack is empty.
+ **/
+extern __aosl_api__ aosl_refobj_t aosl_ref_stack_top_obj (void);
 
 
 #ifdef __cplusplus

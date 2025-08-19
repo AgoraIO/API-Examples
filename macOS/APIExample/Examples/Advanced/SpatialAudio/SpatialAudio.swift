@@ -47,7 +47,7 @@ class SpatialAudioMain: BaseViewController {
             if audioSettingView2.isHidden == false {
                 audioSettingView2.isHidden = true
             }
-            isJoind ? (joinChannelButton.title = "离开频道") : (joinChannelButton.title = "加入频道")
+            isJoind ? (joinChannelButton.title = "leave channel") : (joinChannelButton.title = "join channel")
         }
     }
     

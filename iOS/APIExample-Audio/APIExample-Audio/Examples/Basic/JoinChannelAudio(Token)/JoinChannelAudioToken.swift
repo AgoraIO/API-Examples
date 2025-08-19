@@ -31,11 +31,11 @@ class JoinChannelAudioTokenEntry : BaseViewController
         scenarioBtn.setTitle("\(scenario.description())", for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTapViewHandler))
         view.addGestureRecognizer(tap)
-        //注册键盘出现通知
+        // Register keyboard appearance notification
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)),
                                                name:  UIApplication.keyboardWillShowNotification, object: nil)
         
-        //注册键盘隐藏通知
+        // Register keyboard disappearance notification
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name:  UIApplication.keyboardWillHideNotification, object: nil)
     }
@@ -51,7 +51,7 @@ class JoinChannelAudioTokenEntry : BaseViewController
     private func onTapViewHandler() {
         view.endEditing(true)
     }
-    // 键盘显示
+    // Keyboard appearance
     @objc
     private func keyboardWillShow(notification: Notification) {
         containerViewYCons.constant = -150
@@ -59,7 +59,7 @@ class JoinChannelAudioTokenEntry : BaseViewController
             self.view.layoutIfNeeded()
         }
     }
-    // 键盘隐藏
+    // Keyboard disappearance
     @objc
     private func keyboardWillHide(notification: Notification) {
         containerViewYCons.constant = -56
@@ -220,7 +220,6 @@ class JoinChannelAudioTokenMain: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        // 关闭耳返
         agoraKit.enable(inEarMonitoring: false)
         agoraKit.disableAudio()
         agoraKit.disableVideo()

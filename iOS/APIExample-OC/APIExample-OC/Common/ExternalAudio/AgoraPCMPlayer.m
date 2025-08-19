@@ -19,12 +19,10 @@
         
         [_audioEngine attachNode:_playerNode];
         
-        // 使用 AVAudioFormat 的 init 方法
         AVAudioFormat *format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:sampleRate channels:channels];
         [_audioEngine connect:_playerNode to:_audioEngine.mainMixerNode format:format];
         
         NSError *error = nil;
-        // 使用 start 方法的无参数版本
         [_audioEngine startAndReturnError:&error];
         if (error) {
             NSLog(@"Audio Engine failed to start: %@", error);

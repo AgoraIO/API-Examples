@@ -3,7 +3,7 @@
 "5nb-04-vbe.title" = "1Khz";
 
 /* Class = "NSBox"; title = "Equalization Reverb"; ObjectID = "5z4-pq-KKl"; */
-"5z4-pq-KKl.title" = "混响调整";
+"5z4-pq-KKl.title" = "Equalization Reverb";
 
 /* Class = "NSTextFieldCell"; title = "2Khz"; ObjectID = "6ME-Zv-Hpv"; */
 "6ME-Zv-Hpv.title" = "2Khz";
@@ -20,17 +20,17 @@
 /* Class = "NSTextFieldCell"; title = "16Khz"; ObjectID = "ClO-mY-jZW"; */
 "ClO-mY-jZW.title" = "16Khz";
 
-/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "EhX-UJ-wov"; */
-"EhX-UJ-wov.placeholderString" = "输入频道名";
+/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "EhX-UJ-wov"; */
+"EhX-UJ-wov.placeholderString" = "Enter Channel Name";
 
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "J6a-ul-c2H"; */
 "J6a-ul-c2H.title" = "1V3";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "P4E-oB-5Di"; */
-"P4E-oB-5Di.title" = "加入频道";
+"P4E-oB-5Di.title" = "Join Channel";
 
 /* Class = "NSBox"; title = "Equalization Band"; ObjectID = "bBW-s5-1yz"; */
-"bBW-s5-1yz.title" = "波段增益";
+"bBW-s5-1yz.title" = "Equalization Band";
 
 /* Class = "NSTextFieldCell"; title = "62hz"; ObjectID = "UAW-B9-951"; */
 "UAW-B9-951.title" = "62hz";
@@ -51,7 +51,7 @@
 "iEy-1i-vf4.title" = "125hz";
 
 /* Class = "NSTextFieldCell"; title = "Voice Pitch"; ObjectID = "j8U-Er-3Ry"; */
-"j8U-Er-3Ry.title" = "音调";
+"j8U-Er-3Ry.title" = "Voice Pitch";
 
 /* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
 "jAv-ZA-ecf.title" = "Join Channel Audio";
@@ -60,4 +60,4 @@
 "k68-jy-Jcs.title" = "8Khz";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
-"szu-uz-G6W.title" = "离开频道";
+"szu-uz-G6W.title" = "Leave Channel";

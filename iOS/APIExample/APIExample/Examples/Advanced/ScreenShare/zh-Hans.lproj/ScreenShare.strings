@@ -1,6 +1,6 @@
 
 /* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
+"GWc-L5-fZV.placeholder" = "Enter channel name";
 
 /* Class = "UITextField"; text = "ScreenShare"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.text" = "ScreenShare";
@@ -9,4 +9,4 @@
 "jxp-ZN-2yG.title" = "Join Channel Audio";
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
+"kbN-ZR-nNn.normalTitle" = "Join";

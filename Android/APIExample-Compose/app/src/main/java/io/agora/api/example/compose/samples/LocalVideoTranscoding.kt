@@ -164,6 +164,7 @@ fun LocalVideoTranscoding() {
             val source = MediaPlayerSource()
             source.url = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4"
             source.isAutoPlay = false
+            setLoopCount(-1)
             openWithMediaSource(source)
             adjustPlayoutVolume(0)
         }

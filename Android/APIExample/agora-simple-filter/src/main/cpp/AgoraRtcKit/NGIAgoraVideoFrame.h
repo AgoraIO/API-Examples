@@ -22,6 +22,41 @@ namespace agora {
 namespace rtc {
 
 /**
+ * This structure defines the raw video frame data in memory
+ * 
+ */
+struct RawPixelBuffer {
+  OPTIONAL_ENUM_CLASS Format {
+    kUnknown,
+    kI420,
+    kI422,
+    kNV21,
+    kNV12,
+    kI010,
+    kRGBA,
+    kARGB,
+    kBGRA,
+    kABGR
+  };
+  Format format;
+  uint8_t* data;
+  int size;
+};
+
+struct PaddedRawPixelBuffer {
+  RawPixelBuffer::Format format;
+  uint8_t* data_y;
+  int stride_y;
+  uint8_t* data_u;
+  int stride_u;
+  uint8_t* data_v;
+  int stride_v;
+  PaddedRawPixelBuffer()
+    : data_y(NULL), stride_y(0), data_u(NULL), stride_u(0), data_v(NULL), stride_v(0) {}
+};
+
+
+/**
  * This structure defines the video frame of texture type on Android
  * @note For technical preview, not supported for the moment. Use RawPixelBuffer instead.
  * 
@@ -41,37 +76,14 @@ struct TextureInfo {
   void* shared_context;
   int texture_id;
   int64_t fence_object;
+  int frame_buffer_id;
   float transform_matrix[16];
-};
 
-/**
- * This structure defines the raw video frame data in memory
- * 
- */
-struct RawPixelBuffer {
-  OPTIONAL_ENUM_CLASS Format {
-    kUnknown,
-    kI420,
-    kI422,
-    kNV21,
-    kNV12,
-    kI010,
-    kRGBA,
-    kARGB,
-    kBGRA
-  };
-  Format format;
-  uint8_t* data;
-  int size;
-};
-
-struct PaddedRawPixelBuffer {
-  RawPixelBuffer::Format format;
-  uint8_t* data;
-  int size;
-  int stride;
-  PaddedRawPixelBuffer()
-    : data(NULL), size(0), stride(0) {}
+  // for double buffer data
+  RawPixelBuffer::Format raw_data_format;
+  uint8_t* raw_data;
+  int64_t raw_data_size;
+  int raw_data_stride;
 };
 
 /**
@@ -110,7 +122,16 @@ OPTIONAL_ENUM_CLASS VideoFrameMetaDataType {
   kVideoSourceType,
   kFaceInfo,
   kFaceCaptureInfo,
+  kGravityRotation,
   // Add other types afterwards
+};
+
+OPTIONAL_ENUM_CLASS VideoFrameGravityRotation {
+  kGravityRotation_Unknown = -1,
+  kGravityRotation_0 = 0,
+  kGravityRotation_90 = 90,
+  kGravityRotation_180 = 180,
+  kGravityRotation_270 = 270
 };
 
 struct AlphaChannel {

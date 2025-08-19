@@ -239,7 +239,7 @@ extension RTMPStreamRTC: AgoraRtcEngineDelegate {
             isPublished = true
             ToastView.show(text: "RTMP Publish Success")
         } else if state == .failure {
-            ToastView.show(text: "RTMP Publish Failed: \(reason.rawValue)")
+            
         } else if state == .idle {
             isPublished = false
             ToastView.show(text: "RTMP Publish Stopped")

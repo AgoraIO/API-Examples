@@ -35,7 +35,6 @@ class ViewController: AGViewController {
 //            MenuItem(name: "Group Video Chat".localized, storyboard: "VideoChat", controller: "VideoChat"),
             MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
-            MenuItem(name: "Fusion CDN Streaming".localized, storyboard: "FusionCDN", controller: "FusionCDN"),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
             MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
@@ -59,6 +58,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
             MenuItem(name: "Local Composite Graph".localized, storyboard: "LocalCompositeGraph", controller: ""),
             MenuItem(name: "Video Process".localized, storyboard: "VideoProcess", controller: "VideoProcess"),
+            MenuItem(name: "Agora Beauty".localized, storyboard: "AgoraBeauty", controller: "AgoraBeauty"),
             MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
@@ -75,7 +75,9 @@ class ViewController: AGViewController {
             MenuItem(name: "Audio Waveform".localized, storyboard: "AudioWaveform", controller: ""),
             MenuItem(name: "Face Capture".localized, storyboard: "FaceCapture", controller: ""),
             MenuItem(name: "Transparent Render".localized, storyboard: "TransparentRender", controller: ""),
-            MenuItem(name: "URL Streaming(RTE Player)".localized, storyboard: "RtePlayer", controller: "")
+            MenuItem(name: "URL Streaming(RTE Player)".localized, storyboard: "RtePlayer", controller: ""),
+            MenuItem(name: "Simulcast".localized, storyboard: "Simulcast", controller: "SimulcasthEntry"),
+            MenuItem(name: "Multipath".localized, storyboard: "Multipath", controller: "MultipathEntry"),
         ])
     ]
     override func viewDidLoad() {

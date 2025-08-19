@@ -190,7 +190,6 @@ class CustomVideoRender: BaseViewController {
             
             // ddread
             agoraKit.setVideoFrameDelegate(videos[1].videocanvas)
-            //  开启硬解码, 返回cvPixelBuffer
             agoraKit.setParameters("{\"engine.video.enable_hw_decoder\":true}")
             agoraKit.enableVideo()
             agoraKit.enableAudio()

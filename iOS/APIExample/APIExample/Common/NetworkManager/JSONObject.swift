@@ -8,12 +8,12 @@
 import Foundation
 
 class JSONObject {
-    /// 字典转模型
+    /// Convert dictionary to model
     static func toModel<T: Codable>(_ type: T.Type, value: Any?) -> T? {
         guard let value = value else { return nil }
         return toModel(type, value: value)
     }
-    /// 字典转模型
+    /// Convert dictionary to model
     static func toModel<T: Codable>(_ type: T.Type, value: Any) -> T? {
         guard let data = try? JSONSerialization.data(withJSONObject: value) else { return nil }
         let decoder = JSONDecoder()
@@ -22,12 +22,12 @@ class JSONObject {
                                                                         nan: "NaN")
         return try? decoder.decode(type, from: data)
     }
-    /// JSON字符串转模型
+    /// Convert JSON string to model
     static func toModel<T: Codable>(_ type: T.Type, value: String?) -> T? {
         guard let value = value else { return nil }
         return toModel(type, value: value)
     }
-    /// JSON字符串转模型
+    /// Convert JSON string to model
     static func toModel<T: Codable>(_ type: T.Type, value: String) -> T? {
         let decoder = JSONDecoder()
         decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "+Infinity",
@@ -40,24 +40,24 @@ class JSONObject {
         }
         return t
     }
-    /// 模型转JSON字符串
+    /// Convert model to JSON string
     static func toJson<T: Codable>(_ model: T) -> [String: Any] {
         let jsonString = toJsonString(model) ?? ""
         return toDictionary(jsonString: jsonString)
     }
-    /// 模型转JSON数组字符串
+    /// Convert model to JSON array string
     static func toJsonArray<T: Codable>(_ model: T) -> [[String: Any]]? {
         let jsonString = toJsonString(model) ?? ""
         return toArray(jsonString: jsonString)
     }
-    /// 模型转JSON字符串
+    /// Convert model to JSON string
     static func toJsonString<T: Codable>(_ model: T) -> String? {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(model) else { return nil }
         return String(data: data, encoding: .utf8)
     }
-    /// JSON字符串转字典
+    /// Convert JSON string to dictionary
     static func toDictionary(jsonString: String) -> [String: Any] {
         guard let jsonData = jsonString.data(using: .utf8) else { return [:] }
         guard let dict = try? JSONSerialization.jsonObject(with: jsonData,
@@ -68,7 +68,7 @@ class JSONObject {
         }
         return result
     }
-    /// JSON字符串转字典
+    /// Convert JSON string to dictionary
     static func toDictionary(jsonStr: String) -> [String: String] {
         guard let jsonData = jsonStr.data(using: .utf8) else { return [:] }
         guard let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers), 
@@ -82,7 +82,7 @@ class JSONObject {
         }
         return data
     }
-    /// JSON字符串转数组
+    /// Convert JSON string to array
     static func toArray(jsonString: String) -> [[String: Any]]? {
         guard let jsonData = jsonString.data(using: .utf8) else { return nil }
         guard let array = try? JSONSerialization.jsonObject(with: jsonData,
@@ -93,18 +93,18 @@ class JSONObject {
         }
         return result
     }
-    /// 字典转JSON字符串
+    /// Convert dictionary to JSON string
     static func toJsonString(dict: [String: Any]?) -> String? {
         guard let dict = dict else { return nil }
         if !JSONSerialization.isValidJSONObject(dict) {
-            print("字符串格式错误！")
+            print("Invalid string format!")
             return nil
         }
         guard let data = try? JSONSerialization.data(withJSONObject: dict, options: []) else { return nil }
         guard let jsonString = String(data: data, encoding: .utf8) else { return nil }
         return jsonString
     }
-    /// 字典数组转JSON字符串
+    /// Convert dictionary array to JSON string
     static func toJsonString(array: [[String: Any]?]?) -> String? {
         guard let array = array else { return nil }
         var jsonString = "["
@@ -113,7 +113,7 @@ class JSONObject {
         for dict in array {
             guard let dict = dict else { return nil }
             if !JSONSerialization.isValidJSONObject(dict) {
-                print("字符串格式错误！")
+                print("Invalid string format!")
                 return nil
             }
             guard let data = try? JSONSerialization.data(withJSONObject: dict, options: []) else { return nil }
