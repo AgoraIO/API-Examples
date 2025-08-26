@@ -66,7 +66,7 @@ cn_dir=CN
 global_dir=Global
 
 echo zip_name: $zip_name
-if [ -z "$sdk_url" ]; then
+if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
