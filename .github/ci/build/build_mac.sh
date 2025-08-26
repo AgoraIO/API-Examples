@@ -66,7 +66,7 @@ cn_dir=CN
 global_dir=Global
 
 echo zip_name: $zip_name
-if [ -z "$sdk_url" ]; then
+if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
@@ -99,31 +99,30 @@ fi
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile $sdk_url_flag
 
 echo "start compress"
-7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
+7za a -tzip result.zip -r $unzip_name > log.txt
+echo "start move to"
+echo $WORKSPACE/with${BUILD_NUMBER}_$zip_name
+mv result.zip $WORKSPACE/with_${BUILD_NUMBER}_$zip_name
 
 if [ $compress_apiexample = true ]; then
-    sdk_version=$(grep "pod 'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
+    sdk_version=$(grep "pod 'AgoraRtcEngine_macOS'" ./macOS/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
     echo "sdk_version: $sdk_version"
     
-    mkdir -p $cn_dir $global_dir
-    cp -rf ./iOS/${ios_direction} $cn_dir/
-    cp -rf ./iOS/${ios_direction} $global_dir/
-    cd $cn_dir/${ios_direction}
-    ./cloud_project.sh || exit 1
-    cd -
+    cp -rf ./macOS $global_dir/
+   
     echo "start compress api example"
-    7za a -tzip cn_result.zip $cn_dir > log.txt
-    7za a -tzip global_result.zip $global_dir > log.txt     
+    7za a -tzip global_result.zip $global_dir
+    echo "complete compress api example"
+    echo "current path: `pwd`"
+    ls -al
+    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
+  
+    echo "global_des_path: $global_des_path"
+    echo "Moving global_result.zip to $global_des_path"
+    mv global_result.zip $global_des_path
+    
+    ls -al $WORKSPACE/
+fi
 
-    mv cn_result.zip $WORKSPACE/${apiexample_cn_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
-    mv global_result.zip $WORKSPACE/${apiexample_global_name}_${sdk_version}${BUILD_NUMBER}_APIExample.zip 
-fi 
-
-#if [ $compile_project = true ]; then
-#    cd ./$unzip_name/samples/APIExample
-#    ./cloud_build.sh || exit 1
-#    cd -
-#fi
 
 
