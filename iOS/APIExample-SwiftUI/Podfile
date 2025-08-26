@@ -2,8 +2,8 @@
 # platform :ios, '9.0'
 
 def common_pods
-  # pod 'AgoraRtcEngine_iOS', '4.5.2'
- pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_iOS', '4.6.0'
+#  pod 'sdk', :path => 'sdk.podspec'
 end
 
 target 'APIExample-SwiftUI' do
