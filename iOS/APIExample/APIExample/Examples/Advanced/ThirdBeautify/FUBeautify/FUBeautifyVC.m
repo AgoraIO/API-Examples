@@ -60,10 +60,10 @@
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:KeyCenter.AppId delegate:self];
     
     // 回退帧率：
-//    [self.rtcEngineKit setParameters: @"{\"che.video.enable_performance_adaptive_config\":{\"enable_pre_process_fallback_capture\":true}}"];
-//    [self.rtcEngineKit setParameters: @"{\"che.video.qoe_diagnose_observer_config\":{\"enable\":true,\"interval_ms\":20000}}"];
-//    [self.rtcEngineKit setParameters: @"{\"che.video.capture_aa_config\":{\"enable\":true,\"force_fallback_type\":1}}"];
-//    [self.rtcEngineKit setParameters: @"{\"rtc.video.enable_regulator_scale\":true}"];
+    [self.rtcEngineKit setParameters: @"{\"che.video.enable_performance_adaptive_config\":{\"enable_pre_process_fallback_capture\":true}}"];
+    [self.rtcEngineKit setParameters: @"{\"che.video.qoe_diagnose_observer_config\":{\"enable\":true,\"interval_ms\":20000}}"];
+    [self.rtcEngineKit setParameters: @"{\"che.video.capture_aa_config\":{\"enable\":true,\"force_fallback_type\":1}}"];
+    [self.rtcEngineKit setParameters: @"{\"rtc.video.enable_regulator_scale\":true}"];
     // 回退分辨率：
 //    [self.rtcEngineKit setParameters: @"{\"che.video.enable_performance_adaptive_config\":{\"enable_pre_process_fallback_capture\":true}}"];
 //    [self.rtcEngineKit setParameters: @"{\"che.video.qoe_diagnose_observer_config\":{\"enable\":true,\"interval_ms\":20000}}"];
