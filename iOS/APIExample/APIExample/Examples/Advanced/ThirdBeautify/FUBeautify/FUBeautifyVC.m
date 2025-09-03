@@ -74,8 +74,8 @@
     [self.rtcEngineKit enableVideo];
     [self.rtcEngineKit enableAudio];
     
-    AgoraVideoEncoderConfiguration *encodeConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(480, 640)
-                                                                                              frameRate:(AgoraVideoFrameRateFps15)
+    AgoraVideoEncoderConfiguration *encodeConfig = [[AgoraVideoEncoderConfiguration alloc] initWithSize:CGSizeMake(1080, 1920)
+                                                                                              frameRate:(AgoraVideoFrameRateFps30)
                                                                                                 bitrate:AgoraVideoBitrateStandard
                                                                                         orientationMode:(AgoraVideoOutputOrientationModeFixedPortrait)
                                                                                              mirrorMode:(AgoraVideoMirrorModeDisabled)];
