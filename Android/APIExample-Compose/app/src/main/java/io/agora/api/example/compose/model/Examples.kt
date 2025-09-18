@@ -20,7 +20,7 @@ import io.agora.api.example.compose.samples.MediaPlayer
 import io.agora.api.example.compose.samples.MediaRecorder
 import io.agora.api.example.compose.samples.OriginAudioData
 import io.agora.api.example.compose.samples.OriginVideoData
-import io.agora.api.example.compose.samples.PictureInPictureEntrance
+import io.agora.api.example.compose.samples.PictureInPicture
 import io.agora.api.example.compose.samples.PlayAudioFiles
 import io.agora.api.example.compose.samples.PreCallTest
 import io.agora.api.example.compose.samples.RTMPStreaming
@@ -54,7 +54,7 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_originvideodata) { OriginVideoData() },
     Example(R.string.example_customvideosource) { CustomVideoSource() },
     Example(R.string.example_customvideorender) { CustomVideoRender() },
-    Example(R.string.example_pictureinpicture) { PictureInPictureEntrance(it) },
+    Example(R.string.example_pictureinpicture) { PictureInPicture() },
     Example(R.string.example_joinmultichannel) { JoinMultiChannel() },
     Example(R.string.example_channelencryption) { ChannelEncryption() },
     Example(R.string.example_playaudiofiles) { PlayAudioFiles() },
