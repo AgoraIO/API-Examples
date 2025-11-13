@@ -31,7 +31,7 @@ class PixelBufferRenderViewModel: NSObject, ObservableObject {
         engine.enableAudio()
         engine.enableVideo()
         engine.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: CGSize(width: 960, height: 540),
-                                                                           frameRate: .fps15,
+                                                                           frameRate: AgoraVideoFrameRate.fps15.rawValue,
                                                                            bitrate: AgoraVideoBitrateStandard,
                                                                            orientationMode: .fixedPortrait,
                                                                            mirrorMode: .auto))

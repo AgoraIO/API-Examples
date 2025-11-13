@@ -1,67 +1,143 @@
 //
-//  JoinChannelVideoRTC.swift
+//  LocalVideoCompositionRTC.swift
 //  APIExample-SwiftUI
 //
-//  Created by zhaoyongqiang on 2024/3/19.
+//  Created by qinhui on 2025/11/13.
 //
 
+import Foundation
 import AgoraRtcKit
-import SwiftUI
 
-class MutliCameraRTC: NSObject, ObservableObject {
+class LocalCompositeGraphRTC: NSObject, ObservableObject {
+    @Published var isJoined: Bool = false
     private var agoraKit: AgoraRtcEngineKit!
-    private var isJoined: Bool = false
-    private var channelName: String?
-    private lazy var uid: UInt = UInt.random(in: 1...9999)
-    private lazy var mutliCameraUid: UInt = UInt.random(in: 10000...9999999)
-    private var isOpenCamera: Bool = false
-    
     private var localView: VideoUIView?
-    private var remoteView: VideoUIView?
+    private var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
+    private var systemBroadcastPicker: RPSystemBroadcastPickerView?
+
+    private lazy var screenParams: AgoraScreenCaptureParameters2 = {
+        let params = AgoraScreenCaptureParameters2()
+        params.captureVideo = true
+        params.captureAudio = true
+        let audioParams = AgoraScreenAudioParameters()
+        audioParams.captureSignalVolume = 50
+        params.audioParams = audioParams
+        let videoParams = AgoraScreenVideoParameters()
+        videoParams.dimensions = screenShareVideoDimension()
+        videoParams.frameRate = AgoraVideoFrameRate.fps15.rawValue
+        videoParams.bitrate = AgoraVideoBitrateStandard
+        params.videoParams = videoParams
+        return params
+    }()
     
+    private lazy var option: AgoraRtcChannelMediaOptions = {
+        let option = AgoraRtcChannelMediaOptions()
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
+        option.publishCameraTrack = true
+        option.publishMicrophoneTrack = true
+        return option
+    }()
+
+    private func screenShareVideoDimension() -> CGSize {
+        let screenSize = UIScreen.main.bounds
+        var boundingSize = CGSize(width: 540, height: 960)
+        let mW: CGFloat = boundingSize.width / screenSize.width
+        let mH: CGFloat = boundingSize.height / screenSize.height
+        if mH < mW {
+            boundingSize.width = boundingSize.height / screenSize.height * screenSize.width
+        } else if mW < mH {
+            boundingSize.height = boundingSize.width / screenSize.width * screenSize.height
+        }
+        return boundingSize
+    }
+    
+    private func prepareSystemBroadcaster() {
+        if #available(iOS 12.0, *) {
+            let frame = CGRect(x: 0, y: 0, width: 60, height: 60)
+            systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
+            systemBroadcastPicker?.showsMicrophoneButton = false
+            systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
+            let bundleId = Bundle.main.bundleIdentifier ?? ""
+            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension"
+            
+        } else {
+//            self.showAlert(message: "Minimum support iOS version is 12.0")
+        }
+    }
+    
+    private func stopScreenCapture() {
+        agoraKit.stopScreenCapture()
+        option.publishScreenCaptureVideo = false
+        option.publishScreenCaptureAudio = false
+        agoraKit.updateChannel(with: option)
+    }
+
+    private func startScreenCapture() {
+        guard !UIScreen.main.isCaptured else { return }
+        agoraKit.startScreenCapture(screenParams)
+        prepareSystemBroadcaster()
+        guard let picker = systemBroadcastPicker else { return }
+        for view in picker.subviews where view is UIButton {
+            (view as? UIButton)?.sendActions(for: .allEvents)
+            break
+        }
+        
+        option.publishScreenCaptureVideo = true
+        option.publishScreenCaptureAudio = true
+        agoraKit.updateChannel(with: option)
+    }
+    
+    private func startVideoTranscoder() {
+        
+        // camera capture
+        let cameraStream = AgoraTranscodingVideoStream()
+        cameraStream.rect = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
+        cameraStream.sourceType = .camera
+        
+        // screen capture
+        let screenStream = AgoraTranscodingVideoStream()
+        screenStream.sourceType = .screen
+        screenStream.rect = CGRect(origin: .zero, size: screenShareVideoDimension())
+        
+        let config = AgoraLocalTranscoderConfiguration()
+        config.videoOutputConfiguration.dimensions = screenShareVideoDimension()
+        // set transcoder config
+        config.videoInputStreams = [screenStream, cameraStream]
+        agoraKit.startLocalVideoTranscoder(config)
+    }
     
     func setupRTC(configs: [String: Any],
-                  localView: VideoUIView,
-                  remoteView: VideoUIView) {
+                  localView: VideoUIView) {
         self.localView = localView
-        self.remoteView = remoteView
-        remoteView.setPlaceholder(text: "Second camera".localized)
+        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // Configuring Privatization Parameters
-        Util.configPrivatization(agoraKit: agoraKit)
         
         agoraKit.setLogFile(LogUtils.sdkLogPath())
+        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
-        self.channelName = channelName
-        let fps = GlobalSettings.shared.getFps()
-        let resolution = GlobalSettings.shared.getResolution()
-        let orientation = GlobalSettings.shared.getOrientation()
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: fps.rawValue,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: orientation, mirrorMode: .auto))
-        
-        // open Multi Camera
-        let capturerConfig = AgoraCameraCapturerConfiguration()
-        capturerConfig.cameraDirection = .rear
-        agoraKit.enableMultiCamera(true, config: capturerConfig)
-        
-        setupCanvasView(view: localView.videoView)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        //start screen capture
+        self.startScreenCapture()
+        
+        // start camera
+        let captureConfig = AgoraCameraCapturerConfiguration()
+        captureConfig.dimensions = CGSize(width: 100, height: 100)
+        agoraKit.startCameraCapture(.camera, config: captureConfig)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -70,72 +146,31 @@ class MutliCameraRTC: NSObject, ObservableObject {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.publishMicrophoneTrack = GlobalSettings.shared.getUserRole() == .broadcaster
-        option.clientRoleType = GlobalSettings.shared.getUserRole()
-        NetworkManager.shared.generateToken(channelName: channelName, uid: uid, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: self.uid, mediaOptions: option)
+        option.publishCameraTrack = true
+        option.publishMicrophoneTrack = true
+        option.publishTranscodedVideoTrack = true
+        option.clientRoleType = .broadcaster
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                LogUtils.log(message: "joinChannel call failed: \(result), please check your params", level: .error)
+//                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
+            self.startVideoTranscoder()
         })
-    }
-    
-    func onTapBackCameraButton(_ isOpenCamera: Bool) {
-        self.isOpenCamera = isOpenCamera
-        guard let channelName = self.channelName else {return}
-        let connection = AgoraRtcConnection()
-        connection.channelId = channelName
-        connection.localUid = mutliCameraUid
-        if isOpenCamera {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = mutliCameraUid
-            videoCanvas.view = remoteView?.videoView
-            videoCanvas.renderMode = .hidden
-            videoCanvas.sourceType = .cameraSecondary
-            videoCanvas.mirrorMode = .disabled
-            agoraKit.setupLocalVideo(videoCanvas)
-            
-            let cameraConfig = AgoraCameraCapturerConfiguration()
-            cameraConfig.cameraDirection = .rear
-            cameraConfig.dimensions = remoteView?.videoView.frame.size ?? .zero
-            agoraKit.enableMultiCamera(true, config: cameraConfig)
-            agoraKit.startCameraCapture(.cameraSecondary, config: cameraConfig)
-            
-            let option = AgoraRtcChannelMediaOptions()
-            option.publishSecondaryCameraTrack = true
-            option.publishMicrophoneTrack = true
-            option.clientRoleType = .broadcaster
-            option.autoSubscribeAudio = false
-            option.autoSubscribeVideo = false
-            NetworkManager.shared.generateToken(channelName: channelName, uid: mutliCameraUid) { token in
-                self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
-                self.agoraKit.muteRemoteAudioStream(self.mutliCameraUid, mute: true)
-                self.agoraKit.muteRemoteVideoStream(self.mutliCameraUid, mute: true)
-            }
-        } else {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = mutliCameraUid
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
-            videoCanvas.sourceType = .cameraSecondary
-            agoraKit.setupLocalVideo(videoCanvas)
-            agoraKit.stopCameraCapture(.cameraSecondary)
-            agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
-        }
-    }
-    
-    private func setupCanvasView(view: UIView?) {
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
+        videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = view
-        videoCanvas.renderMode = .hidden
+        videoCanvas.view = localView.videoView
+        videoCanvas.mirrorMode = .disabled
+        videoCanvas.renderMode = .fit
+        videoCanvas.sourceType = .transCoded
+
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
@@ -149,21 +184,13 @@ class MutliCameraRTC: NSObject, ObservableObject {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
-            if isOpenCamera {
-                guard let channelName = channelName else {return}
-                let connection = AgoraRtcConnection()
-                connection.channelId = channelName
-                connection.localUid = mutliCameraUid
-                agoraKit.stopCameraCapture(.cameraSecondary)
-                agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
-            }
         }
         AgoraRtcEngineKit.destroy()
     }
 }
 
-// agora rtc engine delegate events
-extension MutliCameraRTC: AgoraRtcEngineDelegate {
+// MARK: - AgoraRtcEngineDelegate
+extension LocalCompositeGraphRTC: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -182,12 +209,11 @@ extension MutliCameraRTC: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
-        //        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+//        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
-        localView?.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -196,7 +222,6 @@ extension MutliCameraRTC: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        remoteView?.uid = uid
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -205,7 +230,7 @@ extension MutliCameraRTC: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        remoteView?.uid = 0
+        
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
@@ -215,10 +240,6 @@ extension MutliCameraRTC: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-    }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionState, reason: AgoraConnectionChangedReason) {
-        LogUtils.log(message: "Connection state changed: \(state) \(reason)", level: .info)
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -232,4 +253,9 @@ extension MutliCameraRTC: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         localView?.statsInfo?.updateLocalAudioStats(stats)
     }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didLocalVideoTranscoderErrorWithStream stream: AgoraTranscodingVideoStream, errorCode: AgoraVideoTranscoderError) {
+        print("didLocalVideoTranscoderError: \(errorCode.rawValue), source type: \(stream.sourceType.rawValue)")
+    }
 }
+

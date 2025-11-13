@@ -24,7 +24,7 @@ class ScreenShareRTC: NSObject, ObservableObject {
         params.audioParams = audioParams
         let videoParams = AgoraScreenVideoParameters()
         videoParams.dimensions = screenShareVideoDimension()
-        videoParams.frameRate = .fps15
+        videoParams.frameRate = AgoraVideoFrameRate.fps15.rawValue
         videoParams.bitrate = AgoraVideoBitrateStandard
         params.videoParams = videoParams
         return params
@@ -66,7 +66,7 @@ class ScreenShareRTC: NSObject, ObservableObject {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
+                frameRate: fps.rawValue,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation, mirrorMode: .auto))
         
@@ -166,7 +166,7 @@ class ScreenShareRTC: NSObject, ObservableObject {
     }
     
     func setFps(fps: String) {
-        screenParams.videoParams.frameRate = AgoraVideoFrameRate(rawValue: Int(fps) ?? 15) ?? .fps15
+        screenParams.videoParams.frameRate = (AgoraVideoFrameRate(rawValue: Int(fps) ?? 15) ?? .fps15).rawValue
     }
     
    private func setupCanvasView(view: UIView?) {

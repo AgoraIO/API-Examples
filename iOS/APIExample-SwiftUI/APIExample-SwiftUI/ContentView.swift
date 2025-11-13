@@ -95,7 +95,8 @@ struct ContentView: View {
             MenuItem(name: "Simulcast".localized,
                      view: AnyView(SimulcastEntry())),
             MenuItem(name: "Multipath".localized,
-                     view: AnyView(MultipathEntry()))
+                     view: AnyView(MultipathEntry())),
+            MenuItem(name: "LocalCompositeGraph".localized, view: AnyView(LocalCompositeGraphEntry()))
         ])
     ]
 
