@@ -41,6 +41,9 @@ class LocalCompositeGraphMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
+    @IBOutlet weak var virtualBgSegment: UISegmentedControl!
+    @IBOutlet weak var virtualBackgroundSwitch: UISwitch!
+    
     private lazy var screenParams: AgoraScreenCaptureParameters2 = {
         let params = AgoraScreenCaptureParameters2()
         params.captureVideo = true
@@ -50,7 +53,7 @@ class LocalCompositeGraphMain: BaseViewController {
         params.audioParams = audioParams
         let videoParams = AgoraScreenVideoParameters()
         videoParams.dimensions = screenShareVideoDimension()
-        videoParams.frameRate = .fps15
+        videoParams.frameRate = AgoraVideoFrameRate.fps15.rawValue
         videoParams.bitrate = AgoraVideoBitrateStandard
         params.videoParams = videoParams
         return params
@@ -68,6 +71,8 @@ class LocalCompositeGraphMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        virtualBackgroundSwitch.isOn = false
+        
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         container.layoutStream(views: [localVideo])
@@ -98,6 +103,7 @@ class LocalCompositeGraphMain: BaseViewController {
         videoCanvas.mirrorMode = .disabled
         videoCanvas.renderMode = .fit
         videoCanvas.sourceType = .transCoded
+
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
@@ -148,6 +154,34 @@ class LocalCompositeGraphMain: BaseViewController {
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
+    }
+    
+    func changeVirtualBackground() {
+        let source = AgoraVirtualBackgroundSource()
+        switch virtualBgSegment.selectedSegmentIndex {
+        case 0:
+            let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
+            source.backgroundSourceType = .img
+            source.source = imgPath
+            
+        case 1:
+            source.backgroundSourceType = .color
+            source.color = 0xFFFFFF
+            
+        case 2:
+            source.backgroundSourceType = .blur
+            source.blurDegree = .high
+            
+        default: break
+        }
+        
+        source.backgroundSourceType = virtualBackgroundSwitch.isOn ? source.backgroundSourceType : .none
+        let result = agoraKit.enableVirtualBackground(virtualBackgroundSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())
+        print("result == \(result)")
+    }
+    
+    @IBAction func virtualBackgroundAction(_ sender: UISwitch) {
+        changeVirtualBackground()
     }
     
     private func screenShareVideoDimension() -> CGSize {

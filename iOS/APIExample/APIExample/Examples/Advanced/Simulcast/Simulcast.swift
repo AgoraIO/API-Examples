@@ -94,7 +94,7 @@ class SimulcastViewController: BaseViewController {
             // Set video encoder configuration
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = CGSize(width: 1280, height: 720)
-            videoConfig.frameRate = .fps30
+            videoConfig.frameRate = AgoraVideoFrameRate.fps30.rawValue
             videoConfig.bitrate = AgoraVideoBitrateStandard
             videoConfig.orientationMode = .adaptative
             videoConfig.mirrorMode = .auto
