@@ -403,58 +403,83 @@ class IMediaPlayerSourceObserver {
   virtual ~IMediaPlayerSourceObserver() {}
 
   /**
-   * @brief Reports the playback state change.
+   * @brief Reports the changes of playback state.
    *
-   * When the state of the playback changes, the SDK triggers this callback to report the new playback state and the reason or error for the change.
-   * @param state The new playback state after change. See {@link media::base::MEDIA_PLAYER_STATE MEDIA_PLAYER_STATE}.
-   * @param reason The player's error code. See {@link media::base::MEDIA_PLAYER_REASON MEDIA_PLAYER_REASON}.
+   * @details
+   * When the state of the media player changes, the SDK triggers this callback to report the current
+   * playback state.
+   *
+   * @param state The playback state. See `MEDIA_PLAYER_STATE`.
+   * @param reason The reason for the changes in the media player status. See `MEDIA_PLAYER_REASON`.
+   *
    */
   virtual void onPlayerSourceStateChanged(media::base::MEDIA_PLAYER_STATE state,
                                           media::base::MEDIA_PLAYER_REASON reason) = 0;
 
   /**
-   * @brief Reports current playback progress.
+   * @brief Reports the playback progress of the media file.
    *
-   * The callback occurs once every one second during the playback and reports the current playback progress.
-   * @param positionMs Current playback progress (milisecond).
-   * @param timestampMs Current NTP(Network Time Protocol) time (milisecond).
+   * @details
+   * When playing media files, the SDK triggers this callback every two second to report current
+   * playback progress.
+   *
+   * @param positionMs The playback position (ms) of media files.
+   * @param timeStampMs The NTP timestamp (ms) of the current playback progress.
+   *
    */
   virtual void onPositionChanged(int64_t positionMs, int64_t timestampMs) = 0;
 
   /**
-   * @brief Reports the playback event.
+   * @brief Reports the player events.
    *
-   * - After calling the `seek` method, the SDK triggers the callback to report the results of the seek operation.
-   * - After calling the `selectAudioTrack` method, the SDK triggers the callback to report that the audio track changes.
+   * @details
+   * - After calling the `seek` method, the SDK triggers the callback to report the results of the
+   * seek operation.
    *
-   * @param eventCode The playback event. See {@link media::base::MEDIA_PLAYER_EVENT MEDIA_PLAYER_EVENT}.
-   * @param elapsedTime The playback elapsed time.
-   * @param message The playback message.
+   * @param eventCode The player event. See `MEDIA_PLAYER_EVENT`.
+   * @param elapsedTime The time (ms) when the event occurs.
+   * @param message Information about the event.
+   *
    */
   virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT eventCode, int64_t elapsedTime, const char* message) = 0;
 
   /**
-   * @brief Occurs when the metadata is received.
+   * @brief Occurs when the media metadata is received.
    *
-   * The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
+   * @details
+   * The callback occurs when the player receives the media metadata and reports the detailed
+   * information of the media metadata.
+   *
    * @param data The detailed data of the media metadata.
    * @param length The data length (bytes).
+   *
    */
   virtual void onMetaData(const void* data, int length) = 0;
 
 
   /**
-   * @brief Triggered when play buffer updated, once every 1 second
+   * @brief Reports the playback duration that the buffered data can support.
    *
-   * @param int cached buffer during playing, in milliseconds
+   * @details
+   * When playing online media resources, the SDK triggers this callback every two seconds to report
+   * the playback duration that the currently buffered data can support.
+   * - When the playback duration supported by the buffered data is less than the threshold (0 by
+   * default), the SDK returns `PLAYER_EVENT_BUFFER_LOW` (6).
+   * - When the playback duration supported by the buffered data is greater than the threshold (0 by
+   * default), the SDK returns `PLAYER_EVENT_BUFFER_RECOVER` (7).
+   *
+   * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
+   *
    */
   virtual void onPlayBufferUpdated(int64_t playCachedBuffer) = 0;
 
 
   /**
-   * @brief Triggered when the player preloadSrc
+   * @brief Reports the events of preloaded media resources.
    *
-   * @param event
+   * @param src The URL of the media resource.
+   * @param event Events that occur when media resources are preloaded. See `PLAYER_PRELOAD_EVENT`.
+   *
    */
   virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) = 0;
 
@@ -472,43 +497,65 @@ class IMediaPlayerSourceObserver {
   virtual void onAgoraCDNTokenWillExpire() = 0;
 
   /**
-   * @brief Reports current playback source bitrate changed.
-   * @brief Reports current playback source info changed.
+   * @brief Occurs when the video bitrate of the media resource changes.
    *
-   * @param from Streaming media information before the change.
-   * @param to Streaming media information after the change.
+   * @param from Information about the video bitrate of the media resource being played. See
+   * `SrcInfo`.
+   * @param to Information about the changed video bitrate of media resource being played. See
+   * `SrcInfo`.
+   *
    */
   virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) = 0;
 
-   /**
-   * @brief Triggered when media player information updated.
+  /**
+   * @brief Occurs when information related to the media player changes.
    *
-   * @param info Include information of media player.
+   * @details
+   * When the information about the media player changes, the SDK triggers this callback. You can use
+   * this callback for troubleshooting.
+   *
+   * @param info Information related to the media player. See `PlayerUpdatedInfo`.
+   *
    */
   virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info) = 0;
 
-   /**
-   * @brief Triggered every 1 second, reports the statistics of the files being cached.
-   * 
-   * @param stats Cached file statistics.
+  /**
+   * @brief Reports the statistics of the media file being cached.
+   *
+   * @details
+   * After you call the `openWithMediaSource` method and set `enableCache` as `true`, the SDK triggers
+   * this callback once per second to report the statistics of the media file being cached.
+   *
+   * @param stats The statistics of the media file being cached. See `CacheStatistics`.
+   *
    */
   virtual void onPlayerCacheStats(const media::base::CacheStatistics& stats) {
     (void)stats;
   }
 
-   /**
-   * @brief Triggered every 1 second, reports the statistics of the media stream being played.
-   * 
-   * @param stats The statistics of the media stream.
+  /**
+   * @brief The statistics of the media file being played.
+   *
+   * @details
+   * The SDK triggers this callback once per second to report the statistics of the media file being
+   * played.
+   *
+   * @param stats The statistics of the media file. See `PlayerPlaybackStats`.
+   *
    */
   virtual void onPlayerPlaybackStats(const media::base::PlayerPlaybackStats& stats) {
     (void)stats;
   }
   
   /**
-   * @brief Triggered  every 200 millisecond ,update player current volume range [0,255]
+   * @brief Reports the volume of the media player.
    *
-   * @param volume volume of current player.
+   * @details
+   * The SDK triggers this callback every 200 milliseconds to report the current volume of the media
+   * player.
+   *
+   * @param volume The volume of the media player. The value ranges from 0 to 255.
+   *
    */
   virtual void onAudioVolumeIndication(int volume) = 0;
 };

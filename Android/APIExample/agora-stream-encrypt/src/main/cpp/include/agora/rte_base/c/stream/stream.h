@@ -65,9 +65,24 @@ typedef enum RteVideoDegradationPreference {
   kRteVideoDegradationPreferenceDisabled,
 } RteVideoDegradationPreference;
 
+/**
+ * @brief Video mirror mode.
+ */
 typedef enum RteVideoMirrorMode {
+  /**
+   * 0: Mirror mode is decided by the SDK.
+   * - Local view mirror mode: If you use the front camera, local view mirror mode is enabled by
+   * default; if you use the rear camera, it is disabled by default.
+   * - Remote user view mirror mode: Disabled by default.
+   */
   kRteVideoMirrorModeAuto,
+  /**
+   * 1: Enable mirror mode.
+   */
   kRteVideoMirrorModeEnabled,
+  /**
+   * 2: Disable mirror mode.
+   */
   kRteVideoMirrorModeDisabled,
 } RteVideoMirrorMode;
 
