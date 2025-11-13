@@ -15,22 +15,15 @@ namespace rtc {
 // OPTIONAL_ENUM_CLASS RTC_EVENT;
 
 /**
- * Rtc Connection.
+ * @brief Contains connection information.
  */
 struct RtcConnection {
   /**
-   *  The unique channel name for the AgoraRTC session in the string format. The string
-   * length must be less than 64 bytes. Supported character scopes are:
-   * - All lowercase English letters: a to z.
-   * - All uppercase English letters: A to Z.
-   * - All numeric characters: 0 to 9.
-   * - The space character.
-   * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-",
-   * ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   * The channel name.
    */
   const char* channelId;
   /**
-   * User ID: A 32-bit unsigned integer ranging from 1 to (2^32-1). It must be unique.
+   * The ID of the local user.
    */
   uid_t localUid;
 
@@ -1076,14 +1069,16 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   }
 
   /**
-   * @brief Report the multipath transmission statistics
-   *
-   * @post This callback is triggered after you set `enableMultipath` to `true` to enable multipath transmission.
+   * @brief Callback for multipath transmission statistics.
    *
    * @since 4.6.0
    *
-   * @param connection The RtcConnection object.
-   * @param stats The multipath statistics. See the MultipathStats structure for details.
+   * @details
+   * Call timing: This callback is triggered after you set `enableMultipath` to `true` to enable
+   * multipath transmission.
+   *
+   * @param stats Multipath transmission statistics. See `MultipathStats`.
+   *
    */
   virtual void onMultipathStats(const RtcConnection& connection, const MultipathStats& stats) {
     (void)stats;
@@ -1108,84 +1103,142 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
 
 class IRtcEngineEx : public IRtcEngine {
 public:
-   /**
-    * Joins a channel with media options.
-    *
-    * This method enables users to join a channel. Users in the same channel can talk to each other,
-    * and multiple users in the same channel can start a group chat. Users with different App IDs
-    * cannot call each other.
-    *
-    * A successful call of this method triggers the following callbacks:
-    * - The local client: The `onJoinChannelSuccess` and `onConnectionStateChanged` callbacks.
-    * - The remote client: `onUserJoined`, if the user joining the channel is in the Communication
-    * profile or is a host in the Live-broadcasting profile.
-    *
-    * When the connection between the client and Agora's server is interrupted due to poor network
-    * conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins
-    * the channel, the SDK triggers the `onRejoinChannelSuccess` callback on the local client.
-    *
-    * Compared to `joinChannel`, this method adds the options parameter to configure whether to
-    * automatically subscribe to all remote audio and video streams in the channel when the user
-    * joins the channel. By default, the user subscribes to the audio and video streams of all
-    * the other users in the channel, giving rise to usage and billings. To unsubscribe, set the
-    * `options` parameter or call the `mute` methods accordingly.
-    *
-    * @note
-    * - This method allows users to join only one channel at a time.
-    * - Ensure that the app ID you use to generate the token is the same app ID that you pass in the
-    * `initialize` method; otherwise, you may fail to join the channel by token.
-    *
-    * @param connection The RtcConnection object.
-    * @param token The token generated on your server for authentication.
-    * @param options The channel media options: ChannelMediaOptions.
-    * @param eventHandler The event handler: IRtcEngineEventHandler.
-    *
-    * @return
-    * - 0: Success.
-    * - < 0: Failure.
-    *   - -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set
-    * to an integer, or the value of a member in the `ChannelMediaOptions` structure is invalid. You need
-    * to pass in a valid parameter and join the channel again.
-    *   - -3: Failes to initialize the `IRtcEngine` object. You need to reinitialize the IRtcEngine object.
-    *   - -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine
-    * object before calling this method.
-    *   - -8: The internal state of the IRtcEngine object is wrong. The typical cause is that you call
-    * this method to join the channel without calling `stopEchoTest` to stop the test after calling
-    * `startEchoTest` to start a call loop test. You need to call `stopEchoTest` before calling this method.
-    *   - -17: The request to join the channel is rejected. The typical cause is that the user is in the
-    * channel. Agora recommends using the `onConnectionStateChanged` callback to get whether the user is
-    * in the channel. Do not call this method to join the channel unless you receive the
-    * `CONNECTION_STATE_DISCONNECTED(1)` state.
-    *   - -102: The channel name is invalid. You need to pass in a valid channel name in channelId to
-    * rejoin the channel.
-    *   - -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
-    */
+    /**
+     * @brief Joins a channel.
+     *
+     * @details
+     * You can call this method multiple times to join more than one channel. If you want to join the
+     * same channel from different devices, ensure that the user IDs are different for all devices.
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
+     * Call timing: Call this method after `initialize`.
+     * In a multi-camera capture scenario, you need to call the `startPreview(VIDEO_SOURCE_TYPE
+     * sourceType)` method after
+     * calling this method to set the `sourceType` to `VIDEO_SOURCE_CAMERA_SECONDARY`, to ensure that
+     * the second camera captures normally.
+     * Related callbacks: A successful call of this method triggers the following callbacks:
+     * - The local client: The `onJoinChannelSuccess` and `onConnectionStateChanged` callbacks.
+     * - The remote client: The `onUserJoined` callback, if a user joining the channel in the
+     * COMMUNICATION profile, or a host joining a channel in the LIVE_BROADCASTING profile.
+     * When the connection between the local client and Agora's server is interrupted due to poor
+     * network conditions, the SDK tries reconnecting to the server. When the local client successfully
+     * rejoins the channel, the SDK triggers the `onRejoinChannelSuccess` callback on the local client.
+     *
+     * @note
+     * If you are already in a channel, you cannot rejoin the channel with the same user ID.
+     * Before joining a channel, ensure that the App ID you use to generate a token is the same as that
+     * you pass in the `initialize` method; otherwise, you may fail to join the channel with the token.
+     *
+     * @param token The token generated on your server for authentication. See .Note:
+     * - (Recommended) If your project has enabled the security mode (using APP ID and Token for
+     * authentication), this parameter is required.
+     * - If you have only enabled the testing mode (using APP ID for authentication), this parameter is
+     * optional. You will automatically exit the channel 24 hours after successfully joining in.
+     * - If you need to join different channels at the same time or switch between channels, Agora
+     * recommends using a wildcard token so that you don't need to apply for a new token every time
+     * joining a channel. See `Secure authentication with tokens`.
+     * @param connection The connection information. See `RtcConnection`.
+     * @param options The channel media options. See `ChannelMediaOptions`.
+     * @param eventHandler The callback class of `IRtcEngineEx`. See `IRtcEngineEventHandler`. You can
+     * get the callback events of multiple channels through the `eventHandler` object passed in this
+     * parameter.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     *   - -2: The parameter is invalid. For example, the token is invalid, the `uid` parameter is not
+     * set to an integer, or the value of a member in `ChannelMediaOptions` is invalid. You need to pass
+     * in a valid parameter and join the channel again.
+     *   - -3: Fails to initialize the `IRtcEngine` object. You need to reinitialize the `IRtcEngine`
+     * object.
+     *   - -7: The `IRtcEngine` object has not been initialized. You need to initialize the `IRtcEngine`
+     * object before calling this method.
+     *   - -8: The internal state of the `IRtcEngine` object is wrong. The typical cause is that after
+     * calling `startEchoTest` to start a call loop test, you call this method to join the channel
+     * without calling `stopEchoTest` to stop the test. You need to call `stopEchoTest` before calling
+     * this method.
+     *   - -17: The request to join the channel is rejected. The typical cause is that the user is
+     * already in the channel. Agora recommends that you use the `onConnectionStateChanged` callback to
+     * see whether the user is in the channel. Do not call this method to join the channel unless you
+     * receive the `CONNECTION_STATE_DISCONNECTED` (1) state.
+     *   - -102: The channel name is invalid. You need to pass in a valid channel name in `channelId` to
+     * rejoin the channel.
+     *   - -121: The user ID is invalid. You need to pass in a valid user ID in `uid` to rejoin the
+     * channel.
+     */
     virtual int joinChannelEx(const char* token, const RtcConnection& connection,
                               const ChannelMediaOptions& options,
                               IRtcEngineEventHandler* eventHandler) = 0;
 
-  /**
-   * Leaves the channel.
-   *
-   * This method allows a user to leave the channel, for example, by hanging up or exiting a call.
-   *
-   * This method is an asynchronous call, which means that the result of this method returns even before
-   * the user has not actually left the channel. Once the user successfully leaves the channel, the
-   * SDK triggers the \ref IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback.
-   *
-   * @param connection The RtcConnection object.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
+    /**
+     * @brief Leaves a channel.
+     *
+     * @details
+     * After calling this method, the SDK terminates the audio and video interaction, leaves the current
+     * channel, and releases all resources related to the session.
+     * After calling `joinChannelEx` to join a channel, you must call this method or
+     * `leaveChannelEx(const RtcConnection& connection, const LeaveChannelOptions& options)`
+     * to end the call, otherwise, the next call cannot be started.
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: A successful call of this method triggers the following callbacks:
+     * - The local client: The `onLeaveChannel` callback will be triggered.
+     * - The remote client: The `onUserOffline` callback will be triggered after the remote host leaves
+     * the channel.
+     *
+     * @note
+     * If you call `release` immediately after calling this method, the SDK does not trigger the
+     * `onLeaveChannel` callback.
+     * - This method call is asynchronous. When this method returns, it does not necessarily mean that
+     * the user has left the channel.
+     * - If you call `leaveChannel()` or `leaveChannel(const LeaveChannelOptions& options)`, you will
+     * leave all the channels you
+     * have joined by calling `joinChannel(const char* token, const char* channelId, const char* info,
+     * uid_t uid)`, `joinChannel(const char* token, const char* channelId, uid_t uid, const
+     * ChannelMediaOptions& options)`, or `joinChannelEx`.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int leaveChannelEx(const RtcConnection& connection) = 0;
 
     /**
-     * Leaves the channel with the connection ID.
+     * @brief Sets channel options and leaves the channel.
      *
-     * @param connection connection.
-     * @param options The options for leaving the channel. See #LeaveChannelOptions.
-     * @return int
+     * @details
+     * After calling this method, the SDK terminates the audio and video interaction, leaves the current
+     * channel, and releases all resources related to the session.
+     * After calling `joinChannelEx` to join a channel, you must call this method or
+     * `leaveChannelEx(const RtcConnection& connection)`
+     * to end the call, otherwise, the next call cannot be started.
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: A successful call of this method triggers the following callbacks:
+     * - The local client: The `onLeaveChannel` callback will be triggered.
+     * - The remote client: The `onUserOffline` callback will be triggered after the remote host leaves
+     * the channel.
+     *
+     * @note
+     * If you call `release` immediately after calling this method, the SDK does not trigger the
+     * `onLeaveChannel` callback.
+     * - This method call is asynchronous. When this method returns, it does not necessarily mean that
+     * the user has left the channel.
+     * - If you call `leaveChannel()` or `leaveChannel(const LeaveChannelOptions& options)`, you will
+     * leave all the channels you
+     * have joined by calling `joinChannel(const char* token, const char* channelId, const char* info,
+     * uid_t uid)`, `joinChannel(const char* token, const char* channelId, uid_t uid, const
+     * ChannelMediaOptions& options)`, or `joinChannelEx`.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     * @param options Since
+     * v4.1.0
+     * The options for leaving the channel. See `LeaveChannelOptions`.
+     * Note: This parameter only supports the `stopMicrophoneRecording` member in the
+     * `LeaveChannelOptions` settings; setting other members does not take effect.
+     *
+     * @return
      * - 0: Success.
      * - < 0: Failure.
      */
@@ -1241,67 +1294,90 @@ public:
     virtual int leaveChannelWithUserAccountEx(const char* channelId, const char* userAccount, const LeaveChannelOptions& options) = 0;
 
     /**
-     *  Updates the channel media options after joining the channel.
+     * @brief Updates the channel media options after joining the channel.
      *
-     * @param options The channel media options: ChannelMediaOptions.
-     * @param connection The RtcConnection object.
-     * @return int
+     * @param options The channel media options. See `ChannelMediaOptions`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
      * - 0: Success.
      * - < 0: Failure.
+     *   - -2: The value of a member in `ChannelMediaOptions` is invalid. For example, the token or the
+     * user ID is invalid. You need to fill in a valid parameter.
+     *   - -7: The `IRtcEngine` object has not been initialized. You need to initialize the `IRtcEngine`
+     * object before calling this method.
+     *   - -8: The internal state of the `IRtcEngine` object is wrong. The possible reason is that the
+     * user is not in the channel. Agora recommends that you use the `onConnectionStateChanged` callback
+     * to see whether the user is in the channel. If you receive the `CONNECTION_STATE_DISCONNECTED` (1)
+     * or `CONNECTION_STATE_FAILED` (5) state, the user is not in the channel. You need to call
+     * `joinChannel(const char* token, const char* channelId, uid_t uid, const ChannelMediaOptions&
+     * options)` to join a channel before calling this method.
      */
     virtual int updateChannelMediaOptionsEx(const ChannelMediaOptions& options, const RtcConnection& connection) = 0;
     /**
-     * Sets the video encoder configuration.
+     * @brief Sets the video encoder configuration.
      *
-     * Each configuration profile corresponds to a set of video parameters, including
-     * the resolution, frame rate, and bitrate.
+     * @details
+     * Sets the encoder configuration for the local video. Each configuration profile corresponds to a
+     * set of video parameters, including the resolution, frame rate, and bitrate.
+     * Call timing: Call this method after `joinChannelEx`.
      *
-     * The parameters specified in this method are the maximum values under ideal network conditions.
-     * If the video engine cannot render the video using the specified parameters due
-     * to poor network conditions, the parameters further down the list are considered
-     * until a successful configuration is found.
+     * @note The `config` specified in this method is the maximum value under ideal network conditions.
+     * If the video engine cannot render the video using the specified `config` due to unreliable
+     * network conditions, the parameters further down the list are considered until a successful
+     * configuration is found.
      *
-     * @param config The local video encoder configuration: VideoEncoderConfiguration.
-     * @param connection The RtcConnection object.
+     * @param config Video profile. See `VideoEncoderConfiguration`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
     virtual int setVideoEncoderConfigurationEx(const VideoEncoderConfiguration& config, const RtcConnection& connection) = 0;
     /**
-     * Initializes the video view of a remote user.
+     * @brief Initializes the video view of a remote user.
      *
-     * This method initializes the video view of a remote stream on the local device. It affects only the
-     * video view that the local user sees.
-     *
-     * Usually the app should specify the `uid` of the remote video in the method call before the
-     * remote user joins the channel. If the remote `uid` is unknown to the app, set it later when the
-     * app receives the \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" callback.
-     *
-     * To unbind the remote user from the view, set `view` in VideoCanvas as `null`.
+     * @details
+     * This method initializes the video view of a remote stream on the local device. It affects only
+     * the video view that the local user sees. Call this method to bind the remote video stream to a
+     * video view and to set the rendering and mirror modes of the video view.
+     * The application specifies the uid of the remote video in the `VideoCanvas` method before the
+     * remote user joins the channel.
+     * If the remote uid is unknown to the application, set it after the application receives the
+     * `onUserJoined` callback. If the Video Recording function is enabled, the Video Recording Service
+     * joins the channel as a dummy client, causing other clients to also receive the `onUserJoined`
+     * callback. Do not bind the dummy client to the application view because the dummy client does not
+     * send any video streams.
+     * To unbind the remote user from the view, set the `view` parameter to NULL.
+     * Once the remote user leaves the channel, the SDK unbinds the remote user.
      *
      * @note
-     * Ensure that you call this method in the UI thread.
+     * - Call this method after `joinChannelEx`.
+     * - To update the rendering or mirror mode of the remote video view during a call, use the
+     * `setRemoteRenderModeEx` method.
      *
-     * @param canvas The remote video view settings: VideoCanvas.
-     * @param connection The RtcConnection object.
+     * @param canvas The remote video view settings. See `VideoCanvas`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
     virtual int setupRemoteVideoEx(const VideoCanvas& canvas, const RtcConnection& connection) = 0;
     /**
-     * Stops or resumes receiving the audio stream of a specified user.
+     * @brief Stops or resumes receiving the audio stream of a specified user.
      *
-     * @note
-     * You can call this method before or after joining a channel. If a user
-     * leaves a channel, the settings in this method become invalid.
+     * @details
+     *             This method is used to stops or resumes receiving the audio stream of a specified
+     * user. You can call this method before or after joining a channel. If a user leaves a channel, the
+     * settings in this method become invalid.
      *
      * @param uid The ID of the specified user.
      * @param mute Whether to stop receiving the audio stream of the specified user:
-     * - true: Stop receiving the audio stream of the specified user.
-     * - false: (Default) Resume receiving the audio stream of the specified user.
-     * @param connection The RtcConnection object.
+     * - `true`: Stop receiving the audio stream of the specified user.
+     * - `false`: (Default) Resume receiving the audio stream of the specified user.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1309,17 +1385,18 @@ public:
      */
     virtual int muteRemoteAudioStreamEx(uid_t uid, bool mute, const RtcConnection& connection) = 0;
     /**
-     * Stops or resumes receiving the video stream of a specified user.
+     * @brief Stops or resumes receiving the video stream of a specified user.
      *
-     * @note
-     * You can call this method before or after joining a channel. If a user
-     * leaves a channel, the settings in this method become invalid.
+     * @details
+     * This method is used to stop or resume receiving the video stream of a specified user. You can
+     * call this method before or after joining a channel. If a user leaves a channel, the settings in
+     * this method become invalid.
      *
-     * @param uid The ID of the specified user.
+     * @param uid The user ID of the remote user.
      * @param mute Whether to stop receiving the video stream of the specified user:
-     * - true: Stop receiving the video stream of the specified user.
-     * - false: (Default) Resume receiving the video stream of the specified user.
-     * @param connection The RtcConnetion object.
+     * - `true`: Stop receiving the video stream of the specified user.
+     * - `false`: (Default) Resume receiving the video stream of the specified user.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1327,18 +1404,39 @@ public:
      */
     virtual int muteRemoteVideoStreamEx(uid_t uid, bool mute, const RtcConnection& connection) = 0;
     /**
-     * Sets the remote video stream type.
+     * @brief Sets the video stream type to subscribe to.
      *
-     * If the remote user has enabled the dual-stream mode, by default the SDK receives the high-stream video by
-     * Call this method to switch to the low-stream video.
+     * @details
+     * Depending on the default behavior of the sender and the specific settings when calling
+     * `setDualStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig& streamConfig)`, the
+     * scenarios for the receiver calling this method are as follows:
+     * - The SDK enables low-quality video stream adaptive mode ( `AUTO_SIMULCAST_STREAM` ) on the
+     * sender side by default, meaning only the high-quality video stream is transmitted. Only the
+     * receiver with the role of the **host**can call this method to initiate a low-quality video stream
+     * request. Once the sender receives the request, it starts automatically sending the low-quality
+     * video stream. At this point, all users in the channel can call this method to switch to
+     * low-quality video stream subscription mode.
+     * - If the sender calls `setDualStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig&
+     * streamConfig)` and sets `mode` to `DISABLE_SIMULCAST_STREAM`
+     * (never send low-quality video stream), then calling this method will have no effect.
+     * - If the sender calls `setDualStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig&
+     * streamConfig)` and sets `mode` to `ENABLE_SIMULCAST_STREAM`
+     * (always send low-quality video stream), both the host and audience receivers can call this method
+     * to switch to low-quality video stream subscription mode.
+     * The SDK will dynamically adjust the size of the corresponding video stream based on the size of
+     * the video window to save bandwidth and computing resources. The default aspect ratio of the
+     * low-quality video stream is the same as that of the high-quality video stream. According to the
+     * current aspect ratio of the high-quality video stream, the system will automatically allocate the
+     * resolution, frame rate, and bitrate of the low-quality video stream.
      *
-     * @note
-     * This method applies to scenarios where the remote user has enabled the dual-stream mode using
-     * \ref enableDualStreamMode "enableDualStreamMode"(true) before joining the channel.
+     * @note If the publisher has already called `setDualStreamModeEx` and set `mode` to
+     * `DISABLE_SIMULCAST_STREAM` (never send low-quality video stream), calling this method will not
+     * take effect, you should call `setDualStreamModeEx` again on the sending end and adjust the
+     * settings.
      *
-     * @param uid ID of the remote user sending the video stream.
-     * @param streamType Sets the video stream type: #VIDEO_STREAM_TYPE.
-     * @param connection The RtcConnection object.
+     * @param uid The user ID.
+     * @param streamType The video stream type, see `VIDEO_STREAM_TYPE`.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1346,76 +1444,112 @@ public:
      */
     virtual int setRemoteVideoStreamTypeEx(uid_t uid, VIDEO_STREAM_TYPE streamType, const RtcConnection& connection) = 0;
     /**
-     *Stops or resumes sending the local audio stream with connection.
+     * @brief Stops or resumes publishing the local audio stream.
      *
-     *@param mute Determines whether to send or stop sending the local audio stream:
-     *- true: Stop sending the local audio stream.
-     *- false: Send the local audio stream.
+     * @details
+     * A successful call of this method triggers the `onUserMuteAudio` and `onRemoteAudioStateChanged`
+     * callbacks on the remote client.
      *
-     *@param connection The connection of the user ID.
+     * @note This method does not affect any ongoing audio recording, because it does not disable the
+     * audio capture device.
      *
-     *@return
-     *- 0: Success.
-     *- < 0: Failure.
+     * @param mute Whether to stop publishing the local audio stream:
+     * - `true`: Stops publishing the local audio stream.
+     * - `false`: (Default) Resumes publishing the local audio stream.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int muteLocalAudioStreamEx(bool mute, const RtcConnection& connection) = 0;
 
     /**
-     *Stops or resumes sending the local video stream with connection.
+     * @brief Stops or resumes publishing the local video stream.
      *
-     *@param mute Determines whether to send or stop sending the local video stream:
-     *- true: Stop sending the local video stream.
-     *- false: Send the local video stream.
+     * @details
+     * A successful call of this method triggers the `onUserMuteVideo` callback on the remote client.
      *
-     *@param connection The connection of the user ID.
+     * @note This method does not affect any ongoing video recording, because it does not disable the
+     * camera.
      *
-     *@return
-     *- 0: Success.
-     *- < 0: Failure.
+     * @param mute Whether to stop publishing the local video stream.
+     * - `true`: Stop publishing the local video stream.
+     * - `false`: (Default) Publish the local video stream.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int muteLocalVideoStreamEx(bool mute, const RtcConnection& connection) = 0;
 
     /**
-     *Stops or resumes receiving all remote audio stream with connection.
+     * @brief Stops or resumes subscribing to the audio streams of all remote users.
      *
-     *@param mute Whether to stop receiving remote audio streams:
-     *- true: Stop receiving any remote audio stream.
-     *- false: Resume receiving all remote audio streams.
+     * @details
+     * After successfully calling this method, the local user stops or resumes subscribing to the audio
+     * streams of all remote users, including the ones join the channel subsequent to this call.
      *
-     *@param connection The connection of the user ID.
+     * @note
+     * - Call this method after joining a channel.
+     * - If you do not want to subscribe the audio streams of remote users before joining a channel, you
+     * can set `autoSubscribeAudio` as `false` when calling `joinChannel(const char* token, const char*
+     * channelId, uid_t uid, const ChannelMediaOptions& options)`.
      *
-     *@return
-     *- 0: Success.
-     *- < 0: Failure.
+     * @param mute Whether to stop subscribing to the audio streams of all remote users:
+     * - `true`: Stops subscribing to the audio streams of all remote users.
+     * - `false`: (Default) Subscribes to the audio streams of all remote users by default.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int muteAllRemoteAudioStreamsEx(bool mute, const RtcConnection& connection) = 0;
 
     /**
-     *Stops or resumes receiving all remote video stream with connection.
+     * @brief Stops or resumes subscribing to the video streams of all remote users.
      *
-     *@param mute Whether to stop receiving remote audio streams:
-     *- true: Stop receiving any remote audio stream.
-     *- false: Resume receiving all remote audio streams.
+     * @details
+     * After successfully calling this method, the local user stops or resumes subscribing to the video
+     * streams of all remote users, including all subsequent users.
      *
-     *@param connection The connection of the user ID.
+     * @param mute Whether to stop subscribing to the video streams of all remote users.
+     * - `true`: Stop subscribing to the video streams of all remote users.
+     * - `false`: (Default) Subscribe to the video streams of all remote users by default.
+     * @param connection The connection information. See `RtcConnection`.
      *
-     *@return
-     *- 0: Success.
-     *- < 0: Failure.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int muteAllRemoteVideoStreamsEx(bool mute, const RtcConnection& connection) = 0;
 
 
     /**
-     * Sets the blocklist of subscribe remote stream audio.
+     * @brief Sets the blocklist of subscriptions for audio streams.
+     *
+     * @details
+     * You can call this method to specify the audio streams of a user that you do not want to subscribe
+     * to.
      *
      * @note
-     * If uid is in uidList, the remote user's audio will not be subscribed,
-     * even if muteRemoteAudioStream(uid, false) and muteAllRemoteAudioStreams(false) are operated.
+     * - You can call this method either before or after joining a channel.
+     * - The blocklist is not affected by the setting in `muteRemoteAudioStream`,
+     * `muteAllRemoteAudioStreams`, and `autoSubscribeAudio` in `ChannelMediaOptions`.
+     * - Once the blocklist of subscriptions is set, it is effective even if you leave the current
+     * channel and rejoin the channel.
+     * - If a user is added in the allowlist and blocklist at the same time, only the blocklist takes
+     * effect.
      *
-     * @param uidList The id list of users who do not subscribe to audio.
-     * @param uidNumber The number of uid in uidList.
-     * @param connection The RtcConnection object.
+     * @param uidList The user ID list of users that you do not want to subscribe to.
+     * If you want to specify the audio streams of a user that you do not want to subscribe to, add the
+     * user ID in this list. If you want to remove a user from the blocklist, you need to call the
+     * `setSubscribeAudioBlocklist` method to update the user ID list; this means you only add the `uid`
+     * of users that you do not want to subscribe to in the new user ID list.
+     * @param uidNumber The number of users in the user ID list.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1424,16 +1558,27 @@ public:
     virtual int setSubscribeAudioBlocklistEx(uid_t* uidList, int uidNumber, const RtcConnection& connection) = 0;
 
     /**
-     * Sets the allowlist of subscribe remote stream audio.
+     * @brief Sets the allowlist of subscriptions for audio streams.
+     *
+     * @details
+     * You can call this method to specify the audio streams of a user that you want to subscribe to.
      *
      * @note
-     * - If uid is in uidList, the remote user's audio will be subscribed,
-     * even if muteRemoteAudioStream(uid, true) and muteAllRemoteAudioStreams(true) are operated.
-     * - If a user is in the blacklist and whitelist at the same time, the user will not subscribe to audio.
+     * - You can call this method either before or after joining a channel.
+     * - The allowlist is not affected by the setting in `muteRemoteAudioStream`,
+     * `muteAllRemoteAudioStreams` and `autoSubscribeAudio` in `ChannelMediaOptions`.
+     * - Once the allowlist of subscriptions is set, it is effective even if you leave the current
+     * channel and rejoin the channel.
+     * - If a user is added in the allowlist and blocklist at the same time, only the blocklist takes
+     * effect.
      *
-     * @param uidList The id list of users who do subscribe to audio.
-     * @param uidNumber The number of uid in uidList.
-     * @param connection The RtcConnection object.
+     * @param uidList The user ID list of users that you want to subscribe to.
+     * If you want to specify the audio streams of a user for subscription, add the user ID in this
+     * list. If you want to remove a user from the allowlist, you need to call the
+     * `setSubscribeAudioAllowlist` method to update the user ID list; this means you only add the `uid`
+     * of users that you want to subscribe to in the new user ID list.
+     * @param uidNumber The number of users in the user ID list.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1442,15 +1587,28 @@ public:
     virtual int setSubscribeAudioAllowlistEx(uid_t* uidList, int uidNumber, const RtcConnection& connection) = 0;
 
     /**
-     * Sets the blocklist of subscribe remote stream video.
+     * @brief Sets the blocklist of subscriptions for video streams.
+     *
+     * @details
+     * You can call this method to specify the video streams of a user that you do not want to subscribe
+     * to.
      *
      * @note
-     * If uid is in uidList, the remote user's video will not be subscribed,
-     * even if muteRemoteVideoStream(uid, false) and muteAllRemoteVideoStreams(false) are operated.
+     * - You can call this method either before or after joining a channel.
+     * - The blocklist is not affected by the setting in `muteRemoteVideoStream`,
+     * `muteAllRemoteVideoStreams` and `autoSubscribeAudio` in `ChannelMediaOptions`.
+     * - Once the blocklist of subscriptions is set, it is effective even if you leave the current
+     * channel and rejoin the channel.
+     * - If a user is added in the allowlist and blocklist at the same time, only the blocklist takes
+     * effect.
      *
-     * @param uidList The id list of users who do not subscribe to video.
-     * @param uidNumber The number of uid in uidList.
-     * @param connection The RtcConnection object.
+     * @param uidList The user ID list of users that you do not want to subscribe to.
+     * If you want to specify the video streams of a user that you do not want to subscribe to, add the
+     * user ID of that user in this list. If you want to remove a user from the blocklist, you need to
+     * call the `setSubscribeVideoBlocklist` method to update the user ID list; this means you only add
+     * the `uid` of users that you do not want to subscribe to in the new user ID list.
+     * @param uidNumber The number of users in the user ID list.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1459,16 +1617,27 @@ public:
     virtual int setSubscribeVideoBlocklistEx(uid_t* uidList, int uidNumber, const RtcConnection& connection) = 0;
 
     /**
-     * Sets the allowlist of subscribe remote stream video.
+     * @brief Sets the allowlist of subscriptions for video streams.
+     *
+     * @details
+     * You can call this method to specify the video streams of a user that you want to subscribe to.
      *
      * @note
-     * - If uid is in uidList, the remote user's video will be subscribed,
-     * even if muteRemoteVideoStream(uid, true) and muteAllRemoteVideoStreams(true) are operated.
-     * - If a user is in the blacklist and whitelist at the same time, the user will not subscribe to video.
+     * - You can call this method either before or after joining a channel.
+     * - The allowlist is not affected by the setting in `muteRemoteVideoStream`,
+     * `muteAllRemoteVideoStreams` and `autoSubscribeAudio` in `ChannelMediaOptions`.
+     * - Once the allowlist of subscriptions is set, it is effective even if you leave the current
+     * channel and rejoin the channel.
+     * - If a user is added in the allowlist and blocklist at the same time, only the blocklist takes
+     * effect.
      *
-     * @param uidList The id list of users who do subscribe to video.
-     * @param uidNumber The number of uid in uidList.
-     * @param connection The RtcConnection object.
+     * @param uidList The user ID list of users that you want to subscribe to.
+     * If you want to specify the video streams of a user for subscription, add the user ID of that user
+     * in this list. If you want to remove a user from the allowlist, you need to call the
+     * `setSubscribeVideoAllowlist` method to update the user ID list; this means you only add the `uid`
+     * of users that you want to subscribe to in the new user ID list.
+     * @param uidNumber The number of users in the user ID list.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1476,38 +1645,48 @@ public:
      */
     virtual int setSubscribeVideoAllowlistEx(uid_t* uidList, int uidNumber, const RtcConnection& connection) = 0;
     /**
-     * Sets the remote video subscription options
+     * @brief Sets options for subscribing to remote video streams.
      *
+     * @details
+     * When a remote user has enabled dual-stream mode, you can call this method to choose the option
+     * for subscribing to the video streams sent by the remote user.
      *
-     * @param uid ID of the remote user sending the video stream.
-     * @param options Sets the video subscription options: VideoSubscriptionOptions.
-     * @param connection The RtcConnection object.
+     * @param uid The user ID of the remote user.
+     * @param options The video subscription options. See `VideoSubscriptionOptions`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
     virtual int setRemoteVideoSubscriptionOptionsEx(uid_t uid, const VideoSubscriptionOptions& options, const RtcConnection& connection) = 0;
-    /** Sets the sound position and gain of a remote user.
-
-    When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
-
-    @note
-    - For this method to work, enable stereo panning for remote users by calling the \ref agora::rtc::IRtcEngine::enableSoundPositionIndication "enableSoundPositionIndication" method before joining a channel.
-    - This method requires hardware support. For the best sound positioning, we recommend using a wired headset.
-    - Ensure that you call this method after joining a channel.
-
-    @param uid The ID of the remote user.
-    @param pan The sound position of the remote user. The value ranges from -1.0 to 1.0:
-    - 0.0: the remote sound comes from the front.
-    - -1.0: the remote sound comes from the left.
-    - 1.0: the remote sound comes from the right.
-    @param gain Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
-    @param connection The RtcConnection object.
-
-    @return
-    - 0: Success.
-    - < 0: Failure.
-    */
+    /**
+     * @brief Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
+     *
+     * @details
+     * This method sets the voice position and volume of a remote user.
+     * When the local user calls this method to set the voice position of a remote user, the voice
+     * difference between the left and right channels allows the local user to track the real-time
+     * position of the remote user, creating a sense of space. This method applies to massive
+     * multiplayer online games, such as Battle Royale games.
+     *
+     * @note
+     * - For the best voice positioning, Agora recommends using a wired headset.
+     * - Call this method after joining a channel.
+     *
+     * @param uid The user ID of the remote user.
+     * @param pan The voice position of the remote user. The value ranges from -1.0 to 1.0:
+     * - -1.0: The remote voice comes from the left.
+     * - 0.0: (Default) The remote voice comes from the front.
+     * - 1.0: The remote voice comes from the right.
+     * @param gain The volume of the remote user. The value ranges from 0.0 to 100.0. The default value
+     * is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int setRemoteVoicePositionEx(uid_t uid, double pan, double gain, const RtcConnection& connection) = 0;
     /** Sets remote user parameters for spatial audio
 
@@ -1521,21 +1700,21 @@ public:
     */
     virtual int setRemoteUserSpatialAudioParamsEx(uid_t uid, const agora::SpatialAudioParams& params, const RtcConnection& connection) = 0;
     /**
-     * Updates the display mode of the video view of a remote user.
+     * @brief Sets the video display mode of a specified remote user.
      *
+     * @details
      * After initializing the video view of a remote user, you can call this method to update its
      * rendering and mirror modes. This method affects only the video view that the local user sees.
      *
      * @note
-     * - Ensure that you have called \ref setupRemoteVideo "setupRemoteVideo" to initialize the remote video
-     * view before calling this method.
+     * - Call this method after initializing the remote view by calling the `setupRemoteVideo` method.
      * - During a call, you can call this method as many times as necessary to update the display mode
      * of the video view of a remote user.
      *
-     * @param uid ID of the remote user.
-     * @param renderMode Sets the remote display mode. See #RENDER_MODE_TYPE.
-     * @param mirrorMode Sets the mirror type. See #VIDEO_MIRROR_MODE_TYPE.
-     * @param connection The RtcConnection object.
+     * @param uid The user ID of the remote user.
+     * @param renderMode The video display mode of the remote user. See `RENDER_MODE_TYPE`.
+     * @param mirrorMode The mirror mode of the remote user view. See `VIDEO_MIRROR_MODE_TYPE`.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1543,21 +1722,29 @@ public:
      */
     virtual int setRemoteRenderModeEx(uid_t uid, media::base::RENDER_MODE_TYPE renderMode,
                                       VIDEO_MIRROR_MODE_TYPE mirrorMode, const RtcConnection& connection) = 0;
-    /** Enables loopback recording.
+    /**
+     * @brief Enables loopback audio capturing.
      *
-     * If you enable loopback recording, the output of the default sound card is mixed into
-     * the audio stream sent to the other end.
+     * @details
+     * If you enable loopback audio capturing, the output of the sound card is mixed into the audio
+     * stream sent to the other end.
      *
-     * @note This method is for Windows only.
+     * @note
+     * - This method applies to the macOS and Windows only.
+     * - macOS does not support loopback audio capture of the default sound card. If you need to use
+     * this function, use a virtual sound card and pass its name to the `deviceName` parameter. Agora
+     * recommends using AgoraALD as the virtual sound card for audio capturing.
+     * - This method only supports using one sound card for audio capturing.
      *
-     * @param connection The RtcConnection object.
-     * @param enabled Sets whether to enable/disable loopback recording.
-     * - true: Enable loopback recording.
-     * - false: (Default) Disable loopback recording.
-     * @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
-     * - This method is for macOS and Windows only.
-     * - macOS does not support loopback capturing of the default sound card. If you need to use this method,
-     * please use a virtual sound card and pass its name to the deviceName parameter. Agora has tested and recommends using soundflower.
+     * @param connection The connection information. See `RtcConnection`.
+     * @param enabled Sets whether to enable loopback audio capture:
+     * - `true`: Enable loopback audio capturing.
+     * - `false`: (Default) Disable loopback audio capturing.
+     * @param deviceName - macOS: The device name of the virtual sound card. The default value is set to
+     * NULL, which means using AgoraALD for loopback audio capturing.
+     * - Windows: The device name of the sound card. The default is set to NULL, which means the SDK
+     * uses the sound card of your device for loopback audio capturing.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
@@ -1596,19 +1783,20 @@ public:
     virtual int muteRecordingSignalEx(bool mute, const RtcConnection& connection) = 0;
 
     /**
-     * Adjust the playback signal volume of a specified remote user.
-     * You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
+     * @brief Adjusts the playback signal volume of a specified remote user.
      *
-     * @note
-     * The playback volume here refers to the mixed volume of a specified remote user.
-     * This method can only adjust the playback volume of one specified remote user at a time. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
+     * @details
+     * You can call this method to adjust the playback volume of a specified remote user. To adjust the
+     * playback volume of different remote users, call the method as many times, once for each remote
+     * user.
+     * Call timing: Call this method after `joinChannelEx`.
      *
-     * @param uid The ID of the remote user.
-     * @param volume The playback volume of the specified remote user. The value ranges between 0 and 400, including the following:
-     *
+     * @param uid The user ID of the remote user.
+     * @param volume The volume of the user. The value range is [0,400].
      * - 0: Mute.
-     * - 100: (Default) Original volume.
-     * @param connection  RtcConnection
+     * - 100: (Default) The original volume.
+     * - 400: Four times the original volume (amplifying the audio signals by four times).
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1616,104 +1804,135 @@ public:
      */
     virtual int adjustUserPlaybackSignalVolumeEx(uid_t uid, int volume, const RtcConnection& connection) = 0;
 
-    /** Gets the current connection state of the SDK.
-     @param connection The RtcConnection object.
-     @return #CONNECTION_STATE_TYPE.
+    /**
+     * @brief Gets the current connection state of the SDK.
+     *
+     * @details
+     * Call timing: This method can be called either before or after joining the channel.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * The current connection state. See `CONNECTION_STATE_TYPE`.
      */
     virtual CONNECTION_STATE_TYPE getConnectionStateEx(const RtcConnection& connection) = 0;
-    /** Enables/Disables the built-in encryption.
+    /**
+     * @brief Enables or disables the built-in encryption.
      *
-     * In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
-     *
-     * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+     * @details
+     * After the user leaves the channel, the SDK automatically disables the built-in encryption. To
+     * enable the built-in encryption, call this method before the user joins the channel again.
+     * Applicable scenarios: Scenarios with higher security requirements.
+     * Call timing: Call this method before joining a channel.
      *
      * @note
-     * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+     * - All users within the same channel must set the same encryption configurations when calling this
+     * method.
+     * - If you enable the built-in encryption, you cannot use the Media Push function.
      *
-     * @param connection The RtcConnection object.
-     * @param enabled Whether to enable the built-in encryption:
+     * @param enabled Whether to enable built-in encryption:
      * - true: Enable the built-in encryption.
-     * - false: Disable the built-in encryption.
-     * @param config Configurations of built-in encryption schemas. See EncryptionConfig.
+     * - false: (Default) Disable the built-in encryption.
+     * @param config Built-in encryption configurations. See `EncryptionConfig`.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *  - -2(ERR_INVALID_ARGUMENT): An invalid parameter is used. Set the parameter with a valid value.
-     *  - -4(ERR_NOT_SUPPORTED): The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
-     *  - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
      */
     virtual int enableEncryptionEx(const RtcConnection& connection, bool enabled, const EncryptionConfig& config) = 0;
-    /** Creates a data stream.
+    /**
+     * @brief Creates a data stream.
      *
-     * You can call this method to create a data stream and improve the
-     * reliability and ordering of data tranmission.
+     * @details
+     * You can call this method to create a data stream and improve the reliability and ordering of data
+     * transmission.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: After setting `reliable` to `true`, if the recipient does not receive the data
+     * within five seconds, the SDK triggers the `onStreamMessageError` callback and returns an error
+     * code.
      *
-     * @note
-     * - Ensure that you set the same value for `reliable` and `ordered`.
-     * - Each user can only create a maximum of 5 data streams during a RtcEngine
-     * lifecycle.
-     * - The data channel allows a data delay of up to 5 seconds. If the receiver
-     * does not receive the data stream within 5 seconds, the data channel reports
-     * an error.
+     * @note Each user can create up to five data streams during the lifecycle of `IRtcEngine`. The data
+     * stream will be destroyed when leaving the channel, and the data stream needs to be recreated if
+     * needed.
      *
-     * @param[out] streamId The ID of the stream data.
-     * @param reliable Sets whether the recipients are guaranteed to receive
-     * the data stream from the sender within five seconds:
-     * - true: The recipients receive the data stream from the sender within
-     * five seconds. If the recipient does not receive the data stream within
-     * five seconds, an error is reported to the application.
-     * - false: There is no guarantee that the recipients receive the data stream
-     * within five seconds and no error message is reported for any delay or
-     * missing data stream.
-     * @param ordered Sets whether the recipients receive the data stream
-     * in the sent order:
-     * - true: The recipients receive the data stream in the sent order.
-     * - false: The recipients do not receive the data stream in the sent order.
-     * @param connection The RtcConnection object.
+     * @param streamId An output parameter; the ID of the data stream created.
+     * @param reliable Sets whether the recipients are guaranteed to receive the data stream within five
+     * seconds:
+     * - `true`: The recipients receive the data from the sender within five seconds. If the recipient
+     * does not receive the data within five seconds, the SDK triggers the `onStreamMessageError`
+     * callback and returns an error code.
+     * - `false`: There is no guarantee that the recipients receive the data stream within five seconds
+     * and no error message is reported for any delay or missing data stream.
+     * Attention: Please ensure that `reliable` and `ordered` are either both set to`true` or both set
+     * to `false`.
+     * @param ordered Sets whether the recipients receive the data stream in the sent order:
+     * - `true`: The recipients receive the data in the sent order.
+     * - `false`: The recipients do not receive the data in the sent order.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
-     * - 0: Success.
+     * - 0: The data stream is successfully created.
      * - < 0: Failure.
      */
     virtual int createDataStreamEx(int* streamId, bool reliable, bool ordered, const RtcConnection& connection) = 0;
-    /** Creates a data stream.
+    /**
+     * @brief Creates a data stream.
      *
-     * Each user can create up to five data streams during the lifecycle of the IChannel.
-     * @param streamId The ID of the created data stream.
-     * @param config  The config of data stream.
-     * @param connection The RtcConnection object.
-     * @return int
-     * - Returns 0: Success.
+     * @details
+     * Compared to `createDataStreamEx(int* streamId, bool reliable, bool ordered, const RtcConnection&
+     * connection)`, this method does not guarantee the reliability of data
+     * transmission. If a data packet is not received five seconds after it was sent, the SDK directly
+     * discards the data.
+     * Call timing: Call this method after `joinChannelEx`.
+     *
+     * @note
+     * Each user can create up to five data streams during the lifecycle of `IRtcEngine`. The data
+     * stream will be destroyed when leaving the channel, and the data stream needs to be recreated if
+     * needed.
+     * If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
+     * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+     *
+     * @param streamId An output parameter; the ID of the data stream created.
+     * @param config The configurations for the data stream. See `DataStreamConfig`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: The data stream is successfully created.
      * - < 0: Failure.
      */
     virtual int createDataStreamEx(int* streamId, const DataStreamConfig& config, const RtcConnection& connection) = 0;
-    /** Sends a data stream.
+    /**
+     * @brief Sends data stream messages.
      *
-     * After calling \ref IRtcEngine::createDataStream "createDataStream", you can call
-     * this method to send a data stream to all users in the channel.
-     *
+     * @details
+     * After calling `createDataStreamEx(int* streamId, const DataStreamConfig& config, const
+     * RtcConnection& connection)`, you can call this method to send data stream messages
+     * to all users in the channel.
      * The SDK has the following restrictions on this method:
-     * - Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
-     * - Each client can send up to 30 KB of data per second.
-     * - Each user can have up to five data streams simultaneously.
-     *
-     * After the remote user receives the data stream within 5 seconds, the SDK triggers the
-     * \ref IRtcEngineEventHandler::onStreamMessage "onStreamMessage" callback on
-     * the remote client. After the remote user does not receive the data stream within 5 seconds,
-     * the SDK triggers the \ref IRtcEngineEventHandler::onStreamMessageError "onStreamMessageError"
+     * - Each client within the channel can have up to 5 data channels simultaneously, with a total
+     * shared packet bitrate limit of 30 KB/s for all data channels.
+     * - Each data channel can send up to 60 packets per second, with each packet being a maximum of 1
+     * KB.
+     * A successful method call triggers the `onStreamMessage` callback on the remote client, from which
+     * the remote user gets the stream message. A failed method call triggers the `onStreamMessageError`
      * callback on the remote client.
      *
      * @note
-     * - Call this method after calling \ref IRtcEngine::createDataStream "createDataStream".
-     * - This method applies only to the `COMMUNICATION` profile or to
-     * the hosts in the `LIVE_BROADCASTING` profile. If an audience in the
-     * `LIVE_BROADCASTING` profile calls this method, the audience may be switched to a host.
+     * - If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
+     * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+     * - Call this method after `joinChannelEx`.
+     * - Ensure that you call `createDataStreamEx(int* streamId, const DataStreamConfig& config, const
+     * RtcConnection& connection)` to create a data channel before calling this
+     * method.
      *
-     * @param streamId The ID of the stream data.
-     * @param data The data stream.
-     * @param length The length (byte) of the data stream.
-     * @param connection The RtcConnection object.
+     * @param streamId The data stream ID. You can get the data stream ID by calling
+     * `createDataStreamEx(int* streamId, const DataStreamConfig& config, const RtcConnection&
+     * connection)`
+     * .
+     * @param data The message to be sent.
+     * @param length The length of the data.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
@@ -1752,213 +1971,349 @@ public:
      */
     virtual int sendMediaControlMessageEx(uid_t uid, const char *data, size_t length, const RtcConnection& connection) = 0;
 
-    /** Adds a watermark image to the local video.
-
-    This method adds a PNG watermark image to the local video in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included),
-    and the recording device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
-
-    The watermark position depends on the settings in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method:
-    - If the orientation mode of the encoding video is #ORIENTATION_MODE_FIXED_LANDSCAPE, or the landscape mode in #ORIENTATION_MODE_ADAPTIVE, the watermark uses the landscape orientation.
-    - If the orientation mode of the encoding video is #ORIENTATION_MODE_FIXED_PORTRAIT, or the portrait mode in #ORIENTATION_MODE_ADAPTIVE, the watermark uses the portrait orientation.
-    - When setting the watermark position, the region must be less than the dimensions set in the `setVideoEncoderConfiguration` method. Otherwise, the watermark image will be cropped.
-
-    @note
-    - Ensure that you have called the \ref agora::rtc::IRtcEngine::enableVideo "enableVideo" method to enable the video module before calling this method.
-    - If you only want to add a watermark image to the local video for the audience in the CDN live broadcast channel to see and capture, you can call this method or the \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" method.
-    - This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
-    - If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
-    - If you have enabled the local video preview by calling the \ref agora::rtc::IRtcEngine::startPreview "startPreview" method, you can use the `visibleInPreview` member in the WatermarkOptions class to set whether or not the watermark is visible in preview.
-    - If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
-
-    @param watermarkUrl The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
-    @param options Pointer to the watermark's options to be added. See WatermarkOptions for more infomation.
-    @param connection The RtcConnection object.
-
-    @return int
-    - 0: Success.
-    - < 0: Failure.
-
-    @deprecated v4.6.0. This method is deprecated. Use addVideoWatermarkEx(const WatermarkConfig& config, const RtcConnection& connection) instead.
-    */
-    virtual int addVideoWatermarkEx(const char* watermarkUrl, const WatermarkOptions& options, const RtcConnection& connection) = 0;
-
     /**
-     * @brief Add a watermark image to the local video.
+     * @brief Adds a watermark image to the local video.
      *
-     * @since 4.6.0
+     * @deprecated v4.6.0. This method is deprecated. Use addVideoWatermarkEx(const WatermarkConfig&
+     * config, const RtcConnection& connection) instead.
      *
-     * @param config The watermark configuration.
-     * @param connection The RtcConnection object.
+     * @details
+     * This method adds a PNG watermark image to the local video in the live streaming. Once the
+     * watermark image is added, all the audience in the channel (CDN audience included), and the
+     * capturing device can see and capture it. The Agora SDK supports adding only one watermark image
+     * onto a live video stream. The newly added watermark image replaces the previous one.
+     * The watermark coordinates are dependent on the settings in the `setVideoEncoderConfigurationEx`
+     * method:
+     * - If the orientation mode of the encoding video ( `ORIENTATION_MODE` ) is fixed landscape mode or
+     * the adaptive landscape mode, the watermark uses the landscape orientation.
+     * - If the orientation mode of the encoding video ( `ORIENTATION_MODE` ) is fixed portrait mode or
+     * the adaptive portrait mode, the watermark uses the portrait orientation.
+     * - When setting the watermark position, the region must be less than the dimensions set in the
+     * `setVideoEncoderConfigurationEx` method; otherwise, the watermark image will be cropped.
+     *
+     * @note
+     * - Ensure that you have called `enableVideo` before calling this method.
+     * - This method supports adding a watermark image in the PNG file format only. Supported pixel
+     * formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
+     * - If the dimensions of the PNG image differ from your settings in this method, the image will be
+     * cropped or zoomed to conform to your settings.
+     * - If you have enabled the local video preview by calling the `startPreview(VIDEO_SOURCE_TYPE
+     * sourceType)` method, you can
+     * use the `visibleInPreview` member to set whether or not the watermark is visible in the preview.
+     * - If you have enabled the mirror mode for the local video, the watermark on the local video is
+     * also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror
+     * and watermark functions for the local video at the same time. You can implement the watermark
+     * function in your application layer.
+     *
+     * @param watermarkUrl The local file path of the watermark image to be added. This method supports
+     * adding a watermark image from the local absolute or relative file path.
+     * @param options The options of the watermark image to be added. See `WatermarkOptions`.
+     * @param connection The connection information. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
      * - < 0: Failure.
+     */
+    virtual int addVideoWatermarkEx(const char* watermarkUrl, const WatermarkOptions& options, const RtcConnection& connection) = 0;
+
+    /**
+     * @brief Adds a watermark image to the local video.
      *
+     * @since 4.6.0
+     *
+     * @details
+     * Applicable scenarios: This method applies to multi-channel scenarios.
+     *
+     * @param config Watermark configuration. See `WatermarkConfig`.
+     * @param connection `RtcConnection` object. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int addVideoWatermarkEx(const WatermarkConfig& config, const RtcConnection& connection) = 0;
 
     /**
-     * @brief Remove a watermark image from the local video.
+     * @brief Removes the specified watermark image from the local or remote video stream.
      *
      * @since 4.6.0
      *
-     * @param id The watermark ID.
-     * @param connection The RtcConnection object.
+     * @details
+     * Applicable scenarios: This method applies to multi-channel scenarios.
+     *
+     * @param id Watermark ID.
+     * @param connection `RtcConnection` object. See `RtcConnection`.
      *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *
      */
     virtual int removeVideoWatermarkEx(const char* id, const RtcConnection& connection) = 0;
 
-    /** Removes the watermark image on the video stream added by
-    addVideoWatermark().
-
-    @param connection The RtcConnection object.
-    @return
-    - 0: Success.
-    - < 0: Failure.
-    */
+    /**
+     * @brief Removes the watermark image from the video stream.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int clearVideoWatermarkEx(const RtcConnection& connection) = 0;
-    /** Agora supports reporting and analyzing customized messages.
+    /**
+     * @brief Agora supports reporting and analyzing customized messages.
      *
-     * This function is in the beta stage with a free trial. The ability provided
-     * in its beta test version is reporting a maximum of 10 message pieces within
-     * 6 seconds, with each message piece not exceeding 256 bytes.
+     * @details
+     * Agora supports reporting and analyzing customized messages. This function is in the beta stage
+     * with a free trial. The ability provided in its beta test version is reporting a maximum of 10
+     * message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string
+     * not exceeding 100 bytes. To try out this function, contact `support@agora.io` and discuss the
+     * format of customized messages with us.
      *
-     * To try out this function, contact [support@agora.io](mailto:support@agora.io)
-     * and discuss the format of customized messages with us.
      */
     virtual int sendCustomReportMessageEx(const char* id, const char* category, const char* event, const char* label,
                                           int value, const RtcConnection& connection) = 0;
 
     /**
-     * Enables the `onAudioVolumeIndication` callback to report on which users are speaking
-     * and the speakers' volume.
+     * @brief Enables the reporting of users' volume indication.
      *
-     * Once the \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication"
-     * callback is enabled, the SDK returns the volume indication in the at the time interval set
-     * in `enableAudioVolumeIndication`, regardless of whether any user is speaking in the channel.
+     * @details
+     * This method enables the SDK to regularly report the volume information to the app of the local
+     * user who sends a stream and remote users (three users at most) whose instantaneous volumes are
+     * the highest.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: The SDK triggers the `onAudioVolumeIndication` callback according to the
+     * interval you set if this method is successfully called and there are users publishing streams in
+     * the channel.
      *
      * @param interval Sets the time interval between two consecutive volume indications:
-     * - <= 0: Disables the volume indication.
-     * - > 0: Time interval (ms) between two consecutive volume indications,
-     * and should be integral multiple of 200 (less than 200 will be set to 200).
-     * @param smooth The smoothing factor that sets the sensitivity of the audio volume
-     * indicator. The value range is [0, 10]. The greater the value, the more sensitive the
-     * indicator. The recommended value is 3.
-     * @param reportVad
-     * - `true`: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the
-     * `onAudioVolumeIndication` callback reports the voice activity status of the local user.
-     * - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the `vad` parameter
-     * of the `onAudioVolumeIndication` callback does not report the voice activity status of the local user, except for
-     * the scenario where the engine automatically detects the voice activity of the local user.
-     * @param connection The RtcConnection object.
+     * - ≤ 0: Disables the volume indication.
+     * - > 0: Time interval (ms) between two consecutive volume indications. Ensure this parameter is
+     * set to a value greater than 10, otherwise you will not receive the `onAudioVolumeIndication`
+     * callback. Agora recommends that this value is set as greater than 100.
+     * @param smooth The smoothing factor that sets the sensitivity of the audio volume indicator. The
+     * value ranges between 0 and 10. The recommended value is 3. The greater the value, the more
+     * sensitive the indicator.
+     * @param reportVad - `true`: Enables the voice activity detection of the local user. Once it is
+     * enabled, the `vad` parameter of the `onAudioVolumeIndication` callback reports the voice activity
+     * status of the local user.
+     * - `false`: (Default) Disables the voice activity detection of the local user. Once it is
+     * disabled, the `vad` parameter of the `onAudioVolumeIndication` callback does not report the voice
+     * activity status of the local user, except for the scenario where the engine automatically detects
+     * the voice activity of the local user.
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
      */
     virtual int enableAudioVolumeIndicationEx(int interval, int smooth, bool reportVad, const RtcConnection& connection) = 0;
 
-    /** Publishes the local stream without transcoding to a specified CDN live RTMP address.  (CDN live only.)
-      *
-      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
-      * @param connection RtcConnection.
-      *
-      * @return
-      * - 0: Success.
-      * - < 0: Failure.
-      */
-    virtual int startRtmpStreamWithoutTranscodingEx(const char* url, const RtcConnection& connection) = 0;
-
-    /** Publishes the local stream with transcoding to a specified CDN live RTMP address.  (CDN live only.)
-      *
-      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
-      * @param transcoding Sets the CDN live audio/video transcoding settings.  See LiveTranscoding.
-      * @param connection RtcConnection.
-      *
-      * @return
-      * - 0: Success.
-      * - < 0: Failure.
-      */
-    virtual int startRtmpStreamWithTranscodingEx(const char* url, const LiveTranscoding& transcoding, const RtcConnection& connection) = 0;
-
-    /** Update the video layout and audio settings for CDN live. (CDN live only.)
-      * @note This method applies to Live Broadcast only.
-      *
-      * @param transcoding Sets the CDN live audio/video transcoding settings. See LiveTranscoding.
-      * @param connection RtcConnection.
-      *
-      * @return
-      * - 0: Success.
-      * - < 0: Failure.
-      */
-    virtual int updateRtmpTranscodingEx(const LiveTranscoding& transcoding, const RtcConnection& connection) = 0;
-
-    /** Stop an RTMP stream with transcoding or without transcoding from the CDN. (CDN live only.)
-      * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes.
-      * @param connection RtcConnection.
-      * @return
-      * - 0: Success.
-      * - < 0: Failure.
-      */
-    virtual int stopRtmpStreamEx(const char* url, const RtcConnection& connection) = 0;
-
-    /** Starts relaying media streams across channels or updates the channels for media relay.
+    /**
+     * @brief Starts pushing media streams to a CDN without transcoding.
      *
-     * @since v4.2.0
-     * @param configuration The configuration of the media stream relay:ChannelMediaRelayConfiguration.
-     * @param connection RtcConnection.
+     * @details
+     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
+     * API`.
+     * You can call this method to push an audio or video stream to the specified CDN address. This
+     * method can push media streams to only one CDN address at a time, so if you need to push streams
+     * to multiple addresses, call this method multiple times.
+     * After you call this method, the SDK triggers the `onRtmpStreamingStateChanged` callback on the
+     * local client to report the state of the streaming.
+     *
+     * @note
+     * - Call this method after joining a channel.
+     * - Only hosts in the LIVE_BROADCASTING profile can call this method.
+     * - If you want to retry pushing streams after a failed push, make sure to call `stopRtmpStream`
+     * first, then call this method to retry pushing streams; otherwise, the SDK returns the same error
+     * code as the last failed push.
+     *
+     * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot
+     * exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -8(ERR_INVALID_STATE): The current status is invalid, only allowed to be called when the role is the broadcaster.
+     *   - -2: The URL or configuration of transcoding is invalid; check your URL and transcoding
+     * configurations.
+     *   - -7: The SDK is not initialized before calling this method.
+     *   - -19: The Media Push URL is already in use; use another URL instead.
+     */
+    virtual int startRtmpStreamWithoutTranscodingEx(const char* url, const RtcConnection& connection) = 0;
+
+    /**
+     * @brief Starts Media Push and sets the transcoding configuration.
+     *
+     * @details
+     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
+     * API`.
+     * You can call this method to push a live audio-and-video stream to the specified CDN address and
+     * set the transcoding configuration. This method can push media streams to only one CDN address at
+     * a time, so if you need to push streams to multiple addresses, call this method multiple times.
+     * After you call this method, the SDK triggers the `onRtmpStreamingStateChanged` callback on the
+     * local client to report the state of the streaming.
+     *
+     * @note
+     * - Ensure that you enable the Media Push service before using this function.
+     * - Call this method after joining a channel.
+     * - Only hosts in the LIVE_BROADCASTING profile can call this method.
+     * - If you want to retry pushing streams after a failed push, make sure to call `stopRtmpStreamEx`
+     * first, then call this method to retry pushing streams; otherwise, the SDK returns the same error
+     * code as the last failed push.
+     *
+     * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot
+     * exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+     * @param transcoding The transcoding configuration for Media Push. See `LiveTranscoding`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     *   - -2: The URL or configuration of transcoding is invalid; check your URL and transcoding
+     * configurations.
+     *   - -7: The SDK is not initialized before calling this method.
+     *   - -19: The Media Push URL is already in use; use another URL instead.
+     */
+    virtual int startRtmpStreamWithTranscodingEx(const char* url, const LiveTranscoding& transcoding, const RtcConnection& connection) = 0;
+
+    /**
+     * @brief Updates the transcoding configuration.
+     *
+     * @details
+     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
+     * API`.
+     * After you start pushing media streams to CDN with transcoding, you can dynamically update the
+     * transcoding configuration according to the scenario. The SDK triggers the `onTranscodingUpdated`
+     * callback after the transcoding configuration is updated.
+     *
+     * @param transcoding The transcoding configuration for Media Push. See `LiveTranscoding`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int updateRtmpTranscodingEx(const LiveTranscoding& transcoding, const RtcConnection& connection) = 0;
+
+    /**
+     * @brief Stops pushing media streams to a CDN.
+     *
+     * @details
+     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
+     * API`.
+     * You can call this method to stop the live stream on the specified CDN address. This method can
+     * stop pushing media streams to only one CDN address at a time, so if you need to stop pushing
+     * streams to multiple addresses, call this method multiple times.
+     * After you call this method, the SDK triggers the `onRtmpStreamingStateChanged` callback on the
+     * local client to report the state of the streaming.
+     *
+     * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot
+     * exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int stopRtmpStreamEx(const char* url, const RtcConnection& connection) = 0;
+
+    /**
+     * @brief Starts relaying media streams across channels or updates channels for media relay.
+     *
+     * @since v4.2.0
+     *
+     * @details
+     * The first successful call to this method starts relaying media streams from the source channel to
+     * the destination channels. To relay the media stream to other channels, or exit one of the current
+     * media relays, you can call this method again to update the destination channels. This feature
+     * supports relaying media streams to a maximum of six destination channels.
+     * After a successful method call, the SDK triggers the `onChannelMediaRelayStateChanged` callback,
+     * and this callback returns the state of the media stream relay. Common states are as follows:
+     * - If the `onChannelMediaRelayStateChanged` callback returns `RELAY_STATE_RUNNING` (2) and
+     * `RELAY_OK` (0), it means that the SDK starts relaying media streams from the source channel to
+     * the destination channel.
+     * - If the `onChannelMediaRelayStateChanged` callback returns `RELAY_STATE_FAILURE` (3), an
+     * exception occurs during the media stream relay.
+     *
+     * @note
+     * - Call this method after joining the channel.
+     * - This method takes effect only when you are a host in a live streaming channel.
+     * - The relaying media streams across channels function needs to be enabled by contacting
+     * `technical support`.
+     * - Agora does not support string user accounts in this API.
+     *
+     * @param configuration The configuration of the media stream relay. See
+     * `ChannelMediaRelayConfiguration`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     *   - -1: A general error occurs (no specified reason).
+     *   - -2: The parameter is invalid.
+     *   - -8: Internal state error. Probably because the user is not a broadcaster.
      */
     virtual int startOrUpdateChannelMediaRelayEx(const ChannelMediaRelayConfiguration& configuration, const RtcConnection& connection) = 0;
 
-    /** Stops the media stream relay.
-     *
-     * Once the relay stops, the host quits all the destination
+    /**
+     * @brief Stops the media stream relay. Once the relay stops, the host quits all the target
      * channels.
      *
-     * @param connection RtcConnection.
+     * @details
+     * After a successful method call, the SDK triggers the `onChannelMediaRelayStateChanged` callback.
+     * If the callback reports `RELAY_STATE_IDLE` (0) and `RELAY_OK` (0), the host successfully stops
+     * the relay.
+     *
+     * @note If the method call fails, the SDK triggers the `onChannelMediaRelayStateChanged` callback
+     * with the `RELAY_ERROR_SERVER_NO_RESPONSE` (2) or `RELAY_ERROR_SERVER_CONNECTION_LOST` (8) status
+     * code. You can call the `leaveChannel(const LeaveChannelOptions& options)` method to leave the
+     * channel, and the media stream
+     * relay automatically stops.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -7(ERR_NOT_INITIALIZED): cross channel media streams are not relayed.
+     *   - -5: The method call was rejected. There is no ongoing channel media relay.
      */
     virtual int stopChannelMediaRelayEx(const RtcConnection& connection) = 0;
 
-    /** pause the channels for media stream relay.
+    /**
+     * @brief Pauses the media stream relay to all target channels.
      *
-     * @param connection RtcConnection.
+     * @details
+     * After the cross-channel media stream relay starts, you can call this method to pause relaying
+     * media streams to all target channels; after the pause, if you want to resume the relay, call
+     * `resumeAllChannelMediaRelay`.
+     *
+     * @note Call this method after `startOrUpdateChannelMediaRelayEx`.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -7(ERR_NOT_INITIALIZED): cross channel media streams are not relayed.
+     *   - -5: The method call was rejected. There is no ongoing channel media relay.
      */
     virtual int pauseAllChannelMediaRelayEx(const RtcConnection& connection) = 0;
 
-    /** resume the channels for media stream relay.
+    /**
+     * @brief Resumes the media stream relay to all target channels.
      *
-     * @param connection RtcConnection.
+     * @details
+     * After calling the `pauseAllChannelMediaRelayEx` method, you can call this method to resume
+     * relaying media streams to all destination channels.
+     *
+     * @note Call this method after `pauseAllChannelMediaRelayEx`.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     *   - -1(ERR_FAILED): A general error occurs (no specified reason).
-     *   - -2(ERR_INVALID_ARGUMENT): The argument is invalid.
-     *   - -5(ERR_REFUSED): The request is rejected.
-     *   - -7(ERR_NOT_INITIALIZED): cross channel media streams are not relayed.
+     *   - -5: The method call was rejected. There is no paused channel media relay.
      */
     virtual int resumeAllChannelMediaRelayEx(const RtcConnection& connection) = 0;
 
@@ -1992,60 +2347,95 @@ public:
     */
     virtual int getUserInfoByUidEx(uid_t uid, rtc::UserInfo* userInfo, const RtcConnection& connection) = 0;
 
-     /**
-     * Enables or disables the dual video stream mode.
+    /**
+     * @brief Enables or disables dual-stream mode on the sender side.
      *
      * @deprecated v4.2.0. This method is deprecated. Use setDualStreamModeEx instead
      *
-     * If dual-stream mode is enabled, the subscriber can choose to receive the high-stream
-     * (high-resolution high-bitrate video stream) or low-stream (low-resolution low-bitrate video
-     * stream) video using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+     * @details
+     * You can call this method to enable or disable the dual-stream mode on the publisher side. Dual
+     * streams are a pairing of a high-quality video stream and a low-quality video stream:
+     * - High-quality video stream: High bitrate, high resolution.
+     * - Low-quality video stream: Low bitrate, low resolution.
+     * After you enable dual-stream mode, you can call `setRemoteVideoStreamType` to choose to receive
+     * either the high-quality video stream or the low-quality video stream on the subscriber side.
      *
-     * @param enabled
-     * - true: Enable the dual-stream mode.
-     * - false: (default) Disable the dual-stream mode.
-     * @param streamConfig The minor stream config
-     * @param connection The RtcConnection object.
+     * @note This method is applicable to all types of streams from the sender, including but not
+     * limited to video streams collected from cameras, screen sharing streams, and custom-collected
+     * video streams.
+     *
+     * @param enabled Whether to enable dual-stream mode:
+     * - `true`: Enable dual-stream mode.
+     * - `false`: (Default) Disable dual-stream mode.
+     * @param streamConfig The configuration of the low-quality video stream. See
+     * `SimulcastStreamConfig`.Note: When setting `mode` to `DISABLE_SIMULCAST_STREAM`, setting
+     * `streamConfig` will not take effect.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int enableDualStreamModeEx(bool enabled, const SimulcastStreamConfig& streamConfig,
                                        const RtcConnection& connection) = 0;
     /**
-     * Enables, disables or auto enable the dual video stream mode.
+     * @brief Sets the dual-stream mode on the sender side.
      *
-     * If dual-stream mode is enabled, the subscriber can choose to receive the high-stream
-     * (high-resolution high-bitrate video stream) or low-stream (low-resolution low-bitrate video
-     * stream) video using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+     * @details
+     * The SDK defaults to enabling low-quality video stream adaptive mode ( `AUTO_SIMULCAST_STREAM` )
+     * on the sender side, which means the sender does not actively send low-quality video stream. The
+     * receiving end with the role of the **host** can initiate a low-quality video stream request by
+     * calling `setRemoteVideoStreamTypeEx`, and upon receiving the request, the sending end
+     * automatically starts sending low-quality stream.
+     * - If you want to modify this behavior, you can call this method and set `mode` to
+     * `DISABLE_SIMULCAST_STREAM` (never send low-quality video streams) or `ENABLE_SIMULCAST_STREAM`
+     * (always send low-quality video streams).
+     * - If you want to restore the default behavior after making changes, you can call this method
+     * again with `mode` set to `AUTO_SIMULCAST_STREAM`.
      *
-     * @param mode The dual stream mode: #SIMULCAST_STREAM_MODE.
-     * @param streamConfig The configuration of the low stream: SimulcastStreamConfig.
-     * @param connection The RtcConnection object.
+     * @note
+     * The difference and connection between this method and `enableDualStreamModeEx` is as follows:
+     * - When calling this method and setting `mode` to DISABLE_SIMULCAST_STREAM, it has the same effect
+     * as `enableDualStreamModeEx` `(false)`.
+     * - When calling this method and setting `mode` to ENABLE_SIMULCAST_STREAM, it has the same effect
+     * as `enableDualStreamModeEx` `(true)`.
+     * - Both methods can be called before and after joining a channel. If both methods are used, the
+     * settings in the method called later takes precedence.
+     *
+     * @param mode The mode in which the video stream is sent. See `SIMULCAST_STREAM_MODE`.
+     * @param streamConfig The configuration of the low-quality video stream. See
+     * `SimulcastStreamConfig`.Note: When setting `mode` to `DISABLE_SIMULCAST_STREAM`, setting
+     * `streamConfig` will not take effect.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int setDualStreamModeEx(SIMULCAST_STREAM_MODE mode,
                                    const SimulcastStreamConfig& streamConfig,
                                    const RtcConnection& connection) = 0;
 
     /**
-     * Set the multi-layer video stream configuration.
+     * @brief Sets the simulcast video stream configuration.
      *
-     * When users expect the same UID to send multiple streams of different resolutions, they can achieve this by calling setSimulcastConfig.
+     * @since v4.6.0
      *
-     * If multi-layer is configed, the subscriber can choose to receive the corresponding layer
-     * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
+     * @details
+     * This method can be called in scenarios involving multiple channels. You can call the
+     * `setSimulcastConfig` method to set video streams with different resolutions for the same video
+     * source. The subscribers can call to select which stream layer to receive. The broadcaster can
+     * publish up to four layers of video streams: one main stream (highest resolution) and three
+     * additional streams of different quality levels. `setRemoteVideoStreamType`
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
      *
-     * @details This method allows a broadcaster to simultaneously transmit multiple video streams
-     * with different resolutions. The configuration supports enabling up to four layers
-     * simultaneously: one major stream (highest resolution) and three additional simulcast
-     * streams.
+     * @param simulcastConfig This configuration includes seven layers, from STREAM_LAYER_1 to
+     * STREAM_LOW, with a maximum of three layers enabled simultaneously. See `SimulcastConfig`.
+     * @param connection Connection information. See `RtcConnection`.
      *
-     * @param simulcastConfig
-     * - The configuration for multi-layer video stream. It includes seven layers, ranging from
-     *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
-     * @param connection The RtcConnection object.
      * @return
      * - 0: Success.
      * - < 0: Failure.
-     * @since v4.6.0
-     * @scenarios This method applies to scenarios involving multiple channels.
      */
     virtual int setSimulcastConfigEx(const SimulcastConfig& simulcastConfig,
                                      const RtcConnection& connection) = 0;
@@ -2070,91 +2460,124 @@ public:
                                           STREAM_FALLBACK_OPTIONS option,
                                           const RtcConnection& connection) = 0;
 
-  /**
-   * Takes a snapshot of a video stream.
-   *
-   * This method takes a snapshot of a video stream from the specified user, generates a JPG
-   * image, and saves it to the specified path.
-   *
-   * The method is asynchronous, and the SDK has not taken the snapshot when the method call
-   * returns. After a successful method call, the SDK triggers the `onSnapshotTaken` callback
-   * to report whether the snapshot is successfully taken, as well as the details for that
-   * snapshot.
-   *
-   * @note
-   * - Call this method after joining a channel.
-   * - This method takes a snapshot of the published video stream specified in `ChannelMediaOptions`.
-   * - If the user's video has been preprocessed, for example, watermarked or beautified, the resulting
-   * snapshot includes the pre-processing effect.
-   * @param connection The RtcConnection object.
-   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-   * @param filePath The local path (including filename extensions) of the snapshot. For example:
-   * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
-   * - iOS: `/App Sandbox/Library/Caches/example.jpg`
-   * - macOS: `～/Library/Logs/example.jpg`
-   * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
-   *
-   * Ensure that the path you specify exists and is writable.
-   * @return
-   * - 0 : Success.
-   * - < 0 : Failure.
-   */
+    /**
+     * @brief Takes a snapshot of a video stream using connection ID.
+     *
+     * @details
+     * This method takes a snapshot of a video stream from the specified user, generates a JPG image,
+     * and saves it to the specified path.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: After a successful call of this method, the SDK triggers the `onSnapshotTaken`
+     * callback to report whether the snapshot is successfully taken, as well as the details for that
+     * snapshot.
+     *
+     * @note
+     * - The method is asynchronous, and the SDK has not taken the snapshot when the method call
+     * returns.
+     * - When used for local video snapshots, this method takes a snapshot for the video streams
+     * specified in `ChannelMediaOptions`.
+     * - If the user's video has been preprocessed, for example, watermarked or beautified, the
+     * resulting snapshot includes the pre-processing effect.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+     * @param filePath The local path (including filename extensions) of the snapshot. For example:
+     * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg`
+     * - iOS: `/App Sandbox/Library/Caches/example.jpg`
+     * - macOS: `～/Library/Logs/example.jpg`
+     * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.jpg`
+     * Attention: Ensure that the path you specify exists and is writable.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const char* filePath)  = 0;
 
-  /**
-   * Takes a snapshot of a video stream.
-   *
-   * This method takes a snapshot of a video stream from the specified user, generates a JPG
-   * image, and saves it to the specified path.
-   *
-   * The method is asynchronous, and the SDK has not taken the snapshot when the method call
-   * returns. After a successful method call, the SDK triggers the `onSnapshotTaken` callback
-   * to report whether the snapshot is successfully taken, as well as the details for that
-   * snapshot.
-   *
-   * @note
-   * - Call this method after joining a channel.
-   * - This method takes a snapshot of the published video stream specified in `ChannelMediaOptions`.
-   *
-   * @param connection The RtcConnection object.
-   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-   * @param config The configuration for the take snapshot. See SnapshotConfig.
-   *
-   * Ensure that the path you specify exists and is writable.
-   * @return
-   * - 0 : Success.
-   * - &lt; 0: Failure.
-   *   - -4: Incorrect observation position. Modify the input observation position according to the reqiurements specified in SnapshotConfig.
-   */
+    /**
+     * @brief Gets a video screenshot of the specified observation point using the connection ID.
+     *
+     * @details
+     * This method takes a snapshot of a video stream from the specified user, generates a JPG image,
+     * and saves it to the specified path.
+     * Call timing: Call this method after `joinChannelEx`.
+     * Related callbacks: After a successful call of this method, the SDK triggers the `onSnapshotTaken`
+     * callback to report whether the snapshot is successfully taken, as well as the details for that
+     * snapshot.
+     *
+     * @note
+     * - The method is asynchronous, and the SDK has not taken the snapshot when the method call
+     * returns.
+     * - When used for local video snapshots, this method takes a snapshot for the video streams
+     * specified in `ChannelMediaOptions`.
+     * - If the user's video has been preprocessed, for example, watermarked or beautified, the
+     * resulting snapshot includes the pre-processing effect.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+     * @param config The configuration of the snaptshot. See `SnapshotConfig`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int takeSnapshotEx(const RtcConnection& connection, uid_t uid, const media::SnapshotConfig& config)  = 0;
 
-    /** Enables video screenshot and upload with the connection ID.
-    @param enabled Whether to enable video screenshot and upload:
-    - `true`: Yes.
-    - `false`: No.
-    @param config The configuration for video screenshot and upload.
-    @param connection The connection information. See RtcConnection.
-    @return
-    - 0: Success.
-    - < 0: Failure.
-    */
+    /**
+     * @brief Enables or disables video screenshot and upload.
+     *
+     * @details
+     * This method can take screenshots for multiple video streams and upload them. When video
+     * screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by
+     * local users based on the type and frequency of the module you set in `ContentInspectConfig`.
+     * After video screenshot and upload, the Agora server sends the callback notification to your app
+     * server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
+     * Call timing: This method can be called either before or after joining the channel.
+     *
+     * @note Before calling this method, ensure that you have contacted `technical support` to activate
+     * the video screenshot upload service.
+     *
+     * @param enabled Whether to enalbe video screenshot and upload:
+     * - `true`: Enables video screenshot and upload.
+     * - `false`: Disables video screenshot and upload.
+     * @param config Screenshot and upload configuration. See `ContentInspectConfig`.
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
     virtual int enableContentInspectEx(bool enabled, const media::ContentInspectConfig &config, const RtcConnection& connection) = 0;
 
     /**
-     @brief Start tracing media rendering events.
-     @since v4.1.1
-     @discussion
-     - SDK will trace media rendering events when this API is called.
-     - The tracing result can be obtained through callback `IRtcEngineEventHandler(Ex)::onVideoRenderingTracingResult`
-     @param connection The RtcConnection object.
-     @note
-     - By default, SDK will trace media rendering events when `IRtcEngineEx::joinChannelEx` is called.
-     - The start point of event tracing will be reset after leaving channel.
-     @return
-     - 0: Success.
-     - < 0: Failure.
-      - -2(ERR_INVALID_ARGUMENT): The parameter is invalid. Check the channel ID and local uid set by parameter `connection`.
-      - -7(ERR_NOT_INITIALIZED): The SDK is not initialized. Initialize the `IRtcEngine` instance before calling this method.
+     * @brief Enables tracing the video frame rendering process.
+     *
+     * @since v4.1.1
+     *
+     * @details
+     * The SDK starts tracing the rendering status of the video frames in the channel from the moment
+     * this method is successfully called and reports information about the event through the
+     * `onVideoRenderingTracingResult` callback.
+     * Applicable scenarios: Agora recommends that you use this method in conjunction with the UI
+     * settings (such as buttons and sliders) in your app to improve the user experience. For example,
+     * call this method when the user clicks the Join Channel button, and then get the time spent during
+     * the video frame rendering process through the `onVideoRenderingTracingResult` callback, so as to
+     * optimize the indicators accordingly.
+     *
+     * @note
+     * - If you have not called this method, the SDK tracks the rendering events of the video frames
+     * from the moment you call `joinChannel(const char* token, const char* channelId, uid_t uid, const
+     * ChannelMediaOptions& options)` to join the channel. You can call this method at an
+     * appropriate time according to the actual application scenario to set the starting position for
+     * tracking video rendering events.
+     * - After the local user leaves the current channel, the SDK automatically tracks the video
+     * rendering events from the moment you join a channel.
+     *
+     * @param connection The connection information. See `RtcConnection`.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int startMediaRenderingTracingEx(const RtcConnection& connection) = 0;
 
@@ -2169,22 +2592,18 @@ public:
     virtual int setParametersEx(const RtcConnection& connection, const char* parameters) = 0;
 
     /**
-     * Gets the current call ID.
+     * @brief Gets the call ID with the connection ID.
      *
-     * When a user joins a channel on a client, a `callId` is generated to identify
-     * the call.
+     * @details
+     * When a user joins a channel on a client, a `callId` is generated to identify the call from the
+     * client. You can call this method to get `callId`, and pass it in when calling methods such as
+     * `rate` and `complain`.
+     * Call timing: Call this method after joining a channel.
      *
-     * After a call ends, you can call `rate` or `complain` to gather feedback from the customer.
-     * These methods require a `callId` parameter. To use these feedback methods, call the this
-     * method first to retrieve the `callId` during the call, and then pass the value as an
-     * argument in the `rate` or `complain` method after the call ends.
+     * @param callId Output parameter, the current call ID.
+     * @param connection The connection information. See `RtcConnection`.
      *
-     * @param callId The reference to the call ID.
-     * @param connection The RtcConnection object.
-     * @return
-     * - The call ID if the method call is successful.
-     * - < 0: Failure.
-    */
+     */
     virtual int getCallIdEx(agora::util::AString& callId, const RtcConnection& connection) = 0;
 
     /**
@@ -2200,76 +2619,77 @@ public:
     */
     virtual int sendAudioMetadataEx(const RtcConnection& connection, const char* metadata, size_t length) = 0;
 
-    /** Preloads a specified audio effect to a specified channel.
+    /**
+     * @brief Preloads a specified sound effect to a channel.
+     *
      * @since v4.6.0
      *
-     * This method preloads only one specified audio effect into the memory each time
-     * it is called. To preload multiple audio effects, call this method multiple times.
-     *
-     * After preloading, you can call \ref IRtcEngine::playEffect "playEffect"
-     * to play the preloaded audio effect or call
-     * \ref IRtcEngine::playAllEffects "playAllEffects" to play all the preloaded
-     * audio effects.
+     * @details
+     * Each time you call this method, you can only preload one sound effect file into memory. If you
+     * need to preload multiple sound files, please call this method multiple times. After preloading is
+     * complete, you can call `playEffect` to play the preloaded sound effects, or call `playAllEffects`
+     * to play all preloaded sound effects.
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
      *
      * @note
-     * - This method applies to scenarios involving multiple channels.
-     * - To ensure smooth communication, limit the size of the audio effect file.
-     * - Agora recommends calling this method before joining the channel.
+     * - To ensure a smooth experience, the size of sound effect files should not exceed the limit.
+     * - Agora recommends that you call this method before joining a channel.
      *
-     * @param connection The RtcConnection object.
-     * @param soundId The ID of the audio effect.
-     * @param filePath The absolute path of the local audio effect file or the URL
-     * of the online audio effect file. Supported audio formats: mp3, mp4, m4a, aac,
-     * 3gp, mkv, and wav.
+     * @param connection One `RtcConnection` object. See `RtcConnection`.
+     * @param soundId The audio effect ID.
+     * @param filePath The absolute path of the local file or the URL of the online file. Supported
+     * audio formats include: mp3, mp4, m4a, aac, 3gp, mkv and wav.
      * @param startPos The playback position (ms) of the audio effect file.
      *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-    */
+     */
     virtual int preloadEffectEx(const RtcConnection& connection, int soundId, const char* filePath, int startPos = 0) = 0;
 
-    /** Plays a specified audio effect to a specified channel.
+    /**
+     * @brief Plays a specified sound effect in a channel.
+     *
      * @since v4.6.0
      *
-     * This method plays only one specified audio effect each time it is called.
-     * To play multiple audio effects, call this method multiple times.
+     * @details
+     * You can call this method to play a specified sound effect to all users in the channel. Each call
+     * to this method can only play one sound effect. To play multiple sound effects simultaneously,
+     * please call this method multiple times. This method allows you to set whether to publish sound
+     * effects in a channel. In order to play multiple sound files simultaneously, simply call the
+     * method multiple times with different `soundId` and `filePath` parameters.
+     * Applicable scenarios: This method can be called in scenarios involving multiple channels.
      *
      * @note
-     * - This method applies to scenarios involving multiple channels.
-     * - Agora recommends playing no more than three audio effects at the same time.
-     * - The ID and file path of the audio effect in this method must be the same
-     * as that in the \ref IRtcEngine::preloadEffect "preloadEffect" method.
+     * - Agora recommends not playing more than three sound effects at the same time.
+     * - The sound effect ID and file path in this method must be consistent with those in the
+     * `preloadEffect` method.
      *
-     * @param connection The RtcConnection object.
-     * @param soundId The ID of the audio effect.
-     * @param filePath The absolute path of the local audio effect file or the URL
-     * of the online audio effect file. Supported audio formats: mp3, mp4, m4a, aac,
-     * 3gp, mkv, and wav.
-     * @param loopCount The number of times the audio effect loops:
-     * - `-1`: Play the audio effect in an indefinite loop until
-     * \ref IRtcEngine::stopEffect "stopEffect" or
-     * \ref IRtcEngine::stopAllEffects "stopAllEffects"
-     * - `0`: Play the audio effect once.
-     * - `1`: Play the audio effect twice.
-     * @param pitch The pitch of the audio effect. The value ranges between 0.5 and 2.0.
-     * The default value is `1.0` (original pitch). The lower the value, the lower the pitch.
-     * @param pan The spatial position of the audio effect. The value ranges between -1.0 and 1.0:
-     * - `-1.0`: The audio effect displays to the left.
-     * - `0.0`: The audio effect displays ahead.
-     * - `1.0`: The audio effect displays to the right.
-     * @param gain The volume of the audio effect. The value ranges between 0 and 100.
-     * The default value is `100` (original volume). The lower the value, the lower
-     * the volume of the audio effect.
-     * @param publish Sets whether to publish the audio effect in a channel:
-     * - true: Publish the audio effect in the channel so that remote user can hear it.
-     * - false: (Default) Do not publish the audio effect in the channel.
+     * @param connection One `RtcConnection` object. See `RtcConnection`.
+     * @param soundId The audio effect ID.
+     * @param filePath The absolute path of the local file or the URL of the online file. Supported
+     * audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav.
+     * @param loopCount Number of times the sound effect to be looped:
+     * - `-1`: Loop infinitely until calling `stopEffect` or `stopAllEffects`.
+     * - `0`: Play once.
+     * - `1`: Play twice.
+     * @param pitch The pitch of the audio effect. The range is from 0.5 to 2.0, with a default value of
+     * 1.0 (original pitch). The lower the value, the lower the pitch.
+     * @param pan The spatial position of the audio effect. The range of values is from -1.0 to 1.0:
+     * - `-1.0`: The audio effect is heard on the left of the user.
+     * - `0.0`: The audio effect is heard in front of the user.
+     * - `1.0`: The audio effect is heard on the right of the user.
+     * @param gain The volume of the audio effect. The value range is from 0 to 100, with a default
+     * value of 100 (original volume). The smaller the value, the lower the volume.
+     * @param publish Whether to publish the audio effect in the channel:
+     * - `true`: Publish the audio effect in the channel.
+     * - `false`: (Default) Do not publish the audio effect in the channel.
      * @param startPos The playback position (ms) of the audio effect file.
      *
      * @return
      * - 0: Success.
      * - < 0: Failure.
-    */
+     */
     virtual int playEffectEx(const RtcConnection& connection, int soundId, const char* filePath, int loopCount, double pitch, double pan, int gain, bool publish = false, int startPos = 0) = 0;
 };
 
