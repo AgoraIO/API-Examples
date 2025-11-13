@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -73,18 +73,27 @@
                                 <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CWm-gS-LAI">
+                                <rect key="frame" x="50" y="600" width="51" height="31"/>
+                                <connections>
+                                    <action selector="virtualBackgroundAction:" destination="p70-sh-D1h" eventType="valueChanged" id="FpG-2C-8VH"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="bLu-sF-1q0" secondAttribute="bottom" id="FsL-lU-RE5"/>
+                            <constraint firstItem="CWm-gS-LAI" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" constant="50" id="SvP-57-NeB"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="VEN-SG-IFg"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="trailing" secondItem="f4j-hu-9mE" secondAttribute="trailing" id="mw2-ex-GXn"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="ppE-ZD-qQE"/>
+                            <constraint firstItem="CWm-gS-LAI" firstAttribute="top" secondItem="bLu-sF-1q0" secondAttribute="bottom" constant="-296" id="qEo-v8-6Ci"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="container" destination="bLu-sF-1q0" id="ljr-4v-SFl"/>
+                        <outlet property="virtualBackgroundSwitch" destination="CWm-gS-LAI" id="pic-Tm-NuR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
