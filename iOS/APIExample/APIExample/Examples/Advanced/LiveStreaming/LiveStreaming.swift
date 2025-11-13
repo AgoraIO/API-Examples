@@ -321,7 +321,7 @@ class LiveStreamingMain: BaseViewController {
             return
         }
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: fps,
+                                                                             frameRate: fps.rawValue,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation, mirrorMode: .auto))
         

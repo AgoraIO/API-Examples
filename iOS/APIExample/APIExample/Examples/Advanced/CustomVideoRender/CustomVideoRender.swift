@@ -76,7 +76,7 @@ class CustomVideoRenderMain: BaseViewController {
         let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
             .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: fps,
+                                                                             frameRate: fps.rawValue,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation,
                                                                              mirrorMode: .auto))
