@@ -17,70 +17,82 @@ class IMediaRecorder : public RefCountInterface {
 
  public:
   /**
-   * Registers the IMediaRecorderObserver object.
+   * @brief Registers the `IMediaRecorderObserver` observer.
    *
    * @since v4.0.0
    *
-   * @note Call this method before the startRecording method.
+   * @details
+   * This method sets the callback for audio and video recording, so the app can be notified of
+   * recording status and information during the recording process.
+   * Before calling this method, make sure that:
+   * - The `IRtcEngine` object has been created and initialized.
+   * - The media recorder object has been created using `createMediaRecorder`.
    *
-   * @param callback The callbacks for recording audio and video streams. See \ref IMediaRecorderObserver.
+   * @param callback Callback for audio and video stream recording. See `IMediaRecorderObserver`.
    *
    * @return
-   * - 0(ERR_OK): Success.
-   * - < 0: Failure:
+   * - 0: Success.
+   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
    */
   virtual int setMediaRecorderObserver(media::IMediaRecorderObserver* callback) = 0;
   /**
-   * Starts recording the local or remote audio and video.
+   * @brief Starts audio and video stream recording.
    *
    * @since v4.0.0
    *
-   * After successfully calling \ref IRtcEngine::createMediaRecorder "createMediaRecorder" to get the media recorder object
-   * , you can call this method to enable the recording of the local audio and video.
+   * @details
+   * This method starts recording audio and video streams. The Agora SDK supports recording both local
+   * and remote users' audio and video streams simultaneously.
+   * Before starting the recording, make sure that:
+   * - You have created the media recorder object using `createMediaRecorder`.
+   * - You have registered a recorder observer using `setMediaRecorderObserver` to listen for
+   * recording callbacks.
+   * - You have joined a channel.
+   * This method supports recording the following data:
+   * - Audio captured from the microphone in AAC encoding format.
+   * - Video captured from the camera in H.264 or H.265 encoding format.
+   * After recording starts, if the video resolution changes during recording, the SDK stops the
+   * recording. If the audio sample rate or number of channels changes, the SDK continues recording
+   * and generates a single MP4 file.
+   * A recording file is only successfully generated when a recordable audio or video stream is
+   * detected. If there is no recordable stream, or if the stream is interrupted for more than 5
+   * seconds during recording, the SDK stops the recording and triggers the
+   * `onRecorderStateChanged` (`RECORDER_STATE_ERROR, RECORDER_REASON_NO_STREAM`) callback.
    *
-   * This method can record the following content:
-   * - The audio captured by the local microphone and encoded in AAC format.
-   * - The video captured by the local camera and encoded by the SDK.
-   * - The audio received from remote users and encoded in AAC format.
-   * - The video received from remote users.
-   * 
-   * The SDK can generate a recording file only when it detects the recordable audio and video streams; when there are
-   * no audio and video streams to be recorded or the audio and video streams are interrupted for more than five
-   * seconds, the SDK stops recording and triggers the
-   * \ref IMediaRecorderObserver::onRecorderStateChanged "onRecorderStateChanged" (RECORDER_STATE_ERROR, RECORDER_ERROR_NO_STREAM)
-   * callback.
+   * @note
+   * - If you want to record local audio and video streams, make sure the local user role is set to
+   * broadcaster before starting recording.
+   * - If you want to record remote audio and video streams, make sure you have subscribed to the
+   * remote user's streams before starting recording.
    *
-   * @note Call this method after joining the channel.
-   *
-   * @param config The recording configurations. See MediaRecorderConfiguration.
+   * @param config Audio and video stream recording configuration. See `MediaRecorderConfiguration`.
    *
    * @return
-   * - 0(ERR_OK): Success.
-   * - < 0: Failure:
-   *    - `-1(ERR_FAILED)`: IRtcEngine does not support the request because the remote user did not subscribe to the target channel or the media streams published by the local user during remote recording.
-   *    - `-2(ERR_INVALID_ARGUMENT)`: The parameter is invalid. Ensure the following:
-   *      - The specified path of the recording file exists and is writable.
-   *      - The specified format of the recording file is supported.
-   *      - The maximum recording duration is correctly set.
-   *      - During remote recording, ensure the user whose media streams you want record did join the channel.
-   *    - `-4(ERR_NOT_SUPPORTED)`: IRtcEngine does not support the request due to one of the following reasons:
-   *      - The recording is ongoing.
-   *      - The recording stops because an error occurs.
-   *      - No \ref IMediaRecorderObserver object is registered.
+   * - 0: Success.
+   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   *   - -2: Invalid parameter. Please ensure that:
+   *     - The specified recording file path is correct and writable.
+   *     - The specified recording file format is correct.
+   *     - The maximum recording duration is set correctly.
+   *   - -4: `IRtcEngine` is in a state that does not support this operation. This may be because a
+   * recording is already in progress or has stopped due to an error.
+   *   - -7: `IRtcEngine` is not initialized when this method is called. Please make sure the
+   * `IMediaRecorder` object has been created before calling this method.
    */
   virtual int startRecording(const media::MediaRecorderConfiguration& config) = 0;
   /**
-   * Stops recording the audio and video.
+   * @brief Stops audio and video stream recording.
    *
    * @since v4.0.0
    *
-   * @note After calling \ref IMediaRecorder::startRecording "startRecording", if you want to stop the recording,
-   * you must call `stopRecording`; otherwise, the generated recording files might not be playable.
-   *
+   * @note After calling `startRecording`, you must call this method to stop the recording; otherwise,
+   * the generated recording file may not play properly.
    *
    * @return
-   * - 0(ERR_OK): Success.
+   * - 0: Success.
    * - < 0: Failure:
+   *   - -7: `IRtcEngine` is not initialized when this method is called. Please make sure the
+   * `IMediaRecorder` object has been created before calling this method.
    */
   virtual int stopRecording() = 0;
 };
