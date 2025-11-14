@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Local Composite Graph Entry-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntryViewController" id="Y6W-OH-hqX" customClass="LocalCompositeGraphEntry" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n7x-Fb-Blm" userLabel="channelName">
+                                <rect key="frame" x="118.66666666666669" y="421.66666666666669" width="156" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JgB-zn-bzq" userLabel="joinBtn">
+                                <rect key="frame" x="181.66666666666666" y="485" width="30" height="30"/>
+                                <state key="normal" title="Join"/>
+                                <connections>
+                                    <action selector="onClickJoinButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="zUU-pg-033"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n7x-Fb-Blm" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="Qdn-Ek-m1w"/>
+                            <constraint firstItem="JgB-zn-bzq" firstAttribute="top" secondItem="n7x-Fb-Blm" secondAttribute="bottom" constant="29.333333333333314" id="TcD-Um-FuS"/>
+                            <constraint firstItem="n7x-Fb-Blm" firstAttribute="centerY" secondItem="vDu-zF-Fre" secondAttribute="centerY" id="iEv-1n-xxQ"/>
+                            <constraint firstItem="JgB-zn-bzq" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="oo8-B8-fhd"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textField" destination="n7x-Fb-Blm" id="ttl-pI-v7B"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139" y="-2"/>
+        </scene>
+        <!--Local Composite Graph-->
+        <scene sceneID="fhC-kO-ikG">
+            <objects>
+                <viewController storyboardIdentifier="LocalCompositeGraph" id="33B-rf-jso" customClass="LocalCompositeGraph" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0fD-Xq-MDp">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V7v-fP-Wu3">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3wQ-o6-eNJ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="V7v-fP-Wu3" firstAttribute="top" secondItem="3wQ-o6-eNJ" secondAttribute="top" id="Ffo-li-75j"/>
+                            <constraint firstItem="3wQ-o6-eNJ" firstAttribute="trailing" secondItem="V7v-fP-Wu3" secondAttribute="trailing" id="IGi-o6-DhD"/>
+                            <constraint firstItem="V7v-fP-Wu3" firstAttribute="leading" secondItem="3wQ-o6-eNJ" secondAttribute="leading" id="Ne4-hM-RXb"/>
+                            <constraint firstItem="3wQ-o6-eNJ" firstAttribute="bottom" secondItem="V7v-fP-Wu3" secondAttribute="bottom" id="oFs-Rq-l0y"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="V7v-fP-Wu3" id="jZh-u3-jyT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lws-GF-lGx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="243.51145038167937" y="-679.57746478873241"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
