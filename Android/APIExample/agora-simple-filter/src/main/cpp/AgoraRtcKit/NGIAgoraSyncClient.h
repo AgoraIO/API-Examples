@@ -69,6 +69,7 @@ class ISyncClientObserver {
                                  const CollectionEvent* events, int eventSize) = 0;
   virtual void onDatabaseEvent(const char* databaseName, SyncClientError error) = 0;
   virtual void onDataException(const char* databaseName, const char* collectionName) = 0;
+  virtual void onCollectionSyncCompleted() = 0;
   virtual ~ISyncClientObserver() {};
 };
 

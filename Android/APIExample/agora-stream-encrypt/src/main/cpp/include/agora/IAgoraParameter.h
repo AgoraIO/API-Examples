@@ -144,6 +144,10 @@ typedef CopyableAutoPtr<IString> AString;
 
 namespace base {
 
+/**
+ * @brief The interface class of Agora RTC SDK, which provides JSON configuration information of the
+ * SDK.
+ */
 class IAgoraParameter : public RefCountInterface {
  public:
   /**
@@ -291,10 +295,17 @@ class IAgoraParameter : public RefCountInterface {
   virtual int getArray(const char* key, const char* args, agora::util::AString& value) = 0;
 
   /**
-   * set parameters of the sdk or engine
-   * @param [in] parameters
-   *        the parameters
-   * @return return 0 if success or an error code
+   * @brief Provides the technical preview functionalities or special customizations by configuring
+   * the SDK with JSON options.
+   *
+   * @details
+   * Contact `technical support` to get the JSON configuration method.
+   *
+   * @param parameters Pointer to the set parameters in a JSON string.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   virtual int setParameters(const char* parameters) = 0;
 

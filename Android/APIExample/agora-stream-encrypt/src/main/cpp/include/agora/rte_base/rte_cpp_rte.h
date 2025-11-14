@@ -61,7 +61,8 @@ class Observer {
 };
 
 /**
- * The Config class is used to configure the Rte object.
+ * @brief RTE configuration class used to configure the RTE object.
+ *
  * @since v4.4.0
  */
 class Config {
@@ -77,14 +78,16 @@ class Config {
   // @}
 
   /**
-   * Set the App ID Parameter, which is used to initialize the engine. This field value needs to be set before calling Rte::InitMediaEngine to initialize the engine.
-   * If not set, the default value is an empty string.
+   * @brief Sets the App ID.
+   *
    * @since  v4.4.0
-   * @param app_id Your project's App ID
-   * @param err Possible return of the following ErrorCode
-   * - kRteOk: Success
-   * - kRteErrorInvalidArgument: Indicates that the app_id parameter is empty.
-   * @return void
+   *
+   * @details
+   * Call timing: This method must be called before `InitMediaEngine`.
+   *
+   * @param app_id Your project's App ID, which you can obtain from the Agora Console.
+   * @param err Status or error information. See `Error`.
+   *
    */
   void SetAppId(const char *app_id, Error *err = nullptr){
     String str(app_id);
@@ -92,11 +95,15 @@ class Config {
   }
 
   /**
-   * Get the App ID Parameter.
+   * @brief Gets the configured App ID.
+   *
    * @since  v4.4.0
-   * @param err Possible return of the following ErrorCode
-   * - kRteOk: Success
-   * @return std::string The AppId value
+   *
+   * @param err Status or error information. See `Error`.
+   *
+   * @return
+   * - If the method call succeeds, returns the configured App ID.
+   * - If the method call fails, returns an empty string.
    */
   std::string GetAppId(Error *err = nullptr){
     String str;
@@ -205,27 +212,39 @@ class Config {
   }
 
   /**
-   * Set Json format parameters, usually used to set some private parameters supported by rte.
+   * @brief Configures technical preview or custom features provided by the SDK using JSON.
+   *
    * @since v4.4.0
-   * @param json_parameter json format parameter set
-   * @param err Possible return of the following ErrorCode
-   * - kRteOk: Success
-   * - kRteErrorInvalidArgument: Indicates that the json_parameter parameter is empty.
-   * @return void
+   *
+   * @details
+   * Applicable scenarios: You can call this method when you need to set private parameters or use
+   * custom features.
+   * Call timing: This method must be called before `SetConfigs(Config *config, Error *err)`.
+   *
+   * @param json_parameter Parameters in JSON string format.
+   * @param err Status or error information. See `Error`.
+   *
    */
-
   void SetJsonParameter(const char *json_parameter, Error *err = nullptr){
     String str(json_parameter);
     RteConfigSetJsonParameter(&c_rte_config, str.get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * Get the currently configured private parameters of the Rte.
-   * 
+   * @brief Gets the configured SDK JSON configuration information.
+   *
    * @since v4.4.0
-   * @param err Possible return of the following error codes:
-   * - kRteOk: Success
-   * @return std::string Returns the set JSON format parameter set.
+   *
+   * @details
+   * After you call `SetJsonParameter` to set the JSON configuration, you can call this method to
+   * retrieve the configured information.
+   * Call timing: This method must be called after `GetConfigs(Config *config, Error *err)`.
+   *
+   * @param err Status or error information. See `Error`.
+   *
+   * @return
+   * - If the method call succeeds, returns the configured JSON information.
+   * - If the method call fails, returns an empty string.
    */
   std::string GetJsonParameter(Error *err = nullptr){
     String str;
@@ -249,14 +268,21 @@ class Rte {
  public:
 
   /**
-   * Create an Rte object from the rtc bridge. Used in scenarios where the rtc engine has already been initialized, 
-   * which can save the operation of initializing the rte engine.
+   * @brief Bridges an RTE object from `IRtcEngine`.
+   *
    * @since v4.4.0
-   * @param err Possible return values for ErrorCode:
-   *  - kRteOk: Success
-   *  - kRteErrorInvalidOperation: Indicates that the rtc engine instance has not been created or the rtc engine has not been initialized. 
-   *    Unable to bridge rte from rtc engine.
-   * @return Rte object. If the Rte object is invalid, subsequent operations on Rte will return an error.
+   *
+   * @details
+   * The RTE object created by calling this method does not need to be initialized again using
+   * `InitMediaEngine`. If you have not previously created and initialized the RTC engine, you can
+   * first call `Rte` to create an RTE object, and then call `InitMediaEngine` to initialize it.
+   * Call timing: Before calling this method, make sure you have called `initialize` to initialize the
+   * RTC engine.
+   *
+   * @param err A pointer to an `Error` object used to receive status and error codes.
+   *
+   * @return
+   * An RTE object.
    */
   static Rte GetFromBridge(Error* err = nullptr){
     Rte rte( RteGetFromBridge(err != nullptr ? err->get_underlying_impl() : nullptr));
@@ -264,9 +290,16 @@ class Rte {
   }
 
   /**
-   * Construct an Rte object.
+   * @brief Constructs an RTE object.
+   *
    * @since v4.4.0
-   * @param config Rte object initialization configuration object.
+   *
+   * @details
+   * The RTE object is used to organize and manage internal resources within Rte.
+   * Call timing: This method must be called before `InitMediaEngine`.
+   *
+   * @param config Initialization settings. Currently, you can pass null.
+   *
    */
   explicit Rte(InitialConfig *config = nullptr): c_rte(::RteCreate(config != nullptr ? &config->c_rte_init_cfg : nullptr, nullptr)) {}
   ~Rte(){Destroy();};
@@ -322,68 +355,91 @@ class Rte {
   }
 
   /**
-   * Initialize the media engine.
-   * 
-   * @param cb Asynchronous callback function that returns the result of engine initialization.
-   *  - @param err Possible return values for ErrorCode:
-   *    - kRteOk: Success
-   *    - kRteErrorDefault: Engine initialization failed, specific error reason can be obtained through Error.Message().
-   *    - kRteErrorInvalidOperation: Rte object created through GetFromBridge, initialization is not allowed.
+   * @brief Initializes the RTE engine.
    *
-   * @param err Possible return values for ErrorCode:
-   *  - kRteOk: Success
-   *  - kRteErrorDefault: Engine initialization failed, specific error description can be obtained through Error.Message().
-   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has been destroyed or is invalid.
-   * @return bool Returns whether the asynchronous operation was successfully placed in the asynchronous operation queue, not whether the initialization action was successful.
-   *  - true: Asynchronous initialization action executed normally.
-   *  - false: Asynchronous initialization action did not execute normally.
+   * @details
+   * This method is asynchronous and returns the initialization result via a callback function.
+   * Call timing: This method must be called after creating the RTE object and setting the App ID.
+   *
+   * @note
+   * The return value only indicates whether the initialization operation has been successfully
+   * scheduled in the asynchronous task queue, not whether the initialization itself succeeded.
+   *
+   * @param cb An asynchronous callback function used to return the result of engine initialization.
+   * You can get the result or error code of the initialization through the `err` parameter in the
+   * callback. See `Error`.
+   * @param err Error information during the initialization process. See `Error`. When calling the
+   * `InitMediaEngine` method, if immediately detectable errors occur (such as invalid parameters or
+   * insufficient resources), the SDK
+   * will return the error information synchronously through this parameter.
+   *
+   * @return
+   * Whether the asynchronous operation was successfully added to the queue:
+   * - `true`: Successfully added to the queue.
+   * - `false`: Failed to be added to the queue.
+   * Note: This return value only indicates whether the initialization operation has been successfully
+   * scheduled in the asynchronous task queue, not whether the initialization itself succeeded.
    */
   bool InitMediaEngine(std::function<void(rte::Error *err)> cb, Error *err = nullptr){
     auto* ctx = new CallbackContext<Rte>(this, cb);
     return RteInitMediaEngine(&c_rte, &CallbackFunc<::Rte, Rte>, ctx, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
-/**
- * Get the configuration of Rte object.
- * @since v4.4.0
- * @param config The object used to get the rte config configuration.
- * @param err Possible return values for ErrorCode:
- *  - kRteOk: Success
- *  - kRteErrorInvalidOperation: The corresponding internal Rte object has been destroyed or is invalid.
- *  - kRteErrorInvalidArgument: The passed config object is null.
- * @return bool Returns the result of getting the configuration information.
- *  - true: Successfully retrieved.
- *  - false: Failed to retrieve.
- */
+  /**
+   * @brief Gets the configuration information of the RTE object.
+   *
+   * @since v4.4.0
+   *
+   * @details
+   * Call timing: Call this method after `Rte`.
+   *
+   * @param config The settings of the RTE object. See `Config`.
+   * @param err Status or error information. See `Error`.
+   *
+   * @return
+   * Whether the configuration is retrieved successfully:
+   * - `true`: Retrieved successfully.
+   * - `false`: Failed to retrieve.
+   */
   bool GetConfigs(Config *config, Error *err = nullptr){
     return RteGetConfigs(&c_rte, config != nullptr ? config->get_underlying_impl(): nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * Configure the Rte object.
+   * @brief Configures information for the RTE object.
+   *
    * @since v4.4.0
-   * @param config The object used to set the rte config configuration.
-   * @param err Possible return values for ErrorCode:
-   *  - kRteOk: Success
-   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has been destroyed or is invalid.
-   *  - kRteErrorInvalidArgument: The passed config object is null.
-   * @return bool Returns the result of setting the configuration information.
-   *  - true: Successfully set the configuration.
-   *  - false: Failed to set the configuration.
+   *
+   * @details
+   * You can call this method to set information such as the App ID.
+   * Call timing: This method must be called after `Rte`.
+   *
+   * @param config Settings for the RTE object. See `Config`.
+   * @param err Status or error information. See `Error`.
+   *
+   * @return
+   * Whether the configuration is successful:
+   * - `true`: Configuration succeeded.
+   * - `false`: Configuration failed.
    */
   bool SetConfigs(Config *config, Error *err = nullptr){
     return RteSetConfigs(&c_rte, config != nullptr ? config->get_underlying_impl(): nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * Destroy the Rte object. The operation will release all resources used by the Rte object.
+   * @brief Destroys the RTE object.
+   *
    * @since v4.4.0
-   * @param err Possible return values for ErrorCode:
-   *  - kRteOk: Success
-   *  - kRteErrorInvalidOperation: The corresponding internal Rte object has already been destroyed or is invalid.
-   * @return bool Returns the result of destroying the Rte object.
-   *  - true: Successfully destroyed.
-   *  - false: Failed to destroy.
+   *
+   * @details
+   * This method releases all resources used by the RTE object.
+   *
+   * @param err Status or error information. See `Error`.
+   *
+   * @return
+   * Whether the RTE object is destroyed successfully:
+   * - `true`: Destroyed successfully.
+   * - `false`: Failed to destroy.
    */
   bool Destroy(Error *err = nullptr){
     return RteDestroy(&c_rte, err != nullptr ? err->get_underlying_impl() : nullptr);
