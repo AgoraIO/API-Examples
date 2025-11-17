@@ -15,7 +15,7 @@ cd ${PROJECT_PATH}
 
 pod install || exit 1
 
-# Build environment
+# Build configuration
 CONFIGURATION="Debug"
 
 # Project file path
@@ -30,29 +30,33 @@ KEYCENTER_PATH=$TARGET_NAME/Common/KeyCenter.swift
 PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
 
 # Debug
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306982CB9607F0085EFF9:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306982CB9607F0085EFF9:buildSettings:CODE_SIGN_IDENTITY 'iPhone Distribution'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306982CB9607F0085EFF9:buildSettings:DEVELOPMENT_TEAM 'YS397FG5PA'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306982CB9607F0085EFF9:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'apiexample_wildcard_adhoc'" $PBXPROJ_PATH
 # Release
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306992CB9607F0085EFF9:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306992CB9607F0085EFF9:buildSettings:CODE_SIGN_IDENTITY 'iPhone Distribution'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306992CB9607F0085EFF9:buildSettings:DEVELOPMENT_TEAM 'YS397FG5PA'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306992CB9607F0085EFF9:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'apiexample_wildcard_adhoc'" $PBXPROJ_PATH
 
 # Screen Share Extension
 # Debug
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F02CB9633A0085EFF9:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F02CB9633A0085EFF9:buildSettings:CODE_SIGN_IDENTITY 'iPhone Distribution'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F02CB9633A0085EFF9:buildSettings:DEVELOPMENT_TEAM 'YS397FG5PA'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F02CB9633A0085EFF9:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'apiexample_wildcard_adhoc'" $PBXPROJ_PATH
 # Release
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:E73F25152BB6AE380000B523:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F12CB9633A0085EFF9:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F12CB9633A0085EFF9:buildSettings:CODE_SIGN_IDENTITY 'iPhone Distribution'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F12CB9633A0085EFF9:buildSettings:DEVELOPMENT_TEAM 'YS397FG5PA'" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9307F12CB9633A0085EFF9:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'apiexample_wildcard_adhoc'" $PBXPROJ_PATH
 
 # Modify build number
 # Debug
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306982CB9607F0085EFF9:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
 # Release
-/usr/libexec/PlistBuddy -c "Set :objects:E73F240B2BA82C450000B523:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+/usr/libexec/PlistBuddy -c "Set :objects:4C9306992CB9607F0085EFF9:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
 
 # Read APPID environment variable
 echo AGORA_APP_ID: $APP_ID
@@ -62,41 +66,73 @@ echo TARGET_NAME: $TARGET_NAME
 echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
-# Modify Keycenter file
-sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
+# Modify KeyCenter file
+sed -i -e "s#<\#APPID\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
 rm -f ${KEYCENTER_PATH}-e
-
-# Xcode clean
-xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
-
-# Timestamp
-CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
 
 # Archive path
 ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
-# Build environment
-
-# Plist path
+# plist path
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 
+echo PLIST_PATH: $PLIST_PATH
 
-# Archive using workspace (can also use project)
-xcodebuild CODE_SIGN_STYLE="Manual" archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" clean CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS' -quiet || exit 1
+# Archive using workspace, can also use project
+# Disable code signing during archive phase to avoid Pods Framework signing issues
+# Code signing will be performed during export phase according to ExportOptions.plist
+xcodebuild CODE_SIGN_STYLE="Manual" \
+  -workspace "${APP_PATH}" \
+  -scheme "${TARGET_NAME}" \
+  clean \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGNING_ALLOWED=NO \
+  -configuration "${CONFIGURATION}" \
+  archive \
+  -archivePath "${ARCHIVE_PATH}" \
+  -destination 'generic/platform=iOS' \
+  -quiet || exit 1
 
 cd ${WORKSPACE}
 
-# Compress archive
-7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+# Print certificates installed on current device (for debugging)
+echo "=========================================="
+echo "Code signing certificates installed on current device:"
+echo "=========================================="
+security find-identity -v -p codesigning | grep -E "(iPhone Distribution|Apple Distribution|iOS Distribution)" || security find-identity -v -p codesigning
+echo "=========================================="
+echo ""
 
-# Sign
-# sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
-sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
+# Print ExportOptions.plist content (for debugging)
+echo "=========================================="
+echo "ExportOptions.plist configuration content:"
+echo "=========================================="
+cat "${PLIST_PATH}"
+echo "=========================================="
+echo ""
 
+# Export IPA (using xcodebuild directly, consistent with Xcode manual export)
+EXPORT_PATH="${WORKSPACE}/export"
+rm -rf "${EXPORT_PATH}"
+mkdir -p "${EXPORT_PATH}"
+
+security unlock-keychain -p "123456" ~/Library/Keychains/login.keychain
+
+echo "Starting IPA export..."
+xcodebuild -exportArchive \
+  -archivePath "${ARCHIVE_PATH}" \
+  -exportPath "${EXPORT_PATH}" \
+  -exportOptionsPlist "${PLIST_PATH}" \
+  -allowProvisioningUpdates || exit 1
+
+# Rename and move IPA file
 SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
 OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
-mv ${TARGET_NAME}_${BUILD_NUMBER}.ipa $OUTPUT_FILE
+mv ${EXPORT_PATH}/${TARGET_NAME}.ipa $OUTPUT_FILE
 
-rm -rf *.xcarchive
-rm -rf *.xcarchive.zip
+# Clean up temporary files
+rm -rf "${EXPORT_PATH}"
+rm -rf "${ARCHIVE_PATH}"
 echo OUTPUT_FILE: $OUTPUT_FILE
+
+
