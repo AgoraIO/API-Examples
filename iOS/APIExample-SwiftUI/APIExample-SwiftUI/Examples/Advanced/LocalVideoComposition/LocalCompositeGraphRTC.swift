@@ -176,6 +176,16 @@ class LocalCompositeGraphRTC: NSObject, ObservableObject {
         agoraKit.startPreview()
     }
     
+    func updateToggleState(isOn: Bool) {
+        let source = AgoraVirtualBackgroundSource()
+        source.backgroundSourceType = .color
+        source.color = 0xFFFFFF
+        source.backgroundSourceType = isOn ? source.backgroundSourceType : .none
+        let result = agoraKit.enableVirtualBackground(isOn, backData: source, segData: AgoraSegmentationProperty())
+        print("result == \(result)")
+    }
+
+    
     func onDestory() {
         agoraKit.disableAudio()
         agoraKit.disableVideo()
