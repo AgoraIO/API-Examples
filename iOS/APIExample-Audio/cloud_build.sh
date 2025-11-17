@@ -67,7 +67,6 @@ echo PLIST_PATH: $PLIST_PATH
 ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # Archive using workspace, can also use project
-# Disable code signing during archive phase to avoid Pods Framework signing issues
 # Code signing will be performed during export phase according to ExportOptions.plist
 xcodebuild CODE_SIGN_STYLE="Manual" \
   -workspace "${APP_PATH}" \
