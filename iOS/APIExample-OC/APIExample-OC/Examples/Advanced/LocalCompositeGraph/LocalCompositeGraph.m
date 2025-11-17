@@ -45,6 +45,7 @@
 @property (nonatomic, strong)AgoraScreenCaptureParameters2 *screenParams;
 @property (nonatomic, strong)RPSystemBroadcastPickerView *systemBroadcastPicker;
 @property (nonatomic, strong)AgoraRtcChannelMediaOptions *option;
+@property (weak, nonatomic) IBOutlet UISwitch *virtualBackgroundSwitch;
 
 @end
 
@@ -52,6 +53,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.virtualBackgroundSwitch setOn:NO];
     [self.localView setPlaceholder:@"Local Host".localized];
     [self.container layoutStream:@[self.localView]];
     
@@ -127,6 +129,19 @@
     }
     return _localView;
 }
+
+- (IBAction)virtualBackgroundAction:(UISwitch *)sender {
+    [self changeVirtualBackground];
+}
+
+- (void)changeVirtualBackground {
+    AgoraVirtualBackgroundSource *source = [[AgoraVirtualBackgroundSource alloc] init];
+    source.backgroundSourceType = AgoraVirtualBackgroundColor;
+    source.color = 0xFFFFFF;
+    source.backgroundSourceType = self.virtualBackgroundSwitch.isOn ? source.backgroundSourceType : AgoraVirtualBackgroundNone;
+    [self.agoraKit enableVirtualBackground:self.virtualBackgroundSwitch.isOn backData:source segData:[AgoraSegmentationProperty new]];
+}
+
 
 - (AgoraScreenCaptureParameters2 *)screenParams {
     if (_screenParams == nil) {
