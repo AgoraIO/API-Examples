@@ -20,6 +20,7 @@ class PixelBufferRenderView: UIView {
     var uid: UInt = 0
     private var videoWidth: Int32 = 0
     private var videoHeight: Int32 = 0
+    private var videoRotation: Int32 = 0
     
     lazy var displayLayer: AVSampleBufferDisplayLayer = {
         let layer = AVSampleBufferDisplayLayer()
@@ -47,14 +48,16 @@ class PixelBufferRenderView: UIView {
     
     func clean() {
         uid = 0
+        videoRotation = 0
         self.displayLayer.removeFromSuperlayer()
         self.displayLayer = createLayer()
         self.layer.addSublayer(displayLayer)
     }
 
-    func renderFromVideoFrameData(videoData: AgoraOutputVideoFrame, uid: Int) {
+    func renderFromVideoFrameData(videoData: AgoraOutputVideoFrame) {
         let width = videoData.width
         let height = videoData.height
+        let rotation = videoData.rotation
         let yStride = videoData.yStride
         let uStride = videoData.uStride
         let vStride = videoData.vStride
@@ -103,14 +106,15 @@ class PixelBufferRenderView: UIView {
             
             CVPixelBufferUnlockBaseAddress(pixelBuffer, .init(rawValue: 0))
             
-            self.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: width, height: height)
+            self.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: width, height: height, rotation: rotation)
         }
     }
     
-    func renderVideoPixelBuffer(pixelBuffer: CVPixelBuffer, width: Int32, height: Int32) {
+    func renderVideoPixelBuffer(pixelBuffer: CVPixelBuffer, width: Int32, height: Int32, rotation: Int32) {
         DispatchQueue.main.async {
             self.videoWidth = width
             self.videoHeight = height
+            self.videoRotation = rotation
             self.layoutDisplayer()
         }
         
@@ -151,24 +155,66 @@ class PixelBufferRenderView: UIView {
         let viewWidth = self.frame.size.width
         let viewHeight = self.frame.size.height
 
-        let videoRatio = CGFloat(videoWidth) / CGFloat(videoHeight)
+        // 根据旋转角度调整实际的视频宽高
+        let (actualWidth, actualHeight) = getActualVideoDimensions()
+        
+        let videoRatio = CGFloat(actualWidth) / CGFloat(actualHeight)
         let viewRatio = viewWidth / viewHeight
 
         var videoSize = CGSize.zero
-        if videoRatio >= viewRatio {
-            videoSize.height = viewHeight
-            videoSize.width = videoSize.height * videoRatio
-        } else {
+        
+        // 保持宽高比，完整显示视频（AspectFit 模式）
+        if videoRatio > viewRatio {
+            // 视频更宽，以宽度为准
             videoSize.width = viewWidth
             videoSize.height = videoSize.width / videoRatio
+        } else {
+            // 视频更高，以高度为准
+            videoSize.height = viewHeight
+            videoSize.width = videoSize.height * videoRatio
         }
 
-        let xOffset = max(0, (viewWidth - videoSize.width) / 2)
-        let yOffset = max(0, (viewHeight - videoSize.height) / 2)
+        let xOffset = (viewWidth - videoSize.width) / 2
+        let yOffset = (viewHeight - videoSize.height) / 2
         let renderRect = CGRect(x: xOffset, y: yOffset, width: videoSize.width, height: videoSize.height)
 
         if !renderRect.equalTo(displayLayer.frame) {
             displayLayer.frame = renderRect
+        }
+        
+        // 应用旋转变换
+        applyRotationTransform()
+    }
+    
+    /// 根据旋转角度获取实际的视频尺寸
+    private func getActualVideoDimensions() -> (width: Int32, height: Int32) {
+        if videoRotation == 90 || videoRotation == 270 {
+            return (width: videoHeight, height: videoWidth)
+        } else {
+            return (width: videoWidth, height: videoHeight)
+        }
+    }
+    
+    /// 应用旋转变换
+    private func applyRotationTransform() {
+        let rotationAngle: CGFloat
+        
+        switch videoRotation {
+        case 90:
+            rotationAngle = .pi / 2
+        case 180:
+            rotationAngle = .pi
+        case 270:
+            rotationAngle = .pi * 3 / 2
+        default:
+            rotationAngle = 0
+        }
+        
+        // 应用旋转变换
+        if rotationAngle != 0 {
+            displayLayer.setAffineTransform(CGAffineTransform(rotationAngle: rotationAngle))
+        } else {
+            displayLayer.setAffineTransform(CGAffineTransform.identity)
         }
     }
     
