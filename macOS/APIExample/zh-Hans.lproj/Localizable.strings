@@ -201,7 +201,7 @@
 "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "Once enabled, this cannot be disabled and only takes effect when enabled on both primary and secondary ends";
 "Recording" = "Start Recording";
 "Stop Recording" = "Stop Recording";
-"Local composite graph" = "Local Composite Graph";
+"Local Video Transcoding" = "Local Video Transcoding";
 "Exclude Window" = "Exclude Window";
 "Opening" = "Enabled";
 "(Default: flow)" = "(Default: High Stream)";
