@@ -7,20 +7,20 @@
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>
-	<string>development</string>
+	<string>release-testing</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.agora.api.examples.audio</key>
-		<string>AgoraLab2020</string>
+		<string>apiexample_wildcard_adhoc</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>Apple Development</string>
+	<string>iPhone Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>JDPG69R49Z</string>
+	<string>YS397FG5PA</string>
 	<key>thinning</key>
 	<string>&lt;none&gt;</string>
 </dict>
