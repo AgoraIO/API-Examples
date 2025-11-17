@@ -28,36 +28,27 @@ class PixelBufferPIPViewController: PIPBaseViewController {
         return button
     }()
     
-    private lazy var sizeButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("Switch size", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(sizeAction), for: .touchUpInside)
-        
-        return button
-    }()
-    
     private lazy var topLeftView: PixelBufferRenderView = {
         let view = PixelBufferRenderView()
-        view.backgroundColor = .blue
+        view.backgroundColor = .white
         return view
     }()
     
     private lazy var topRightView: PixelBufferRenderView = {
         let view = PixelBufferRenderView()
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         return view
     }()
     
     private lazy var bottomLeftView: PixelBufferRenderView = {
         let view = PixelBufferRenderView()
-        view.backgroundColor = .green
+        view.backgroundColor = .white
         return view
     }()
     
     private lazy var bottomRightView: PixelBufferRenderView = {
         let view = PixelBufferRenderView()
-        view.backgroundColor = .purple
+        view.backgroundColor = .white
         return view
     }()
     
@@ -128,7 +119,6 @@ extension PixelBufferPIPViewController {
         videoContainerView.addSubview(bottomRightView)
         
         self.view.addSubview(pipButton)
-        self.view.addSubview(sizeButton)
         
         videoContainerView.snp.makeConstraints { make in
             make.left.top.right.bottom.equalTo(0)
@@ -164,11 +154,6 @@ extension PixelBufferPIPViewController {
         pipButton.snp.makeConstraints { make in
             make.center.equalTo(view)
         }
-        
-        sizeButton.snp.makeConstraints { make in
-            make.top.equalTo(self.pipButton.snp.bottom).offset(10)
-            make.centerX.equalTo(self.pipButton.snp.centerX)
-        }
     }
     
     private func initRtc() {
@@ -188,13 +173,6 @@ extension PixelBufferPIPViewController {
         }
     }
     
-    @objc func sizeAction() {
-        guard let videoCallbackController = videoCallbackController else { return }
-        
-        let i = Int.random(in: 0..<pipSizes.count)
-        let size = pipSizes[i]
-        videoCallbackController.preferredContentSize = size
-    }
 }
 
 @available(iOS 15.0, *)
@@ -217,7 +195,6 @@ extension PixelBufferPIPViewController: AVPictureInPictureControllerDelegate {
         videoContainerView.removeFromSuperview()
         view.addSubview(videoContainerView)
         view.bringSubviewToFront(pipButton)
-        view.bringSubviewToFront(sizeButton)
 
         videoContainerView.snp.makeConstraints { make in
             make.left.top.bottom.right.equalTo(0)
@@ -248,7 +225,7 @@ extension PixelBufferPIPViewController: AgoraRtcEngineDelegate {
 extension PixelBufferPIPViewController: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame, sourceType: AgoraVideoSourceType) -> Bool {
         if let view = displayViews.allObjects.first(where: { $0.uid == mockUid }), let pixelBuffer = videoFrame.pixelBuffer {
-            view.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height)
+            view.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height, rotation: videoFrame.rotation)
         }
         
         return true
@@ -257,9 +234,9 @@ extension PixelBufferPIPViewController: AgoraVideoFrameDelegate {
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if let view = displayViews.allObjects.first(where: { $0.uid == uid }) {
             if let pixelBuffer = videoFrame.pixelBuffer {
-                view.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height)
+                view.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height, rotation: videoFrame.rotation)
             } else {
-                view.renderFromVideoFrameData(videoData: videoFrame, uid: Int(uid))
+                view.renderFromVideoFrameData(videoData: videoFrame)
             }
         }
         
