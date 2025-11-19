@@ -402,6 +402,9 @@ public:
 
     /**
    * Open the Agora CDN media source.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @param src The src of the media file that you want to play.
    * @param startPos The  playback position (ms).
    * @return
@@ -412,6 +415,9 @@ public:
 
   /**
    * Gets the number of  Agora CDN lines.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @return
    * - > 0: number of CDN.
    * - <= 0: Failure.
@@ -420,6 +426,9 @@ public:
 
   /**
    * Switch Agora CDN lines.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @param index Specific CDN line index.
    * @return
    * - 0: Success.
@@ -429,6 +438,9 @@ public:
 
   /**
    * Gets the line of the current CDN.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @return
    * - >= 0: Specific line.
    * - < 0: Failure.
@@ -437,6 +449,9 @@ public:
 
   /**
    * Enable automatic CDN line switching.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @param enable Whether enable.
    * @return
    * - 0: Success.
@@ -446,6 +461,9 @@ public:
 
   /**
    * Update the CDN source token and timestamp.
+   * 
+   * @deprecated 4.6.0
+   * 
    * @param token token.
    * @param ts ts.
    * @return
@@ -456,6 +474,9 @@ public:
 
   /**
    * Switch the CDN source when open a media through "openWithAgoraCDNSrc" API
+   * 
+   * @deprecated 4.6.0
+   * 
    * @param src Specific src.
    * @param syncPts Live streaming must be set to false.
    * @return
