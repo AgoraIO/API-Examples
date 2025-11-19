@@ -326,6 +326,7 @@ struct LocalVideoTrackStats {
   int height;
   uint32_t encoder_type;
   uint32_t hw_encoder_accelerating;
+  uint32_t encoder_frame_depth;
   /*
    * encoder vender id, VideoCodecVenderId
   */
@@ -349,8 +350,6 @@ struct LocalVideoTrackStats {
   
   SimulcastStreamProfile simulcast_stream_profile[STREAM_LAYER_COUNT_MAX];
 
-  uint8_t hdr_stream_encoder;
-
   LocalVideoTrackStats() : number_of_streams(0),
                            bytes_major_stream(0),
                            bytes_minor_stream(0),
@@ -373,12 +372,12 @@ struct LocalVideoTrackStats {
                            height(0),
                            encoder_type(0),
                            hw_encoder_accelerating(0),
+                           encoder_frame_depth(8),
                            encoder_vender_id(0),
                            uplink_cost_time_ms(0),
                            quality_adapt_indication(ADAPT_NONE),
                            txPacketLossRate(0),
-                           capture_brightness_level(CAPTURE_BRIGHTNESS_LEVEL_INVALID),
-                           hdr_stream_encoder(0)  {}
+                           capture_brightness_level(CAPTURE_BRIGHTNESS_LEVEL_INVALID) {}
 };
 
 /**

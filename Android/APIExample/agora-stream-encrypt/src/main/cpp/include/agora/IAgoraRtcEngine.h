@@ -356,6 +356,13 @@ struct LocalVideoStats
   /** The dimensions of the simulcast streams's encoding frame.
     */
   VideoDimensions simulcastDimensions[SimulcastConfig::STREAM_LAYER_COUNT_MAX];
+  /**
+   * @technical preview
+   * The encodedFrameDepth of the local video:
+   * - SDR = 8.
+   * - HDR = 10.
+   */
+  int encodedFrameDepth;
 };
 
 /**
@@ -1299,6 +1306,12 @@ struct ChannelMediaOptions {
    * - `true`: Enable multipath transmission.
    * - `false`: Disable multipath transmission.
    *
+   * @note
+   * - Permission And System Required:
+   *   - Android: Android 7.0 or later(API level 24 or later), with ACCESS_NETWORK_STATE and CHANGE_NETWORK_STATE permission.
+   *   - IOS: IOS 12.0 or later
+   *   - Macos: 10.14 or later
+   *   - Windows: Windows Vista or later
    * @since 4.6.0
    */
   Optional<bool> enableMultipath;
@@ -3036,10 +3049,10 @@ class IRtcEngineEventHandler {
   /**
    * @brief Reports the result of calling renewToken.
    * @since 4.6.0
-   * 
+   *
    *  Occurs when a user renews the token.
    *
-   * This callback notifies the app of the result after the user calls `renewToken` to renew the token. 
+   * This callback notifies the app of the result after the user calls `renewToken` to renew the token.
    * The app can obtain the result of the `renewToken` call from this callback.
    *
    * @param token The token.
@@ -3213,7 +3226,7 @@ class IVideoDeviceManager {
 class IVideoEffectObject : public RefCountInterface {
  public:
   virtual ~IVideoEffectObject() {}
-  
+
   /**
    * @brief Types of video effect nodes that can be applied.
    *
@@ -3227,7 +3240,7 @@ class IVideoEffectObject : public RefCountInterface {
     /** Filter effect node. */
     FILTER       = 1U << 2,
   };
-  
+
   /**
    * @brief Actions that can be performed on video effect nodes.
    *
@@ -3249,7 +3262,7 @@ class IVideoEffectObject : public RefCountInterface {
    *               Example:
    *               - Single effect: `VIDEO_EFFECT_NODE_ID::BEAUTY`
    *               - Combined effects: `VIDEO_EFFECT_NODE_ID::BEAUTY | VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP`
-   * 
+   *
    * @note Priority Rules:
    * - The `STYLE_MAKEUP` node takes precedence over `FILTER` parameters.
    * - To apply `FILTER` parameters, first remove the `STYLE_MAKEUP` node:
@@ -3573,8 +3586,12 @@ public:
     virtual void onMetadataReceived(const Metadata& metadata) = 0;
 };
 
-// The reason codes for media streaming
-// GENERATED_JAVA_ENUM_PACKAGE: io.agora.streaming
+/**
+ * @deprecated v4.6.0.
+ *
+ * The reason codes for media streaming
+ * GENERATED_JAVA_ENUM_PACKAGE: io.agora.streaming
+ */
 enum DIRECT_CDN_STREAMING_REASON {
   // No error occurs.
   DIRECT_CDN_STREAMING_REASON_OK = 0,
@@ -3590,8 +3607,12 @@ enum DIRECT_CDN_STREAMING_REASON {
   DIRECT_CDN_STREAMING_REASON_BAD_NAME = 5,
 };
 
-// The connection state of media streaming
-// GENERATED_JAVA_ENUM_PACKAGE: io.agora.streaming
+/**
+ * @deprecated v4.6.0.
+ *
+ * The connection state of media streaming
+ * GENERATED_JAVA_ENUM_PACKAGE: io.agora.streaming
+ */
 enum DIRECT_CDN_STREAMING_STATE {
 
   DIRECT_CDN_STREAMING_STATE_IDLE = 0,
@@ -3607,7 +3628,7 @@ enum DIRECT_CDN_STREAMING_STATE {
 
 /**
  * The statistics of the Direct Cdn Streams.
- * 
+ *
  * @deprecated v4.6.0.
  */
 struct DirectCdnStreamingStats {
@@ -3639,7 +3660,7 @@ struct DirectCdnStreamingStats {
 
 /**
  * The event handler for direct cdn streaming
- * 
+ *
  * @deprecated v4.6.0.
  *
  */
@@ -3666,7 +3687,7 @@ class IDirectCdnStreamingEventHandler {
 
 /**
  * The channel media options.
- * 
+ *
  * @deprecated v4.6.0.
  */
 struct DirectCdnStreamingMediaOptions {
@@ -3820,27 +3841,28 @@ using RtcEngineReleaseCallback = void(*)();
 class IRtcEngine : public agora::base::IEngineBase {
  public:
   /**
-   * Releases the IRtcEngine object.
+   * Destroys the IRtcEngine object.
    *
-   * This method releases all resources used by the Agora SDK. Use this method for apps in which users
-   * occasionally make voice or video calls. When users do not make calls, you can free up resources for
-   * other operations.
+   * This method destroys the IRtcEngine instance and releases its associated resources.
+   * It is recommended for applications where users make occasional voice or video calls.
+   * When the real-time communication functionality is no longer needed,
+   * call this method to free up resources for other operations.
    *
-   * After a successful method call, you can no longer use any method or callback in the SDK anymore.
-   * If you want to use the real-time communication functions again, you must call `createAgoraRtcEngine`
-   * and `initialize` to create a new `IRtcEngine` instance.
+   * After a successful call, you can no longer use any methods or callbacks provided by the SDK.
+   * To use the real-time communication features again, you must create a new IRtcEngine instance
+   * by calling `createAgoraRtcEngine` and `initialize`.
    *
-   * @note If you want to create a new `IRtcEngine` instance after destroying the current one, ensure
-   * that you wait till the `release` method execution to complete.
+   * @note If you plan to create a new IRtcEngine instance after destroying the current one,
+   * ensure that the `release` method has completed execution before creating the new instance.
+   * Do not call this method from within any SDK callback, as this may result in a deadlock.
    *
-   * @param callback An optional function pointer of `RtcEngineReleaseCallback`. It determines
-   * whether this method is a synchronous call.
-   * - `non-nullptr`: This method is an asynchronous call. The result returns immediately even when the
-   * `IRtcEngine` object resources are not released, and `onEngineReleased` callback will be triggered
-   * when engine is released.
-   * - `nullptr`: This method is a synchronous call, which means that the result of this method call
-   * returns after the `IRtcEngine` object resources are released. Do not call this method
-   * in any callback generated by the SDK, or it may result in a deadlock.
+   * @param callback An optional pointer to the `RtcEngineReleaseCallback` function,
+   * used to configure synchronous or asynchronous destruction of the engine:
+   * - Non-nullptr: Asynchronous destruction. The method returns immediately,
+   * and the engine resources may not be fully released yet.
+   * The `RtcEngineReleaseCallback` will be triggered once the engine destruction is complete.
+   * - nullptr: Synchronous destruction. The method returns only after the engine resources
+   * have been fully released.
    */
   AGORA_CPP_API static void release(RtcEngineReleaseCallback callback = nullptr);
 
@@ -4512,12 +4534,12 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @param bundlePath The path of the video effect bundle.
    * @param type The media source type. See #MEDIA_SOURCE_TYPE.
    *
-   * @return 
+   * @return
    * - The pointer to \ref rtc::IVideoEffectObject "IVideoEffectObject", if the method call succeeds.
    * - A null pointer, if the method call fails.
    */
   virtual agora_refptr<IVideoEffectObject> createVideoEffectObject(const char* bundlePath, agora::media::MEDIA_SOURCE_TYPE type = agora::media::PRIMARY_CAMERA_SOURCE) = 0;
-  
+
 
   /**
    * @brief Destroys a video effect object.
@@ -4531,7 +4553,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - < 0: Failure.
    */
   virtual int destroyVideoEffectObject(agora_refptr<IVideoEffectObject> videoEffectObject) = 0;
-  
+
   /**
    * Sets low-light enhancement.
    *
@@ -6453,15 +6475,15 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Sets the multi-layer video stream configuration.
    *
    * When users expect the same UID to send multiple streams of different resolutions, they can achieve this by calling setSimulcastConfig
-   * 
+   *
    * If multi-layer is configured, the subscriber can choose to receive the corresponding layer
    * of video stream using {@link setRemoteVideoStreamType setRemoteVideoStreamType}.
-   * 
-   * @details This method allows a broadcaster to simultaneously transmit multiple video streams 
-   * with different resolutions. The configuration supports enabling up to four layers 
-   * simultaneously: one major stream (highest resolution) and three additional simulcast 
-   * streams. 
-   * 
+   *
+   * @details This method allows a broadcaster to simultaneously transmit multiple video streams
+   * with different resolutions. The configuration supports enabling up to four layers
+   * simultaneously: one major stream (highest resolution) and three additional simulcast
+   * streams.
+   *
    * @param simulcastConfig
    * - The configuration for multi-layer video stream. It includes seven layers, ranging from
    *   STREAM_LAYER_1 to STREAM_LOW. A maximum of 3 layers can be enabled simultaneously.
@@ -8460,7 +8482,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @note
    * Must call this api before "startDirectCdnStreaming"
-   * 
+   *
    * @deprecated v4.6.0.
    *
    * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels:
@@ -8476,7 +8498,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * Each configuration profile corresponds to a set of video parameters, including
    * the resolution, frame rate, and bitrate.
-   * 
+   *
    * @deprecated v4.6.0.
    *
    * @note
@@ -8491,7 +8513,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int setDirectCdnStreamingVideoConfiguration(const VideoEncoderConfiguration& config) = 0;
 
   /** Start direct cdn streaming
-   * 
+   *
    * @deprecated v4.6.0.
    *
    * @param eventHandler A pointer to the direct cdn streaming event handler: \ref agora::rtc::IDirectCdnStreamingEventHandler
@@ -8509,7 +8531,7 @@ class IRtcEngine : public agora::base::IEngineBase {
                                       const char* publishUrl, const DirectCdnStreamingMediaOptions& options) = 0;
 
   /** Stop direct cdn streaming
-   * 
+   *
    * @deprecated v4.6.0.
    *
    * @note
@@ -8522,7 +8544,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int stopDirectCdnStreaming() = 0;
 
   /** Change the media source during the pushing
-   * 
+   *
    * @deprecated v4.6.0.
    *
    * @note
@@ -8835,6 +8857,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Queries the HDR capability of the video module
+   * @since v4.6.0
    * @param videoModule The video module. See VIDEO_MODULE_TYPE
    * @param capability HDR capability of video module. See HDR_CAPABILITY
    * @return

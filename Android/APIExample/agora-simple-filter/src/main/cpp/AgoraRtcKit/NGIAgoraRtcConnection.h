@@ -531,6 +531,12 @@ class IRtcConnection : public RefCountInterface {
    * When enabled, the SDK can use multiple network paths for data transmission,
    * which can improve the reliability and performance of the connection.
    *
+   * @note
+   * - Permission And System Required:
+   *   - Android: Android 7.0 or later(API level 24 or later), with ACCESS_NETWORK_STATE and CHANGE_NETWORK_STATE permission.
+   *   - IOS: IOS 12.0 or later
+   *   - Macos: 10.14 or later
+   *   - Windows: Windows Vista or later
    * @param enable A boolean value indicating whether to enable (true) or disable (false) multipath.
    * @param ares A reference for asynchronous operations, defaulting to AOSL_REF_INVALID.
    * @return
