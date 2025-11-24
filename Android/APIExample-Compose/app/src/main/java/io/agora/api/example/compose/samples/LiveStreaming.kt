@@ -1,5 +1,6 @@
 package io.agora.api.example.compose.samples
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -57,6 +58,17 @@ import io.agora.rtc2.video.VideoEncoderConfiguration
 import io.agora.rtc2.video.VideoEncoderConfiguration.AdvanceOptions
 import io.agora.rtc2.video.WatermarkOptions
 
+private const val TAG = "LiveStreaming"
+
+private fun getVideoScenarioName(scenario: Constants.VideoScenario): String {
+    return when (scenario) {
+        Constants.VideoScenario.APPLICATION_SCENARIO_GENERAL -> "General"
+        Constants.VideoScenario.APPLICATION_SCENARIO_MEETING -> "Meeting"
+        Constants.VideoScenario.APPLICATION_SCENARIO_1V1 -> "1V1"
+        Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW -> "Live Show"
+    }
+}
+
 @Composable
 fun LiveStreaming() {
     val context = LocalContext.current
@@ -70,6 +82,9 @@ fun LiveStreaming() {
     var localStats by remember { mutableStateOf(VideoStatsInfo()) }
     var remoteStats by remember { mutableStateOf(VideoStatsInfo()) }
     var clientRole by remember { mutableStateOf(Constants.CLIENT_ROLE_AUDIENCE) }
+    val settingsValues = remember { mutableStateMapOf<String, Any>().apply {
+        put("videoScenario", Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW)
+    } }
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
@@ -177,6 +192,10 @@ fun LiveStreaming() {
                     ), 100, 15
                 )
             )
+            // Set default video scenario
+            val defaultScenario = Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW
+            val ret = setVideoScenario(defaultScenario)
+            Log.d(TAG, "onItemSelected: setVideoScenario " + getVideoScenarioName(defaultScenario) + " ret=" + ret)
         }
     }
     DisposableEffect(lifecycleOwner) {
@@ -192,6 +211,11 @@ fun LiveStreaming() {
             if (allGranted) {
                 // Permission is granted
                 Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
+                // Set video scenario before joining channel
+                val scenario = settingsValues["videoScenario"] as? Constants.VideoScenario
+                    ?: Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW
+                val ret = rtcEngine.setVideoScenario(scenario)
+                Log.d(TAG, "onItemSelected: setVideoScenario " + getVideoScenarioName(scenario) + " ret=" + ret)
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = clientRole
@@ -214,6 +238,7 @@ fun LiveStreaming() {
         localStats = localStats,
         remoteStats = remoteStats,
         localLarge = localLarge,
+        settingsValues = settingsValues,
         onSwitch = {
             localLarge = !localLarge
         },
@@ -248,12 +273,12 @@ private fun LiveStreamingView(
     localLarge: Boolean = true,
     localStats: VideoStatsInfo = VideoStatsInfo(),
     remoteStats: VideoStatsInfo = VideoStatsInfo(),
+    settingsValues: MutableMap<String, Any> = mutableMapOf(),
     onSwitch: () -> Unit = {},
     onJoinClick: (String) -> Unit,
     onLeaveClick: () -> Unit
 ) {
     var openSettingSheet by rememberSaveable { mutableStateOf(false) }
-    val settingsValues = remember { mutableStateMapOf<String, Any>() }
 
     Box {
         Column {
@@ -349,9 +374,17 @@ private fun LiveStreamingView(
                     rtcEngine = rtcEngine,
                     role = clientRole,
                     remoteUid = remoteUid,
+                    isJoined = isJoined,
                     values = settingsValues,
                     onValueChanged = { key, value ->
                         settingsValues[key] = value
+                        // Update video scenario immediately if not joined
+                        if (key == "videoScenario" && !isJoined) {
+                            val scenario = value as? Constants.VideoScenario
+                                ?: Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW
+                            val ret = rtcEngine?.setVideoScenario(scenario) ?: -1
+                            Log.d(TAG, "onItemSelected: setVideoScenario " + getVideoScenarioName(scenario) + " ret=" + ret)
+                        }
                     }
                 )
             }
@@ -387,15 +420,34 @@ private fun LiveStreamingSettingView(
     rtcEngine: RtcEngine? = null,
     role: Int = Constants.CLIENT_ROLE_AUDIENCE,
     remoteUid: Int = 0,
+    isJoined: Boolean = false,
     values: Map<String, Any> = emptyMap(),
     onValueChanged: (String, Any) -> Unit = { _, _ -> }
 ) {
     val context = LocalContext.current
+    val videoScenario = values["videoScenario"] as? Constants.VideoScenario
+        ?: Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW
 
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Video Scenario selection - must be set before joining channel
+        DropdownMenuRaw(
+            title = stringResource(id = R.string.video_scenario),
+            options = listOf(
+                stringResource(id = R.string.video_scenario_general) to Constants.VideoScenario.APPLICATION_SCENARIO_GENERAL,
+                stringResource(id = R.string.video_scenario_meeting) to Constants.VideoScenario.APPLICATION_SCENARIO_MEETING,
+                stringResource(id = R.string.video_scenario_1v1) to Constants.VideoScenario.APPLICATION_SCENARIO_1V1,
+                stringResource(id = R.string.video_scenario_liveshow) to Constants.VideoScenario.APPLICATION_SCENARIO_LIVESHOW,
+            ),
+            selectedValue = videoScenario,
+            enable = !isJoined,
+            onSelected = { _, option ->
+                onValueChanged("videoScenario", option.second)
+            }
+        )
+        Divider(modifier = Modifier.padding(horizontal = 16.dp))
         if (role == Constants.CLIENT_ROLE_AUDIENCE) {
             SwitchRaw(
                 title = stringResource(id = R.string.open_low_latency_live),

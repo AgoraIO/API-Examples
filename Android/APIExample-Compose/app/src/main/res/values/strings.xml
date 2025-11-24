@@ -107,4 +107,9 @@
     <string name="permission_granted">Permission Granted</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="enable_video">Enable Video</string>
+    <string name="video_scenario">Video Scenario</string>
+    <string name="video_scenario_general">General</string>
+    <string name="video_scenario_meeting">Meeting</string>
+    <string name="video_scenario_1v1">1V1</string>
+    <string name="video_scenario_liveshow">Live Show</string>
 </resources>
