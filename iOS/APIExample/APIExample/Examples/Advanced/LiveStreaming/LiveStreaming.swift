@@ -20,7 +20,7 @@ class LiveStreamingEntry: UIViewController {
     private var isFirstFrame: Bool = false
     private var backgroundColor: UInt32 = 0x000000
     private var cameraKey: String?
-    
+    private var defaultVideoScenario: AgoraApplicationScenarioType = .applicationLiveShowScenario
     private lazy var agoraKit: AgoraRtcEngineKit = {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -134,18 +134,17 @@ class LiveStreamingEntry: UIViewController {
     @IBAction func onTapVideoScenarioButton(_ sender: UIButton) {
         let pickerView = PickerView()
         pickerView.dataArray = [
+            AgoraApplicationScenarioType.applicationLiveShowScenario.description(),
             AgoraApplicationScenarioType.applicationGeneralScenario.description(),
             AgoraApplicationScenarioType.applicationMeetingScenario.description(),
-            AgoraApplicationScenarioType.application1V1Scenario.description(),
-            AgoraApplicationScenarioType.applicationLiveShowScenario.description()
+            AgoraApplicationScenarioType.application1V1Scenario.description()
         ]
         AlertManager.show(view: pickerView, alertPostion: .bottom)
         pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
             guard let self = self else { return }
             let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
             let type = AgoraApplicationScenarioType(rawValue: idx) ?? .applicationGeneralScenario
-            let ret = self.agoraKit.setVideoScenario(type)
-            print("setVideoScenario[\(type.rawValue)] ret = \(ret)")
+            self.defaultVideoScenario = type
             self.videoScenarioButton?.setTitle(key, for: .normal)
         }
     }
@@ -156,6 +155,7 @@ class LiveStreamingEntry: UIViewController {
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return
         }
+        self.agoraKit.setVideoScenario(defaultVideoScenario)
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName,
                                      "role": self.role,
