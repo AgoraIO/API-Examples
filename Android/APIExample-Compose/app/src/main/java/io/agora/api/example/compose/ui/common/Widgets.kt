@@ -349,6 +349,7 @@ fun <T> DropdownMenuRaw(
                 value = text,
                 onValueChange = {},
                 readOnly = true,
+                enabled = enable,
                 singleLine = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded && enable) },
                 colors = TextFieldDefaults.colors(
