@@ -34,6 +34,7 @@
     <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_raw_audio">Raw Audio Data</string>
     <string name="item_spatial_sound">Spatial Audio</string>
+    <string name="item_audio_safety">Audio Safety</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelaudioByToken">This example demonstrates how to use the SDK to join channels with token for voice only calls.</string>
@@ -44,6 +45,8 @@
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication.</string>
     <string name="rhythmplayer">This example shows how to use virtual rhythm player for during RTC communication.</string>
+    <string name="audio_safety">This example shows how to implement audio security/moderation features, allowing
+        users to report “bad actors” in voice chats and upload the last 5 minutes of audio evidence from that user..</string>
     <string name="writeback">Write Back Audio</string>
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="start">Start</string>
