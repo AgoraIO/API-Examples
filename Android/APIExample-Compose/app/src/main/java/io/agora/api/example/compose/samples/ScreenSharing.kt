@@ -1,5 +1,9 @@
 package io.agora.api.example.compose.samples
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -43,6 +47,13 @@ import io.agora.rtc2.ScreenCaptureParameters
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
+private tailrec fun Context.findActivity(): Activity =
+    when (this) {
+        is Activity -> this
+        is ContextWrapper -> this.baseContext.findActivity()
+        else -> throw IllegalArgumentException("Could not find activity!")
+    }
+
 @Composable
 fun ScreenSharing() {
     val context = LocalContext.current
@@ -64,7 +75,7 @@ fun ScreenSharing() {
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
             mAreaCode = SettingPreferences.getArea()
-            mContext = context
+            mContext = context.applicationContext
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
                 override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
@@ -115,6 +126,8 @@ fun ScreenSharing() {
                     localStats.copy(localVideoStats = stats).let {
                         localStats = it
                     }
+                    Log.d("onLocalVideoStats","${stats?.captureFrameWidth} ${stats?.captureFrameHeight} " +
+                            "${stats?.encodedFrameWidth} ${stats?.encodedFrameHeight}")
                 }
 
                 override fun onLocalAudioStats(stats: LocalAudioStats?) {
@@ -191,6 +204,13 @@ fun ScreenSharing() {
                 // Permission is granted
                 Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
 
+                val metrics = DisplayMetrics()
+                context.findActivity().windowManager.defaultDisplay.getRealMetrics(metrics)
+                screenCaptureParameters.videoCaptureParameters.width = 720
+                screenCaptureParameters.videoCaptureParameters.height =
+                    (720 * 1.0f / metrics.widthPixels * metrics.heightPixels).toInt()
+                screenCaptureParameters.videoCaptureParameters.framerate = 15
+
                 rtcEngine.startScreenCapture(screenCaptureParameters)
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
@@ -227,7 +247,7 @@ fun ScreenSharing() {
             rtcEngine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY)
         },
         remoteRender = { view, id ->
-            rtcEngine.setupRemoteVideo(VideoCanvas(view, Constants.RENDER_MODE_HIDDEN, id))
+            rtcEngine.setupRemoteVideo(VideoCanvas(view, Constants.RENDER_MODE_FIT, id))
         },
         onJoinClick = {
             if (it.isEmpty()) {
@@ -254,7 +274,7 @@ fun ScreenSharing() {
                 screenUid = localUid
             } else {
                 screenUid = 0
-                val videoCanvas = VideoCanvas(null, Constants.RENDER_MODE_HIDDEN, localUid)
+                val videoCanvas = VideoCanvas(null, Constants.RENDER_MODE_FIT, localUid)
                 videoCanvas.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY.value
                 videoCanvas.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED
                 rtcEngine.setupLocalVideo(videoCanvas)
