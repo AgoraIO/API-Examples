@@ -1,0 +1,347 @@
+package io.agora.api.example.examples.advanced
+
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.Nullable
+import io.agora.api.example.MainApplication
+import io.agora.api.example.R
+import io.agora.api.example.annotation.Example
+import io.agora.api.example.common.BaseFragment
+import io.agora.api.example.common.model.Examples
+import io.agora.api.example.common.widget.AudioOnlyLayout
+import io.agora.api.example.common.widget.AudioSeatManager
+import io.agora.api.example.utils.CommonUtil
+import io.agora.api.example.utils.PermissonUtils
+import io.agora.api.example.utils.TokenUtils
+import io.agora.rtc2.ChannelMediaOptions
+import io.agora.rtc2.Constants
+import io.agora.rtc2.IRtcEngineEventHandler
+import io.agora.rtc2.RtcEngine
+import io.agora.rtc2.RtcEngineConfig
+
+/**
+ * Audio Safety Example
+ * 
+ * This example demonstrates how to use AudioSafetyManager to:
+ * - Record audio from local and remote users in a circular buffer
+ * - Report users and generate WAV files with audio evidence
+ * - Support moderation/safety features for voice chat
+ */
+@Example(
+    index = 23,
+    group = Examples.ADVANCED,
+    name = R.string.item_audio_safety,
+    actionId = R.id.action_mainFragment_to_AudioSafety,
+    tipsId = R.string.audio_safety
+)
+class AudioSafety : BaseFragment(), View.OnClickListener {
+    
+    companion object {
+        private const val TAG = "AudioSafety"
+    }
+    
+    private lateinit var etChannel: android.widget.EditText
+    private lateinit var btnJoin: android.widget.Button
+    private var engine: RtcEngine? = null
+    private var audioSafetyManager: AudioSafetyManager? = null
+    private var audioSeatManager: AudioSeatManager? = null
+    private var myUid: Int = 0
+    private var joined: Boolean = false
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler = Handler(Looper.getMainLooper())
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_audio_safety, container, false)
+        return view
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        etChannel = view.findViewById(R.id.et_channel)
+        btnJoin = view.findViewById(R.id.btn_join)
+        btnJoin.setOnClickListener(this)
+        
+        // Initialize audio seat manager for displaying users (8 seats)
+        audioSeatManager = AudioSeatManager(
+            view.findViewById(R.id.audio_place_01),
+            view.findViewById(R.id.audio_place_02),
+            view.findViewById(R.id.audio_place_03),
+            view.findViewById(R.id.audio_place_04),
+            view.findViewById(R.id.audio_place_05),
+            view.findViewById(R.id.audio_place_06),
+            view.findViewById(R.id.audio_place_07),
+            view.findViewById(R.id.audio_place_08)
+        )
+        
+        // Set click listeners on audio seats to report users
+        setupReportListeners(view)
+    }
+    
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val context = context ?: return
+        
+        try {
+            // Initialize RtcEngine
+            val config = RtcEngineConfig()
+            config.mContext = context.applicationContext
+            config.mAppId = getString(R.string.agora_app_id)
+            config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
+            config.mEventHandler = iRtcEngineEventHandler
+            val mainApp = activity?.application as? MainApplication
+            config.mAreaCode = mainApp?.globalSettings?.areaCode ?: 0
+            
+            engine = RtcEngine.create(config)
+            
+            // Set reporting parameters
+            engine?.setParameters("{" +
+                    "\"rtc.report_app_scenario\":" +
+                    "{" +
+                    "\"appScenario\":" + 100 + "," +
+                    "\"serviceType\":" + 11 + "," +
+                    "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\"" +
+                    "}" +
+                    "}")
+            
+            // Set local access point if configured
+            val localAccessPointConfiguration = (activity?.application as? MainApplication)
+                ?.globalSettings?.privateCloudConfig
+            if (localAccessPointConfiguration != null) {
+                engine?.setLocalAccessPoint(localAccessPointConfiguration)
+            }
+            
+            // Initialize AudioSafetyManager
+            audioSafetyManager = AudioSafetyManager(context, bufferDurationMinutes = 5)
+            
+            // Register audio frame observer BEFORE joining channel (as per Agora documentation)
+            engine?.let { rtcEngine ->
+                audioSafetyManager?.initialize(rtcEngine)
+            }
+            
+        } catch (e: Exception) {
+            e.printStackTrace()
+            activity?.onBackPressed()
+        }
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        
+        // Cleanup
+        if (engine != null) {
+            engine?.leaveChannel()
+        }
+        
+        audioSafetyManager?.release()
+        audioSafetyManager = null
+        
+        handler.post {
+            RtcEngine.destroy()
+        }
+        engine = null
+    }
+    
+    override fun onClick(v: View) {
+        if (v.id == R.id.btn_join) {
+            if (!joined) {
+                CommonUtil.hideInputBoard(activity, etChannel)
+                val channelId = etChannel.text.toString()
+                
+                // Check permissions
+                checkOrRequestPermisson(object : PermissonUtils.PermissionResultCallback {
+                    override fun onPermissionsResult(
+                        allPermissionsGranted: Boolean,
+                        permissions: Array<String>,
+                        grantResults: IntArray
+                    ) {
+                        if (allPermissionsGranted) {
+                            joinChannel(channelId)
+                        }
+                    }
+                })
+            } else {
+                joined = false
+                engine?.leaveChannel()
+                btnJoin.text = getString(R.string.join)
+                audioSeatManager?.downAllSeats()
+                audioSafetyManager?.stopRecording()
+            }
+        }
+    }
+    
+    private fun joinChannel(channelId: String) {
+        engine?.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
+        engine?.setDefaultAudioRoutetoSpeakerphone(true)
+        
+        // AudioSafetyManager is already initialized and registered before joining channel
+        
+        TokenUtils.gen(requireContext(), channelId, 0) { token ->
+            val option = ChannelMediaOptions()
+            option.autoSubscribeAudio = true
+            option.autoSubscribeVideo = true
+            
+            val res = engine?.joinChannel(token, channelId, 0, option) ?: -1
+            if (res != 0) {
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)))
+                Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)))
+                return@gen
+            }
+            
+            btnJoin.isEnabled = false
+        }
+    }
+    
+    private fun setupReportListeners(view: View) {
+        // Set click listeners on all audio seats (8 seats)
+        val seatIds = listOf(
+            R.id.audio_place_01,
+            R.id.audio_place_02,
+            R.id.audio_place_03,
+            R.id.audio_place_04,
+            R.id.audio_place_05,
+            R.id.audio_place_06,
+            R.id.audio_place_07,
+            R.id.audio_place_08
+        )
+        
+        seatIds.forEach { seatId ->
+            view.findViewById<AudioOnlyLayout>(seatId)?.let { seat ->
+                // Enable clickable and focusable for click events
+                seat.isClickable = true
+                seat.isFocusable = true
+                
+                seat.setOnClickListener { clickedSeat ->
+                    val uid = clickedSeat.tag as? Int
+                    if (uid == null) {
+                        showShortToast("No user in this seat")
+                        return@setOnClickListener
+                    }
+                    
+                    if (!joined) {
+                        showShortToast("Please join a channel first")
+                        return@setOnClickListener
+                    }
+                    
+                    // Allow reporting any user including local user
+                    reportUser(uid)
+                }
+            }
+        }
+    }
+    
+    private fun reportUser(uid: Int) {
+        if (!joined) {
+            showShortToast("Please join a channel first")
+            return
+        }
+        
+        // Show loading indicator
+        showShortToast("Generating audio evidence for user $uid...")
+
+        audioSafetyManager?.reportUser(uid, object : AudioSafetyManager.ReportCallback {
+            override fun onSuccess(wavFileUri: String) {
+                // Callback is executed in worker thread, post to main thread for UI update
+                handler.post {
+                    showLongToast("Audio evidence saved: $wavFileUri")
+                    Log.d(TAG, "Reported user $uid, WAV file: $wavFileUri")
+                    
+                    // Here you can upload the WAV file to your moderation service
+                    // For example:
+                    // uploadToModerationService(wavFileUri, uid)
+                }
+            }
+            
+            override fun onError(error: String) {
+                // Callback is executed in worker thread, post to main thread for UI update
+                handler.post {
+                    showShortToast("Failed to generate audio evidence: $error")
+                    Log.e(TAG, "Failed to report user $uid: $error")
+                }
+            }
+        })
+    }
+    
+    private val iRtcEngineEventHandler = object : IRtcEngineEventHandler() {
+        
+        override fun onError(err: Int) {
+            Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)))
+        }
+        
+        override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
+            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid))
+            showShortToast(String.format("Joined channel %s as user %d", channel, uid))
+            
+            myUid = uid
+            joined = true
+            
+            handler.post {
+                btnJoin.isEnabled = true
+                btnJoin.text = getString(R.string.leave)
+                
+                // Set local UID and start recording (observer already registered before joining channel)
+                audioSafetyManager?.setLocalUserId(uid)
+                audioSafetyManager?.startRecording()
+                
+                // Register local user for audio monitoring
+                audioSafetyManager?.registerUser(uid)
+                
+                // Show local user in seat
+                audioSeatManager?.upLocalSeat(uid)
+            }
+        }
+        
+        override fun onLeaveChannel(stats: RtcStats) {
+            super.onLeaveChannel(stats)
+            Log.i(TAG, String.format("local user %d leaveChannel!", myUid))
+            showShortToast(String.format("Left channel"))
+            
+            handler.post {
+                audioSafetyManager?.stopRecording()
+                // Unregister local user when leaving channel
+                audioSafetyManager?.unregisterUser(myUid)
+            }
+        }
+        
+        override fun onUserJoined(uid: Int, elapsed: Int) {
+            super.onUserJoined(uid, elapsed)
+            Log.i(TAG, "onUserJoined->$uid")
+            showShortToast(String.format("User %d joined!", uid))
+            
+            handler.post {
+                audioSeatManager?.upRemoteSeat(uid)
+                // Register remote user for audio monitoring
+                audioSafetyManager?.registerUser(uid)
+            }
+        }
+        
+        override fun onUserOffline(uid: Int, reason: Int) {
+            Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason))
+            showShortToast(String.format("User %d left", uid))
+            
+            handler.post {
+                audioSeatManager?.downSeat(uid)
+                // Unregister user when user leaves
+                audioSafetyManager?.unregisterUser(uid)
+            }
+        }
+        
+        override fun onActiveSpeaker(uid: Int) {
+            super.onActiveSpeaker(uid)
+            Log.i(TAG, String.format("onActiveSpeaker:%d", uid))
+        }
+    }
+}

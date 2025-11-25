@@ -55,6 +55,10 @@
             android:id="@+id/action_mainFragment_to_AudioWaveform"
             app:destination="@id/AudioWaveform" />
 
+        <action
+            android:id="@+id/action_mainFragment_to_AudioSafety"
+            app:destination="@id/AudioSafety" />
+
     </fragment>
 
     <fragment
@@ -114,4 +118,10 @@
         android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
         android:label="@string/item_rhythmplayer"
         tools:layout="@layout/fragment_rhythm_player" />
+
+    <fragment
+        android:id="@+id/AudioSafety"
+        android:name="io.agora.api.example.examples.advanced.AudioSafety"
+        android:label="@string/item_audio_safety"
+        tools:layout="@layout/fragment_audio_safety" />
 </navigation>
