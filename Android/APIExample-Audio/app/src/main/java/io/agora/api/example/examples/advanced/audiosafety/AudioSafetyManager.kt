@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.advanced
+package io.agora.api.example.examples.advanced.audiosafety
 
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,7 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IAudioFrameObserver
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.audio.AudioParams
+import kotlinx.coroutines.CancellationException
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
@@ -20,6 +21,14 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.min
 
+data class AudioSafetyManagerConfig(
+    val context: Context,
+    val rtcEngine: RtcEngine,
+    val localUid: Int,
+    val enableRegisterLocal: Boolean = true,
+    val bufferDurationSeconds: Int = 300,
+)
+
 /**
  * AudioSafetyManager - Manages audio recording for safety/moderation purposes
  * 
@@ -31,8 +40,7 @@ import kotlin.math.min
  * - Thread-safe operations
  */
 class AudioSafetyManager(
-    private val context: Context,
-    private val bufferDurationMinutes: Int = 5
+    private val config: AudioSafetyManagerConfig
 ) : IAudioFrameObserver {
     
     companion object {
@@ -45,15 +53,12 @@ class AudioSafetyManager(
         private const val BYTES_PER_SAMPLE = BITS_PER_SAMPLE / 8
         
         // Calculate buffer size for specified duration
-        private fun calculateBufferSize(durationMinutes: Int): Int {
+        private fun calculateBufferSize(durationSeconds: Int): Int {
             // Buffer size = sample_rate * channels * bytes_per_sample * duration_seconds
-            val durationSeconds = durationMinutes * 60
             return SAMPLE_RATE * CHANNELS * BYTES_PER_SAMPLE * durationSeconds
         }
     }
-    
-    private var engine: RtcEngine? = null
-    @Volatile private var localUid: Int = 0
+
     @Volatile private var isRecording: Boolean = false
     
     // Thread-safe storage for each user's audio buffer
@@ -68,126 +73,21 @@ class AudioSafetyManager(
     
     // Coroutine scope for file I/O operations (can be slower, won't block audio capture)
     private val fileProcessingScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    
-    
-    /**
-     * Circular buffer for storing PCM audio data
-     * Thread-safe implementation using synchronized blocks
-     */
-    private class CircularAudioBuffer(val capacity: Int) {
-        private val buffer = ByteArray(capacity)
-        private var writePosition = 0
-        private var isFull = false
-        private val lock = Any()
-        
-        /**
-         * Write audio data to the circular buffer
-         * @param data Audio data to write
-         * @param offset Offset in data array
-         * @param length Length of data to write
-         */
-        fun write(data: ByteArray, offset: Int, length: Int) {
-            synchronized(lock) {
-                var remaining = length
-                var srcOffset = offset
-                
-                while (remaining > 0) {
-                    val available = if (isFull) capacity else writePosition
-                    val spaceAvailable = capacity - available
-                    val toWrite = min(remaining, spaceAvailable)
-                    
-                    if (toWrite == 0) {
-                        // Buffer is full, start overwriting from beginning
-                        writePosition = 0
-                        isFull = true
-                        continue
-                    }
-                    
-                    val endPos = writePosition + toWrite
-                    if (endPos <= capacity) {
-                        // Simple case: write doesn't wrap around
-                        System.arraycopy(data, srcOffset, buffer, writePosition, toWrite)
-                        writePosition = endPos
-                    } else {
-                        // Write wraps around
-                        val firstPart = capacity - writePosition
-                        System.arraycopy(data, srcOffset, buffer, writePosition, firstPart)
-                        System.arraycopy(data, srcOffset + firstPart, buffer, 0, toWrite - firstPart)
-                        writePosition = toWrite - firstPart
-                    }
-                    
-                    remaining -= toWrite
-                    srcOffset += toWrite
-                    
-                    if (writePosition == capacity) {
-                        writePosition = 0
-                        isFull = true
-                    }
-                }
-            }
-        }
-        
-        /**
-         * Read all available audio data from the buffer (snapshot, non-destructive)
-         * This method creates a snapshot of the current buffer state without affecting writes
-         * Can be called multiple times to get the latest data
-         * @return ByteArray containing all audio data (most recent data)
-         */
-        fun readAll(): ByteArray {
-            synchronized(lock) {
-                return if (isFull) {
-                    // Buffer is full, return all data starting from writePosition
-                    // This gives us the most recent data (oldest data is at writePosition)
-                    val result = ByteArray(capacity)
-                    System.arraycopy(buffer, writePosition, result, 0, capacity - writePosition)
-                    System.arraycopy(buffer, 0, result, capacity - writePosition, writePosition)
-                    result
-                } else {
-                    // Buffer not full, return data from 0 to writePosition
-                    val result = ByteArray(writePosition)
-                    System.arraycopy(buffer, 0, result, 0, writePosition)
-                    result
-                }
-            }
-        }
-        
-        /**
-         * Get the current size of data in the buffer
-         */
-        fun size(): Int {
-            synchronized(lock) {
-                return if (isFull) capacity else writePosition
-            }
-        }
-        
-        /**
-         * Clear the buffer
-         */
-        fun clear() {
-            synchronized(lock) {
-                writePosition = 0
-                isFull = false
-            }
-        }
-    }
-    
-    /**
-     * Initialize and register with RtcEngine
-     * Must be called before joining channel (as per Agora documentation)
-     */
-    fun initialize(rtcEngine: RtcEngine) {
-        this.engine = rtcEngine
-        
+
+    init {
         // Register audio frame observer BEFORE joining channel
-        val result = rtcEngine.registerAudioFrameObserver(this)
+        val result = config.rtcEngine.registerAudioFrameObserver(this)
         if (result != 0) {
             Log.e(TAG, "Failed to register audio frame observer: $result")
-            return
+        }
+
+        if (config.enableRegisterLocal){
+            registerUser(config.localUid)
         }
         
         // Set audio frame parameters
         // For recording (local user)
-        rtcEngine.setRecordingAudioFrameParameters(
+        config.rtcEngine.setRecordingAudioFrameParameters(
             SAMPLE_RATE,
             CHANNELS,
             Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY,
@@ -196,21 +96,13 @@ class AudioSafetyManager(
         
         // For playback before mixing (remote users)
         // Note: setPlaybackAudioFrameBeforeMixingParameters is required for onPlaybackAudioFrameBeforeMixing callback
-        rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
+        config.rtcEngine.setPlaybackAudioFrameBeforeMixingParameters(
             SAMPLE_RATE,
             CHANNELS,
             1024
         )
         
         Log.d(TAG, "AudioSafetyManager initialized and registered (before joining channel)")
-    }
-    
-    /**
-     * Set local user ID (called after joining channel)
-     */
-    fun setLocalUserId(uid: Int) {
-        this.localUid = uid
-        Log.d(TAG, "Local user ID set to $uid")
     }
     
     /**
@@ -258,9 +150,8 @@ class AudioSafetyManager(
      */
     fun release() {
         stopRecording()
-        engine?.registerAudioFrameObserver(null)
-        engine = null
-        
+        config.rtcEngine.registerAudioFrameObserver(null)
+
         // Cancel coroutine scopes
         audioWriteScope.cancel()
         fileProcessingScope.cancel()
@@ -315,7 +206,7 @@ class AudioSafetyManager(
                 }
                 Log.d(TAG, "Generated WAV file for user $targetUid: $wavFile")
                 callback.onSuccess(wavFile)
-            } catch (e: kotlinx.coroutines.CancellationException) {
+            } catch (e: CancellationException) {
                 // Scope was cancelled, don't call callback as manager is being released
                 Log.d(TAG, "Report generation cancelled for user $targetUid")
                 throw e // Re-throw to respect cancellation
@@ -331,7 +222,7 @@ class AudioSafetyManager(
      */
     private fun generateWavFile(uid: Int, pcmData: ByteArray): String {
         val fileName = "audio_report_${uid}_${System.currentTimeMillis()}.wav"
-        val externalFilesDir = context.getExternalFilesDir(null)
+        val externalFilesDir = config.context.getExternalFilesDir(null)
             ?: throw IllegalStateException("External files directory is not available")
         val file = File(externalFilesDir, fileName)
         
@@ -390,7 +281,7 @@ class AudioSafetyManager(
         // Slow path: create new buffer
         // ConcurrentHashMap.getOrPut is thread-safe, lambda may execute multiple times but result is the same
         return userBuffers.getOrPut(uid) {
-            val bufferSize = calculateBufferSize(bufferDurationMinutes)
+            val bufferSize = calculateBufferSize(config.bufferDurationSeconds)
             CircularAudioBuffer(bufferSize)
         }
     }
@@ -413,7 +304,7 @@ class AudioSafetyManager(
             return false
         }
         
-        val targetUid = localUid
+        val targetUid = config.localUid
         if (targetUid == 0 || !registeredUsers.contains(targetUid)) {
             return false
         }
@@ -556,5 +447,106 @@ class AudioSafetyManager(
     
     override fun getEarMonitoringAudioParams(): AudioParams? {
         return null
+    }
+
+    /**
+     * Circular buffer for storing PCM audio data
+     * Thread-safe implementation using synchronized blocks
+     */
+    private class CircularAudioBuffer(val capacity: Int) {
+        private val buffer = ByteArray(capacity)
+        private var writePosition = 0
+        private var isFull = false
+        private val lock = Any()
+
+        /**
+         * Write audio data to the circular buffer
+         * @param data Audio data to write
+         * @param offset Offset in data array
+         * @param length Length of data to write
+         */
+        fun write(data: ByteArray, offset: Int, length: Int) {
+            synchronized(lock) {
+                var remaining = length
+                var srcOffset = offset
+
+                while (remaining > 0) {
+                    val available = if (isFull) capacity else writePosition
+                    val spaceAvailable = capacity - available
+                    val toWrite = min(remaining, spaceAvailable)
+
+                    if (toWrite == 0) {
+                        // Buffer is full, start overwriting from beginning
+                        writePosition = 0
+                        isFull = true
+                        continue
+                    }
+
+                    val endPos = writePosition + toWrite
+                    if (endPos <= capacity) {
+                        // Simple case: write doesn't wrap around
+                        System.arraycopy(data, srcOffset, buffer, writePosition, toWrite)
+                        writePosition = endPos
+                    } else {
+                        // Write wraps around
+                        val firstPart = capacity - writePosition
+                        System.arraycopy(data, srcOffset, buffer, writePosition, firstPart)
+                        System.arraycopy(data, srcOffset + firstPart, buffer, 0, toWrite - firstPart)
+                        writePosition = toWrite - firstPart
+                    }
+
+                    remaining -= toWrite
+                    srcOffset += toWrite
+
+                    if (writePosition == capacity) {
+                        writePosition = 0
+                        isFull = true
+                    }
+                }
+            }
+        }
+
+        /**
+         * Read all available audio data from the buffer (snapshot, non-destructive)
+         * This method creates a snapshot of the current buffer state without affecting writes
+         * Can be called multiple times to get the latest data
+         * @return ByteArray containing all audio data (most recent data)
+         */
+        fun readAll(): ByteArray {
+            synchronized(lock) {
+                return if (isFull) {
+                    // Buffer is full, return all data starting from writePosition
+                    // This gives us the most recent data (oldest data is at writePosition)
+                    val result = ByteArray(capacity)
+                    System.arraycopy(buffer, writePosition, result, 0, capacity - writePosition)
+                    System.arraycopy(buffer, 0, result, capacity - writePosition, writePosition)
+                    result
+                } else {
+                    // Buffer not full, return data from 0 to writePosition
+                    val result = ByteArray(writePosition)
+                    System.arraycopy(buffer, 0, result, 0, writePosition)
+                    result
+                }
+            }
+        }
+
+        /**
+         * Get the current size of data in the buffer
+         */
+        fun size(): Int {
+            synchronized(lock) {
+                return if (isFull) capacity else writePosition
+            }
+        }
+
+        /**
+         * Clear the buffer
+         */
+        fun clear() {
+            synchronized(lock) {
+                writePosition = 0
+                isFull = false
+            }
+        }
     }
 }
