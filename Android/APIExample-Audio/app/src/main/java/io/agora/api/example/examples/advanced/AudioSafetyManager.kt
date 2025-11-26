@@ -2,6 +2,7 @@ package io.agora.api.example.examples.advanced
 
 import android.content.Context
 import android.util.Log
+import kotlin.jvm.Volatile
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IAudioFrameObserver
 import io.agora.rtc2.RtcEngine
@@ -52,8 +53,8 @@ class AudioSafetyManager(
     }
     
     private var engine: RtcEngine? = null
-    private var localUid: Int = 0
-    private var isRecording: Boolean = false
+    @Volatile private var localUid: Int = 0
+    @Volatile private var isRecording: Boolean = false
     
     // Thread-safe storage for each user's audio buffer
     private val userBuffers = ConcurrentHashMap<Int, CircularAudioBuffer>()
@@ -245,6 +246,7 @@ class AudioSafetyManager(
      */
     fun stopRecording() {
         isRecording = false
+        userBuffers.values.forEach { it.clear() }
         userBuffers.clear()
         registeredUsers.clear()
         Log.d(TAG, "Recording stopped")
@@ -289,6 +291,12 @@ class AudioSafetyManager(
         // Multiple reports for the same user can run concurrently - each gets a snapshot of the buffer
         fileProcessingScope.launch {
             try {
+                // Check if still recording (may have changed during coroutine execution)
+                if (!isRecording) {
+                    callback.onError("Recording stopped during report generation")
+                    return@launch
+                }
+                
                 val buffer = userBuffers[targetUid]
                 if (buffer == null) {
                     callback.onError("No audio data found for user $targetUid")
@@ -307,6 +315,10 @@ class AudioSafetyManager(
                 }
                 Log.d(TAG, "Generated WAV file for user $targetUid: $wavFile")
                 callback.onSuccess(wavFile)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // Scope was cancelled, don't call callback as manager is being released
+                Log.d(TAG, "Report generation cancelled for user $targetUid")
+                throw e // Re-throw to respect cancellation
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to generate WAV file for user $targetUid", e)
                 callback.onError("Failed to generate WAV file: ${e.message}")
@@ -319,7 +331,9 @@ class AudioSafetyManager(
      */
     private fun generateWavFile(uid: Int, pcmData: ByteArray): String {
         val fileName = "audio_report_${uid}_${System.currentTimeMillis()}.wav"
-        val file = File(context.getExternalFilesDir(null), fileName)
+        val externalFilesDir = context.getExternalFilesDir(null)
+            ?: throw IllegalStateException("External files directory is not available")
+        val file = File(externalFilesDir, fileName)
         
         FileOutputStream(file).use { fos ->
             // Write WAV header
