@@ -51,6 +51,10 @@ class AudioSafety : BaseFragment(), View.OnClickListener {
     // Current config values (can be updated from config page)
     private var currentEnableRegisterLocal: Boolean = true
     private var currentBufferDurationSeconds: Int = 300
+    
+    // Debounce for reportUser to prevent rapid consecutive calls
+    private var lastReportTime: Long = 0
+    private val REPORT_DEBOUNCE_MS = 1000L  // Minimum 1 second between reports
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -261,12 +265,21 @@ class AudioSafety : BaseFragment(), View.OnClickListener {
             return
         }
 
+        // Debounce: prevent rapid consecutive reports
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastReportTime < REPORT_DEBOUNCE_MS) {
+            showShortToast("Please wait before reporting again")
+            return
+        }
+        lastReportTime = currentTime
+
         // Show loading indicator
         showShortToast("Generating audio evidence for user $uid...")
 
         audioSafetyManager?.reportUser(uid, object : AudioSafetyManager.ReportCallback {
             override fun onSuccess(wavFileUri: String) {
                 // Callback is executed in worker thread, post to main thread for UI update
+                // Use postDelayed with 0 delay to ensure it's queued, not executed immediately
                 handler.post {
                     showLongToast("Audio evidence saved: $wavFileUri")
                     Log.d(TAG, "Reported user $uid, WAV file: $wavFileUri")
