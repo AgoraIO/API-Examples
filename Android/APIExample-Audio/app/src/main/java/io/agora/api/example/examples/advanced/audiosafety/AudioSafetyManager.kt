@@ -135,13 +135,18 @@ class AudioSafetyManager(
     
     /**
      * Stop recording and cleanup
+     * Note: This method should be called from a background thread to avoid blocking
      */
     fun stopRecording() {
         isRecording = false
-        userBuffers.values.forEach { it.clear() }
-        userBuffers.clear()
-        registeredUsers.clear()
-        Log.d(TAG, "Recording stopped")
+        // Clear buffers in background to avoid blocking caller thread
+        // For large buffers, clearing can take time
+        fileProcessingScope.launch {
+            userBuffers.values.forEach { it.clear() }
+            userBuffers.clear()
+            registeredUsers.clear()
+            Log.d(TAG, "Recording stopped")
+        }
     }
     
     /**
