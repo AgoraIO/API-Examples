@@ -81,9 +81,9 @@ rm -f vender_faceunity_resources_apiexample.zip
 #curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sensetime_resources_apiexample.zip"
 #unzip -o vender_sensetime_resources_apiexample.zip
 #rm -f vender_sensetime_resources_apiexample.zip
-curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_agora_resources_apiexample.zip"
-unzip -o vender_agora_resources_apiexample.zip
-rm -f vender_agora_resources_apiexample.zip
+curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_agora_resources_apiexample.4.6.2.zip"
+unzip -o vender_agora_resources_apiexample.4.6.2.zip
+rm -f vender_agora_resources_apiexample.4.6.2.zip
 cd - || exit 1
 
 ./gradlew clean || exit 1
