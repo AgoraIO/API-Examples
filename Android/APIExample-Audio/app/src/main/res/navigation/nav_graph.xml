@@ -56,8 +56,8 @@
             app:destination="@id/AudioWaveform" />
 
         <action
-            android:id="@+id/action_mainFragment_to_AudioSafety"
-            app:destination="@id/AudioSafety" />
+            android:id="@+id/action_mainFragment_to_AudioSafetyConfig"
+            app:destination="@id/AudioSafetyConfig" />
 
     </fragment>
 
@@ -119,9 +119,34 @@
         android:label="@string/item_rhythmplayer"
         tools:layout="@layout/fragment_rhythm_player" />
 
+
+    <fragment
+        android:id="@+id/AudioSafetyConfig"
+        android:name="io.agora.api.example.examples.advanced.audiosafety.AudioSafetyConfigFragment"
+        android:label="Audio Safety Configuration"
+        tools:layout="@layout/fragment_audio_safety_config">
+
+        <action
+            android:id="@+id/action_AudioSafetyConfig_to_AudioSafety"
+            app:destination="@id/AudioSafety" />
+    </fragment>
+
     <fragment
         android:id="@+id/AudioSafety"
-        android:name="io.agora.api.example.examples.advanced.AudioSafety"
+        android:name="io.agora.api.example.examples.advanced.audiosafety.AudioSafety"
         android:label="@string/item_audio_safety"
-        tools:layout="@layout/fragment_audio_safety" />
+        tools:layout="@layout/fragment_audio_safety">
+        <argument
+            android:name="enable_register_local"
+            app:argType="boolean"
+            android:defaultValue="true" />
+        <argument
+            android:name="buffer_duration_seconds"
+            app:argType="integer"
+            android:defaultValue="300" />
+
+        <action
+            android:id="@+id/action_AudioSafety_to_AudioSafetyConfig"
+            app:destination="@id/AudioSafetyConfig" />
+    </fragment>
 </navigation>
