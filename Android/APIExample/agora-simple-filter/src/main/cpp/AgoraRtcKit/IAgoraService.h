@@ -822,6 +822,21 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createScreenCaptureVideoTrack(
       agora_refptr<rtc::IScreenCapturer> screen, const char* id = OPTIONAL_NULLPTR) = 0;
+
+
+/**
+   * Creates a local audio track object with a screen capture source extension and returns the pointer.
+   *
+   * Once created, this track can be used to work with the screen capture extension.
+   *
+   * @param screen The pointer to the screen capture source.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createScreenCaptureAudioTrack(
+    agora_refptr<rtc::IScreenCapturer> screen) = 0;
 #endif
 
 /// @cond (!Linux)
