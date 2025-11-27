@@ -6431,9 +6431,56 @@ enum VOICE_AI_TUNER_TYPE {
 };
 
 /**
+ * @brief The audio configuration for the shared screen stream.
+ *
+ * @details
+ * Only available where `captureAudio` is `true`.
+ *
+ */
+struct ScreenAudioParameters {
+  /**
+   * Audio sample rate (Hz). 
+   */
+  int sampleRate;
+  /**
+   * The number of audio channels. The default value is 2, which means stereo.
+   */
+  int channels;
+  /**
+   * The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+   */
+  int captureSignalVolume;
+
+#if defined(__APPLE__) && !TARGET_OS_IOS
+  bool excludeCurrentProcessAudio = true;
+  ScreenAudioParameters(): sampleRate(48000), channels(2), captureSignalVolume(100) {}
+#else
+  ScreenAudioParameters(): sampleRate(16000), channels(2), captureSignalVolume(100) {}
+#endif
+};
+
+/**
  * @brief Screen sharing configurations.
  */
 struct ScreenCaptureParameters {
+
+  /**
+   * Determines whether to capture system audio during screen sharing:
+   * - `true`: Capture.
+   * - `false`: (Default)  Do not capture.
+   *
+   * @note
+   * Due to system limitations, capturing system audio is only available for Android API level 29
+   * and later (that is, Android 10 and later).
+   */
+  bool captureAudio;
+  /**
+   * The audio configuration for the shared screen stream.
+   * @note This parameter only takes effect when `captureAudio` is `true`.
+   * See `ScreenAudioParameters`.
+   */
+  ScreenAudioParameters audioParams;
+
   /**
    * The video encoding resolution of the screen sharing stream. See `VideoDimensions`. The default
    * value is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to
@@ -6523,7 +6570,8 @@ struct ScreenCaptureParameters {
   bool enableHighLight;
 
   ScreenCaptureParameters()
-      : dimensions(1920, 1080),
+      : captureAudio(false),
+        dimensions(1920, 1080),
         frameRate(5),
         bitrate(STANDARD_BITRATE),
         captureMouseCursor(true),
@@ -6534,7 +6582,7 @@ struct ScreenCaptureParameters {
         highLightColor(0),
         enableHighLight(false) {}
   ScreenCaptureParameters(const VideoDimensions& d, int f, int b)
-      : dimensions(d),
+      : captureAudio(false),dimensions(d),
         frameRate(f),
         bitrate(b),
         captureMouseCursor(true),
@@ -6545,7 +6593,8 @@ struct ScreenCaptureParameters {
         highLightColor(0),
         enableHighLight(false) {}
   ScreenCaptureParameters(int width, int height, int f, int b)
-      : dimensions(width, height),
+      : captureAudio(false),
+        dimensions(width, height),
         frameRate(f),
         bitrate(b),
         captureMouseCursor(true),
@@ -6556,7 +6605,8 @@ struct ScreenCaptureParameters {
         highLightColor(0),
         enableHighLight(false) {}
   ScreenCaptureParameters(int width, int height, int f, int b, bool cur, bool fcs)
-      : dimensions(width, height),
+      : captureAudio(false),
+        dimensions(width, height),
         frameRate(f),
         bitrate(b),
         captureMouseCursor(cur),
@@ -6567,7 +6617,8 @@ struct ScreenCaptureParameters {
         highLightColor(0),
         enableHighLight(false) {}
   ScreenCaptureParameters(int width, int height, int f, int b, view_t* ex, int cnt)
-      : dimensions(width, height),
+      : captureAudio(false),
+        dimensions(width, height),
         frameRate(f),
         bitrate(b),
         captureMouseCursor(true),
@@ -6579,7 +6630,8 @@ struct ScreenCaptureParameters {
         enableHighLight(false) {}
   ScreenCaptureParameters(int width, int height, int f, int b, bool cur, bool fcs, view_t* ex,
                           int cnt)
-      : dimensions(width, height),
+      : captureAudio(false),
+        dimensions(width, height),
         frameRate(f),
         bitrate(b),
         captureMouseCursor(cur),
@@ -7597,28 +7649,6 @@ struct ScreenVideoParameters {
   VIDEO_CONTENT_HINT contentHint = VIDEO_CONTENT_HINT::CONTENT_HINT_MOTION;
 
   ScreenVideoParameters() : dimensions(1280, 720) {}
-};
-
-/**
- * @brief The audio configuration for the shared screen stream.
- *
- * @details
- * Only available where `captureAudio` is `true`.
- *
- */
-struct ScreenAudioParameters {
-  /**
-   * Audio sample rate (Hz). The default value is 16000.
-   */
-  int sampleRate = 16000;
-  /**
-   * The number of audio channels. The default value is 2, which means stereo.
-   */
-  int channels = 2;
-  /**
-   * The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-   */
-  int captureSignalVolume = 100;
 };
 
 /**

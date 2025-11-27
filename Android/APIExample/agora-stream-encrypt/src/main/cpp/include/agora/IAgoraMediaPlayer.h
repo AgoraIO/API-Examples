@@ -877,6 +877,15 @@ public:
    */
   virtual int setSoundPositionParams(float pan, float gain) = 0;
 
+  /**
+   * @brief Gets the audio buffer delay when playing the media file.
+   * @param[out] delayMs delay in millisecond.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getAudioBufferDelay(int32_t& delayMs) = 0;
+
 };
 
 /**
