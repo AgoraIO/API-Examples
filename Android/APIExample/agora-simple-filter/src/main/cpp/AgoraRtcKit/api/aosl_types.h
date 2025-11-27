@@ -54,6 +54,33 @@ typedef void (*aosl_argv_f) (uintptr_t argc, uintptr_t argv []);
 typedef aosl_argv_f aosl_obj_dtor_t;
 
 
+/**
+ * The common customized internal object constructor callback function.
+ * Parameters:
+ *     dst: the destination address internal for constructing the object;
+ *     src: the source address for constructing the internal object;
+ * Return value:
+ *      <0: indicate some error occurs;
+ *     >=0: successful;
+ * Remarks:
+ *     Construct the customized internal object according to the source,
+ *     such as invoking the C++ constructor etc for C++ API.
+ **/
+typedef int (*aosl_ctor_t) (void *dst, void *src);
+
+/**
+ * The common customized internal object destructor callback function.
+ * Parameters:
+ *     obj: the address of the customized internal object;
+ * Return value:
+ *     N/A.
+ * Remarks:
+ *     Destruct the customized internal object in this callback function,
+ *     such as invoking the C++ destructor etc for C++ API.
+ **/
+typedef void (*aosl_dtor_t) (void *obj);
+
+
 #if !defined (_WIN32) && !defined (__kspreadtrum__)
 typedef int aosl_fd_t;
 #define AOSL_INVALID_FD ((aosl_fd_t)-1)

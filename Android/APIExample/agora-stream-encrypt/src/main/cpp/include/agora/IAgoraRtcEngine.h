@@ -1284,7 +1284,14 @@ struct ChannelMediaOptions {
    * - `false`: Do not publish the audio captured by the microphone.
    */
   Optional<bool> publishMicrophoneTrack;
-
+  #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(TARGET_OS_MAC) || defined(__OHOS__)
+  /**
+   * Whether to publish the audio track of the screen capturer:
+   * - `true`: Publish the video audio of the screen capturer.
+   * - `false`: (Default) Do not publish the audio track of the screen capturer.
+   */
+   Optional<bool> publishScreenCaptureAudio;
+  #endif
   #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
   /**
    * Whether to publish the video captured from the screen:
@@ -1293,13 +1300,7 @@ struct ChannelMediaOptions {
    * @note This parameter is for Android and iOS only.
    */
   Optional<bool> publishScreenCaptureVideo;
-  /**
-   * Whether to publish the audio captured from the screen:
-   * - `true`: Publish the audio captured from the screen.
-   * - `false`: Publish the audio captured from the screen.
-   * @note This parameter is for Android and iOS only.
-   */
-  Optional<bool> publishScreenCaptureAudio;
+
   #else
   /**
    * Whether to publish the video captured from the screen:
@@ -1542,9 +1543,11 @@ struct ChannelMediaOptions {
       SET_FROM(publishThirdCameraTrack);
       SET_FROM(publishFourthCameraTrack);
       SET_FROM(publishMicrophoneTrack);
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(TARGET_OS_MAC) || defined(__OHOS__)
+      SET_FROM(publishScreenCaptureAudio);
+#endif
 #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
       SET_FROM(publishScreenCaptureVideo);
-      SET_FROM(publishScreenCaptureAudio);
 #else
       SET_FROM(publishScreenTrack);
       SET_FROM(publishSecondaryScreenTrack);
@@ -1595,9 +1598,11 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishThirdCameraTrack);
       ADD_COMPARE(publishFourthCameraTrack);
       ADD_COMPARE(publishMicrophoneTrack);
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(TARGET_OS_MAC) || defined(__OHOS__)
+      ADD_COMPARE(publishScreenCaptureAudio);
+#endif
 #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
       ADD_COMPARE(publishScreenCaptureVideo);
-      ADD_COMPARE(publishScreenCaptureAudio);
 #else
       ADD_COMPARE(publishScreenTrack);
       ADD_COMPARE(publishSecondaryScreenTrack);
@@ -1651,9 +1656,11 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishThirdCameraTrack);
         REPLACE_BY(publishFourthCameraTrack);
         REPLACE_BY(publishMicrophoneTrack);
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(TARGET_OS_MAC) || defined(__OHOS__)
+        REPLACE_BY(publishScreenCaptureAudio);
+#endif
 #if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
         REPLACE_BY(publishScreenCaptureVideo);
-        REPLACE_BY(publishScreenCaptureAudio);
 #else
         REPLACE_BY(publishScreenTrack);
         REPLACE_BY(publishSecondaryScreenTrack);
