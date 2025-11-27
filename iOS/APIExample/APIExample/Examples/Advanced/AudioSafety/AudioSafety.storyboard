@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Audio Safety Entry-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="EntryViewController" id="Y6W-OH-hqX" customClass="AudioSafetyEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Gi-Eh-Rp4" userLabel="channelName">
+                                <rect key="frame" x="30" y="258.33333333333331" width="333" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter duration in seconds" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BVk-YL-N3h" userLabel="channelName">
+                                <rect key="frame" x="30" y="201.33333333333334" width="333" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ht0-uF-N5a" userLabel="joinBtn">
+                                <rect key="frame" x="181.66666666666666" y="342.33333333333331" width="30" height="30"/>
+                                <state key="normal" title="Join"/>
+                                <connections>
+                                    <action selector="doJoinPressedWithSender:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="BHG-XI-O33"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buffer Duration(seconds)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQ9-8g-gZZ">
+                                <rect key="frame" x="30" y="163.33333333333334" width="193" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable record local user's audio in the buffer" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVH-pl-HF5">
+                                <rect key="frame" x="30" y="91" width="339" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9Y-6f-gep">
+                                <rect key="frame" x="30" y="119.33333333333331" width="51" height="31"/>
+                            </switch>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ht0-uF-N5a" firstAttribute="top" secondItem="6Gi-Eh-Rp4" secondAttribute="bottom" constant="50" id="1JO-qu-SS0"/>
+                            <constraint firstItem="BVk-YL-N3h" firstAttribute="top" secondItem="FQ9-8g-gZZ" secondAttribute="bottom" constant="17" id="2bQ-R5-NEZ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="6Gi-Eh-Rp4" secondAttribute="trailing" constant="30" id="6Mu-wH-G6A"/>
+                            <constraint firstItem="DVH-pl-HF5" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="32" id="8s4-j5-tWu"/>
+                            <constraint firstItem="O9Y-6f-gep" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="Beq-82-G81"/>
+                            <constraint firstItem="DVH-pl-HF5" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="H3M-75-K9A"/>
+                            <constraint firstItem="6Gi-Eh-Rp4" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="Hjd-5d-ZnW"/>
+                            <constraint firstItem="BVk-YL-N3h" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="Ir1-NR-aIn"/>
+                            <constraint firstItem="DVH-pl-HF5" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="0.862595" id="Lvi-WM-gHY"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="BVk-YL-N3h" secondAttribute="trailing" constant="30" id="M7A-eD-GeL"/>
+                            <constraint firstItem="O9Y-6f-gep" firstAttribute="top" secondItem="DVH-pl-HF5" secondAttribute="bottom" constant="8" symbolic="YES" id="PTN-Cs-jZh"/>
+                            <constraint firstItem="6Gi-Eh-Rp4" firstAttribute="top" secondItem="BVk-YL-N3h" secondAttribute="bottom" constant="23" id="b0s-Ib-69S"/>
+                            <constraint firstItem="FQ9-8g-gZZ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="eax-Ni-nIE"/>
+                            <constraint firstItem="ht0-uF-N5a" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="sGc-dU-UJ7"/>
+                            <constraint firstItem="FQ9-8g-gZZ" firstAttribute="top" secondItem="O9Y-6f-gep" secondAttribute="bottom" constant="13" id="xHz-BM-VIs"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="6Gi-Eh-Rp4" id="7K0-Ep-JJ8"/>
+                        <outlet property="durationTextField" destination="BVk-YL-N3h" id="bIQ-US-p5z"/>
+                        <outlet property="recordSwitch" destination="O9Y-6f-gep" id="kEx-ZJ-JuF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138.1679389312977" y="-2.1126760563380285"/>
+        </scene>
+        <!--Audio Safety-->
+        <scene sceneID="mcs-9T-c0h">
+            <objects>
+                <viewController storyboardIdentifier="AudioSafety" id="1Ok-qE-hBy" customClass="AudioSafety" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bh9-oV-ygr">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ak9-Dx-3yg" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="59" width="393" height="733"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="axV-FJ-Yqm"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="axV-FJ-Yqm" firstAttribute="bottom" secondItem="ak9-Dx-3yg" secondAttribute="bottom" constant="26" id="7qk-NT-RqO"/>
+                            <constraint firstItem="axV-FJ-Yqm" firstAttribute="trailing" secondItem="ak9-Dx-3yg" secondAttribute="trailing" id="iEu-RZ-u9W"/>
+                            <constraint firstItem="ak9-Dx-3yg" firstAttribute="leading" secondItem="axV-FJ-Yqm" secondAttribute="leading" id="nHs-6R-6FZ"/>
+                            <constraint firstItem="ak9-Dx-3yg" firstAttribute="top" secondItem="axV-FJ-Yqm" secondAttribute="top" id="srp-QU-huk"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="ak9-Dx-3yg" id="vqW-Jt-O1v"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i7v-B3-Isy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-66.412213740458014" y="644.36619718309862"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

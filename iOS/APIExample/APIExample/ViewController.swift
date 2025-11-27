@@ -78,6 +78,7 @@ class ViewController: AGViewController {
             MenuItem(name: "URL Streaming(RTE Player)".localized, storyboard: "RtePlayer", controller: ""),
             MenuItem(name: "Simulcast".localized, storyboard: "Simulcast", controller: "SimulcasthEntry"),
             MenuItem(name: "Multipath".localized, storyboard: "Multipath", controller: "MultipathEntry"),
+            MenuItem(name: "AudioSafety".localized, storyboard: "AudioSafety", controller: "CustomAudioEntry"),
         ])
     ]
     override func viewDidLoad() {
