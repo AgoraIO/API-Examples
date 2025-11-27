@@ -216,6 +216,9 @@
 		F73479242DF5CA820030C0CE /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */; };
 		F73479262DF5CAEB0030C0CE /* AgoraBeautyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */; };
 		F73B01D52CCB84590077B7D2 /* APIReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F73B01D32CCB84590077B7D2 /* APIReporter.m */; };
+		F77E52ED2ED704750014F14F /* AudioSafety.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E52EC2ED704750014F14F /* AudioSafety.swift */; };
+		F77E52EF2ED704A80014F14F /* AudioSafety.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F77E52EE2ED704A80014F14F /* AudioSafety.storyboard */; };
+		F77E52F12ED73EAF0014F14F /* AudioSafetyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E52F02ED73EAF0014F14F /* AudioSafetyManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -535,6 +538,9 @@
 		F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeautyManager.swift; sourceTree = "<group>"; };
 		F73B01D22CCB84590077B7D2 /* APIReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIReporter.h; sourceTree = "<group>"; };
 		F73B01D32CCB84590077B7D2 /* APIReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIReporter.m; sourceTree = "<group>"; };
+		F77E52EC2ED704750014F14F /* AudioSafety.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSafety.swift; sourceTree = "<group>"; };
+		F77E52EE2ED704A80014F14F /* AudioSafety.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AudioSafety.storyboard; sourceTree = "<group>"; };
+		F77E52F02ED73EAF0014F14F /* AudioSafetyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSafetyManager.swift; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1055,6 +1061,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F77E52EB2ED704250014F14F /* AudioSafety */,
 				F73478602DE59CE10030C0CE /* AgoraBeauty */,
 				ABB399EB2DF9605B00AF5033 /* Multipath */,
 				ABB399F02DF9605B00AF5033 /* Simulcast */,
@@ -1382,6 +1389,16 @@
 			path = Report;
 			sourceTree = "<group>";
 		};
+		F77E52EB2ED704250014F14F /* AudioSafety */ = {
+			isa = PBXGroup;
+			children = (
+				F77E52EC2ED704750014F14F /* AudioSafety.swift */,
+				F77E52F02ED73EAF0014F14F /* AudioSafetyManager.swift */,
+				F77E52EE2ED704A80014F14F /* AudioSafety.storyboard */,
+			);
+			path = AudioSafety;
+			sourceTree = "<group>";
+		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1616,6 +1633,7 @@
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				DDFD502A2C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 in Resources */,
 				E726BFFA2A949F70006870E2 /* AudioRouterPlayer.strings in Resources */,
+				F77E52EF2ED704A80014F14F /* AudioSafety.storyboard in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
@@ -1752,6 +1770,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F77E52F12ED73EAF0014F14F /* AudioSafetyManager.swift in Sources */,
 				DD6ED7F32CB69FFB007B3B5D /* LocalCompositeGraph.swift in Sources */,
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
@@ -1780,6 +1799,7 @@
 				6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
+				F77E52ED2ED704750014F14F /* AudioSafety.swift in Sources */,
 				E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */,
 				E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */,
 				F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */,
@@ -2421,7 +2441,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2455,7 +2475,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
@@ -2611,7 +2631,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2682,7 +2702,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = APIExample/Info.plist;
@@ -2751,7 +2771,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2788,7 +2808,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = G726234S43;
+				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
