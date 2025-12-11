@@ -70,7 +70,7 @@ class QuickSwitchChannel: BaseViewController {
         
         let encoderConfig = AgoraVideoEncoderConfiguration()
         encoderConfig.dimensions = CGSize(width: 960, height: 720)
-        encoderConfig.frameRate = .fps30
+        encoderConfig.frameRate = 30
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
