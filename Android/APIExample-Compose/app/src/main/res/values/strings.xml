@@ -74,6 +74,7 @@
     <string name="transcoding_or_not">Transcoding Or Not</string>
     <string name="screen_sharing_local_preview">Screen Sharing Local Preview</string>
     <string name="screen_sharing_audio">Screen Sharing Audio</string>
+    <string name="screen_sharing_share_screen_only">Share Screen Only</string>
     <string name="spatial_sound_experience_tip">Please move the red icon to experience the 3D audio effect</string>
     <string name="mute_audio">Mute Audio</string>
     <string name="beauty_face">Beauty</string>
