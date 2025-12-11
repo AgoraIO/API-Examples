@@ -108,7 +108,7 @@ class MediaPlayer: BaseViewController {
             
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = resolution.size()
-            videoConfig.frameRate = AgoraVideoFrameRate(rawValue: fps) ?? .fps15
+            videoConfig.frameRate = 15
             agoraKit.enableVideo()
             agoraKit.setVideoEncoderConfiguration(videoConfig)
  
@@ -311,7 +311,7 @@ private extension MediaPlayer {
                   let fps = self.selectedFps() else {return}
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = resolution.size()
-            videoConfig.frameRate = AgoraVideoFrameRate(rawValue: fps) ?? .fps15
+            videoConfig.frameRate = 15
             self.agoraKit.setVideoEncoderConfiguration(videoConfig)
         }
     }
@@ -338,7 +338,7 @@ private extension MediaPlayer {
                   let fps = self.selectedFps() else {return}
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = resolution.size()
-            videoConfig.frameRate = AgoraVideoFrameRate(rawValue: fps) ?? .fps15
+            videoConfig.frameRate = 15
             self.agoraKit.setVideoEncoderConfiguration(videoConfig)
         }
     }

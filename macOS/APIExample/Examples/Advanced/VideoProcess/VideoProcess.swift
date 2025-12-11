@@ -125,7 +125,7 @@ class VideoProcess: BaseViewController {
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    frameRate: 15,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto
@@ -336,7 +336,7 @@ class VideoProcess: BaseViewController {
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    frameRate: 15,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto
@@ -372,7 +372,7 @@ class VideoProcess: BaseViewController {
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    frameRate: 15,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto
