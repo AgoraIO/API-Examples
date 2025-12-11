@@ -151,7 +151,7 @@ class MultipathMain: BaseViewController {
             agoraKit.setClientRole(role)
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = CGSize(width: 640, height: 360)
-            videoConfig.frameRate = .fps15
+            videoConfig.frameRate = 15
             videoConfig.bitrate = AgoraVideoBitrateStandard
             videoConfig.orientationMode = .adaptative
             videoConfig.mirrorMode = .auto
