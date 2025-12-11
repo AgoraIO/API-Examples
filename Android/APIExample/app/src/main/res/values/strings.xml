@@ -187,6 +187,7 @@
     <string name="screen_share_preview">Screen Preview</string>
     <string name="screen_share_audio">Screen Audio</string>
     <string name="external_mediaprojection">External MediaProjection</string>
+    <string name="share_screen_only">Share Screen Only</string>
     <string name="screen_share_video">Screen Video</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
