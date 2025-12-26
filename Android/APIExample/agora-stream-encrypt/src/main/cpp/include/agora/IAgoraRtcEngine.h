@@ -8633,7 +8633,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Call timing: Call this method before joining a channel.
    *
    * @param sampleRate The sample rate returned in the callback, which can be set as 8000, 16000,
-   * 32000, 44100, or 48000 Hz.
+   * 24000, 32000, 44100, or 48000 Hz.
    * @param channel The number of audio channels. You can set the value as 1 or 2.
    * - 1: Mono.
    * - 2: Stereo.

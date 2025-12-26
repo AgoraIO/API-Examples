@@ -700,7 +700,13 @@ enum ERROR_CODE_TYPE {
   ERR_CERT_REQUEST = 168,
 
   // PcmSend Error num
+  /**
+   * 200: Unsupported PCM format.
+   */
   ERR_PCMSEND_FORMAT = 200,          // unsupport pcm format
+  /**
+   * 201: Buffer overflow, the PCM send rate too quickly.
+   */
   ERR_PCMSEND_BUFFEROVERFLOW = 201,  // buffer overflow, the pcm send rate too quickly
 
   /// @cond
@@ -6452,6 +6458,9 @@ struct ScreenAudioParameters {
   int captureSignalVolume;
 
 #if defined(__APPLE__) && !TARGET_OS_IOS
+  /**
+   * @technical preview
+   */
   bool excludeCurrentProcessAudio = true;
   ScreenAudioParameters(): sampleRate(48000), channels(2), captureSignalVolume(100) {}
 #else
