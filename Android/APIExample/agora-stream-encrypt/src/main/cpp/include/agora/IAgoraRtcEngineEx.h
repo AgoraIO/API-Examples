@@ -2634,6 +2634,10 @@ public:
      * @note
      * - To ensure a smooth experience, the size of sound effect files should not exceed the limit.
      * - Agora recommends that you call this method before joining a channel.
+     * - If preloadEffectEx is called before playEffectEx is executed, the file resource will not be closed after playEffectEx. 
+     * The next time playEffectEx is executed, it will directly seek to play at the beginning.
+     * - If preloadEffectEx is not called before playEffectEx is executed, the resource will be destroyed after playEffectEx. 
+     * The next time playEffectEx is executed, it will try to reopen the file and play it from the beginning.
      *
      * @param connection One `RtcConnection` object. See `RtcConnection`.
      * @param soundId The audio effect ID.
@@ -2663,7 +2667,11 @@ public:
      * @note
      * - Agora recommends not playing more than three sound effects at the same time.
      * - The sound effect ID and file path in this method must be consistent with those in the
-     * `preloadEffect` method.
+     * `preloadEffectEx` method.
+     * - If preloadEffectEx is called before playEffectEx is executed, the file resource will not be closed after playEffectEx. 
+     * The next time playEffectEx is executed, it will directly seek to play at the beginning.
+     * - If preloadEffectEx is not called before playEffectEx is executed, the resource will be destroyed after playEffectEx. 
+     * The next time playEffectEx is executed, it will try to reopen the file and play it from the beginning.
      *
      * @param connection One `RtcConnection` object. See `RtcConnection`.
      * @param soundId The audio effect ID.
