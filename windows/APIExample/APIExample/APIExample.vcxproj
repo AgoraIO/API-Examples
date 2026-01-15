@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -101,7 +101,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\libFFmpeg;$(SolutionDir)sdk;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\libFFmpeg;$(SolutionDir)sdk\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>dsound.lib;dxguid.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -116,7 +116,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\*.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk\x86 (copy $(SolutionDir)sdk\x86\*.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)ThirdParty\libFFmpeg (copy $(SolutionDir)ThirdParty\libFFmpeg\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
@@ -197,7 +197,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\libFFmpeg;$(SolutionDir)sdk\;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\libFFmpeg;$(SolutionDir)sdk\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>dsound.lib;dxguid.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib</AdditionalDependencies>
       <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
@@ -213,7 +213,7 @@ if exist $(SolutionDir)APIExample\res\hdr_1280_720.yuv (copy $(SolutionDir)APIEx
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\*.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk\x86 (copy $(SolutionDir)sdk\x86\*.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)ThirdParty\libFFmpeg (copy $(SolutionDir)ThirdParty\libFFmpeg\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
