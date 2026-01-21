@@ -82,7 +82,11 @@ extension CustomRenderRTC: AgoraVideoFrameDelegate {
 
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if let view = remoteRenderViews.allObjects.first(where: { $0.uid == uid }) {
-            view.renderFromVideoFrameData(videoData: videoFrame)
+            if let pixelBuffer = videoFrame.pixelBuffer {
+                view.renderVideoPixelBuffer(pixelBuffer: pixelBuffer, width: videoFrame.width, height: videoFrame.height)
+            } else {
+                view.renderFromVideoFrameData(videoData: videoFrame)
+            }
         }
         
         return self.videoFrameDelegte?.onRenderVideoFrame?(videoFrame, uid: uid, channelId: channelId) ?? true
