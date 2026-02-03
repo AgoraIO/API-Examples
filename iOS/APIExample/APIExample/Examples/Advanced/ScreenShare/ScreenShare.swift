@@ -63,7 +63,7 @@ class ScreenShareMain: BaseViewController {
         params.audioParams = audioParams
         let videoParams = AgoraScreenVideoParameters()
         videoParams.dimensions = screenShareVideoDimension()
-        videoParams.frameRate = .fps15
+        videoParams.frameRate = AgoraVideoFrameRate.fps15.rawValue
         videoParams.bitrate = AgoraVideoBitrateStandard
         params.videoParams = videoParams
         return params
@@ -119,7 +119,7 @@ class ScreenShareMain: BaseViewController {
         let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?
             .selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: fps,
+                                                                             frameRate: fps.rawValue,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation,
                                                                              mirrorMode: .auto))
@@ -197,7 +197,7 @@ class ScreenShareMain: BaseViewController {
         pickerView.pickerViewSelectedValueClosure = { [weak self] value in
             guard let self = self else { return }
             self.fpsButton.setTitle("\(value)fps", for: .normal)
-            self.screenParams.videoParams.frameRate = AgoraVideoFrameRate(rawValue: Int(value) ?? 15) ?? .fps15
+            self.screenParams.videoParams.frameRate = (AgoraVideoFrameRate(rawValue: Int(value) ?? 15) ?? .fps15).rawValue
         }
         AlertManager.show(view: pickerView, alertPostion: .bottom)
     }

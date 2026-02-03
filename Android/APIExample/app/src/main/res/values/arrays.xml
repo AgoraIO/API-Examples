@@ -332,10 +332,10 @@
         <item>FACE_SHAPE_STYLE_MALE</item>
     </string-array>
     <string-array name="scenario_type">
+        <item>APPLICATION_SCENARIO_LIVESHOW</item>
         <item>APPLICATION_SCENARIO_GENERAL</item>
         <item>APPLICATION_SCENARIO_MEETING</item>
         <item>APPLICATION_SCENARIO_1V1</item>
-        <item>APPLICATION_SCENARIO_LIVESHOW</item>
     </string-array>
     <string-array name="video_module_postion">
         <item>VIDEO_MODULE_POSITION_PRE_RENDERER</item>

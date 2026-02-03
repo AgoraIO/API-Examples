@@ -77,7 +77,7 @@ class MultipathViewController: BaseViewController {
             // Set video encoder configuration
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = CGSize(width: 640, height: 360)
-            videoConfig.frameRate = .fps15
+            videoConfig.frameRate = AgoraVideoFrameRate.fps15.rawValue
             videoConfig.bitrate = AgoraVideoBitrateStandard
             videoConfig.orientationMode = .adaptative
             videoConfig.mirrorMode = .auto

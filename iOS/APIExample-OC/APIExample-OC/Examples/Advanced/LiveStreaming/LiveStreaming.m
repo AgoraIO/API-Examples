@@ -227,6 +227,7 @@
     
     // Set audio route to speaker
     [self.agoraKit setDefaultAudioRouteToSpeakerphone:YES];
+    [self.agoraKit setVideoScenario:AgoraApplicationLiveShowScenario];
     
     // start joining channel
     // 1. Users can only see each other after they join the

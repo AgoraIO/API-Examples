@@ -1302,7 +1302,7 @@ public:
 
 	aosl_ref_magic_t magic () const
 	{
-		return refoop->magic ();
+		return refmagic;
 	}
 
 	int hold (aosl_ref_func_t f, uintptr_t argc, ...)

@@ -79,6 +79,7 @@
         [[MenuItem alloc]initWithName:@"Mutli Camera(iOS13.0+)".localized storyboard:@"MutliCamera" controller:@""],
         [[MenuItem alloc]initWithName:@"Simulcast".localized storyboard:@"Simulcast" controller:@""],
         [[MenuItem alloc]initWithName:@"Multipath".localized storyboard:@"Multipath" controller:@""],
+        [[MenuItem alloc]initWithName:@"LocalCompositeGraph".localized storyboard:@"LocalCompositeGraph" controller:@""],
     ]];
     [array addObject:anvancedSection];
     

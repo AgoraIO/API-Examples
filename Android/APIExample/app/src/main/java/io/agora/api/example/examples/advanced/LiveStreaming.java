@@ -77,7 +77,7 @@ import io.agora.rtc2.video.WatermarkOptions;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
     private static final int FPS_DEFAULT = 15;
-    public Constants.VideoModulePosition position = Constants.VideoModulePosition.VIDEO_MODULE_POSITION_PRE_RENDERER;
+    private Constants.VideoModulePosition position = Constants.VideoModulePosition.VIDEO_MODULE_POSITION_PRE_RENDERER;
     private FragmentLiveStreamingBinding mRootBinding;
     private FragmentLiveStreamingSettingBinding mSettingBinding;
     private BottomSheetDialog mSettingDialog;
@@ -399,6 +399,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
                 mRootBinding.btnPublish.setEnabled(false);
                 mRootBinding.btnPreload.setEnabled(true);
                 mRootBinding.etChannel.setEnabled(true);
+                mRootBinding.spinnerScenario.setEnabled(true);
                 mRootBinding.btnPublish.setText(getString(R.string.enable_publish));
                 mRootBinding.videoTrackingLayout.getRoot().setVisibility(View.GONE);
                 mSettingBinding.switchWatermark.setChecked(false);
@@ -711,6 +712,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
                     mRootBinding.btnJoin.setEnabled(true);
                     mRootBinding.btnJoin.setText(getString(R.string.leave));
                     mRootBinding.btnPublish.setEnabled(true);
+                    mRootBinding.spinnerScenario.setEnabled(false);
                     if (isLocalVideoForeground) {
                         foreGroundVideo.setReportUid(uid);
                     } else {
@@ -963,10 +965,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
                 // Set the video scenario
                 String name = parent.getSelectedItem().toString();
                 Constants.VideoScenario videoScenario = Constants.VideoScenario.valueOf(name);
-                if (videoScenario != null) {
-                    int ret = engine.setVideoScenario(videoScenario);
-                    Log.d(TAG, "onItemSelected: setVideoScenario ret=" + ret);
-                }
+                int ret = engine.setVideoScenario(videoScenario);
+                Log.d(TAG, "onItemSelected: setVideoScenario " + name + " ret=" + ret);
             }
         } else if (parent == mRootBinding.spinnerSnapshot) {
             if (engine != null) {
