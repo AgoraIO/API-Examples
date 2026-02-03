@@ -170,7 +170,7 @@ class SimulcastMain: BaseViewController {
             agoraKit.setClientRole(role)
             let videoConfig = AgoraVideoEncoderConfiguration()
             videoConfig.dimensions = CGSize(width: 1280, height: 720)
-            videoConfig.frameRate = .fps30
+            videoConfig.frameRate = 30
             videoConfig.bitrate = AgoraVideoBitrateStandard
             videoConfig.orientationMode = .adaptative
             videoConfig.mirrorMode = .auto

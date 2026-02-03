@@ -41,6 +41,8 @@ class LocalCompositeGraphMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
+    @IBOutlet weak var virtualBackgroundSwitch: UISwitch!
+    
     private lazy var screenParams: AgoraScreenCaptureParameters2 = {
         let params = AgoraScreenCaptureParameters2()
         params.captureVideo = true
@@ -50,7 +52,7 @@ class LocalCompositeGraphMain: BaseViewController {
         params.audioParams = audioParams
         let videoParams = AgoraScreenVideoParameters()
         videoParams.dimensions = screenShareVideoDimension()
-        videoParams.frameRate = .fps15
+        videoParams.frameRate = AgoraVideoFrameRate.fps15.rawValue
         videoParams.bitrate = AgoraVideoBitrateStandard
         params.videoParams = videoParams
         return params
@@ -68,6 +70,8 @@ class LocalCompositeGraphMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        virtualBackgroundSwitch.isOn = false
+        
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         container.layoutStream(views: [localVideo])
@@ -89,24 +93,10 @@ class LocalCompositeGraphMain: BaseViewController {
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
-
-        // set up local video to render your local camera preview
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videoView
-        videoCanvas.mirrorMode = .disabled
-        videoCanvas.renderMode = .fit
-        videoCanvas.sourceType = .transCoded
-        agoraKit.setupLocalVideo(videoCanvas)
-        // you have to call startPreview to see local video
-        agoraKit.startPreview()
-        
-        // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         //start screen capture
-        self.startScreenCapture()
+        startScreenCapture()
         
         // start camera
         let captureConfig = AgoraCameraCapturerConfiguration()
@@ -135,6 +125,8 @@ class LocalCompositeGraphMain: BaseViewController {
             }
             self.startVideoTranscoder()
         })
+        
+        setupLocalPreview(transCoded: true)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -148,6 +140,33 @@ class LocalCompositeGraphMain: BaseViewController {
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
+        
+        AgoraRtcEngineKit.destroy()
+    }
+    
+    func setupLocalPreview(transCoded: Bool) {
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        videoCanvas.sourceType = transCoded ? .transCoded : .screen
+        videoCanvas.mirrorMode = .disabled
+        agoraKit.setupLocalVideo(videoCanvas)
+        agoraKit.startPreview()
+    }
+
+    
+    func changeVirtualBackground() {
+        let source = AgoraVirtualBackgroundSource()
+        source.backgroundSourceType = .color
+        source.color = 0xFFFFFF
+        source.backgroundSourceType = virtualBackgroundSwitch.isOn ? source.backgroundSourceType : .none
+        let result = agoraKit.enableVirtualBackground(virtualBackgroundSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())
+        print("result == \(result)")
+    }
+    
+    @IBAction func virtualBackgroundAction(_ sender: UISwitch) {
+        changeVirtualBackground()
     }
     
     private func screenShareVideoDimension() -> CGSize {
@@ -203,7 +222,7 @@ class LocalCompositeGraphMain: BaseViewController {
         
         // camera capture
         let cameraStream = AgoraTranscodingVideoStream()
-        cameraStream.rect = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
+        cameraStream.rect = CGRect(origin: CGPointMake(0, 60), size: CGSize(width: 100, height: 100))
         cameraStream.sourceType = .camera
         
         // screen capture

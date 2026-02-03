@@ -41,18 +41,14 @@
 
 本项目包含第三方美颜集成示例，在没有配置资源和证书的情况下，默认是无法启用的。资源证书配置方法如下：
 
-#### 商汤美颜
+#### 声网美颜
 
-1. 联系商汤客服获取美颜sdk下载链接以及证书
-2. 解压美颜sdk，并将以下资源复制到对应路径
+1. 联系声网技术支持获取美颜资源
+2. 将美颜资源放到对应路径下
 
-| 商汤SDK文件/目录                                                           | 项目路径                                                     |
-|----------------------------------------------------------------------|----------------------------------------------------------|
-| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
-| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
-| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
-| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
-| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
+| 美颜资源 | 项目路径                             |
+|------|----------------------------------|
+| 美颜资源 | app/src/main/assets/beauty_agora |
 
 #### 相芯美颜
 
@@ -64,22 +60,6 @@
 | 美妆资源(如naicha.bundle) | app/src/main/assets/beauty_faceunity/makeup                                    |
 | 贴纸资源(如fashi.bundle)  | app/src/main/assets/beauty_faceunity/sticker                                   |
 | 证书authpack.java      | app/src/main/java/io/agora/api/example/examples/advanced/beauty/authpack.java  |
-
-#### 字节美颜
-
-1. 联系字节客服获取美颜sdk下载链接以及证书
-2. 解压字节/火山美颜资源并复制以下文件/目录到对应路径下
-
-| 字节SDK文件/目录                                       | 项目路径                                                  |
-|--------------------------------------------------|-------------------------------------------------------|
-| resource/LicenseBag.bundle                       | app/src/main/assets/beauty_bytedance           |
-| resource/ModelResource.bundle                    | app/src/main/assets/beauty_bytedance           |
-| resource/ComposeMakeup.bundle                    | app/src/main/assets/beauty_bytedance           |
-| resource/StickerResource.bundle                  | app/src/main/assets/beauty_bytedance           |
-| resource/StickerResource.bundle                  | app/src/main/assets/beauty_bytedance           |
-
-3.
-修改app/src/main/java/io/agora/api/example/examples/advanced/beauty/ByteDanceBeauty.java文件里LICENSE_NAME为申请到的证书文件名
 
 ### 对于Agora Extension开发者
 

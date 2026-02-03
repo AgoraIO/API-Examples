@@ -36,7 +36,7 @@ class QuickSwitchChannelRTC: NSObject, ObservableObject {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
+                frameRate: fps.rawValue,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation, mirrorMode: .auto))
         

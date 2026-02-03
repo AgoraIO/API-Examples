@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Screen Share-->
         <scene sceneID="pbK-2b-qbr">
             <objects>
-                <viewController title="Stream Encryption" storyboardIdentifier="LocalCompositeGraph" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="LocalCompositeGraph" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Stream Encryption" storyboardIdentifier="LocalVideoTranscoding" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="LocalVideoTranscoding" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GAN-Bp-SzP">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -24,28 +24,12 @@
                                             <rect key="frame" x="310" y="0.0" width="314" height="498"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <view id="Sdd-lG-w3y" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="306" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="wRZ-XO-4yb" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="427" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="UdM-Ys-Izc" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="362" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="5dj-Qi-dye" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="118" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
                                                 <view id="QS2-pr-4lf" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="245" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="413" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r9I-9E-LeA">
-                                                    <rect key="frame" x="22" y="198" width="142" height="32"/>
+                                                    <rect key="frame" x="22" y="366" width="117" height="32"/>
                                                     <buttonCell key="cell" type="push" title="Display Share" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SAX-wa-nOm">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -54,28 +38,8 @@
                                                         <action selector="onScreenShare:" target="Gwp-vd-c2J" id="alH-2V-dCG"/>
                                                     </connections>
                                                 </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="suC-J6-RXf">
-                                                    <rect key="frame" x="22" y="83" width="279" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Window Share" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GY6-hd-Bf5">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onWindowShare:" target="Gwp-vd-c2J" id="erA-Yo-hVE"/>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9RF-XQ-1Kc">
-                                                    <rect key="frame" x="22" y="42" width="142" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Share Half Screen" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="W6S-ui-VuF">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="onStartShareHalfScreen:" target="Gwp-vd-c2J" id="3SN-fE-myZ"/>
-                                                    </connections>
-                                                </button>
                                                 <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M4d-F9-fzD">
-                                                    <rect key="frame" x="163" y="198" width="138" height="32"/>
+                                                    <rect key="frame" x="138" y="366" width="163" height="32"/>
                                                     <buttonCell key="cell" type="push" title="Generate thumbnail" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G2K-yC-ti4">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -84,33 +48,31 @@
                                                         <action selector="onScreentThumbnailButton:" target="Gwp-vd-c2J" id="AYh-3w-dYN"/>
                                                     </connections>
                                                 </button>
-                                                <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UwN-vm-34e">
-                                                    <rect key="frame" x="162" y="42" width="139" height="32"/>
-                                                    <buttonCell key="cell" type="push" title="Generate thumbnail" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ghC-jR-1O0">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="FVE-ja-5Xc">
+                                                    <rect key="frame" x="254" y="326" width="42" height="25"/>
                                                     <connections>
-                                                        <action selector="onWindowThumbnailButton:" target="Gwp-vd-c2J" id="ESO-ga-Xzd"/>
+                                                        <action selector="onVirturalBackground:" target="Gwp-vd-c2J" id="QiP-TQ-B6r"/>
                                                     </connections>
-                                                </button>
+                                                </switch>
+                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="55E-9f-6Im">
+                                                    <rect key="frame" x="27" y="331" width="120" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Virtual Background" id="I7C-7c-uwc">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="suC-J6-RXf" secondAttribute="trailing" constant="20" symbolic="YES" id="7Xd-fr-0nx"/>
-                                                <constraint firstAttribute="trailing" secondItem="UwN-vm-34e" secondAttribute="trailing" constant="20" symbolic="YES" id="AdC-Di-wgI"/>
-                                                <constraint firstItem="9RF-XQ-1Kc" firstAttribute="width" secondItem="r9I-9E-LeA" secondAttribute="width" id="Cxi-zo-BaW"/>
-                                                <constraint firstItem="9RF-XQ-1Kc" firstAttribute="top" secondItem="suC-J6-RXf" secondAttribute="bottom" constant="21" id="DKB-6n-VU4"/>
+                                                <constraint firstItem="FVE-ja-5Xc" firstAttribute="centerY" secondItem="55E-9f-6Im" secondAttribute="centerY" id="6tW-8E-yko"/>
                                                 <constraint firstAttribute="trailing" secondItem="M4d-F9-fzD" secondAttribute="trailing" constant="20" symbolic="YES" id="IeZ-Hw-tZh"/>
-                                                <constraint firstItem="suC-J6-RXf" firstAttribute="top" secondItem="5dj-Qi-dye" secondAttribute="bottom" constant="8" id="Ity-U7-bcL"/>
-                                                <constraint firstItem="5dj-Qi-dye" firstAttribute="centerX" secondItem="r9I-9E-LeA" secondAttribute="trailing" id="KBk-S9-i0K"/>
-                                                <constraint firstItem="suC-J6-RXf" firstAttribute="leading" secondItem="9RF-XQ-1Kc" secondAttribute="leading" id="KQE-GV-3Ev"/>
+                                                <constraint firstItem="55E-9f-6Im" firstAttribute="leading" secondItem="r9I-9E-LeA" secondAttribute="leading" id="Knl-17-3ku"/>
                                                 <constraint firstItem="r9I-9E-LeA" firstAttribute="leading" secondItem="UTN-N1-uNG" secondAttribute="leading" constant="29" id="Oa3-0h-N31"/>
-                                                <constraint firstItem="UwN-vm-34e" firstAttribute="centerY" secondItem="9RF-XQ-1Kc" secondAttribute="centerY" id="aTy-bx-grm"/>
-                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="leading" secondItem="suC-J6-RXf" secondAttribute="leading" id="bDy-lh-IGW"/>
+                                                <constraint firstItem="FVE-ja-5Xc" firstAttribute="trailing" secondItem="M4d-F9-fzD" secondAttribute="trailing" id="bBe-oz-DG9"/>
                                                 <constraint firstItem="M4d-F9-fzD" firstAttribute="centerY" secondItem="r9I-9E-LeA" secondAttribute="centerY" id="e5s-j2-gAa"/>
+                                                <constraint firstItem="55E-9f-6Im" firstAttribute="top" secondItem="r9I-9E-LeA" secondAttribute="bottom" constant="26" id="h4o-G3-vFb"/>
                                                 <constraint firstItem="M4d-F9-fzD" firstAttribute="leading" secondItem="r9I-9E-LeA" secondAttribute="trailing" constant="13" id="img-1J-iy2"/>
-                                                <constraint firstItem="UwN-vm-34e" firstAttribute="leading" secondItem="9RF-XQ-1Kc" secondAttribute="trailing" constant="12" symbolic="YES" id="pp5-IY-wuV"/>
-                                                <constraint firstItem="5dj-Qi-dye" firstAttribute="top" secondItem="r9I-9E-LeA" secondAttribute="bottom" constant="37" id="tYF-r1-LRW"/>
+                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="top" secondItem="QS2-pr-4lf" secondAttribute="bottom" constant="20" symbolic="YES" id="p4Q-14-MPr"/>
                                                 <constraint firstItem="M4d-F9-fzD" firstAttribute="leading" secondItem="r9I-9E-LeA" secondAttribute="trailing" constant="13" id="yRl-N7-Gjp"/>
                                             </constraints>
                                         </view>
@@ -188,22 +150,15 @@
                     <connections>
                         <outlet property="channelField" destination="DbD-Gb-o8t" id="lN2-Jm-z1B"/>
                         <outlet property="container" destination="1IN-H9-sOa" id="0rO-aR-kmu"/>
-                        <outlet property="halfScreenShareButton" destination="9RF-XQ-1Kc" id="B0E-OZ-f3Y"/>
                         <outlet property="joinChannelButton" destination="m5Y-g9-nbd" id="IWF-DR-p6U"/>
                         <outlet property="screenShareButton" destination="r9I-9E-LeA" id="LCe-S0-Dqk"/>
                         <outlet property="screenThumbnailButton" destination="M4d-F9-fzD" id="COa-4u-Xjs"/>
-                        <outlet property="selectDisplayHintPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
-                        <outlet property="selectFpsPicker" destination="UdM-Ys-Izc" id="TMO-Lz-aO4"/>
-                        <outlet property="selectResolutionPicker" destination="wRZ-XO-4yb" id="6ZL-0l-P82"/>
                         <outlet property="selectScreenPicker" destination="QS2-pr-4lf" id="jUS-ch-8zS"/>
-                        <outlet property="selectWindowPicker" destination="5dj-Qi-dye" id="3DD-Hv-N77"/>
-                        <outlet property="windowShareButton" destination="suC-J6-RXf" id="seK-wl-Bpj"/>
-                        <outlet property="windowThumbnailButton" destination="UwN-vm-34e" id="w4O-yz-ixP"/>
                     </connections>
                 </viewController>
                 <customObject id="S9U-UI-b0n" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3240" y="36"/>
+            <point key="canvasLocation" x="3166" y="40"/>
         </scene>
     </scenes>
 </document>

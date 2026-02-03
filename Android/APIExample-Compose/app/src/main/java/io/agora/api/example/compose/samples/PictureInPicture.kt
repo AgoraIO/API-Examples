@@ -2,34 +2,34 @@ package io.agora.api.example.compose.samples
 
 import android.app.AppOpsManager
 import android.app.PictureInPictureParams
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.RectF
 import android.os.Build
-import android.os.Bundle
 import android.os.Process
+import android.util.Log
 import android.util.Rational
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toAndroidRectF
@@ -38,20 +38,18 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.util.Consumer
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
-import io.agora.api.example.compose.ui.common.APIExampleScaffold
 import io.agora.api.example.compose.ui.common.ChannelNameInput
 import io.agora.api.example.compose.ui.common.TwoVideoView
 import io.agora.api.example.compose.ui.common.TwoVideoViewType
 import io.agora.api.example.compose.ui.common.VideoStatsInfo
-import io.agora.api.example.compose.ui.theme.APIExampleComposeTheme
 import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -61,25 +59,102 @@ import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
+// Global state storage that persists across component recreation
+private val globalLocalUid = mutableIntStateOf(0)
+private val globalRemoteUid = mutableIntStateOf(0)
+private val globalChannelName = mutableStateOf("")
+private val globalIsJoined = mutableStateOf(false)
+private val isInPipTransition = mutableStateOf(false)
+private val isPageLeaving = mutableStateOf(false) // Flag to track if user is truly leaving the page
+private var globalCleanupFunction: (() -> Unit)? = null // Global cleanup function
 
+// Helper function to find Activity from Context
+private fun Context.findActivity(): ComponentActivity {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is ComponentActivity) return context
+        context = context.baseContext
+    }
+    throw IllegalStateException("Picture in picture should be called in the context of an Activity")
+}
+
+// Correct PiP state management following Android official guidelines
 @Composable
-fun PictureInPictureEntrance(back: () -> Unit) {
-    val context = LocalContext.current
-    val intent = Intent(context, PictureInPictureActivity::class.java)
-    context.startActivity(intent)
-    back()
+private fun rememberIsInPipMode(): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val activity = LocalContext.current.findActivity()
+        var pipMode by remember { mutableStateOf(activity.isInPictureInPictureMode) }
+        DisposableEffect(activity) {
+            val observer = Consumer<PictureInPictureModeChangedInfo> { info ->
+                pipMode = info.isInPictureInPictureMode
+            }
+            activity.addOnPictureInPictureModeChangedListener(observer)
+            onDispose { activity.removeOnPictureInPictureModeChangedListener(observer) }
+        }
+        return pipMode
+    } else {
+        return false
+    }
+}
+
+// Public function to clean up global state when user leaves the page
+fun cleanupPictureInPictureState() {
+    Log.d("PiPDebug", "cleanupPictureInPictureState called")
+    globalCleanupFunction?.invoke()
 }
 
 @Composable
-private fun PictureInPicture() {
+fun PictureInPicture() {
     val context = LocalContext.current as ComponentActivity
-    var isPipOn by rememberSaveable { mutableStateOf(false) }
+    // Use the correct PiP state management
+    val isPipOn = rememberIsInPipMode()
+
+    Log.d("PiPDebug", "PictureInPicture: Current isPipOn = $isPipOn")
+
+    // Function to mark that user is leaving the page
+    fun markPageLeaving() {
+        isPageLeaving.value = true
+        Log.d("PiPDebug", "Marked page as leaving - global state will be cleared on next dispose")
+    }
+
+    // Register cleanup function globally
+    LaunchedEffect(Unit) {
+        globalCleanupFunction = { markPageLeaving() }
+    }
+
+    // Add LaunchedEffect to handle PiP mode changes
+    LaunchedEffect(isPipOn) {
+        Log.d("PiPDebug", "PiP mode changed to: $isPipOn")
+        // Mark that we're in a PiP transition
+        isInPipTransition.value = true
+        // Note: We can't access localUid and rtcEngine here as they're defined later
+        // The video setup will be handled in the render callbacks
+    }
+
+    // Add DisposableEffect to track lifecycle
+    DisposableEffect(Unit) {
+        onDispose {
+            // Only clear global state when user is truly leaving the page (not during PiP transitions)
+            if (isPageLeaving.value) {
+                Log.d("PiPDebug", "DisposableEffect: User is leaving page, clearing global state")
+                globalLocalUid.intValue = 0
+                globalRemoteUid.intValue = 0
+                globalChannelName.value = ""
+                globalIsJoined.value = false
+                isPageLeaving.value = false // Reset flag
+            } else {
+                Log.d("PiPDebug", "DisposableEffect: Component recreation (PiP transition), preserving global state")
+            }
+        }
+    }
     val lifecycleOwner = LocalLifecycleOwner.current
     val keyboard = LocalSoftwareKeyboardController.current
-    var isJoined by rememberSaveable { mutableStateOf(false) }
-    var channelName by rememberSaveable { mutableStateOf("") }
-    var localUid by rememberSaveable { mutableIntStateOf(0) }
-    var remoteUid by rememberSaveable { mutableIntStateOf(0) }
+    // Use global state directly to avoid duplication
+    var isJoined by globalIsJoined
+    var channelName by globalChannelName
+    var localUid by globalLocalUid
+    var remoteUid by globalRemoteUid
+
     var localStats by remember { mutableStateOf(VideoStatsInfo()) }
     var remoteStats by remember { mutableStateOf(VideoStatsInfo()) }
     val videoViewBound = remember { RectF() }
@@ -176,13 +251,7 @@ private fun PictureInPicture() {
         }
     }
     LaunchedEffect(lifecycleOwner) {
-        context.addOnPictureInPictureModeChangedListener { info ->
-            isPipOn = info.isInPictureInPictureMode
-            if (lifecycleOwner.lifecycle.currentState < Lifecycle.State.STARTED) {
-                context.finish()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(object: DefaultLifecycleObserver {
+        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 rtcEngine.stopPreview()
                 rtcEngine.leaveChannel()
@@ -216,19 +285,31 @@ private fun PictureInPicture() {
         TwoVideoView(
             modifier = Modifier
                 .height(350.dp)
-                .onGloballyPositioned {
+                .onGloballyPositioned { layoutCoordinates ->
                     videoViewBound.set(
-                        it
+                        layoutCoordinates
                             .boundsInWindow()
                             .toAndroidRectF()
                     )
+                    val boundsInWindow = layoutCoordinates.boundsInWindow()
+                    Log.d("PiPDebug", "VideoView distance from top: ${boundsInWindow.top}px")
                 },
             type = TwoVideoViewType.Row,
             localUid = localUid,
             remoteUid = remoteUid,
             localStats = localStats,
             remoteStats = remoteStats,
-            localRender = { view, id, _ ->
+            localRender = { view, id, isFirstSetup ->
+                Log.d("PiPDebug", "localRender: view=$view, id=$id, isFirstSetup=$isFirstSetup, isJoined=$isJoined, isPipOn=$isPipOn")
+                // Clear previous view first
+                rtcEngine.setupLocalVideo(
+                    VideoCanvas(
+                        null,
+                        Constants.RENDER_MODE_HIDDEN,
+                        id
+                    )
+                )
+                // Then set up new view
                 rtcEngine.setupLocalVideo(
                     VideoCanvas(
                         view,
@@ -237,8 +318,19 @@ private fun PictureInPicture() {
                     )
                 )
                 rtcEngine.startPreview()
+                Log.d("PiPDebug", "localRender: started preview")
             },
-            remoteRender = { view, id, _ ->
+            remoteRender = { view, id, isFirstSetup ->
+                Log.d("PiPDebug", "remoteRender: view=$view, id=$id, isFirstSetup=$isFirstSetup, remoteUid=$remoteUid, isPipOn=$isPipOn")
+                // Clear previous view first
+                rtcEngine.setupRemoteVideo(
+                    VideoCanvas(
+                        null,
+                        Constants.RENDER_MODE_HIDDEN,
+                        id
+                    )
+                )
+                // Then set up new view
                 rtcEngine.setupRemoteVideo(
                     VideoCanvas(
                         view,
@@ -246,95 +338,90 @@ private fun PictureInPicture() {
                         id
                     )
                 )
+                Log.d("PiPDebug", "remoteRender: setup completed")
             })
     }
 
     if (isPipOn) {
-        videoView()
+        Log.d("PiPDebug", "PictureInPicture： Rendering PiP mode - localUid: $localUid, remoteUid: $remoteUid, " +
+                "isJoined: $isJoined")
+        // In PiP mode, render only the video content without any scaffold or app bar
+        // Use fillMaxSize to ensure video takes full available space in PiP window
+        Box(modifier = Modifier.fillMaxSize()) {
+            videoView()
+        }
     } else {
-        APIExampleComposeTheme {
-            APIExampleScaffold(
-                topBarTitle = stringResource(id = R.string.example_pictureinpicture),
-                showSettingIcon = false,
-                showBackNavigationIcon = true,
-                onBackClick = { context.finish() },
-            ) { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .consumeWindowInsets(WindowInsets.safeDrawing)
-                        .padding(paddingValues)
-                ) {
-                    videoView()
-                    Spacer(modifier = Modifier.weight(1f))
+        Log.d("PiPDebug", "PictureInPicture: Rendering normal mode - full UI")
+        // Normal mode with full UI - let Example component handle the scaffold
+        Column(modifier = Modifier.fillMaxWidth()) {
+            videoView()
+            Spacer(modifier = Modifier.weight(1f))
 
-                    Button(
-                        modifier = Modifier.padding(16.dp, 8.dp),
-                        enabled = isJoined,
-                        onClick = {
-                            if (Build.VERSION.SDK_INT >= 26) {
-                                val appOpsManager: AppOpsManager =
-                                    context.getSystemService(AppOpsManager::class.java)
-                                if (appOpsManager.checkOpNoThrow(
-                                        AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                                        Process.myUid(),
-                                        context.packageName
-                                    ) == AppOpsManager.MODE_ALLOWED
-                                ) {
-                                    context.enterPictureInPictureMode(
-                                        PictureInPictureParams.Builder()
-                                            .setAspectRatio(
-                                                Rational(
-                                                    videoViewBound.width().toInt(),
-                                                    videoViewBound.height().toInt()
-                                                )
-                                            )
-                                            .build()
+            Button(
+                modifier = Modifier.padding(16.dp, 8.dp),
+                enabled = isJoined,
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        val appOpsManager: AppOpsManager =
+                            context.getSystemService(AppOpsManager::class.java)
+                        if (appOpsManager.checkOpNoThrow(
+                                AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                                Process.myUid(),
+                                context.packageName
+                            ) == AppOpsManager.MODE_ALLOWED
+                        ) {
+                            context.enterPictureInPictureMode(
+                                PictureInPictureParams.Builder()
+                                    .setAspectRatio(
+                                        Rational(
+                                            videoViewBound.width().toInt(),
+                                            videoViewBound.height().toInt()
+                                        )
                                     )
-                                    val homeIntent = Intent(Intent.ACTION_MAIN)
-                                    homeIntent.addCategory(Intent.CATEGORY_HOME)
-                                    context.startActivity(homeIntent)
-                                    isPipOn = true
-                                }
-                            }
-                        }
-                    ) {
-                        Text(text = "Enter Picture-in-Picture Mode")
-                    }
-
-                    ChannelNameInput(
-                        channelName = channelName,
-                        isJoined = isJoined,
-                        onJoinClick = {
-                            channelName = it
-                            keyboard?.hide()
-                            permissionLauncher.launch(
-                                arrayOf(
-                                    android.Manifest.permission.RECORD_AUDIO,
-                                    android.Manifest.permission.CAMERA
-                                )
+                                    .setActions(emptyList()) // Hide system actions (back button, etc.)
+                                    .build()
                             )
-                        },
-                        onLeaveClick = {
-                            rtcEngine.stopPreview()
-                            rtcEngine.leaveChannel()
+                            val homeIntent = Intent(Intent.ACTION_MAIN)
+                            homeIntent.addCategory(Intent.CATEGORY_HOME)
+                            context.startActivity(homeIntent)
+                            // isPipOn is now managed by rememberIsInPipMode(), no need to manually set
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Picture-in-Picture permission is not granted",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    )
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Picture-in-Picture requires Android 8.0 (API 26) or higher",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+            ) {
+                Text(text = "Enter Picture-in-Picture Mode")
             }
+
+            ChannelNameInput(
+                channelName = channelName,
+                isJoined = isJoined,
+                onJoinClick = {
+                    channelName = it
+                    keyboard?.hide()
+                    permissionLauncher.launch(
+                        arrayOf(
+                            android.Manifest.permission.RECORD_AUDIO,
+                            android.Manifest.permission.CAMERA
+                        )
+                    )
+                },
+                onLeaveClick = {
+                    rtcEngine.stopPreview()
+                    rtcEngine.leaveChannel()
+                }
+            )
         }
     }
-
-}
-
-
-class PictureInPictureActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            PictureInPicture()
-        }
-    }
-
 }

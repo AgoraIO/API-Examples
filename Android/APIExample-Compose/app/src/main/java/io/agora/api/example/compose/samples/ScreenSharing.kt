@@ -1,5 +1,13 @@
 package io.agora.api.example.compose.samples
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -21,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.R
@@ -43,6 +50,13 @@ import io.agora.rtc2.ScreenCaptureParameters
 import io.agora.rtc2.video.VideoCanvas
 import io.agora.rtc2.video.VideoEncoderConfiguration
 
+private tailrec fun Context.findActivity(): Activity =
+    when (this) {
+        is Activity -> this
+        is ContextWrapper -> this.baseContext.findActivity()
+        else -> throw IllegalArgumentException("Could not find activity!")
+    }
+
 @Composable
 fun ScreenSharing() {
     val context = LocalContext.current
@@ -57,6 +71,9 @@ fun ScreenSharing() {
     var screenUid by rememberSaveable { mutableIntStateOf(0) }
     var isScreenPreview by rememberSaveable { mutableStateOf(true) }
     var isScreenSharing by rememberSaveable { mutableStateOf(false) }
+    var shareScreenOnly by rememberSaveable { mutableStateOf(true) }
+
+    val handler = remember { Handler(Looper.getMainLooper()) }
 
     val screenCaptureParameters = remember {
         ScreenCaptureParameters()
@@ -64,7 +81,7 @@ fun ScreenSharing() {
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
             mAreaCode = SettingPreferences.getArea()
-            mContext = context
+            mContext = context.applicationContext
             mAppId = BuildConfig.AGORA_APP_ID
             mEventHandler = object : IRtcEngineEventHandler() {
                 override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
@@ -115,6 +132,8 @@ fun ScreenSharing() {
                     localStats.copy(localVideoStats = stats).let {
                         localStats = it
                     }
+                    Log.d("onLocalVideoStats","${stats?.captureFrameWidth} ${stats?.captureFrameHeight} " +
+                            "${stats?.encodedFrameWidth} ${stats?.encodedFrameHeight}")
                 }
 
                 override fun onLocalAudioStats(stats: LocalAudioStats?) {
@@ -142,6 +161,36 @@ fun ScreenSharing() {
                             remoteStats = it
                         }
                     }
+                }
+
+                override fun onLocalVideoEvent(source: Constants.VideoSourceType?, event: Int) {
+                    super.onLocalVideoEvent(source, event)
+                    handler.post {
+                        when (event) {
+
+                            Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_WINDOW_HIDDEN -> {
+                                Toast.makeText(context, "Shared app moved to background", Toast.LENGTH_LONG).show()
+                            }
+
+                            Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN -> {
+                                Toast.makeText(context, "Shared app restored to foreground", Toast.LENGTH_LONG).show()
+                            }
+
+                            Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_STOPPED_BY_USER -> {
+                                Toast.makeText(
+                                    context,
+                                    "Screen sharing stopped by user in status bar",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+
+                            Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_SYSTEM_INTERNAL_ERROR -> {
+                                Toast.makeText(context, "Screen sharing error occurred", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
                 }
 
                 override fun onLocalVideoStateChanged(
@@ -191,7 +240,24 @@ fun ScreenSharing() {
                 // Permission is granted
                 Toast.makeText(context, R.string.permission_granted, Toast.LENGTH_LONG).show()
 
+                // Set share screen only parameter for Android 14+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    if (shareScreenOnly) {
+                        rtcEngine.setParameters("{\"rtc.video.share_screen_only\":true}")
+                    } else {
+                        rtcEngine.setParameters("{\"rtc.video.share_screen_only\":false}")
+                    }
+                }
+
+                val metrics = DisplayMetrics()
+                context.findActivity().windowManager.defaultDisplay.getRealMetrics(metrics)
+                screenCaptureParameters.videoCaptureParameters.width = 720
+                screenCaptureParameters.videoCaptureParameters.height =
+                    (720 * 1.0f / metrics.widthPixels * metrics.heightPixels).toInt()
+                screenCaptureParameters.videoCaptureParameters.framerate = 15
+
                 rtcEngine.startScreenCapture(screenCaptureParameters)
+
                 val mediaOptions = ChannelMediaOptions()
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
@@ -202,6 +268,7 @@ fun ScreenSharing() {
                 mediaOptions.publishScreenCaptureAudio = true
                 mediaOptions.publishScreenCaptureVideo = true
                 TokenUtils.gen(channelName, 0) {
+
                     rtcEngine.joinChannel(it, channelName, 0, mediaOptions)
                 }
             } else {
@@ -218,6 +285,10 @@ fun ScreenSharing() {
         remoteStats = remoteStats,
         isScreenPreview = isScreenPreview,
         isScreenSharing = isScreenSharing,
+        shareScreenOnly = shareScreenOnly,
+        onShareScreenOnly = {
+            shareScreenOnly = it
+        },
         localRender = { view, id ->
             val videoCanvas = VideoCanvas(view, Constants.RENDER_MODE_FIT, id)
             videoCanvas.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY.value
@@ -227,7 +298,7 @@ fun ScreenSharing() {
             rtcEngine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY)
         },
         remoteRender = { view, id ->
-            rtcEngine.setupRemoteVideo(VideoCanvas(view, Constants.RENDER_MODE_HIDDEN, id))
+            rtcEngine.setupRemoteVideo(VideoCanvas(view, Constants.RENDER_MODE_FIT, id))
         },
         onJoinClick = {
             if (it.isEmpty()) {
@@ -238,8 +309,8 @@ fun ScreenSharing() {
             channelName = it
             permissionLauncher.launch(
                 arrayOf(
-                    android.Manifest.permission.RECORD_AUDIO,
-                    android.Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA,
                 )
             )
         },
@@ -254,7 +325,7 @@ fun ScreenSharing() {
                 screenUid = localUid
             } else {
                 screenUid = 0
-                val videoCanvas = VideoCanvas(null, Constants.RENDER_MODE_HIDDEN, localUid)
+                val videoCanvas = VideoCanvas(null, Constants.RENDER_MODE_FIT, localUid)
                 videoCanvas.sourceType = Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY.value
                 videoCanvas.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED
                 rtcEngine.setupLocalVideo(videoCanvas)
@@ -291,12 +362,14 @@ private fun ScreenSharingView(
     remoteRender: (view: View, id: Int) -> Unit = { _, _ -> },
     isScreenPreview: Boolean = true,
     isScreenSharing: Boolean = false,
+    shareScreenOnly: Boolean = false,
     onJoinClick: (String) -> Unit,
     onLeaveClick: () -> Unit,
     onScreenPreview: (Boolean) -> Unit,
     onScreenAudio: (Boolean) -> Unit,
     onScreenScenario: (Constants.ScreenScenarioType) -> Unit,
     onScreenVolume: (Float) -> Unit,
+    onShareScreenOnly: (Boolean) -> Unit,
 ) {
     Column {
         TwoVideoView(
@@ -324,6 +397,15 @@ private fun ScreenSharingView(
             enable = isJoined && isScreenSharing
         ) {
             onScreenAudio(it)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            SwitchRaw(
+                title = stringResource(id = R.string.screen_sharing_share_screen_only),
+                checked = shareScreenOnly,
+                enable = !isJoined
+            ) {
+                onShareScreenOnly(it)
+            }
         }
         DropdownMenuRaw(
             title = "Scenario Type",
@@ -353,19 +435,20 @@ private fun ScreenSharingView(
 }
 
 
-@Preview
-@Composable
-private fun ScreenSharingViewPreview() {
-    ScreenSharingView(
-        channelName = "test",
-        isJoined = false,
-        localUid = 1,
-        onJoinClick = {},
-        onLeaveClick = { },
-        onScreenPreview = {},
-        onScreenAudio = {},
-        onScreenScenario = {}
-    ) {
-
-    }
-}
+//@Preview
+//@Composable
+//private fun ScreenSharingViewPreview() {
+//    ScreenSharingView(
+//        channelName = "test",
+//        isJoined = false,
+//        localUid = 1,
+//        onJoinClick = {},
+//        onLeaveClick = { },
+//        onScreenPreview = {},
+//        onScreenAudio = {},
+//        onScreenScenario = {},
+//        onShareScreenOnly = {},
+//    ) {
+//
+//    }
+//}

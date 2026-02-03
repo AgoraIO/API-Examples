@@ -25,7 +25,8 @@ class CanvasConfig;
 using ErrorCode = ::RteErrorCode;
 
 /**
- * Error class. Used to record the execution result of an interface call.
+ * @brief This class provides methods to retrieve error codes and error messages.
+ *
  * @since v4.4.0
  */
 class Error {
@@ -54,16 +55,29 @@ class Error {
   }
 
   /**
-   * This interface is used to get the specific error code.
+   * @brief Gets the error code returned by the API call.
+   *
    * @since v4.4.0
-   * @return ErrorCode Error code,Refer to the ErrorCode type for details.
+   *
+   * @details
+   * Call timing: When an API call fails, you can call this method to get the error code.
+   *
+   * @return
+   * The error code. See `RteErrorCode`.
    */
   ErrorCode Code() const { return c_error != nullptr ? c_error->code : kRteErrorDefault; }
 
   /**
-   * This interface is used to get the specific error description.
+   * @brief Gets detailed error information.
+   *
    * @since v4.4.0
-   * @return const char* Error description
+   *
+   * @details
+   * Call timing: When an API call fails, you can call this method to get error information to help
+   * troubleshoot the issue.
+   *
+   * @return
+   * Error information.
    */
   const char *Message() const { 
     if(c_error != nullptr && c_error->message != nullptr){

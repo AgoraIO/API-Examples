@@ -137,5 +137,14 @@
         android:text="@string/external_mediaprojection" />
 
 
-
+    <Switch
+        android:id="@+id/share_screen_only"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/media_projection_external"
+        android:layout_marginBottom="16dp"
+        android:paddingHorizontal="16dp"
+        android:checked="true"
+        android:enabled="true"
+        android:text="@string/share_screen_only" />
 </RelativeLayout>

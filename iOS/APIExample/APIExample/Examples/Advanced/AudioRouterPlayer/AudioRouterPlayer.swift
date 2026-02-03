@@ -205,7 +205,7 @@ class AudioRouterPlayerMain: BaseViewController {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                                                                             frameRate: (AgoraVideoFrameRate(rawValue: fps) ?? .fps15).rawValue,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation, mirrorMode: .auto))
 

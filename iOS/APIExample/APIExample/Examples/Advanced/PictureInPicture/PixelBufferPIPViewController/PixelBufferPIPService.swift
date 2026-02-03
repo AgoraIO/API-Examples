@@ -29,8 +29,9 @@ class PixelBufferPIPService: NSObject {
         engine.setClientRole(.broadcaster)
         engine.enableAudio()
         engine.enableVideo()
-        engine.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: CGSize(width: 960, height: 540), 
-                                                                           frameRate: .fps15,
+        engine.setParameters("{\"rtc.camera_enable_multitasking\": true}")
+        engine.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: CGSize(width: 960, height: 540),
+                                                                           frameRate: 15,
                                                                            bitrate: AgoraVideoBitrateStandard,
                                                                            orientationMode: .fixedPortrait,
                                                                            mirrorMode: .auto))
@@ -49,14 +50,6 @@ class PixelBufferPIPService: NSObject {
     }
     
     private func setupRtcEngin() {
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        videoCanvas.view = localView
-        videoCanvas.renderMode = .hidden
-        
-        rtcEngine.setupLocalVideo(videoCanvas)
-        rtcEngine.startPreview()
-        
         rtcEngine.setDefaultAudioRouteToSpeakerphone(true)
         rtcEngine.setVideoFrameDelegate(self)
         
@@ -64,7 +57,6 @@ class PixelBufferPIPService: NSObject {
         option.publishCameraTrack = true
         option.publishMicrophoneTrack = true
         option.clientRoleType = .broadcaster
-    
         NetworkManager.shared.generateToken(channelName: channelId, success: { [weak self] token in
             guard let self = self else { return }
             let result = self.rtcEngine.joinChannel(byToken: token, channelId: self.channelId, uid: self.uid, mediaOptions: option)
