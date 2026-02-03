@@ -24,8 +24,8 @@ object AgoraBeautySDK {
     fun initBeautySDK(context: Context, rtcEngine: RtcEngine): Boolean {
         rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true)
         val storagePath = context.getExternalFilesDir("")?.absolutePath ?: return false
-        val modelsPath = "$storagePath/beauty_agora/beauty_material.bundle"
-        copyAssets(context, "beauty_agora/beauty_material.bundle", modelsPath)
+        val modelsPath = "$storagePath/beauty_agora/beauty_material"
+        copyAssets(context, "beauty_agora/beauty_material", modelsPath)
         videoEffectObject = rtcEngine.createVideoEffectObject(
             "$modelsPath/beauty_material_v2.0.0",
             Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE

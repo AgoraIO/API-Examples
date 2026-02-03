@@ -21,6 +21,7 @@ class IRtmpConnection;
 class ILocalUser;
 class IMediaDeviceManager;
 class INGAudioDeviceManager;
+class INGVideoDeviceManager;
 struct TConnectionInfo;
 struct RtcConnectionConfiguration;
 struct RtmpConnectionConfiguration;
@@ -380,6 +381,23 @@ public:
    * @param configContent The config fetched from server.
    */
   virtual void onFetchConfigResult(int code, rtc::CONFIG_FETCH_TYPE configType, const char* configContent) {}
+
+#if defined(__ANDROID__)
+  /**
+    * Reports the permission granted.
+    * @param permission {@link PERMISSION}
+    */
+  virtual void onPermissionGranted(agora::rtc::PERMISSION_TYPE permissionType) {}
+#endif
+
+  /**
+   * Occurs when the local user registers a user account.
+   *
+   * @param uid The ID of the local user.
+   * @param userAccount The user account of the local user.
+   */
+  virtual void onLocalUserRegistered(rtc::uid_t uid, const char* userAccount) {}
+
 };
 
 /**
@@ -669,6 +687,16 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::INGAudioDeviceManager> createAudioDeviceManager() = 0;
 
+
+  /**
+   * Creates a video device manager object and returns the pointer.
+   *
+   * @return
+   * - The pointer to \ref rtc::INGVideoDeviceManager "INGVideoDeviceManager": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::INGVideoDeviceManager> createVideoDeviceManager() = 0;
+
   /**
    * Creates a media node factory object and returns the pointer.
    *
@@ -794,6 +822,21 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createScreenCaptureVideoTrack(
       agora_refptr<rtc::IScreenCapturer> screen, const char* id = OPTIONAL_NULLPTR) = 0;
+
+
+/**
+   * Creates a local audio track object with a screen capture source extension and returns the pointer.
+   *
+   * Once created, this track can be used to work with the screen capture extension.
+   *
+   * @param screen The pointer to the screen capture source.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createScreenCaptureAudioTrack(
+    agora_refptr<rtc::IScreenCapturer> screen) = 0;
 #endif
 
 /// @cond (!Linux)

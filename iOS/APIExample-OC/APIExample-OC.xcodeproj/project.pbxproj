@@ -132,6 +132,8 @@
 		E7361FD52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E7361FC52A6E6EE500925BD6 /* ExtensionVideoFilter.hpp */; };
 		E7361FD62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7361FC62A6E6EE500925BD6 /* ExtensionVideoFilter.cpp */; };
 		E76347D62AB2E769005D130F /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E76347D82AB2E769005D130F /* ContentInspect.storyboard */; };
+		F765A4FF2EC6CCC300161371 /* LocalCompositeGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = F765A4FE2EC6CCC300161371 /* LocalCompositeGraph.m */; };
+		F765A5012EC6CD3C00161371 /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F765A5002EC6CD3C00161371 /* LocalCompositeGraph.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -373,6 +375,9 @@
 		E76347D72AB2E769005D130F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ContentInspect.storyboard; sourceTree = "<group>"; };
 		E76347DA2AB2E771005D130F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ContentInspect.strings"; sourceTree = "<group>"; };
 		EE1DD4153A945ADCE1953823 /* Pods_Agora_ScrrenShare_Extension_OC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScrrenShare_Extension_OC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F765A4FD2EC6CCC300161371 /* LocalCompositeGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalCompositeGraph.h; sourceTree = "<group>"; };
+		F765A4FE2EC6CCC300161371 /* LocalCompositeGraph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalCompositeGraph.m; sourceTree = "<group>"; };
+		F765A5002EC6CD3C00161371 /* LocalCompositeGraph.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -491,6 +496,7 @@
 		E70ADE0A2A5D009D009947CF /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F765A4FC2EC6CBFD00161371 /* LocalCompositeGraph */,
 				AB8474102DF9CD7900B4DB73 /* Multipath */,
 				AB8474162DF9CD7900B4DB73 /* Simulcast */,
 				E72F62072A78B31B00C963D2 /* MutliCamera */,
@@ -969,6 +975,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		F765A4FC2EC6CBFD00161371 /* LocalCompositeGraph */ = {
+			isa = PBXGroup;
+			children = (
+				F765A4FD2EC6CCC300161371 /* LocalCompositeGraph.h */,
+				F765A4FE2EC6CCC300161371 /* LocalCompositeGraph.m */,
+				F765A5002EC6CD3C00161371 /* LocalCompositeGraph.storyboard */,
+			);
+			path = LocalCompositeGraph;
+			sourceTree = "<group>";
+		};
 		FB95B04C515AA8E46D5A7E6A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1143,6 +1159,7 @@
 				E70ADDFF2A5D0050009947CF /* LaunchScreen.storyboard in Resources */,
 				E70ADEC62A66306F009947CF /* VideoMetadata.storyboard in Resources */,
 				E72F61AF2A72179700C963D2 /* ScreenShare.storyboard in Resources */,
+				F765A5012EC6CD3C00161371 /* LocalCompositeGraph.storyboard in Resources */,
 				E7361F512A6E5B3700925BD6 /* CustomVideoRender.storyboard in Resources */,
 				E70ADDFC2A5D0050009947CF /* Assets.xcassets in Resources */,
 				E70ADE682A5FAAEB009947CF /* Localizable.strings in Resources */,
@@ -1208,9 +1225,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-APIExample-OC/Pods-APIExample-OC-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-APIExample-OC/Pods-APIExample-OC-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1284,6 +1305,7 @@
 				E70ADE1F2A5D0368009947CF /* MediaUtils.m in Sources */,
 				E70ADEDD2A6A2D7D009947CF /* AgoraPCMSourcePush.m in Sources */,
 				E70ADE202A5D0368009947CF /* BundleUtil.m in Sources */,
+				F765A4FF2EC6CCC300161371 /* LocalCompositeGraph.m in Sources */,
 				E72F620C2A78B31B00C963D2 /* MutliCamera.m in Sources */,
 				E70ADE742A60EC9A009947CF /* LiveStreaming.m in Sources */,
 				E70ADEE62A6A71FE009947CF /* ExternalAudio.mm in Sources */,
@@ -1606,7 +1628,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1648,7 +1670,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1681,7 +1703,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1710,7 +1732,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

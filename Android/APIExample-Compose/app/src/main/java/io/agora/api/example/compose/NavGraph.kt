@@ -1,5 +1,6 @@
 package io.agora.api.example.compose
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,6 +10,7 @@ import androidx.navigation.navArgument
 import io.agora.api.example.compose.model.Component
 import io.agora.api.example.compose.model.Components
 import io.agora.api.example.compose.model.Example
+import io.agora.api.example.compose.samples.cleanupPictureInPictureState
 import io.agora.api.example.compose.ui.example.Example
 import io.agora.api.example.compose.ui.home.Home
 import io.agora.api.example.compose.ui.settings.Settings
@@ -48,7 +50,15 @@ fun NavGraph() {
             val example = component.examples[exampleIndex]
             Example(
                 example = example,
-                onBackClick = { navController.popBackStack() },
+                onBackClick = {
+                    Log.d("PiPDebug", "NavGraph: onBackClick called for example: ${example.name}")
+                    // Special handling for PictureInPicture example
+                    if (example.name == R.string.example_pictureinpicture) {
+                        Log.d("PiPDebug", "NavGraph: Cleaning up PictureInPicture state")
+                        cleanupPictureInPictureState()
+                    }
+                    navController.popBackStack()
+                },
             )
         }
     }

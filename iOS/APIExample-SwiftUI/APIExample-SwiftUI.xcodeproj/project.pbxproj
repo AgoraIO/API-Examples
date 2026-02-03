@@ -136,6 +136,8 @@
 		F73B016E2CBA1AED0077B7D2 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9306AF2CB961150085EFF9 /* GlobalSettings.swift */; };
 		F73B016F2CBA1AF40077B7D2 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9307F42CB963B30085EFF9 /* SampleHandler.swift */; };
 		F73B018D2CC10E240077B7D2 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73B018C2CC10E240077B7D2 /* ViewExtensions.swift */; };
+		F765A4F92EC5E0DC00161371 /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765A4F82EC5E0DC00161371 /* LocalCompositeGraph.swift */; };
+		F765A4FB2EC5E1CA00161371 /* LocalCompositeGraphRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F765A4FA2EC5E1CA00161371 /* LocalCompositeGraphRTC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -312,6 +314,8 @@
 		E633FB65347D029555FE8BDB /* Pods_APIExample_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F73B016A2CBA1AC60077B7D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		F73B018C2CC10E240077B7D2 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		F765A4F82EC5E0DC00161371 /* LocalCompositeGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraph.swift; sourceTree = "<group>"; };
+		F765A4FA2EC5E1CA00161371 /* LocalCompositeGraphRTC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCompositeGraphRTC.swift; sourceTree = "<group>"; };
 		F89807E42BC51A25F44D3692 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -610,6 +614,7 @@
 		4C9308122CBA7F9B0085EFF9 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				F765A4F72EC5E0C000161371 /* LocalVideoComposition */,
 				AB8474212DF9D1BD00B4DB73 /* Multipath */,
 				AB8474242DF9D1BD00B4DB73 /* Simulcast */,
 				4C9309E92CBA95530085EFF9 /* SpatialAudio */,
@@ -933,6 +938,15 @@
 			path = Simulcast;
 			sourceTree = "<group>";
 		};
+		F765A4F72EC5E0C000161371 /* LocalVideoComposition */ = {
+			isa = PBXGroup;
+			children = (
+				F765A4F82EC5E0DC00161371 /* LocalCompositeGraph.swift */,
+				F765A4FA2EC5E1CA00161371 /* LocalCompositeGraphRTC.swift */,
+			);
+			path = LocalVideoComposition;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1094,9 +1108,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-APIExample-SwiftUI/Pods-APIExample-SwiftUI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1112,6 +1130,7 @@
 			files = (
 				4C93076A2CB961150085EFF9 /* CircularBuffer.c in Sources */,
 				4C9309CA2CBA91530085EFF9 /* PixelBufferRenderViewModel.swift in Sources */,
+				F765A4FB2EC5E1CA00161371 /* LocalCompositeGraphRTC.swift in Sources */,
 				4C9309D52CBA91530085EFF9 /* AudioWaveformRTC.swift in Sources */,
 				4C9309CE2CBA91530085EFF9 /* VideoMetaDataRTC.swift in Sources */,
 				4C9309C12CBA91530085EFF9 /* CustomPCMAudioSource.swift in Sources */,
@@ -1192,6 +1211,7 @@
 				4C9307622CB961150085EFF9 /* JSONObject.swift in Sources */,
 				4C9309E82CBA91530085EFF9 /* AudioMixing.swift in Sources */,
 				4C9307712CB961150085EFF9 /* StatisticsInfo.swift in Sources */,
+				F765A4F92EC5E0DC00161371 /* LocalCompositeGraph.swift in Sources */,
 				4C9309AE2CBA91530085EFF9 /* MediaChannelRelayRTC.swift in Sources */,
 				4C9307672CB961150085EFF9 /* AgoraSampleBufferRender.m in Sources */,
 				4C9309C02CBA91530085EFF9 /* CustomPCMAudioSourceRTC.swift in Sources */,
@@ -1385,7 +1405,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1424,7 +1444,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1454,7 +1474,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1485,7 +1505,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 4.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

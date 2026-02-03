@@ -87,7 +87,7 @@ class LiveStreamingRTC: NSObject, ObservableObject {
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
+        agoraKit.setVideoScenario(.applicationLiveShowScenario)
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -154,7 +154,7 @@ class LiveStreamingRTC: NSObject, ObservableObject {
             return
         }
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                                                                             frameRate: fps,
+                                                                             frameRate: fps.rawValue,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: orientation, mirrorMode: .auto))
         

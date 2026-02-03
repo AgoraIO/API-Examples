@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionConfig;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,7 +73,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private FrameLayout fl_local, fl_remote;
     private Button join;
-    private Switch screenAudio, screenPreview, externalMediaPro;
+    private Switch screenAudio, screenPreview, externalMediaPro, shareScreenOnly;
     private SeekBar screenAudioVolume;
     private EditText et_channel;
     private int myUid, remoteUid = -1;
@@ -118,6 +119,12 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         fl_remote = view.findViewById(R.id.fl_screenshare);
         join.setOnClickListener(this);
 
+        shareScreenOnly = view.findViewById(R.id.share_screen_only);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            shareScreenOnly.setVisibility(View.VISIBLE);
+        } else {
+            shareScreenOnly.setVisibility(View.GONE);
+        }
         screenPreview = view.findViewById(R.id.screen_preview);
         externalMediaPro = view.findViewById(R.id.media_projection_external);
         screenAudio = view.findViewById(R.id.screen_audio);
@@ -125,6 +132,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         screenScenarioType = view.findViewById(R.id.spinner_screen_scenario_type);
 
         screenScenarioType.setOnItemSelectedListener(this);
+        shareScreenOnly.setOnCheckedChangeListener(this);
         screenPreview.setOnCheckedChangeListener(this);
         screenAudio.setOnCheckedChangeListener(this);
         externalMediaPro.setOnCheckedChangeListener(this);
@@ -246,6 +254,8 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             screenCaptureParameters.captureAudio = checked;
             engine.updateScreenCaptureParameters(screenCaptureParameters);
         } else if (compoundButton == externalMediaPro) {
+        } else if (compoundButton == shareScreenOnly) {
+
         }
     }
 
@@ -256,6 +266,10 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 channelId = et_channel.getText().toString();
+                if (channelId.isEmpty()){
+                    showLongToast("Channel is empty");
+                    return;
+                }
                 // Check permission
                 checkOrRequestPermisson((allPermissionsGranted, permissions, grantResults) -> {
                     if (allPermissionsGranted) {
@@ -315,16 +329,16 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     private void startMediaProjectionService() {
 //        if (joined) {
-            Context context = getContext();
-            if (context != null) {
-                Intent intent = new Intent(context, MediaProjectionService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(intent);
-                } else {
-                    context.startService(intent);
-                }
+        Context context = getContext();
+        if (context != null) {
+            Intent intent = new Intent(context, MediaProjectionService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
             }
         }
+    }
 //    }
 
     private void stopMediaProjectionService() {
@@ -337,13 +351,34 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
     private void requestScreenCapture() {
         startMediaProjectionService();
-        Intent intent = mediaProjectionManager.createScreenCaptureIntent();
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            MediaProjectionConfig config;
+            if (shareScreenOnly.isChecked()) {
+                // Force users to share "Entire Screen" only (hides the "Single App" option).
+                config = MediaProjectionConfig.createConfigForDefaultDisplay();
+            } else {
+                // Android 14 cannot force "share app only". createConfigForUserChoice allows users to choose between "Single App" or "Entire Screen".
+                config = MediaProjectionConfig.createConfigForUserChoice();
+            }
+            intent = mediaProjectionManager.createScreenCaptureIntent(config);
+        } else {
+            intent = mediaProjectionManager.createScreenCaptureIntent();
+        }
         mediaProjectionLauncher.launch(intent);
     }
 
 
     private void joinChannel() {
         engine.setParameters("{\"che.video.mobile_1080p\":true}");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (shareScreenOnly.isChecked()) {
+                engine.setParameters("{\"rtc.video.share_screen_only\":true}");
+            } else {
+                engine.setParameters("{\"rtc.video.share_screen_only\":false}");
+            }
+        }
+
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
 
         /*Enable video module*/
@@ -438,6 +473,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             joined = true;
             handler.post(() -> {
                 externalMediaPro.setEnabled(false);
+                shareScreenOnly.setEnabled(false);
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
             });
@@ -460,6 +496,20 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                     }
                     runOnUIThread(() -> leaveChannel());
                 }
+            }
+        }
+
+        @Override
+        public void onLocalVideoEvent(Constants.VideoSourceType source, int event) {
+            super.onLocalVideoEvent(source, event);
+            if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_WINDOW_HIDDEN) {
+                showLongToast("Shared app moved to background");
+            } else if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_WINDOW_RECOVER_FROM_HIDDEN) {
+                showLongToast("Shared app restored to foreground");
+            } else if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_STOPPED_BY_USER) {
+                showLongToast("Screen sharing stopped by user in status bar");
+            } else if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_SYSTEM_INTERNAL_ERROR) {
+                showLongToast("Screen sharing error occurred");
             }
         }
 
@@ -555,11 +605,11 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                 });
             }
         }
-
     };
 
     private void leaveChannel() {
         externalMediaPro.setEnabled(true);
+        shareScreenOnly.setEnabled(true);
         stopMediaProjectionService();
         joined = false;
         join.setText(getString(R.string.join));

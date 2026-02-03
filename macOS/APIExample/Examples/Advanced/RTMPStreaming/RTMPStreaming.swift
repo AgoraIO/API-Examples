@@ -171,7 +171,7 @@ class RTMPStreaming: BaseViewController {
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value].size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]) ?? .fps15,
+                    frameRate: Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value],
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto
