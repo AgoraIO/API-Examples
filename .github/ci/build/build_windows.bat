@@ -10,8 +10,6 @@ REM 'repo:string',
 REM 'base:string',
 REM 'arch:string'
 REM 'output:string'
-REM 'short_version:string'
-REM 'release_version:string'
 REM 'build_date:string(yyyyMMdd)',
 REM 'build_timestamp:string (yyyyMMdd_hhmm)',
 REM 'platform: string',
@@ -46,54 +44,68 @@ echo source_root: %source_root%
 echo output: C:\\tmp\\%project%_out
 echo build_date: %build_date%
 echo build_time: %build_time%
-echo release_version: %release_version%
-echo short_version: %short_version%
 echo pwd: %cd%
 echo sdk_url: %sdk_url%
 
-
-set zip_name=Agora_Native_SDK_for_Windows_FULL_DEFAULT.zip
-if %compile_project% EQU false goto SKIP_DOWNLOAD
-set zip_name=%sdk_url%
-:LOOP
-for /f "tokens=1* delims=</>" %%a in ("%zip_name%") do (
-    set zip_name=%%a
-    set part2=%%b
+REM If sdk_url has a value, replace the URL in install.ps1
+if not "%sdk_url%"=="" (
+    if not "%sdk_url%"=="none" (
+        echo "Replacing SDK URL in install.ps1"
+        powershell -Command "(Get-Content windows\APIExample\install.ps1) -replace '\$agora_sdk = ''.*''', ('$agora_sdk = ''' + '%sdk_url%' + '''') | Set-Content windows\APIExample\install.ps1"
+    )
 )
-if "%part2%" EQU "" goto END
-set zip_name=%part2%
-goto LOOP
-:END
-echo on
-echo zip_name: %zip_name%
 
-dir
+REM Check compress_apiexample parameter
+if "%compress_apiexample%"=="" set compress_apiexample=false
+echo compress_apiexample: %compress_apiexample%
 
-curl %sdk_url% -o %zip_name%
-REM python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
-7z x ./%zip_name% -y
-dir
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
-del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
-del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
-:SKIP_DOWNLOAD
+REM Check compile_project parameter
+if "%compile_project%"=="" set compile_project=false
+echo compile_project: %compile_project%
 
+REM Package APIExample code (only when compress_apiexample=true)
+REM Run before compile so package content is not affected by compile
+set result_zip=APIExample_result.zip
+set des_path=%WORKSPACE%\Shengwang_APIExample_code_windows_%BUILD_NUMBER%.zip
+if "%compress_apiexample%"=="true" (
+    echo "Packaging APIExample code..."
+    
+    REM Compress windows\APIExample (code only) to zip
+    echo "Compressing APIExample code package..."
+    del /F /Q %result_zip% 2>nul
+    7z a -tzip %result_zip% -r windows\APIExample
+    if errorlevel 1 (
+        echo 7z compression failed!
+        exit /b 1
+    )
+    
+    REM Copy to WORKSPACE with new naming format
+    echo "Copying %result_zip% to %des_path%"
+    copy %result_zip% %des_path%
+    if errorlevel 1 (
+        echo copy failed!
+        exit /b 1
+    )
+    
+    REM Clean up temporary zip in repo root
+    del /F %result_zip%
+    
+    echo "Complete: APIExample code package created"
+    dir %WORKSPACE%\
+) else (
+    echo "Skipping APIExample code packaging (compress_apiexample=false)"
+)
 
-mkdir Agora_Native_SDK_for_Windows_FULL\samples
-mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
-rmdir /S /Q windows\cicd
-del /F /Q windows\APIExample\ci.py
-xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
-dir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
-7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
-copy result.zip %WORKSPACE%\\withAPIExample_%BUILD_NUMBER%_%zip_name%
-del /F result.zip
-del /F %WORKSPACE%\\%zip_name%
-
-if %compile_project% EQU false goto FINAL
-cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
-call cloud_build.bat
-:FINAL
+REM Compile project to generate executable (only when compile_project=true)
+if "%compile_project%"=="true" (
+    echo "Compiling project to generate executable..."
+    cd windows\APIExample
+    call cloud_build.bat
+    if %ERRORLEVEL% NEQ 0 (
+        echo Build failed!
+        exit /b %ERRORLEVEL%
+    )
+    cd ..\..
+) else (
+    echo "Skipping project compilation (compile_project=false)"
+)
