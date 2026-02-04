@@ -1,0 +1,33 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch or ref to create tag from'
+        required: true
+        type: string
+      tag:
+        description: 'Tag name to create (e.g. v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-tag:
+    name: Create and push tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
