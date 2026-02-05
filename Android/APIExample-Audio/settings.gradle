@@ -18,5 +18,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = 'APIExample-Audio'
+rootProject.name = 'Agora-APIExample-Audio'
 include ':app'
