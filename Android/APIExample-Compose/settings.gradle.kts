@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "APIExample-Compose"
+rootProject.name = "Agora-APIExample-Compose"
 include(":app")

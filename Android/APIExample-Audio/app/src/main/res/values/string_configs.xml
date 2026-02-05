@@ -23,6 +23,6 @@
 
     PS: It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
     -->
-    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    <string name="agora_app_certificate" translatable="false"></string>
 
 </resources>

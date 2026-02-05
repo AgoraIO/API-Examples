@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import io.agora.api.example.annotation.Example;
-import io.agora.api.example.common.adapter.ExampleSection;
+import io.agora.api.example.common.adapter.SectionAdapter;
 import io.agora.api.example.common.model.Examples;
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -78,10 +77,10 @@ public class MainFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            SectionedRecyclerViewAdapter sectionedAdapter = new SectionedRecyclerViewAdapter();
-            sectionedAdapter.addSection(new ExampleSection(BASIC, Examples.ITEM_MAP.get(BASIC), mListener));
-            sectionedAdapter.addSection(new ExampleSection(ADVANCED, Examples.ITEM_MAP.get(ADVANCED), mListener));
-            recyclerView.setAdapter(sectionedAdapter);
+            SectionAdapter sectionAdapter = new SectionAdapter(mListener);
+            sectionAdapter.addSection(BASIC, Examples.ITEM_MAP.get(BASIC));
+            sectionAdapter.addSection(ADVANCED, Examples.ITEM_MAP.get(ADVANCED));
+            recyclerView.setAdapter(sectionAdapter);
         }
         return view;
     }
