@@ -22,7 +22,7 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = 'APIExample'
+rootProject.name = 'Agora-APIExample'
 include ':app'
 if (simpleFilter.toBoolean()) {
     include ':agora-simple-filter'
