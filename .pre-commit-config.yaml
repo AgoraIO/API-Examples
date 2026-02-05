@@ -4,7 +4,7 @@ repos:
       - id: gitleaks
         name: Detect hardcoded secrets
         description: Ensures no secrets are committed
-        entry: gitleaks protect
+        entry: .git-hooks/run-gitleaks.sh protect
         args: ["--config=.gitleaks.toml", "--staged", "--verbose"]
         language: system
         pass_filenames: false
