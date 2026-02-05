@@ -10,7 +10,7 @@
     In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project,
     then the APP ID can be found in the project detail page.
     -->
-    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    <string name="agora_app_id" translatable="false">aab8b8f5a8cd4469a63042fcfafe7063</string>
 
 
     <!--
@@ -23,6 +23,6 @@
 
     PS: It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
     -->
-    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    <string name="agora_app_certificate" translatable="false"></string>
 
 </resources>
