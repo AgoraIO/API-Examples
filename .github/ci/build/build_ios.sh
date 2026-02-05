@@ -67,6 +67,108 @@ apiexample_cn_name=Shengwang_Native_SDK_for_iOS
 apiexample_global_name=Agora_Native_SDK_for_iOS
 global_dir=Global
 
+# ===================================
+# Version validation logic
+# ===================================
+echo "=========================================="
+echo "Starting branch version validation..."
+echo "=========================================="
+
+# Get current branch name (try multiple methods for CI environments)
+BRANCH_NAME=""
+
+# Method 1: Try environment variable (Jenkins/GitLab CI)
+if [ ! -z "$GIT_BRANCH" ]; then
+    BRANCH_NAME="$GIT_BRANCH"
+    echo "Branch from GIT_BRANCH: $BRANCH_NAME"
+elif [ ! -z "$BRANCH_NAME" ]; then
+    echo "Branch from BRANCH_NAME: $BRANCH_NAME"
+elif [ ! -z "$CI_COMMIT_REF_NAME" ]; then
+    BRANCH_NAME="$CI_COMMIT_REF_NAME"
+    echo "Branch from CI_COMMIT_REF_NAME: $BRANCH_NAME"
+# Method 2: Try git command
+elif [ -z "$BRANCH_NAME" ]; then
+    BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    if [ "$BRANCH_NAME" = "HEAD" ]; then
+        # In detached HEAD state, try to get branch from remote
+        BRANCH_NAME=$(git branch -r --contains HEAD | grep -v HEAD | head -1 | sed 's/^[[:space:]]*origin\///')
+        echo "Branch from git branch -r: $BRANCH_NAME"
+    else
+        echo "Branch from git rev-parse: $BRANCH_NAME"
+    fi
+fi
+
+# Remove origin/ prefix if present (but keep the rest of the path)
+BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's/^origin\///')
+
+if [ -z "$BRANCH_NAME" ] || [ "$BRANCH_NAME" = "HEAD" ]; then
+    echo "Warning: Unable to get Git branch name, skipping version validation"
+else
+    echo "Current branch: $BRANCH_NAME"
+    
+    # Extract version from branch name (format: dev/x.x.x)
+    if [[ $BRANCH_NAME =~ ^dev/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+        BRANCH_VERSION="${BASH_REMATCH[1]}"
+        echo "Branch version: $BRANCH_VERSION"
+        echo "Current building project: $ios_direction"
+        echo ""
+        
+        # Validate the current project based on ios_direction
+        PROJECT_PATH="iOS/${ios_direction}"
+        PROJECT_NAME="${ios_direction}"
+        
+        echo "-----------------------------------"
+        echo "Validating: $PROJECT_PATH"
+        
+        PBXPROJ_FILE="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj/project.pbxproj"
+        
+        if [ ! -f "$PBXPROJ_FILE" ]; then
+            echo "Error: project.pbxproj file not found: $PBXPROJ_FILE"
+            exit 1
+        fi
+        
+        # Extract MARKETING_VERSION for main target (skip Extension targets)
+        # Look for the version that appears with @executable_path/Frameworks (main app)
+        PLIST_VERSION=$(grep -A 2 "@executable_path/Frameworks" "$PBXPROJ_FILE" | grep "MARKETING_VERSION" | head -1 | sed 's/.*MARKETING_VERSION = \([^;]*\);/\1/' | tr -d ' ')
+        
+        if [ -z "$PLIST_VERSION" ]; then
+            echo "Error: Unable to read MARKETING_VERSION from project.pbxproj"
+            exit 1
+        fi
+        
+        echo "Project version: $PLIST_VERSION"
+        echo "-----------------------------------"
+        
+        # Compare versions
+        if [ "$BRANCH_VERSION" != "$PLIST_VERSION" ]; then
+            echo ""
+            echo "=========================================="
+            echo "Error: Version mismatch!"
+            echo "=========================================="
+            echo "  Branch version:  $BRANCH_VERSION"
+            echo "  Project version: $PLIST_VERSION"
+            echo "  Project path:    $PROJECT_PATH"
+            echo ""
+            echo "Please ensure the version in branch name matches MARKETING_VERSION in Info.plist"
+            echo ""
+            exit 1
+        fi
+        
+        echo "✓ Version validation passed: $BRANCH_VERSION"
+    else
+        echo "Warning: Branch name does not match dev/x.x.x format!"
+        echo "Current branch: $BRANCH_NAME"
+        echo "Expected format: dev/x.x.x (e.g., dev/4.5.3)"
+        echo "Skipping version validation for non-version branches..."
+    fi
+fi
+
+echo "Version validation completed"
+echo "=========================================="
+echo ""
+
+
+
 if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    sdk_url_flag=false
    echo "sdk_url is empty"
@@ -116,8 +218,7 @@ if [ $compress_apiexample = true ]; then
     echo "complete compress api example"
     echo "current path: `pwd`"
     ls -al
-    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
-  
+    global_des_path=$WORKSPACE/${apiexample_global_name}_v${sdk_version}_APIExample_${BUILD_NUMBER}.zip
     echo "global_des_path: $global_des_path"
     echo "Moving global_result.zip to $global_des_path"
     mv global_result.zip $global_des_path
