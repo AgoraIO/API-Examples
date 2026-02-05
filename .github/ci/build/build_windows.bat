@@ -47,6 +47,15 @@ echo build_time: %build_time%
 echo pwd: %cd%
 echo sdk_url: %sdk_url%
 
+REM Version validation: branch name vs install.ps1 SDK version
+for /f "tokens=*" %%a in ('powershell -Command "(Get-Content 'windows\APIExample\install.ps1' -Raw) -match '_v([0-9]+\.[0-9]+\.[0-9]+)' | Out-Null; $matches[1]"') do set SDK_VER=%%a
+for /f "tokens=*" %%b in ('powershell -Command "'%api_examples_branch%' -match '([0-9]+\.[0-9]+\.[0-9]+)' | Out-Null; $matches[1]"') do set BRANCH_VER=%%b
+if not "%SDK_VER%"=="%BRANCH_VER%" (
+    echo ERROR: Version mismatch - Branch: %BRANCH_VER%, install.ps1: %SDK_VER%
+    exit /b 1
+)
+echo Version validated: %BRANCH_VER%
+
 REM If sdk_url has a value, replace the URL in install.ps1
 if not "%sdk_url%"=="" (
     if not "%sdk_url%"=="none" (
@@ -66,7 +75,7 @@ echo compile_project: %compile_project%
 REM Package APIExample code (only when compress_apiexample=true)
 REM Run before compile so package content is not affected by compile
 set result_zip=APIExample_result.zip
-set des_path=%WORKSPACE%\Shengwang_APIExample_code_windows_%BUILD_NUMBER%.zip
+set des_path=%WORKSPACE%\Agora_Native_SDK_for_Windows_v%SDK_VER%_APIExample_%BUILD_NUMBER%.zip
 if "%compress_apiexample%"=="true" (
     echo "Packaging APIExample code..."
     
