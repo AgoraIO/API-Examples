@@ -115,8 +115,7 @@ if [ $compress_apiexample = true ]; then
     echo "complete compress api example"
     echo "current path: `pwd`"
     ls -al
-    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
-  
+    global_des_path=$WORKSPACE/${apiexample_global_name}_v${sdk_version}_APIExample_${BUILD_NUMBER}.zip
     echo "global_des_path: $global_des_path"
     echo "Moving global_result.zip to $global_des_path"
     mv global_result.zip $global_des_path
