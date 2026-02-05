@@ -46,23 +46,26 @@ fi
 ./gradlew clean || exit 1
 ./gradlew :app:assembleRelease || exit 1
 
+# Extract SDK version from gradle.properties
 SDK_VERSION=""
-if [ "$1" = "false" ]; then
-    sdk_version_file="./gradle.properties"
-    if [[ -f "$sdk_version_file" ]]; then
+sdk_version_file="./gradle.properties"
+if [[ -f "$sdk_version_file" ]]; then
     rtc_sdk_version=$(grep "rtc_sdk_version" "$sdk_version_file" | cut -d'=' -f2)
     if [[ -n "$rtc_sdk_version" ]]; then
         SDK_VERSION=$(echo "$rtc_sdk_version" | sed 's/^[ \t]*//;s/[ \t]*$//')
+        echo "SDK Version from gradle.properties: $SDK_VERSION"
     else
-        echo "rtc_sdk_version value not found"
+        echo "Warning: rtc_sdk_version value not found in gradle.properties"
+        SDK_VERSION="unknown"
     fi
 else
-    echo "file not found: $sdk_version_file"
-fi
-else
-    SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
+    echo "Warning: gradle.properties file not found"
+    SDK_VERSION="unknown"
 fi
 
 if [ "$WORKSPACE" != "" ]; then
-cp app/build/outputs/apk/release/*.apk $WORKSPACE/APIExample-Compose_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").apk
+    PROJECT_NAME="Agora-APIExample-Compose"
+    APK_NAME="${PROJECT_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").apk"
+    echo "Copying APK to: $WORKSPACE/$APK_NAME"
+    cp app/build/outputs/apk/release/*.apk "$WORKSPACE/$APK_NAME"
 fi
