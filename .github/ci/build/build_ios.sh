@@ -68,41 +68,138 @@ apiexample_global_name=Agora_Native_SDK_for_iOS
 global_dir=Global
 
 # ===================================
-# Version validation logic
+# Version Validation Functions
 # ===================================
+
+# Function: Get current branch name from various sources
+get_branch_name() {
+    local branch_name=""
+    
+    # Method 1: Try environment variable (Jenkins/GitLab CI)
+    if [ ! -z "$GIT_BRANCH" ]; then
+        branch_name="$GIT_BRANCH"
+        echo "Branch from GIT_BRANCH: $branch_name" >&2
+    elif [ ! -z "$BRANCH_NAME" ]; then
+        branch_name="$BRANCH_NAME"
+        echo "Branch from BRANCH_NAME: $branch_name" >&2
+    elif [ ! -z "$CI_COMMIT_REF_NAME" ]; then
+        branch_name="$CI_COMMIT_REF_NAME"
+        echo "Branch from CI_COMMIT_REF_NAME: $branch_name" >&2
+    # Method 2: Try git command
+    else
+        branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+        if [ "$branch_name" = "HEAD" ]; then
+            # In detached HEAD state, try to get branch from remote
+            branch_name=$(git branch -r --contains HEAD | grep -v HEAD | head -1 | sed 's/^[[:space:]]*origin\///')
+            echo "Branch from git branch -r: $branch_name" >&2
+        else
+            echo "Branch from git rev-parse: $branch_name" >&2
+        fi
+    fi
+    
+    # Remove origin/ prefix if present (but keep the rest of the path)
+    branch_name=$(echo "$branch_name" | sed 's/^origin\///')
+    
+    echo "$branch_name"
+}
+
+# Function: Validate project MARKETING_VERSION against branch version
+validate_project_version() {
+    local project_path="$1"
+    local project_name="$2"
+    local branch_version="$3"
+    
+    echo "-----------------------------------"
+    echo "Validating project version: $project_path"
+    
+    local pbxproj_file="${project_path}/${project_name}.xcodeproj/project.pbxproj"
+    
+    if [ ! -f "$pbxproj_file" ]; then
+        echo "Error: project.pbxproj file not found: $pbxproj_file"
+        return 1
+    fi
+    
+    # Extract MARKETING_VERSION for main target (skip Extension targets)
+    local plist_version=$(grep -A 2 "@executable_path/Frameworks" "$pbxproj_file" | grep "MARKETING_VERSION" | head -1 | sed 's/.*MARKETING_VERSION = \([^;]*\);/\1/' | tr -d ' ')
+    
+    if [ -z "$plist_version" ]; then
+        echo "Error: Unable to read MARKETING_VERSION from project.pbxproj"
+        return 1
+    fi
+    
+    echo "Project version: $plist_version"
+    
+    # Compare versions
+    if [ "$branch_version" != "$plist_version" ]; then
+        echo ""
+        echo "=========================================="
+        echo "Error: Version mismatch!"
+        echo "=========================================="
+        echo "  Branch version:  $branch_version"
+        echo "  Project version: $plist_version"
+        echo "  Project path:    $project_path"
+        echo ""
+        echo "Please ensure the version in branch name matches MARKETING_VERSION in Info.plist"
+        echo ""
+        return 1
+    fi
+    
+    echo "✓ Project version matches: $plist_version"
+    return 0
+}
+
+# Function: Validate SDK version in Podfile against branch version
+validate_sdk_version() {
+    local podfile_path="$1"
+    local branch_version="$2"
+    
+    echo "-----------------------------------"
+    echo "Validating SDK version: $podfile_path"
+    
+    # Extract SDK version from Podfile (support both AgoraRtcEngine_iOS and AgoraAudio_iOS)
+    # Also support commented lines (lines starting with #)
+    local sdk_version=$(grep -E "^[[:space:]]*#?[[:space:]]*pod[[:space:]]+'AgoraRtcEngine_iOS'" "$podfile_path" | sed -n "s/.*'\([0-9.]*\)'.*/\1/p" | head -1)
+    if [ -z "$sdk_version" ]; then
+        sdk_version=$(grep -E "^[[:space:]]*#?[[:space:]]*pod[[:space:]]+'AgoraAudio_iOS'" "$podfile_path" | sed -n "s/.*'\([0-9.]*\)'.*/\1/p" | head -1)
+    fi
+    
+    if [ -z "$sdk_version" ]; then
+        echo "Error: Unable to extract SDK version from Podfile"
+        echo "Podfile path: $podfile_path"
+        return 1
+    fi
+    
+    echo "SDK version: $sdk_version"
+    
+    # Compare versions
+    if [ "$branch_version" != "$sdk_version" ]; then
+        echo ""
+        echo "=========================================="
+        echo "Error: SDK version mismatch!"
+        echo "=========================================="
+        echo "  Branch version: $branch_version"
+        echo "  SDK version:    $sdk_version"
+        echo "  Podfile path:   $podfile_path"
+        echo ""
+        echo "Please ensure the SDK version in Podfile matches the branch version."
+        echo ""
+        return 1
+    fi
+    
+    echo "✓ SDK version matches: $sdk_version"
+    return 0
+}
+
+# Main version validation logic
 echo "=========================================="
 echo "Starting branch version validation..."
 echo "=========================================="
 
-# Get current branch name (try multiple methods for CI environments)
-BRANCH_NAME=""
-
-# Method 1: Try environment variable (Jenkins/GitLab CI)
-if [ ! -z "$GIT_BRANCH" ]; then
-    BRANCH_NAME="$GIT_BRANCH"
-    echo "Branch from GIT_BRANCH: $BRANCH_NAME"
-elif [ ! -z "$BRANCH_NAME" ]; then
-    echo "Branch from BRANCH_NAME: $BRANCH_NAME"
-elif [ ! -z "$CI_COMMIT_REF_NAME" ]; then
-    BRANCH_NAME="$CI_COMMIT_REF_NAME"
-    echo "Branch from CI_COMMIT_REF_NAME: $BRANCH_NAME"
-# Method 2: Try git command
-elif [ -z "$BRANCH_NAME" ]; then
-    BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-    if [ "$BRANCH_NAME" = "HEAD" ]; then
-        # In detached HEAD state, try to get branch from remote
-        BRANCH_NAME=$(git branch -r --contains HEAD | grep -v HEAD | head -1 | sed 's/^[[:space:]]*origin\///')
-        echo "Branch from git branch -r: $BRANCH_NAME"
-    else
-        echo "Branch from git rev-parse: $BRANCH_NAME"
-    fi
-fi
-
-# Remove origin/ prefix if present (but keep the rest of the path)
-BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's/^origin\///')
+BRANCH_NAME=$(get_branch_name)
 
 if [ -z "$BRANCH_NAME" ] || [ "$BRANCH_NAME" = "HEAD" ]; then
     echo "Warning: Unable to get Git branch name, skipping version validation"
+    BRANCH_VERSION=""
 else
     echo "Current branch: $BRANCH_NAME"
     
@@ -113,53 +210,22 @@ else
         echo "Current building project: $ios_direction"
         echo ""
         
-        # Validate the current project based on ios_direction
+        # Validate project version
         PROJECT_PATH="iOS/${ios_direction}"
         PROJECT_NAME="${ios_direction}"
         
+        if ! validate_project_version "$PROJECT_PATH" "$PROJECT_NAME" "$BRANCH_VERSION"; then
+            exit 1
+        fi
+        
         echo "-----------------------------------"
-        echo "Validating: $PROJECT_PATH"
-        
-        PBXPROJ_FILE="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj/project.pbxproj"
-        
-        if [ ! -f "$PBXPROJ_FILE" ]; then
-            echo "Error: project.pbxproj file not found: $PBXPROJ_FILE"
-            exit 1
-        fi
-        
-        # Extract MARKETING_VERSION for main target (skip Extension targets)
-        # Look for the version that appears with @executable_path/Frameworks (main app)
-        PLIST_VERSION=$(grep -A 2 "@executable_path/Frameworks" "$PBXPROJ_FILE" | grep "MARKETING_VERSION" | head -1 | sed 's/.*MARKETING_VERSION = \([^;]*\);/\1/' | tr -d ' ')
-        
-        if [ -z "$PLIST_VERSION" ]; then
-            echo "Error: Unable to read MARKETING_VERSION from project.pbxproj"
-            exit 1
-        fi
-        
-        echo "Project version: $PLIST_VERSION"
-        echo "-----------------------------------"
-        
-        # Compare versions
-        if [ "$BRANCH_VERSION" != "$PLIST_VERSION" ]; then
-            echo ""
-            echo "=========================================="
-            echo "Error: Version mismatch!"
-            echo "=========================================="
-            echo "  Branch version:  $BRANCH_VERSION"
-            echo "  Project version: $PLIST_VERSION"
-            echo "  Project path:    $PROJECT_PATH"
-            echo ""
-            echo "Please ensure the version in branch name matches MARKETING_VERSION in Info.plist"
-            echo ""
-            exit 1
-        fi
-        
-        echo "✓ Version validation passed: $BRANCH_VERSION"
+        echo "✓ All version validations passed: $BRANCH_VERSION"
     else
         echo "Warning: Branch name does not match dev/x.x.x format!"
         echo "Current branch: $BRANCH_NAME"
         echo "Expected format: dev/x.x.x (e.g., dev/4.5.3)"
         echo "Skipping version validation for non-version branches..."
+        BRANCH_VERSION=""
     fi
 fi
 
@@ -208,8 +274,22 @@ echo $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
 if [ $compress_apiexample = true ]; then
-    sdk_version=$(grep "pod 'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
+    # Extract SDK version from Podfile (support both AgoraRtcEngine_iOS and AgoraAudio_iOS)
+    # Also support commented lines
+    sdk_version=$(grep -E "^[[:space:]]*#?[[:space:]]*pod[[:space:]]+'AgoraRtcEngine_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p" | head -1)
+    if [ -z "$sdk_version" ]; then
+        sdk_version=$(grep -E "^[[:space:]]*#?[[:space:]]*pod[[:space:]]+'AgoraAudio_iOS'" ./iOS/${ios_direction}/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p" | head -1)
+    fi
     echo "sdk_version: $sdk_version"
+    
+    # Validate SDK version matches branch version (if on dev/x.x.x branch)
+    if [ ! -z "$BRANCH_VERSION" ]; then
+        if ! validate_sdk_version "./iOS/${ios_direction}/Podfile" "$BRANCH_VERSION"; then
+            exit 1
+        fi
+    else
+        echo "Skipping SDK version validation (not on dev/x.x.x branch)"
+    fi
     
     cp -rf ./iOS/${ios_direction} $global_dir/
    

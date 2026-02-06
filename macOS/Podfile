@@ -2,8 +2,8 @@
 
 
 def common_pods
- pod 'AgoraRtcEngine_macOS', '4.6.2'
-  # pod 'sdk', :path => 'sdk.podspec'
+ # pod 'AgoraRtcEngine_macOS', '4.5.3'
+   pod 'sdk', :path => 'sdk.podspec'
 end
 
 target 'APIExample' do
