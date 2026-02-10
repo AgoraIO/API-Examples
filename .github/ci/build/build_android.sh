@@ -63,77 +63,83 @@ echo compile_project: $compile_project
 echo compress_apiexample: $compress_apiexample
 echo api_examples_branch: $api_examples_branch
 
-# Validate required variables
-if [ -z "$android_direction" ]; then
-    echo "Error: android_direction variable is not set"
-    exit 1
-fi
-
 # ===== Version Consistency Check =====
 echo ""
 echo "=========================================="
 echo "Checking version consistency..."
 echo "=========================================="
 
-# Extract version number from branch name (supports formats like dev/4.6.2, release/4.6.2, etc.)
-BRANCH_VERSION=$(echo $api_examples_branch | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+# Read version from gradle.properties based on android_direction
+GRADLE_FILE="Android/${android_direction}/gradle.properties"
 
-if [ -z "$BRANCH_VERSION" ]; then
+if [ ! -f "$GRADLE_FILE" ]; then
+    echo ""
+    echo "=========================================="
+    echo "❌ CI BUILD FAILED: GRADLE FILE NOT FOUND"
+    echo "=========================================="
+    echo "Cannot find: $GRADLE_FILE"
+    echo "=========================================="
+    exit 1
+fi
+
+SDK_VERSION=$(grep "rtc_sdk_version" "$GRADLE_FILE" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+echo "Using version from $GRADLE_FILE: $SDK_VERSION"
+
+if [ -z "$SDK_VERSION" ]; then
     echo ""
     echo "=========================================="
     echo "❌ CI BUILD FAILED: CANNOT EXTRACT VERSION"
     echo "=========================================="
-    echo "Cannot extract version from branch name: $api_examples_branch"
-    echo "Branch name must contain version number (e.g., dev/4.6.2, release/4.6.2)"
+    echo "Cannot extract rtc_sdk_version from $GRADLE_FILE"
+    echo "Please ensure rtc_sdk_version is set in gradle.properties"
     echo "=========================================="
     exit 1
 fi
 
-echo "Branch version: $BRANCH_VERSION"
 echo ""
 
-# Check all gradle.properties files
-GRADLE_FILES=(
-    "Android/APIExample/gradle.properties"
-    "Android/APIExample-Audio/gradle.properties"
-    "Android/APIExample-Compose/gradle.properties"
-)
+# Skip version check for main branch (we trust main when building from it)
+api_examples_branch_stripped=$(echo "$api_examples_branch" | sed 's|^origin/||')
+if [ "$api_examples_branch_stripped" = "main" ]; then
+    echo "Branch is main, skipping version consistency check (main branch is trusted)"
+    echo "Using version: $SDK_VERSION"
+else
+    # Extract version number from branch name (supports formats like dev/4.6.2, release/4.6.2, etc.)
+    BRANCH_NAME_VERSION=$(echo $api_examples_branch | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
 
-VERSION_MISMATCH=false
-
-for gradle_file in "${GRADLE_FILES[@]}"; do
-    if [ -f "$gradle_file" ]; then
-        GRADLE_VERSION=$(grep "rtc_sdk_version" "$gradle_file" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-        echo "Checking $gradle_file: $GRADLE_VERSION"
-        
-        if [ "$GRADLE_VERSION" != "$BRANCH_VERSION" ]; then
-            echo "❌ ERROR: Version mismatch in $gradle_file"
-            echo "   Branch version: $BRANCH_VERSION"
-            echo "   Gradle version: $GRADLE_VERSION"
-            VERSION_MISMATCH=true
-        else
-            echo "✅ Version matched: $GRADLE_VERSION"
-        fi
-    else
-        echo "⚠️  Warning: $gradle_file not found"
+    if [ -z "$BRANCH_NAME_VERSION" ]; then
+        echo ""
+        echo "=========================================="
+        echo "❌ CI BUILD FAILED: CANNOT EXTRACT VERSION FROM BRANCH"
+        echo "=========================================="
+        echo "Cannot extract version from branch name: $api_examples_branch"
+        echo "Branch name must contain version number (e.g., dev/4.6.2, release/4.6.2)"
+        echo "=========================================="
+        exit 1
     fi
-    echo ""
-done
 
-if [ "$VERSION_MISMATCH" = true ]; then
+    echo "Branch name version: $BRANCH_NAME_VERSION"
     echo ""
-    echo "=========================================="
-    echo "❌ CI BUILD FAILED: VERSION MISMATCH"
-    echo "=========================================="
-    echo "Branch name contains version: $BRANCH_VERSION"
-    echo "But gradle.properties has different version(s)"
-    echo ""
-    echo "Please update rtc_sdk_version in all gradle.properties files to: $BRANCH_VERSION"
-    echo "=========================================="
-    exit 1
+
+    # Check gradle.properties for consistency with branch name
+    GRADLE_VERSION=$(grep "rtc_sdk_version" "$GRADLE_FILE" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+    echo "Checking $GRADLE_FILE: $GRADLE_VERSION"
+    
+    if [ "$GRADLE_VERSION" != "$BRANCH_NAME_VERSION" ]; then
+        echo ""
+        echo "=========================================="
+        echo "❌ CI BUILD FAILED: VERSION MISMATCH"
+        echo "=========================================="
+        echo "Branch name contains version: $BRANCH_NAME_VERSION"
+        echo "But $GRADLE_FILE has version: $GRADLE_VERSION"
+        echo ""
+        echo "Please update rtc_sdk_version in $GRADLE_FILE to: $BRANCH_NAME_VERSION"
+        echo "=========================================="
+        exit 1
+    fi
+
+    echo "✅ Version check passed: $GRADLE_VERSION"
 fi
-
-echo "✅ All version checks passed!"
 echo "=========================================="
 echo ""
 
@@ -198,7 +204,7 @@ if [ "$compress_apiexample" = true ]; then
     echo "✅ Code-only package created"
     
     # Generate final output zip name with version
-    OUTPUT_ZIP_NAME="Agora_Native_SDK_for_Android_v${BRANCH_VERSION}_${android_direction}_${BUILD_NUMBER}.zip"
+    OUTPUT_ZIP_NAME="Agora_Native_SDK_for_Android_v${SDK_VERSION}_${android_direction}_${BUILD_NUMBER}.zip"
     echo "Output zip name: $OUTPUT_ZIP_NAME"
     mv $TEMP_ZIP_NAME $WORKSPACE/$OUTPUT_ZIP_NAME
     
@@ -212,7 +218,7 @@ else
     echo "✅ Full package created"
     
     # Generate final output zip name with version (with SDK)
-    OUTPUT_ZIP_NAME="withSDK_Agora_Native_SDK_for_Android_v${BRANCH_VERSION}_${android_direction}_${BUILD_NUMBER}.zip"
+    OUTPUT_ZIP_NAME="withSDK_Agora_Native_SDK_for_Android_v${SDK_VERSION}_${android_direction}_${BUILD_NUMBER}.zip"
     echo "Output zip name: $OUTPUT_ZIP_NAME"
     mv $TEMP_ZIP_NAME $WORKSPACE/$OUTPUT_ZIP_NAME
     
@@ -224,20 +230,12 @@ echo ""
 if [ $compile_project = true ]; then
 	echo "Starting project compilation..."
 	cd ./$unzip_name/rtc/samples/${android_direction} || exit 1
-	
-	# Try to compile, but don't fail the build if compilation fails
 	if [ -z "$sdk_url" ] || [ "$sdk_url" = "none" ]; then
-		./cloud_build.sh false || echo "⚠️  Warning: Project compilation failed, but continuing..."
+		./cloud_build.sh false || exit 1
 	else
-		./cloud_build.sh true || echo "⚠️  Warning: Project compilation failed, but continuing..."
+		./cloud_build.sh true || exit 1
 	fi
-	
-	# Check if compilation was successful
-	if [ $? -eq 0 ]; then
-		echo "✅ Project compiled successfully"
-	else
-		echo "⚠️  Project compilation had issues, but package was created successfully"
-	fi
+	echo "✅ Project compiled successfully"
 	echo ""
 fi
 
