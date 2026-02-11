@@ -2631,6 +2631,7 @@ struct WatermarkConfig {
 enum MultipathMode {
   /**
     * Duplicate mode, the same piece of data is redundantly transmitted over all available paths.
+    * @technical preview
     */
   Duplicate= 0,
   /**

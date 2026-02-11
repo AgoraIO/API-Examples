@@ -53,9 +53,9 @@ else
     print_green "pre-commit is already installed!"
 fi
 
-# Check if gitleaks is installed
+# Check if gitleaks is installed (required)
 if ! command -v gitleaks &> /dev/null; then
-    print_yellow "gitleaks not found, please install it..."
+    print_red "❌ gitleaks not found - this is a required security tool!"
     print_yellow "Installation guide: https://github.com/gitleaks/gitleaks#installing"
     
     # Attempt automatic installation (based on OS)
@@ -77,6 +77,8 @@ if ! command -v gitleaks &> /dev/null; then
         print_red "Please install gitleaks manually and try again"
         exit 1
     fi
+else
+    print_green "gitleaks is installed!"
 fi
 
 # Check required files and directories
