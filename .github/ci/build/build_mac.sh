@@ -218,7 +218,7 @@ else
     else
         echo "Warning: Branch name does not match dev/x.x.x format!"
         echo "Current branch: $BRANCH_NAME"
-        echo "Expected format: dev/x.x.x (e.g., dev/4.5.3)"
+        echo "Expected format: dev/x.x.x (e.g., dev/4.6.2)"
         echo "Skipping version validation for non-version branches..."
         BRANCH_VERSION=""
     fi
