@@ -1,4 +1,4 @@
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.5.3_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.6.2_FULL.zip'
 $ThirdPartysrc = 'https://demo-app-download.agora.io/api_example/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_des = 'AgoraSdk.zip'
