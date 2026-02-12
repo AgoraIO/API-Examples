@@ -3,31 +3,49 @@ name: Create Tag
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch or ref to create tag from'
-        required: true
-        type: string
+      action:
+        description: 'push or delete'
+        required: false
+        type: choice
+        default: push
+        options:
+          - push
+          - delete
       tag:
-        description: 'Tag name to create (e.g. v1.0.0)'
+        description: 'Tag name'
         required: true
         type: string
+      message:
+        description: 'Tag message (used when action is push)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
-  create-tag:
-    name: Create and push tag
+  tag-job:
+    name: Tag ${{ inputs.action }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
+          ref: main
           fetch-depth: 0
 
-      - name: Create and push tag
+      - name: Push tag
+        if: inputs.action == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "${{ inputs.tag }}"
+          if [ -n "${{ inputs.message }}" ]; then
+            git tag -a "${{ inputs.tag }}" -m "${{ inputs.message }}"
+          else
+            git tag "${{ inputs.tag }}"
+          fi
           git push origin "${{ inputs.tag }}"
+
+      - name: Delete tag
+        if: inputs.action == 'delete'
+        run: git push origin --delete "${{ inputs.tag }}"
