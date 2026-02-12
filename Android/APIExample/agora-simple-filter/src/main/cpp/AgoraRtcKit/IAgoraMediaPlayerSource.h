@@ -273,9 +273,6 @@ public:
    * Open the Agora CDN media source.
    * @param src The src of the media file that you want to play.
    * @param startPos The  playback position (ms).
-   * 
-   * @deprecated 4.6.0
-   * 
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -284,9 +281,6 @@ public:
 
   /**
    * Gets the number of  Agora CDN lines.
-   * 
-   * @deprecated 4.6.0
-   * 
    * @return
    * - > 0: number of CDN.
    * - <= 0: Failure.
@@ -296,9 +290,6 @@ public:
 
   /**
    * Switch Agora CDN lines.
-   * 
-   * @deprecated 4.6.0
-   * 
    * @param index Specific CDN line index.
    * @return
    * - 0: Success.
@@ -308,9 +299,6 @@ public:
 
   /**
    * Gets the line of the current CDN.
-   * 
-   * @deprecated 4.6.0
-   * 
    * @return
    * - >= 0: Specific line.
    * - < 0: Failure.
@@ -319,9 +307,6 @@ public:
 
   /**
    * Enable automatic CDN line switching.
-   * 
-   * @deprecated 4.6.0
-   * 
    * @param enable Whether enable.
    * @return
    * - 0: Success.
@@ -331,9 +316,6 @@ public:
 
   /**
    * Update the CDN source token and timestamp.
-   * 
-   * @deprecated 4.6.0
-   * 
    * @param token token.
    * @param ts ts.
    * @return
@@ -344,9 +326,6 @@ public:
 
   /**
    * Switch the CDN source when open a media through "openWithAgoraCDNSrc" API
-   * 
-   * @deprecated 4.6.0
-   * 
    * @param src Specific src.
    * @param syncPts Live streaming must be set to false.
    * @return
@@ -403,83 +382,58 @@ class IMediaPlayerSourceObserver {
   virtual ~IMediaPlayerSourceObserver() {}
 
   /**
-   * @brief Reports the changes of playback state.
+   * @brief Reports the playback state change.
    *
-   * @details
-   * When the state of the media player changes, the SDK triggers this callback to report the current
-   * playback state.
-   *
-   * @param state The playback state. See `MEDIA_PLAYER_STATE`.
-   * @param reason The reason for the changes in the media player status. See `MEDIA_PLAYER_REASON`.
-   *
+   * When the state of the playback changes, the SDK triggers this callback to report the new playback state and the reason or error for the change.
+   * @param state The new playback state after change. See {@link media::base::MEDIA_PLAYER_STATE MEDIA_PLAYER_STATE}.
+   * @param reason The player's error code. See {@link media::base::MEDIA_PLAYER_REASON MEDIA_PLAYER_REASON}.
    */
   virtual void onPlayerSourceStateChanged(media::base::MEDIA_PLAYER_STATE state,
                                           media::base::MEDIA_PLAYER_REASON reason) = 0;
 
   /**
-   * @brief Reports the playback progress of the media file.
+   * @brief Reports current playback progress.
    *
-   * @details
-   * When playing media files, the SDK triggers this callback every two second to report current
-   * playback progress.
-   *
-   * @param positionMs The playback position (ms) of media files.
-   * @param timeStampMs The NTP timestamp (ms) of the current playback progress.
-   *
+   * The callback occurs once every one second during the playback and reports the current playback progress.
+   * @param positionMs Current playback progress (milisecond).
+   * @param timestampMs Current NTP(Network Time Protocol) time (milisecond).
    */
   virtual void onPositionChanged(int64_t positionMs, int64_t timestampMs) = 0;
 
   /**
-   * @brief Reports the player events.
+   * @brief Reports the playback event.
    *
-   * @details
-   * - After calling the `seek` method, the SDK triggers the callback to report the results of the
-   * seek operation.
+   * - After calling the `seek` method, the SDK triggers the callback to report the results of the seek operation.
+   * - After calling the `selectAudioTrack` method, the SDK triggers the callback to report that the audio track changes.
    *
-   * @param eventCode The player event. See `MEDIA_PLAYER_EVENT`.
-   * @param elapsedTime The time (ms) when the event occurs.
-   * @param message Information about the event.
-   *
+   * @param eventCode The playback event. See {@link media::base::MEDIA_PLAYER_EVENT MEDIA_PLAYER_EVENT}.
+   * @param elapsedTime The playback elapsed time.
+   * @param message The playback message.
    */
   virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT eventCode, int64_t elapsedTime, const char* message) = 0;
 
   /**
-   * @brief Occurs when the media metadata is received.
+   * @brief Occurs when the metadata is received.
    *
-   * @details
-   * The callback occurs when the player receives the media metadata and reports the detailed
-   * information of the media metadata.
-   *
+   * The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
    * @param data The detailed data of the media metadata.
    * @param length The data length (bytes).
-   *
    */
   virtual void onMetaData(const void* data, int length) = 0;
 
 
   /**
-   * @brief Reports the playback duration that the buffered data can support.
+   * @brief Triggered when play buffer updated, once every 1 second
    *
-   * @details
-   * When playing online media resources, the SDK triggers this callback every two seconds to report
-   * the playback duration that the currently buffered data can support.
-   * - When the playback duration supported by the buffered data is less than the threshold (0 by
-   * default), the SDK returns `PLAYER_EVENT_BUFFER_LOW` (6).
-   * - When the playback duration supported by the buffered data is greater than the threshold (0 by
-   * default), the SDK returns `PLAYER_EVENT_BUFFER_RECOVER` (7).
-   *
-   * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
-   *
+   * @param int cached buffer during playing, in milliseconds
    */
   virtual void onPlayBufferUpdated(int64_t playCachedBuffer) = 0;
 
 
   /**
-   * @brief Reports the events of preloaded media resources.
+   * @brief Triggered when the player preloadSrc
    *
-   * @param src The URL of the media resource.
-   * @param event Events that occur when media resources are preloaded. See `PLAYER_PRELOAD_EVENT`.
-   *
+   * @param event
    */
   virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) = 0;
 
@@ -490,72 +444,47 @@ class IMediaPlayerSourceObserver {
 
   /**
    * @brief AgoraCDN Token has expired and needs to be set up with renewAgoraCDNSrcToken(const char* src).
-   * 
-   * @deprecated 4.6.0
-   * 
    */
   virtual void onAgoraCDNTokenWillExpire() = 0;
 
   /**
-   * @brief Occurs when the video bitrate of the media resource changes.
+   * @brief Reports current playback source bitrate changed.
+   * @brief Reports current playback source info changed.
    *
-   * @param from Information about the video bitrate of the media resource being played. See
-   * `SrcInfo`.
-   * @param to Information about the changed video bitrate of media resource being played. See
-   * `SrcInfo`.
-   *
+   * @param from Streaming media information before the change.
+   * @param to Streaming media information after the change.
    */
   virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) = 0;
 
-  /**
-   * @brief Occurs when information related to the media player changes.
+   /**
+   * @brief Triggered when media player information updated.
    *
-   * @details
-   * When the information about the media player changes, the SDK triggers this callback. You can use
-   * this callback for troubleshooting.
-   *
-   * @param info Information related to the media player. See `PlayerUpdatedInfo`.
-   *
+   * @param info Include information of media player.
    */
   virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info) = 0;
 
-  /**
-   * @brief Reports the statistics of the media file being cached.
-   *
-   * @details
-   * After you call the `openWithMediaSource` method and set `enableCache` as `true`, the SDK triggers
-   * this callback once per second to report the statistics of the media file being cached.
-   *
-   * @param stats The statistics of the media file being cached. See `CacheStatistics`.
-   *
+   /**
+   * @brief Triggered every 1 second, reports the statistics of the files being cached.
+   * 
+   * @param stats Cached file statistics.
    */
   virtual void onPlayerCacheStats(const media::base::CacheStatistics& stats) {
     (void)stats;
   }
 
-  /**
-   * @brief The statistics of the media file being played.
-   *
-   * @details
-   * The SDK triggers this callback once per second to report the statistics of the media file being
-   * played.
-   *
-   * @param stats The statistics of the media file. See `PlayerPlaybackStats`.
-   *
+   /**
+   * @brief Triggered every 1 second, reports the statistics of the media stream being played.
+   * 
+   * @param stats The statistics of the media stream.
    */
   virtual void onPlayerPlaybackStats(const media::base::PlayerPlaybackStats& stats) {
     (void)stats;
   }
   
   /**
-   * @brief Reports the volume of the media player.
+   * @brief Triggered  every 200 millisecond ,update player current volume range [0,255]
    *
-   * @details
-   * The SDK triggers this callback every 200 milliseconds to report the current volume of the media
-   * player.
-   *
-   * @param volume The volume of the media player. The value ranges from 0 to 255.
-   *
+   * @param volume volume of current player.
    */
   virtual void onAudioVolumeIndication(int volume) = 0;
 };

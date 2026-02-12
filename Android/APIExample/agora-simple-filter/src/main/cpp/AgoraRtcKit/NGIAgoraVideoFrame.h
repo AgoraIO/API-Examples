@@ -22,41 +22,6 @@ namespace agora {
 namespace rtc {
 
 /**
- * This structure defines the raw video frame data in memory
- * 
- */
-struct RawPixelBuffer {
-  OPTIONAL_ENUM_CLASS Format {
-    kUnknown,
-    kI420,
-    kI422,
-    kNV21,
-    kNV12,
-    kI010,
-    kRGBA,
-    kARGB,
-    kBGRA,
-    kABGR
-  };
-  Format format;
-  uint8_t* data;
-  int size;
-};
-
-struct PaddedRawPixelBuffer {
-  RawPixelBuffer::Format format;
-  uint8_t* data_y;
-  int stride_y;
-  uint8_t* data_u;
-  int stride_u;
-  uint8_t* data_v;
-  int stride_v;
-  PaddedRawPixelBuffer()
-    : data_y(NULL), stride_y(0), data_u(NULL), stride_u(0), data_v(NULL), stride_v(0) {}
-};
-
-
-/**
  * This structure defines the video frame of texture type on Android
  * @note For technical preview, not supported for the moment. Use RawPixelBuffer instead.
  * 
@@ -76,14 +41,37 @@ struct TextureInfo {
   void* shared_context;
   int texture_id;
   int64_t fence_object;
-  int frame_buffer_id;
   float transform_matrix[16];
+};
 
-  // for double buffer data
-  RawPixelBuffer::Format raw_data_format;
-  uint8_t* raw_data;
-  int64_t raw_data_size;
-  int raw_data_stride;
+/**
+ * This structure defines the raw video frame data in memory
+ * 
+ */
+struct RawPixelBuffer {
+  OPTIONAL_ENUM_CLASS Format {
+    kUnknown,
+    kI420,
+    kI422,
+    kNV21,
+    kNV12,
+    kI010,
+    kRGBA,
+    kARGB,
+    kBGRA
+  };
+  Format format;
+  uint8_t* data;
+  int size;
+};
+
+struct PaddedRawPixelBuffer {
+  RawPixelBuffer::Format format;
+  uint8_t* data;
+  int size;
+  int stride;
+  PaddedRawPixelBuffer()
+    : data(NULL), size(0), stride(0) {}
 };
 
 /**
@@ -98,6 +86,7 @@ struct VideoFrameData {
     kPaddedRawPixels, // Raw pixels with paddings
     kTextureOES,// Android: GL_TEXTURE_OES
     kTexture2D, // Android: GL_TEXTURE_2D
+    kDoubleBuffer, //Android: double buffer
   };
   Type type;
   union {

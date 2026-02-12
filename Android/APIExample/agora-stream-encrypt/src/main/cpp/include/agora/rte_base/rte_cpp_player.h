@@ -30,8 +30,9 @@ using AbrFallbackLayer = ::RteAbrFallbackLayer;
 class PlayerInitialConfig {};
 
 /**
- * @brief Information about the player and media stream.
- *
+ * @brief Player information.
+ * @details When playerInfo changes, it will be notified through the PlayerObserver::onPlayerInfoUpdated callback interface. 
+ * It can also be actively obtained through the Player::GetInfo interface.
  * @since v4.5.1
  */
 class PlayerInfo {
@@ -60,195 +61,143 @@ class PlayerInfo {
   }
 
   /**
-   * @brief Gets the current player state.
-   *
+   * @brief Get the current player state
    * @since v4.5.1
-   *
-   * @return
-   * - If the method call succeeds, returns the current player state. See `RtePlayerState`.
+   * @return RtePlayerState The current player state.
    */
   RtePlayerState State() const {
     return c_player_info.state;
   }
 
   /**
-   * @brief Gets the duration of the current media resource.
-   *
+   * @brief Get the duration time of the current media source.
    * @since v4.5.1
-   *
-   * @note
-   * Valid only when playing local media files or on-demand streams.
-   *
-   * @return
-   * If the method call succeeds, returns the duration of the current media resource in milliseconds.
+   * @note This is valid when playing local media files or on-demand streams.
+   * @return size_t The duration time of the current media source, in milliseconds.
    */
   size_t Duration() const {
     return c_player_info.duration;
   }
 
   /**
-   * @brief Gets the number of streams in the current playback source.
-   *
+   * @brief Get The Stream count.
    * @since v4.5.1
-   *
-   * @note
-   * This method is valid when opening non-RTE URLs.
-   *
-   * @return
-   * If the method call succeeds, returns the number of streams in the current playback source.
-   */
+   * @note This is valid when opening a non-RTE URL.
+   * @return size_t The stream count.
+   */ 
   size_t StreamCount() const {
     return c_player_info.stream_count;
   }
 
   /**
-   * @brief Determines whether the media resource contains an audio stream.
-   *
+   * @brief Whether there is an audio stream.
    * @since v4.5.1
-   *
-   * @details
-   * Indicates whether the URL source contains an audio stream.
-   *
-   * @return
-   * - `true`: The media resource contains an audio stream.
-   * - `false`: The media resource does not contain an audio stream.
+   * @details Indicates whether the url source contains the audio stream.
+   * @return bool Whether there is an audio stream.
+   *  - true: The url source contains the audio stream.
+   *  - false: The url source does not contain the audio stream.
    */
   bool HasAudio() const {
     return c_player_info.has_audio;
   }
 
   /**
-   * @brief Determines whether a video stream is included.
-   *
+   * @brief Whether there is a video stream.
    * @since v4.5.1
-   *
-   * @return
-   * - `true`: The URL source contains a video stream.
-   * - `false`: The URL source does not contain a video stream.
+   * @details Indicates whether the url source contains the video stream.
+   * @return bool Whether there is a video stream.
+   *  - true: The url source contains the video stream.
+   *  - false: The url source does not contain the video stream.
    */
   bool HasVideo() const {
     return c_player_info.has_video;
   }
 
   /**
-   * @brief Determines whether the player has stopped receiving the audio stream.
-   *
+   * @brief Whether player stops receiving the audio stream.
    * @since v4.5.1
-   *
-   * @details
-   * This method is used to determine whether the player has stopped receiving the audio stream.
-   *
-   * @return
-   * - `true`: The player has stopped receiving the audio stream.
-   * - `false`: The player is still receiving the audio stream.
+   * @details Indicates whether the player stops receiving the audio stream.
+   * @return bool Whether player stops receiving the audio stream.
+   *  - true: Stop receiving the audio stream.
+   *  - false: Continue receiving the audio stream.
    */
   bool IsAudioMuted() const {
     return c_player_info.is_audio_muted;
   }
 
   /**
-   * @brief Determines whether the player has stopped receiving the video stream.
-   *
+   * @brief Whether player stops receiving the video stream.
    * @since v4.5.1
-   *
-   * @note
-   * The `IsVideoMuted` API is only valid when opening an RTE URL.
-   *
-   * @return
-   * - `true`: The player has stopped receiving the video stream.
-   * - `false`: The player is still receiving the video stream.
+   * @details Indicates whether the player stops receiving the video stream. 
+   * @note This field is only valid when you open an RTE URL.
+   * @return bool Whether player stops receiving the video stream.
+   *  - true: Stop receiving the video stream.
+   *  - false: Continue receiving the video stream.
    */
   bool IsVideoMuted() const {
     return c_player_info.is_video_muted;
   }
 
   /**
-   * @brief Gets the height of the video resolution.
-   *
+   * @brief Get the video resolution height. 
    * @since v4.5.1
-   *
-   * @return
-   * If the method call succeeds, returns the height of the video resolution in pixels.
+   * @return int The video resolution height, in pixels.
    */
   int VideoHeight() const {
     return c_player_info.video_height;
   }
 
   /**
-   * @brief Gets the width of the video resolution.
-   *
+   * @brief Get the video resolution width.
    * @since v4.5.1
-   *
-   * @return
-   * If the method call succeeds, returns the width of the video resolution in pixels.
+   * @return int The video resolution width, in pixels.
    */
   int VideoWidth() const {
     return c_player_info.video_width;
   }
 
   /**
-   * @brief Gets the currently subscribed video layer.
-   *
+   * @brief Get the currently subscribed video layer.
    * @since v4.5.1
-   *
-   * @note
-   * This field is only valid when you open an RTE URL.
-   *
-   * @return
-   * - If the method call succeeds, returns the currently subscribed video layer. See
-   * `RteAbrSubscriptionLayer`.
+   * @note This field is only valid when you open an RTE URL.
+   * @return RteAbrSubscriptionLayer The currently subscribed video layer.
    */
   AbrSubscriptionLayer AbrSubscriptionLayer() const {
     return c_player_info.abr_subscription_layer;
   }
 
   /**
-   * @brief Gets the audio sample rate.
-   *
+   * @brief Get the audio sample rate.
    * @since v4.5.1
-   *
-   * @return
-   * If the method call succeeds, returns the audio sample rate in Hz.
+   * @return int The audio sample rate, in Hz.
    */
   int AudioSampleRate() const {
     return c_player_info.audio_sample_rate;
   }
 
   /**
-   * @brief Gets the number of audio channels.
-   *
+   * @brief Get the number of audio channels.
    * @since v4.5.1
-   *
-   * @return
-   * If the method call succeeds, returns the number of audio channels.
+   * @return int The number of audio channels.
    */
   int AudioChannels() const {
     return c_player_info.audio_channels;
   }
 
   /**
-   * @brief Gets the number of bits per audio sample.
-   *
+   * @brief Get the audio bits per sample.
    * @since v4.5.1
-   *
-   * @note
-   * This field is only valid when opening a non-RTE URL.
-   *
-   * @return
-   * If the method call succeeds, returns the number of bits per audio sample, in bits.
+   * @note This field is only valid when opening a non-RTE URL.
+   * @return int The audio bits per sample, in bits.
    */
   int AudioBitsPerSample() const {
     return c_player_info.audio_bits_per_sample;
   }
 
   /**
-   * @brief Gets the currently playing URL.
-   *
+   * @brief Get the URL being played.
    * @since v4.5.1
-   *
-   * @return
-   * - If the method call succeeds, returns the currently playing URL.
-   * - If the method call fails, returns an empty string.
+   * @return std::string The URL being played.
    */
   std::string CurrentUrl() const {
     String str(c_player_info.current_url);
@@ -256,7 +205,7 @@ class PlayerInfo {
   }
 
   /**
-   * @brief Sets the current URL.
+   * @brief Set the current URL.
    * @technical preview
    * @param url The current URL.
    * @return void
@@ -324,118 +273,84 @@ class PlayerObserver {
   // @}
 
   /**
-   * @brief Occurs when the player state changes.
-   *
+   * @brief Player state callback. This function is called when the player state changes.
    * @since v4.4.0
-   *
-   * @details
-   * If you need to monitor changes in the player state, you must first call `RegisterObserver` to
-   * register the player observer object.
-   * Call timing: When the player state changes, the SDK triggers this callback to report the current
-   * and previous states.
-   *
-   * @param old_state The previous state of the player. See `RtePlayerState`.
-   * @param new_state The current state of the player. See `RtePlayerState`. If the current state is
-   * `kRtePlayerStateFailed`, you can get detailed error information from the `err` parameter.
-   * @param err Status or error information. See `Error`.
-   *
+   * @param old_state The old state.
+   * @param new_state The new state.
+   * @param err Possible return values for ErrorCode. Only when the new_state value is kRtePlayerStateFailed, you need to check the value of this parameter.
+   *  - kRteErrorDefault. For specific reasons, see Error.Message, including the following situations:
+   *    - Failed to connect to the channel.
+   *  - kRteErrorInvalidArgument.
+   *    - Invalid appid.
+   *    - Invalid channelid.
+   *    - Invalid uid.
+   *  - kRteErrorAuthenticationFailed.
+   *    - Invalid token.
+   *    - Token expired.
+   *  - kRteErrorStreamNotFound. After entering the channel, no stream was received from the broadcaster for more than 10 seconds.
+   * @return void
    */
   virtual void onStateChanged(PlayerState old_state, PlayerState new_state,
                     rte::Error *err) {};
 
   /**
-   * @brief Reports the current playback progress of the media resource.
-   *
+   * @brief Reports current playback progress.This callback will be triggered when the playback position changed.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This callback is triggered once per second during media playback.
-   *
-   * @param curr_time Current playback progress in milliseconds.
-   * @param utc_time Current NTP (Network Time Protocol) time in milliseconds.
-   *
+   * 
+   * @details The callback occurs once every one second during the playback and reports the current playback progress.
+   * @param curr_time Current playback progress (milisecond).
+   * @param utc_time Current NTP(Network Time Protocol) time (milisecond).
+   * @return void
    */
   virtual void onPositionChanged(uint64_t curr_time,
                       uint64_t utc_time) {};
 
   /**
-   * @brief Occurs when the video resolution changes.
-   *
+   * Video resolution change callback.
    * @since v4.4.0
-   *
-   * @details
-   * If you need to monitor changes in the resolution of the video stream played by the player, you
-   * must first call `RegisterObserver` to register the player observer object.
-   * Call timing: When the resolution of the video stream changes, the SDK triggers this callback to
-   * report the current width and height of the video.
-   *
-   * @param width Width of the video frame (px).
-   * @param height Height of the video frame (px).
-   *
+   * @param width The width of the video frame.
+   * @param height The height of the video frame.
+   * @return void
    */
   virtual void onResolutionChanged(int width, int height) {};
 
   /**
-   * @brief Callback for player events.
-   *
+   * Event callback.
    * @since v4.4.0
-   *
-   * @details
-   * If you need to monitor player events, you must first call `RegisterObserver` to register the
-   * player observer object.
-   * Call timing: The SDK triggers this callback when a player event occurs.
-   *
-   * @param event Player event. See `RtePlayerEvent`.
-   *
+   * @param event The event notified by the callback. Refer to the rte::PlayerEvent type. Currently, the following events can be handled accordingly:
+   * - kRtePlayerEventFreezeStart: Indicates that stuttering has occurred or shows a loading animation.
+   * - kRtePlayerEventFreezeStop: Indicates that stuttering has ended or stops the loading animation.
+   * - kRtePlayerEventAuthenticationWillExpire: Regenerate the token, use the new token to construct the RTE URL, and call Player::OpenWithUrl to refresh the token.
+   * - kRtePlayerEventAbrFallbackToAudioOnlyLayer: Indicates that due to network reasons, it has fallen back to audio-only mode.
+   * - kRtePlayerEventAbrRecoverFromAudioOnlyLayer: Indicates that it has recovered from audio-only mode to video mode.
+   * @return void
    */
   virtual void onEvent(PlayerEvent event) {};
 
   /**
-   * @brief Callback for received media metadata.
-   *
+   * Metadata callback.
    * @since v4.4.0
-   *
-   * @details
-   * If you need to obtain metadata from the media stream, you must first call `RegisterObserver` to
-   * register the player observer object.
-   * Call timing: After the SDK parses the metadata from the media stream being played, it triggers
-   * this callback to report the metadata type and its content.
-   *
-   * @param type Metadata type. See `RtePlayerMetadataType`.
-   * @param data Parsed metadata.
-   * @param length Size of the data in bytes.
-   *
+   * @param type The type of metadata.
+   * @param data The metadata buffer.
+   * @param length The length of the metadata.
+   * @return void
    */
   virtual void onMetadata(PlayerMetadataType type,
                       const uint8_t *data, size_t length) {};
   
   /**
-   * @brief Occurs when player and media stream information changes.
-   *
+   * Player information update callback. This is called when fields in rte::PlayerInfo are updated.
    * @since v4.4.0
-   *
-   * @details
-   * If you need to get information about the player and media stream, you must first call
-   * `RegisterObserver` to register the player observer object. You can also directly retrieve it
-   * using the `GetInfo` method.
-   * Call timing: The SDK triggers this callback when information about the player or media stream
-   * changes.
-   *
-   * @param info Information about the player and media stream. See `PlayerInfo`.
-   *
+   * @param info The current PlayerInfo information.
+   * @return void 
    */
   virtual void onPlayerInfoUpdated(const PlayerInfo *info) {};
 
   /**
-   * @brief Callback for player audio volume indication.
-   *
+   * Update player current volume
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: The SDK triggers this callback when the player's volume changes.
-   *
-   * @param volume The current volume of the player, ranging from [0, 225].
-   *
+   * @param volume The current volume of the player. The value range is [0, 255].
+   * @return void
    */
   virtual void onAudioVolumeIndication(int32_t volume) {};
 
@@ -500,8 +415,7 @@ void onAudioVolumeIndication(::RtePlayerObserver *observer, int32_t volume){
 }
 
 /**
- * @brief This class provides methods for configuring the player.
- *
+ * The PlayerConfig class is used to configure the Player object.
  * @since v4.4.0
  */
 class PlayerConfig {
@@ -525,43 +439,29 @@ class PlayerConfig {
   };
   // @}
 
-  /**
-   * @brief Sets whether to autoplay.
-   *
-   * @since v4.4.0
-   *
-   * @details
-   * Before you call `OpenWithUrl` to open a media stream, you can call this method to set whether to
-   * autoplay. If not set, autoplay is enabled by default.
-   * Call timing: This method must be called before `OpenWithUrl`.
-   *
-   * @param auto_play Whether to enable autoplay:
-   * - `true`: (Default) Enable autoplay.
-   * - `false`: Disable autoplay.
-   * @param err Status or error information. See `Error`.
-   *
-   */
+ /** 
+  * Whether to automatically play after a successful call to Player::OpenWithUrl.
+  * If not set, the default value is true.
+  * @since v4.4.0
+  * @param auto_play 
+  * - true: Automatically start streaming and playing after a successful opening.
+  * - false: After a successful open with OpenWithUrl, you need to actively call Player::Play() to play the audio and video stream.
+  * @param err Possible return values for ErrorCode:
+  *   - kRteOk: Success
+  * @return void
+  */
   void SetAutoPlay(bool auto_play, Error *err = nullptr) {
     RtePlayerConfigSetAutoPlay(&c_player_config, auto_play,
                                err != nullptr ? err->get_underlying_impl() : nullptr);
   } 
 
-  /**
-   * @brief Gets the auto-play setting.
-   *
-   * @since v4.4.0
-   *
-   * @details
-   * You can call this method to check the current auto-play setting of the player.
-   * Call timing: Call this method after `GetConfigs(PlayerConfig* config, Error* err)`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the auto-play setting is retrieved successfully:
-   * - `true`: Retrieved successfully.
-   * - `false`: Failed to retrieve.
-   */
+ /**
+  * Get the auto-play setting.
+  * @since v4.4.0
+  * @param err Possible return values for ErrorCode:
+  *   - kRteOk: Success  
+  * @return bool Returns whether auto-play is enabled.
+  */
   bool GetAutoPlay(Error *err = nullptr) {
     bool auto_play;
     RtePlayerConfigGetAutoPlay(&c_player_config, &auto_play,
@@ -570,18 +470,14 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Sets the playback speed parameter.
-   *
+   * Set the playback speed parameter.
    * @since v4.5.1
-   *
-   * @note
-   * You can call this method after calling the `OpenWithUrl` method.
-   *
-   * @param speed Playback speed. The valid range is [50, 400].
-   * @param err Status or error information. See `Error`.
-   * - kRteOk: Call succeeded.
-   * - kRteErrorInvalidArgument: The `speed` parameter is set to an invalid value.
-   *
+   * @note You can call this method after calling Player::OpenWithUrl.
+   * @param speed The playback speed. The value range is [50,400].
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidArgument: The speed parameter is set to an illegal value.
+   * @return void
    */
   void SetPlaybackSpeed(int32_t speed, Error *err = nullptr) {
     RtePlayerConfigSetPlaybackSpeed(&c_player_config, speed,
@@ -589,15 +485,11 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Gets the playback speed parameter.
-   *
+   * Get the playback speed parameter.
    * @since v4.5.1
-   *
-   * @param err Status or error information. See `Error`.
-   * - kRteOk: Indicates success.
-   *
-   * @return
-   * If the method call succeeds, returns the playback speed value.
+   * @param err Posible return values for ErrorCode:
+   *   - kRteOk: Success
+   * @return int32_t The value of playback speed.
    */
   int32_t GetPlaybackSpeed(Error *err = nullptr) {
     int32_t speed;
@@ -769,19 +661,13 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Sets the playback volume parameter.
-   *
+   * Set the playout volume parameter.
    * @since v4.5.1
-   *
-   * @details
-   * You can use this method to set the playback volume. The valid range is [0, 400].
-   *
-   * @param volume The volume value to set. The valid range is [0, 400].
-   * @param err Status or error information. See `Error`.
-   * Possible error codes include:
-   * - kRteOk: Setting succeeded.
-   * - kRteErrorInvalidArgument: The volume parameter is set to an invalid value.
-   *
+   * @param volume The volume value to be set. The value range is [0, 400].
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidArgument: The volume parameter is set to an illegal value.
+   * @return void
    */
   void SetPlayoutVolume(int32_t volume, Error *err = nullptr) {
     RtePlayerConfigSetPlayoutVolume(&c_player_config, volume,
@@ -789,15 +675,11 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Gets the playback volume of the player.
-   *
+   * Get the playout volume parameter.
    * @since v4.5.1
-   *
-   * @param err Status or error information. See `Error`.
-   * - kRteOk: Indicates success.
-   *
-   * @return
-   * If the method call succeeds, returns the volume value of the player.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return int32_t The volume value of the player.
    */
   int32_t GetPlayoutVolume(Error *err = nullptr) {
     int32_t volume;
@@ -888,18 +770,16 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Sets the loop count for media file playback.
-   *
+   * Set the loop count parameter.
    * @since v4.5.1
-   *
-   * @param count The number of times the media file should loop.
-   * - `1`: Play once.
-   * - `2`: Play twice.
-   * - `-1`: Loop indefinitely until `Stop` is called.
-   * @param err Status or error information. See `Error`.
-   * - kRteOk: Call succeeded.
-   * - kRteErrorInvalidArgument: The `count` parameter is set to an invalid value.
-   *
+   * @param count The number of times looping the media file.
+   *   - 1: Play the media file once.
+   *   - 2: Play the media file twice.
+   *   - -1: Play the media file in a loop indefinitely, until stop() is called.
+   * @param err Posible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: Indicates that the count parameter is set to an illegal value.
+   * @return void
    */
   void SetLoopCount(int32_t count, Error *err = nullptr) {
     RtePlayerConfigSetLoopCount(&c_player_config, count,
@@ -907,15 +787,11 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Gets the loop count parameter of the media file.
-   *
+   * Get the loop count parameter.
    * @since v4.5.1
-   *
-   * @param err Output parameter, status or error information. See `Error`.
-   * - kRteOk: Indicates success.
-   *
-   * @return
-   * If the method call succeeds, returns the loop count of the media file.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return int32_t The number of times looping the media file.
    */
   int32_t GetLoopCount(Error *err = nullptr) {
     int32_t count;
@@ -954,45 +830,14 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Sets the quality layer of the subscribed media stream.
-   *
+   * Set the ABR subscription layer.
+   * If ABR is not enabled, the audience can only switch the high and low video stream  in the origin channel. After enabling it, the audience can switch any layer in the abr channel.
    * @since v4.4.0
-   *
-   * @details
-   * You can switch between different video stream quality layers based on actual network conditions,
-   * each corresponding to a different resolution.
-   * By default, after calling this method, the audience can only switch between high and low video
-   * stream quality, i.e., between `kRteAbrSubscriptionHigh` and `kRteAbrSubscriptionLow`.
-   * If you have higher requirements for video resolution switching, you can `contact technical
-   * support` to enable
-   * the ABR (Adaptive Bitrate) feature. Once enabled, you can customize the resolution for each video
-   * quality layer, and the audience can switch between all video quality layers as needed. For
-   * detailed implementation, see `Audience-side URL streaming`.
-   * Applicable scenarios: In unstable network environments, the audience can choose an appropriate
-   * video quality level based on actual network conditions to ensure a smooth viewing experience.
-   * Call timing: This method must be called before `SetConfigs(PlayerConfig* config, Error* err)`.
-   *
-   * @note If you have not enabled the ABR feature when calling this method, the subscribed video
-   * quality layer can only be `kRteAbrSubscriptionHigh` or `kRteAbrSubscriptionLow`.
-   *
-   * @param abr_subscription_layer The video quality layer to subscribe to. See
-   * `RteAbrSubscriptionLayer`.
-   *                     When customizing the resolution of `kRteAbrSubscriptionLayer1` to
-   * `kRteAbrSubscriptionLayer6`, you can refer to the table below or set it according to your actual
-   * needs:
-   *                         Note: When customizing resolutions, be sure to sort the video quality
-   * layers from highest to lowest resolution, and by frame rate from highest to lowest when
-   * resolutions are the same.
-   * | Video Quality Layer                | Resolution  |
-   * | --------------------------- | --------- |
-   * | `kRteAbrSubscriptionLayer1` | 2160p (4K) |
-   * | `kRteAbrSubscriptionLayer2` | 1440p (2K) |
-   * | `kRteAbrSubscriptionLayer3` | 1080p (HD) |
-   * | `kRteAbrSubscriptionLayer4` | 720p (HD)  |
-   * | `kRteAbrSubscriptionLayer5` | 540p (SD)  |
-   * | `kRteAbrSubscriptionLayer6` | 480p (SD)  |
-   * @param err Status or error information. See `Error`.
-   *
+   * @param abr_subscription_layer The layer to subscribe to. Refer to the rte::AbrSubscriptionLayer enumeration values for details.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: An illegal AbrSubscriptionLayer value was set.
+   * @return void
    */
   void SetAbrSubscriptionLayer(AbrSubscriptionLayer abr_subscription_layer, Error *err = nullptr) {
     RtePlayerConfigSetAbrSubscriptionLayer(&c_player_config, abr_subscription_layer,
@@ -1000,17 +845,11 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Gets the quality layer of the subscribed video stream.
-   *
+   * Get the ABR subscription layer.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: Call this method after `GetConfigs(PlayerConfig* config, Error* err)`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * The currently set video quality layer. See `RteAbrSubscriptionLayer`.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return AbrSubscriptionLayer The currently set subscription layer.
    */
   AbrSubscriptionLayer GetAbrSubscriptionLayer(Error *err = nullptr) {
     AbrSubscriptionLayer abr_subscription_layer;
@@ -1020,49 +859,15 @@ class PlayerConfig {
   }
 
   /**
-   * @brief Sets the fallback option for the subscribed video stream.
-   *
+   * Set the ABR fallback layer option.
+   * If ABR is not enabled, after calling this method, the audience can only set kRteAbrFallbackDisabled ~ kRteAbrFallbackAudioOnly in the original channel. 
+   * After enabling it, the audience can switch all values of AbrFallbackLayer in the abr channel.
    * @since v4.4.0
-   *
-   * @details
-   * In poor network conditions, the quality of real-time audio and video may degrade. After calling
-   * this method, the SDK will downgrade the resolution of the video stream to the specified fallback
-   * quality layer when the network condition is poor. Different quality layers correspond to
-   * different resolutions and bitrates. At the same time, the SDK
-   * continuously monitors the network quality and restores the video stream to the subscribed quality
-   * layer when the network improves.
-   * By default, after calling this method, you can only choose to fallback to `kRteAbrFallbackLow` or
-   * `kRteAbrFallbackAudioOnly`. If you have higher requirements for video experience, you can
-   * `contact technical support`
-   * to enable the ABR feature. Once enabled, you can fallback to video streams of all quality layers
-   * and customize the resolution for each layer.
-   * Applicable scenarios: - In general scenarios, you can call this method and set the fallback
-   * quality layer to `kRteAbrFallbackLow` or
-   * `kRteAbrFallbackAudioOnly`, and the SDK will fallback to a low-quality video stream or receive
-   * only the audio stream when the network is poor.
-   * - If you have higher resolution requirements for fallback video streams, you can `contact
-   * technical support` to enable the ABR feature. After enabling, you can customize the resolution
-   * for each layer. The SDK
-   * will use the resolution of the lowest quality layer you specify as the lower limit and
-   * dynamically adjust the resolution within this range based on network conditions. For detailed
-   * implementation, see `Audience-side URL streaming`.
-   * Call timing: This method must be called before `SetConfigs(PlayerConfig* config, Error* err)`.
-   *
-   * @note If you have not enabled the ABR feature when calling this method, the fallback quality
-   * layer for the video stream can only be `kRteAbrFallbackLow` or `kRteAbrFallbackAudioOnly`.
-   *
-   * @param abr_fallback_layer The fallback quality layer of the video stream. See `RteAbrFallbackLayer`. When customizing the resolution for `kRteAbrFallbackLayer1` to `kRteAbrFallbackLayer6`, you can refer to the table below, or set it according to your actual needs: | Video Quality Layer                | Resolution  |
-   * | --------------------------- | --------- |
-   * | `kRteAbrSubscriptionLayer1` | 2160p (4K) |
-   * | `kRteAbrSubscriptionLayer2` | 1440p (2K) |
-   * | `kRteAbrSubscriptionLayer3` | 1080p (HD) |
-   * | `kRteAbrSubscriptionLayer4` | 720p (HD)  |
-   * | `kRteAbrSubscriptionLayer5` | 540p (SD)  |
-   * | `kRteAbrSubscriptionLayer6` | 480p (SD)  |
-   * Note: When customizing resolutions, be sure to sort the video quality layers from highest to
-   * lowest resolution, and by frame rate from highest to lowest when resolutions are the same.
-   * @param err Status or error information. See `Error`.
-   *
+   * @param abr_fallback_layer The ABR fallback option to set.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: An illegal AbrFallbackLayer value was set. Check the value of the passed abr_fallback_layer parameter.
+   * @return void
    */
   void SetAbrFallbackLayer(AbrFallbackLayer abr_fallback_layer, Error *err = nullptr) {
     RtePlayerConfigSetAbrFallbackLayer(&c_player_config, abr_fallback_layer,
@@ -1071,17 +876,11 @@ class PlayerConfig {
 
 
   /**
-   * @brief Gets the configured video stream fallback option.
-   *
+   * Get the ABR fallback layer option.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: Call this method after `GetConfigs(PlayerConfig* config, Error* err)`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * The configured video stream fallback option. See `RteAbrFallbackLayer`.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return AbrFallbackLayer The currently set ABR fallback option.
    */
   AbrFallbackLayer GetAbrFallbackLayer(Error *err = nullptr) {
     AbrFallbackLayer abr_fallback_layer;
@@ -1105,18 +904,12 @@ class PlayerConfig {
  */
 class Player {
  public:
-  /**
-   * @brief Constructs a player object.
-   *
-   * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called after `InitMediaEngine`.
-   *
-   * @param self An `Rte` object.
-   * @param config Initial configuration for the player object. You can pass a null pointer.
-   *
-   */
+/**
+ * Construct a Player object.
+ * @since v4.4.0
+ * @param rte Rte object.
+ * @param config PlayerInitialConfig initialization configuration object. Currently, a null pointer can be passed.
+ */
   explicit Player(Rte *self, PlayerInitialConfig *config = nullptr) 
   : c_player(::RtePlayerCreate(&self->c_rte, nullptr, nullptr)) {};
   ~Player() { 
@@ -1132,63 +925,43 @@ class Player {
   // @}
 
   /**
-   * @brief Preloads a URL resource.
-   *
+   * Preload URL, only valid for rte type URLs. This interface can speed up the OpenWithUrl operation. Up to 20 URLs can be preloaded. If the limit is exceeded, new preloads will replace old ones.
    * @since v4.4.0
-   *
-   * @details
-   * After successful preloading, the speed of opening the URL resource via `OpenWithUrl` can be
-   * improved. When these resources are needed, they can be accessed more quickly, reducing waiting
-   * time.
-   * Applicable scenarios: Preloading media resources before opening them can reduce user wait time
-   * and provide a smoother audiovisual experience.
-   * Call timing: This method must be called before `OpenWithUrl`.
-   *
-   * @note This method currently only works for URLs prefixed with `rte://`. A maximum of 20 URLs can
-   * be preloaded. If the limit is exceeded, the earliest URL will be replaced by the newly preloaded
-   * one.
-   *
-   * @param url A URL prefixed with `rte://`. For details on the fields, see `Audience-side URL
-   * streaming`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the preload is successful:
-   * - `true`: Preload succeeded.
-   * - `false`: Preload failed.
+   * @param url rte type URL
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: The passed URL is empty or has an invalid format.
+   * @return bool Whether the preload operation was successful.
+   *  - true: Successfully preload the Rte URL.
+   *  - false: Failed to preload the Rte URL.
    */
   static bool PreloadWithUrl(const char* url, Error *err = nullptr)  {
     return RtePlayerPreloadWithUrl(nullptr, url, err != nullptr ? err->get_underlying_impl() : nullptr);
   };
 
-  /**
-   * @brief Opens a URL resource.
-   *
+  /** 
+   * Open URL resource. Currently, the rte URLs and cdn URLs and files are supported.
+   * This interface can also be used to refresh the token of an already opened RTE URL.
+   * For RTE URL format definition and token refresh method description, refer to the doc:
+   *  https://doc.shengwang.cn/doc/rtc/android/best-practice/playing-url
    * @since v4.4.0
-   *
-   * @details
-   * This method supports opening real-time streaming media via URL. If you want to speed up the URL
-   * opening process, you can call `PreloadWithUrl` to preload the resource before calling this
-   * method.
-   * If the resource fails to open, you will receive the `onStateChanged` callback with the state
-   * reported as `kRtePlayerStateFailed`. In this case, you need to call `Stop` first and then call
-   * `OpenWithUrl` again to reopen the URL resource. If you have disabled autoplay, you can call
-   * `Play` to start playback after the resource is opened.
-   * Call timing: This method must be called after `Player`.
-   * Related callbacks: After calling this method, the `onStateChanged` callback is triggered to
-   * report the player state as `kRtePlayerStateOpening`, indicating the URL is being opened.
-   * Upon successful opening, the player state is reported as `kRtePlayerStateOpenCompleted`.
-   *
-   * @note This method currently only supports URLs that start with `rte://`, CDN URLs, and local
-   * media files.
-   *
-   * @param url The URL to open. It can be a CDN URL, local media file, or a URL prefixed with
-   * `rte://`. For details on the fields of an RTE URL, see `Audience-side URL streaming`.
-   * @param start_time The start playback position, in milliseconds.
-   * @param cb An asynchronous callback function used to notify the result of opening the URL
-   * resource. If an error occurs during the opening process, you can get the specific error
-   * information through the `err` parameter in the callback. See `Error`.
-   *
+   * @param url The URL resource to open
+   * @param start_time Set the starting position for playback, in ms.
+   * @param cb Callback to asynchronously notify the result of the open operation. If an error occurs during open, it will enter the kRtePlayerStateFailed state. You need to call the Stop method before calling OpenWithUrl again.
+   *    @param err Possible return values for ErrorCode. At this time, the new_state value corresponds to kRtePlayerStateFailed.
+   *      - kRteOk: Success
+   *      - kRteErrorDefault: For specific reasons, see Error.Message, including the following situations:
+   *        - Failed to connect to the channel
+   *      - kRteErrorInvalidArgument:
+   *        - Invalid appid
+   *        - Invalid channelid
+   *        - Invalid uid
+   *      - kRteErrorAuthenticationFailed:
+   *        - Invalid token
+   *        - Token expired
+   *      - kRteErrorInvalidOperation:
+   *        - Engine not initialized
+   * @return void
    */
   void OpenWithUrl(const char* url, uint64_t start_time, std::function<void(rte::Error* err)> cb)  {
     CallbackContext<Player>* callbackCtx = new CallbackContext<Player>(this, cb);
@@ -1225,27 +998,27 @@ class Player {
 
 
   /**
-   * @brief Switches to a new URL during playback.
-   *
-   * @since v4.5.1
+   * Switch to a new URL. This interface can be used to switch to a new URL during playback.
    *
    * @note
-   * This method is only valid when the player has opened a non-RTE URL. Call this method when the SDK
-   * reports the player state as `kRtePlayerStateOpenCompleted`.
-   *
+   * - This method is only valid when the player opens a non-RTE URL. 
+   * - Call this method when the sdk returns the player state as kRtePlayerStateOpenCompleted.
+   * 
+   * @since v4.5.1
    * @param url The new URL to switch to.
-   * @param sync_pts - `true`: Synchronize playback position.
-   * - `false`: (Default) Do not synchronize playback position.
-   * @param cb Callback for asynchronously notifying the result of the switch operation. You can get
-   * the result or error code through the `err` parameter in the callback. See `Error`.
-   * Possible values for `err` include:
-   * - kRteOk: Switch succeeded.
-   * - kRteErrorDefault: Switch failed.
-   * - kRteErrorInvalidArgument: The provided URL is empty or has an invalid format.
-   * - kRteErrorInvalidOperation:
-   *   - The corresponding internal `Player` object has been destroyed or is invalid.
-   *   - The currently opened URL is an `Rte` URL, which does not support switching.
-   *
+   * @param sync_pts Whether to synchronize the playback position (ms) after the switch operation:
+   *    - true: Synchronize the playback position.  
+   *    - false: (Default)Do not synchronize the playback position.
+   * @param cb Callback to asynchronously notify the result of the switch operation. 
+   *    @param err Possible return values for ErrorCode:
+   *      - kRteOk: Success
+   *      - kRteErrorDefault: Failed to switch to the new URL.
+   *      - kRteErrorInvalidArgument: The passed URL is empty or has an invalid format.
+   *      - kRteErrorInvalidOperation: 
+   *          - The corresponding internal Player object has been destroyed or is invalid.
+   *          - The opened URL is a RTE URL, switch to a new URL is not supported.
+   * @return void 
+   *  
    */
   void SwitchWithUrl(const char* url, bool sync_pts, std::function<void(rte::Error* err)> cb){
     CallbackContext<Player>* callbackCtx = new CallbackContext<Player>(this, cb);
@@ -1253,20 +1026,13 @@ class Player {
   }
 
   /**
-   * @brief Gets statistics of the media resource currently being played by the player.
-   *
+   * Get player playback statistics.
    * @since v4.4.0
-   *
-   * @details
-   * This method is used to obtain player statistics, including decoding, rendering frame rate, audio
-   * and video bitrates, etc., and returns the result asynchronously via a callback function.
-   * Call timing: This method must be called after `OpenWithUrl`.
-   * @param cb An asynchronous callback function used to notify the result and error information when
-   * retrieving player media resource statistics. The function includes the following parameters:
-   * - `stats`: Statistical data of the media resource currently being played by the player. See
-   * `RtePlayerStats`.
-   * - `err`: Error information. See `Error`.
-   *
+   * @param cb Asynchronous callback for statistical data.
+   *    @param stats Statistical values.
+   *    @param err Possible return values for ErrorCode:
+   *      - kRteOk: Success
+   * @return void
    */
   void GetStats(std::function<void(rte::PlayerStats *stats, rte::Error *err)> cb){
     CallbackContextWithArgs<Player, rte::PlayerStats*> *ctx = new CallbackContextWithArgs<Player, rte::PlayerStats*>(this, cb);
@@ -1274,169 +1040,105 @@ class Player {
   }
 
   /**
-   * @brief Sets the view window for displaying video.
-   *
+   * Set canvas. After the stream is successfully pulled, the video frame will be rendered on the set canvas.
    * @since v4.4.0
-   *
-   * @details
-   * This method is used to specify a `Canvas` object to display video. Once the video stream is
-   * successfully played, the video will be shown on the specified `Canvas`.
-   * Call timing: This method must be called after `Player`.
-   *
-   * @param canvas The `Canvas` object used to render video frames. See `Canvas`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the setting is successful:
-   * - `true`: Setting succeeded.
-   * - `false`: Setting failed. You can check the error code returned in the `err` parameter for
-   * details.
+   * @param canvas The canvas object used to render video frames.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: The canvas is null.
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the SetCanvas operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully set the canvas.
+   *  - false: Failed to set the canvas.
    */
   bool SetCanvas(Canvas *canvas, Error *err = nullptr)  {
     return RtePlayerSetCanvas(&c_player, canvas != nullptr ? &canvas->c_canvas : nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   };
 
   /**
-   * @brief Plays a URL resource.
-   *
+   * Start stream playback.
    * @since v4.4.0
-   *
-   * @details
-   * If you have disabled autoplay, after successfully calling `OpenWithUrl` to open a real-time
-   * stream, you can call this method to start playback.
-   * Call timing: Call this method after receiving the `onStateChanged` callback reporting the state
-   * as `kRtePlayerStateOpenCompleted`.
-   * Related callbacks: After this method is successfully called, the `onStateChanged` callback is
-   * triggered to report the player state.
-   *
-   * @note This method currently only supports URLs prefixed with `rte://`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether playback is successful:
-   * - `true`: Playback succeeded.
-   * - `false`: Playback failed.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the Play operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully play.
+   *  - false: Failed to play.
    */
   bool Play(Error *err = nullptr)  {
     return RtePlayerPlay(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Stops media playback.
-   *
+   * Stop playback.
    * @since v4.4.0
-   *
-   * @details
-   * After successfully opening a URL stream and calling `Play`, you can call this method to stop
-   * playback. If you want to pause playback, call `Pause` instead.
-   * If you fail to open the URL stream using `OpenWithUrl`, you need to call this method first before
-   * calling `OpenWithUrl` again to reopen the URL.
-   * Call timing: This method must be called after `OpenWithUrl`.
-   * Related callbacks: After this method is successfully called, the `onStateChanged` callback is
-   * triggered and reports the player state as `kRtePlayerStateStopped`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the playback is successfully stopped:
-   * - `true`: Playback stopped successfully.
-   * - `false`: Failed to stop playback.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the Stop operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully stop.
+   *  - false: Failed to stop.
    */
   bool Stop(Error *err = nullptr)  {
     return RtePlayerStop(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Pauses playback.
-   *
+   * Pause playback.
    * @since v4.4.0
-   *
-   * @details
-   * After you call `Play` to play a URL resource, you can call this method to pause playback. If you
-   * want to stop playback, call `Stop`.
-   * Call timing: This method must be called after `Play`.
-   * Related callbacks: After this method is successfully called, the `onStateChanged` callback is
-   * triggered to report the player state as `kRtePlayerStatePaused`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the playback is successfully paused:
-   * - `true`: Playback paused successfully.
-   * - `false`: Failed to pause playback.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the Pause operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully pause.
+   *  - false: Failed to pause.
    */
   bool Pause(Error *err = nullptr)  {
     return RtePlayerPause(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Seeks to a new playback position.
-   *
+   * Seek the playback position.
    * @since v4.5.1
-   *
    * @param new_time The new playback position to seek to.
-   * @param err Output parameter indicating the error code:
-   * - kRteOk: Success.
-   * - kRteErrorInvalidOperation:
-   *   - The corresponding internal `Player` object has been destroyed or is invalid.
-   *   - The opened URL is an RTE URL, which does not support seeking. See `Error`.
-   *
-   *  @return
-   * Whether the SDK successfully sought to the specified playback position:
-   * - `true`: Successfully sought to the playback position.
-   * - `false`: Failed to seek to the playback position.
-   *
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: 
+   *    - The corresponding internal Player object has been destroyed or is invalid.
+   *    - The opened URL is an RTE URL, Seek is not supported.
+   * @return bool The result of the Seek operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully Seek.
+   *  - false: Failed to Seek.
    */
   bool Seek(uint64_t new_time, Error *err = nullptr)  {
     return RtePlayerSeek(&c_player, new_time, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Receives or stops receiving the audio stream.
-   *
+   * Mute/unmute audio separately.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called after `OpenWithUrl`.
-   * Related callbacks: After this method is successfully called, the `onPlayerInfoUpdated(const
-   * PlayerInfo *info)` callback is triggered to report the latest player and media stream
-   * information.
-   *
-   * @param mute Whether to receive the audio stream:
-   * - `true`: Do not receive the audio stream.
-   * - `false`: Receive the audio stream.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the subscribe or unsubscribe operation succeeds:
-   * - `true`: Operation succeeded.
-   * - `false`: Operation failed.
+   * @param mute Whether to mute.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the MuteAudio operation. If it fails, you can check the specific error through err.
+   *  - true: The mute operation was successful.
+   *  - false: The mute operation failed.
    */
   bool MuteAudio(bool mute, Error *err = nullptr)  {
     return RtePlayerMuteAudio(&c_player, mute, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Receives or stops receiving the video stream.
-   *
+   * Mute/unmute video separately.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called after `OpenWithUrl`.
-   * Related callbacks: After this method is successfully called, the `onPlayerInfoUpdated(const
-   * PlayerInfo *info)` callback is triggered to report the latest player and media stream
-   * information.
-   *
-   * @param mute Whether to receive the video stream:
-   * - `true`: Do not receive the video stream.
-   * - `false`: Receive the video stream.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the subscribe or unsubscribe operation succeeds:
-   * - `true`: Operation succeeded.
-   * - `false`: Operation failed.
+   * @param mute Whether to mute.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   * @return bool The result of the MuteVideo operation. If it fails, you can check the specific error through err.
+   *  - true: The mute operation was successful.
+   *  - false: The mute operation failedl.
    */
   bool MuteVideo(bool mute, Error *err = nullptr)  {
     return RtePlayerMuteVideo(&c_player, mute, err != nullptr ? err->get_underlying_impl() : nullptr);
@@ -1444,132 +1146,96 @@ class Player {
 
 
   /**
-   * @brief Gets the current playback position.
-   *
+   * Get the playback position.
    * @since v4.5.1
-   *
-   * @details
-   * This method is used to get the current playback time position, in milliseconds.
-   *
-   * @param err Status or error information. See `Error`.
-   * Possible error codes include:
-   * - kRteOk: Call succeeded.
-   * - kRteErrorInvalidOperation:
-   *   - The corresponding internal `Player` object has been destroyed or is invalid.
-   *   - The opened URL is an RTE URL, which does not support calling `GetPosition`.
-   *
-   * @return
-   * If the method call succeeds, returns the current playback position in milliseconds.
+   * @param err Possible return values for ErrorCode:
+   *   - kRteOk: Success
+   *   - kRteErrorInvalidOperation: 
+   *     - The corresponding internal Player object has been destroyed or is invalid.
+   *     - The opened URL is an RTE URL, getPosition is not supported.
+   * @return uint64_t The current playback position, in milliseconds.
    */
   uint64_t GetPosition(Error *err = nullptr){
     return RtePlayerGetPosition(&c_player, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Gets information about the player and media stream.
-   *
+   * Get player information.
    * @since v4.4.0
-   *
-   * @details
-   * You can use this method to get information about the player and media stream, such as audio
-   * sample rate, video frame size, and more.
-   * Call timing: Call this method after `Player`.
-   *
-   * @param info Information about the player and media stream. See `PlayerInfo`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the information is retrieved successfully:
-   * - `true`: Retrieved successfully.
-   * - `false`: Failed to retrieve.
+   * @param info The object used to receive player information. After the interface call is successful, the player information will be copied to the info object.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The info object is null.
+   * @return bool The result of the GetInfo operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully get the player information.
+   *  - false: Failed to get the player information.
    */
   bool GetInfo(PlayerInfo *info, Error *err = nullptr){
     return RtePlayerGetInfo(&c_player, info != nullptr ? info->get_underlying_impl() : nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Gets the current player settings.
-   *
+   * Get the configuration of Player object.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: Call this method after `Player`.
-   *
-   * @param config The player settings object. See `PlayerConfig`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the configuration is retrieved successfully:
-   * - `true`: Retrieved successfully.
-   * - `false`: Failed to retrieve.
+   * @param config The object used to receive PlayerConfig information.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The config object is null.
+   * @return bool The result of the GetConfigs operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully get the configuration.
+   *  - false: Failed to get the configuration.
    */
   bool GetConfigs(PlayerConfig* config, Error *err = nullptr)  {
     return RtePlayerGetConfigs(&c_player, config->get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Configures the player.
-   *
+   * Configure the Player object.
    * @since v4.4.0
-   *
-   * @details
-   * You can call this method to configure the player, such as enabling autoplay, subscribing to video
-   * streams of different resolutions and bitrates, etc.
-   * Call timing: This method must be called after `Player`.
-   *
-   * @param config Player configuration object. See `PlayerConfig`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the player configuration is successful:
-   * - `true`: Configuration succeeded.
-   * - `false`: Configuration failed.
+   * @param config The object used to change the player configuration.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The config object is null.
+   * @return bool The result of the SetConfigs operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully set the configuration.
+   *  - false: Failed to set the configuration.
    */
   bool SetConfigs(PlayerConfig* config, Error *err = nullptr)  {
     return RtePlayerSetConfigs(&c_player, config->get_underlying_impl(), err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Registers a player observer object.
-   *
+   * Register player observer.
    * @since v4.4.0
-   *
-   * @details
-   * Before calling this method, you need to implement an interface class that inherits from
-   * `PlayerObserver`.
-   * Call timing: This method must be called after `Player`.
-   *
-   * @param observer An instance of the interface object. See `PlayerObserver`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the registration is successful:
-   * - `true`: Registration succeeded.
-   * - `false`: Registration failed.
+   * @param observer The object used to receive player-related callbacks.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The observer object is null.
+   * @return bool The result of the RegisterObserver operation. If it fails, you can check the specific error through err.
+   *  - true: Successfully register the observer.
+   *  - false: Failed to register the observer.
    */
   bool RegisterObserver(PlayerObserver *observer, Error *err = nullptr) {
     return RtePlayerRegisterObserver(
         &c_player, observer != nullptr ? observer->c_player_observer : nullptr, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
-  /**
-   * @brief Unregisters the player event observer object.
-   *
-   * @since v4.4.0
-   *
-   * @details
-   * After calling `RegisterObserver` to register a player event observer, call this method if you
-   * need to unregister it.
-   * Call timing: This method must be called after `RegisterObserver`.
-   *
-   * @param observer Instance of the interface object. See `PlayerObserver`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the unregistration is successful:
-   * - `true`: Unregistration succeeded.
-   * - `false`: Unregistration failed.
-   */
+/**
+ * Unregister player observer.
+ * @since v4.4.0
+ * @param observer The object used to receive player-related callbacks.
+ * @param err Possible return values for ErrorCode:
+ *  - kRteOk: Success
+ *  - kRteErrorInvalidOperation: The corresponding internal Player object has been destroyed or is invalid.
+ *  - kRteErrorInvalidArgument: The observer object is null.
+ * @return bool The result of the UnregisterObserver operation. If it fails, you can check the specific error through err.
+ *  - true: Successfully unregister the observer.
+ * - false: Failed to unregister the observer.
+ */
   bool UnregisterObserver(PlayerObserver *observer, Error *err = nullptr){
     return RtePlayerUnregisterObserver(&c_player, observer != nullptr ? observer->c_player_observer : nullptr,
                                 err != nullptr ? err->get_underlying_impl() : nullptr);

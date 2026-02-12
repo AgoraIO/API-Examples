@@ -52,8 +52,68 @@ class ICameraCapturer : public RefCountInterface {
     CAMERA_STOPPED,
   };
 
+  // Interface for receiving information about available camera devices.
+  /**
+   * The IDeviceInfo class, which manages the information of available cameras.
+   */
+  class IDeviceInfo {
+   public:
+    virtual ~IDeviceInfo() {}
+
+    /**
+     * Releases the device.
+     */
+    virtual void release() = 0;
+
+    /**
+     * Gets the number of all available cameras.
+     * @return The number of all available cameras.
+     */
+    virtual uint32_t NumberOfDevices() = 0;
+
+    /**
+     * Gets the name of a specified camera.
+     * @param deviceNumber The index number of the device.
+     * @param deviceNameUTF8 The name of the device.
+     * @param deviceNameLength The length of the device name.
+     * @param deviceUniqueIdUTF8 The unique ID of the device.
+     * @param deviceUniqueIdLength The length of the device ID.
+     * @param productUniqueIdUTF8 The unique ID of the product.
+     * @param productUniqueIdLength The length of the product ID.
+     * @param deviceTypeUTF8 The camera type of the device.
+     * @param deviceTypeLength The length of the camera type.
+     * @return
+     * The name of the device in the UTF8 format: Success.
+     */
+    virtual int32_t GetDeviceName(uint32_t deviceNumber, char* deviceNameUTF8,
+                                  uint32_t deviceNameLength, char* deviceUniqueIdUTF8,
+                                  uint32_t deviceUniqueIdLength, char* productUniqueIdUTF8 = 0,
+                                  uint32_t productUniqueIdLength = 0,
+                                  char* deviceTypeUTF8 = 0, uint32_t deviceTypeLength = 0) = 0;
+
+    /**
+     * Sets the capability number for a specified device.
+     * @param deviceUniqueIdUTF8 The pointer to the ID of the device in the UTF8 format.
+     * @return
+     * The capability number of the device.
+     */
+    virtual int32_t NumberOfCapabilities(const char* deviceUniqueIdUTF8) = 0;
+
+    /**
+     * Gets the capability of a specified device.
+     * @param deviceUniqueIdUTF8 The pointer to the ID of the device in the UTF8 format.
+     * @param capabilityIndex The capability index of the device.
+     * @param capability The reference to the video capability. See {@link VideoFormat}.
+     * @return
+     * The capability number of the device.
+     */
+    virtual int32_t GetCapability(const char* deviceUniqueIdUTF8,
+                                  const uint32_t capabilityIndex,
+                                  VideoFormat& capability) = 0;
+  };
+
  public:
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE) || defined (__OHOS__)
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   /**
    * Sets the camera source.
    *
@@ -276,7 +336,7 @@ class ICameraCapturer : public RefCountInterface {
    */
   virtual int setCameraExposureFactor(float value, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
-#if (defined(__APPLE__) && TARGET_OS_IOS)
+#if (defined(__APPLE__) && (TARGET_OS_IOS || (defined(TARGET_OS_VISION) && TARGET_OS_VISION)))
   /**
    * Enables or disables the AVCaptureMultiCamSession.
    *
@@ -322,9 +382,19 @@ class ICameraCapturer : public RefCountInterface {
   virtual int setCameraStabilizationMode(CAMERA_STABILIZATION_MODE mode) = 0;
 #endif
   
-#elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__) && !defined (__OHOS__)) || \
+#elif defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__)) || \
     (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 
+  /**
+   * Creates a DeviceInfo object.
+   *
+   * @note
+   * This method applies to Windows, macOS, and Linux only.
+   * @return
+   * - The pointer to \ref agora::rtc::ICameraCapturer::IDeviceInfo "IDeviceInfo": Success.
+   * - An empty pointer NULL: Failure.
+   */
+  virtual IDeviceInfo* createDeviceInfo() = 0;
   /**
    * Initializes the device with the device ID.
    *

@@ -651,13 +651,13 @@ class ILocalUser {
    * - 2: Stereo.
    * @param sampleRateHz The sample rate (Hz) of the audio frame in the `onPlaybackAudioFrameBeforeMixing` callback. You can
    * set it as 8000, 16000, 32000, 44100, or 48000.
-   * @param samplesPerCall The number of samples of the audio frame.
+   *
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
   virtual int setPlaybackAudioFrameBeforeMixingParameters(size_t numberOfChannels,
-                                                          uint32_t sampleRateHz, int samplesPerCall = 0, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+                                                          uint32_t sampleRateHz, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /**
    * Registers an audio frame observer.
@@ -1210,6 +1210,56 @@ struct AudioVolumeInformation {
 };
 
 /**
+ * The definition of the RemoteAudioContextInfo struct.
+ */
+struct RemoteAudioContextInfo {
+  /**
+   * The type of the remote OS.
+   */
+  agora::Optional<int> os_type;
+
+  /**
+   * The type of the remote router.
+   */
+  agora::Optional<int> router_type;
+
+  /**
+   * The type of the remote scenario.
+   */
+  agora::Optional<int> scenario;
+
+  /**
+   * Whether the remote hardware 3A is enabled or unknown.
+   */
+  agora::Optional<bool> hardware_3a_enabled;
+
+  /**
+   * Whether the remote hardware AEC is enabled.
+   */
+  agora::Optional<bool> aec_enabled;
+
+  /**
+   * Whether the remote AI AEC is enabled.
+   */
+  agora::Optional<bool> ai_aec_enabled;
+
+  /**
+   * Whether the remote ANS is enabled.
+   */
+  agora::Optional<bool> ans_enabled;
+
+  /**
+   * Whether the remote AI ANS is enabled.
+   */
+  agora::Optional<bool> ai_ans_enabled;
+
+  /**
+   * Whether the remote AGC is enabled.
+   */
+  agora::Optional<bool> agc_enabled;
+};
+
+/**
  * The `ILocalUserObserver` class.
  */
 class ILocalUserObserver {
@@ -1249,6 +1299,14 @@ class ILocalUserObserver {
    * @param stats The statistics of the remote audio track.
    */
   virtual void onRemoteAudioTrackStatistics(agora_refptr<rtc::IRemoteAudioTrack> audioTrack, const RemoteAudioTrackStats& stats) = 0;
+
+  /**
+   * Reports the statistics of a remote audio context info.
+   *
+   * @param audioTrack The pointer to `IRemoteAudioTrack`.
+   * @param contextInfo The context info of the remote audio track.
+   */
+  virtual void onRemoteAudioContextInfoChanged(agora_refptr<rtc::IRemoteAudioTrack> audioTrack, const RemoteAudioContextInfo& contextInfo) = 0;
   /**
    * Occurs when the first remote audio frame is received.
    *
@@ -1587,22 +1645,6 @@ class ILocalUserObserver {
   virtual void onUserStateChanged(user_id_t userId, uint32_t state){}
 
   virtual void onVideoRenderingTracingResult(user_id_t user_id, MEDIA_TRACE_EVENT currentState, VideoRenderingTracingInfo tracingInfo) {}
-
-  /** Occurs when receive rdt message.
-   *
-   * @param userId Remote uid.
-   * @param type Rdt stream type.
-   * @param data data The pointer to the sent data.
-   * @param length length The length of the sent data.
-   */
-  virtual void onRdtMessage(user_id_t userId, RdtStreamType type, const char *data, size_t length) {}
-
-  /** Occurs when rdt state changed with userId.
-   *
-   * @param userId Remote uid.
-   * @param state  rdt state.
-   */
-  virtual void onRdtStateChanged(user_id_t userId, RdtState state) {}
 };
 
 class IVideoFrameObserver2 {

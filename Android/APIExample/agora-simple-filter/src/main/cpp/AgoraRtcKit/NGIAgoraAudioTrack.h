@@ -11,14 +11,6 @@
 #include "AgoraBase.h"
 #include <api/cpp/aosl_ares_class.h>
 
-#ifndef OPTIONAL_OVERRIDE
-#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-#define OPTIONAL_OVERRIDE override
-#else
-#define OPTIONAL_OVERRIDE
-#endif
-#endif
-
 // FIXME(Ender): use this class instead of AudioSendStream as local track
 namespace agora {
 namespace rtc {
@@ -46,11 +38,6 @@ struct AudioSinkWants {
   AudioSinkWants(int sampleRate, size_t chs) : samplesPerSec(sampleRate),
                                                channels(chs) {}
   AudioSinkWants(int sampleRate, size_t chs, int trackNum) : samplesPerSec(sampleRate), channels(chs) {}                                            
-};
-
-enum AudioTrackType {
-  LOCAL_AUDIO_TRACK,
-  REMOTE_AUDIO_TRACK,
 };
 
 /**
@@ -219,13 +206,6 @@ class IAudioTrack : public RefCountInterface {
    * - `false`: Failure.
    */
   virtual bool removeAudioSink(agora_refptr<IAudioSinkBase> sink, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-  /**
-   * Get the track type of the audio track
-   * @return
-   * - AudioTrackType
-   */
-  virtual AudioTrackType getType() = 0;
-
 };
 
 /**
@@ -436,13 +416,6 @@ class ILocalAudioTrack : public IAudioTrack {
    * - < 0: Failure.
    */
   virtual int ClearSenderBuffer() = 0;
-  /**
-   * Get the track type of the audio track
-   * @return
-   * - AudioTrackType
-   */
-  virtual AudioTrackType getType() OPTIONAL_OVERRIDE { return LOCAL_AUDIO_TRACK; }
-
 
  protected:
   ~ILocalAudioTrack() {}
@@ -578,15 +551,6 @@ struct RemoteAudioTrackStats {
    *  The time of 200 ms frozen in 2 seconds
    */
   uint16_t frozen_time_200_ms;
-
-  /**
-   *  The count of frozen in 2 seconds
-   */
-  uint16_t frozen_count_by_custom;
-  /**
-   *  The time of frozen in 2 seconds
-   */
-  uint16_t frozen_time_ms_by_custom;
   /**
    *  The full time of 80 ms frozen in 2 seconds
    */
@@ -650,6 +614,57 @@ struct RemoteAudioTrackStats {
    */
   int32_t downlink_effect_type;
 
+  /**
+   * The total duration of the remote audio stream.
+   */
+  int32_t total_stream_duration;
+  
+  /**
+   * The total duration of the remote audio frame.
+   */
+  int32_t total_frame_duration;
+
+  /**
+   * The duration of the bad network.
+   */
+  int32_t bad_network_duration;
+  
+  /**
+   * The total number of in-order packets.
+   */
+  int32_t total_inorder_packet_num;
+
+  /**
+   * The total number of out-of-order packets.
+   */
+  int32_t total_unorder_packet_num;
+
+  /**
+   * The total number of received packets.
+   */
+  int32_t tota_recv_packets_num;
+
+  /**
+   * The time elapse after the last received packet.
+   */
+  int32_t last_packet_recv_elapse;
+
+  /**
+   * The codec type of the remote audio stream.
+   */
+  int32_t codec_type;
+
+  /**
+   * The length of time in milliseconds represented by the media in a packet 
+   * of the remote audio stream.
+   */
+  uint32_t p_time;
+
+  /**
+   * Whether the remote audio stream dtx feature is enabled.
+   */
+  bool recv_dtx_enabled;
+  
   RemoteAudioTrackStats() :
     uid(0),
     quality(0),
@@ -684,8 +699,6 @@ struct RemoteAudioTrackStats {
     frozen_time_200_ms(0),
     full_frozen_time_80_ms(0),
     full_frozen_time_200_ms(0),
-    frozen_count_by_custom(0),
-    frozen_time_ms_by_custom(0),
     delay_estimate_ms(0),
     mos_value(0),
     frozen_rate_by_custom_plc_count(0),
@@ -698,7 +711,17 @@ struct RemoteAudioTrackStats {
     new_e2e_delay_ms(0),
     qoe_quality(0),
     quality_changed_reason(0),
-    downlink_effect_type(0) {}
+    downlink_effect_type(0),
+    total_stream_duration(0),
+    total_frame_duration(0),
+    bad_network_duration(0),
+    total_inorder_packet_num(0),
+    total_unorder_packet_num(0),
+    tota_recv_packets_num(0),
+    last_packet_recv_elapse(0),
+    codec_type(AUDIO_CODEC_OPUS),
+    p_time(0),
+    recv_dtx_enabled(false) {}
 };
 
 
@@ -921,6 +944,15 @@ class IRemoteAudioTrack : public IAudioTrack {
    */
   virtual int adjustAudioDeceleration(int percentage, aosl_ref_t ares = AOSL_REF_INVALID) = 0;  
 
+  /** enable audio fast acceleration during audio packets burst arrival.
+
+   @param enable Whether to enable audio burst acceleration.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableAudioBurstAccelerate(bool enable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+
   /** enable spatial audio
    
    @param enabled enable/disable spatial audio:
@@ -941,9 +973,6 @@ class IRemoteAudioTrack : public IAudioTrack {
    - < 0: Failure.
    */
   virtual int setRemoteUserSpatialAudioParams(const agora::SpatialAudioParams& params, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-
-  virtual AudioTrackType getType() OPTIONAL_OVERRIDE { return REMOTE_AUDIO_TRACK; }
-  
 };
 
 }  // namespace rtc

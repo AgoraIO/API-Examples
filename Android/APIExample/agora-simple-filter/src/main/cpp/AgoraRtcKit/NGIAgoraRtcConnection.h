@@ -282,8 +282,6 @@ class IRtcConnection : public RefCountInterface {
    * Renews the token.
    *
    * The token expires after a certain period of time.
-   * The SDK triggers the \ref IRtcConnectionObserver::onRenewTokenResult "onRenewTokenResult" callback after the token is renewed.
-   * 
    * When the \ref IRtcConnectionObserver::onError "onError" callback reports `ERR_TOKEN_EXPIRED(109)`, you must generate a new token from the server
    * and then call this method to renew it. Otherwise, the SDK disconnects from the Agora channel.
    *
@@ -442,30 +440,6 @@ class IRtcConnection : public RefCountInterface {
    */
   virtual int sendStreamMessage(int streamId, const char* data, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
-  /** Send Reliable message to remote uid in channel.
-   * @param UserId remote user id.
-   * @param type Reliable Data Transmission tunnel message type.
-   * @param data The pointer to the sent data.
-   * @param length The length of the sent data.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int sendRdtMessage(user_id_t userId, RdtStreamType type, const char *data, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-
-  /** Send Media Control Message to remote uid in channel.
-   *
-   * @param userId ID of the user who sends the data.
-   * @param data The sending data.
-   * @param length The length (byte) of the data.
-   * 
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int sendMediaControlMessage(user_id_t userId, const char* data, size_t length, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-
   /** Enables/Disables the built-in encryption.
    *
    * In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
@@ -524,19 +498,13 @@ class IRtcConnection : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int getUserInfoByUid(uid_t uid, rtc::UserInfo* userInfo) = 0;
-
+  
   /**
    * Enables or disables the multipath feature.
    *
    * When enabled, the SDK can use multiple network paths for data transmission,
    * which can improve the reliability and performance of the connection.
    *
-   * @note
-   * - Permission And System Required:
-   *   - Android: Android 7.0 or later(API level 24 or later), with ACCESS_NETWORK_STATE and CHANGE_NETWORK_STATE permission.
-   *   - IOS: IOS 12.0 or later
-   *   - Macos: 10.14 or later
-   *   - Windows: Windows Vista or later
    * @param enable A boolean value indicating whether to enable (true) or disable (false) multipath.
    * @param ares A reference for asynchronous operations, defaulting to AOSL_REF_INVALID.
    * @return
@@ -558,7 +526,7 @@ class IRtcConnection : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int setUplinkMultipathMode(MultipathMode mode, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
-
+  
   /**
    * Sets the downlink multipath mode.
    *
@@ -674,19 +642,6 @@ class IRtcConnectionObserver {
    * "renewToken" to pass the new token to the SDK.
    */
   virtual void onTokenPrivilegeDidExpire() = 0;
-
-  /**
-   * @brief Reports the result of calling renewToken.
-   * @since v4.6.0
-   * 
-   * Occurs when a user renews the token.
-   *
-   * This callback notifies the app of the result after the user calls `renewToken` to renew the token. 
-   * The app can obtain the result of the `renewToken` call from this callback.
-   * @param token The token.
-   * @param code The error code.
-   */
-  virtual void onRenewTokenResult(const char* token, RENEW_TOKEN_ERROR_CODE code) = 0;
 
   /**
    * Occurs when the connection state between the SDK and the Agora channel changes to `CONNECTION_STATE_FAILED(5)`.
@@ -911,6 +866,28 @@ class IRtcConnectionObserver {
    */
   virtual void onMultipathStats(const MultipathStats& stats) {
     (void)stats;
+  }
+
+  /** Occurs when the WIFI message need be sent to the user.
+   *
+   * @param reason The reason of notifying the user of a message.
+   * @param action Suggest an action for the user.
+   * @param wlAccMsg The message content of notifying the user.
+   */
+  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
+    (void)reason;
+    (void)action;
+    (void)wlAccMsg;
+  }
+
+  /** Occurs when SDK statistics wifi acceleration optimization effect.
+   *
+   * @param currentStats Instantaneous value of optimization effect.
+   * @param averageStats Average value of cumulative optimization effect.
+   */
+  virtual void onWlAccStats(const WlAccStats& currentStats, const WlAccStats& averageStats) {
+    (void)currentStats;
+    (void)averageStats;
   }
 };
 

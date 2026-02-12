@@ -382,14 +382,6 @@ public:
    */
   virtual void onFetchConfigResult(int code, rtc::CONFIG_FETCH_TYPE configType, const char* configContent) {}
 
-#if defined(__ANDROID__)
-  /**
-    * Reports the permission granted.
-    * @param permission {@link PERMISSION}
-    */
-  virtual void onPermissionGranted(agora::rtc::PERMISSION_TYPE permissionType) {}
-#endif
-
   /**
    * Occurs when the local user registers a user account.
    *
@@ -397,7 +389,6 @@ public:
    * @param userAccount The user account of the local user.
    */
   virtual void onLocalUserRegistered(rtc::uid_t uid, const char* userAccount) {}
-
 };
 
 /**
@@ -780,7 +771,7 @@ class IAgoraService {
       const rtc::SenderOptions& options,
       const char* id = OPTIONAL_NULLPTR) = 0;
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) || defined(__OHOS__)
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
   /**
    * Creates a local video track object with a screen capture source extension and returns the pointer.
    *
@@ -960,7 +951,7 @@ class IAgoraService {
    */
   virtual const char* getExtensionId(const char* provider_name, const char* extension_name) = 0;
 
-#if defined (_WIN32) ||  defined(__linux__) || defined(__ANDROID__)
+#if defined (_WIN32) || defined(__linux__) || defined(__ANDROID__)
   /**
    * @brief load the dynamic library of the extension
    * 

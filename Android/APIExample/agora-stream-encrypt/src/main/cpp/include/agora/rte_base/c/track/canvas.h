@@ -18,18 +18,14 @@ extern "C" {
 typedef struct RteViewConfig RteViewConfig;
 
 
-/**
- * @brief Video render mode.
- */
 typedef enum RteVideoRenderMode {
     /**
-     * 0: Video is scaled proportionally to fill the view. Extra parts of the video that exceed the view
-     * due to aspect ratio differences will be cropped.
+     * 0: The hidden mode will fill the entire view. Parts of the image that exceed the view will be
+     * cropped.
      */
     kRteVideoRenderModeHidden = 0,
     /**
-     * 1: Video is scaled proportionally to fit within the view. Black bars are added to fill any unused
-     * space due to aspect ratio differences.
+     * 1: The fit mode will render the entire image within the view.
      */
     kRteVideoRenderModeFit = 1
 } RteVideoRenderMode;

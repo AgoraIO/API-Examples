@@ -19,70 +19,52 @@ class ILocalAudioTrack;
 class IRtcEngineEventHandler;
 
 /**
- * @brief Virtual metronome state.
+ The states of the rhythm player.
  */
 enum RHYTHM_PLAYER_STATE_TYPE {
-  /**
-   * 810: The virtual metronome is not enabled or disabled already.
-   */
+  /** 810: The rhythm player is idle. */
   RHYTHM_PLAYER_STATE_IDLE = 810,
-  /**
-   * 811: Opening the beat files.
-   */
+  /** 811: The rhythm player is opening files. */
   RHYTHM_PLAYER_STATE_OPENING,
-  /**
-   * 812: Decoding the beat files.
-   */
+  /** 812: Files opened successfully, the rhythm player starts decoding files. */
   RHYTHM_PLAYER_STATE_DECODING,
-  /**
-   * 813: The beat files are playing.
-   */
+  /** 813: Files decoded successfully, the rhythm player starts mixing the two files and playing back them locally. */
   RHYTHM_PLAYER_STATE_PLAYING,
-  /**
-   * 814: Failed to start virtual metronome. You can use the reported `errorCode` to troubleshoot the
-   * cause of the error, or you can try to start the virtual metronome again.
-   */
+  /** 814: The rhythm player is starting to fail, and you need to check the error code for detailed failure reasons. */
   RHYTHM_PLAYER_STATE_FAILED,
 };
 
 /**
- * @brief Virtual Metronome error message.
+ The reason codes of the rhythm player.
  */
 enum RHYTHM_PLAYER_REASON {
-  /**
-   * 0: The beat files are played normally without errors.
-   */
+  /** 0: The rhythm player works well. */
   RHYTHM_PLAYER_REASON_OK = 0,
-  /**
-   * 1: A general error; no specific reason.
-   */
+  /** 1: The rhythm player occurs a internal error. */
   RHYTHM_PLAYER_REASON_FAILED = 1,
-  /**
-   * 801: There is an error when opening the beat files.
-   */
+  /** 801: The rhythm player can not open the file. */
   RHYTHM_PLAYER_REASON_CAN_NOT_OPEN = 801,
-  /**
-   * 802: There is an error when playing the beat files.
-   */
+  /** 802: The rhythm player can not play the file. */
   RHYTHM_PLAYER_REASON_CAN_NOT_PLAY,
-  /**
-   * 803: The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
-   */
+  /** 803: The file duration over the limit. The file duration limit is 1.2 seconds */
   RHYTHM_PLAYER_REASON_FILE_OVER_DURATION_LIMIT,
 };
 
 /**
- * @brief The metronome configuration.
+ * The configuration of rhythm player,
+ * which is set in startRhythmPlayer or configRhythmPlayer.
  */
 struct AgoraRhythmPlayerConfig {
   /**
-   * The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means
-   * that each measure contains one downbeat and three upbeats.
+   * The number of beats per measure. The range is 1 to 9.
+   * The default value is 4,
+   * which means that each measure contains one downbeat and three upbeats.
    */
   int beatsPerMeasure;
-  /**
-   * The beat speed (beats/minute), which ranges from 60 to 360. The default value is 60, which means
-   * that the metronome plays 60 beats in one minute.
+  /*
+   * The range is 60 to 360.
+   * The default value is 60,
+   * which means that the rhythm player plays 60 beats in one minute.
    */
   int beatsPerMinute;
 

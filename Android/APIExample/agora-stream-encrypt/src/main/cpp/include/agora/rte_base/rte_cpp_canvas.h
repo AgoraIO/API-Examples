@@ -33,8 +33,7 @@ class CanvasInitialConfig {
 };
 
 /**
- * @brief This class provides methods for configuring video rendering for the player.
- *
+ * The CanvasConfig class is used to configure the Canvas object.
  * @since v4.4.0
  */
 class CanvasConfig {
@@ -43,36 +42,25 @@ class CanvasConfig {
  ~CanvasConfig() {RteCanvasConfigDeinit(&c_canvas_config, nullptr);}
 
  /**
-  * @brief Sets the video render mode.
-  *
+  * Set the video render mode.
   * @since v4.4.0
-  *
-  * @details
-  * Call timing: This method must be called before `SetConfigs(CanvasConfig *config, Error *err)`.
-  *
-  * @param mode Render mode. See `RteVideoRenderMode`. The default render mode is
-  * `kRteVideoRenderModeHidden`,
-  * which scales the video proportionally and prioritizes filling the view window.
-  * @param err Status or error information. See `Error`.
-  *
+  * @param mode The render mode to set. Refer to the rte::VideoRenderMode type, default is kRteVideoRenderModeHidden.
+  * @param err Possible return values for ErrorCode:
+  *  - kRteOk: Success
+  *  - kRteErrorInvalidArgument: The mode parameter is set to an illegal value.
+  * @return void
   */
  void SetRenderMode(VideoRenderMode mode, Error *err = nullptr) {
     RteCanvasConfigSetVideoRenderMode(&c_canvas_config, mode, err != nullptr ? err->get_underlying_impl() : nullptr);
  }
 
-  /**
-   * @brief Gets the currently set video render mode.
-   *
-   * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called after `GetConfigs(CanvasConfig *config, Error *err)`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * The currently set video render mode. See `RteVideoRenderMode`.
-   */
+ /**
+  * Get the render mode.
+  * @since v4.4.0
+  * @param err Possible return values for ErrorCode:
+  *  - kRteOk: Success
+  * @return VideoRenderMode 
+  */
   VideoRenderMode GetRenderMode(Error *err = nullptr) {
     VideoRenderMode mode;
     RteCanvasConfigGetVideoRenderMode(&c_canvas_config, &mode, err != nullptr ? err->get_underlying_impl() : nullptr);
@@ -80,35 +68,24 @@ class CanvasConfig {
  }
 
   /**
-   * @brief Sets the mirror mode for the video.
-   *
+   * Set the video mirror mode.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called before `SetConfigs(CanvasConfig *config, Error *err)`.
-   *
-   * @param mode Mirror mode. See `RteVideoMirrorMode`. The default is `kRteVideoMirrorModeAuto`,
-   * where the SDK
-   * determines the mirror mode. By default, the mirror mode for remote users is disabled.
-   * @param err Status or error information. See `Error`.
-   *
+   * @param mode The mirror mode to set. Refer to the rte::VideoMirrorMode type, default is kRteVideoMirrorModeAuto.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidArgument: The mode parameter is set to an illegal value.
+   * @return void
    */
   void SetMirrorMode(VideoMirrorMode mode, Error *err = nullptr) {
     RteCanvasConfigSetVideoMirrorMode(&c_canvas_config, mode, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
   
   /**
-   * @brief Gets the currently set mirror mode.
-   *
+   * Get the video mirror mode.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called after `GetConfigs(CanvasConfig *config, Error *err)`.
-   *
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * The currently set mirror mode. See `RteVideoMirrorMode`.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   * @return VideoMirrorMode The current video mirror mode.
    */
   VideoMirrorMode GetMirrorMode(Error *err = nullptr) {
     VideoMirrorMode mode;
@@ -153,14 +130,10 @@ class CanvasConfig {
 class Canvas {
  public:
   /**
-   * @brief Constructs a `Canvas` object.
-   *
-   * @details
-   * Call timing: Call this method after `InitMediaEngine`.
-   *
-   * @param Rte An `Rte` object.
-   * @param initial_config The configuration object for the `Canvas`. Currently, you can pass in null.
-   *
+   * Construct a Canvas object.
+   * @since v4.4.0
+   * @param rte Rte object.
+   * @param initial_config CanvasInitialConfig initialization configuration object. Currently, a null pointer can be passed.
    */
   Canvas(Rte *rte, CanvasInitialConfig *initial_config = nullptr) {
     c_canvas = ::RteCanvasCreate(&rte->c_rte, initial_config != nullptr ? &initial_config->c_canvas_initial_config : nullptr, nullptr);
@@ -179,90 +152,66 @@ class Canvas {
 
 
   /**
-   * @brief Gets the current video rendering configuration of the player.
-   *
+   * Get the configuration of Canvas object.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: Call this method after `Canvas`.
-   *
-   * @param config The settings of the `Canvas` object. See `CanvasConfig`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the configuration is retrieved successfully:
-   * - `true`: Retrieved successfully.
-   * - `false`: Failed to retrieve.
+   * @param config The object used to get the canvas config configuration.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Canvas object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The passed config object is null.
+   * @return bool Returns the result of getting the configuration information.
+   *  - true: Successfully retrieved.
+   *  - false: Failed to retrieve.
    */
   bool GetConfigs(CanvasConfig *config, Error *err = nullptr) {
     return RteCanvasGetConfigs(&c_canvas, &config->c_canvas_config, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Sets the player video rendering configuration.
-   *
+   * Configure the Canvas object.
    * @since v4.4.0
-   *
-   * @details
-   * Call timing: This method must be called before `OpenWithUrl`.
-   *
-   * @param config Settings for the `Canvas` object. See `CanvasConfig`.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the configuration is successful:
-   * - `true`: Configuration succeeded.
-   * - `false`: Configuration failed.
+   * @param config The object used to set the canvas config configuration.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Canvas object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The passed config object is null.
+   * @return bool Returns the result of setting the configuration information.
+   *  - true: Successfully set the configuration.
+   *  - false: Failed to set the configuration.
    */
   bool SetConfigs(CanvasConfig *config, Error *err = nullptr) {
     return RteCanvasSetConfigs(&c_canvas, &config->c_canvas_config, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
   /**
-   * @brief Adds a rendering view.
-   *
+   * Add a rendering view. Currently, only one view is supported.
    * @since v4.4.0
-   *
-   * @details
-   * Applicable scenarios: When you need to use the player to play videos, you can call this method to
-   * add a view to the video renderer so that the video content can be displayed.
-   * Call timing: This method must be called before `SetCanvas`.
-   *
-   * @note Currently, only one view is supported.
-   *
-   * @param view The HWND window handle.
-   * @param config The settings of the `View` object. Currently, pass in null.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the view is added successfully:
-   * - `true`: The view is added successfully.
-   * - `false`: Failed to add the view.
+   * @param view Pointer to the View object. On the Windows platform, you can assign an HWND window handle to a View type variable and pass it to the interface.
+   * @param config View-related configuration. Currently, nullptr can be passed.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Canvas object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The passed view is null.
+   * @return bool Returns the result of adding the View.
+   *  - true: Successfully add the View.
+   *  - false: Failed to add the View.
    */
   bool AddView(View *view, ViewConfig *config, rte::Error *err = nullptr) {
     return RteCanvasAddView(&c_canvas, view, config, err != nullptr ? err->get_underlying_impl() : nullptr);
   }
 
-  /**
-   * @brief Removes a rendering view.
-   *
+  /** 
+   * Remove a rendering view.
    * @since v4.4.0
-   *
-   * @details
-   * After you call `AddView` to add a view, you can call this method to remove the rendering view if
-   * needed.
-   * Call timing: This method must be called after `AddView`.
-   *
-   * @note Only one view can be removed at a time.
-   *
-   * @param view The view object to be removed.
-   * @param config Settings for the `View` object. Currently, pass null.
-   * @param err Status or error information. See `Error`.
-   *
-   * @return
-   * Whether the view is successfully removed:
-   * - `true`: View removed successfully.
-   * - `false`: Failed to remove view.
+   * @param view Pointer to the View object.
+   * @param config View-related configuration. Currently, nullptr can be passed.
+   * @param err Possible return values for ErrorCode:
+   *  - kRteOk: Success
+   *  - kRteErrorInvalidOperation: The corresponding internal Canvas object has been destroyed or is invalid.
+   *  - kRteErrorInvalidArgument: The passed view is null.
+   * @return bool Returns the result of removing the View.
+   *  - true: Successfully removed the View.
+   *  - false: Failed to remove the View.
    */
   bool RemoveView(View *view, ViewConfig *config, rte::Error *err = nullptr) {
     return RteCanvasRemoveView(&c_canvas, view, config, err != nullptr ? err->get_underlying_impl() : nullptr);

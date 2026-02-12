@@ -49,39 +49,31 @@ namespace base {
 static const uint8_t kMaxCharBufferLength = 50;
 /**
  * @brief The playback state.
+ *
  */
 enum MEDIA_PLAYER_STATE {
-  /**
-   * 0: The default state. The media player returns this state code before you open the media resource
-   * or after you stop the playback.
+  /** Default state.
    */
   PLAYER_STATE_IDLE = 0,
-  /**
-   * 1: Opening the media resource.
+  /** Opening the media file.
    */
   PLAYER_STATE_OPENING,
-  /**
-   * 2: Opens the media resource successfully.
+  /** The media file is opened successfully.
    */
   PLAYER_STATE_OPEN_COMPLETED,
-  /**
-   * 3: The media resource is playing.
+  /** Playing the media file.
    */
   PLAYER_STATE_PLAYING,
-  /**
-   * 4: Pauses the playback.
+  /** The playback is paused.
    */
   PLAYER_STATE_PAUSED,
-  /**
-   * 5: The playback is complete.
+  /** The playback is completed.
    */
   PLAYER_STATE_PLAYBACK_COMPLETED,
-  /**
-   * 6: The loop is complete.
+  /** All loops are completed.
    */
   PLAYER_STATE_PLAYBACK_ALL_LOOPS_COMPLETED,
-  /**
-   * 7: The playback stops.
+  /** The playback is stopped.
    */
   PLAYER_STATE_STOPPED,
   /** Player pausing (internal)
@@ -105,73 +97,58 @@ enum MEDIA_PLAYER_STATE {
   /** Player set track state (internal)
    */
   PLAYER_STATE_SET_TRACK_INTERNAL,
-  /**
-   * 100: The media player fails to play the media resource.
+  /** The playback fails.
    */
   PLAYER_STATE_FAILED = 100,
 };
 /**
- * @brief Reasons for the changes in the media player status.
+ * @brief Player error code
+ *
  */
 enum MEDIA_PLAYER_REASON {
-  /**
-   * 0: No error.
+  /** No error.
    */
   PLAYER_REASON_NONE = 0,
-  /**
-   * -1: Invalid arguments.
+  /** The parameter is invalid.
    */
   PLAYER_REASON_INVALID_ARGUMENTS = -1,
-  /**
-   * -2: Internal error.
+  /** Internel error.
    */
   PLAYER_REASON_INTERNAL = -2,
-  /**
-   * -3: No resource.
+  /** No resource.
    */
   PLAYER_REASON_NO_RESOURCE = -3,
-  /**
-   * -4: Invalid media resource.
+  /** Invalid media source.
    */
   PLAYER_REASON_INVALID_MEDIA_SOURCE = -4,
-  /**
-   * -5: The media stream type is unknown.
+  /** The type of the media stream is unknown.
    */
   PLAYER_REASON_UNKNOWN_STREAM_TYPE = -5,
-  /**
-   * -6: The object is not initialized.
+  /** The object is not initialized.
    */
   PLAYER_REASON_OBJ_NOT_INITIALIZED = -6,
-  /**
-   * -7: The codec is not supported.
+  /** The codec is not supported.
    */
   PLAYER_REASON_CODEC_NOT_SUPPORTED = -7,
-  /**
-   * -8: Invalid renderer.
+  /** Invalid renderer.
    */
   PLAYER_REASON_VIDEO_RENDER_FAILED = -8,
-  /**
-   * -9: An error with the internal state of the player occurs.
+  /** An error occurs in the internal state of the player.
    */
   PLAYER_REASON_INVALID_STATE = -9,
-  /**
-   * -10: The URL of the media resource cannot be found.
+  /** The URL of the media file cannot be found.
    */
   PLAYER_REASON_URL_NOT_FOUND = -10,
-  /**
-   * -11: Invalid connection between the player and the Agora Server.
+  /** Invalid connection between the player and the Agora server.
    */
   PLAYER_REASON_INVALID_CONNECTION_STATE = -11,
-  /**
-   * -12: The playback buffer is insufficient.
+  /** The playback buffer is insufficient.
    */
   PLAYER_REASON_SRC_BUFFER_UNDERFLOW = -12,
-  /**
-   * -13: The playback is interrupted.
+  /** The audio mixing file playback is interrupted.
    */
   PLAYER_REASON_INTERRUPTED = -13,
-  /**
-   * -14: The SDK does not support the method being called.
+  /** The SDK does not support this function.
    */
   PLAYER_REASON_NOT_SUPPORTED = -14,
   /** The token has expired.
@@ -180,92 +157,75 @@ enum MEDIA_PLAYER_REASON {
   /** The ip has expired.
    */
   PLAYER_REASON_IP_EXPIRED = -16,
-  /**
-   * -17: An unknown error.
+  /** An unknown error occurs.
    */
   PLAYER_REASON_UNKNOWN = -17,
 };
 
 /**
  * @brief The type of the media stream.
+ *
  */
 enum MEDIA_STREAM_TYPE {
-  /**
-   * 0: The type is unknown.
+  /** The type is unknown.
    */
   STREAM_TYPE_UNKNOWN = 0,
-  /**
-   * 1: The video stream.
+  /** The video stream.
    */
   STREAM_TYPE_VIDEO = 1,
-  /**
-   * 2: The audio stream.
+  /** The audio stream.
    */
   STREAM_TYPE_AUDIO = 2,
-  /**
-   * 3: The subtitle stream.
+  /** The subtitle stream.
    */
   STREAM_TYPE_SUBTITLE = 3,
 };
 
 /**
- * @brief Media player events.
+ * @brief The playback event.
+ *
  */
 enum MEDIA_PLAYER_EVENT {
-  /**
-   * 0: The player begins to seek to a new playback position.
+  /** The player begins to seek to the new playback position.
    */
   PLAYER_EVENT_SEEK_BEGIN = 0,
-  /**
-   * 1: The player finishes seeking to a new playback position.
+  /** The seek operation completes.
    */
   PLAYER_EVENT_SEEK_COMPLETE = 1,
-  /**
-   * 2: An error occurs when seeking to a new playback position.
+  /** An error occurs during the seek operation.
    */
   PLAYER_EVENT_SEEK_ERROR = 2,
-  /**
-   * 5: The audio track used by the player has been changed.
+  /** The player changes the audio track for playback.
    */
   PLAYER_EVENT_AUDIO_TRACK_CHANGED = 5,
-  /**
-   * 6: The currently buffered data is not enough to support playback.
+  /** player buffer low
    */
   PLAYER_EVENT_BUFFER_LOW = 6,
-  /**
-   * 7: The currently buffered data is just enough to support playback.
+    /** player buffer recover
    */
   PLAYER_EVENT_BUFFER_RECOVER = 7,
-  /**
-   * 8: The audio or video playback freezes.
+  /** The video or audio is interrupted
    */
   PLAYER_EVENT_FREEZE_START = 8,
-  /**
-   * 9: The audio or video playback resumes without freezing.
+  /** Interrupt at the end of the video or audio
    */
   PLAYER_EVENT_FREEZE_STOP = 9,
-  /**
-   * 10: The player starts switching the media resource.
-   */
+  /** switch source begin
+  */
   PLAYER_EVENT_SWITCH_BEGIN = 10,
-  /**
-   * 11: Media resource switching is complete.
-   */
+  /** switch source complete
+  */
   PLAYER_EVENT_SWITCH_COMPLETE = 11,
-  /**
-   * 12: Media resource switching error.
-   */
+  /** switch source error
+  */
   PLAYER_EVENT_SWITCH_ERROR = 12,
-  /**
-   * 13: The first video frame is rendered.
+  /** An application can render the video to less than a second
    */
   PLAYER_EVENT_FIRST_DISPLAYED = 13,
-  /**
-   * 14: The cached media files reach the limit in number.
+  /** cache resources exceed the maximum file count
    */
   PLAYER_EVENT_REACH_CACHE_FILE_MAX_COUNT = 14,
-  /**
-   * 15: The cached media files reach the limit in aggregate storage space.
+  /** cache resources exceed the maximum file size
    */
   PLAYER_EVENT_REACH_CACHE_FILE_MAX_SIZE = 15,
   /** Triggered when a retry is required to open the media
@@ -284,91 +244,63 @@ enum MEDIA_PLAYER_EVENT {
 };
 
 /**
- * @brief Events that occur when media resources are preloaded.
+ * @brief The play preload another source event.
+ *
  */
 enum PLAYER_PRELOAD_EVENT  {
-  /**
-   * 0: Starts preloading media resources.
-   */
+  /** preload source begin
+  */
   PLAYER_PRELOAD_EVENT_BEGIN = 0,
-  /**
-   * 1: Preloading media resources is complete.
-   */
+  /** preload source complete
+  */
   PLAYER_PRELOAD_EVENT_COMPLETE = 1,
-  /**
-   * 2: An error occurs when preloading media resources.
-   */
+  /** preload source error
+  */
   PLAYER_PRELOAD_EVENT_ERROR = 2,
 };
 
 /**
- * @brief The detailed information of the media stream.
+ * @brief The information of the media stream object.
+ *
  */
 struct PlayerStreamInfo {
-  /**
-   * The index of the media stream.
-   */
+  /** The index of the media stream. */
   int streamIndex;
 
-  /**
-   * The type of the media stream. See `MEDIA_STREAM_TYPE`.
-   */
+  /** The type of the media stream. See {@link MEDIA_STREAM_TYPE}. */
   MEDIA_STREAM_TYPE streamType;
 
-  /**
-   * The codec of the media stream.
-   */
+  /** The codec of the media stream. */
   char codecName[kMaxCharBufferLength];
 
-  /**
-   * The language of the media stream.
-   */
+  /** The language of the media stream. */
   char language[kMaxCharBufferLength];
 
-  /**
-   * This parameter only takes effect for video streams, and indicates the video frame rate (fps).
-   */
+  /** The frame rate (fps) if the stream is video. */
   int videoFrameRate;
 
-  /**
-   * This parameter only takes effect for video streams, and indicates the video bitrate (bps).
-   */
+  /** The video bitrate (bps) if the stream is video. */
   int videoBitRate;
 
-  /**
-   * This parameter only takes effect for video streams, and indicates the video width (pixel).
-   */
+  /** The video width (pixel) if the stream is video. */
   int videoWidth;
 
-  /**
-   * This parameter only takes effect for video streams, and indicates the video height (pixel).
-   */
+  /** The video height (pixel) if the stream is video. */
   int videoHeight;
 
-  /**
-   * This parameter only takes effect for video streams, and indicates the video rotation angle.
-   */
+  /** The rotation angle if the steam is video. */
   int videoRotation;
 
-  /**
-   * This parameter only takes effect for audio streams, and indicates the audio sample rate (Hz).
-   */
+  /** The sample rate if the stream is audio. */
   int audioSampleRate;
 
-  /**
-   * This parameter only takes effect for audio streams, and indicates the audio channel number.
-   */
+  /** The number of audio channels if the stream is audio. */
   int audioChannels;
 
-  /**
-   * This parameter only takes effect for audio streams, and indicates the bit number of each audio
-   * sample.
-   */
+  /** The number of bits per sample if the stream is audio. */
   int audioBitsPerSample;
 
-  /**
-   * The total duration (ms) of the media stream.
-   */
+  /** The total duration (millisecond) of the media stream. */
   int64_t duration;
 
   PlayerStreamInfo() : streamIndex(0),
@@ -388,104 +320,90 @@ struct PlayerStreamInfo {
 };
 
 /**
- * @brief Information about the video bitrate of the media resource being played.
+ * @brief The information of the media stream object.
+ *
  */
 struct SrcInfo {
-  /**
-   * The video bitrate (Kbps) of the media resource being played.
+  /** The bitrate of the media stream. The unit of the number is kbps.
+   *
    */
   int bitrateInKbps;
 
-  /**
-   * The name of the media resource.
-   */
+  /** The name of the media stream.
+   *
+  */
   const char* name;
 
 };
 
 /**
- * @brief The type of media metadata.
+ * @brief The type of the media metadata.
+ *
  */
 enum MEDIA_PLAYER_METADATA_TYPE {
-  /**
-   * 0: The type is unknown.
+  /** The type is unknown.
    */
   PLAYER_METADATA_TYPE_UNKNOWN = 0,
-  /**
-   * 1: The type is SEI.
+  /** The type is SEI.
    */
   PLAYER_METADATA_TYPE_SEI = 1,
 };
 
-/**
- * @brief Statistics about the media files being cached.
- */
 struct CacheStatistics {
-  /**
-   * The size (bytes) of the media file being played.
+  /**  total data size of uri
    */
   int64_t fileSize;
-  /**
-   * The size (bytes) of the media file that you want to cache.
+  /**  data of uri has cached
    */
   int64_t cacheSize;
-  /**
-   * The size (bytes) of the media file that has been downloaded.
+  /**  data of uri has downloaded
    */
   int64_t downloadSize;
 };
 
 /**
- * @brief The information of the media file being played.
+ * @brief The real time statistics of the media stream being played.
+ *
  */
 struct PlayerPlaybackStats {
-  /**
-   * The frame rate (fps) of the video.
+  /**  Video fps.
    */
   int videoFps;
-  /**
-   * The bitrate (kbps) of the video.
+  /**  Video bitrate (Kbps).
    */
   int videoBitrateInKbps;
-  /**
-   * The bitrate (kbps) of the audio.
+  /**  Audio bitrate (Kbps).
    */
   int audioBitrateInKbps;
-  /**
-   * The total bitrate (kbps) of the media stream.
+  /**  Total bitrate (Kbps).
    */
   int totalBitrateInKbps;
 };
 
 /**
- * @brief Information related to the media player.
+ * @brief The updated information of media player.
+ *
  */
 struct PlayerUpdatedInfo {
   /** @technical preview
    */
   const char* internalPlayerUuid;
-  /**
-   * The ID of a deivce.
+  /** The device ID of the playback device.
    */
   const char* deviceId;
-  /**
-   * Height (pixel) of the video.
+  /**  Video height.
    */
   int videoHeight;
-  /**
-   * Width (pixel) of the video.
+  /**  Video width.
    */
   int videoWidth;
-  /**
-   * Audio sample rate (Hz).
+  /**  Audio sample rate.
    */
   int audioSampleRate;
-  /**
-   * The number of audio channels.
+  /**  The audio channel number.
    */
   int audioChannels;
-  /**
-   * The number of bits per audio sample point.
+  /**  The bit number of each audio sample.
    */
   int audioBitsPerSample;
 
@@ -506,132 +424,89 @@ class IMediaPlayerCustomDataProvider {
 public:
     
     /**
-     * @brief Occurs when the SDK reads the media resource data.
-     *
-     * @details
-     * When you call the `openWithMediaSource` method to open a media resource, the SDK triggers this
-     * callback and request you to pass in the buffer of the media resource data.
-     *
-     * @param buffer An input parameter. Data buffer (bytes). Write the `bufferSize` data reported by
-     * the SDK into this parameter.
-     * @param bufferSize The length of the data buffer (bytes).
-     *
-     * @return
-     * - If the data is read successfully, pass in the length of the data (bytes) you actually read in
-     * the return value.
-     * - If reading the data fails, pass in 0 in the return value.
+     * @brief The player requests to read the data callback, you need to fill the specified length of data into the buffer
+     * @param buffer the buffer pointer that you need to fill data.
+     * @param bufferSize the bufferSize need to fill of the buffer pointer.
+     * @return you need return offset value if succeed. return 0 if failed.
      */
     virtual int onReadData(unsigned char *buffer, int bufferSize) = 0;
     
     /**
-     * @brief Occurs when the SDK seeks the media resource data.
-     *
-     * @details
-     * When you call the `openWithMediaSource` or `open` method to open a custom media resource, the SDK
-     * triggers this callback to request the specified location in the media resource.
-     *
-     * @param offset An input parameter. The offset of the target position relative to the starting
-     * point, in bytes. The value can be positive or negative.
-     * @param whence An input parameter. The starting point. You can set it as one of the following
-     * values:
-     * - 0: The starting point is the head of the data, and the actual data offset after seeking is
-     * `offset`.
-     * - 1: The starting point is the current position, and the actual data offset after seeking is the
-     * current position plus `offset`.
-     * - 2: The starting point is the end of the data, and the actual data offset after seeking is the
-     * whole data length plus `offset`.
-     * - 65536: Do not perform position seeking, return the file size. Agora recommends that you use
-     * this parameter value when playing pure audio files such as MP3 and WAV.
-     *
+     * @brief The Player seek event callback, you need to operate the corresponding stream seek operation, You can refer to the definition of lseek() at https://man7.org/linux/man-pages/man2/lseek.2.html
+     * @param offset the value of seek offset.
+     * @param whence the postion of start seeking, the directive whence as follows:
+     * 0 - SEEK_SET : The file offset is set to offset bytes.
+     * 1 - SEEK_CUR : The file offset is set to its current location plus offset bytes.
+     * 2 - SEEK_END : The file offset is set to the size of the file plus offset bytes.
+     * 65536 - AVSEEK_SIZE : Optional. Passing this as the "whence" parameter to a seek function causes it to return the filesize without seeking anywhere.
      * @return
-     * - When `whence` is `65536`, the media file size is returned.
-     * - When `whence` is `0`, `1`, or `2`, the actual data offset after the seeking is returned.
-     * - -1: Seeking failed.
+     * whence == 65536, return filesize if you need.
+     * whence >= 0 && whence < 3 , return offset value if succeed. return -1 if failed.
      */
     virtual int64_t onSeek(int64_t offset, int whence) = 0;
     
     virtual ~IMediaPlayerCustomDataProvider() {}
 };
 
-/**
- * @brief Information related to the media file to be played and the playback scenario
- * configurations.
- */
 struct MediaSource {
   /**
-   * The URL of the media file to be played.
-   * @note If you open a common media resource, pass in the value to `url`. If you open a custom media
-   * resource, pass in the value to `provider`. Agora recommends that you do not pass in values to
-   * both parameters in one call; otherwise, this call may fail.
+   * The URL of the media file that you want to play.
    */
   const char* url;
   /**
-   * The URI (Uniform Resource Identifier) of the media file.
+   * The URI of the media file
+   *
+   * When caching is enabled, if the url cannot distinguish the cache file name,
+   * the uri must be able to ensure that the cache file name corresponding to the url is unique.
    */
   const char* uri;
   /**
-   * The starting position (ms) for playback. The default value is 0.
+   * Set the starting position for playback, in ms.
    */
   int64_t startPos;
   /**
-   * Whether to enable autoplay once the media file is opened:
-   * - `true`: (Default) Yes.
-   * - `false`: No.
-   * @note If autoplay is disabled, you need to call the `play` method to play a media file after it
-   * is opened.
+   * Determines whether to autoplay after opening a media resource.
+   * - true: (Default) Autoplay after opening a media resource.
+   * - false: Do not autoplay after opening a media resource.
    */
   bool autoPlay;
   /**
-   * Whether to cache the media file when it is being played:
-   * - `true`:Enables caching.
-   * - `false`: (Default) Disables caching.
+   * Determines whether to enable cache streaming to local files. If enable cached, the media player will
+   * use the url or uri as the cache index.
+   *
    * @note
-   * - Agora only supports caching on-demand audio and video streams that are not transmitted in HLS
-   * protocol.
-   * - If you need to enable caching, pass in a value to `uri`; otherwise, caching is based on the
-   * `url` of the media file.
-   * - If you enable this function, the Media Player caches part of the media file being played on
-   * your local device, and you can play the cached media file without internet connection. The
-   * statistics about the media file being cached are updated every second after the media file is
-   * played. See `CacheStatistics`.
+   * The local cache function only supports on-demand video/audio streams and does not support live streams.
+   * Caching video and audio files based on the HLS protocol (m3u8) to your local device is not supported.
+   *
+   * - true: Enable cache.
+   * - false: (Default) Disable cache.
    */
   bool enableCache;
   /**
-   * Whether to allow the selection of different audio tracks when playing this media file:
-   * - `true`: Allow to select different audio tracks.
-   * - `false`: (Default) Do not allow to select different audio tracks.
-   * If you need to set different audio tracks for local playback and publishing to the channel, you
-   * need to set this parameter to `true`, and then call the `selectMultiAudioTrack` method to select
-   * the audio track.
+   * Determines whether to enable multi-track audio stream decoding.
+   * Then you can select multi audio track of the media file for playback or publish to channel
+   *
+   * @note
+   * If you use the selectMultiAudioTrack API, you must set enableMultiAudioTrack to true.
+   *
+   * - true: Enable MultiAudioTrack;.
+   * - false: (Default) Disable MultiAudioTrack;.
    */
   bool enableMultiAudioTrack;
   /**
-   * Whether the media resource to be opened is a live stream or on-demand video distributed through
-   * Media Broadcast service:
-   * - `true`: The media resource to be played is a live or on-demand video distributed through Media
-   * Broadcast service.
-   * - `false`: (Default) The media resource is not a live stream or on-demand video distributed
-   * through Media Broadcast service.
-   * @note If you need to open a live stream or on-demand video distributed through Broadcast
-   * Streaming service, pass in the URL of the media resource to `url`, and set `isAgoraSource` as
-   * `true`; otherwise, you don't need to set the `isAgoraSource` parameter.
+   * Determines whether the opened media resource is a stream through the Agora Broadcast Streaming Network(CDN).
+   * - true: It is a stream through the Agora Broadcast Streaming Network.
+   * - false: (Default) It is not a stream through the Agora Broadcast Streaming Network.
    */
   Optional<bool> isAgoraSource;
   /**
-   * Whether the media resource to be opened is a live stream:
-   * - `true`: The media resource is a live stream.
-   * - `false`: (Default) The media resource is not a live stream.
-   * If the media resource you want to open is a live stream, Agora recommends that you set this
-   * parameter as `true` so that the live stream can be loaded more quickly.
-   * @note If the media resource you open is not a live stream, but you set `isLiveSource` as `true`,
-   * the media resource is not to be loaded more quickly.
+   * Determines whether the opened media resource is a live stream. If is a live stream, it can speed up the opening of media resources.
+   * - true: It is a live stream.
+   * - false: (Default) It is not is a live stream.
    */
   Optional<bool> isLiveSource;
   /**
-   * The callback for custom media resource files. See `IMediaPlayerCustomDataProvider`.
-   * @note If you open a custom media resource, pass in the value to `provider`. If you open a common
-   * media resource, pass in the value to `url`. Agora recommends that you do not pass in values to
-   * both `url` and `provider` in one call; otherwise, this call may fail.
+   * External custom data source object
    */
   IMediaPlayerCustomDataProvider* provider;
 
