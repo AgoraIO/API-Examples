@@ -65,6 +65,26 @@ apiexample_global_name=Agora_Native_SDK_for_Mac
 cn_dir=CN
 global_dir=Global
 
+# Source common functions
+source "$(dirname "$0")/common_functions.sh"
+
+# Run version validation
+run_version_validation "macOS" "APIExample" "macos" || exit 1
+
+# Validate SDK version in Podfile (skip only for main branch)
+if [ "$BRANCH_NAME" != "main" ]; then
+    if [ -z "$BRANCH_VERSION" ]; then
+        echo "Error: BRANCH_VERSION is not set, cannot validate SDK version"
+        exit 1
+    fi
+    
+    echo "=========================================="
+    echo "Validating SDK version in Podfile..."
+    echo "=========================================="
+    validate_sdk_version "./macOS/Podfile" "$BRANCH_VERSION" "macos" || exit 1
+    echo ""
+fi
+
 echo zip_name: $zip_name
 if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    sdk_url_flag=false
@@ -105,8 +125,9 @@ echo $WORKSPACE/with${BUILD_NUMBER}_$zip_name
 mv result.zip $WORKSPACE/with_${BUILD_NUMBER}_$zip_name
 
 if [ $compress_apiexample = true ]; then
-    sdk_version=$(grep "pod 'AgoraRtcEngine_macOS'" ./macOS/Podfile | sed -n "s/.*'\([0-9.]*\)'.*/\1/p")
-    echo "sdk_version: $sdk_version"
+    # Use BRANCH_VERSION for the package name (already validated to match SDK version)
+    sdk_version="${BRANCH_VERSION}"
+    echo "Using version for package: $sdk_version"
     
     cp -rf ./macOS $global_dir/
    
@@ -115,8 +136,7 @@ if [ $compress_apiexample = true ]; then
     echo "complete compress api example"
     echo "current path: `pwd`"
     ls -al
-    global_des_path=$WORKSPACE/${apiexample_global_name}_${sdk_version}_${BUILD_NUMBER}_APIExample.zip
-  
+    global_des_path=$WORKSPACE/${apiexample_global_name}_v${sdk_version}_APIExample_${BUILD_NUMBER}.zip
     echo "global_des_path: $global_des_path"
     echo "Moving global_result.zip to $global_des_path"
     mv global_result.zip $global_des_path
