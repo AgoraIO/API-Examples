@@ -209,7 +209,7 @@ run_version_validation() {
         echo "Error: Branch naming is not compliant!"
         echo "=========================================="
         echo "Current branch: $BRANCH_NAME"
-        echo "Required format: dev/x.x.x (e.g., dev/4.5.3)"
+        echo "Required format: dev/x.x.x (e.g., dev/4.6.2)"
         echo ""
         echo "Branch naming rules:"
         echo "  - Version branches must follow: dev/x.x.x"
