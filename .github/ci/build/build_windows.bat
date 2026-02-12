@@ -49,12 +49,18 @@ echo sdk_url: %sdk_url%
 
 REM Version validation: branch name vs install.ps1 SDK version
 for /f "tokens=*" %%a in ('powershell -Command "(Get-Content 'windows\APIExample\install.ps1' -Raw) -match '_v([0-9]+\.[0-9]+\.[0-9]+)' | Out-Null; $matches[1]"') do set SDK_VER=%%a
+set "BRANCH_STRIP=%api_examples_branch:origin/=%"
+if "%BRANCH_STRIP%"=="main" (
+    echo Branch is main, skipping version validation ^(main branch is trusted^)
+    goto :skip_version_validation
+)
 for /f "tokens=*" %%b in ('powershell -Command "'%api_examples_branch%' -match '([0-9]+\.[0-9]+\.[0-9]+)' | Out-Null; $matches[1]"') do set BRANCH_VER=%%b
 if not "%SDK_VER%"=="%BRANCH_VER%" (
     echo ERROR: Version mismatch - Branch: %BRANCH_VER%, install.ps1: %SDK_VER%
     exit /b 1
 )
 echo Version validated: %BRANCH_VER%
+:skip_version_validation
 
 REM If sdk_url has a value, replace the URL in install.ps1
 if not "%sdk_url%"=="" (
