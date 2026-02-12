@@ -9,7 +9,6 @@
 #include <AgoraRtcKit/AgoraRefCountedObject.h>
 #include "AgoraRtcKit/AgoraRefPtr.h"
 #include "AudioProcessor.h"
-#include "AgoraRtcKit/AgoraExtensions.h"
 
 namespace agora {
     namespace extension {

@@ -10,7 +10,6 @@
 #include "AgoraRtcKit/AgoraRefPtr.h"
 #include "VideoProcessor.h"
 #include "external_thread_pool.h"
-#include "AgoraRtcKit/AgoraExtensions.h"
 
 namespace agora {
     namespace extension {

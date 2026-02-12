@@ -17,7 +17,6 @@
 
 #include "EGLCore.h"
 #include "rapidjson/rapidjson.h"
-#include "AgoraRtcKit/AgoraExtensions.h"
 
 namespace agora {
     namespace extension {
