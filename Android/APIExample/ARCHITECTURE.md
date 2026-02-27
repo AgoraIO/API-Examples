@@ -45,55 +45,53 @@ APIExample/
         │
         ├── examples/                        # All cases live here — ClassUtils scans this package
         │   ├── basic/                       # group = "BASIC"
-        │   │   ├── JoinChannelVideo.java
-        │   │   ├── JoinChannelAudio.java
-        │   │   └── JoinChannelVideoByToken.java
-        │   ├── advanced/                    # group = "ADVANCED"
-        │   │   ├── LiveStreaming.java
-        │   │   ├── ScreenSharing.java
-        │   │   ├── MediaPlayer.java
-        │   │   ├── MediaRecorder.java
-        │   │   ├── VoiceEffects.java
-        │   │   ├── SpatialSound.java
-        │   │   ├── ChannelEncryption.java
-        │   │   ├── JoinMultipleChannel.java
-        │   │   ├── SendDataStream.java
-        │   │   ├── ProcessRawData.java
-        │   │   ├── ProcessAudioRawData.java
-        │   │   ├── PushExternalVideo.java
-        │   │   ├── PushExternalVideoYUV.java
-        │   │   ├── CustomRemoteVideoRender.java
-        │   │   ├── LocalVideoTranscoding.java
-        │   │   ├── MultiVideoSourceTracks.java
-        │   │   ├── VideoProcessExtension.java
-        │   │   ├── SimpleExtension.java
-        │   │   ├── ContentInspect.java
-        │   │   ├── FaceCapture.java
-        │   │   ├── AgoraBeauty.java
-        │   │   ├── ThirdPartyBeauty.java
-        │   │   ├── HostAcrossChannel.java
-        │   │   ├── RTMPStreaming.java
-        │   │   ├── MediaMetadata.java
-        │   │   ├── PlayAudioFiles.java
-        │   │   ├── RhythmPlayer.java
-        │   │   ├── PreCallTest.java
-        │   │   ├── InCallReport.java
-        │   │   ├── KtvCopyrightMusic.java
-        │   │   ├── PictureInPicture.java
-        │   │   ├── Simulcast.java
-        │   │   ├── SwitchCameraScreenShare.java
-        │   │   ├── TransparentRendering.java
-        │   │   ├── UrlLiveStream.java
-        │   │   ├── VideoQuickSwitch.java
-        │   │   ├── Multipath.java
-        │   │   ├── beauty/                  # Third-party beauty integrations
-        │   │   ├── CDNStreaming/
-        │   │   ├── customaudio/
-        │   │   └── videoRender/
-        │   └── audio/                       # Audio-specific cases in the full demo
-        │       ├── AudioWaveform.java
-        │       ├── AudioRouterPlayer.java
-        │       └── AudioRouterPlayer*.java  # Exo / Ijk / Native variants
+        │   │   ├── JoinChannelVideoByToken.java # [0] "Live Interactive Video Streaming(Token Verify)"
+        │   │   ├── JoinChannelVideo.java        # [1] "Live Interactive Video Streaming"
+        │   │   └── JoinChannelAudio.java        # [2] "Live Interactive Audio Streaming"
+        │   ├── advanced/                        # group = "ADVANCED"
+        │   │   ├── LiveStreaming.java           # [0]  "RTC Live Streaming" — setClientRole, broadcaster/audience
+        │   │   ├── RTMPStreaming.java           # [1]  "Push Streams to CDN" — RTMP push streaming
+        │   │   ├── MediaMetadata.java           # [3]  "Media Metadata" — send/receive metadata in video stream
+        │   │   ├── VoiceEffects.java            # [4]  "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
+        │   │   ├── customaudio/CustomAudioSource.java  # [5] "Custom Audio Sources" — push external audio
+        │   │   ├── customaudio/CustomAudioRender.java  # [6] "Custom Audio Render" — pull audio for custom rendering
+        │   │   ├── PushExternalVideoYUV.java    # [7]  "Custom Video Source" — push YUV external video
+        │   │   ├── CustomRemoteVideoRender.java # [8]  "Custom Video Renderer" — custom remote video rendering
+        │   │   ├── ProcessAudioRawData.java     # [9]  "Raw Audio Data" — audio raw data processing
+        │   │   ├── MultiVideoSourceTracks.java  # [10] "Multi Video Source Tracks" — multiple video sources
+        │   │   ├── ProcessRawData.java          # [11] "Raw Video Data" — video raw data processing
+        │   │   ├── SimpleExtension.java         # [11] "Simple Extension" — custom video extension
+        │   │   ├── PictureInPicture.java        # [11] "Picture In Picture" — PiP mode
+        │   │   ├── FaceCapture.java             # [12] "Face Capture" — face detection
+        │   │   ├── VideoQuickSwitch.java        # [12] "Quick Switch Channel" — fast channel switching
+        │   │   ├── JoinMultipleChannel.java     # [13] "Join Multiple Channel" — multi-channel join
+        │   │   ├── ChannelEncryption.java       # [14] "Media Stream Encryption" — built-in encryption
+        │   │   ├── PlayAudioFiles.java          # [15] "Play Audio Files" — audio mixing
+        │   │   ├── MediaPlayer.java             # [17] "MediaPlayer" — play media files
+        │   │   ├── ScreenSharing.java           # [18] "Screen Sharing" — screen capture & share
+        │   │   ├── VideoProcessExtension.java   # [19] "Video Process Extension" — video filter extension
+        │   │   ├── LocalVideoTranscoding.java   # [19] "LocalVideoTranscoding" — local video compositing
+        │   │   ├── RhythmPlayer.java            # [19] "Rhythm Player" — metronome/rhythm playback
+        │   │   ├── SendDataStream.java          # [20] "Send Data Stream" — data channel messaging
+        │   │   ├── HostAcrossChannel.java       # [21] "Relay Streams across Channels" — cross-channel relay
+        │   │   ├── SpatialSound.java            # [22] "Spatial Audio" — 3D spatial audio
+        │   │   ├── ContentInspect.java          # [23] "Content Inspect" — content moderation
+        │   │   ├── ThirdPartyBeauty.java        # [24] "Third-party beauty" — third-party beauty SDK
+        │   │   ├── KtvCopyrightMusic.java       # [24] "KTV Copyright Music" — licensed music
+        │   │   ├── TransparentRendering.java    # [25] "TransparentRendering" — alpha channel rendering
+        │   │   ├── UrlLiveStream.java           # [26] "Ultra Live Streaming with Url" — URL-based live stream
+        │   │   ├── AgoraBeauty.java             # [27] "Agora beauty 2.0" — built-in beauty effects
+        │   │   ├── Simulcast.java               # [28] "Simulcast" — multi-quality stream publishing
+        │   │   ├── Multipath.java               # [29] "Multipath" — multi-path transmission
+        │   │   ├── VideoSnapshot.java           # [30] "Video Snapshot" — takeSnapshot API
+        │   │   ├── MediaRecorder.java           # "Local/Remote MediaRecorder" — record media streams
+        │   │   ├── beauty/                      # Third-party beauty integrations
+        │   │   ├── CDNStreaming/                 # (disabled) CDN streaming entry
+        │   │   └── videoRender/                 # Custom video rendering helpers
+        │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
+        │       ├── AudioWaveform.java           # [17] "Audio Waveform" — audio visualization
+        │       ├── AudioRouterPlayer.java       # [17] "AudioRouter(Third Party Player)" — third-party audio routing
+        │       └── AudioRouterPlayer*.java      # Exo / Ijk / Native variants
         │
         ├── service/
         │   └── MediaProjectionService.java  # Foreground service required for screen sharing

@@ -41,21 +41,20 @@ APIExample-Audio/
         │
         ├── examples/                        # All cases live here — ClassUtils scans this package
         │   ├── basic/                       # group = "BASIC"
-        │   │   ├── JoinChannelAudio.java
-        │   │   └── JoinChannelAudioByToken.java
-        │   ├── advanced/                    # group = "ADVANCED"
-        │   │   ├── VoiceEffects.java
-        │   │   ├── SpatialSound.java
-        │   │   ├── PlayAudioFiles.java
-        │   │   ├── ProcessAudioRawData.java
-        │   │   ├── RhythmPlayer.java
-        │   │   ├── PreCallTest.java
-        │   │   └── customaudio/
-        │   │       ├── CustomAudioSource.java
-        │   │       ├── CustomAudioRender.java
-        │   │       └── AudioPlayer.java
-        │   └── audio/
-        │       └── AudioWaveform.java
+        │   │   ├── JoinChannelAudioByToken.java # [0] "Live Interactive Audio Streaming(Token Verify)"
+        │   │   └── JoinChannelAudio.java        # [1] "Live Interactive Audio Streaming"
+        │   ├── advanced/                        # group = "ADVANCED"
+        │   │   ├── VoiceEffects.java            # [4]  "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
+        │   │   ├── customaudio/CustomAudioSource.java  # [5] "Custom Audio Sources" — push external audio
+        │   │   ├── customaudio/CustomAudioRender.java  # [6] "Custom Audio Render" — pull audio for custom rendering
+        │   │   ├── customaudio/AudioPlayer.java        # helper for CustomAudioRender
+        │   │   ├── ProcessAudioRawData.java     # [9]  "Raw Audio Data" — audio raw data processing
+        │   │   ├── PlayAudioFiles.java          # [15] "Play Audio Files" — audio mixing
+        │   │   ├── PreCallTest.java             # [16] "Pre-call Tests" — network/device test before joining
+        │   │   ├── RhythmPlayer.java            # [19] "Rhythm Player" — metronome/rhythm playback
+        │   │   └── SpatialSound.java            # [22] "Spatial Audio" — 3D spatial audio
+        │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
+        │       └── AudioWaveform.java           # [17] "Audio Waveform" — audio visualization
         │
         └── utils/
             ├── ClassUtils.java              # DEX scanner — auto-discovers @Example classes

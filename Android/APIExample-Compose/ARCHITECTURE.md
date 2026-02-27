@@ -21,34 +21,34 @@ APIExample-Compose/
         │   └── Components.kt                # Groups the two lists into Components for the home screen
         │
         ├── samples/                         # One .kt file per case — all @Composable
-        │   ├── JoinChannelVideo.kt          # Canonical reference — read this before writing a new case
-        │   ├── JoinChannelAudio.kt
-        │   ├── JoinChannelVideoToken.kt
-        │   ├── LiveStreaming.kt
-        │   ├── RTMPStreaming.kt
-        │   ├── ScreenSharing.kt
-        │   ├── MediaPlayer.kt
-        │   ├── MediaRecorder.kt
-        │   ├── MediaMetadata.kt
-        │   ├── VoiceEffects.kt
-        │   ├── SpatialSound.kt
-        │   ├── ChannelEncryption.kt
-        │   ├── JoinMultiChannel.kt
-        │   ├── HostAcrossChannel.kt
-        │   ├── SendDataStream.kt
-        │   ├── OriginAudioData.kt
-        │   ├── OriginVideoData.kt
-        │   ├── CustomAudioSource.kt
-        │   ├── CustomAudioRender.kt
-        │   ├── CustomVideoSource.kt
-        │   ├── CustomVideoRender.kt
-        │   ├── PlayAudioFiles.kt
-        │   ├── RhythmPlayer.kt
-        │   ├── PreCallTest.kt
-        │   ├── PictureInPicture.kt
-        │   ├── LocalVideoTranscoding.kt
-        │   ├── VideoProcessExtension.kt
-        │   └── SpatialSound.kt
+        │   ├── JoinChannelVideoToken.kt     # Basic: "Join Video Channel (With Token)"
+        │   ├── JoinChannelVideo.kt          # Basic: "Join Video Channel" — canonical reference
+        │   ├── JoinChannelAudio.kt          # Basic: "Join Audio Channel"
+        │   ├── LiveStreaming.kt             # Advanced: "Live Streaming" — setClientRole
+        │   ├── RTMPStreaming.kt             # Advanced: "RTMP Streaming" — push to CDN
+        │   ├── MediaMetadata.kt             # Advanced: "Media Metadata" — send/receive metadata
+        │   ├── VoiceEffects.kt              # Advanced: "Voice Effects" — voice beautifier/effects
+        │   ├── OriginAudioData.kt           # Advanced: "Origin Audio Data" — raw audio processing
+        │   ├── CustomAudioSource.kt         # Advanced: "Custom Audio Source" — push external audio
+        │   ├── CustomAudioRender.kt         # Advanced: "Custom Audio Render" — pull audio rendering
+        │   ├── OriginVideoData.kt           # Advanced: "Origin Video Data" — raw video processing
+        │   ├── CustomVideoSource.kt         # Advanced: "Custom Video Source" — push external video
+        │   ├── CustomVideoRender.kt         # Advanced: "Custom Video Render" — custom video rendering
+        │   ├── PictureInPicture.kt          # Advanced: "Picture In Picture" — PiP mode
+        │   ├── JoinMultiChannel.kt          # Advanced: "Join Multi Channel" — multi-channel join
+        │   ├── ChannelEncryption.kt         # Advanced: "Channel Encryption" — built-in encryption
+        │   ├── PlayAudioFiles.kt            # Advanced: "Play Audio Files" — audio mixing
+        │   ├── PreCallTest.kt               # Advanced: "Pre Call Test" — network/device test
+        │   ├── MediaRecorder.kt             # Advanced: "Media Recorder" — record media streams
+        │   ├── MediaPlayer.kt               # Advanced: "Media Player" — play media files
+        │   ├── ScreenSharing.kt             # Advanced: "Screen Sharing" — screen capture & share
+        │   ├── VideoProcessExtension.kt     # Advanced: "Video Process Extension" — video filter
+        │   ├── RhythmPlayer.kt              # Advanced: "Rhythm Player" — metronome playback
+        │   ├── LocalVideoTranscoding.kt     # Advanced: "Local Video Transcoding" — local compositing
+        │   ├── SendDataStream.kt            # Advanced: "Send Data Stream" — data channel messaging
+        │   ├── HostAcrossChannel.kt         # Advanced: "Host Across Channel" — cross-channel relay
+        │   ├── SpatialSound.kt              # Advanced: "Spatial Sound" — 3D spatial audio
+        │   └── VideoSnapshot.kt             # Advanced: "Video Snapshot" — takeSnapshot API
         │
         ├── ui/
         │   ├── home/
