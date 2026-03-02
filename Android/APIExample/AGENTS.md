@@ -42,8 +42,8 @@ See `ARCHITECTURE.md` for the full registration mechanism. The required steps ar
    - `tips` string (description shown on the case screen)
 
 3. Add navigation entries to `app/src/main/res/navigation/nav_graph.xml`:
-   - `<fragment>` destination for the new Fragment
-   - `<action>` from `mainFragment` with the `actionId` used in the annotation
+   - `<fragment>` destination (under root `<navigation>`) for the new Fragment
+   - `<action>` inside `<fragment id="Ready">` — **not** `mainFragment`; `mainFragment` only routes to `Ready`
 
 4. Build and run — the case appears automatically via reflection. No other registration needed.
 
@@ -55,6 +55,11 @@ See `ARCHITECTURE.md` for the full registration mechanism. The required steps ar
 - Always call `engine.leaveChannel()` before `RtcEngine.destroy()` in `onDestroy()`.
 - All `IRtcEngineEventHandler` callbacks run on a background thread — use `handler.post {}` for UI updates.
 - Always call `checkOrRequestPermission()` before `joinChannel()`.
+
+## Skills
+
+- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new case (template, nav placement, verify checklist)
+- `.kiro/skills/query-cases/` — query existing cases by API, group, or sort index; uses `ARCHITECTURE.md` as fast index
 
 ## Further Reading
 

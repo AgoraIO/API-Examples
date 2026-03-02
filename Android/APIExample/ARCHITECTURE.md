@@ -139,8 +139,8 @@ A missing or malformed annotation causes the case to silently not appear — no 
 Single `nav_graph.xml` with Jetpack Navigation Component.
 
 Every case needs:
-- A `<fragment>` destination entry in `nav_graph.xml`
-- An `<action android:id="@+id/action_mainFragment_to_myCase">` inside `<fragment id="mainFragment">`
+- A `<fragment>` destination entry under the root `<navigation>` in `nav_graph.xml`
+- An `<action android:id="@+id/action_mainFragment_to_myCase">` inside `<fragment id="Ready">` — **not** `mainFragment`; `mainFragment` has only one action pointing to `Ready`, all case actions live in `Ready`
 - The action `id` must exactly match `actionId` in `@Example`
 
 `MainActivity` calls `Navigation.findNavController(...).navigate(example.actionId())` on list item tap.

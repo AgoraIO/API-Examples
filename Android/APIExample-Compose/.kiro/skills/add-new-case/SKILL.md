@@ -1,120 +1,60 @@
 ---
 name: add-new-case
-description: Add a new API example case to APIExample-Compose (Jetpack Compose demo). Use when a PRD requires a Compose UI implementation or porting an existing APIExample case to Compose. Kotlin only, no XML layouts.
+description: >
+  Add a new API example case to the APIExample-Compose Android demo — creates a
+  Kotlin Composable file, registers it in Examples.kt, and adds a string resource.
+  Use when: adding a new Agora RTC API demo screen in Jetpack Compose, porting an
+  existing APIExample case to Compose, implementing a new feature example in Kotlin
+  + Compose UI, or registering a new entry in BasicExampleList or AdvanceExampleList.
+  Kotlin only — no XML layouts, no Fragments. Keywords: add case, new composable,
+  Examples.kt, BasicExampleList, AdvanceExampleList, APIExample-Compose, Compose case,
+  new screen, Jetpack Compose, RTC API example.
 ---
 
 # Add New Case — APIExample-Compose
 
-## Step 1: Fill in the requirement template
+Touch exactly 3 files (all paths relative to `app/src/main/`):
 
-Fill in the template below before proceeding. Do not skip any field.
+| File | What to add |
+|---|---|
+| `java/.../compose/samples/YourCaseName.kt` | Composable file |
+| `java/.../compose/model/Examples.kt` | 1 list entry |
+| `res/values/strings.xml` | 1 string |
 
-```
-## Case Requirement
+No `nav_graph.xml` changes — navigation routes by list position automatically.
 
-- Case name:          # Display name shown in the list, e.g. "Video Snapshot"
-                      # String key must use the prefix: example_
-- Group:              # BasicExampleList or AdvanceExampleList
-- Agora APIs:         # e.g. takeSnapshot(), setBeautyEffectOptions()
-- Reference case:     # Closest existing case file — default to JoinChannelVideo.kt
-- Description:        # 1–3 sentences explaining what this case demonstrates
-```
+---
 
-This project has no reflection-based registration. You must manually add the entry to `model/Examples.kt`.
+## Step 1: Clarify before coding
+
+Before writing a single line, ask:
+- **What API am I demonstrating?** — determines which existing case is the closest reference (`JoinChannelVideo.kt` for video, `JoinChannelAudio.kt` for audio)
+- **Video or audio-only?** — determines permissions (`CAMERA` + `RECORD_AUDIO` vs `RECORD_AUDIO` only), whether `enableVideo()` and `VideoGrid` are needed
+- **BasicExampleList or AdvanceExampleList?** — Basic for fundamental join/leave patterns; Advance for feature-specific APIs
+- **List position?** — run `query-cases` skill to see current entries; list order is display order
+
+---
 
 ## Step 2: Create the Composable file
 
-Path: `app/src/main/java/io/agora/api/example/compose/samples/YourCaseName.kt`
+**MANDATORY — READ ENTIRE FILE before writing any code**:
+[`references/composable-template.kt`](references/composable-template.kt)
 
-Follow the two-function pattern. `JoinChannelVideo.kt` is the canonical reference.
+Do NOT skip — the `SettingPreferences.getArea()`, `DisposableEffect` key, `rememberSaveable` vs `remember` rules, and `@Preview` placement are only fully shown there and are required in every case.
 
-```kotlin
-@Composable
-fun YourCaseName() {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+**Do NOT load** any other reference files for this task.
 
-    // State
-    var isJoined by rememberSaveable { mutableStateOf(false) }
-    var channelName by rememberSaveable { mutableStateOf("") }
+Non-obvious points the template highlights:
 
-    // RtcEngine — created once, survives recomposition
-    val rtcEngine = remember {
-        RtcEngine.create(RtcEngineConfig().apply {
-            mContext = context
-            mAppId = BuildConfig.AGORA_APP_ID
-            mEventHandler = object : IRtcEngineEventHandler() {
-                override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
-                    isJoined = true   // safe to mutate Compose state from any thread
-                }
-                override fun onLeaveChannel(stats: RtcStats?) {
-                    isJoined = false
-                }
-            }
-        })
-    }
+- `mAreaCode = SettingPreferences.getArea()` — **required**, do not hardcode or omit
+- `DisposableEffect(lifecycleOwner)` — key must be `lifecycleOwner`, not `Unit`; wrong key means cleanup never fires on back navigation
+- `rememberSaveable` for channelName, isJoined, uid, videoIdList — survives rotation
+- `remember` for RtcEngine — must NOT be `rememberSaveable` (engine is not serializable)
+- `IRtcEngineEventHandler` callbacks can mutate Compose state directly — snapshot system is thread-safe, no `runOnUIThread()` needed
+- `Toast`/`Dialog`/`AlertDialog` inside callbacks still need main thread — use `coroutineScope.launch(Dispatchers.Main) { }`
+- `@Preview` goes on the **private** `*View` function only — never on the public stateful entry
 
-    // Cleanup
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (isJoined) rtcEngine.leaveChannel()
-            RtcEngine.destroy()
-        }
-    }
-
-    // Permissions
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { grantedMap ->
-        if (grantedMap.values.all { it }) {
-            TokenUtils.gen(channelName, 0) { token ->
-                val options = ChannelMediaOptions().apply {
-                    channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
-                    clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-                }
-                rtcEngine.joinChannel(token, channelName, 0, options)
-            }
-        }
-    }
-
-    // Stateless UI
-    YourCaseNameView(
-        channelName = channelName,
-        isJoined = isJoined,
-        onJoinClick = { name ->
-            channelName = name
-            permissionLauncher.launch(arrayOf(
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.CAMERA
-            ))
-        },
-        onLeaveClick = { rtcEngine.leaveChannel() }
-    )
-}
-
-@Composable
-private fun YourCaseNameView(
-    channelName: String,
-    isJoined: Boolean,
-    onJoinClick: (String) -> Unit,
-    onLeaveClick: () -> Unit
-) {
-    Column(Modifier.fillMaxSize()) {
-        ChannelNameInput(
-            channelName = channelName,
-            isJoined = isJoined,
-            onJoinClick = onJoinClick,
-            onLeaveClick = onLeaveClick
-        )
-    }
-}
-```
-
-State rules:
-- `rememberSaveable` — values that must survive rotation (channelName, isJoined, uid)
-- `remember` — objects that must not be recreated (RtcEngine, collections)
-- `IRtcEngineEventHandler` callbacks can mutate Compose state directly — the snapshot system is thread-safe
-- **Android View APIs (Toast, Dialog, AlertDialog, etc.) MUST still be called on the main thread.** Use `coroutineScope.launch { }` (from `rememberCoroutineScope()`) to post to the main thread inside callbacks.
+---
 
 ## Step 3: Register in Examples.kt
 
@@ -127,7 +67,9 @@ val AdvanceExampleList = listOf(
 )
 ```
 
-List order is display order.
+List order is display order — position determines where the case appears in the UI.
+
+---
 
 ## Step 4: Add string resource
 
@@ -137,7 +79,9 @@ File: `app/src/main/res/values/strings.xml`
 <string name="example_your_case_name">Your Case Name</string>
 ```
 
-The Compose project only needs the name string — there is no separate tips string.
+String key must use the `example_` prefix. No separate tips string needed (unlike APIExample).
+
+---
 
 ## Step 5: Verify
 
@@ -145,20 +89,20 @@ The Compose project only needs the name string — there is no separate tips str
 ./gradlew assembleDebug
 ```
 
-- [ ] Case appears in the correct group on the home screen
-- [ ] Tapping the case navigates to the case screen
-- [ ] Channel join succeeds
-- [ ] `DisposableEffect.onDispose` fires on back navigation (confirm in Logcat)
-- [ ] State survives screen rotation (`rememberSaveable` values intact)
-- [ ] Target API works as expected
+- [ ] Case appears in the correct group at the expected list position
+- [ ] Tap navigates to the case screen
+- [ ] Channel join succeeds and `isJoined` flips to `true`
+- [ ] Press back — check Logcat for `RtcEngine.destroy` within ~2 seconds; if missing, `DisposableEffect` key is wrong or `onDispose` is incomplete
+- [ ] Rotate screen — `channelName` and `isJoined` survive (`rememberSaveable` working)
 
-## Common mistakes
+---
 
-| Symptom | Cause |
-|---|---|
-| Case not in list | Entry not added to `Examples.kt` |
-| Build error: resource not found | String not added to `strings.xml` |
-| State lost on rotation | Used `remember` instead of `rememberSaveable` |
-| Engine not destroyed after leaving | Wrong key in `DisposableEffect`, or `RtcEngine.destroy()` missing in `onDispose` |
-| Preview crash | `@Preview` on the stateful function — only preview the private `*View` function |
-| Toast crash on background thread | Called `Toast`/`Dialog` inside `IRtcEngineEventHandler` callback without `coroutineScope.launch { }` |
+## NEVER
+
+- **NEVER** use XML layouts, `Fragment`, or `ViewBinding` — Compose only.
+- **NEVER** use `remember` for channelName, isJoined, or uid — they must be `rememberSaveable` to survive rotation.
+- **NEVER** use `rememberSaveable` for `RtcEngine` — it is not serializable and will crash on rotation.
+- **NEVER** use `Unit` as the `DisposableEffect` key — it fires only once and won't clean up on back navigation. Always use `lifecycleOwner`.
+- **NEVER** put `@Preview` on the public stateful function — it will crash because `LocalContext` and `LocalLifecycleOwner` are unavailable in preview. Only preview the private `*View` function.
+- **NEVER** call `Toast`/`Dialog`/`AlertDialog` directly inside `IRtcEngineEventHandler` callbacks — they require the main thread. Use `coroutineScope.launch(Dispatchers.Main) { }`.
+- **NEVER** hardcode `mAreaCode` — always use `SettingPreferences.getArea()`.

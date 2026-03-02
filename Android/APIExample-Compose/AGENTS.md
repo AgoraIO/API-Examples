@@ -52,10 +52,15 @@ No `nav_graph.xml` changes needed. Navigation routes by list index automatically
 
 - Do NOT use XML layouts, `Fragment`, or `ViewBinding` — Compose only.
 - Do NOT use `View`-based widgets directly in Compose UI — wrap with `AndroidView` if unavoidable.
-- `RtcEngine` must be created inside `remember { }` and destroyed inside `DisposableEffect { onDispose { } }`.
+- `RtcEngine` must be created inside `remember { }` and destroyed inside `DisposableEffect(lifecycleOwner) { onDispose { } }` — key must be `lifecycleOwner`, not `Unit`; wrong key means cleanup never fires on back navigation.
 - Always call `rtcEngine.leaveChannel()` before `RtcEngine.destroy()` in `onDispose`.
 - Permissions use `rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions())`.
 - `IRtcEngineEventHandler` callbacks are safe to mutate Compose state directly (snapshot system is thread-safe).
+
+## Skills
+
+- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new Compose case (template, `rememberSaveable` rules, verify checklist)
+- `.kiro/skills/query-cases/` — query existing cases by API, group, or list position; uses `ARCHITECTURE.md` as fast index
 
 ## Further Reading
 

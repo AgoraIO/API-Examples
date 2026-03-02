@@ -121,7 +121,7 @@ val rtcEngine = remember {
         mEventHandler = object : IRtcEngineEventHandler() { … }
     })
 }
-DisposableEffect(lifecycleOwner) {
+DisposableEffect(lifecycleOwner) {  // key must be lifecycleOwner, not Unit
     onDispose {
         if (isJoined) rtcEngine.leaveChannel()
         RtcEngine.destroy()

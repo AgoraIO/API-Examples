@@ -49,6 +49,11 @@ The registration mechanism is identical to `APIExample`. Required steps:
 - All `IRtcEngineEventHandler` callbacks run on a background thread — use `handler.post {}` for UI updates.
 - Always call `checkOrRequestPermission()` before `joinChannel()`. Audio cases only need `RECORD_AUDIO`.
 
+## Skills
+
+- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new audio case (voice-sdk template, nav placement, verify checklist)
+- `.kiro/skills/query-cases/` — query existing cases by API, group, or sort index; uses `ARCHITECTURE.md` as fast index
+
 ## Further Reading
 
 - `ARCHITECTURE.md` — full directory layout and case registration details

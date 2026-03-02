@@ -1,228 +1,149 @@
 ---
 name: add-new-case
-description: Add a new audio API example case to APIExample-Audio (audio-only demo). Use when a PRD requires a new Agora audio feature demonstration. This project uses voice-sdk — no video APIs available.
+description: >
+  Add a new audio API example case to the APIExample-Audio Android demo — creates
+  Fragment class, XML layout, string resources, and nav_graph registration.
+  Use when: adding a new Agora audio API demo screen, implementing a new audio
+  feature example in Java + XML layouts, registering a new case via @Example
+  annotation, or subclassing BaseFragment for a new audio demo screen.
+  This project uses voice-sdk — no video APIs available.
+  Keywords: add case, new fragment, nav_graph, @Example, BaseFragment, APIExample-Audio,
+  audio case, voice-sdk, new screen, audio demo.
 ---
 
 # Add New Case — APIExample-Audio
 
-## Step 1: Fill in the requirement template
+Touch exactly 4 files (all paths relative to `app/src/main/`):
 
-Fill in the template below before proceeding. Do not skip any field.
+| File | What to add |
+|---|---|
+| `java/.../examples/{basic\|advanced}/YourCaseName.java` | Fragment class |
+| `res/layout/fragment_your_case_name.xml` | XML layout |
+| `res/values/strings.xml` | 2 strings |
+| `res/navigation/nav_graph.xml` | 1 action + 1 destination |
 
-```
-## Case Requirement
+Registration is automatic via reflection — no other files needed.
 
-- Case name:          # Display name shown in the list, e.g. "Voice Changer"
-- Group:              # BASIC or ADVANCED
-- Sort index:         # Position within the group — check existing cases to avoid duplicates
-- Agora audio APIs:   # e.g. setAudioProfile(), setVoiceBeautifierPreset()
-- Reference case:     # Closest existing case file, e.g. VoiceEffects.java
-- Description:        # 1–3 sentences explaining what this case demonstrates
-```
+**voice-sdk constraint**: Do NOT call `enableVideo()`, `setupLocalVideo()`, `VideoCanvas`, or any video API — the module does not exist and will crash at runtime.
 
-This project uses `voice-sdk`. Do NOT use any video APIs.
-Forbidden calls: `enableVideo()`, `setupLocalVideo()`, `VideoCanvas`, `setVideoEncoderConfiguration()`.
+---
 
-## Step 2: Create the Fragment file
+## Step 1: Clarify before coding
 
-Path: `app/src/main/java/io/agora/api/example/examples/{basic|advanced}/YourCaseName.java`
+Before writing a single line, ask:
+- **What audio API am I demonstrating?** — determines which existing case is the closest reference to copy patterns from
+- **BASIC or ADVANCED group?** — BASIC for fundamental join/leave audio patterns; ADVANCED for feature-specific audio APIs
+- **What's the sort index?** — run `query-cases` skill first; a collision causes silent ordering bugs at runtime
+- **Any special permissions beyond `RECORD_AUDIO`?** — most audio cases only need `RECORD_AUDIO`; check if the API requires anything else
 
-```java
-/**
- * This demo demonstrates how to use [describe the audio API feature here].
- *
- * Key APIs used:
- * - [list the primary Agora audio APIs, e.g. RtcEngine.setVoiceBeautifierPreset()]
- *
- * NOTE: This project uses voice-sdk. Do NOT call any video APIs.
- *
- * @see <a href="https://docs.agora.io/en/">Agora API Reference</a>
- */
-@Example(
-    index    = 10,
-    group    = ADVANCED,
-    name     = R.string.item_your_case_name,
-    actionId = R.id.action_mainFragment_to_yourCaseName,
-    tipsId   = R.string.your_case_name_tips
-)
-public class YourCaseName extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = YourCaseName.class.getSimpleName();
+---
 
-    private RtcEngine engine;
-    private int myUid;
-    private boolean joined = false;
+## Step 2: Create the Fragment
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Check if the context is valid
-        Context context = getContext();
-        if (context == null) {
-            return;
-        }
-        try {
-            RtcEngineConfig config = new RtcEngineConfig();
-            /**
-             * The context of Android Activity
-             */
-            config.mContext = context.getApplicationContext();
-            /**
-             * The App ID issued to you by Agora. See
-             * <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             * How to get the App ID</a>
-             */
-            config.mAppId = getString(R.string.agora_app_id);
-            /**
-             * Sets the channel profile of the Agora RtcEngine.
-             * CHANNEL_PROFILE_COMMUNICATION(0): one-on-one or group calls.
-             * CHANNEL_PROFILE_LIVE_BROADCASTING(1): live broadcast with broadcaster/audience roles.
-             */
-            config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            /**
-             * IRtcEngineEventHandler is an abstract class providing default implementation.
-             * The SDK uses this class to report to the app on SDK runtime events.
-             */
-            config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
-            engine = RtcEngine.create(config);
+**MANDATORY — READ ENTIRE FILE before writing any code**:
+[`references/fragment-template.java`](references/fragment-template.java)
 
-            /**
-             * This parameter is for reporting the usages of APIExample to Agora backend.
-             * Generally, it is not necessary for you to set this parameter.
-             */
-            engine.setParameters("{"
-                    + "\"rtc.report_app_scenario\":"
-                    + "{"
-                    + "\"appScenario\":" + 100 + ","
-                    + "\"serviceType\":" + 11 + ","
-                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
-                    + "}"
-                    + "}");
+Do NOT skip — the `setParameters`, `handler.post`, `getPrivateCloudConfig()` null-check, `AudioSeatManager` wiring, and voice-sdk constraints are only fully shown there and are required in every case.
 
-            /**
-             * Setting the local access point if the private cloud IP was set,
-             * otherwise the config will be invalid.
-             * IMPORTANT: getPrivateCloudConfig() can return null — always null-check.
-             */
-            LocalAccessPointConfiguration localAccessPointConfiguration =
-                    ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
-            if (localAccessPointConfiguration != null) {
-                engine.setLocalAccessPoint(localAccessPointConfiguration);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            getActivity().onBackPressed();
-        }
-    }
+**Do NOT load** any other reference files for this task.
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        /**
-         * leaveChannel and destroy the RtcEngine instance.
-         * After calling destroy, you MUST NOT use the engine anymore.
-         */
-        if (engine != null) {
-            engine.leaveChannel();
-        }
-        handler.post(RtcEngine::destroy);
-        engine = null;
-    }
+Non-obvious points the template highlights:
 
-    /**
-     * IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.
-     * NOTE: All callbacks run on a BACKGROUND thread — use runOnUIThread() for UI updates.
-     */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
-       
-        @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
-            joined = true;
-            runOnUIThread(() -> { /* update join button, enable controls */ });
-        }
+- `setParameters(...)` for app scenario reporting — **required in every case**, do not remove
+- `handler.post(RtcEngine::destroy)` — NOT `RtcEngine.destroy()` directly; direct call blocks UI thread (ANR)
+- `getPrivateCloudConfig()` null-check before `setLocalAccessPoint()` — returns null on non-private-cloud builds (NPE)
+- All `IRtcEngineEventHandler` callbacks run on a **background thread** — always `runOnUIThread()` for UI
+- `onActivityCreated` → create engine; `onDestroy` → `leaveChannel()` then `handler.post(RtcEngine::destroy)`
+- `ChannelMediaOptions` must NOT set `publishCameraTrack` or `autoSubscribeVideo` — voice-sdk has no video module
+- Use `AudioSeatManager` (not `VideoReportLayout`) to visualize remote participants
 
-        @Override
-        public void onUserJoined(int uid, int elapsed) {
-            Log.i(TAG, "onUserJoined -> " + uid);
-            runOnUIThread(() -> { /* update audio seat */ });
-        }
-
-        @Override
-        public void onUserOffline(int uid, int reason) {
-            Log.i(TAG, String.format("user %d offline, reason %d", uid, reason));
-            runOnUIThread(() -> { /* remove audio seat */ });
-        }
-    };
-}
-```
-
-The engine initialization above is the **canonical pattern** — copy it exactly. Key points:
-- `config.mAreaCode` must come from `GlobalSettings.getAreaCode()`
-- `setParameters(...)` for app scenario reporting is required for all cases
-- `getPrivateCloudConfig()` can return `null` — always null-check before calling `setLocalAccessPoint()`
-- Wrap the entire block in try/catch and call `onBackPressed()` on failure
-- All `IRtcEngineEventHandler` callbacks run on a background thread — always use `runOnUIThread()` for UI updates
-- Include `TAG`, `myUid`, `joined` fields — they are used by nearly every case
+---
 
 ## Step 3: Create the XML layout
 
-Path: `app/src/main/res/layout/fragment_your_case_name.xml`
-
-Typical structure for audio cases:
-- Channel name input + Join/Leave button
-- `AudioOnlyLayout` or `WaveformView` for audio status
-- Feature control buttons (mute, effect toggle, etc.)
-
-## Step 4: Add string resources
-
-File: `app/src/main/res/values/strings.xml`
+Typical audio layout — channel input + join button + audio controls:
 
 ```xml
-<string name="item_your_case_name">Your Case Name</string>
-<string name="your_case_name_tips">This example demonstrates how to use XXX audio API.</string>
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- audio status / waveform view goes here -->
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+    </LinearLayout>
+</RelativeLayout>
 ```
 
-## Step 5: Add navigation entries
+For waveform visualization, copy the `WaveformView` pattern from `fragment_join_channel_audio.xml`.
 
-File: `app/src/main/res/navigation/nav_graph.xml`
+---
 
-Add an action inside `<fragment id="@+id/mainFragment">`:
+## Step 4: Add nav entries
+
+File: `res/navigation/nav_graph.xml`
+
+**Action** — inside `<fragment android:id="@+id/mainFragment">`:
+
 ```xml
 <action
     android:id="@+id/action_mainFragment_to_yourCaseName"
     app:destination="@id/yourCaseName" />
 ```
 
-Add a destination at the root level:
+**Destination** — at root `<navigation>` level:
+
 ```xml
 <fragment
     android:id="@+id/yourCaseName"
     android:name="io.agora.api.example.examples.advanced.YourCaseName"
-    android:label="YourCaseName" />
+    android:label="@string/item_your_case_name"
+    tools:layout="@layout/fragment_your_case_name" />
 ```
 
-## Step 6: Verify
+`action android:id` must exactly match `actionId` in `@Example`.
+
+---
+
+## Step 5: Verify
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-- [ ] Case appears in the correct group
-- [ ] Tapping the case navigates to the case screen
-- [ ] Audio works after joining the channel
-- [ ] No engine leak after leaving the screen
-- [ ] Target audio API works as expected
+- [ ] Case appears in correct group at expected sort position
+- [ ] Tap navigates to the case screen (silent failure = nav action in wrong fragment)
+- [ ] `onJoinChannelSuccess` fires in Logcat
+- [ ] After pressing back, check Logcat for `RtcEngine.destroy` within ~2 seconds — if missing, there is a lifecycle bug in `onDestroy`
 
-## Common mistakes
+---
 
-| Symptom | Cause |
-|---|---|
-| Case not in list | `@Example` annotation missing, or class not under `io.agora.api.example.examples` |
-| Crash on tap | `actionId` does not match the action id in `nav_graph.xml` |
-| Build error: resource not found | String not added to `strings.xml` |
-| Runtime crash `NoSuchMethodError` | Called a video API that does not exist in `voice-sdk` |
-| NPE on `setLocalAccessPoint` | `getPrivateCloudConfig()` returns null — must null-check before calling |
+## NEVER
+
+- **NEVER** call any video API (`enableVideo`, `setupLocalVideo`, `VideoCanvas`) — voice-sdk has no video module; crash is immediate.
+- **NEVER** call `RtcEngine.destroy()` directly on the main thread — always `handler.post(RtcEngine::destroy)`. Direct call blocks the UI thread and causes ANR.
+- **NEVER** call `setLocalAccessPoint()` without null-checking `getPrivateCloudConfig()` first — it returns null on standard builds, causing NPE.
+- **NEVER** update UI directly inside `IRtcEngineEventHandler` callbacks — they run on a background thread. Always wrap with `runOnUIThread()`.
+- **NEVER** omit `setParameters(...)` — it's required for Agora backend usage reporting in every case; omitting it causes silent reporting failure even though the app appears to work normally.
