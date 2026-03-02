@@ -19,22 +19,18 @@ Quickly locate example code locations for specific features on iOS platform.
 
 This SKILL covers the following iOS projects:
 
-| Project | Tech Stack | Completeness | Menu File |
-|---------|------------|--------------|-----------|
-| `APIExample/` | Swift + UIKit | ⭐⭐⭐⭐⭐ | `APIExample/APIExample/ViewController.swift` |
-| `APIExample-Audio/` | Swift + UIKit | ⭐⭐⭐ | `APIExample-Audio/APIExample-Audio/ViewController.swift` |
-| `APIExample-SwiftUI/` | Swift + SwiftUI | ⭐⭐⭐ | `APIExample-SwiftUI/APIExample-SwiftUI/ContentView.swift` |
-| `APIExample-OC/` | Objective-C + UIKit | ⭐⭐⭐ | `APIExample-OC/APIExample-OC/ViewController.m` |
-
-**Recommended:** Prioritize `APIExample/` (UIKit standard), which contains the most complete examples and comments.
+| Project | Tech Stack | Menu File |
+|---------|------------|-----------|
+| `APIExample/` | Swift + UIKit | `APIExample/APIExample/ViewController.swift` |
+| `APIExample-Audio/` | Swift + UIKit | `APIExample-Audio/APIExample-Audio/ViewController.swift` |
+| `APIExample-SwiftUI/` | Swift + SwiftUI | `APIExample-SwiftUI/APIExample-SwiftUI/ContentView.swift` |
+| `APIExample-OC/` | Objective-C + UIKit | `APIExample-OC/APIExample-OC/ViewController.m` |
 
 ## When to Use
 
 - User asks "How to implement XXX", "Is there an XXX example", "Where is XXX"
 - Need to find reference code for specific features
 - Unsure which example implements a certain feature
-
-## Search Process
 
 ## Search Process
 
