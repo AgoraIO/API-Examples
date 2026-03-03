@@ -1,42 +1,48 @@
-# Agent Guide — APIExample
+# AGENTS.md — APIExample
 
-## Project Context
+Full demo project. Covers all Agora RTC APIs using UIKit + Swift.
+Default project when the PRD does not specify a platform variant.
 
-This is the UIKit + Swift implementation of Agora RTC SDK examples. Before making any changes, read `ARCHITECTURE.md` to understand the structural rules of this project.
+## Build Commands
 
-## Rules
+```bash
+pod install                      # install CocoaPods dependencies
+# Then open APIExample.xcworkspace in Xcode and build (Cmd+B)
+```
 
-### Follow the Architecture
+## App ID Configuration
 
-All work in this project must conform to the rules defined in `ARCHITECTURE.md`:
-- Every example uses the Entry/Main ViewController pattern
-- Entry class inherits `UIViewController`; Main class inherits `BaseViewController`
-- Each example has exactly one storyboard with two scenes (`EntryViewController` and `<ExampleName>`)
-- Configuration flows from Entry to Main exclusively via the `configs` dictionary
-- All examples are registered in `ViewController.swift` via `MenuItem`
+Edit `APIExample/Common/KeyCenter.swift`:
+```swift
+static let AppId: String = "YOUR_APP_ID"
+static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
+```
 
-### Follow the Existing Language and Framework
+## How to Add a New Case
 
-- Language is Swift — do not introduce Objective-C files
-- UI is UIKit + Storyboards — do not introduce SwiftUI views
-- State management uses instance variables and delegate callbacks — do not introduce Combine or async/await patterns unless they already exist in the file being modified
-- Match the code style, naming, and patterns of existing examples in this project
+See `ARCHITECTURE.md` for the full registration mechanism. The required steps are:
 
-### Use Example-Level SKILLs
+1. Create an example folder under `APIExample/Examples/Basic/` or `APIExample/Examples/Advanced/`:
+   - `<ExampleName>.swift` containing both `<ExampleName>Entry` and `<ExampleName>Main` classes
+   - `Base.lproj/<ExampleName>.storyboard` with two scenes: Entry (`EntryViewController`) and Main (`<ExampleName>`)
 
-Each example may contain a `SKILL.md` file in its folder. When working on or referencing a specific example:
-1. Check whether a `SKILL.md` exists in that example's directory
-2. If it exists, read it before making changes — it describes the API usage, call flow, and known constraints for that example
-3. If it does not exist, one will be created in the future; proceed using the source code as the reference
+2. Add a `MenuItem` to the `menus` array in `APIExample/ViewController.swift`:
+   ```swift
+   MenuItem(name: "My New Case".localized, storyboard: "MyNewCase", controller: "MyNewCase")
+   ```
 
-**SKILL.md location pattern:** `APIExample/Examples/[Basic|Advanced]/<ExampleName>/SKILL.md`
+3. Build and run — the case appears in the list.
 
-### Use Project-Level SKILLs
+## Architecture Red Lines
 
-For broader tasks, use the skills in `../.agent/skills/`:
+- Do NOT add audio-only cases that require `AgoraAudio_iOS` exclusivity — use `APIExample-Audio/` instead.
+- Do NOT use SwiftUI — this project is UIKit + Storyboards only.
+- Do NOT introduce Objective-C files — this project is Swift only.
+- Each case must create and destroy its own `AgoraRtcEngineKit` instance.
+- Always call `agoraKit.leaveChannel()` before `AgoraRtcEngineKit.destroy()` when the screen is dismissed.
+- `AgoraRtcEngineDelegate` callbacks may arrive on a background thread — dispatch UI updates to the main thread.
+- Always request camera/microphone permissions before calling `joinChannel()`.
 
-| Task | SKILL |
-|------|-------|
-| Find an existing example | `find-api-example` |
-| Create a new example | `create-api-example` |
-| Migrate an example to another project | `migrate-api-to-project` |
+## Further Reading
+
+- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/Main pattern details

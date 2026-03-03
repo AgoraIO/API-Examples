@@ -1,88 +1,115 @@
-# APIExample-Audio Architecture
+# ARCHITECTURE.md — APIExample-Audio
 
-## Overview
-
-iOS example project using UIKit + Swift, focused exclusively on audio features. Shares the same Entry/Main pattern as `APIExample` but omits all video rendering concerns.
-
-## Technology Stack
-
-- Language: Swift
-- UI Framework: UIKit + Storyboards
-- Architecture: Entry/Main ViewController pattern
-- State: Instance variables + delegate callbacks
-- Focus: Audio capture, playback, effects, mixing, and custom sources
-
-## Directory Structure
+## Directory Layout
 
 ```
 APIExample-Audio/
-├── APIExample-Audio/
-│   ├── Examples/
-│   │   ├── Basic/
-│   │   │   └── <ExampleName>/
-│   │   │       ├── <ExampleName>.swift
-│   │   │       ├── Base.lproj/<ExampleName>.storyboard
-│   │   │       └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   │   └── Advanced/
-│   │       └── <ExampleName>/
-│   │           ├── <ExampleName>.swift
-│   │           ├── Base.lproj/<ExampleName>.storyboard
-│   │           └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   ├── Common/              # Shared utilities (KeyCenter, GlobalSettings, LogUtils, Util)
-│   ├── Resources/           # Audio assets and images
-│   ├── AppDelegate.swift
-│   └── ViewController.swift # Root menu controller
-├── AGENTS.md                # Agent guide for this project
-└── ARCHITECTURE.md          # This file
+├── Podfile                                  # CocoaPods dependencies (AgoraAudio_iOS, Floaty, AGEVideoLayout)
+└── APIExample-Audio/
+    ├── AppDelegate.swift
+    ├── ViewController.swift                 # Root menu controller — MenuItem registration lives here
+    ├── Info.plist
+    ├── APIExample.entitlements
+    ├── APIExample-Bridging-Header.h
+    │
+    ├── Common/
+    │   ├── KeyCenter.swift                  # App ID and Certificate
+    │   ├── GlobalSettings.swift             # Shared runtime config
+    │   ├── BaseViewController.swift         # Base class all Main VCs must extend
+    │   ├── EntryViewController.swift        # Generic Entry VC for storyboard == "Main" cases
+    │   ├── LogViewController.swift          # Log viewer
+    │   ├── AlertManager.swift
+    │   ├── AgoraExtension.swift
+    │   ├── StatisticsInfo.swift
+    │   ├── UITypeAlias.swift
+    │   ├── VideoView.swift / .xib           # Audio seat view (no video rendering)
+    │   ├── Settings/                        # Settings UI components
+    │   ├── Utils/                           # LogUtils, Util (privatization config)
+    │   ├── NetworkManager/                  # Token request helper
+    │   ├── ExternalAudio/                   # External audio source helpers
+    │   └── ExternalVideo/                   # (unused in audio project)
+    │
+    ├── Examples/
+    │   ├── Basic/
+    │   │   ├── JoinChannelAudio/            # "Join a channel (Audio)"
+    │   │   └── JoinChannelAudio(Token)/     # "Join a channel (Token)"
+    │   └── Advanced/
+    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
+    │       ├── CustomAudioSource/           # "Custom Audio Source"
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)"
+    │       ├── CustomAudioRender/           # "Custom Audio Render"
+    │       ├── RawAudioData/                # "Raw Audio Data"
+    │       ├── AudioMixing/                 # "Audio Mixing"
+    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── PrecallTest/                 # "Precall Test"
+    │       └── SpatialAudio/                # "Spatial Audio"
+    │
+    ├── Resources/                           # Audio sample files
+    ├── Assets.xcassets/
+    ├── Base.lproj/                          # Main.storyboard, LaunchScreen.storyboard
+    └── zh-Hans.lproj/                       # Chinese localization
 ```
 
-## Architectural Rules
+## Case Registration Mechanism
 
-### Example Structure
+Registration is **manual** via the `menus` array in `ViewController.swift`. Identical to `APIExample`.
 
-Each example lives in its own folder under `Examples/Basic/` or `Examples/Advanced/` and consists of:
-- A Swift file containing both `Entry` and `Main` classes
-- A storyboard with two scenes: Entry and Main
+**`MenuItem` struct:**
+```swift
+struct MenuItem {
+    var name: String        // display name in the list
+    var entry: String       // storyboard ID of the entry VC (default: "EntryViewController")
+    var storyboard: String  // storyboard file name (default: "Main")
+    var controller: String  // storyboard ID of the main VC
+    var note: String        // optional description
+}
+```
 
-### Entry/Main Pattern
+**To add a case, edit exactly two things:**
+1. Add a `MenuItem` to the `menus` array in `ViewController.swift`
+2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift file(s) and storyboard
 
-Every example is split into two view controller roles:
+## Entry/Main ViewController Pattern
+
+Identical to `APIExample`:
 
 **Entry** (`<ExampleName>Entry : UIViewController`)
-- Collects user configuration (channel name, audio settings)
-- Owns the storyboard loading and Main VC instantiation
+- Collects user configuration before entering the example
 - Passes configuration to Main via a `configs` dictionary
 
 **Main** (`<ExampleName>Main : BaseViewController`)
-- Owns the Agora engine lifecycle for the duration of the example
+- Owns the `AgoraRtcEngineKit` lifecycle for the duration of the example
 - Implements `AgoraRtcEngineDelegate`
 - Receives configuration exclusively through `configs`
 - UI contains only audio controls — no video rendering views
 
-### Storyboard Convention
+## Audio-Only Constraint
 
-Each example storyboard contains exactly two scenes:
-- Entry scene — storyboard ID: `EntryViewController`
-- Main scene — storyboard ID: `<ExampleName>` (matches folder name)
+This project uses `AgoraAudio_iOS` SDK which has no video module. Main view controllers must NOT include:
+- Video rendering views or video canvas setup
+- Calls to `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()`
+- Camera-related APIs
 
-### Audio-Only Constraint
+All UI is limited to audio controls, status indicators, and effect parameter inputs.
 
-Main view controllers in this project must not include video rendering views or video canvas setup. All UI is limited to audio controls, status indicators, and effect parameter inputs.
+## AgoraRtcEngineKit Lifecycle
 
-### Menu Registration
+```
+viewDidLoad    → AgoraRtcEngineKit.sharedEngine(withAppId:delegate:)
+               → engine.setAudioProfile / setAudioScenario
+               → engine.joinChannel() (after RECORD_AUDIO permission granted)
+                      ↓
+                 [AgoraRtcEngineDelegate callbacks — may be on background thread]
+                      ↓
+viewDidDisappear / willMove(toParent:)
+               → engine.leaveChannel()
+               → AgoraRtcEngineKit.destroy()
+```
 
-All examples are registered in `ViewController.swift` via a `MenuItem` in the `menus` array. The `storyboard` field must match the example folder name.
+## Token Flow
 
-### Naming
-
-- Example folder names: PascalCase (e.g., `JoinChannelAudio`)
-- Entry class: `<ExampleName>Entry`
-- Main class: `<ExampleName>Main`
-
-### Common Utilities
-
-All examples share utilities from `Common/`:
-- `KeyCenter` — App ID and token
-- `GlobalSettings` — Shared runtime configuration
-- `LogUtils` — SDK log path
-- `Util` — Privatization configuration
+```swift
+NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
+    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
+}
+```

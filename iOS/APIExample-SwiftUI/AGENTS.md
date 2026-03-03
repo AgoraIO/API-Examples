@@ -1,44 +1,49 @@
-# Agent Guide — APIExample-SwiftUI
+# AGENTS.md — APIExample-SwiftUI
 
-## Project Context
+SwiftUI version of the API demo. Mirrors cases from `APIExample/` but uses
+SwiftUI views instead of UIKit + Storyboards.
 
-This is the SwiftUI implementation of Agora RTC SDK examples. Before making any changes, read `ARCHITECTURE.md` to understand the structural rules of this project.
+## Build Commands
 
-## Rules
+```bash
+pod install                      # install CocoaPods dependencies
+# Then open APIExample-SwiftUI.xcworkspace in Xcode and build (Cmd+B)
+```
 
-### Follow the Architecture
+## App ID Configuration
 
-All work in this project must conform to the rules defined in `ARCHITECTURE.md`:
-- Every example follows the MVVM pattern with a `View` and a `ViewModel`
-- ViewModel inherits `NSObject`, conforms to `ObservableObject` and `AgoraRtcEngineDelegate`
-- View holds the ViewModel as `@StateObject`
-- State is exposed exclusively via `@Published` properties on the ViewModel
-- Delegate callbacks must dispatch UI updates to the main thread
-- UIKit video views are bridged into SwiftUI via `UIViewRepresentable`
-- Examples are registered in `ContentView.swift` as navigation destinations
+Edit `APIExample-SwiftUI/Common/KeyCenter.swift`:
+```swift
+static let AppId: String = "YOUR_APP_ID"
+static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
+```
 
-### Follow the Existing Language and Framework
+## How to Add a New Case
 
-- Language is Swift — do not introduce Objective-C files
-- UI framework is SwiftUI — do not introduce UIKit view controllers or storyboards
-- State management uses `@ObservableObject` / `@Published` / `@StateObject` — do not introduce UIKit delegate-based state patterns
-- Match the code style, naming, and patterns of existing examples in this project
+See `ARCHITECTURE.md` for the full registration mechanism. The required steps are:
 
-### Use Example-Level SKILLs
+1. Create an example folder under `APIExample-SwiftUI/Examples/Basic/` or `APIExample-SwiftUI/Examples/Advanced/`:
+   - `<ExampleName>.swift` — Entry view and Main view
+   - `<ExampleName>RTC.swift` — RTC wrapper class (`ObservableObject` + `AgoraRtcEngineDelegate`)
 
-Each example may contain a `SKILL.md` file in its folder. When working on or referencing a specific example:
-1. Check whether a `SKILL.md` exists in that example's directory
-2. If it exists, read it before making changes — it describes the API usage, call flow, and known constraints for that example
-3. If it does not exist, one will be created in the future; proceed using the source code as the reference
+2. Add a `MenuItem` to the `menus` array in `APIExample-SwiftUI/ContentView.swift`:
+   ```swift
+   MenuItem(name: "My New Case".localized, view: AnyView(MyNewCaseEntry()))
+   ```
 
-**SKILL.md location pattern:** `APIExample-SwiftUI/Examples/[Basic|Advanced]/<ExampleName>/SKILL.md`
+3. Build and run — the case appears in the list.
 
-### Use Project-Level SKILLs
+## Architecture Red Lines
 
-For broader tasks, use the skills in `../.agent/skills/`:
+- Do NOT add audio-only cases that require `AgoraAudio_iOS` exclusivity — use `APIExample-Audio/` instead.
+- Do NOT use UIKit view controllers or Storyboards — this project is SwiftUI only.
+- Do NOT introduce Objective-C files — this project is Swift only.
+- Each case must create and destroy its own `AgoraRtcEngineKit` instance.
+- Always call `agoraKit.leaveChannel()` before `AgoraRtcEngineKit.destroy()` in `onDestroy()`.
+- `AgoraRtcEngineDelegate` callbacks may arrive on a background thread — dispatch UI updates to the main thread.
+- Engine setup should happen in `.onAppear`, cleanup in `.onDisappear`.
+- Always request camera/microphone permissions before calling `joinChannel()`.
 
-| Task | SKILL |
-|------|-------|
-| Find an existing example | `find-api-example` |
-| Create a new example | `create-api-example` |
-| Migrate an example to another project | `migrate-api-to-project` |
+## Further Reading
+
+- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/RTC pattern details

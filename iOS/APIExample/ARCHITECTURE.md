@@ -1,83 +1,159 @@
-# APIExample Architecture
+# ARCHITECTURE.md — APIExample
 
-## Overview
-
-Standard iOS example project using UIKit + Swift. Demonstrates Agora RTC SDK features through a collection of self-contained examples organized by complexity.
-
-## Technology Stack
-
-- Language: Swift
-- UI Framework: UIKit + Storyboards
-- Architecture: Entry/Main ViewController pattern
-- State: Instance variables + delegate callbacks
-
-## Directory Structure
+## Directory Layout
 
 ```
 APIExample/
-├── APIExample/
-│   ├── Examples/
-│   │   ├── Basic/
-│   │   │   └── <ExampleName>/
-│   │   │       ├── <ExampleName>.swift
-│   │   │       ├── Base.lproj/<ExampleName>.storyboard
-│   │   │       └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   │   └── Advanced/
-│   │       └── <ExampleName>/
-│   │           ├── <ExampleName>.swift
-│   │           ├── Base.lproj/<ExampleName>.storyboard
-│   │           └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   ├── Common/              # Shared utilities (KeyCenter, GlobalSettings, LogUtils, Util)
-│   ├── Resources/
-│   ├── AppDelegate.swift
-│   └── ViewController.swift # Root menu controller
-├── AGENTS.md                # Agent guide for this project
-└── ARCHITECTURE.md          # This file
+├── Podfile                                  # CocoaPods dependencies (AgoraRtcEngine_iOS, Floaty, AGEVideoLayout, etc.)
+├── SimpleFilter/                            # Optional C++ audio/video extension module
+├── Agora-ScreenShare-Extension/             # ReplayKit broadcast extension for screen sharing
+├── ByteEffectLib/                           # Optional ByteDance beauty SDK resources
+├── FULib/                                   # Optional FaceUnity beauty SDK resources
+├── SenseLib/                                # Optional SenseTime beauty SDK resources
+├── libs/                                    # Local SDK frameworks (when not using CocoaPods)
+└── APIExample/
+    ├── AppDelegate.swift
+    ├── ViewController.swift                 # Root menu controller — MenuItem registration lives here
+    ├── Info.plist
+    ├── APIExample.entitlements
+    ├── APIExample-Bridging-Header.h
+    │
+    ├── Common/
+    │   ├── KeyCenter.swift                  # App ID and Certificate
+    │   ├── GlobalSettings.swift             # Shared runtime config (resolution, fps, orientation, role)
+    │   ├── BaseViewController.swift         # Base class all Main VCs must extend
+    │   ├── EntryViewController.swift        # Generic Entry VC for storyboard == "Main" cases
+    │   ├── LogViewController.swift          # Log viewer
+    │   ├── AlertManager.swift
+    │   ├── AgoraExtension.swift
+    │   ├── PickerView.swift
+    │   ├── StatisticsInfo.swift
+    │   ├── UITypeAlias.swift
+    │   ├── VideoView.swift / .xib           # Reusable video rendering view
+    │   ├── Settings/                        # Settings UI components
+    │   ├── Utils/                           # LogUtils, Util (privatization config)
+    │   ├── NetworkManager/                  # Token request helper
+    │   ├── ExternalAudio/                   # External audio source helpers
+    │   ├── ExternalVideo/                   # External video source helpers
+    │   ├── CustomEncryption/                # Custom stream encryption helpers
+    │   └── ARKit/                           # ARKit integration helpers
+    │
+    ├── Examples/
+    │   ├── Basic/
+    │   │   ├── JoinChannelVideo/            # "Join a channel (Video)"
+    │   │   ├── JoinChannelVideo(Token)/     # "Join a channel (Token)"
+    │   │   ├── JoinChannelVideo(Recorder)/  # "Local or remote recording"
+    │   │   └── JoinChannelAudio/            # "Join a channel (Audio)"
+    │   └── Advanced/
+    │       ├── LiveStreaming/               # "Live Streaming" — setClientRole
+    │       ├── RTMPStreaming/               # "RTMP Streaming" — push to CDN
+    │       ├── VideoMetadata/               # "Video Metadata" — send/receive metadata
+    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source" — push PCM audio
+    │       ├── CustomAudioRender/           # "Custom Audio Render" — pull audio rendering
+    │       ├── CustomAudioSource/           # (legacy custom audio source)
+    │       ├── CustomVideoSourcePush/       # "Custom Video Source(Push)" — push external video
+    │       ├── CustomVideoSourcePushMulti/  # "Custom Video Source(Multi)" — multi-track push
+    │       ├── CustomVideoRender/           # "Custom Video Render"
+    │       ├── RawAudioData/                # "Raw Audio Data"
+    │       ├── RawVideoData/                # "Raw Video Data"
+    │       ├── RawMediaData/                # (legacy raw media data)
+    │       ├── PictureInPicture/            # "Picture In Picture (iOS15+)"
+    │       ├── SimpleFilter/                # "Simple Filter Extension"
+    │       ├── QuickSwitchChannel/          # "Quick Switch Channel"
+    │       ├── JoinMultiChannel/            # "Join Multiple Channels"
+    │       ├── StreamEncryption/            # "Stream Encryption"
+    │       ├── AudioMixing/                 # "Audio Mixing"
+    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── MediaPlayer/                 # "Media Player"
+    │       ├── ScreenShare/                 # "Screen Share"
+    │       ├── LocalCompositeGraph/         # "Local Composite Graph"
+    │       ├── VideoProcess/                # "Video Process"
+    │       ├── AgoraBeauty/                 # "Agora Beauty"
+    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── MediaChannelRelay/           # "Media Channel Relay"
+    │       ├── SpatialAudio/                # "Spatial Audio"
+    │       ├── ContentInspect/              # "Content Inspect"
+    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
+    │       ├── ThirdBeautify/               # "Third Beautify" — third-party beauty SDK
+    │       ├── ARKit/                       # "ARKit"
+    │       ├── AudioRouterPlayer/           # "Audio Router (Third Party Player)"
+    │       ├── AudioWaveform/               # "Audio Waveform"
+    │       ├── FaceCapture/                 # "Face Capture"
+    │       ├── TransparentRender/           # "Transparent Render"
+    │       ├── RtePlayer/                   # "URL Streaming (RTE Player)"
+    │       ├── Simulcast/                   # "Simulcast"
+    │       ├── Multipath/                   # "Multipath"
+    │       └── VideoChat/                   # (disabled) Group Video Chat
+    │
+    ├── Resources/                           # Audio/video sample files, beauty resources
+    ├── Assets.xcassets/
+    ├── Base.lproj/                          # Main.storyboard, LaunchScreen.storyboard
+    └── zh-Hans.lproj/                       # Chinese localization
 ```
 
-## Architectural Rules
 
-### Example Structure
+## Case Registration Mechanism
 
-Each example lives in its own folder under `Examples/Basic/` or `Examples/Advanced/` and consists of:
-- A Swift file containing both `Entry` and `Main` classes
-- A storyboard with two scenes: Entry and Main
+Registration is **manual** via the `menus` array in `ViewController.swift`. No reflection or annotation scanning.
 
-### Entry/Main Pattern
+**`MenuItem` struct:**
+```swift
+struct MenuItem {
+    var name: String        // display name in the list
+    var entry: String       // storyboard ID of the entry VC (default: "EntryViewController")
+    var storyboard: String  // storyboard file name (default: "Main")
+    var controller: String  // storyboard ID of the main VC
+    var note: String        // optional description
+}
+```
+
+**Two navigation paths exist depending on `storyboard`:**
+
+1. `storyboard == "Main"` — uses the shared `Main.storyboard`. The generic `EntryViewController` is instantiated, and `nextVCIdentifier` is set to `controller` to load the Main VC.
+2. `storyboard != "Main"` — each example has its own `.storyboard` file. The VC with identifier `entry` (default `"EntryViewController"`) is instantiated directly from that storyboard.
+
+Most examples use path 2 (their own storyboard).
+
+**To add a case, edit exactly two things:**
+1. Add a `MenuItem` to the `menus` array in `ViewController.swift`
+2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift file(s) and storyboard
+
+## Entry/Main ViewController Pattern
 
 Every example is split into two view controller roles:
 
 **Entry** (`<ExampleName>Entry : UIViewController`)
 - Collects user configuration before entering the example
-- Owns the storyboard loading and Main VC instantiation
 - Passes configuration to Main via a `configs` dictionary
 
 **Main** (`<ExampleName>Main : BaseViewController`)
-- Owns the Agora engine lifecycle for the duration of the example
+- Owns the `AgoraRtcEngineKit` lifecycle for the duration of the example
 - Implements `AgoraRtcEngineDelegate`
 - Receives configuration exclusively through `configs`
 
-### Storyboard Convention
+## AgoraRtcEngineKit Lifecycle
 
-Each example storyboard contains exactly two scenes:
-- Entry scene — storyboard ID: `EntryViewController`
-- Main scene — storyboard ID: `<ExampleName>` (matches folder name)
+```
+viewDidLoad    → AgoraRtcEngineKit.sharedEngine(withAppId:delegate:)
+               → engine.setVideoEncoderConfiguration / setChannelProfile
+               → engine.joinChannel() (after permission granted)
+                      ↓
+                 [AgoraRtcEngineDelegate callbacks — may be on background thread]
+                      ↓
+viewDidDisappear / willMove(toParent:)
+               → engine.leaveChannel()
+               → AgoraRtcEngineKit.destroy()
+```
 
-### Menu Registration
+## Token Flow
 
-All examples are registered in `ViewController.swift` via a `MenuItem` in the `menus` array. The `storyboard` field must match the example folder name.
+```swift
+NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
+    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
+}
+```
 
-### Naming
-
-- Example folder names: PascalCase (e.g., `JoinChannelVideo`)
-- Entry class: `<ExampleName>Entry`
-- Main class: `<ExampleName>Main`
-
-### Common Utilities
-
-All examples share utilities from `Common/`:
-- `KeyCenter` — App ID and token
-- `GlobalSettings` — Shared runtime configuration (region, resolution, fps)
-- `LogUtils` — SDK log path
-- `Util` — Privatization configuration
-- `AGEVideoLayout` — Multi-user video layout management
+If `KeyCenter.Certificate` is nil, token generation is skipped and a nil token is used — valid for projects without App Certificate.

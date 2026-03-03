@@ -1,81 +1,143 @@
-# APIExample-SwiftUI Architecture
+# ARCHITECTURE.md — APIExample-SwiftUI
 
-## Overview
-
-iOS example project using SwiftUI. Demonstrates Agora RTC SDK features with a declarative UI and reactive state management.
-
-## Technology Stack
-
-- Language: Swift
-- UI Framework: SwiftUI
-- Architecture: MVVM
-- State: `@ObservableObject` / `@Published` / `@StateObject`
-- Video Rendering: `UIViewRepresentable` wrapping UIKit views
-
-## Directory Structure
+## Directory Layout
 
 ```
 APIExample-SwiftUI/
-├── APIExample-SwiftUI/
-│   ├── Examples/
-│   │   ├── Basic/
-│   │   │   └── <ExampleName>/
-│   │   │       ├── <ExampleName>View.swift
-│   │   │       ├── <ExampleName>ViewModel.swift
-│   │   │       └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   │   └── Advanced/
-│   │       └── <ExampleName>/
-│   │           ├── <ExampleName>View.swift
-│   │           ├── <ExampleName>ViewModel.swift
-│   │           └── SKILL.md          # Per-example agent guide (present or forthcoming)
-│   ├── Common/              # Shared utilities (KeyCenter, GlobalSettings, LogUtils, Util)
-│   ├── Resources/
-│   ├── App.swift            # App entry point
-│   └── ContentView.swift    # Root navigation view
-├── AGENTS.md                # Agent guide for this project
-└── ARCHITECTURE.md          # This file
+├── Podfile                                  # CocoaPods dependencies (AgoraRtcEngine_iOS)
+├── Agora-ScreenShare-Extension/             # ReplayKit broadcast extension for screen sharing
+├── libs/                                    # Local SDK frameworks (when not using CocoaPods)
+└── APIExample-SwiftUI/
+    ├── APIExample_SwiftUIApp.swift          # App entry point (@main)
+    ├── ContentView.swift                    # Root navigation — MenuItem registration lives here
+    ├── Info.plist
+    ├── APIExample-Bridging-Header.h
+    │
+    ├── Common/
+    │   ├── KeyCenter.swift                  # App ID and Certificate
+    │   ├── AgoraExtension.swift
+    │   ├── PickerView.swift
+    │   ├── StatisticsInfo.swift
+    │   ├── VideoView.swift                  # SwiftUI wrapper for video rendering
+    │   ├── VideoUIView.swift                # UIKit video view
+    │   ├── ViewExtensions.swift
+    │   ├── View/                            # Reusable SwiftUI components
+    │   ├── Settings/                        # GlobalSettings
+    │   ├── Utils/                           # LogUtils, Util (privatization config)
+    │   ├── NetworkManager/                  # Token request helper
+    │   ├── ExternalAudio/                   # External audio source helpers
+    │   ├── ExternalVideo/                   # External video source helpers
+    │   ├── CustomEncryption/                # Custom stream encryption helpers
+    │   └── ARKit/                           # ARKit integration helpers
+    │
+    ├── Examples/
+    │   ├── Basic/
+    │   │   ├── JoinChannelVideo/            # "Join a channel (Video)"
+    │   │   ├── JoinChannelVideo(Token)/     # "Join a channel (Token)"
+    │   │   ├── JoinChannelVideo(Recorder)/  # "Local or remote recording"
+    │   │   └── JoinChannelAudio/            # "Join a channel (Audio)"
+    │   └── Advanced/
+    │       ├── LiveStreaming/               # "Live Streaming"
+    │       ├── RTMPStream/                  # "RTMP Streaming"
+    │       ├── VideoMetadata/               # "Video Metadata"
+    │       ├── VoiceChanger/                # "Voice Changer"
+    │       ├── CustomPCMAudioSource/        # "Custom Audio Source (PCM)"
+    │       ├── CustomAudioRender/           # "Custom Audio Render"
+    │       ├── RawAudioData/                # "Raw Audio Data"
+    │       ├── RawVideoData/                # "Raw Video Data"
+    │       ├── PictureInPicture/            # "Picture In Picture"
+    │       ├── QuickSwitchChannel/          # "Quick Switch Channel"
+    │       ├── JoinMultiChannel/            # "Join Multiple Channels"
+    │       ├── StreamEncryption/            # "Stream Encryption"
+    │       ├── AudioMixing/                 # "Audio Mixing"
+    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── MediaPlayer/                 # "Media Player"
+    │       ├── ScreenShare/                 # "Screen Share"
+    │       ├── LocalVideoTranscoding/       # "Local Video Transcoding"
+    │       ├── LocalVideoComposition/       # "Local Composite Graph"
+    │       ├── VideoProcess/                # "Video Process"
+    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── MediaChannelRelay/           # "Media Channel Relay"
+    │       ├── SpatialAudio/                # "Spatial Audio"
+    │       ├── ContentInspect/              # "Content Inspect"
+    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
+    │       ├── ARKit/                       # "ARKit"
+    │       ├── AudioWaveform/               # "Audio Waveform"
+    │       ├── FaceCapture/                 # "Face Capture"
+    │       ├── Simulcast/                   # "Simulcast"
+    │       └── Multipath/                   # "Multipath"
+    │
+    ├── Resources/                           # Audio/video sample files
+    ├── Assets.xcassets/
+    └── Preview Content/
 ```
 
-## Architectural Rules
+## Case Registration Mechanism
 
-### Example Structure
+Registration is **manual** via the `menus` array in `ContentView.swift`. No reflection or annotation scanning.
 
-Each example lives in its own folder under `Examples/Basic/` or `Examples/Advanced/` and consists of:
-- A `View` file (`<ExampleName>View.swift`)
-- A `ViewModel` file (`<ExampleName>ViewModel.swift`)
-- A `UIViewRepresentable` wrapper for video rendering when needed
+**`MenuItem` struct:**
+```swift
+struct MenuItem: Identifiable {
+    let id = UUID()
+    var name: String
+    var view: AnyView   // the Entry view wrapped in AnyView
+}
+```
 
-### MVVM Pattern
+Navigation uses SwiftUI `NavigationLink`. Each `MenuItem` holds an `AnyView` wrapping the Entry view.
 
-**ViewModel** (`<ExampleName>ViewModel : NSObject, ObservableObject, AgoraRtcEngineDelegate`)
-- Owns the Agora engine lifecycle
-- Exposes state to the View exclusively via `@Published` properties
-- Implements all delegate callbacks; dispatches UI updates to the main thread
+**To add a case, edit exactly two things:**
+1. Add a `MenuItem` to the `menus` array in `ContentView.swift`:
+   ```swift
+   MenuItem(name: "My New Case".localized, view: AnyView(MyNewCaseEntry()))
+   ```
+2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift files
 
-**View** (`<ExampleName>View : View`)
-- Holds the ViewModel as `@StateObject`
-- Binds to `@Published` properties for rendering
-- Triggers ViewModel methods in response to user actions
-- Manages engine lifecycle via `.onAppear` / `.onDisappear`
+## Entry/RTC Pattern
 
-### Video Rendering
+Every example is split into two parts:
 
-UIKit video views are bridged into SwiftUI via `UIViewRepresentable`. The ViewModel owns the `UIView` instances; the View wraps them for display.
+**Entry** (`<ExampleName>Entry : View`)
+- A SwiftUI View that collects user configuration (channel name, etc.)
+- Uses `NavigationLink` to navigate to the main view
+- Passes configuration via a `configs` dictionary
 
-### Navigation
+**RTC** (`<ExampleName>RTC : NSObject, ObservableObject, AgoraRtcEngineDelegate`)
+- Owns the `AgoraRtcEngineKit` lifecycle
+- Exposes state to the View via `@Published` properties
+- Implements all delegate callbacks
 
-Examples are registered in `ContentView.swift` as navigation destinations.
+**Main View** (`<ExampleName> : View`)
+- Holds the RTC object as `@ObservedObject`
+- Calls `setupRTC()` in `.onAppear`
+- Calls `onDestroy()` in `.onDisappear`
 
-### Naming
+## Video Rendering
 
-- Example folder names: PascalCase (e.g., `JoinChannelVideo`)
-- View: `<ExampleName>View`
-- ViewModel: `<ExampleName>ViewModel`
+UIKit video views (`VideoUIView`) are bridged into SwiftUI via `UIViewRepresentable` (`VideoView`). The RTC class owns the `UIView` instances; the SwiftUI View wraps them for display.
 
-### Common Utilities
+## AgoraRtcEngineKit Lifecycle
 
-All examples share utilities from `Common/`:
-- `KeyCenter` — App ID and token
-- `GlobalSettings` — Shared runtime configuration
-- `LogUtils` — SDK log path
-- `Util` — Privatization configuration
+```
+.onAppear      → setupRTC()
+               → AgoraRtcEngineKit.sharedEngine(with:delegate:)
+               → engine.setVideoEncoderConfiguration / setClientRole
+               → engine.joinChannel() (after token generation)
+                      ↓
+                 [AgoraRtcEngineDelegate callbacks]
+                      ↓
+.onDisappear   → onDestroy()
+               → engine.leaveChannel()
+               → AgoraRtcEngineKit.destroy()
+```
+
+## Token Flow
+
+```swift
+NetworkManager.shared.generateToken(channelName: channelName) { token in
+    self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+}
+```

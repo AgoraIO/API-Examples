@@ -1,44 +1,53 @@
-# Agent Guide — APIExample-OC
+# AGENTS.md — APIExample-OC
 
-## Project Context
+Objective-C version of the API demo. Mirrors cases from `APIExample/` but uses
+Objective-C instead of Swift.
 
-This is the Objective-C + UIKit implementation of Agora RTC SDK examples. Before making any changes, read `ARCHITECTURE.md` to understand the structural rules of this project.
+## Build Commands
 
-## Rules
+```bash
+pod install                      # install CocoaPods dependencies
+# Then open APIExample-OC.xcworkspace in Xcode and build (Cmd+B)
+```
 
-### Follow the Architecture
+## App ID Configuration
 
-All work in this project must conform to the rules defined in `ARCHITECTURE.md`:
-- Every example uses the Entry/Main ViewController pattern
-- Entry class inherits `UIViewController`; Main class inherits `BaseViewController`
-- Each example has a `.h` + `.m` pair for Entry and a `.h` + `.m` pair for Main
-- Each example has exactly one storyboard with two scenes (`EntryViewController` and `<ExampleName>`)
-- Configuration flows from Entry to Main exclusively via the `configs` dictionary (`NSDictionary`)
-- All examples are registered in `ViewController.m` via `MenuItem`
+Edit `APIExample-OC/Common/KeyCenter.m`:
+```objc
++ (NSString *)AppId {
+    return @"YOUR_APP_ID";
+}
 
-### Follow the Existing Language and Framework
++ (NSString *)Certificate {
+    return nil;   // leave nil if App Certificate is not enabled
+}
+```
 
-- Language is Objective-C — do not introduce Swift files
-- UI is UIKit + Storyboards — do not introduce SwiftUI views
-- State management uses instance variables and delegate callbacks — do not introduce modern Swift concurrency patterns
-- Use Objective-C memory management conventions (`strong`, `weak`, `copy` property attributes)
-- Match the code style, naming, and patterns of existing examples in this project
+## How to Add a New Case
 
-### Use Example-Level SKILLs
+See `ARCHITECTURE.md` for the full registration mechanism. The required steps are:
 
-Each example may contain a `SKILL.md` file in its folder. When working on or referencing a specific example:
-1. Check whether a `SKILL.md` exists in that example's directory
-2. If it exists, read it before making changes — it describes the API usage, call flow, and known constraints for that example
-3. If it does not exist, one will be created in the future; proceed using the source code as the reference
+1. Create an example folder under `APIExample-OC/Examples/Basic/` or `APIExample-OC/Examples/Advanced/`:
+   - `<ExampleName>.h` / `<ExampleName>.m` containing both Entry and Main classes
+   - `<ExampleName>.storyboard` with two scenes: Entry (`EntryViewController`) and Main
 
-**SKILL.md location pattern:** `APIExample-OC/Examples/[Basic|Advanced]/<ExampleName>/SKILL.md`
+2. Add a `MenuItem` to the `+[MenuSection menus]` method in `APIExample-OC/ViewController.m`:
+   ```objc
+   [[MenuItem alloc] initWithName:@"My New Case".localized storyboard:@"MyNewCase" controller:@""]
+   ```
 
-### Use Project-Level SKILLs
+3. Build and run — the case appears in the list.
 
-For broader tasks, use the skills in `../.agent/skills/`:
+## Architecture Red Lines
 
-| Task | SKILL |
-|------|-------|
-| Find an existing example | `find-api-example` |
-| Create a new example | `create-api-example` |
-| Migrate an example to another project | `migrate-api-to-project` |
+- Do NOT add audio-only cases that require `AgoraAudio_iOS` exclusivity — use `APIExample-Audio/` instead.
+- Do NOT use SwiftUI or UIKit Storyboards with Swift — this project is Objective-C + Storyboards only.
+- Do NOT introduce Swift files — this project is Objective-C only.
+- Each case must create and destroy its own `AgoraRtcEngineKit` instance.
+- Always call `[agoraKit leaveChannel:]` before `[AgoraRtcEngineKit destroy]` when the screen is dismissed.
+- `AgoraRtcEngineDelegate` callbacks may arrive on a background thread — dispatch UI updates to the main thread.
+- Always request camera/microphone permissions before calling `joinChannelByToken:`.
+
+## Further Reading
+
+- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/Main pattern details
