@@ -59,8 +59,20 @@ No `nav_graph.xml` changes needed. Navigation routes by list index automatically
 
 ## Skills
 
-- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new Compose case (template, `rememberSaveable` rules, verify checklist)
-- `.kiro/skills/query-cases/` — query existing cases by API, group, or list position; uses `ARCHITECTURE.md` as fast index
+- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new Compose case (template, `rememberSaveable` rules, verify checklist). Read `SKILL.md` inside before writing any code.
+- `.kiro/skills/query-cases/` — query existing cases by API, group, or list position; uses `ARCHITECTURE.md` as fast index.
+
+## Hooks
+
+- `.kiro/hooks/build-on-task-complete.json` — runs `assembleDebug` automatically after each spec task completes
+
+## Steering
+| File | Inclusion | Purpose |
+|------|-----------|---------|
+| `.kiro/steering/project-routing.md` | Always | which sub-project to use for a given scenario; hard constraints on file sharing
+| `.kiro/steering/coding-standards.md` | Always | RtcEngine lifecycle rules, Kotlin/Compose standards, naming conventions
+| `.kiro/steering/complex-case-spec.md` | Manual | when and how to use the Spec workflow for complex cases
+
 
 ## Further Reading
 

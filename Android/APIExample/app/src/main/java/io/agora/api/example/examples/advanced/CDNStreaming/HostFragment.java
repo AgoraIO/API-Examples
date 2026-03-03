@@ -48,6 +48,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 /**
  * The type Host fragment.
  */
+@Deprecated
 public class HostFragment extends BaseFragment {
     private static final String TAG = HostFragment.class.getSimpleName();
     private static final String AGORA_CHANNEL_PREFIX = "rtmp://push.webdemo.agoraio.cn/lbhd/";

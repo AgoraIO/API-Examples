@@ -93,7 +93,123 @@ Minimum structure — channel input + join button at bottom:
 </RelativeLayout>
 ```
 
-For video cases, copy the `VideoReportLayout` grid pattern from `fragment_joinchannel_video.xml`.
+For video cases, use `VideoReportLayout` for each video slot. Pick one of the four standard layouts below — they cover the vast majority of cases.
+
+**General rules (apply to all layouts):**
+- Video containers must sit **above** the bottom control bar. In `RelativeLayout` use `android:layout_above="@id/ll_join"`; in `ConstraintLayout` use `app:layout_constraintBottom_toTopOf="@id/ll_join"`.
+- Each `VideoReportLayout` needs a unique `android:id` (`fl_local`, `fl_remote`, `fl_remote2`, …).
+
+---
+
+**Layout A — Single broadcaster (local fullscreen)**
+Use when: broadcaster-only demo, no remote video needed.
+
+```xml
+<!-- ConstraintLayout root -->
+<io.agora.api.example.common.widget.VideoReportLayout
+    android:id="@+id/fl_local"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/ll_join" />
+```
+
+---
+
+**Layout B — 1v1 (local left, remote right, side by side)**
+Use when: two-party call, equal-weight split.
+
+```xml
+<!-- RelativeLayout root -->
+<LinearLayout
+    android:id="@+id/video_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@id/ll_join"
+    android:orientation="horizontal">
+
+    <io.agora.api.example.common.widget.VideoReportLayout
+        android:id="@+id/fl_local"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5" />
+
+    <io.agora.api.example.common.widget.VideoReportLayout
+        android:id="@+id/fl_remote"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5" />
+</LinearLayout>
+```
+
+---
+
+**Layout C — Audience co-hosting (remote fullscreen background + local PiP top-right)**
+Use when: live streaming where audience co-hosts; remote/host fills screen, local is a small overlay.
+
+```xml
+<!-- ConstraintLayout root -->
+<io.agora.api.example.common.widget.VideoReportLayout
+    android:id="@+id/fl_remote"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/ll_join" />
+
+<io.agora.api.example.common.widget.VideoReportLayout
+    android:id="@+id/fl_local"
+    android:layout_width="120dp"
+    android:layout_height="160dp"
+    android:layout_margin="8dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+```
+
+---
+
+**Layout D — 2×2 grid (up to 4 participants)**
+Use when: multi-party call with up to 4 streams.
+
+```xml
+<!-- RelativeLayout root -->
+<LinearLayout
+    android:id="@+id/video_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@id/ll_join"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal">
+        <io.agora.api.example.common.widget.VideoReportLayout
+            android:id="@+id/fl_local"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+        <io.agora.api.example.common.widget.VideoReportLayout
+            android:id="@+id/fl_remote"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal">
+        <io.agora.api.example.common.widget.VideoReportLayout
+            android:id="@+id/fl_remote2"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+        <io.agora.api.example.common.widget.VideoReportLayout
+            android:id="@+id/fl_remote3"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+</LinearLayout>
+```
 
 ---
 

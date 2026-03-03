@@ -68,6 +68,7 @@ APIExample/
         │   │   ├── ChannelEncryption.java       # [14] "Media Stream Encryption" — built-in encryption
         │   │   ├── PlayAudioFiles.java          # [15] "Play Audio Files" — audio mixing
         │   │   ├── MediaPlayer.java             # [17] "MediaPlayer" — play media files
+        │   │   ├── MediaRecorder.java           # [17] "Local/Remote MediaRecorder" — record media streams
         │   │   ├── ScreenSharing.java           # [18] "Screen Sharing" — screen capture & share
         │   │   ├── VideoProcessExtension.java   # [19] "Video Process Extension" — video filter extension
         │   │   ├── LocalVideoTranscoding.java   # [19] "LocalVideoTranscoding" — local video compositing
@@ -83,10 +84,9 @@ APIExample/
         │   │   ├── AgoraBeauty.java             # [27] "Agora beauty 2.0" — built-in beauty effects
         │   │   ├── Simulcast.java               # [28] "Simulcast" — multi-quality stream publishing
         │   │   ├── Multipath.java               # [29] "Multipath" — multi-path transmission
-        │   │   ├── VideoSnapshot.java           # [30] "Video Snapshot" — takeSnapshot API
-        │   │   ├── MediaRecorder.java           # "Local/Remote MediaRecorder" — record media streams
+        │   │   ├── LiveStreamingWithEffect.java # [31] "Live Streaming With Effect" — ultra-low-latency live streaming + audio effect
         │   │   ├── beauty/                      # Third-party beauty integrations
-        │   │   ├── CDNStreaming/                 # (disabled) CDN streaming entry
+        │   │   ├── CDNStreaming/                 # (disabled — UI removed, code retained for reference) CDN streaming entry
         │   │   └── videoRender/                 # Custom video rendering helpers
         │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
         │       ├── AudioWaveform.java           # [17] "Audio Waveform" — audio visualization

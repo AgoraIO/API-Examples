@@ -33,6 +33,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+// Disabled: UI entry removed. Code retained for reference only.
 //@Example(
 //        index = 17,
 //        group = ADVANCED,
