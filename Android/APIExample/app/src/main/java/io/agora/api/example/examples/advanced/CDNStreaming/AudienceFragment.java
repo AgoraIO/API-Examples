@@ -50,6 +50,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 /**
  * The type Audience fragment.
  */
+@Deprecated
 public class AudienceFragment extends BaseFragment implements IMediaPlayerObserver {
     private static final String TAG = AudienceFragment.class.getSimpleName();
     private static final String AGORA_CHANNEL_PREFIX = "rtmp://pull.webdemo.agoraio.cn/lbhd/";

@@ -54,6 +54,17 @@ The registration mechanism is identical to `APIExample`. Required steps:
 - `.kiro/skills/add-new-case/` — step-by-step guide for adding a new audio case (voice-sdk template, nav placement, verify checklist)
 - `.kiro/skills/query-cases/` — query existing cases by API, group, or sort index; uses `ARCHITECTURE.md` as fast index
 
+## Hooks
+
+- `.kiro/hooks/build-on-task-complete.json` — automatically runs `./gradlew assembleDebug` after each Spec task completes to verify the build
+
+## Steering
+| File | Inclusion | Purpose |
+|------|-----------|---------|
+| `.kiro/steering/project-routing.md` | Always | routes work to the correct sub-project; enforces audio-only constraint
+| `.kiro/steering/coding-standards.md` | Always | RtcEngine lifecycle rules, Java standards, voice-sdk constraints, naming conventions
+| `.kiro/steering/complex-case-spec.md`| Manual | Spec workflow for complex cases; include via `#complex-case-spec` when creating a Spec
+
 ## Further Reading
 
 - `ARCHITECTURE.md` — full directory layout and case registration details

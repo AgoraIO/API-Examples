@@ -5,6 +5,18 @@
 ```
 APIExample-Compose/
 ├── gradle.properties                        # rtc_sdk_version
+├── AGENTS.md                                # Agent entry point — build commands, red lines, skill index
+├── ARCHITECTURE.md                          # This file — directory layout, patterns, registration
+├── .kiro/
+│   ├── hooks/
+│   │   └── build-on-task-complete.json      # Runs assembleDebug after each spec task completes
+│   ├── skills/
+│   │   ├── add-new-case/SKILL.md            # Step-by-step guide for adding a new Compose case
+│   │   └── query-cases/SKILL.md             # Query existing cases by API, group, or list position
+│   └── steering/
+│       ├── project-routing.md               # Which sub-project to use; hard constraints (always included)
+│       ├── coding-standards.md              # RtcEngine lifecycle, Kotlin/Compose rules (always included)
+│       └── complex-case-spec.md             # Spec workflow for complex cases (manual inclusion)
 └── app/src/main/
     ├── AndroidManifest.xml
     ├── assets/                              # Audio/video sample files
@@ -48,7 +60,6 @@ APIExample-Compose/
         │   ├── SendDataStream.kt            # Advanced: "Send Data Stream" — data channel messaging
         │   ├── HostAcrossChannel.kt         # Advanced: "Host Across Channel" — cross-channel relay
         │   ├── SpatialSound.kt              # Advanced: "Spatial Sound" — 3D spatial audio
-        │   └── VideoSnapshot.kt             # Advanced: "Video Snapshot" — takeSnapshot API
         │
         ├── ui/
         │   ├── home/
