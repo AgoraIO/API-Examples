@@ -23,30 +23,12 @@ Edit `APIExample-OC/Common/KeyCenter.m`:
 }
 ```
 
-## How to Add a New Case
+## Skills
 
-See `ARCHITECTURE.md` for the full registration mechanism. The required steps are:
-
-1. Create an example folder under `APIExample-OC/Examples/Basic/` or `APIExample-OC/Examples/Advanced/`:
-   - `<ExampleName>.h` / `<ExampleName>.m` containing both Entry and Main classes
-   - `<ExampleName>.storyboard` with two scenes: Entry (`EntryViewController`) and Main
-
-2. Add a `MenuItem` to the `+[MenuSection menus]` method in `APIExample-OC/ViewController.m`:
-   ```objc
-   [[MenuItem alloc] initWithName:@"My New Case".localized storyboard:@"MyNewCase" controller:@""]
-   ```
-
-3. Build and run — the case appears in the list.
-
-## Architecture Red Lines
-
-- Do NOT add audio-only cases that require `AgoraAudio_iOS` exclusivity — use `APIExample-Audio/` instead.
-- Do NOT use SwiftUI or UIKit Storyboards with Swift — this project is Objective-C + Storyboards only.
-- Do NOT introduce Swift files — this project is Objective-C only.
-- Each case must create and destroy its own `AgoraRtcEngineKit` instance.
-- Always call `[agoraKit leaveChannel:]` before `[AgoraRtcEngineKit destroy]` when the screen is dismissed.
-- `AgoraRtcEngineDelegate` callbacks may arrive on a background thread — dispatch UI updates to the main thread.
-- Always request camera/microphone permissions before calling `joinChannelByToken:`.
+| Task | Skill | Status |
+|------|-------|--------|
+| Find an existing example | `query-cases` | TODO |
+| Add a new example | `add-new-case` | TODO |
 
 ## Further Reading
 

@@ -23,13 +23,6 @@ SDK version: each project's `Podfile` specifies the SDK version.
 
 Never share source files between projects.
 
-## Architecture Red Lines (all projects)
-
-1. Each case owns its own `AgoraRtcEngineKit` — never share across screens.
-2. Always `leaveChannel()` then `AgoraRtcEngineKit.destroy()` when the screen is dismissed.
-3. `AgoraRtcEngineDelegate` callbacks may arrive on a background thread — dispatch UI updates to the main thread.
-4. Always request permissions (camera/microphone) before calling `joinChannel()`.
-
 ## Further Reading
 
 - `ARCHITECTURE.md` — four-project structure overview
