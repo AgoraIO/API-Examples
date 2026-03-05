@@ -107,6 +107,20 @@ Create `APIExample/Base.lproj/<ExampleName>.storyboard` with two scenes:
 
 Connect a `Show` segue or use the manual push in `onJoinPressed`.
 
+## Default Entry UI Convention
+
+Unless the user explicitly asks for a different flow, use this default Entry layout and interaction:
+
+- One channel input field (`UITextField`) with placeholder `"Enter channel name".localized`
+- One join button (`UIButton`) with title `"Join".localized`
+- Join action validates non-empty channel name, dismisses keyboard, and pushes Main VC
+- Pass config via `configs = ["channelName": channelName]`
+
+Rationale:
+- This matches the dominant pattern used by existing APIExample cases
+- Keeps new cases consistent with existing user interaction and navigation
+- Minimizes refactor cost when RTC join logic is added later
+
 ## Step 4 — Register the MenuItem
 
 Add to the `menus` array in `APIExample/ViewController.swift`:
@@ -137,6 +151,7 @@ Key APIs: list 2–5 core SDK methods the case demonstrates. Do not list `joinCh
 - [ ] Both Entry and Main classes exist in the Swift file
 - [ ] Main inherits `BaseViewController`
 - [ ] Storyboard has correct scene IDs
+- [ ] Entry scene follows default UI convention (channel input + Join button), unless the user requested otherwise
 - [ ] MenuItem added to `ViewController.swift`
 - [ ] `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called in `willMove(toParent:)` when `parent == nil`
 - [ ] UI updates inside delegate callbacks dispatched to `DispatchQueue.main`
