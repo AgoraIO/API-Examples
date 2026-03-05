@@ -1,12 +1,11 @@
 # AGENTS.md — APIExample-OC
 
-Objective-C version of the API demo. Mirrors cases from `APIExample/` but uses
-Objective-C instead of Swift.
+Objective-C variant of the API demo. Mirrors cases from `APIExample/` using Objective-C instead of Swift.
 
 ## Build Commands
 
 ```bash
-pod install                      # install CocoaPods dependencies
+pod install
 # Then open APIExample-OC.xcworkspace in Xcode and build (Cmd+B)
 ```
 
@@ -23,13 +22,24 @@ Edit `APIExample-OC/Common/KeyCenter.m`:
 }
 ```
 
+## Architecture Red Lines
+
+- Do NOT skip calling `leaveChannel:` + `[AgoraRtcEngineKit destroy]` in `dealloc` or `viewDidDisappear:`
+- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to the main thread via `dispatch_async(dispatch_get_main_queue(), ^{ ... })`
+- Do NOT create `AgoraRtcEngineKit` in the Entry VC — engine lifecycle belongs to Main VC only
+- Do NOT share `AgoraRtcEngineKit` instances across examples
+- Do NOT add cases to `Main.storyboard` — each example must have its own `.storyboard` file
+- Do NOT use ARC-unsafe patterns (`__unsafe_unretained`) for delegate references — use `__weak`
+- Do NOT request camera/microphone permissions after calling `joinChannelByToken:`
+
 ## Skills
 
-| Task | Skill | Status |
-|------|-------|--------|
-| Find an existing example | `query-cases` | TODO |
-| Add a new example | `add-new-case` | TODO |
+| Task | Skill | When to use |
+|------|-------|-------------|
+| Add or modify a case | `.agent/skills/upsert-case/` | Need to create a new API demo or update an existing one |
+| Code review | `.agent/skills/review-case/` | Review case code for lifecycle, thread safety, and OC convention compliance |
+| Find an existing case | `.agent/skills/query-cases/` | Locate which file demonstrates a specific API or feature |
 
 ## Further Reading
 
-- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/Main pattern details
+- `ARCHITECTURE.md` — full directory layout, case registration, Entry/Main pattern, engine lifecycle

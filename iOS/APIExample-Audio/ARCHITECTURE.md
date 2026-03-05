@@ -1,5 +1,21 @@
 # ARCHITECTURE.md — APIExample-Audio
 
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `setAudioScenario()`, `adjustRecordingSignalVolume()`, `enable(inEarMonitoring:)` | Basic audio call with profile, scenario, volume, and in-ear monitoring controls |
+| JoinChannelAudio(Token) | `Examples/Basic/JoinChannelAudio(Token)/JoinChannelAudioToken.swift` | `joinChannel(byToken:)`, `setAudioProfile()`, `setAudioScenario()`, `adjustRecordingSignalVolume()` | Audio call with token authentication |
+| VoiceChanger | `Examples/Advanced/VoiceChanger/VoiceChanger.swift` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setLocalVoiceEqualizationOf()` | Voice beautifier, effects, conversion presets, and equalizer |
+| CustomAudioSource | `Examples/Advanced/CustomAudioSource/CustomAudioSource.swift` | `setExternalAudioSource()` | Push custom audio via external audio source API |
+| CustomPcmAudioSource | `Examples/Advanced/CustomPcmAudioSource/CustomPcmAudioSource.swift` | `createCustomAudioTrack()`, `enableCustomAudioLocalPlayback()`, `pushExternalAudioFrameRawData()` | Push custom PCM audio frames as mixable audio track |
+| CustomAudioRender | `Examples/Advanced/CustomAudioRender/CustomAudioRender.swift` | `enableExternalAudioSink()`, `pullPlaybackAudioFrameRawData()` | Pull audio frames for custom rendering |
+| RawAudioData | `Examples/Advanced/RawAudioData/RawAudioData.swift` | `setAudioFrameDelegate()` | Capture raw audio PCM data via delegate |
+| AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.swift` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
+| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| PrecallTest | `Examples/Advanced/PrecallTest/PrecallTest.swift` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
+| SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()`, `setEnableSpeakerphone()` | 3D spatial audio with media player integration |
+
 ## Directory Layout
 
 ```

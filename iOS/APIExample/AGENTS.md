@@ -1,12 +1,11 @@
 # AGENTS.md — APIExample
 
-Full demo project. Covers all Agora RTC APIs using UIKit + Swift.
-Default project when the PRD does not specify a platform variant.
+Full demo project. Covers all Agora RTC APIs using UIKit + Swift. Default choice when no specific variant is required.
 
 ## Build Commands
 
 ```bash
-pod install                      # install CocoaPods dependencies
+pod install
 # Then open APIExample.xcworkspace in Xcode and build (Cmd+B)
 ```
 
@@ -18,13 +17,23 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
+## Architecture Red Lines
+
+- Do NOT skip calling `leaveChannel()` + `AgoraRtcEngineKit.destroy()` in `willMove(toParent:)` when `parent == nil`
+- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to `DispatchQueue.main`
+- Do NOT create `AgoraRtcEngineKit` in the Entry VC — engine lifecycle belongs to Main VC only
+- Do NOT share `AgoraRtcEngineKit` instances across examples
+- Do NOT add cases to `Main.storyboard` — each example must have its own `.storyboard` file
+- Do NOT request camera/microphone permissions after calling `joinChannel()`
+
 ## Skills
 
-| Task | Skill | Status |
-|------|-------|--------|
-| Find an existing example | `query-cases` | TODO |
-| Add a new example | `add-new-case` | TODO |
+| Task | Skill | When to use |
+|------|-------|-------------|
+| Add or modify a case | `.agent/skills/upsert-case/` | Need to create a new API demo or update an existing one |
+| Code review | `.agent/skills/review-case/` | Review case code for lifecycle, thread safety, and convention compliance |
+| Find an existing case | `.agent/skills/query-cases/` | Locate which file demonstrates a specific API or feature |
 
 ## Further Reading
 
-- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/Main pattern details
+- `ARCHITECTURE.md` — full directory layout, case registration, Entry/Main pattern, engine lifecycle

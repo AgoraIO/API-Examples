@@ -1,5 +1,45 @@
 # ARCHITECTURE.md — APIExample-SwiftUI
 
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| JoinChannelVideo | `Examples/Basic/JoinChannelVideo/` | `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()` | Basic video call — join channel and render local/remote video |
+| JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/` | `joinChannel(byToken:)`, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
+| JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/` | `createMediaRecorder()`, `joinChannel()`, `setupLocalVideo()` | Local and remote stream recording |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/` | `joinChannel()`, `setAudioProfile()`, `setAudioScenario()`, `adjustRecordingSignalVolume()`, `enable(inEarMonitoring:)` | Basic audio call with profile, scenario, and volume controls |
+| LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `setVideoScenario()`, `preloadChannel()`, `enableInstantMediaRendering()` | Interactive live streaming with role switching |
+| RTMPStream | `Examples/Advanced/RTMPStream/` | `startRtmpStreamWithoutTranscoding()`, `startRtmpStream(withTranscoding:)`, `updateRtmpTranscoding()`, `stopRtmpStream()` | Push stream to CDN with optional transcoding |
+| VideoMetadata | `Examples/Advanced/VideoMetadata/` | `setMediaMetadataDataSource()`, `setMediaMetadataDelegate()` | Send and receive metadata attached to video stream |
+| VoiceChanger | `Examples/Advanced/VoiceChanger/` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setLocalVoiceFormant()` | Voice beautifier, effects, and conversion presets |
+| CustomPCMAudioSource | `Examples/Advanced/CustomPCMAudioSource/` | `createCustomAudioTrack()`, `enableCustomAudioLocalPlayback()`, `pushExternalAudioFrameRawData()` | Push custom PCM audio frames as external audio source |
+| CustomAudioRender | `Examples/Advanced/CustomAudioRender/` | `enableExternalAudioSink()`, `pullPlaybackAudioFrameRawData()` | Pull audio frames for custom rendering |
+| RawAudioData | `Examples/Advanced/RawAudioData/` | `setAudioFrameDelegate()`, `sendAudioMetadata()` | Capture raw audio PCM data via delegate |
+| RawVideoData | `Examples/Advanced/RawVideoData/` | `setVideoFrameDelegate()` | Capture raw video frames via delegate |
+| PictureInPicture | `Examples/Advanced/PictureInPicture/` | `AVPictureInPictureController`, `joinChannel()`, `setVideoFrameDelegate()` | Picture-in-Picture using AVKit (iOS 15+) |
+| QuickSwitchChannel | `Examples/Advanced/QuickSwitchChannel/` | `joinChannel()`, `leaveChannel()` | Quickly switch between channels as audience |
+| JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/` | `joinChannelEx()`, `takeSnapshotEx()` | Join multiple channels simultaneously via ex connection |
+| StreamEncryption | `Examples/Advanced/StreamEncryption/` | `enableEncryption()` | Built-in and custom stream encryption |
+| AudioMixing | `Examples/Advanced/AudioMixing/` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
+| PrecallTest | `Examples/Advanced/PrecallTest/` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
+| MediaPlayer | `Examples/Advanced/MediaPlayer/` | `createMediaPlayer()`, `updateChannelEx()` | Play media files and publish to channel via media player |
+| ScreenShare | `Examples/Advanced/ScreenShare/` | `startScreenCapture()`, `updateScreenCapture()`, `stopScreenCapture()` | Screen capture and sharing via ReplayKit extension |
+| LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `createMediaPlayer()` | Transcode multiple video sources locally before publishing |
+| LocalVideoComposition | `Examples/Advanced/LocalVideoComposition/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()` | Composite camera and screen capture into one stream |
+| VideoProcess | `Examples/Advanced/VideoProcess/` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
+| RhythmPlayer | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
+| MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
+| SpatialAudio | `Examples/Advanced/SpatialAudio/` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
+| ContentInspect | `Examples/Advanced/ContentInspect/` | `enableContentInspect()`, `switchCamera()` | Moderate content in video stream |
+| MutliCamera | `Examples/Advanced/MutliCamera/` | `enableMultiCamera()`, `startCameraCapture()`, `stopCameraCapture()` | Capture from front and back cameras simultaneously (iOS 13+) |
+| KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/` | — | Links to KTV copyright music documentation |
+| ARKit | `Examples/Advanced/ARKit/` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
+| AudioWaveform | `Examples/Advanced/AudioWaveform/` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
+| FaceCapture | `Examples/Advanced/FaceCapture/` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
+| Simulcast | `Examples/Advanced/Simulcast/` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
+| Multipath | `Examples/Advanced/Multipath/` | `updateChannel()` | Multi-path network transmission configuration |
+
 ## Directory Layout
 
 ```
