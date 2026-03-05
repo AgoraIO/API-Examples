@@ -17,15 +17,7 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
-## Architecture Red Lines
-
-- Do NOT skip calling `leaveChannel()` + `AgoraRtcEngineKit.destroy()` in `onDestroy()` — call it from `.onDisappear`
-- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to `DispatchQueue.main`
-- Do NOT create `AgoraRtcEngineKit` in the Entry view — engine lifecycle belongs to the RTC class only
-- Do NOT use `@StateObject` for the RTC object in the Main view — use `@ObservedObject` (Main view does not own the RTC object's lifetime)
-- Do NOT call SDK APIs inside SwiftUI `body` — only in `.onAppear` / `.onDisappear` or explicit user actions
-- Do NOT share `AgoraRtcEngineKit` instances across examples
-- Do NOT request camera/microphone permissions after calling `joinChannel()`
+To obtain an App ID, see [README.md](README.md#obtain-an-app-id).
 
 ## Skills
 

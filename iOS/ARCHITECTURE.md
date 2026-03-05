@@ -12,7 +12,7 @@ For internal details of each project, see the project-level `ARCHITECTURE.md`.
 - SDK: AgoraRtcEngine_iOS (full-featured)
 - Architecture: Entry/Main ViewController pattern
 - Case registration: `MenuItem` array in `ViewController.swift`
-- Details: `APIExample/ARCHITECTURE.md`
+- Details: [APIExample/ARCHITECTURE.md](APIExample/ARCHITECTURE.md)
 
 ---
 
@@ -23,7 +23,7 @@ For internal details of each project, see the project-level `ARCHITECTURE.md`.
 - SDK: AgoraRtcEngine_iOS (full-featured)
 - Architecture: MVVM (View + ViewModel)
 - Case registration: navigation destinations in `ContentView.swift`
-- Details: `APIExample-SwiftUI/ARCHITECTURE.md`
+- Details: [APIExample-SwiftUI/ARCHITECTURE.md](APIExample-SwiftUI/ARCHITECTURE.md)
 
 ---
 
@@ -34,7 +34,7 @@ For internal details of each project, see the project-level `ARCHITECTURE.md`.
 - SDK: AgoraRtcEngine_iOS (full-featured)
 - Architecture: Entry/Main ViewController pattern (same as APIExample)
 - Case registration: `MenuItem` array in `ViewController.m`
-- Details: `APIExample-OC/ARCHITECTURE.md`
+- Details: [APIExample-OC/ARCHITECTURE.md](APIExample-OC/ARCHITECTURE.md)
 
 ---
 
@@ -46,4 +46,4 @@ For internal details of each project, see the project-level `ARCHITECTURE.md`.
 - Architecture: Entry/Main ViewController pattern
 - Case registration: `MenuItem` array in `ViewController.swift`
 - Constraint: no video rendering views
-- Details: `APIExample-Audio/ARCHITECTURE.md`
+- Details: [APIExample-Audio/ARCHITECTURE.md](APIExample-Audio/ARCHITECTURE.md)

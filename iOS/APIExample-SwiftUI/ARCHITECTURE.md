@@ -27,6 +27,7 @@
 | LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `createMediaPlayer()` | Transcode multiple video sources locally before publishing |
 | LocalVideoComposition | `Examples/Advanced/LocalVideoComposition/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()` | Composite camera and screen capture into one stream |
 | VideoProcess | `Examples/Advanced/VideoProcess/` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `enableExtension()`, `createVideoEffectObject()`, `setFilterEffectOptions()` | Agora beauty extension with makeup and virtual background |
 | RhythmPlayer | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
@@ -96,6 +97,7 @@ APIExample-SwiftUI/
     │       ├── LocalVideoTranscoding/       # "Local Video Transcoding"
     │       ├── LocalVideoComposition/       # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
+    │       ├── AgoraBeauty/                 # "Agora Beauty"
     │       ├── RhythmPlayer/                # "Rhythm Player"
     │       ├── CreateDataStream/            # "Create Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"

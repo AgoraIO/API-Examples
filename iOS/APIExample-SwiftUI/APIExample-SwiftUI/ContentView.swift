@@ -72,6 +72,8 @@ struct ContentView: View {
                      view: AnyView(ScreenShareEntry())),
             MenuItem(name: "Video Process".localized,
                      view: AnyView(VideoProcessEntry())),
+            MenuItem(name: "Agora Beauty".localized,
+                     view: AnyView(AgoraBeautyEntry())),
             MenuItem(name: "Rhythm Player".localized,
                      view: AnyView(RhythmPlayerEntry())),
             MenuItem(name: "Create Data Stream".localized,

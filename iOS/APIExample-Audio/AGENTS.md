@@ -17,15 +17,7 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
-## Architecture Red Lines
-
-- Do NOT call any video API: `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()`, `startPreview()` — the SDK has no video module
-- Do NOT add video rendering views (`AgoraRtcVideoCanvas`, `VideoView`) to any case in this project
-- Do NOT skip calling `leaveChannel()` + `AgoraRtcEngineKit.destroy()` in `willMove(toParent:)` when `parent == nil`
-- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to `DispatchQueue.main`
-- Do NOT create `AgoraRtcEngineKit` in the Entry VC — engine lifecycle belongs to Main VC only
-- Do NOT share `AgoraRtcEngineKit` instances across examples
-- Do NOT request microphone permission after calling `joinChannel()`
+To obtain an App ID, see [README.md](README.md#obtain-an-app-id).
 
 ## Skills
 

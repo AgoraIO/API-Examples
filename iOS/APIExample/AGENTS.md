@@ -17,14 +17,7 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
-## Architecture Red Lines
-
-- Do NOT skip calling `leaveChannel()` + `AgoraRtcEngineKit.destroy()` in `willMove(toParent:)` when `parent == nil`
-- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to `DispatchQueue.main`
-- Do NOT create `AgoraRtcEngineKit` in the Entry VC — engine lifecycle belongs to Main VC only
-- Do NOT share `AgoraRtcEngineKit` instances across examples
-- Do NOT add cases to `Main.storyboard` — each example must have its own `.storyboard` file
-- Do NOT request camera/microphone permissions after calling `joinChannel()`
+To obtain an App ID, see [README.md](README.md#obtain-an-app-id).
 
 ## Skills
 
