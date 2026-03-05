@@ -1,8 +1,46 @@
-# Agent Guide — macOS
+# AGENTS.md — macOS
 
 ## Project Context
 
 This is the Swift + Cocoa implementation of Agora RTC SDK examples for macOS. Before making any changes, read `ARCHITECTURE.md` to understand the structural rules.
+
+## Build Commands
+
+```bash
+# Install dependencies
+pod install
+
+# Build in Xcode
+xcodebuild -workspace APIExample.xcworkspace -scheme APIExample -configuration Release
+
+# Or open in Xcode and build manually
+open APIExample.xcworkspace
+```
+
+## App ID Configuration
+
+Configure your Agora App ID in `APIExample/Common/KeyCenter.swift`:
+
+```swift
+struct KeyCenter {
+    static let AppId: String = "<#YOUR_APP_ID#>"
+    
+    // Token is optional for testing, but required for production
+    static func Token(channelName: String) -> String {
+        return "<#YOUR_TOKEN#>"
+    }
+}
+```
+
+## Architecture Red Lines
+
+**Do NOT:**
+- Introduce UIKit or SwiftUI — use Cocoa (AppKit) only
+- Use Combine or async/await patterns unless already present in the file being modified
+- Create examples outside the `APIExample/Examples/[Basic|Advanced]/` directory structure
+- Forget to call `leaveChannel()` and `destroy()` when closing an example
+- Update UI from background threads — always dispatch to main thread
+- Share engine instances between examples — each example manages its own lifecycle
 
 ## Rules
 
@@ -34,7 +72,7 @@ Each example may contain a `SKILL.md` file in its folder. When working on or ref
 
 For broader tasks, use the skills in `.agent/skills/`:
 
-| Task | SKILL |
-|------|-------|
-| Find an existing example | `find-api-example` |
-| Create a new example | `create-api-example` |
+| Task | Skill | When to use |
+|------|-------|-------------|
+| Add or modify an example | `.agent/skills/upsert-case/` | Need to create a new API demo or update an existing one |
+| Code review | `.agent/skills/review-case/` | Review example code for lifecycle, thread safety, and convention compliance |
