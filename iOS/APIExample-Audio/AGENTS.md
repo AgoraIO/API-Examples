@@ -1,12 +1,11 @@
 # AGENTS.md — APIExample-Audio
 
-Audio-only demo project. Uses `AgoraAudio_iOS` — the video module is not available.
-Use this project only when the PRD is explicitly audio-only.
+Audio-only demo project. Uses `AgoraAudio_iOS` SDK — the video module is not included.
 
 ## Build Commands
 
 ```bash
-pod install                      # install CocoaPods dependencies
+pod install
 # Then open APIExample-Audio.xcworkspace in Xcode and build (Cmd+B)
 ```
 
@@ -18,13 +17,24 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
+## Architecture Red Lines
+
+- Do NOT call any video API: `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()`, `startPreview()` — the SDK has no video module
+- Do NOT add video rendering views (`AgoraRtcVideoCanvas`, `VideoView`) to any case in this project
+- Do NOT skip calling `leaveChannel()` + `AgoraRtcEngineKit.destroy()` in `willMove(toParent:)` when `parent == nil`
+- Do NOT update UI directly inside `AgoraRtcEngineDelegate` callbacks — always dispatch to `DispatchQueue.main`
+- Do NOT create `AgoraRtcEngineKit` in the Entry VC — engine lifecycle belongs to Main VC only
+- Do NOT share `AgoraRtcEngineKit` instances across examples
+- Do NOT request microphone permission after calling `joinChannel()`
+
 ## Skills
 
-| Task | Skill | Status |
-|------|-------|--------|
-| Find an existing example | `query-cases` | TODO |
-| Add a new example | `add-new-case` | TODO |
+| Task | Skill | When to use |
+|------|-------|-------------|
+| Add or modify a case | `.agent/skills/upsert-case/` | Need to create a new audio API demo or update an existing one |
+| Code review | `.agent/skills/review-case/` | Review case code for lifecycle, thread safety, and audio-only convention compliance |
+| Find an existing case | `.agent/skills/query-cases/` | Locate which file demonstrates a specific API or feature |
 
 ## Further Reading
 
-- `ARCHITECTURE.md` — full directory layout, case registration internals, Entry/Main pattern details
+- `ARCHITECTURE.md` — full directory layout, case registration, Entry/Main pattern, engine lifecycle

@@ -1,5 +1,41 @@
 # ARCHITECTURE.md — APIExample-OC
 
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| JoinChannelVideo | `Examples/Basic/JoinChannelVideo/JoinChannelVideo.m` | `joinChannelByToken:`, `setupLocalVideo:`, `setupRemoteVideo:` | Basic video call — join channel and render local/remote video |
+| JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/JoinChannelVideoToken.m` | `joinChannelByToken:`, `setupLocalVideo:`, `setupRemoteVideo:` | Video call with token authentication |
+| JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/JoinChannelVideoRecorder.m` | `createMediaRecorder:`, `joinChannelByToken:`, `setupLocalVideo:` | Local and remote stream recording |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.m` | `joinChannelByToken:`, `setAudioProfile:`, `enableAudioVolumeIndication:` | Basic audio call |
+| LiveStreaming | `Examples/Advanced/LiveStreaming/LiveStreaming.m` | `setClientRole:`, `setVideoScenario:`, `preloadChannelByToken:`, `enableInstantMediaRendering` | Interactive live streaming with role switching |
+| RTMPStreaming | `Examples/Advanced/RTMPStreaming/RTMPStreaming.m` | `startRtmpStreamWithoutTranscoding:`, `startRtmpStreamWithTranscoding:`, `updateRtmpTranscoding:`, `stopRtmpStream:` | Push stream to CDN with optional transcoding |
+| VideoMetadata | `Examples/Advanced/VideoMetadata/VideoMetadata.m` | `setMediaMetadataDataSource:withType:`, `setMediaMetadataDelegate:withType:` | Send and receive metadata attached to video stream |
+| VoiceChanger | `Examples/Advanced/VoiceChanger/VoiceChanger.m` | `setVoiceBeautifierPreset:`, `setAudioEffectPreset:`, `setVoiceConversionPreset:` | Voice beautifier, effects, and conversion presets |
+| CustomPcmAudioSource | `Examples/Advanced/CustomPcmAudioSource/CustomPcmAudioSource.m` | `createCustomAudioTrack:config:`, `enableCustomAudioLocalPlayback:enabled:`, `pushExternalAudioFrameRawData:` | Push custom PCM audio frames as external audio source |
+| CustomAudioRender | `Examples/Advanced/CustomAudioRender/CustomAudioRender.m` | `enableExternalAudioSink:sampleRate:channels:`, `pullPlaybackAudioFrameRawData:lengthInByte:` | Pull audio frames for custom rendering |
+| CustomVideoSourcePush | `Examples/Advanced/CustomVideoSourcePush/CustomVideoSourcePush.m` | `setExternalVideoSource:useTexture:sourceType:`, `pushExternalVideoFrame:videoTrackId:` | Push external video frames as custom video source |
+| CustomVideoRender | `Examples/Advanced/CustomVideoRender/CustomVideoRender.m` | `setVideoFrameDelegate:` | Custom rendering of remote video frames via delegate |
+| RawAudioData | `Examples/Advanced/RawAudioData/RawAudioData.m` | `setAudioFrameDelegate:` | Capture raw audio PCM data via delegate |
+| RawVideoData | `Examples/Advanced/RawVideoData/RawVideoData.m` | `setVideoFrameDelegate:` | Capture raw video frames via delegate |
+| SimpleFilter | `Examples/Advanced/SimpleFilter/SimpleFilter.m` | `enableExtensionWithVendor:extension:enabled:`, `setExtensionPropertyWithVendor:extension:key:value:` | Apply audio/video filter via Agora Extension API |
+| JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/JoinMultiChannel.m` | `joinChannelExByToken:connection:delegate:mediaOptions:` | Join multiple channels simultaneously via ex connection |
+| StreamEncryption | `Examples/Advanced/StreamEncryption/StreamEncryption.m` | `enableEncryption:encryptionConfig:` | Built-in and custom stream encryption |
+| AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.m` | `startAudioMixing:loopback:cycle:`, `adjustAudioMixingVolume:`, `setEffectsVolume:` | Mix local audio file with microphone input |
+| MediaPlayer | `Examples/Advanced/MediaPlayer/MediaPlayer.m` | `createMediaPlayerWithDelegate:`, `updateChannelExWithMediaOptions:connection:` | Play media files and publish to channel via media player |
+| ScreenShare | `Examples/Advanced/ScreenShare/ScreenShare.m` | `startScreenCapture:`, `updateScreenCapture:`, `stopScreenCapture` | Screen capture and sharing via ReplayKit extension |
+| LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.m` | `startLocalVideoTranscoder:`, `startCameraCapture:config:`, `enableVirtualBackground:backData:segData:` | Composite multiple video sources locally before publishing |
+| VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.m` | `setBeautyEffectOptions:options:`, `enableVirtualBackground:backData:segData:`, `enableExtensionWithVendor:` | Built-in beauty, virtual background, and video enhancement |
+| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.m` | `startRhythmPlayer:sound2:config:`, `stopRhythmPlayer` | Play metronome-style rhythm audio |
+| CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.m` | `createDataStream:config:`, `sendStreamMessage:data:` | Create and send data stream messages between users |
+| MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.m` | `startOrUpdateChannelMediaRelay:`, `stopChannelMediaRelay`, `pauseAllChannelMediaRelay`, `resumeAllChannelMediaRelay` | Relay media stream to multiple destination channels |
+| SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.m` | `createMediaPlayerWithDelegate:`, `updateChannelWithMediaOptions:` | 3D spatial audio with media player integration |
+| ContentInspect | `Examples/Advanced/ContentInspect/ContentInspect.m` | `enableContentInspect:config:`, `switchCamera` | Moderate content in video stream |
+| MutliCamera | `Examples/Advanced/MutliCamera/MutliCamera.m` | `enableMultiCamera:config:`, `startCameraCapture:config:`, `stopCameraCapture:` | Capture from front and back cameras simultaneously (iOS 13+) |
+| PictureInPicture | `Examples/Advanced/PictureInPicture/PictureInPicture.m` | `setVideoFrameDelegate:`, `AVPictureInPictureController` | Picture-in-Picture using AVKit (iOS 15+) |
+| Simulcast | `Examples/Advanced/Simulcast/Simulcast.m` | `setSimulcastConfig:`, `setRemoteVideoStream:type:` | Publish multiple video quality layers simultaneously |
+| Multipath | `Examples/Advanced/Multipath/Multipath.m` | `updateChannelWithMediaOptions:` | Multi-path network transmission configuration |
+
 ## Directory Layout
 
 ```

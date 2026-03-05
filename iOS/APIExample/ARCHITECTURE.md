@@ -1,5 +1,55 @@
 # ARCHITECTURE.md — APIExample
 
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| JoinChannelVideo | `Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift` | `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()` | Basic video call — join channel and render local/remote video |
+| JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/JoinChannelVideoToken.swift` | `joinChannel(byToken:)`, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
+| JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/JoinChannelVideoRecorder.swift` | `createMediaRecorder()`, `joinChannel()`, `setupLocalVideo()` | Local and remote stream recording |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `enableAudioVolumeIndication()`, `adjustRecordingSignalVolume()` | Basic audio call with volume and in-ear monitoring controls |
+| LiveStreaming | `Examples/Advanced/LiveStreaming/LiveStreaming.swift` | `setClientRole()`, `setVideoScenario()`, `preloadChannel()`, `enableCameraCenterStage()` | Interactive live streaming with role switching and camera features |
+| RTMPStreaming | `Examples/Advanced/RTMPStreaming/RTMPStreaming.swift` | `startRtmpStreamWithoutTranscoding()`, `startRtmpStream(withTranscoding:)`, `updateRtmpTranscoding()`, `stopRtmpStream()` | Push stream to CDN with optional transcoding |
+| VideoMetadata | `Examples/Advanced/VideoMetadata/VideoMetadata.swift` | `setMediaMetadataDataSource()`, `setMediaMetadataDelegate()` | Send and receive metadata attached to video stream |
+| VoiceChanger | `Examples/Advanced/VoiceChanger/VoiceChanger.swift` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setAINSMode()` | Voice beautifier, effects, conversion presets, and AI noise suppression |
+| CustomPcmAudioSource | `Examples/Advanced/CustomPcmAudioSource/CustomPcmAudioSource.swift` | `createCustomAudioTrack()`, `enableCustomAudioLocalPlayback()`, `pushExternalAudioFrameRawData()` | Push custom PCM audio frames as external audio source |
+| CustomAudioRender | `Examples/Advanced/CustomAudioRender/CustomAudioRender.swift` | `enableExternalAudioSink()`, `pullPlaybackAudioFrameRawData()` | Pull audio frames for custom rendering |
+| CustomAudioSource | `Examples/Advanced/CustomAudioSource/CustomAudioSource.swift` | `createCustomAudioTrack()` | Push custom audio via mixable audio track |
+| CustomVideoSourcePush | `Examples/Advanced/CustomVideoSourcePush/CustomVideoSourcePush.swift` | `setExternalVideoSource()`, `pushExternalVideoFrame()` | Push external video frames as custom video source |
+| CustomVideoSourcePushMulti | `Examples/Advanced/CustomVideoSourcePushMulti/CustomVideoSourcePushMulti.swift` | `createCustomVideoTrack()`, `createCustomEncodedVideoTrack()`, `pushExternalEncodedVideoFrame()` | Multi-track custom video source with encoded frame push |
+| CustomVideoRender | `Examples/Advanced/CustomVideoRender/CustomVideoRender.swift` | `setVideoFrameDelegate()` | Custom rendering of remote video frames via delegate |
+| RawAudioData | `Examples/Advanced/RawAudioData/RawAudioData.swift` | `setAudioFrameDelegate()`, `sendAudioMetadata()` | Capture raw audio PCM data via delegate |
+| RawVideoData | `Examples/Advanced/RawVideoData/RawVideoData.swift` | `setVideoFrameDelegate()` | Capture raw video frames via delegate |
+| RawMediaData | `Examples/Advanced/RawMediaData/RawMediaData.swift` | `setVideoFrameDelegate()`, `setAudioFrameDelegate()`, `setRecordingAudioFrameParametersWithSampleRate()`, `startAudioRecording()` | Capture both raw audio and video data simultaneously |
+| PictureInPicture | `Examples/Advanced/PictureInPicture/` | `AVPictureInPictureController`, `joinChannel()`, `setVideoFrameDelegate()` | Picture-in-Picture using AVKit (iOS 15+) |
+| SimpleFilter | `Examples/Advanced/SimpleFilter/SimpleFilter.swift` | `enableExtension()`, `setExtensionPropertyWithVendor()` | Apply audio/video filter via Agora Extension API |
+| QuickSwitchChannel | `Examples/Advanced/QuickSwitchChannel/QuickSwitchChannel.swift` | `joinChannel()`, `leaveChannel()` | Quickly switch between channels as audience |
+| JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/JoinMultiChannel.swift` | `joinChannelEx()`, `takeSnapshotEx()` | Join multiple channels simultaneously via ex connection |
+| StreamEncryption | `Examples/Advanced/StreamEncryption/StreamEncryption.swift` | `enableEncryption()` | Built-in and custom stream encryption |
+| AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.swift` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
+| PrecallTest | `Examples/Advanced/PrecallTest/PrecallTest.swift` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()`, `stopLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
+| MediaPlayer | `Examples/Advanced/MediaPlayer/MediaPlayer.swift` | `createMediaPlayer()`, `updateChannelEx()` | Play media files and publish to channel via media player |
+| ScreenShare | `Examples/Advanced/ScreenShare/ScreenShare.swift` | `startScreenCapture()`, `updateScreenCapture()`, `stopScreenCapture()`, `setScreenCaptureScenario()` | Screen capture and sharing via ReplayKit extension |
+| LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.swift` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()`, `enableVirtualBackground()` | Composite multiple video sources locally before publishing |
+| VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.swift` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `enableExtension()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
+| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.swift` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
+| MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.swift` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
+| SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
+| ContentInspect | `Examples/Advanced/ContentInspect/ContentInspect.swift` | `enableContentInspect()`, `switchCamera()` | Moderate content in video stream |
+| MutliCamera | `Examples/Advanced/MutliCamera/MutliCamera.swift` | `enableMultiCamera()`, `startCameraCapture()`, `stopCameraCapture()` | Capture from front and back cameras simultaneously (iOS 13+) |
+| KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/KtvCopyrightMusic.swift` | — | Links to KTV copyright music documentation |
+| ThirdBeautify | `Examples/Advanced/ThirdBeautify/ThirdBeautify.swift` | `enableExtension()` | Third-party beauty SDK integration (ByteDance / FaceUnity / SenseTime) |
+| ARKit | `Examples/Advanced/ARKit/ARKit.swift` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
+| AudioRouterPlayer | `Examples/Advanced/AudioRouterPlayer/AudioRouterPlayer.swift` | `setEnableSpeakerphone()` | Control audio output routing with third-party player |
+| AudioWaveform | `Examples/Advanced/AudioWaveform/AudioWaveform.swift` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
+| FaceCapture | `Examples/Advanced/FaceCapture/FaceCapture.swift` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
+| TransparentRender | `Examples/Advanced/TransparentRender/TransparentRender.swift` | `createMediaPlayer()`, `setExternalVideoSource()`, `pushExternalVideoFrame()` | Render video with transparent background |
+| RtePlayer | `Examples/Advanced/RtePlayer/RtePlayer.swift` | `AgoraRte`, `AgoraRtePlayer`, `AgoraRteCanvas` | URL-based stream playback via RTE Player API |
+| Simulcast | `Examples/Advanced/Simulcast/Simulcast.swift` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
+| Multipath | `Examples/Advanced/Multipath/Multipath.swift` | `updateChannel()` | Multi-path network transmission configuration |
+
 ## Directory Layout
 
 ```
