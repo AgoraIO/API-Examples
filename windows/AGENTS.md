@@ -1,8 +1,44 @@
-# Agent Guide — Windows
+# AGENTS.md — Windows
 
 ## Project Context
 
 This is the C++ + MFC implementation of Agora RTC SDK examples for Windows. Before making any changes, read `ARCHITECTURE.md` to understand the structural rules.
+
+## Build Commands
+
+```bash
+# Build using Visual Studio (from command line)
+cd windows/APIExample
+msbuild APIExample.sln /p:Configuration=Release /p:Platform=x64
+
+# Or open in Visual Studio and build manually
+start APIExample.sln
+```
+
+## App ID Configuration
+
+Configure your Agora App ID in `APIExample/APIExample/CConfig.h` and `CConfig.cpp`:
+
+```cpp
+// CConfig.h
+class CConfig {
+public:
+    static const char* GetAppId() { return "<#YOUR_APP_ID#>"; }
+    static const char* GetToken(const char* channelName) { return "<#YOUR_TOKEN#>"; }
+};
+```
+
+## Architecture Red Lines
+
+**Do NOT:**
+- Introduce C# or other languages — use C++ only
+- Use WinForms or WPF — use MFC only
+- Deviate from MFC naming conventions (`C` prefix for classes, `m_` prefix for members)
+- Use modern C++ patterns (lambdas, smart pointers) unless already present in the file being modified
+- Forget to call `leaveChannel()` and `release()` when closing an example
+- Update UI from background threads — always post messages to the main thread
+- Share engine instances between examples — each example manages its own lifecycle
+- Forget to implement `IAgoraRtcEngineEventHandler` for event handling
 
 ## Rules
 
@@ -37,7 +73,7 @@ Each example may contain a `SKILL.md` file in its folder. When working on or ref
 
 For broader tasks, use the skills in `.agent/skills/`:
 
-| Task | SKILL |
-|------|-------|
-| Find an existing example | `find-api-example` |
-| Create a new example | `create-api-example` |
+| Task | Skill | When to use |
+|------|-------|-------------|
+| Add or modify an example | `.agent/skills/upsert-case/` | Need to create a new API demo or update an existing one |
+| Code review | `.agent/skills/review-case/` | Review example code for lifecycle, thread safety, and convention compliance |
