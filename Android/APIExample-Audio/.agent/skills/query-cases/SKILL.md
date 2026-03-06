@@ -50,6 +50,7 @@ Read `ARCHITECTURE.md` (the `examples/` section of the Directory Layout). It con
 Use ARCHITECTURE.md as the primary source. Fall back to scanning the source directories only when:
 - The query requires data not in ARCHITECTURE.md (e.g. full `@Example` field values, `tipsId`)
 - ARCHITECTURE.md appears stale (a case exists in source but not in the doc)
+- The output involves free-index claims, index collisions, or "is index X available?" decisions — these must be validated from source immediately before final output
 
 ### Step 3: Scan case directories (fallback only)
 
@@ -99,6 +100,8 @@ For a specific query (e.g. "which case uses enableSpatialAudio?"), return only m
 For a free-index query, list all used indices in the target group and identify the next available slot:
 > BASIC range: 0–9. ADVANCED range: 10+.
 > ADVANCED indices in use: 10, 11, 12, 15, 20 → next free: 13
+
+Before returning any free-index/collision result, re-scan source registration points (`@Example` across `basic/`, `advanced/`, `audio/`) and recompute once from source-of-truth data.
 
 ---
 

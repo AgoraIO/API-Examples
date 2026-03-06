@@ -20,7 +20,7 @@ Touch exactly 4 files (all paths relative to `app/src/main/`):
 
 | File | What to add |
 |---|---|
-| `java/.../examples/{basic\|advanced}/YourCaseName.java` | Fragment class |
+| `java/.../examples/{basic\|advanced\|audio}/YourCaseName.java` | Fragment class |
 | `res/layout/fragment_your_case_name.xml` | XML layout |
 | `res/values/strings.xml` | 2 strings |
 | `res/navigation/nav_graph.xml` | 1 action + 1 destination |
@@ -132,7 +132,7 @@ File: `res/navigation/nav_graph.xml`
 
 ### Step 5: Update ARCHITECTURE.md
 
-Add one line to the case list in `ARCHITECTURE.md` under the correct directory section (`basic/`, `advanced/`):
+Add one line to the case list in `ARCHITECTURE.md` under the correct directory section (`basic/`, `advanced/`, or `audio/`):
 
 ```
 ├── YourCaseName.java    # [index] "Display Name" — key API description
@@ -148,7 +148,7 @@ When modifying an existing case rather than creating a new one, identify which f
 
 | What changed | Files to touch |
 |---|---|
-| Implementation logic (API calls, event handling) | `java/.../examples/{basic\|advanced}/CaseName.java` |
+| Implementation logic (API calls, event handling) | `java/.../examples/{basic\|advanced\|audio}/CaseName.java` |
 | UI layout (views, controls) | `res/layout/fragment_case_name.xml` |
 | Display name or tips text | `res/values/strings.xml` |
 | Sort index or group (BASIC ↔ ADVANCED) | `@Example` annotation in the Fragment class |

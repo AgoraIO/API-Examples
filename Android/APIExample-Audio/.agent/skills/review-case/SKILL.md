@@ -40,3 +40,18 @@ Open the case's Fragment source file and verify each point against the actual co
 ### Audio-Only Constraint
 
 - [ ] **No video APIs** — The case must not call `enableVideo()`, `setupLocalVideo()`, or reference `VideoCanvas`. APIExample-Audio uses the voice-SDK which has no video module; calling video APIs causes a compile error or runtime crash.
+
+## If a Check Fails
+
+- Teardown order wrong (`destroy` before `leaveChannel`) — fix teardown to `leaveChannel()` first, then `handler.post(RtcEngine::destroy)`, and re-test back navigation.
+- UI touched in SDK callback without main-thread dispatch — wrap UI updates in `runOnUIThread()` and re-run to verify no thread exceptions.
+- Permission flow missing before `joinChannel()` — add `checkOrRequestPermission()` gate and verify join only after `RECORD_AUDIO` is granted.
+- Any video API appears in code — remove all video API calls/usages immediately and replace with audio-only equivalents.
+- Missing `setParameters(...)` or private-cloud null-check — add both safeguards in engine init and re-run initialization.
+
+## NEVER
+
+- **NEVER** approve a case review if any video API (`enableVideo`, `setupLocalVideo`, `VideoCanvas`) exists in APIExample-Audio.
+- **NEVER** approve a case review with direct `RtcEngine.destroy()` on main thread.
+- **NEVER** approve a case review when `leaveChannel()` is missing before destroy.
+- **NEVER** ignore background-thread UI updates inside `IRtcEngineEventHandler` callbacks.

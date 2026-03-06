@@ -55,6 +55,7 @@ Read `ARCHITECTURE.md` (the `samples/` section of the Directory Layout). It cont
 Use ARCHITECTURE.md as the primary source. Fall back to reading Examples.kt only when:
 - The query requires data not in ARCHITECTURE.md (e.g. exact list position, `description` field)
 - ARCHITECTURE.md appears stale (a case exists in Examples.kt but not in the doc)
+- The output involves list position availability, duplicate registration checks, or "is this case already registered?" decisions — these must be validated from `Examples.kt` immediately before final output
 
 ### Step 3: Read Examples.kt (fallback / position queries)
 
@@ -103,6 +104,8 @@ For a specific query, return only matching rows.
 
 For a position query, list current entries in the target list and identify the next available slot:
 > AdvanceExampleList has 12 entries → next position: 13 (append at end)
+
+Before returning any position/registration-conflict result, re-read `Examples.kt` and recompute from the current list entries.
 
 ---
 

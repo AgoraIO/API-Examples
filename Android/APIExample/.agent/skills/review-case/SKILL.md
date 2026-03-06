@@ -36,3 +36,17 @@ Open the case's Fragment source file and verify each point against the actual co
 ### Private Cloud
 
 - [ ] **getPrivateCloudConfig null-check** — `getPrivateCloudConfig()` is null-checked before `setLocalAccessPoint()` is called. The method returns `null` on standard (non-private-cloud) builds, so calling `setLocalAccessPoint()` without the guard causes a NullPointerException.
+
+## If a Check Fails
+
+- Teardown order wrong (`destroy` before `leaveChannel`) — fix teardown to `leaveChannel()` first, then `handler.post(RtcEngine::destroy)`, and re-test back navigation.
+- UI touched in SDK callback without main-thread dispatch — wrap UI updates in `runOnUIThread()` and re-run the case to verify no thread exceptions.
+- Permission flow missing before `joinChannel()` — add `checkOrRequestPermission()` gate and verify join succeeds only after permission is granted.
+- Missing `setParameters(...)` or private-cloud null-check — add both safeguards in engine init and re-run the init path once.
+
+## NEVER
+
+- **NEVER** approve a case review with direct `RtcEngine.destroy()` on main thread.
+- **NEVER** approve a case review when `leaveChannel()` is missing before destroy.
+- **NEVER** ignore background-thread UI updates inside `IRtcEngineEventHandler` callbacks.
+- **NEVER** assume runtime behavior is correct without at least one back-navigation teardown check in Logcat.

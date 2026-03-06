@@ -32,3 +32,17 @@ Open the case's Composable source file and verify each point against the actual 
 ### Permissions
 
 - [ ] **Permission check before joinChannel** — Permission launcher (`rememberLauncherForActivityResult`) is called before `joinChannel()`. Joining without the required permissions (`RECORD_AUDIO`, and `CAMERA` for video cases) causes a silent failure — no error callback, just no audio/video.
+
+## If a Check Fails
+
+- `DisposableEffect(Unit)` is used — change key to `lifecycleOwner`, then verify back navigation triggers cleanup.
+- `RtcEngine` stored in `rememberSaveable` or state fields in `remember` only — fix to `RtcEngine -> remember`, UI/session state -> `rememberSaveable`, then verify rotation.
+- Toast/Dialog shown directly in callback — move UI-thread-only calls into `coroutineScope.launch(Dispatchers.Main)`.
+- Permission launcher bypassed before `joinChannel()` — gate join flow behind permission callback and re-test denied/granted paths.
+
+## NEVER
+
+- **NEVER** approve a review when `DisposableEffect` key is `Unit` for case teardown logic.
+- **NEVER** approve a review when `RtcEngine` uses `rememberSaveable`.
+- **NEVER** treat Compose callback state safety as permission to call Toast/Dialog off main thread.
+- **NEVER** skip rotation and back-navigation checks for lifecycle-sensitive Compose cases.
