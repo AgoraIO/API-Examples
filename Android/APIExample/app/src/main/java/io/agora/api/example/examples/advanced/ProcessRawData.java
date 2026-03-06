@@ -55,7 +55,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Process raw data.
  */
 @Example(
-        index = 11,
+        index = 20,
         group = ADVANCED,
         name = R.string.item_processraw,
         actionId = R.id.action_mainFragment_to_ProcessRawData,

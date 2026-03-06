@@ -46,7 +46,7 @@ import io.agora.rtc2.video.VideoCanvas;
  * @author cjw
  */
 @Example(
-        index = 11,
+        index = 21,
         group = ADVANCED,
         name = R.string.item_ext,
         actionId = R.id.action_mainFragment_extension,

@@ -39,7 +39,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * This demo demonstrates how to make a one-to-one voice call
  */
 @Example(
-        index = 5,
+        index = 11,
         group = ADVANCED,
         name = R.string.item_customaudiosource,
         actionId = R.id.action_mainFragment_to_CustomAudioSource,

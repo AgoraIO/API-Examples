@@ -56,7 +56,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
  */
 @Example(
-        index = 8,
+        index = 17,
         group = ADVANCED,
         name = R.string.item_customremoterender,
         actionId = R.id.action_mainFragment_to_CustomRemoteRender,

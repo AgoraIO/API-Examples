@@ -32,7 +32,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * The type Audio waveform.
  */
 @Example(
-        index = 17,
+        index = 5,
         group = ADVANCED,
         name = R.string.item_audiowaveform,
         actionId = R.id.action_mainFragment_to_AudioWaveform,

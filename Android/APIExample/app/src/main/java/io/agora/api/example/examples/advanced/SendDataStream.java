@@ -41,7 +41,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Send data stream.
  */
 @Example(
-        index = 20,
+        index = 35,
         group = ADVANCED,
         name = R.string.item_senddatastream,
         actionId = R.id.action_mainFragment_senddatastream,

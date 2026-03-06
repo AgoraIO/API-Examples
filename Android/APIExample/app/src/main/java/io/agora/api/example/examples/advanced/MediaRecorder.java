@@ -54,7 +54,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Media recorder.
  */
 @Example(
-        index = 17,
+        index = 30,
         group = ADVANCED,
         name = R.string.item_media_recorder,
         actionId = R.id.action_mainFragment_to_MediaRecorder,

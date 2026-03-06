@@ -44,7 +44,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * @author cjw
  */
 @Example(
-        index = 9,
+        index = 18,
         group = ADVANCED,
         name = R.string.item_raw_audio,
         actionId = R.id.action_mainFragment_raw_audio,

@@ -91,7 +91,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * The type Voice effects.
  */
 @Example(
-        index = 4,
+        index = 13,
         group = ADVANCED,
         name = R.string.item_voiceeffects,
         actionId = R.id.action_mainFragment_to_VoiceEffects,

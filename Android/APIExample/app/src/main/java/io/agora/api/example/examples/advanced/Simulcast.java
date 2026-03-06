@@ -49,7 +49,7 @@ import kotlin.Pair;
  * This example demonstrates how to use Simulcast
  */
 @Example(
-        index = 28,
+        index = 44,
         group = ADVANCED,
         name = R.string.item_simulcast,
         actionId = R.id.action_mainFragment_to_simulcast,

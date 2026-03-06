@@ -43,7 +43,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * The type Play audio files.
  */
 @Example(
-        index = 15,
+        index = 27,
         group = ADVANCED,
         name = R.string.item_playaudiofiles,
         actionId = R.id.action_mainFragment_to_PlayAudioFiles,

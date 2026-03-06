@@ -36,7 +36,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * The type Pre call test.
  */
 @Example(
-        index = 16,
+        index = 28,
         group = ADVANCED,
         name = R.string.item_precalltest,
         actionId = R.id.action_mainFragment_to_PreCallTest,

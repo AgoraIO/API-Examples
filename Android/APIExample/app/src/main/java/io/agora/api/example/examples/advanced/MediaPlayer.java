@@ -65,7 +65,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Media player.
  */
 @Example(
-        index = 17,
+        index = 29,
         group = ADVANCED,
         name = R.string.item_mediaplayer,
         actionId = R.id.action_mainFragment_to_MediaPlayer,

@@ -47,7 +47,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This example demonstrates how to use Multipath
  */
 @Example(
-        index = 29,
+        index = 45,
         group = ADVANCED,
         name = R.string.item_multipath,
         actionId = R.id.action_mainFragment_to_multipath,

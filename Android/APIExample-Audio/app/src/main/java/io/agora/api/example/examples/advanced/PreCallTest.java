@@ -34,7 +34,7 @@ import io.agora.rtc2.internal.LastmileProbeConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 @Example(
-        index = 16,
+        index = 15,
         group = ADVANCED,
         name = R.string.item_precalltest,
         actionId = R.id.action_mainFragment_to_PreCallTest,

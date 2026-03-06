@@ -66,7 +66,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Multi video source tracks.
  */
 @Example(
-        index = 10,
+        index = 19,
         group = ADVANCED,
         name = R.string.item_multiVideoSourceTracks,
         actionId = R.id.action_mainFragment_to_MultiVideoSourceTracks,
