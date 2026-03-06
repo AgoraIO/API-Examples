@@ -91,6 +91,38 @@ APIExample-Compose/
             └── GLTextureView.java
 ```
 
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| Join Video Channel (With Token) | `JoinChannelVideoToken.kt` | `joinChannel()`, `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()` | Joins a video channel using a manually provided token instead of fetching one automatically |
+| Join Video Channel | `JoinChannelVideo.kt` | `joinChannel()`, `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()`, `setVideoEncoderConfiguration()` | Canonical reference for joining a video channel with token generation and basic video rendering |
+| Join Audio Channel | `JoinChannelAudio.kt` | `joinChannel()`, `enableAudio()`, `setChannelProfile()`, `setAudioScenario()`, `setAudioProfile()`, `enableInEarMonitoring()` | Joins an audio-only channel with audio route, in-ear monitoring, and volume controls |
+| Live Streaming | `LiveStreaming.kt` | `joinChannel()`, `enableVideo()`, `setClientRole()`, `setDualStreamMode()`, `setVideoScenario()`, `addVideoWatermark()`, `setVideoEncoderConfiguration()` | Demonstrates live streaming with client role switching, dual stream, watermark, and encoder options |
+| RTMP Streaming | `RTMPStreaming.kt` | `joinChannel()`, `enableVideo()`, `startRtmpStreamWithTranscoding()`, `startRtmpStreamWithoutTranscoding()`, `stopRtmpStream()`, `updateRtmpTranscoding()` | Pushes a live stream to a CDN via RTMP with optional transcoding |
+| Media Metadata | `MediaMetadata.kt` | `joinChannel()`, `enableVideo()`, `registerMediaMetadataObserver()` | Sends and receives video metadata through the IMetadataObserver interface |
+| Voice Effects | `VoiceEffects.kt` | `joinChannel()`, `enableAudio()`, `setVoiceBeautifierPreset()`, `setVoiceConversionPreset()`, `setAudioEffectPreset()`, `setAudioEffectParameters()`, `setAINSMode()` | Applies voice beautifier, voice changer, style transformation, and noise suppression presets |
+| Origin Audio Data | `OriginAudioData.kt` | `joinChannel()`, `enableAudio()`, `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Accesses and rewrites raw audio frames via the IAudioFrameObserver interface |
+| Custom Audio Source | `CustomAudioSource.kt` | `joinChannel()`, `enableAudio()`, `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `destroyCustomAudioTrack()`, `enableCustomAudioLocalPlayback()` | Pushes external audio from a file into a custom audio track |
+| Custom Audio Render | `CustomAudioRender.kt` | `joinChannel()`, `enableAudio()`, `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Pulls remote audio frames and renders them through a custom AudioTrack player |
+| Origin Video Data | `OriginVideoData.kt` | `joinChannel()`, `enableVideo()`, `registerVideoFrameObserver()` | Captures raw video frames via IVideoFrameObserver for screenshot functionality |
+| Custom Video Source | `CustomVideoSource.kt` | `joinChannel()`, `enableVideo()`, `pushExternalVideoFrameById()` | Pushes external video frames in I420, NV21, NV12, or Texture2D format |
+| Custom Video Render | `CustomVideoRender.kt` | `joinChannel()`, `enableVideo()`, `registerVideoFrameObserver()` | Renders remote video frames using a custom OpenGL renderer via IVideoFrameObserver |
+| Picture In Picture | `PictureInPicture.kt` | `joinChannel()`, `enableVideo()`, `setupLocalVideo()`, `setupRemoteVideo()`, `enterPictureInPictureMode()` | Demonstrates Android Picture-in-Picture mode during a video call |
+| Join Multi Channel | `JoinMultiChannel.kt` | `joinChannel()`, `joinChannelEx()`, `leaveChannelEx()`, `enableVideo()`, `setupRemoteVideoEx()`, `takeSnapshotEx()` | Joins two channels simultaneously using RtcEngineEx multi-channel APIs |
+| Channel Encryption | `ChannelEncryption.kt` | `joinChannel()`, `enableVideo()`, `enableEncryption()` | Enables built-in media encryption before joining a channel |
+| Play Audio Files | `PlayAudioFiles.kt` | `joinChannel()`, `enableAudio()`, `startAudioMixing()`, `stopAudioMixing()`, `playEffect()`, `preloadEffect()`, `setAudioProfile()` | Plays audio mixing and sound effect files with volume controls |
+| Pre Call Test | `PreCallTest.kt` | `startLastmileProbeTest()`, `stopLastmileProbeTest()`, `startEchoTest()`, `stopEchoTest()`, `enableVideo()` | Runs network quality probe and audio/video echo tests before joining a channel |
+| Media Recorder | `MediaRecorder.kt` | `joinChannel()`, `enableVideo()`, `createMediaRecorder()`, `startRecording()`, `stopRecording()` | Records local or remote media streams to MP4 files using AgoraMediaRecorder |
+| Media Player | `MediaPlayer.kt` | `joinChannel()`, `enableVideo()`, `createMediaPlayer()`, `open()`, `play()`, `stop()`, `updateChannelMediaOptions()` | Plays media files and publishes the player track to the channel |
+| Screen Sharing | `ScreenSharing.kt` | `joinChannel()`, `enableVideo()`, `startScreenCapture()`, `stopScreenCapture()`, `updateScreenCaptureParameters()`, `setScreenCaptureScenario()` | Captures and shares the device screen with scenario and audio options |
+| Video Process Extension | `VideoProcessExtension.kt` | `joinChannel()`, `enableVideo()`, `setBeautyEffectOptions()`, `setLowlightEnhanceOptions()`, `setColorEnhanceOptions()`, `setVideoDenoiserOptions()`, `enableVirtualBackground()`, `enableExtension()` | Applies beauty filters, low-light enhancement, color enhancement, denoiser, and virtual background |
+| Rhythm Player | `RhythmPlayer.kt` | `joinChannel()`, `startRhythmPlayer()`, `stopRhythmPlayer()`, `updateChannelMediaOptions()` | Plays a metronome beat track and publishes it to the channel |
+| Local Video Transcoding | `LocalVideoTranscoding.kt` | `joinChannel()`, `enableVideo()`, `startLocalVideoTranscoder()`, `stopLocalVideoTranscoder()`, `startCameraCapture()`, `stopCameraCapture()` | Composites camera and media player streams into a single transcoded video |
+| Send Data Stream | `SendDataStream.kt` | `joinChannel()`, `enableVideo()`, `createDataStream()`, `sendStreamMessage()` | Sends and receives real-time data messages through a data channel |
+| Host Across Channel | `HostAcrossChannel.kt` | `joinChannel()`, `enableVideo()`, `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relays media streams from one channel to another for cross-channel hosting |
+| Spatial Sound | `SpatialSound.kt` | `joinChannel()`, `enableAudio()`, `ILocalSpatialAudioEngine.initialize()`, `updateSelfPosition()`, `updateRemotePosition()`, `updatePlayerPositionInfo()` | Demonstrates 3D spatial audio with draggable sound source positioning |
+
 ## Case Registration Mechanism
 
 Registration is **manual** — no reflection, no annotation scanning.

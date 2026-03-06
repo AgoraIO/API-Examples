@@ -40,21 +40,21 @@ APIExample-Audio/
         │   └── gles/                        # OpenGL ES helpers (for waveform visualization)
         │
         ├── examples/                        # All cases live here — ClassUtils scans this package
-        │   ├── basic/                       # group = "BASIC"
+        │   ├── basic/                       # group = "BASIC" (index 0–9)
         │   │   ├── JoinChannelAudioByToken.java # [0] "Live Interactive Audio Streaming(Token Verify)"
         │   │   └── JoinChannelAudio.java        # [1] "Live Interactive Audio Streaming"
-        │   ├── advanced/                        # group = "ADVANCED"
-        │   │   ├── VoiceEffects.java            # [4]  "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
-        │   │   ├── customaudio/CustomAudioSource.java  # [5] "Custom Audio Sources" — push external audio
-        │   │   ├── customaudio/CustomAudioRender.java  # [6] "Custom Audio Render" — pull audio for custom rendering
+        │   ├── advanced/                        # group = "ADVANCED" (index 10+)
+        │   │   ├── VoiceEffects.java            # [10] "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
+        │   │   ├── customaudio/CustomAudioSource.java  # [11] "Custom Audio Sources" — push external audio
+        │   │   ├── customaudio/CustomAudioRender.java  # [12] "Custom Audio Render" — pull audio for custom rendering
         │   │   ├── customaudio/AudioPlayer.java        # helper for CustomAudioRender
-        │   │   ├── ProcessAudioRawData.java     # [9]  "Raw Audio Data" — audio raw data processing
-        │   │   ├── PlayAudioFiles.java          # [15] "Play Audio Files" — audio mixing
-        │   │   ├── PreCallTest.java             # [16] "Pre-call Tests" — network/device test before joining
-        │   │   ├── RhythmPlayer.java            # [19] "Rhythm Player" — metronome/rhythm playback
-        │   │   └── SpatialSound.java            # [22] "Spatial Audio" — 3D spatial audio
+        │   │   ├── ProcessAudioRawData.java     # [13] "Raw Audio Data" — audio raw data processing
+        │   │   ├── PlayAudioFiles.java          # [14] "Play Audio Files" — audio mixing
+        │   │   ├── PreCallTest.java             # [15] "Pre-call Tests" — network/device test before joining
+        │   │   ├── RhythmPlayer.java            # [16] "Rhythm Player" — metronome/rhythm playback
+        │   │   └── SpatialSound.java            # [17] "Spatial Audio" — 3D spatial audio
         │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
-        │       └── AudioWaveform.java           # [17] "Audio Waveform" — audio visualization
+        │       └── AudioWaveform.java           # [18] "Audio Waveform" — audio visualization
         │
         └── utils/
             ├── ClassUtils.java              # DEX scanner — auto-discovers @Example classes
@@ -66,6 +66,22 @@ APIExample-Audio/
             ├── AudioFileReader.java
             └── YUVUtils.java
 ```
+
+## Case Index
+
+| Case | Path | Key APIs | Description |
+|------|------|----------|-------------|
+| Live Interactive Audio Streaming(Token Verify) | `basic/JoinChannelAudioByToken.java` | `RtcEngine.create()`, `joinChannel()`, `setClientRole()` | Demonstrates audio-only calling with manual App ID and token input |
+| Live Interactive Audio Streaming | `basic/JoinChannelAudio.java` | `RtcEngine.create()`, `joinChannel()`, `setAudioProfile()`, `setAudioScenario()`, `muteLocalAudioStream()`, `enableInEarMonitoring()`, `adjustRecordingSignalVolume()`, `adjustPlaybackSignalVolume()` | Demonstrates audio-only calling with volume controls, in-ear monitoring, and audio routing |
+| Set the Voice Beautifier and Effects | `advanced/VoiceEffects.java` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setAudioEffectParameters()`, `setLocalVoicePitch()`, `setLocalVoiceEqualization()`, `setLocalVoiceReverb()`, `setLocalVoiceFormant()`, `setAINSMode()`, `enableVoiceAITuner()` | Demonstrates voice beautifier presets, audio effects, voice conversion, and AI noise suppression |
+| Custom Audio Sources | `advanced/customaudio/CustomAudioSource.java` | `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `enableCustomAudioLocalPlayback()`, `destroyCustomAudioTrack()` | Demonstrates pushing external audio frames via a custom audio track |
+| Custom Audio Render | `advanced/customaudio/CustomAudioRender.java` | `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Demonstrates pulling audio frames for custom audio rendering |
+| Raw Audio Data | `advanced/ProcessAudioRawData.java` | `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Demonstrates processing raw audio data through the audio frame observer |
+| Play Audio Files | `advanced/PlayAudioFiles.java` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()`, `getAudioEffectManager()`, `adjustAudioMixingVolume()` | Demonstrates audio mixing and sound effect playback |
+| Pre-call Tests | `advanced/PreCallTest.java` | `startLastmileProbeTest()`, `stopLastmileProbeTest()`, `startEchoTest()`, `stopEchoTest()` | Demonstrates network quality probing and echo testing before joining a channel |
+| Rhythm Player | `advanced/RhythmPlayer.java` | `startRhythmPlayer()`, `stopRhythmPlayer()`, `enableAudioVolumeIndication()` | Demonstrates metronome/rhythm playback synchronized with audio streaming |
+| Spatial Audio | `advanced/SpatialSound.java` | `ILocalSpatialAudioEngine.create()`, `updateSelfPosition()`, `updateRemotePosition()`, `updatePlayerPositionInfo()`, `setZones()`, `createMediaPlayer()` | Demonstrates 3D spatial audio positioning for remote users and media players |
+| Audio Waveform | `audio/AudioWaveform.java` | `enableAudio()`, `enableAudioVolumeIndication()` | Demonstrates real-time audio waveform visualization |
 
 ## Case Registration Mechanism
 
@@ -81,7 +97,7 @@ Identical to `APIExample` — automatic via reflection, no manual list.
 **`@Example` annotation — all four fields are required:**
 ```java
 @Example(
-    index    = 2,                               // sort order within the group
+    index    = 2,                               // sort order within the group; BASIC: 0–9, ADVANCED: 10+
     group    = BASIC,                           // "BASIC" or "ADVANCED"
     name     = R.string.item_my_case,           // display name string resource
     actionId = R.id.action_mainFragment_to_myCase, // nav action ID in nav_graph.xml
@@ -96,7 +112,7 @@ Identical to `APIExample` — single `nav_graph.xml` with Jetpack Navigation Com
 
 Every case needs:
 - A `<fragment>` destination entry in `nav_graph.xml`
-- An `<action android:id="@+id/action_mainFragment_to_myCase">` inside `<fragment id="mainFragment">`
+- An `<action android:id="@+id/action_mainFragment_to_myCase">` inside `<fragment id="Ready">`
 - The action `id` must exactly match `actionId` in `@Example`
 
 ## RtcEngine Lifecycle

@@ -28,7 +28,7 @@ import io.agora.api.example.examples.advanced.beauty.FaceUnityBeautySDK;
  * The type Third party beauty.
  */
 @Example(
-        index = 24,
+        index = 39,
         group = ADVANCED,
         name = R.string.item_third_party_beauty,
         actionId = R.id.action_mainFragment_to_third_party_beauty,

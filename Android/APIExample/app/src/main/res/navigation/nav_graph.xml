@@ -35,9 +35,6 @@
         <action
             android:id="@+id/action_mainFragment_to_RTCToRTMP"
             app:destination="@id/RTCToRTMP" />
-<!--        <action-->
-<!--            android:id="@+id/action_mainFragment_to_CDNStreaming"-->
-<!--            app:destination="@id/CDNStreaming" />-->
         <action
             android:id="@+id/action_mainFragment_to_MediaMetadata"
             app:destination="@id/MediaMetadata" />

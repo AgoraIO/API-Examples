@@ -38,7 +38,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 /**
  * This demo demonstrates how to make a one-to-one voice call
  */
-@Example(index = 5, group = ADVANCED, name = R.string.item_customaudiosource, actionId = R.id.action_mainFragment_to_CustomAudioSource, tipsId = R.string.customaudio)
+@Example(index = 14, group = ADVANCED, name = R.string.item_customaudiosource, actionId = R.id.action_mainFragment_to_CustomAudioSource, tipsId = R.string.customaudio)
 public class CustomAudioSource extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = CustomAudioSource.class.getSimpleName();
     private EditText et_channel;

@@ -68,7 +68,7 @@ import io.agora.rtc2.video.WatermarkOptions;
  * When turn the Co-host on, others will see you.
  */
 @Example(
-        index = 0,
+        index = 10,
         group = ADVANCED,
         name = R.string.item_livestreaming,
         actionId = R.id.action_mainFragment_to_live_streaming,

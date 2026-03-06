@@ -28,7 +28,7 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 @Example(
-        index = 7,
+        index = 18,
         group = Examples.ADVANCED,
         name = R.string.item_audiowaveform,
         actionId = R.id.action_mainFragment_to_AudioWaveform,

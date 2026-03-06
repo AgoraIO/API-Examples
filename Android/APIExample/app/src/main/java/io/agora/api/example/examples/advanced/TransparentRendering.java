@@ -45,7 +45,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This demo demonstrates how to make a one-to-one video call
  */
 @Example(
-        index = 25,
+        index = 41,
         group = ADVANCED,
         name = R.string.item_transparentrendering,
         actionId = R.id.action_mainFragment_to_transparentrendering,

@@ -49,7 +49,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Join multiple channel.
  */
 @Example(
-        index = 13,
+        index = 25,
         group = ADVANCED,
         name = R.string.item_joinmultichannel,
         actionId = R.id.action_mainFragment_to_MultiChannel,

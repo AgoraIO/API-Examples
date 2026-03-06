@@ -37,7 +37,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * This demo demonstrates how to make a VideoProcessExtension
  */
 @Example(
-        index = 19,
+        index = 16,
         group = ADVANCED,
         name = R.string.item_rhythmplayer,
         actionId = R.id.action_mainFragment_rhythm_player,

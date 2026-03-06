@@ -14,39 +14,7 @@ Jetpack Compose version of the API demo. Mirrors cases from `APIExample/` but us
 
 ## App ID Configuration
 
-Edit `local.properties` in the project root (not in `app/`):
-```
-AGORA_APP_ID=YOUR_APP_ID
-AGORA_APP_CERT=YOUR_CERT
-```
-The build will throw a `GradleException` if `AGORA_APP_ID` is missing or empty.
-Values are injected as `BuildConfig.AGORA_APP_ID` / `BuildConfig.AGORA_APP_CERT` at compile time.
-
-## How to Add a New Case
-
-Registration is **manual** — there is no reflection in this project.
-
-1. Create `app/src/main/java/io/agora/api/example/compose/samples/MyNewCase.kt`:
-   ```kotlin
-   @Composable
-   fun MyNewCase() {
-       // RtcEngine + state here
-   }
-   ```
-   Follow the two-function pattern: a public stateful entry + a private stateless `*View` function.
-   See `JoinChannelVideo.kt` as the canonical reference.
-
-2. Register in `model/Examples.kt` — add to `BasicExampleList` or `AdvanceExampleList`:
-   ```kotlin
-   Example(R.string.example_my_new_case) { MyNewCase() }
-   ```
-
-3. Add the display string to `app/src/main/res/values/strings.xml`:
-   ```xml
-   <string name="example_my_new_case">My New Case</string>
-   ```
-
-No `nav_graph.xml` changes needed. Navigation routes by list index automatically.
+See [README.md — Obtain an App Id](README.md#obtain-an-app-id).
 
 ## Architecture Red Lines
 
@@ -59,20 +27,11 @@ No `nav_graph.xml` changes needed. Navigation routes by list index automatically
 
 ## Skills
 
-- `.kiro/skills/add-new-case/` — step-by-step guide for adding a new Compose case (template, `rememberSaveable` rules, verify checklist). Read `SKILL.md` inside before writing any code.
-- `.kiro/skills/query-cases/` — query existing cases by API, group, or list position; uses `ARCHITECTURE.md` as fast index.
-
-## Hooks
-
-- `.kiro/hooks/build-on-task-complete.json` — runs `assembleDebug` automatically after each spec task completes
-
-## Steering
-| File | Inclusion | Purpose |
-|------|-----------|---------|
-| `.kiro/steering/project-routing.md` | Always | which sub-project to use for a given scenario; hard constraints on file sharing
-| `.kiro/steering/coding-standards.md` | Always | RtcEngine lifecycle rules, Kotlin/Compose standards, naming conventions
-| `.kiro/steering/complex-case-spec.md` | Manual | when and how to use the Spec workflow for complex cases
-
+| Skill | Path | Description |
+|-------|------|-------------|
+| upsert-case | `.agent/skills/upsert-case/` | Add a new Compose case or modify an existing one |
+| query-cases | `.agent/skills/query-cases/` | Query and browse existing Compose cases |
+| review-case | `.agent/skills/review-case/` | Review a case against project red lines |
 
 ## Further Reading
 

@@ -12,7 +12,7 @@ import io.agora.api.example.common.BaseBrowserFragment;
  * The type Ktv copyright music.
  */
 @Example(
-        index = 24,
+        index = 40,
         group = ADVANCED,
         name = R.string.item_ktv_copyright_music,
         actionId = R.id.action_mainFragment_to_ktv_copyright_music,

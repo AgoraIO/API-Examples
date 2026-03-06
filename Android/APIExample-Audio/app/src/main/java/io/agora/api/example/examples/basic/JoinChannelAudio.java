@@ -62,7 +62,7 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
  * @author cjw
  */
 @Example(
-        index = 2,
+        index = 1,
         group = BASIC,
         name = R.string.item_joinaudio,
         actionId = R.id.action_mainFragment_to_joinChannelAudio,

@@ -54,7 +54,7 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
  * The type Agora beauty.
  */
 @Example(
-        index = 27,
+        index = 43,
         group = ADVANCED,
         name = R.string.item_agora_beauty,
         actionId = R.id.action_mainFragment_agora_beauty,

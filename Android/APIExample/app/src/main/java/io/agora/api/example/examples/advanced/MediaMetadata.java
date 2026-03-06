@@ -47,7 +47,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Video metadata.
  */
 @Example(
-        index = 3,
+        index = 12,
         group = ADVANCED,
         name = R.string.item_mediametadata,
         actionId = R.id.action_mainFragment_to_MediaMetadata,

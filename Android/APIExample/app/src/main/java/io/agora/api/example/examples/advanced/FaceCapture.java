@@ -45,7 +45,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Process raw data.
  */
 @Example(
-        index = 12,
+        index = 23,
         group = ADVANCED,
         name = R.string.item_face_capture,
         actionId = R.id.action_mainFragment_to_face_capture,

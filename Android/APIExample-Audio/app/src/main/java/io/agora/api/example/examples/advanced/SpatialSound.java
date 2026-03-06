@@ -57,7 +57,7 @@ import io.agora.spatialaudio.SpatialAudioZone;
  * The type Spatial sound.
  */
 @Example(
-        index = 22,
+        index = 17,
         group = ADVANCED,
         name = R.string.item_spatial_sound,
         actionId = R.id.action_mainFragment_to_spatial_sound,

@@ -56,7 +56,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * @author cjw
  */
 @Example(
-        index = 12,
+        index = 24,
         group = ADVANCED,
         name = R.string.item_quickswitck,
         actionId = R.id.action_mainFragment_to_QuickSwitch,

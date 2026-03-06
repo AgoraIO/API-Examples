@@ -40,7 +40,7 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 
 @Example(
-        index = 15,
+        index = 14,
         group = ADVANCED,
         name = R.string.item_playaudiofiles,
         actionId = R.id.action_mainFragment_to_PlayAudioFiles,
