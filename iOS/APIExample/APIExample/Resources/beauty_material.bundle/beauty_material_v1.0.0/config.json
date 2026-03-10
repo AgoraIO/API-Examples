@@ -3,7 +3,8 @@
         "identifier": "agora_beauty_material_100",
         "version": "1.0.0",
         "aspect": "16:9",
-        "preferred_fps": 24
+        "preferred_fps": 24,
+        "performance_mode": 2
     },
     "user_interface_option": {
         "模板女": "muban_female/",
@@ -16,5 +17,9 @@
     },
     "beauty_config" : "模板男",
     "makeup_config" : "学姐妆",
-    "filter_config" : "冷白"
+    "filter_config" : "冷白",
+    "beauty_custom_option": {
+        "brightness_factor": 1.0,
+        "auto_sharpness": false
+    }
 }

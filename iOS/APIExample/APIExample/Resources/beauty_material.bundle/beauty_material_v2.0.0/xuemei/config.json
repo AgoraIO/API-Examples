@@ -18,15 +18,10 @@
         "lipStyle": 2,
         "lipColor": 5,
         "lipStrength": 1.0,
-        "wocanStyle": 3,
-        "wocanStrength": 1.0,
-        "facialStyle": 5,
-        "facialStrength": 1.0
-    },
-    "filter_effect_option": {
-        "enable": true,
-        "path": "../../resource/filters/xuemei.png",
-        "strength": 0.5
+        "facialStyle": 2,
+        "facialStrength": 1.0,
+        "wocanStyle": 2,
+        "wocanStrength": 1.0
     },
     "style_makeup_option" : {
       "styleIntensity" : 0.95

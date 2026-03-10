@@ -1,0 +1,37 @@
+{
+    "lists" : [
+        {
+            "name": "guofeng_hat",
+            "type": 3,
+            "resourceType": "png",
+            "path": "../../sticker_resource/guofeng/hat.png",
+            "anchor": 1,
+            "follow": 2,
+            "followIndex": 3,
+            "followCtrls": [118, 298, 358, 298, 242, 202],
+            "followOffset": [0.0, 0.0],
+            "blendMode": 0
+        },
+        {
+            "name": "guofeng_sunglass",
+            "type": 3,
+            "resourceType": "png",
+            "path": "../../sticker_resource/guofeng/sunglasses.png",
+            "anchor": 1,
+            "follow": 3,
+            "followIndex": 3,
+            "followCtrls": [134, 84, 366, 84, 250, 200],
+            "followOffset": [0.0, 0.0],
+            "blendMode": 0
+        },
+        {
+            "name": "front_partical",
+            "type": 4,
+            "resourceType": "gif",
+            "path": "../../sticker_resource/front/front-partical",
+            "fillScreen": true,
+            "blendMode": 2,
+            "fps": 10
+        }
+    ]
+}

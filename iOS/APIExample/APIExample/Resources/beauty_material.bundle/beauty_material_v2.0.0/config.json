@@ -3,7 +3,8 @@
         "identifier": "agora_beauty_material_200",
         "version": "2.0.0",
         "aspect": "16:9",
-        "preferred_fps": 24
+        "preferred_fps": 24,
+        "performance_mode": 1
     },
     "user_interface_option": {
         "模板女": "muban_female/",
@@ -13,9 +14,10 @@
         "学妹妆": "xuemei/",
         "原生": "yuansheng/",
         "冷白": "lengbai/",
-        "嫩白": "nenbai/"
+        "嫩白": "nenbai/",
+        "国风": "sticker_guofeng/"
     },
     "beauty_config" : "模板女",
     "makeup_config" : "学妹妆",
-    "filter_config" : "原生"
+    "filter_config" : "冷白"
 }

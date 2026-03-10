@@ -1,11 +1,11 @@
 {
     "beauty_effect_option": {
         "enable": true,
-        "smoothness": 0.6,
-        "lightness": 0.3,
-        "redness": 0.2,
-        "sharpness": 0.5,
-        "contrast_strength": 1.0
+        "smoothness": 0.5,
+        "lightness": 0.7,
+        "redness": 0.5,
+        "sharpness": 0.0,
+        "contrast_strength": 0.5
     },
     "face_shape_beauty_option": {
         "enable": true,
