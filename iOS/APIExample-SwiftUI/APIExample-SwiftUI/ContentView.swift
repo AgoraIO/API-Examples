@@ -117,6 +117,7 @@ struct ContentView: View {
             .navigationTitle("Agora API Example")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .navigationViewStyle(.stack)
     }
 }
 

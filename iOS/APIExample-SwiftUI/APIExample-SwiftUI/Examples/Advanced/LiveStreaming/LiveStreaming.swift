@@ -8,17 +8,23 @@
 import SwiftUI
 import Combine
 
+/// Used for .sheet(item:) to pass focal length data, avoiding the sheet closure capturing an empty @State
+private struct CameraSheetItem: Identifiable {
+    let id = UUID()
+    let options: [AgoraFocalLengthInfo]
+}
+
 struct LiveStreamingEntry: View {
     @State private var channelName: String = ""
     @State private var channelButtonIsActive = false
-    @State private var selectedCamertOption = ""
+    @State private var selectedCamertOption = "Front camera".localized + " - " + "Default".localized
     @State private var firstFrameToggleIsOn = false
     @State private var preloadIsOn = false
     @State private var roleSheetIsShow = false
-    @State private var cameraSheetIsShow = false
     @State private var role: AgoraClientRole = .broadcaster
 
-    @State private var cameraOptions: [AgoraFocalLengthInfo] = []
+    @State private var cameraSheetItem: CameraSheetItem?
+    @State private var showCameraUnavailableAlert = false
     @State private var configs: [String: Any] = [:]
     @State var selectedColor: BackgroundColors = .Red
     @ObservedObject private var liveStreamRTCKit = LiveStreamingRTC()
@@ -32,7 +38,7 @@ struct LiveStreamingEntry: View {
                 .padding()
                 .padding(.bottom, 10)
             
-            //Default background color
+            // Default background color
             HStack {
                 Text("Default background Color".localized)
                 Picker("", selection: $selectedColor) {
@@ -42,7 +48,7 @@ struct LiveStreamingEntry: View {
                 }
             }
             
-            //First frame optimization
+            // First frame optimization
             Toggle("First Frame Optimization", isOn: $firstFrameToggleIsOn)
                 .padding(.bottom, 10)
                 .alert(isPresented: $firstFrameToggleIsOn) {
@@ -54,26 +60,40 @@ struct LiveStreamingEntry: View {
                 }
                 .fixedSize()
             
-            //Preload
+            // Preload
             Button(preloadIsOn ? "cancel preload".localized : "preload Channel".localized) {
                 preloadIsOn.toggle()
             }
             .padding(.bottom, 10)
     
-            //Camera
+            // Camera (default front, fetches focal length capability on tap)
             HStack {
                 Text("Camera Selected".localized)
                 Button(selectedCamertOption) {
-                    self.cameraSheetIsShow = true
+                    guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else {
+                        showCameraUnavailableAlert = true
+                        return
+                    }
+                    let keys = infos.flatMap({ $0.value }).map({ $0.key })
+                    guard !keys.isEmpty else {
+                        showCameraUnavailableAlert = true
+                        return
+                    }
+                    if !keys.contains(selectedCamertOption) {
+                        selectedCamertOption = keys.first(where: { $0.contains("Front camera".localized) }) ?? keys.first ?? selectedCamertOption
+                    }
+                    cameraSheetItem = CameraSheetItem(options: infos)
                 }
-                .sheet(isPresented: $cameraSheetIsShow, content: {
-                    let params = cameraOptions.flatMap({ $0.value })
+                .sheet(item: $cameraSheetItem) { item in
+                    let params = item.options.flatMap({ $0.value })
                     let keys = params.map({ $0.key })
-                    
-                    PickerSheetView(selectedOption: $selectedCamertOption, options: keys, isPresented: $cameraSheetIsShow) { selectedOption in
-                        self.selectedCamertOption = selectedOption
+                    PickerSheetView(selectedOption: $selectedCamertOption, options: keys, isPresented: Binding(
+                        get: { cameraSheetItem != nil },
+                        set: { if !$0 { cameraSheetItem = nil } }
+                    )) { selectedOption in
+                        selectedCamertOption = selectedOption
                         for camera in params {
-                            if camera.key == self.selectedCamertOption {
+                            if camera.key == selectedCamertOption {
                                 let config = AgoraCameraCapturerConfiguration()
                                 config.cameraFocalLengthType = camera.value
                                 config.cameraDirection = camera.key.contains("Front camera".localized) ? .front : .rear
@@ -82,7 +102,14 @@ struct LiveStreamingEntry: View {
                             }
                         }
                     }
-                })
+                }
+                .alert(isPresented: $showCameraUnavailableAlert) {
+                    Alert(
+                        title: Text("Camera options are not available yet.".localized),
+                        message: Text("Please try again after joining the channel.".localized),
+                        dismissButton: .default(Text("OK".localized))
+                    )
+                }
             }
             .padding(.bottom, 10)
             
@@ -133,14 +160,6 @@ struct LiveStreamingEntry: View {
         .onDisappear(perform: {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         })
-        .onAppear(perform: {
-            guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else { return }
-            let params = infos.flatMap({ $0.value })
-            let keys = params.map({ $0.key })
-            cameraOptions = infos
-            
-            selectedCamertOption = keys.first ?? ""
-        })
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: Button(action: {
             liveStreamRTCKit.onDestory()
@@ -175,9 +194,9 @@ struct LiveStreaming: View {
     @State var gasketPushFlow: Bool = false
     @State var showCenterStageAlert: Bool = false
     @State var simulcastStreamState: Bool = false
-    @State private var selectedCamertOption = ""
-    @State private var cameraOptions: [AgoraFocalLengthInfo] = []
-    @State private var cameraSheetIsShow = false
+    @State private var selectedCamertOption = "Front camera".localized + " - " + "Default".localized
+    @State private var cameraSheetItem: CameraSheetItem?
+    @State private var showCameraUnavailableAlert = false
     @State private var showSnapshot: Bool = false
     @State private var showSnapShotTitle: String = ""
     @State private var showSnapShotMessage: String = ""
@@ -204,7 +223,7 @@ struct LiveStreaming: View {
                         }
                 }
        
-                //Anti-shake
+                // Anti-shake
                 HStack {
                     Text("anti shake".localized)
                         .adaptiveForegroundStyle(.white)
@@ -221,8 +240,8 @@ struct LiveStreaming: View {
                 .padding(.top, 30)
                 
                 if liveStreamRTCKit.role == .broadcaster {
-                    //centerStage, camera focus
-                    VStack {
+                    // CenterStage, camera focus
+                    HStack {
                         Toggle("CenterStage", isOn: $centerStage)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: centerStage) { newValue in
@@ -249,35 +268,56 @@ struct LiveStreaming: View {
                         Text("Camera Selected".localized)
                             .adaptiveForegroundStyle(.white)
                         Button(selectedCamertOption) {
-                            self.cameraSheetIsShow = true
+                            guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else {
+                                showCameraUnavailableAlert = true
+                                return
+                            }
+                            let keys = infos.flatMap({ $0.value }).map({ $0.key })
+                            guard !keys.isEmpty else {
+                                showCameraUnavailableAlert = true
+                                return
+                            }
+                            if !keys.contains(selectedCamertOption) {
+                                selectedCamertOption = keys.first(where: { $0.contains("Front camera".localized) }) ?? keys.first ?? selectedCamertOption
+                            }
+                            cameraSheetItem = CameraSheetItem(options: infos)
                         }
-                        .sheet(isPresented: $cameraSheetIsShow, content: {
-                            let params = cameraOptions.flatMap({ $0.value })
+                        .sheet(item: $cameraSheetItem) { item in
+                            let params = item.options.flatMap({ $0.value })
                             let keys = params.map({ $0.key })
-                            
-                            PickerSheetView(selectedOption: $selectedCamertOption, options: keys, isPresented: $cameraSheetIsShow) { selectedOption in
-                                self.selectedCamertOption = selectedOption
+                            PickerSheetView(selectedOption: $selectedCamertOption, options: keys, isPresented: Binding(
+                                get: { cameraSheetItem != nil },
+                                set: { if !$0 { cameraSheetItem = nil } }
+                            )) { selectedOption in
+                                selectedCamertOption = selectedOption
                                 for camera in params {
-                                    if camera.key == self.selectedCamertOption {
+                                    if camera.key == selectedCamertOption {
                                         let config = AgoraCameraCapturerConfiguration()
                                         config.cameraFocalLengthType = camera.value
-                                        config.cameraDirection = camera.key.contains("Front camera".localized) ? .front : .rear
-                                        if (config.cameraDirection != self.cameraDirection) {
+                                        let newDirection: AgoraCameraDirection = camera.key.contains("Front camera".localized) ? .front : .rear
+                                        if newDirection != cameraDirection {
                                             liveStreamRTCKit.agoraKit.switchCamera()
                                         }
                                         liveStreamRTCKit.agoraKit.setCameraCapturerConfiguration(config)
-                                        self.cameraDirection = config.cameraDirection
+                                        cameraDirection = newDirection
                                         break
                                     }
                                 }
                             }
-                        })
+                        }
+                        .alert(isPresented: $showCameraUnavailableAlert) {
+                            Alert(
+                                title: Text("Camera options are not available yet.".localized),
+                                message: Text("Please try again.".localized),
+                                dismissButton: .default(Text("OK".localized))
+                            )
+                        }
                     }
                     .fixedSize()
                     .adaptiveBackground(.gray.opacity(0.3))
                     
-                    //B-frame, encoding method    
-                    VStack {
+                    // B-frame, encoding type
+                    HStack {
                         Toggle("B Fps".localized, isOn: $bFpsState)
                             .adaptiveForegroundStyle(.white)
                             .onChange(of: bFpsState) { newValue in
@@ -310,7 +350,7 @@ struct LiveStreaming: View {
                     .fixedSize()
                     .adaptiveBackground(.gray.opacity(0.3))
                     
-                    //Watermark, gasket push flow
+                    // Watermark, gasket push flow
                     HStack {
                         Toggle("Water Mark".localized, isOn: $waterMarkState)
                             .adaptiveForegroundStyle(.white)
@@ -346,7 +386,7 @@ struct LiveStreaming: View {
                     .adaptiveBackground(.gray.opacity(0.3))
                 }
                 
-                //Screenshot, dual stream
+                // Screenshot, simulcast stream
                 HStack {
                     Button("screenshot".localized) {
                         showSnapshot = true
@@ -383,7 +423,7 @@ struct LiveStreaming: View {
                 .fixedSize()
                 .adaptiveBackground(.gray.opacity(0.3))
                 
-                //Live streaming at lightning speed, real-time interaction
+                // Fast live, link stream
                 HStack {
                     if liveStreamRTCKit.showUltraLowEntry {
                         Toggle("Fast Live".localized, isOn: $fastLiveState)
@@ -409,16 +449,10 @@ struct LiveStreaming: View {
         }
         .onAppear {
             liveStreamRTCKit.setupRTC(configs: configs, localView: backgroundView.videoView, remoteView: foregroundView.videoView)
-            guard let infos = liveStreamRTCKit.agoraKit.queryCameraFocalLengthCapability() else { return }
-            
-            cameraOptions = infos
-            
-            if let cameraKey = configs["cameraKey"] as? String {
+            if let cameraKey = configs["cameraKey"] as? String, !cameraKey.isEmpty {
                 selectedCamertOption = cameraKey
                 cameraDirection = cameraKey.contains("Front camera".localized) ? .front : .rear
             }
-            
-            
         }.onDisappear {
             liveStreamRTCKit.leaveChannel()
         }

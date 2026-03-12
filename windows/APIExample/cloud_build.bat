@@ -38,35 +38,19 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo "compile done."
 
-REM --- 4. Package (Clean Output) ---
-echo Preparing clean output directory...
-rmdir /S /Q Output 2>nul
-mkdir Output
-
-REM Copy executables and DLLs from Release
-xcopy /Y /S Release\*.exe Output\ >nul 2>&1
-xcopy /Y /S Release\*.dll Output\ >nul 2>&1
-
-REM Copy resources
-xcopy /Y /S /I APIExample\res Output\res >nul 2>&1
-xcopy /Y APIExample\*.ini Output\ >nul 2>&1
-
-REM Copy SDK and ThirdParty DLLs (Agora uses sdk\x86 for Win32)
-xcopy /Y sdk\x86\*.dll Output\ >nul 2>&1
-xcopy /Y ThirdParty\libFFmpeg\*.dll Output\ >nul 2>&1
-
-echo Packaging...
+REM --- 4. Package (zip entire Release) ---
+echo Packaging Release...
 set "result_zip=result.zip"
 del /F /Q !result_zip! 2>nul
 
 REM Try 7z, fallback to PowerShell
 where 7z >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
-    7z a -tzip !result_zip! .\Output\* >nul
+    7z a -tzip !result_zip! -r Release\* >nul
 ) else (
-    "C:\Program Files\7-Zip\7z.exe" a -tzip !result_zip! .\Output\* >nul 2>nul
+    "C:\Program Files\7-Zip\7z.exe" a -tzip !result_zip! -r Release\* >nul 2>nul
     if %ERRORLEVEL% NEQ 0 (
-        powershell -command "Compress-Archive -Path '.\Output\*' -DestinationPath '!result_zip!' -Force"
+        powershell -command "Compress-Archive -Path '.\Release\*' -DestinationPath '!result_zip!' -Force"
     )
 )
 
@@ -76,6 +60,5 @@ set h=%h: =0%
 if not defined WORKSPACE set WORKSPACE=%~dp0
 copy !result_zip! "%WORKSPACE%\\APIExample_windows_%BUILD_NUMBER%_%date:~4,2%%date:~7,2%%h%%time:~3,2%_Release_exe.zip"
 del /F /Q !result_zip! 2>nul
-rmdir /S /Q Output 2>nul
 
 echo Build and Package done.
