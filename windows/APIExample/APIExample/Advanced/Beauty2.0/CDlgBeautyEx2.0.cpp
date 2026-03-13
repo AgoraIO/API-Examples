@@ -343,20 +343,7 @@ void CDlgBeautyEx2::ApplyMakeupEffect()
 	}
 	
 	try {
-		int ret = m_videoEffectObjectRef->addOrUpdateVideoEffect(
-			static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP),
-			""
-		);
-		
-		if (ret != 0) {
-			CString strMsg;
-			strMsg.Format(_T("addOrUpdateVideoEffect failed: %d"), ret);
-			AfxMessageBox(strMsg);
-			return;
-		}
-		
 		m_videoEffectObjectRef->setVideoEffectBoolParam("makeup_options", "enable_mu", m_makeupOptions.enable_mu);
-		
 		if (m_makeupOptions.enable_mu) {
 			CString strParams;
 			strParams.Format(_T("browStyle: %d, browColor: %d, browStrength: %f, lashStyle: %d, lashColor: %d, lashStrength: %f, shadowStyle: %d, shadowStrength: %f, pupilStyle: %d, pupilStrength: %f, blushStyle: %d, blushColor: %d, blushStrength: %f, lipStyle: %d, lipColor: %d, lipStrength: %f\n"),
@@ -465,7 +452,18 @@ std::string CDlgBeautyEx2::GetFaceShapeAreaParamName(FaceShapeAreaOptions::FACE_
 
 void CDlgBeautyEx2::OnBnClickedCheckMakeUp()
 {
-	m_makeupOptions.enable_mu = mCbMakeup.GetCheck();
+	m_makeupOptions.enable_mu = (mCbMakeup.GetCheck() != 0);
+	if (m_videoEffectObjectRef) {
+		if (m_makeupOptions.enable_mu) {
+			if (m_videoEffectObjectRef->addOrUpdateVideoEffect(
+					static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP), "") != 0) {
+				return;
+			}
+		} else {
+			m_videoEffectObjectRef->removeVideoEffect(
+				static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::STYLE_MAKEUP));
+		}
+	}
 	SetBeauty();
 }
 
