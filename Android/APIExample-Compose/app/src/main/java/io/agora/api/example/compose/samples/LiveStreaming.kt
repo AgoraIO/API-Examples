@@ -34,7 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.agora.api.example.compose.BuildConfig
+import io.agora.api.example.compose.utils.AgoraConfig
 import io.agora.api.example.compose.R
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
@@ -89,7 +89,7 @@ fun LiveStreaming() {
         RtcEngine.create(RtcEngineConfig().apply {
             mAreaCode = SettingPreferences.getArea()
             mContext = context
-            mAppId = BuildConfig.AGORA_APP_ID
+            mAppId = AgoraConfig.getAppId()
             mEventHandler = object : IRtcEngineEventHandler() {
                 override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
                     super.onJoinChannelSuccess(channel, uid, elapsed)

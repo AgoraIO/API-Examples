@@ -22,19 +22,16 @@
 2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
 4. 复制后台的 **App Certificate** 并备注，稍后启动应用时会用到它
-5. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
 
-6. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书、 临时Token 分别替换到 `Your App Id` 、 `YOUR ACCESS TOKEN` 和 `YOUR APP CERTIFICATE`
+5. 打开 `Android/APIExample-Audio` 并编辑项目根目录下的 `local.properties`，填入你的 App ID。如果你的 Agora 项目开启了 App Certificate，并且你希望使用示例内置的 token 生成功能，再填入 `YOUR APP CERTIFICATE`
 
     ```
-    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // 如果你没有打开Token功能，certificate可以直接不填
-    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
-    // 如果你没有打开Token功能或者已经配置了certificate，token可以直接不填
-    // 注意：App证书放在客户端不安全，推荐放在服务端以确保 App 证书不会泄露。
-    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
-    
+    sdk.dir=/path/to/Android/sdk
+    AGORA_APP_ID=YOUR APP ID
+    AGORA_APP_CERT=YOUR APP CERTIFICATE
     ```
+
+`AGORA_APP_ID` 为必填项。如果你的项目没有开启 App Certificate，`AGORA_APP_CERT` 留空即可。如果你使用自己的服务端生成 token，建议不要在客户端填写 `AGORA_APP_CERT`，直接使用 `JoinChannelAudio(Token)` 示例在运行时粘贴 token。
 
 然后你就可以编译并运行项目了。
 
@@ -42,8 +39,8 @@
 
 - 如果你遇到了困难，可以先参阅 [常见问题](https://docs.agora.io/cn/faq)
 - 如果你想了解更多官方示例，可以参考 [官方SDK示例](https://github.com/AgoraIO)
-- 如果你想了解声网SDK在复杂场景下的应用，可以参考 [官方场景案例](https://github.com/AgoraIO-usecase)
-- 如果你想了解声网的一些社区开发者维护的项目，可以查看 [社区](https://github.com/AgoraIO-Community)
+- 如果你想了解 Agora SDK 在复杂场景下的应用，可以参考 [官方场景案例](https://github.com/AgoraIO-usecase)
+- 如果你想了解 Agora 的一些社区开发者维护的项目，可以查看 [社区](https://github.com/AgoraIO-Community)
 - 完整的 API 文档见 [文档中心](https://docs.agora.io/cn/)
 - 若遇到问题需要开发者帮助，你可以到 [开发者社区](https://rtcdeveloper.com/) 提问
 - 如果需要售后技术支持, 你可以在 [Agora Dashboard](https://dashboard.agora.io) 提交工单

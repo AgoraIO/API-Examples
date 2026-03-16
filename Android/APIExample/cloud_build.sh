@@ -35,11 +35,23 @@ fi
 #sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g"
 # gradle/wrapper/gradle-wrapper.properties
 
+set_local_property() {
+  key="$1"
+  value="$2"
+  file="local.properties"
+  touch "$file"
+  if grep -q "^${key}=" "$file"; then
+    sed -i.bak "s#^${key}=.*#${key}=${value}#g" "$file"
+    rm -f "${file}.bak"
+  elif [ -n "$value" ]; then
+    echo "${key}=${value}" >> "$file"
+  fi
+}
+
 ## config appId
-sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
-sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
-sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
-rm -f app/src/main/res/values/string_configs.xml-e
+set_local_property "AGORA_APP_ID" "${APP_ID}"
+APP_CERT_VALUE="${APP_CERT:-${AGORA_APP_CERT:-${AGORA_APP_CERTIFICATE:-}}}"
+set_local_property "AGORA_APP_CERT" "${APP_CERT_VALUE}"
 echo "First argument: $1"
 echo "Second argument: $2"
 if [ "$1" = "false" ]; then

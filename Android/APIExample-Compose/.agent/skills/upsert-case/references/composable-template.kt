@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
 import io.agora.api.example.compose.ui.common.ChannelNameInput
+import io.agora.api.example.compose.utils.AgoraConfig
 import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -54,7 +54,7 @@ fun YourCaseName() {
         RtcEngine.create(RtcEngineConfig().apply {
             mAreaCode = SettingPreferences.getArea()   // REQUIRED — do not hardcode
             mContext = context
-            mAppId = BuildConfig.AGORA_APP_ID
+            mAppId = AgoraConfig.getAppId()
             mEventHandler = object : IRtcEngineEventHandler() {
                 // IRtcEngineEventHandler callbacks are safe to mutate Compose state directly —
                 // the snapshot system is thread-safe. No runOnUIThread() needed.

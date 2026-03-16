@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
-import io.agora.api.example.compose.BuildConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -43,11 +42,11 @@ public final class TokenUtils {
     }
 
     public static void genToken(String channelName, int uid, OnTokenGenCallback<String> onGetToken) {
-        String cert = BuildConfig.AGORA_APP_CERT;
+        String cert = AgoraConfig.getAppCertificate();
         if (cert.isEmpty()) {
             onGetToken.onTokenGen("");
         } else {
-            gen(BuildConfig.AGORA_APP_ID, BuildConfig.AGORA_APP_CERT, channelName, uid, ret -> {
+            gen(AgoraConfig.getAppId(), AgoraConfig.getAppCertificate(), channelName, uid, ret -> {
                 if (onGetToken != null) {
                     runOnUiThread(() -> {
                         onGetToken.onTokenGen(ret);
@@ -72,7 +71,7 @@ public final class TokenUtils {
      * @param onGetToken  the on get token
      */
     public static void gen(String channelName, int uid, OnTokenGenCallback<String> onGetToken) {
-        gen(BuildConfig.AGORA_APP_ID, BuildConfig.AGORA_APP_CERT, channelName, uid, ret -> {
+        gen(AgoraConfig.getAppId(), AgoraConfig.getAppCertificate(), channelName, uid, ret -> {
             if (onGetToken != null) {
                 runOnUiThread(() -> {
                     onGetToken.onTokenGen(ret);

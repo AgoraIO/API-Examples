@@ -37,11 +37,23 @@ fi
 sed -ie "s#google()#maven { url = uri(\"https://maven.aliyun.com/repository/public\") }\n        google()#g" settings.gradle.kts
 sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" gradle/wrapper/gradle-wrapper.properties
 
+set_local_property() {
+  key="$1"
+  value="$2"
+  file="local.properties"
+  touch "$file"
+  if grep -q "^${key}=" "$file"; then
+    sed -i.bak "s#^${key}=.*#${key}=${value}#g" "$file"
+    rm -f "${file}.bak"
+  elif [ -n "$value" ]; then
+    echo "${key}=${value}" >> "$file"
+  fi
+}
+
 ## config appId
-if [ ! -f "local.properties" ];then
-  touch local.properties
-  echo "AGORA_APP_ID=${APP_ID}" >> local.properties
-fi
+set_local_property "AGORA_APP_ID" "${APP_ID}"
+APP_CERT_VALUE="${APP_CERT:-${AGORA_APP_CERT:-${AGORA_APP_CERTIFICATE:-}}}"
+set_local_property "AGORA_APP_CERT" "${APP_CERT_VALUE}"
 
 ./gradlew clean || exit 1
 ./gradlew :app:assembleRelease || exit 1

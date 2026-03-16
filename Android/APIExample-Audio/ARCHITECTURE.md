@@ -137,3 +137,4 @@ TokenUtils.gen(requireContext(), channelId, uid, token -> {
 });
 ```
 
+`TokenUtils` reads `AGORA_APP_ID` and `AGORA_APP_CERT` from `local.properties` via `BuildConfig`. If `AGORA_APP_CERT` is empty, token generation is skipped — valid for projects without certificate.

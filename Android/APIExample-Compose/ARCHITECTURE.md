@@ -160,7 +160,7 @@ MyNewCase()                     ← public, stateful: owns RtcEngine, state, per
 val rtcEngine = remember {
     RtcEngine.create(RtcEngineConfig().apply {
         mContext = context
-        mAppId = BuildConfig.AGORA_APP_ID
+        mAppId = AgoraConfig.getAppId()
         mEventHandler = object : IRtcEngineEventHandler() { … }
     })
 }
