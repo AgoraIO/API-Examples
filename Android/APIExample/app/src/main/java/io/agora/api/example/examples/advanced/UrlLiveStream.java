@@ -67,11 +67,11 @@ public class UrlLiveStream extends BaseVbFragment<FragmentUrlLiveStreamBinding> 
 
     @Override
     protected void initData() {
-        binding.etRteUrl.setText("rte://" + getString(R.string.agora_app_id));
+        binding.etRteUrl.setText("rte://" + getAgoraAppId());
         try {
             mRte = new Rte(null);
             Config config = new Config();
-            config.setAppId(getContext().getString(R.string.agora_app_id));
+            config.setAppId(getAgoraAppId());
             mRte.setConfigs(config);
             mRte.initMediaEngine((Error error) -> {
                 io.agora.rte.Constants.ErrorCode errCode = error.code();

@@ -89,7 +89,7 @@ public class YourCaseName extends BaseFragment implements View.OnClickListener {
         try {
             RtcEngineConfig config = new RtcEngineConfig();
             config.mContext = context.getApplicationContext();
-            config.mAppId = getString(R.string.agora_app_id);
+            config.mAppId = getAgoraAppId();
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);

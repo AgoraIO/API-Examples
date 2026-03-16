@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 
 import java.util.Map;
 
+import io.agora.api.example.utils.AgoraConfig;
 import io.agora.api.example.utils.PermissonUtils;
 
 /**
@@ -151,6 +152,14 @@ public class BaseFragment extends Fragment {
             }
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         });
+    }
+
+    protected final String getAgoraAppId() {
+        return AgoraConfig.getAppId();
+    }
+
+    protected final String getAgoraAppCertificate() {
+        return AgoraConfig.getAppCertificate();
     }
 
     /**

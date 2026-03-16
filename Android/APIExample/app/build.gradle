@@ -10,6 +10,18 @@ sdkVersionFile.withInputStream { stream ->
 def agoraSdkVersion = properties.getProperty("rtc_sdk_version")
 println("${rootProject.project.name}   agoraSdkVersion: ${agoraSdkVersion}")
 def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+}
+def agoraAppId = localProperties.getProperty("AGORA_APP_ID", "")
+if (agoraAppId.isEmpty()) {
+    throw new GradleException("Please configure correctly in the local.properties file in the project root directory: AGORA_APP_ID=<Your Agora AppId>")
+}
+def agoraAppCert = localProperties.getProperty("AGORA_APP_CERT", "")
 
 
 android {
@@ -24,6 +36,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'
+        buildConfigField "String", "AGORA_APP_ID", "\"${agoraAppId}\""
+        buildConfigField "String", "AGORA_APP_CERT", "\"${agoraAppCert}\""
     }
 
     signingConfigs {

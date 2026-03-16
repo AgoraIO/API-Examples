@@ -23,15 +23,15 @@ To build and run the sample application, get an App Id:
 3. Save the **App Id** from the Dashboard for later use.
 4. Save the **App Certificate** from the Dashboard for later use.
 
-5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-configs.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard. Note you can leave the certificate variable `null` if your project has not turned on security token.
+5. Open `Android/APIExample` and edit the `local.properties` file in the project root. Update `YOUR APP ID` with your App Id. If your Agora project has App Certificate enabled and you want to use the sample's built-in token generation flow, update `YOUR APP CERTIFICATE` as well.
 
     ```
-    // Agora APP ID.
-    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // Agora APP Certificate. If the project does not have certificates enabled, leave this field blank.
-    // PS：It is unsafe to place the App Certificate on the client side, it is recommended to place it on the server side to ensure that the App Certificate is not leaked.
-    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    sdk.dir=/path/to/Android/sdk
+    AGORA_APP_ID=YOUR APP ID
+    AGORA_APP_CERT=YOUR APP CERTIFICATE
     ```
+
+`AGORA_APP_ID` is required. If your project does not enable App Certificate, leave `AGORA_APP_CERT` blank. If you generate tokens on your own server, keep `AGORA_APP_CERT` empty on the client side and use the `ByToken` examples to paste the token at runtime.
 
 You are all set. Now connect your Android device and run the project.
 

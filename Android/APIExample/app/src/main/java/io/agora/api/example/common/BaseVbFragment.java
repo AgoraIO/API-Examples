@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 
 import io.agora.api.example.MainApplication;
-import io.agora.api.example.R;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
@@ -62,7 +61,7 @@ public abstract class BaseVbFragment<T extends ViewBinding> extends BaseFragment
             /*
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
-            config.mAppId = getString(R.string.agora_app_id);
+            config.mAppId = getAgoraAppId();
             /* Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
