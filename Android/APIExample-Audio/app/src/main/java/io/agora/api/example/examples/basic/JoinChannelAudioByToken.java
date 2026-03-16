@@ -75,7 +75,6 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_app_id = view.findViewById(R.id.et_app_id);
-        et_app_id.setText(getAgoraAppId());
         et_channel = view.findViewById(R.id.et_channel);
         et_token = view.findViewById(R.id.et_token);
         view.findViewById(R.id.btn_join).setOnClickListener(this);

@@ -67,7 +67,6 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         join = view.findViewById(R.id.btn_join);
         switch_camera = view.findViewById(R.id.btn_switch_camera);
         et_app_id = view.findViewById(R.id.et_app_id);
-        et_app_id.setText(getAgoraAppId());
         et_channel = view.findViewById(R.id.et_channel);
         et_token = view.findViewById(R.id.et_token);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
