@@ -107,7 +107,7 @@ class SimpleFilterMain: BaseViewController {
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: 15,
+                    frameRate: fps,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: AgoraVideoMirrorMode.auto
@@ -145,7 +145,7 @@ class SimpleFilterMain: BaseViewController {
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: 15,
+                    frameRate: fps,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto
@@ -361,7 +361,7 @@ class SimpleFilterMain: BaseViewController {
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
-                    frameRate: 15,
+                    frameRate: fps,
                     bitrate: AgoraVideoBitrateStandard,
                     orientationMode: .adaptative,
                     mirrorMode: .auto

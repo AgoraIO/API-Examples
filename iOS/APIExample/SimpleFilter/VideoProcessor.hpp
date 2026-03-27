@@ -11,9 +11,7 @@
 #include <vector>
 #include <AgoraRtcKit/AgoraRefPtr.h>
 #include "AgoraRtcKit/NGIAgoraMediaNode.h"
-#include "AgoraRtcKit/AgoraExtensions.h"
 #include "AgoraRtcKit/AgoraMediaBase.h"
-#include "AgoraRtcKit/AgoraExtensions.h"
 
 namespace agora {
     namespace extension {
