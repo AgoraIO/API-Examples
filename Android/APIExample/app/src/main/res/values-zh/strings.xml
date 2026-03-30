@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shengwang API Example</string>
+    <string name="app_name">Agora API Example</string>
     <string name="inject">拉流</string>
     <string name="stopinject">停止拉流</string>
     <string name="publish">推流</string>
