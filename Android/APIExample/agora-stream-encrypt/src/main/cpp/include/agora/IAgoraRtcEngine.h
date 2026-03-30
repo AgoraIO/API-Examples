@@ -2058,7 +2058,7 @@ class IRtcEngineEventHandler {
    @note This callback is invalid when the number of users or broadacasters in a
    channel exceeds 20.
 
-   @param userId ID of the remote user.
+   @param uid ID of the remote user.
    @param muted Whether the remote user stops publishing the video stream:
    - true: The remote user has paused sending the video stream.
    - false: The remote user has resumed sending the video stream.
@@ -2476,7 +2476,7 @@ class IRtcEngineEventHandler {
    * - If the most active remote speaker is always the same user, the SDK triggers the `onActiveSpeaker` callback only once.
    * - If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
    *
-   * @param userId The ID of the active speaker. A `uid` of 0 means the local user.
+   * @param uid The ID of the active speaker. A `uid` of 0 means the local user.
    */
   virtual void onActiveSpeaker(uid_t uid) { 
     (void)uid;
@@ -3897,7 +3897,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * Queries the capacity of the current device codec.
    *
-   * @param codec_info An array of the codec cap information: CodecCapInfo.
+   * @param codecInfo An array of the codec cap information: CodecCapInfo.
    * @param size The array size.
    * @return 
    * 0: Success.
@@ -4285,7 +4285,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /** Starts a video call test.
    *
-   * @param config: configuration for video call test.
+   * @param config configuration for video call test.
    *
    * @return
    * - 0: Success.
@@ -4497,10 +4497,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - You can call this method either before or after joining a channel.
    * - The filter effect feature has specific performance requirements for devices. If your device overheats after enabling the filter effect, Agora recommends disabling it entirely.
    *
-   * @param enabled. Whether to enable filter effect:
+   * @param enabled Whether to enable filter effect:
    * - `true`: Enable.
    * - `false`: (Default) Disable.
-   * @param options. Set the filter effect options. See FilterEffectOptions.
+   * @param options Set the filter effect options. See FilterEffectOptions.
    *
    * @return
    * - 0: Success.
@@ -5870,7 +5870,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /** Sets remote user parameters for spatial audio
 
    @param uid The ID of the remote user.
-   @param param spatial audio parameters: SpatialAudioParams.
+   @param params spatial audio parameters: SpatialAudioParams.
 
    @return int
    - 0: Success.
@@ -6207,7 +6207,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - true: Enable the voice AI tuner
    * - false: (default) Disable the voice AI tuner.
    *
-   * @param type. The options for SDK voice AI tuner types. See #VOICE_AI_TUNER_TYPE.
+   * @param type The options for SDK voice AI tuner types. See #VOICE_AI_TUNER_TYPE.
    * @return
    * - 0: Success.
    * - < 0: Failure.

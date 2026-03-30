@@ -1200,7 +1200,7 @@ enum VIDEO_CODEC_TYPE {
    * 7: Generic H264.
    * @deprecated This codec type is deprecated.
    */
-  VIDEO_CODEC_GENERIC_H264 = 7,
+  VIDEO_CODEC_GENERIC_H264 __deprecated = 7,
   /**
    * 12: AV1.
    * @technical preview
@@ -2323,6 +2323,7 @@ enum MultipathMode {
 
   /**
     * Duplicate mode, the same piece of data is redundantly transmitted over all available paths.
+    * @technical preview
     */
   Duplicate= 0,
   /**

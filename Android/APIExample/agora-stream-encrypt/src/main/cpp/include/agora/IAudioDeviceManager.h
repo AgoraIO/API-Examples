@@ -52,7 +52,6 @@ public:
 
   /**
    * Gets the information of a specified audio device.
-   * @note 
    * @param index An input parameter that specifies the audio device.
    * @param deviceName An output parameter that indicates the device name.
    * @param deviceTypeName An output parameter that indicates the device type name. such as Built-in, USB, HDMI, etc. (MacOS only)
