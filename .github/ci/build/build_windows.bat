@@ -78,22 +78,75 @@ REM Check compile_project parameter
 if "%compile_project%"=="" set compile_project=false
 echo compile_project: %compile_project%
 
-REM Package APIExample code (only when compress_apiexample=true)
+REM Package APIExample with SDK (only when compress_apiexample=true)
 REM Run before compile so package content is not affected by compile
 set result_zip=APIExample_result.zip
 set des_path=%WORKSPACE%\Agora_Native_SDK_for_Windows_v%SDK_VER%_APIExample_%BUILD_NUMBER%.zip
 if "%compress_apiexample%"=="true" (
-    echo "Packaging APIExample code..."
-    
-    REM Compress windows\APIExample (code only) to zip
-    echo "Compressing APIExample code package..."
+    echo "Packaging APIExample with SDK..."
+
+    set "sdk_package_url=%sdk_url%"
+    if "%sdk_package_url%"=="" (
+        for /f "tokens=*" %%a in ('powershell -Command "(Get-Content 'windows\APIExample\install.ps1' -Raw) -match '\$agora_sdk = ''([^'']+)''' | Out-Null; $matches[1]"') do set "sdk_package_url=%%a"
+    )
+    if "%sdk_package_url%"=="none" (
+        for /f "tokens=*" %%a in ('powershell -Command "(Get-Content 'windows\APIExample\install.ps1' -Raw) -match '\$agora_sdk = ''([^'']+)''' | Out-Null; $matches[1]"') do set "sdk_package_url=%%a"
+    )
+    if "%sdk_package_url%"=="" (
+        echo SDK package URL is empty!
+        exit /b 1
+    )
+
+    for /f "tokens=*" %%a in ('powershell -Command "[System.IO.Path]::GetFileName('%sdk_package_url%')"') do set "sdk_zip_name=%%a"
+
+    set "sdk_extract_dir=Agora_Native_SDK_for_Windows_FULL"
+    if exist "%sdk_extract_dir%" rmdir /S /Q "%sdk_extract_dir%"
+    del /F /Q "%sdk_zip_name%" 2>nul
     del /F /Q %result_zip% 2>nul
-    7z a -tzip %result_zip% -r windows\APIExample
+
+    echo "Downloading SDK package: %sdk_package_url%"
+    curl %sdk_package_url% -o %sdk_zip_name%
+    if errorlevel 1 (
+        echo SDK download failed!
+        exit /b 1
+    )
+
+    echo "Extracting SDK package..."
+    7z x .\%sdk_zip_name% -y
+    if errorlevel 1 (
+        echo SDK extraction failed!
+        exit /b 1
+    )
+
+    if not exist "%sdk_extract_dir%" (
+        echo Extracted SDK folder "%sdk_extract_dir%" not found!
+        exit /b 1
+    )
+
+    if exist "%sdk_extract_dir%\demo" rmdir /S /Q "%sdk_extract_dir%\demo"
+    if exist "%sdk_extract_dir%\commits" del /F /Q "%sdk_extract_dir%\commits"
+    if exist "%sdk_extract_dir%\package_size_report.txt" del /F /Q "%sdk_extract_dir%\package_size_report.txt"
+
+    mkdir "%sdk_extract_dir%\samples"
+    mkdir "%sdk_extract_dir%\samples\API-example"
+
+    del /F /Q windows\APIExample\ci.py 2>nul
+
+    xcopy /Y /E windows\APIExample "%sdk_extract_dir%\samples\API-example"
+    xcopy /Y windows\README.md "%sdk_extract_dir%\samples\API-example\"
+    xcopy /Y windows\README.zh.md "%sdk_extract_dir%\samples\API-example\"
+
+    if exist "%sdk_extract_dir%\samples\API-example\APIExample\APIExample" (
+        rmdir /S /Q "%sdk_extract_dir%\samples\API-example\APIExample\APIExample"
+    )
+
+    echo "Compressing APIExample package with SDK..."
+    7z a -tzip %result_zip% -r "%sdk_extract_dir%"
     if errorlevel 1 (
         echo 7z compression failed!
         exit /b 1
     )
-    
+
     REM Copy to WORKSPACE with new naming format
     echo "Copying %result_zip% to %des_path%"
     copy %result_zip% %des_path%
@@ -102,13 +155,15 @@ if "%compress_apiexample%"=="true" (
         exit /b 1
     )
     
-    REM Clean up temporary zip in repo root
+    REM Clean up temporary files in repo root
     del /F %result_zip%
-    
-    echo "Complete: APIExample code package created"
+    del /F /Q "%sdk_zip_name%" 2>nul
+    if exist "%sdk_extract_dir%" rmdir /S /Q "%sdk_extract_dir%"
+
+    echo "Complete: APIExample package with SDK created"
     dir %WORKSPACE%\
 ) else (
-    echo "Skipping APIExample code packaging (compress_apiexample=false)"
+    echo "Skipping APIExample packaging (compress_apiexample=false)"
 )
 
 REM Compile project to generate executable (only when compile_project=true)
