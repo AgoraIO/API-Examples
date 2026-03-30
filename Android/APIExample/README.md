@@ -37,14 +37,15 @@ You are all set. Now connect your Android device and run the project.
 
 ### Beauty Configuration
 
-> Third Part Beauty case use
-> the [Agora Beauty API Library](https://github.com/AgoraIO-Community/BeautyAPI)
+This project contains two types of beauty examples:
 
-This project contains third-party beauty integration examples, which cannot be enabled by default
-without configuring resources and certificates. The resource certificate configuration method is as
-follows:
+- Agora Beauty, which is self-developed by Agora.
+- Third-party beauty integration examples, such as FaceUnity.
 
-#### Agora
+Some beauty examples cannot be enabled by default without configuring resources and certificates.
+The configuration methods are as follows:
+
+#### Agora Beauty
 
 1. Contact Agora technical support to obtain beauty resources
 2. Put the beauty resources in the corresponding path
@@ -53,7 +54,10 @@ follows:
 |------------------------|----------------------------------|
 | beauty resources       | app/src/main/assets/beauty_agora |
 
-#### FaceUnity
+#### Third-party Beauty (FaceUnity)
+
+> The FaceUnity integration example is based on the
+> [Agora Beauty API Library](https://github.com/AgoraIO-Community/BeautyAPI)
 
 1. Contact FaceUnity customer service to obtain beauty resources and certificates
 2. Put the beauty resource and certificate in the corresponding path
