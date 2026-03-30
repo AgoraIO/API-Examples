@@ -99,7 +99,12 @@ if "%compress_apiexample%"=="true" (
         exit /b 1
     )
 
-    for /f "tokens=*" %%a in ('powershell -Command "[System.IO.Path]::GetFileName(''!sdk_package_url!'')"') do set "sdk_zip_name=%%a"
+    set "SDK_PACKAGE_URL=!sdk_package_url!"
+    for /f "usebackq tokens=*" %%a in (`powershell -Command "[System.IO.Path]::GetFileName($env:SDK_PACKAGE_URL)"`) do set "sdk_zip_name=%%a"
+    if "!sdk_zip_name!"=="" (
+        echo SDK zip file name parse failed!
+        exit /b 1
+    )
 
     set "sdk_extract_dir=Agora_Native_SDK_for_Windows_FULL"
     if exist "!sdk_extract_dir!" rmdir /S /Q "!sdk_extract_dir!"
