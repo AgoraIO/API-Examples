@@ -1,43 +1,43 @@
 
 /* Class = "NSTextFieldCell"; title = "water"; ObjectID = "8YN-Yd-UZv"; */
-"Srd-aW-lWt.title" = "Watermark";
+"Srd-aW-lWt.title" = "水印";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
 "BP9-4w-AfJ.title" = "Box";
 
 /* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[0] = "Auto"; ObjectID = "D2B-fw-Vnp"; */
-"2nu-cG-poA.ibShadowedLabels[0]" = "Auto";
+"2nu-cG-poA.ibShadowedLabels[0]" = "自动";
 
 /* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[1] = "Soft knitting"; ObjectID = "D2B-fw-Vnp"; */
-"2nu-cG-poA.ibShadowedLabels[1]" = "Software Encoding";
+"2nu-cG-poA.ibShadowedLabels[1]" = "软编";
 
 /* Class = "NSSegmentedCell"; D2B-fw-Vnp.ibShadowedLabels[2] = "Hard knitting"; ObjectID = "D2B-fw-Vnp"; */
-"2nu-cG-poA.ibShadowedLabels[2]" = "Hardware Encoding";
+"2nu-cG-poA.ibShadowedLabels[2]" = "硬编";
 
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
-"Lhu-U1-6qh.title" = "Join Channel";
+"Lhu-U1-6qh.title" = "加入频道";
 
 /* Class = "NSTextFieldCell"; title = "first frame is drawn"; ObjectID = "PDX-e5-ZpY"; */
-"ZlG-nb-3NY.title" = "First Frame";
+"ZlG-nb-3NY.title" = "首帧出图";
 
 /* Class = "NSTextFieldCell"; title = "S or l flow"; ObjectID = "XH3-Ib-cXr"; */
-"zOU-d9-jDn.title" = "Dual Stream";
+"zOU-d9-jDn.title" = "大小流";
 
 /* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "Video Call/Live Streaming";
+"YjT-yy-DnJ.title" = "实时视频通话/直播";
 
 /* Class = "NSButtonCell"; title = "Snap Shot"; ObjectID = "cDh-B1-x3E"; */
-"hca-Of-3bM.title" = "Screenshot";
+"hca-Of-3bM.title" = "截图";
 
 /* Class = "NSTextFieldCell"; title = "(Default: flow)"; ObjectID = "d9V-RQ-OX6"; */
-"G8a-XO-yaN.title" = "(Default: High Stream)";
+"G8a-XO-yaN.title" = "(默认: 大流)";
 
 /* Class = "NSTextFieldCell"; title = "BF"; ObjectID = "gt3-r0-jqt"; */
-"Prc-Ti-Ayl.title" = "B Frame";
+"Prc-Ti-Ayl.title" = "B帧";
 
-"gCs-hv-sr4.title" = "Preload";
+"gCs-hv-sr4.title" = "预加载";
 
-"gBn-zJ-ZES.title" = "Padding Stream";
+"gBn-zJ-ZES.title" = "垫片推流";
 
-"iuE-dA-CLg.placeholderString"="Remote render frame rate (1-60), default 15";
-"dbV-BZ-hXR.placeholderString"="Local render frame rate (1-60), default 15";
+"iuE-dA-CLg.placeholderString" = "远端渲染帧率(1-60)，默认15";
+"dbV-BZ-hXR.placeholderString" = "本地渲染帧率(1-60)，默认15";

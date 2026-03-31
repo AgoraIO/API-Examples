@@ -3,13 +3,13 @@
 "11E-tR-tFb.title" = "Low light Enhancement";
 
 /* Class = "NSTextFieldCell"; title = "Beauty"; ObjectID = "4WO-Em-0Qq"; */
-"4WO-Em-0Qq.title" = "Beauty";
+"4WO-Em-0Qq.title" = "美颜";
 
 /* Class = "NSTextFieldCell"; title = "Strength"; ObjectID = "7PH-4u-nrD"; */
 "7PH-4u-nrD.title" = "Strength";
 
 /* Class = "NSTextFieldCell"; title = "Ruddy"; ObjectID = "85x-Bt-HuU"; */
-"85x-Bt-HuU.title" = "Ruddy";
+"85x-Bt-HuU.title" = "红润";
 
 /* Class = "NSTextFieldCell"; title = "Color Enhancement"; ObjectID = "97m-MF-3to"; */
 "97m-MF-3to.title" = "Color Enhancement";
@@ -24,7 +24,7 @@
 "YjT-yy-DnJ.title" = "Video Process";
 
 /* Class = "NSTextFieldCell"; title = "Sharp"; ObjectID = "ZOR-gO-Ji2"; */
-"ZOR-gO-Ji2.title" = "Sharp";
+"ZOR-gO-Ji2.title" = "锐利";
 
 /* Class = "NSTextFieldCell"; title = "Skin Protect"; ObjectID = "ozL-f1-AXZ"; */
 "ozL-f1-AXZ.title" = "Skin Protect";
@@ -33,15 +33,15 @@
 "plA-5C-vDg.title" = "Video Denoise";
 
 /* Class = "NSTextFieldCell"; title = "Whitening"; ObjectID = "q1I-U0-llK"; */
-"q1I-U0-llK.title" = "Whitening";
+"q1I-U0-llK.title" = "美白";
 
 /* Class = "NSTextFieldCell"; title = "Smoothing"; ObjectID = "sFK-pV-vaj"; */
-"sFK-pV-vaj.title" = "Smoothing";
+"sFK-pV-vaj.title" = "平滑";
 
-"AAl-Un-v63.title" = "Lightening";
+"AAl-Un-v63.title" = "提亮";
 
 /* Class = "NSButtonCell"; normalTitle = "Face Shape"; ObjectID = "9VS-Ox-yEZ"; */
-"9VS-Ox-yEZ.title" = "Face Shape";
+"9VS-Ox-yEZ.title" = "美型";
 
 /* Class = "NSButtonCell"; normalTitle = "Make Up"; ObjectID = "8aS-7m-YP7"; */
-"8aS-7m-YP7.title" = "Make Up";
+"8aS-7m-YP7.title" = "美妆";
