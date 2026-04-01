@@ -64,13 +64,7 @@ if not "%SDK_VER%"=="%BRANCH_VER%" (
 echo Version validated: %BRANCH_VER%
 :skip_version_validation
 
-REM If sdk_url has a value, replace the URL in install.ps1
-if not "%sdk_url%"=="" (
-    if not "%sdk_url%"=="none" (
-        echo "Replacing SDK URL in install.ps1"
-        powershell -Command "(Get-Content windows\APIExample\install.ps1) -replace '\$agora_sdk = ''.*''', ('$agora_sdk = ''' + '%sdk_url%' + '''') | Set-Content windows\APIExample\install.ps1"
-    )
-)
+REM Keep install.ps1 unchanged. If sdk_url is provided, later prepare a local ../../sdk folder for compile.
 
 REM Check compress_apiexample parameter
 if "%compress_apiexample%"=="" set compress_apiexample=false
