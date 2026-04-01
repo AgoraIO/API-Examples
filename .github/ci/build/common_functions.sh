@@ -40,11 +40,11 @@ get_branch_name() {
 # Function: Extract version from branch name
 # Args:
 #   $1 - Branch name
-# Returns: Version string (e.g., "4.6.2") or empty if not in dev/x.x.x format
+# Returns: Version string (e.g., "4.6.2") or empty if not in <branch-type>/x.x.x format
 extract_branch_version() {
     local branch_name="$1"
     
-    if [[ $branch_name =~ ^dev/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+    if [[ $branch_name =~ ^[^/]+/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
         echo "${BASH_REMATCH[1]}"
     else
         echo ""
@@ -200,7 +200,7 @@ run_version_validation() {
         return 0
     fi
     
-    # Extract version from branch name (format: dev/x.x.x)
+    # Extract version from branch name (format: <branch-type>/x.x.x)
     BRANCH_VERSION=$(extract_branch_version "$BRANCH_NAME")
     
     if [ -z "$BRANCH_VERSION" ]; then
@@ -209,10 +209,10 @@ run_version_validation() {
         echo "Error: Branch naming is not compliant!"
         echo "=========================================="
         echo "Current branch: $BRANCH_NAME"
-        echo "Required format: dev/x.x.x (e.g., dev/4.6.2)"
+        echo "Required format: <branch-type>/x.x.x (e.g., dev/4.6.2 or release/4.6.2)"
         echo ""
         echo "Branch naming rules:"
-        echo "  - Version branches must follow: dev/x.x.x"
+        echo "  - Version branches must follow: <branch-type>/x.x.x"
         echo "  - Main branch: main (skips validation)"
         echo ""
         return 1
