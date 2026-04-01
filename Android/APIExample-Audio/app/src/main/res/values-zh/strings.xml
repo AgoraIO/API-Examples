@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shengwang API Example(Audio)</string>
+    <string name="app_name">Agora API Example(Audio)</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>
     <string name="play">播放</string>
