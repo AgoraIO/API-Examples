@@ -49,7 +49,7 @@ All work must conform to the rules defined in `ARCHITECTURE.md`:
 - Each example implements `IAgoraRtcEngineEventHandler` interface
 - Each example manages its own Agora engine lifecycle
 - Message handlers are defined via `BEGIN_MESSAGE_MAP` / `END_MESSAGE_MAP`
-- All examples are registered in `CSceneDialog`
+- All examples are registered in `APIExampleDlg.h` and `APIExampleDlg.cpp`
 - Configuration is managed centrally via `CConfig` class
 
 ### Follow the Existing Language and Framework

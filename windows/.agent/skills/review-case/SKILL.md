@@ -29,10 +29,10 @@ Use this skill when you need to:
 - [ ] Engine is created in `InitializeAgoraEngine()` or similar
 - [ ] Engine is initialized with `RtcEngineContext`
 - [ ] `leaveChannel()` is called before `release()`
-- [ ] `release()` is called in `PostNcDestroy()` or cleanup method
+- [ ] `release()` is called in the case's real cleanup path
 - [ ] No engine leaks (engine not recreated on every join)
 
-**Correct Pattern:**
+**Correct Pattern A — standalone dialog teardown:**
 ```cpp
 BOOL CExampleDlg::OnInitDialog() {
     CDialogEx::OnInitDialog();
@@ -60,6 +60,33 @@ void CExampleDlg::LeaveChannel() {
     m_rtcEngine->leaveChannel();
 }
 ```
+
+**Correct Pattern B — scene-switching dialog teardown:**
+```cpp
+bool CExampleDlg::InitAgora() {
+    m_rtcEngine = createAgoraRtcEngine();
+    // initialize once when the scene becomes active
+    return m_rtcEngine != nullptr;
+}
+
+void CExampleDlg::UnInitAgora() {
+    if (!m_rtcEngine) return;
+    if (m_joinChannel) {
+        m_rtcEngine->leaveChannel();
+    }
+    m_rtcEngine->release(nullptr);
+    m_rtcEngine = nullptr;
+}
+
+void CExampleDlg::OnShowWindow(BOOL bShow, UINT nStatus) {
+    CDialogEx::OnShowWindow(bShow, nStatus);
+    if (!bShow) {
+        UnInitAgora();
+    }
+}
+```
+
+Accept either pattern as long as the dialog follows one lifecycle consistently and does not leak the engine across scene switches.
 
 **Incorrect Pattern:**
 See `references/incorrect-lifecycle.cpp` for common mistakes.
