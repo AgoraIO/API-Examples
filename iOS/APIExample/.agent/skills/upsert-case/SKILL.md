@@ -24,8 +24,8 @@ Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case do
 
 | Scenario | Files |
 |----------|-------|
-| Add new case | New folder + `.swift` file + `.storyboard`, `ViewController.swift` (MenuItem), `ARCHITECTURE.md` (Case Index) |
-| Modify existing case | Existing `.swift` file(s), optionally `.storyboard`, `ARCHITECTURE.md` (Case Index) |
+| Add new case | New folder + `.swift` file + `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` (MenuItem), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `.swift` file(s), optionally `Base.lproj/<ExampleName>.storyboard`, `ARCHITECTURE.md` (Case Index) |
 
 ---
 
@@ -98,7 +98,7 @@ extension <ExampleName>Main: AgoraRtcEngineDelegate {
 
 ## Step 3 — Create the Storyboard
 
-Create `APIExample/Base.lproj/<ExampleName>.storyboard` with two scenes:
+Create `APIExample/Examples/[Basic|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard` with two scenes:
 
 | Scene | Storyboard ID | Class |
 |-------|--------------|-------|
@@ -106,6 +106,8 @@ Create `APIExample/Base.lproj/<ExampleName>.storyboard` with two scenes:
 | Main  | `<ExampleName>` | `<ExampleName>Main` |
 
 Connect a `Show` segue or use the manual push in `onJoinPressed`.
+
+Keep the storyboard inside the example folder. Do not place new case storyboards in the shared `APIExample/Base.lproj/` directory.
 
 ## Default Entry UI Convention
 

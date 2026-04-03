@@ -30,11 +30,11 @@ windows/
 │   │   ├── res/                 # Resources (icons, dialogs, strings)
 │   │   ├── APIExample.cpp
 │   │   ├── APIExample.h
-│   │   ├── APIExampleDlg.cpp    # Main dialog
+│   │   ├── APIExampleDlg.cpp    # Main dialog and example registration
 │   │   ├── APIExampleDlg.h
 │   │   ├── CConfig.cpp          # Configuration management
 │   │   ├── CConfig.h
-│   │   ├── CSceneDialog.cpp     # Scene selection dialog
+│   │   ├── CSceneDialog.cpp     # Shared dialog helper, not the case registration source
 │   │   └── CSceneDialog.h
 │   ├── APIExample.sln           # Visual Studio solution
 │   ├── cicd/                    # CI/CD scripts
@@ -73,7 +73,7 @@ Each example is a dialog class that:
 
 ### Menu Registration
 
-All examples are registered in `CSceneDialog` via a scene list. The example name must match the folder name.
+All examples are registered in `APIExampleDlg.h` and `APIExampleDlg.cpp`. The localized scene name is wired through `Language.h`, `stdafx.cpp`, `en.ini`, and `zh-cn.ini`, and the example name should still match the folder name.
 
 ### Configuration Management
 
