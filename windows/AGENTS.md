@@ -60,15 +60,6 @@ All work must conform to the rules defined in `ARCHITECTURE.md`:
 - Use message map pattern for event handling — do not introduce modern C++ patterns unless they already exist in the file being modified
 - Match the code style, naming, and patterns of existing examples
 
-### Use Example-Level SKILLs
-
-Each example may contain a `SKILL.md` file in its folder. When working on or referencing a specific example:
-1. Check whether a `SKILL.md` exists in that example's directory
-2. If it exists, read it before making changes — it describes the API usage, call flow, and known constraints
-3. If it does not exist, one will be created in the future; proceed using the source code as the reference
-
-**SKILL.md location pattern:** `APIExample/APIExample/[Basic|Advanced]/<ExampleName>/SKILL.md`
-
 ### Use Project-Level SKILLs
 
 For broader tasks, use the skills in `.agent/skills/`:
