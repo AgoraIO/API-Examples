@@ -117,7 +117,6 @@
     <string name="item_streamencrypt">Media Stream Encryption(Custom Encoder)</string>
     <string name="item_channelencryption">Media Stream Encryption</string>
     <string name="item_setvideoprofile">Set the Video Profile</string>
-    <string name="item_incallreport">Report In-call Statistics</string>
     <string name="item_superresolution">Super Resolution</string>
     <string name="item_livestreaming">RTC Live Streaming</string>
     <string name="item_twoProcessScreenShare">Multi Process - Screen Sharing</string>
@@ -166,7 +165,6 @@
     <string name="audiorouter_palyer">This example shows the behavior of audio router while communicating with rtc.</string>
     <string name="audio_waveform">This example demonstrates how to display waveform by rtc engine.</string>
     <string name="media_recorder">This example demonstrates how to use MediaRecorder to recorde local or remote video.</string>
-    <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="setvideoprofile">This example demonstrates how to use VideoEncoderConfiguration to adjust video configurations.</string>
