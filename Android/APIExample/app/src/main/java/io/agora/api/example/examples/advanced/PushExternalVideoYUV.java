@@ -301,7 +301,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
-        /*Please configure accessToken in the string_config file.
+        /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
