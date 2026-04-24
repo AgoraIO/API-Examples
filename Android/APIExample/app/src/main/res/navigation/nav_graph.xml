@@ -93,9 +93,6 @@
             android:id="@+id/action_mainFragment_to_MediaRecorder"
             app:destination="@id/MediaRecorder" />
         <action
-            android:id="@+id/action_mainFragment_to_InCallReport"
-            app:destination="@id/InCallReport" />
-        <action
             android:id="@+id/action_mainFragment_to_PreCallTest"
             app:destination="@id/PreCallTest" />
         <action
@@ -325,11 +322,6 @@
         android:name="io.agora.api.example.examples.advanced.MediaRecorder"
         android:label="@string/item_media_recorder"
         tools:layout="@layout/fragment_media_recorder" />
-    <fragment
-        android:id="@+id/InCallReport"
-        android:name="io.agora.api.example.examples.advanced.InCallReport"
-        android:label="@string/item_incallreport"
-        tools:layout="@layout/fragment_in_call_report" />
     <fragment
         android:id="@+id/PreCallTest"
         android:name="io.agora.api.example.examples.advanced.PreCallTest"

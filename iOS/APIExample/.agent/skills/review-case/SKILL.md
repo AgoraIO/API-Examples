@@ -102,7 +102,7 @@ AgoraAudioSession.sharedInstance().requestRecordPermission { [weak self] granted
 
 **Check:**
 - Entry class inherits `UIViewController`, Main class inherits `BaseViewController`
-- Class names follow `<ExampleName>Entry` / `<ExampleName>Main` pattern
+- Entry class usually follows `<ExampleName>Entry`; the main controller may be `<ExampleName>Main` or an existing project-specific `*ViewController` name as long as storyboard wiring is correct
 - `configs` dictionary used to pass data from Entry to Main (no direct property injection)
 - File placed under `Examples/Basic/` or `Examples/Advanced/` matching the MenuItem section
 - Storyboard ID of Main scene matches the `controller` field in `MenuItem`

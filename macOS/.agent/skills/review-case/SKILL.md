@@ -87,6 +87,7 @@ See `references/incorrect-thread-safety.swift` for common mistakes.
 - [ ] Microphone permission requested before `enableAudio()`
 - [ ] Camera permission requested before `enableVideo()`
 - [ ] Permissions checked before accessing devices
+- [ ] Review guidance stays macOS-specific and does not suggest iOS-only APIs such as `AVAudioSession.sharedInstance().requestRecordPermission`
 
 **Correct Pattern:**
 ```swift
@@ -98,7 +99,7 @@ func initializeAgoraEngine() {
         }
     }
     
-    AVAudioSession.sharedInstance().requestRecordPermission { granted in
+    AVCaptureDevice.requestAccess(for: .audio) { granted in
         if granted {
             self.agoraKit.enableAudio()
         }

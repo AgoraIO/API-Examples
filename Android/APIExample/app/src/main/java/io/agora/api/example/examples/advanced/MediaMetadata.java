@@ -260,7 +260,7 @@ public class MediaMetadata extends BaseFragment implements View.OnClickListener 
         int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
         Log.e(TAG, code + "");
 
-        /*Please configure accessToken in the string_config file.
+        /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see

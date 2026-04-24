@@ -2,7 +2,7 @@
 name: upsert-case
 description: >
   Add a new API example or modify an existing one. Covers both creation and modification scenarios,
-  including file structure, registration, and ARCHITECTURE.md updates.
+  including file structure, per-example storyboard creation, registration, and ARCHITECTURE.md updates.
 compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
@@ -30,9 +30,10 @@ Use this skill when you need to:
 1. Determine if the example belongs in `Basic/` or `Advanced/`
 2. Create the example folder with PascalCase name
 3. Create the Swift implementation file
-4. Register the example in `ViewController.swift`
-5. Update `ARCHITECTURE.md` Case Index
-6. Verify compilation and functionality
+4. Create the example storyboard
+5. Register the example in `ViewController.swift`
+6. Update `ARCHITECTURE.md` Case Index
+7. Verify compilation and functionality
 
 ### Scenario 2: Modify an Existing Example
 
@@ -41,8 +42,9 @@ Use this skill when you need to:
 **Steps:**
 1. Locate the example in `APIExample/Examples/[Basic|Advanced]/<ExampleName>/`
 2. Modify the Swift file
-3. Update `ARCHITECTURE.md` Case Index if APIs changed
-4. Verify compilation and functionality
+3. Modify the storyboard if outlets, actions, or controller identifiers changed
+4. Update `ARCHITECTURE.md` Case Index if APIs changed
+5. Verify compilation and functionality
 
 ---
 
@@ -53,6 +55,7 @@ Use this skill when you need to:
 | File | Action | Notes |
 |------|--------|-------|
 | `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/<ExampleName>.swift` | Create | Main implementation file |
+| `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard` | Create | Example UI and controller identifier |
 | `APIExample/ViewController.swift` | Modify | Register example in menu/list |
 | `ARCHITECTURE.md` | Modify | Add entry to Case Index |
 
@@ -61,6 +64,7 @@ Use this skill when you need to:
 | File | Action | Notes |
 |------|--------|-------|
 | `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/<ExampleName>.swift` | Modify | Update implementation |
+| `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard` | Modify if needed | Keep outlets and controller identifiers aligned |
 | `ARCHITECTURE.md` | Modify | Update Case Index if APIs changed |
 
 ---
@@ -86,19 +90,26 @@ Create `APIExample/Examples/[Basic|Advanced]/<ExampleName>/<ExampleName>.swift`
 
 Use the template from `references/example-template.swift` as a starting point. Replace `<ExampleName>` with your example name.
 
-### Step 4: Register in ViewController
+### Step 4: Create the Example Storyboard
+
+Create `APIExample/Examples/[Basic|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard`.
+
+The storyboard name must match the value passed to `NSStoryboard(name:bundle:)` from `ViewController.swift`, and the main controller identifier in the storyboard must match the `controller` field in `MenuItem`.
+
+### Step 5: Register in ViewController
 
 Edit `APIExample/ViewController.swift` and add the example to the menu/list:
 
 ```swift
-// In the example list or menu setup
-let examples = [
-    // ... existing examples
-    ("ExampleName", <ExampleName>Main.self),
-]
+MenuItem(name: "Example Name".localized,
+         identifier: "menuCell",
+         controller: "<ExampleName>",
+         storyboard: "<ExampleName>")
 ```
 
-### Step 5: Update ARCHITECTURE.md
+Place it in the correct section (Basic / Advanced).
+
+### Step 6: Update ARCHITECTURE.md
 
 Add a new row to the Case Index table in `ARCHITECTURE.md`:
 
@@ -108,13 +119,14 @@ Add a new row to the Case Index table in `ARCHITECTURE.md`:
 
 **Key APIs column:** List 2-5 core SDK methods used in this example.
 
-### Step 6: Verify
+### Step 7: Verify
 
 - [ ] Code compiles without errors
 - [ ] Example appears in the menu/list
 - [ ] Example can join channel and receive callbacks
 - [ ] `leaveChannel()` and `destroy()` are called on close
 - [ ] UI updates happen on main thread
+- [ ] Storyboard loads with the expected controller identifier
 - [ ] ARCHITECTURE.md Case Index is updated
 
 ---
@@ -139,6 +151,7 @@ See `references/` directory for code patterns:
 - Forget to implement `AgoraRtcEngineDelegate` for event handling
 - Leave the channel without calling `leaveChannel()` first
 - Modify examples outside the `APIExample/Examples/[Basic|Advanced]/` structure
+- Register a new menu item without also creating the per-example storyboard under the same example folder
 - Forget to update `ARCHITECTURE.md` Case Index after adding/modifying an example
 
 ---
@@ -150,6 +163,8 @@ After completing the upsert, verify:
 - [ ] Example folder is in correct location (`APIExample/Examples/[Basic|Advanced]/<ExampleName>/`)
 - [ ] Swift file is named `<ExampleName>.swift` (PascalCase)
 - [ ] Class name is `<ExampleName>Main` and extends `BaseViewController`
+- [ ] Storyboard exists at `APIExample/Examples/[Basic|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard`
+- [ ] Storyboard identifier matches the `controller` value registered in `ViewController.swift`
 - [ ] Example is registered in `ViewController.swift`
 - [ ] `initializeAgoraEngine()` creates engine with correct config
 - [ ] `joinChannel()` uses token from `KeyCenter`

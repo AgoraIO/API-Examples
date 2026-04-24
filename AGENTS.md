@@ -5,7 +5,7 @@ Read this file first, then navigate to the relevant platform directory.
 
 ## Repository Overview
 
-This repository contains sample projects demonstrating Agora RTC Native SDK APIs across five platforms. Each platform is fully independent — do not share source files or dependencies across platforms.
+This repository contains sample projects demonstrating Agora RTC Native SDK APIs across four independent platforms. Each platform is self-contained — do not share source files, build scripts, or dependencies across platforms.
 
 | Platform | Language(s) | Directory | SDK |
 |----------|-------------|-----------|-----|

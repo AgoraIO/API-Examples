@@ -47,7 +47,7 @@ macOS/
 
 Each example lives in its own folder under `APIExample/Examples/Basic/` or `APIExample/Examples/Advanced/` and consists of:
 - A Swift file containing the example implementation
-- Optional: A storyboard or XIB file for UI layout
+- A per-example storyboard, typically at `Base.lproj/<ExampleName>.storyboard`
 
 ### Example Pattern
 
