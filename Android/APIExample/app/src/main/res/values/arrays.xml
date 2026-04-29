@@ -204,7 +204,6 @@
         <item>VD_960x720</item>
         <item>VD_1280x720</item>
         <item>VD_1920x1080</item>
-        <item>VD_1920x1080</item>
         <item>VD_2540x1440</item>
         <item>VD_3840x2160</item>
     </string-array>
