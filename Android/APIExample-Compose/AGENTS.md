@@ -29,9 +29,9 @@ See [README.md — Obtain an App Id](README.md#obtain-an-app-id).
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| upsert-case | `.agent/skills/upsert-case/` | Add a new Compose case or modify an existing one |
-| query-cases | `.agent/skills/query-cases/` | Query and browse existing Compose cases |
-| review-case | `.agent/skills/review-case/` | Review a case against project red lines |
+| upsert-case | `.agents/skills/upsert-case/` | Add a new Compose case or modify an existing one |
+| query-cases | `.agents/skills/query-cases/` | Query and browse existing Compose cases |
+| review-case | `.agents/skills/review-case/` | Review a case against project red lines |
 
 ## Further Reading
 

@@ -7,16 +7,16 @@ APIExample-Compose/
 ├── gradle.properties                        # rtc_sdk_version
 ├── AGENTS.md                                # Agent entry point — build commands, red lines, skill index
 ├── ARCHITECTURE.md                          # This file — directory layout, patterns, registration
-├── .kiro/
-│   ├── hooks/
-│   │   └── build-on-task-complete.json      # Runs assembleDebug after each spec task completes
-│   ├── skills/
-│   │   ├── add-new-case/SKILL.md            # Step-by-step guide for adding a new Compose case
-│   │   └── query-cases/SKILL.md             # Query existing cases by API, group, or list position
-│   └── steering/
-│       ├── project-routing.md               # Which sub-project to use; hard constraints (always included)
-│       ├── coding-standards.md              # RtcEngine lifecycle, Kotlin/Compose rules (always included)
-│       └── complex-case-spec.md             # Spec workflow for complex cases (manual inclusion)
+├── .agents/
+│   └── skills/
+│       ├── upsert-case/
+│       │   ├── SKILL.md                     # Add or update a Compose case
+│       │   └── references/
+│       │       └── composable-template.kt   # Compose lifecycle/state reference skeleton
+│       ├── query-cases/
+│       │   └── SKILL.md                     # Query existing cases by API, group, or list position
+│       └── review-case/
+│           └── SKILL.md                     # Review a Compose case against project red lines
 └── app/src/main/
     ├── AndroidManifest.xml
     ├── assets/                              # Audio/video sample files
@@ -127,7 +127,7 @@ APIExample-Compose/
 
 Registration is **manual** — no reflection, no annotation scanning.
 
-**To add a case, edit exactly two files:**
+**To add a case, update at least four project-local artifacts:**
 
 **1. `model/Examples.kt`** — append to `BasicExampleList` or `AdvanceExampleList`:
 ```kotlin
@@ -143,8 +143,14 @@ val AdvanceExampleList = listOf(
 fun MyNewCase() { … }
 ```
 
-No `nav_graph.xml`, no `@Example` annotation, no action ID. `NavGraph.kt` routes to cases by their
-index in the list — the order in `Examples.kt` is the display order.
+**3. `res/values/strings.xml`** — add the user-facing example title.
+
+**4. `ARCHITECTURE.md`** — update the case index so discovery tooling stays current.
+
+Update `res/values-zh/strings.xml` too when the case title should remain localized alongside the existing examples.
+
+No `nav_graph.xml`, no `@Example` annotation, and no action ID. `NavGraph.kt` routes to cases by their
+position in the list — the order in `Examples.kt` is the display order inside the target list.
 
 ## Composable Case Pattern
 
