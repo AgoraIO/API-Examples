@@ -513,6 +513,18 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             }
         }
 
+        @Override
+        public void onPermissionGranted(int permission) {
+            super.onPermissionGranted(permission);
+            if (permission == Constants.RECORD_AUDIO) {
+                showLongToast("Recording permission granted");
+            } else if (permission == Constants.CAMERA) {
+                showLongToast("Camera permission granted");
+            } else if (permission == Constants.SCREEN_CAPTURE) {
+                showLongToast("Screen capture permission granted");
+            }
+        }
+
         /**Since v2.9.0.
          * Occurs when the remote video state changes.
          * PS: This callback does not work properly when the number of users (in the Communication
