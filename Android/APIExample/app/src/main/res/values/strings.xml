@@ -403,11 +403,13 @@
     <string name="channel_profile_cloud_gaming" translatable="false">CLOUD_GAMING</string>
     <string name="channel_profile_communication_1v1" translatable="false">COMMUNICATION_1v1</string>
     <string name="audio_route_default">default</string>
-    <string name="audio_route_speakerphone">speakerphone</string>
-    <string name="audio_route_earpiece">earpiece</string>
     <string name="audio_route_headset">headset</string>
-    <string name="audio_route_headset_typec">headset(TypeC)</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="audio_route_headset_no_mic">headset(no mic)</string>
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_loudspeaker">external speaker(unsupported)</string>
     <string name="audio_route_headset_bluetooth">bluetooth headset</string>
+    <string name="audio_route_headset_typec">USB device(Type-C)</string>
     <string name="third_party_player">Third Party Player</string>
     <string name="third_party_player_ijk" translatable="false">IjkPlayer</string>
     <string name="third_party_player_exo" translatable="false">ExoPlayer</string>

@@ -261,10 +261,14 @@
         <item>@string/channel_profile_communication_1v1</item>
     </string-array>
     <string-array name="audio_route">
-        <item>@string/audio_route_speakerphone</item>
-        <item>@string/audio_route_earpiece</item>
+        <item>@string/audio_route_default</item>
         <item>@string/audio_route_headset</item>
+        <item>@string/audio_route_earpiece</item>
+        <item>@string/audio_route_headset_no_mic</item>
+        <item>@string/audio_route_speakerphone</item>
+        <item>@string/audio_route_loudspeaker</item>
         <item>@string/audio_route_headset_bluetooth</item>
+        <item>@string/audio_route_headset_typec</item>
     </string-array>
 
     <string-array name="third_party_players">
