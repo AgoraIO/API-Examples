@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -58,6 +59,7 @@ import io.agora.rtc2.video.ImageTrackOptions;
 import io.agora.rtc2.video.SnapshotConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.video.WatermarkConfig;
 import io.agora.rtc2.video.WatermarkOptions;
 
 /**
@@ -591,7 +593,13 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
             watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
             watermarkOptions.visibleInPreview = true;
-            int ret = engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
+
+            WatermarkConfig watermarkConfig = new WatermarkConfig();
+            watermarkConfig.id = UUID.randomUUID().toString().replace("-", "");
+            watermarkConfig.type = WatermarkConfig.WATERMARK_TYPE_IMAGE;
+            watermarkConfig.imageUrl = Constant.WATER_MARK_FILE_PATH;
+            watermarkConfig.options = watermarkOptions;
+            int ret = engine.addVideoWatermark(watermarkConfig);
             if (ret != Constants.ERR_OK) {
                 Log.e(TAG, "addVideoWatermark error=" + ret + ", msg=" + RtcEngine.getErrorDescription(ret));
             }
