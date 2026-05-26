@@ -344,6 +344,7 @@
         <item>APPLICATION_SCENARIO_1V1</item>
     </string-array>
     <string-array name="video_module_postion">
+        <item>VIDEO_MODULE_POSITION_POST_CAPTURER</item>
         <item>VIDEO_MODULE_POSITION_PRE_RENDERER</item>
         <item>VIDEO_MODULE_POSITION_PRE_ENCODER</item>
         <item>VIDEO_MODULE_POSITION_POST_CAPTURER_ORIGIN</item>
