@@ -394,7 +394,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         // audio config
         engine.setAudioProfile(
                 Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
-                Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
+                getAudioScenarioValue(audioScenario.getSelectedItem().toString())
         );
 
         /*
@@ -575,7 +575,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         }
 
         if (parent == audioScenario) {
-            engine.setAudioScenario(Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString())));
+            engine.setAudioScenario(getAudioScenarioValue(audioScenario.getSelectedItem().toString()));
             return;
         }
 
@@ -650,6 +650,17 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             String item = parent.getSelectedItem().toString();
             engine.enableVoiceAITuner(enable, enable ? Constants.VOICE_AI_TUNER_TYPE.valueOf(item) : Constants.VOICE_AI_TUNER_TYPE.VOICE_AI_TUNER_MATURE_MALE);
         }
+    }
+
+    private int getAudioScenarioValue(String label) {
+        return switch (label) {
+            case "AUDIO_SCENARIO_GAME_STREAMING" -> Constants.AUDIO_SCENARIO_GAME_STREAMING;
+            case "AUDIO_SCENARIO_CHATROOM" -> Constants.AUDIO_SCENARIO_CHATROOM;
+            case "AUDIO_SCENARIO_CHORUS" -> Constants.AUDIO_SCENARIO_CHORUS;
+            case "AUDIO_SCENARIO_MEETING" -> Constants.AUDIO_SCENARIO_MEETING;
+            case "AUDIO_SCENARIO_AI_CLIENT" -> Constants.AUDIO_SCENARIO_AI_CLIENT;
+            default -> Constants.AUDIO_SCENARIO_DEFAULT;
+        };
     }
 
     private int getVoiceConversionValue(String label) {

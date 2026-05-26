@@ -16,9 +16,12 @@
         <item>Channel1</item>
     </string-array>
     <string-array name="audioScenario">
-        <item>DEFAULT</item>
-        <item>GAME_STREAMING</item>
-        <item>CHATROOM</item>
+        <item>AUDIO_SCENARIO_DEFAULT</item>
+        <item>AUDIO_SCENARIO_GAME_STREAMING</item>
+        <item>AUDIO_SCENARIO_CHATROOM</item>
+        <item>AUDIO_SCENARIO_CHORUS</item>
+        <item>AUDIO_SCENARIO_MEETING</item>
+        <item>AUDIO_SCENARIO_AI_CLIENT</item>
     </string-array>
     <string-array name="audioChatBeautifier">
         <item>OFF</item>

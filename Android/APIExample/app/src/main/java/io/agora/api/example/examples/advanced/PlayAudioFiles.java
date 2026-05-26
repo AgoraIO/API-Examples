@@ -231,7 +231,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent == audioScenario) {
-            engine.setAudioScenario(Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString())));
+            engine.setAudioScenario(getAudioScenarioValue(audioScenario.getSelectedItem().toString()));
         }
     }
 
@@ -330,7 +330,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         engine.setAudioProfile(
                 Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
-                Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
+                getAudioScenarioValue(audioScenario.getSelectedItem().toString())
         );
 
         /*
@@ -357,6 +357,17 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             // Prevent repeated entry
             join.setEnabled(false);
         });
+    }
+
+    private int getAudioScenarioValue(String label) {
+        return switch (label) {
+            case "AUDIO_SCENARIO_GAME_STREAMING" -> Constants.AUDIO_SCENARIO_GAME_STREAMING;
+            case "AUDIO_SCENARIO_CHATROOM" -> Constants.AUDIO_SCENARIO_CHATROOM;
+            case "AUDIO_SCENARIO_CHORUS" -> Constants.AUDIO_SCENARIO_CHORUS;
+            case "AUDIO_SCENARIO_MEETING" -> Constants.AUDIO_SCENARIO_MEETING;
+            case "AUDIO_SCENARIO_AI_CLIENT" -> Constants.AUDIO_SCENARIO_AI_CLIENT;
+            default -> Constants.AUDIO_SCENARIO_DEFAULT;
+        };
     }
 
     /**
