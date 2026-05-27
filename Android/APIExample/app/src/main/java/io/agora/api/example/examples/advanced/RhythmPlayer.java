@@ -36,13 +36,13 @@ import io.agora.rtc2.proxy.LocalAccessPointConfiguration;
 /**
  * This demo demonstrates how to make a VideoProcessExtension
  */
-@Example(
+/*@Example(
         index = 34,
         group = ADVANCED,
         name = R.string.item_rhythmplayer,
         actionId = R.id.action_mainFragment_rhythm_player,
         tipsId = R.string.rhythmplayer
-)
+)*/
 public class RhythmPlayer extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = RhythmPlayer.class.getSimpleName();
