@@ -238,15 +238,25 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         @Override
         public void onError(int err) {
             super.onError(err);
-            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
-            if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
+//            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
+        }
+
+        /**
+         * Occurs when the network connection state changes.
+         * @param state The current connection state.
+         * @param reason Reason for connection status change
+         */
+        @Override
+        public void onConnectionStateChanged(int state, int reason) {
+            super.onConnectionStateChanged(state, reason);
+            if (reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN || reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
                 engine.leaveChannel();
                 runOnUIThread(() -> join.setEnabled(true));
 
-                if (Constants.ERR_INVALID_TOKEN == err) {
+                if (Constants.CONNECTION_CHANGED_INVALID_TOKEN == reason) {
                     showAlert(getString(R.string.token_invalid));
                 }
-                if (Constants.ERR_TOKEN_EXPIRED == err) {
+                if (Constants.CONNECTION_CHANGED_TOKEN_EXPIRED == reason) {
                     showAlert(getString(R.string.token_expired));
                 }
             }
