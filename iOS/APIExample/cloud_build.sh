@@ -187,7 +187,7 @@ if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
   echo "Error: Unable to determine SDK version from Podfile"
   exit 1
 fi
-OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${API_EXAMPLES_SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
+OUTPUT_FILE=${WORKSPACE}/Agora_${TARGET_NAME}_${BUILD_NUMBER}_${API_EXAMPLES_SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
 mv ${EXPORT_PATH}/${TARGET_NAME}.ipa $OUTPUT_FILE
 
 # Clean up temporary files
