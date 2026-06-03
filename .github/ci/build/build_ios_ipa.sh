@@ -146,24 +146,28 @@ cd ${WORKSPACE}
 # sh sign "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}"
 sh export "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --plist "${PLIST_PATH}"
 
-SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
+if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
+    API_EXAMPLES_SDK_VERSION=$(grep -E "pod 'Agora(RtcEngine|Audio)_iOS'" "${PROJECT_PATH}/Podfile" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
+fi
+if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
+    echo "Error: Unable to determine SDK version from Podfile"
+    exit 1
+fi
 # 上传IPA
-PAYLOAD_PATH="${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}_Payload"
+PAYLOAD_PATH="${TARGET_NAME}_SDK_${API_EXAMPLES_SDK_VERSION}_CI_${BUILD_NUMBER}_Payload"
 mkdir "${PAYLOAD_PATH}"
 # mv "${TARGET_NAME}_${BUILD_NUMBER}_iOS.ipa" "${PAYLOAD_PATH}"
 mv "${TARGET_NAME}_${BUILD_NUMBER}.ipa" "${PAYLOAD_PATH}"
 
-7za a "${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
-python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}_IPA.zip" --project
+7za a "${TARGET_NAME}_SDK_${API_EXAMPLES_SDK_VERSION}_CI_${BUILD_NUMBER}_IPA.zip" -r "${PAYLOAD_PATH}"
+python3 artifactory_utils.py --action=upload_file --file="${TARGET_NAME}_SDK_${API_EXAMPLES_SDK_VERSION}_CI_${BUILD_NUMBER}_IPA.zip" --project
 
 # 删除IPA文件夹
-rm -rf ${TARGET_NAME}_SDK_${SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive
+rm -rf ${TARGET_NAME}_SDK_${API_EXAMPLES_SDK_VERSION}_CI_${BUILD_NUMBER}.xcarchive
 rm -rf *.zip
 rm -rf ${PAYLOAD_PATH}
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
-
-
 
 

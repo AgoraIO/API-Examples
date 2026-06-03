@@ -84,8 +84,16 @@ if [ "$BRANCH_NAME" != "main" ]; then
     echo "Validating SDK version in Podfile..."
     echo "=========================================="
     validate_sdk_version "./iOS/${ios_direction}/Podfile" "$BRANCH_VERSION" "ios" || exit 1
+    export BRANCH_VERSION
     echo ""
 fi
+
+API_EXAMPLES_SDK_VERSION=$(grep -E "^[[:space:]]*#?[[:space:]]*pod[[:space:]]+'Agora(RtcEngine|Audio)_iOS'" "./iOS/${ios_direction}/Podfile" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
+if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
+    echo "Error: Unable to determine SDK version from ./iOS/${ios_direction}/Podfile"
+    exit 1
+fi
+export API_EXAMPLES_SDK_VERSION
 
 if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    sdk_url_flag=false
@@ -122,13 +130,11 @@ python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_directi
 echo "start compress"
 7za a -tzip result.zip -r $unzip_name > log.txt
 echo "start move to"
-echo $WORKSPACE/Agora_APIExample_iOS_${ios_direction}_${BUILD_NUMBER}_$zip_name
-mv result.zip $WORKSPACE/Agora_APIExample_iOS_${ios_direction}_${BUILD_NUMBER}_$zip_name
+echo $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
+mv result.zip $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
 
 if [ $compress_apiexample = true ]; then
-    # Use BRANCH_VERSION for the package name (already validated to match SDK version)
-    sdk_version="${BRANCH_VERSION}"
-    echo "Using version for package: $sdk_version"
+    echo "Using version for package: $API_EXAMPLES_SDK_VERSION"
     
     cp -rf ./iOS/${ios_direction} $global_dir/
    
@@ -137,7 +143,7 @@ if [ $compress_apiexample = true ]; then
     echo "complete compress api example"
     echo "current path: `pwd`"
     ls -al
-    global_des_path=$WORKSPACE/${apiexample_global_name}_v${sdk_version}_APIExample_${BUILD_NUMBER}.zip
+    global_des_path=$WORKSPACE/${apiexample_global_name}_v${API_EXAMPLES_SDK_VERSION}_APIExample_${BUILD_NUMBER}.zip
     echo "global_des_path: $global_des_path"
     echo "Moving global_result.zip to $global_des_path"
     mv global_result.zip $global_des_path

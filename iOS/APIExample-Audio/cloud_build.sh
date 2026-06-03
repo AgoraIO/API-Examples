@@ -7,9 +7,6 @@ PROJECT_PATH=$PWD
 if [ "$WORKSPACE" = "" ]; then
 	WORKSPACE=$PWD
 fi
-if [ "$BUILD_NUMBER" = "" ]; then
-	BUILD_NUMBER=888
-fi
 
 
 cd ${PROJECT_PATH} && pod install || exit 1
@@ -113,13 +110,17 @@ xcodebuild -exportArchive \
   -allowProvisioningUpdates || exit 1
 
 # Rename and move IPA file
-SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
-OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
+if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
+  API_EXAMPLES_SDK_VERSION=$(grep -E "pod 'Agora(RtcEngine|Audio)_iOS'" Podfile | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
+fi
+if [ -z "$API_EXAMPLES_SDK_VERSION" ]; then
+  echo "Error: Unable to determine SDK version from Podfile"
+  exit 1
+fi
+OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${API_EXAMPLES_SDK_VERSION}_$(date "+%Y%m%d%H%M%S").ipa
 mv ${EXPORT_PATH}/${TARGET_NAME}.ipa $OUTPUT_FILE
 
 # Clean up temporary files
 rm -rf "${EXPORT_PATH}"
 rm -rf "${ARCHIVE_PATH}"
 echo OUTPUT_FILE: $OUTPUT_FILE
-
-
