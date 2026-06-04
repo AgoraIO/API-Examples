@@ -3,14 +3,31 @@
 # Common functions for iOS/macOS build scripts
 # This file contains reusable functions for version validation
 
+# Function: Normalize branch references to plain branch names
+# Returns: Branch name without common ref prefixes
+normalize_branch_name() {
+    local branch_name="$1"
+
+    branch_name=$(echo "$branch_name" | sed \
+        -e 's|^refs/remotes/origin/||' \
+        -e 's|^refs/heads/||' \
+        -e 's|^remotes/origin/||' \
+        -e 's|^origin/||')
+
+    echo "$branch_name"
+}
+
 # Function: Get current git branch name
 # Tries multiple methods to determine the branch name in CI environments
-# Returns: Branch name (without origin/ prefix)
+# Returns: Branch name without common ref prefixes
 get_branch_name() {
     local branch_name=""
     
     # Method 1: Try environment variables (Jenkins/GitLab CI)
-    if [ ! -z "$GIT_BRANCH" ]; then
+    if [ ! -z "$api_examples_branch" ]; then
+        branch_name="$api_examples_branch"
+        echo "Branch from api_examples_branch: $branch_name" >&2
+    elif [ ! -z "$GIT_BRANCH" ]; then
         branch_name="$GIT_BRANCH"
         echo "Branch from GIT_BRANCH: $branch_name" >&2
     elif [ ! -z "$BRANCH_NAME" ]; then
@@ -24,15 +41,14 @@ get_branch_name() {
         branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if [ "$branch_name" = "HEAD" ]; then
             # In detached HEAD state, try to get branch from remote
-            branch_name=$(git branch -r --contains HEAD | grep -v HEAD | head -1 | sed 's/^[[:space:]]*origin\///')
+            branch_name=$(git branch -r --contains HEAD | grep -v HEAD | head -1 | sed 's/^[[:space:]]*//')
             echo "Branch from git branch -r: $branch_name" >&2
         else
             echo "Branch from git rev-parse: $branch_name" >&2
         fi
     fi
     
-    # Remove origin/ prefix if present (but keep the rest of the path)
-    branch_name=$(echo "$branch_name" | sed 's/^origin\///')
+    branch_name=$(normalize_branch_name "$branch_name")
     
     echo "$branch_name"
 }
@@ -40,11 +56,11 @@ get_branch_name() {
 # Function: Extract version from branch name
 # Args:
 #   $1 - Branch name
-# Returns: Version string (e.g., "4.6.2") or empty if not in dev/x.x.x format
+# Returns: Version string (e.g., "4.6.2") or empty if no version is present
 extract_branch_version() {
     local branch_name="$1"
     
-    if [[ $branch_name =~ ^dev/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+    if [[ $branch_name =~ ([0-9]+\.[0-9]+\.[0-9]+) ]]; then
         echo "${BASH_REMATCH[1]}"
     else
         echo ""
@@ -200,7 +216,7 @@ run_version_validation() {
         return 0
     fi
     
-    # Extract version from branch name (format: dev/x.x.x)
+    # Extract version from branch name (for example: dev/x.x.x or release/x.x.x)
     BRANCH_VERSION=$(extract_branch_version "$BRANCH_NAME")
     
     if [ -z "$BRANCH_VERSION" ]; then
@@ -209,10 +225,10 @@ run_version_validation() {
         echo "Error: Branch naming is not compliant!"
         echo "=========================================="
         echo "Current branch: $BRANCH_NAME"
-        echo "Required format: dev/x.x.x (e.g., dev/4.6.2)"
+        echo "Branch name must contain version number (e.g., dev/4.6.2, release/4.6.2)"
         echo ""
         echo "Branch naming rules:"
-        echo "  - Version branches must follow: dev/x.x.x"
+        echo "  - Version branches must contain x.x.x"
         echo "  - Main branch: main (skips validation)"
         echo ""
         return 1
