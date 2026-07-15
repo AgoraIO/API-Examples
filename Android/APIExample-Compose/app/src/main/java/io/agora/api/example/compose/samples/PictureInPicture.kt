@@ -25,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +35,7 @@ import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -64,9 +63,7 @@ private val globalLocalUid = mutableIntStateOf(0)
 private val globalRemoteUid = mutableIntStateOf(0)
 private val globalChannelName = mutableStateOf("")
 private val globalIsJoined = mutableStateOf(false)
-private val isInPipTransition = mutableStateOf(false)
 private val isPageLeaving = mutableStateOf(false) // Flag to track if user is truly leaving the page
-private var globalCleanupFunction: (() -> Unit)? = null // Global cleanup function
 
 // Helper function to find Activity from Context
 private fun Context.findActivity(): ComponentActivity {
@@ -100,7 +97,7 @@ private fun rememberIsInPipMode(): Boolean {
 // Public function to clean up global state when user leaves the page
 fun cleanupPictureInPictureState() {
     Log.d("PiPDebug", "cleanupPictureInPictureState called")
-    globalCleanupFunction?.invoke()
+    isPageLeaving.value = true
 }
 
 @Composable
@@ -111,28 +108,9 @@ fun PictureInPicture() {
 
     Log.d("PiPDebug", "PictureInPicture: Current isPipOn = $isPipOn")
 
-    // Function to mark that user is leaving the page
-    fun markPageLeaving() {
-        isPageLeaving.value = true
-        Log.d("PiPDebug", "Marked page as leaving - global state will be cleared on next dispose")
-    }
-
-    // Register cleanup function globally
-    LaunchedEffect(Unit) {
-        globalCleanupFunction = { markPageLeaving() }
-    }
-
-    // Add LaunchedEffect to handle PiP mode changes
-    LaunchedEffect(isPipOn) {
-        Log.d("PiPDebug", "PiP mode changed to: $isPipOn")
-        // Mark that we're in a PiP transition
-        isInPipTransition.value = true
-        // Note: We can't access localUid and rtcEngine here as they're defined later
-        // The video setup will be handled in the render callbacks
-    }
-
     // Add DisposableEffect to track lifecycle
-    DisposableEffect(Unit) {
+    DisposableEffect(isPipOn) {
+        Log.d("PiPDebug", "PiP mode changed to: $isPipOn")
         onDispose {
             // Only clear global state when user is truly leaving the page (not during PiP transitions)
             if (isPageLeaving.value) {
@@ -250,14 +228,18 @@ fun PictureInPicture() {
             enableVideo()
         }
     }
-    LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+    DisposableEffect(lifecycleOwner) {
+        val observer = object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 rtcEngine.stopPreview()
                 rtcEngine.leaveChannel()
                 RtcEngine.destroy()
             }
-        })
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { grantedMap ->
@@ -269,7 +251,7 @@ fun PictureInPicture() {
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
                 mediaOptions.autoSubscribeAudio = true
-                mediaOptions.autoSubscribeAudio = true
+                mediaOptions.autoSubscribeVideo = true
                 mediaOptions.publishCameraTrack = true
                 mediaOptions.publishMicrophoneTrack = true
                 TokenUtils.gen(channelName, 0) {

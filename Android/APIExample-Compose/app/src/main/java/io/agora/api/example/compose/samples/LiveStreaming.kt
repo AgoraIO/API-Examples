@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -445,7 +445,7 @@ private fun LiveStreamingSettingView(
                 onValueChanged("videoScenario", option.second)
             }
         )
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         if (role == Constants.CLIENT_ROLE_AUDIENCE) {
             SwitchRaw(
                 title = stringResource(id = R.string.open_low_latency_live),
@@ -460,7 +460,7 @@ private fun LiveStreamingSettingView(
         }
 
         if (role == Constants.CLIENT_ROLE_BROADCASTER) {
-            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             SwitchRaw(
                 title = stringResource(id = R.string.watermark),
                 checked = values["watermark"] as? Boolean ?: false
@@ -481,7 +481,7 @@ private fun LiveStreamingSettingView(
         }
 
 
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
             title = stringResource(id = R.string.low_stream),
             checked = values["stream"] as? Boolean ?: false
@@ -497,7 +497,7 @@ private fun LiveStreamingSettingView(
         }
 
 
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         DropdownMenuRaw(
             title = stringResource(id = R.string.encoder_type),
             options = listOf(
@@ -516,7 +516,7 @@ private fun LiveStreamingSettingView(
             })
         }
 
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
             title = stringResource(id = R.string.b_frame),
             checked = values["BFrame"] as? Boolean ?: false
@@ -535,7 +535,7 @@ private fun LiveStreamingSettingView(
         }
 
 
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         SwitchRaw(
             title = stringResource(id = R.string.video_image),
             checked = values["padding"] as? Boolean ?: false

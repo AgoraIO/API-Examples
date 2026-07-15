@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
@@ -344,7 +345,7 @@ fun <T> DropdownMenuRaw(
         ) {
             TextField(
                 // The `menuAnchor` modifier must be passed to the text field for correctness.
-                modifier = Modifier.menuAnchor(),
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = enable),
                 shape = TextFieldDefaults.shape,
                 value = text,
                 onValueChange = {},
@@ -644,4 +645,3 @@ fun WidgetsPreview() {
         // SliderRaw("Bitrate", 0.5f)
     }
 }
-

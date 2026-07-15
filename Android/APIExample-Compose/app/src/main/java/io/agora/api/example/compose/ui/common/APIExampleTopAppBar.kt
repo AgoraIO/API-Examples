@@ -14,7 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import io.agora.api.example.compose.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +43,7 @@ fun APIExampleTopAppBar(
                         IconButton(onClick = { onSettingClick() }) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
-                                contentDescription = ""
+                                contentDescription = stringResource(R.string.settings_action)
                             )
                         }
                     }
@@ -53,7 +55,7 @@ fun APIExampleTopAppBar(
                 IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = ""
+                        contentDescription = stringResource(R.string.navigate_back)
                     )
                 }
             }
