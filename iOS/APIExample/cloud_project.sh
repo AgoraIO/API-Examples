@@ -5,9 +5,6 @@ PROJECT_PATH=$PWD
 if [ "$WORKSPACE" = "" ]; then
 	WORKSPACE=$PWD
 fi
-if [ "$BUILD_NUMBER" = "" ]; then
-	BUILD_NUMBER=888
-fi
 
 # Download beauty resource
 echo "start download bytedance resource : $bytedance_lib"
@@ -34,4 +31,3 @@ perl -i -pe "s#\#pod 'bytedEffect'#pod 'bytedEffect'#g" Podfile
 perl -i -pe "s#\#pod 'fuLib'#pod 'fuLib'#g" Podfile
 
 pod install --repo-update || exit 1
-

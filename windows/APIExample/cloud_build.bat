@@ -70,11 +70,11 @@ if %ERRORLEVEL% EQU 0 (
     )
 )
 
-REM Copy to WORKSPACE with original naming format
+REM Copy to WORKSPACE with Agora-prefixed naming format
 set h=%time:~0,2%
 set h=%h: =0%
 if not defined WORKSPACE set WORKSPACE=%~dp0
-copy !result_zip! "%WORKSPACE%\\APIExample_windows_%BUILD_NUMBER%_%date:~4,2%%date:~7,2%%h%%time:~3,2%_Release_exe.zip"
+copy !result_zip! "%WORKSPACE%\\Agora_APIExample_windows_%BUILD_NUMBER%_%date:~4,2%%date:~7,2%%h%%time:~3,2%_Release_exe.zip"
 del /F /Q !result_zip! 2>nul
 rmdir /S /Q Output 2>nul
 
