@@ -25,6 +25,17 @@ Each platform directory contains its own `AGENTS.md` with platform-specific rule
 | macOS | `macOS/AGENTS.md` |
 | Windows | `windows/AGENTS.md` |
 
+## AI Engineering Workflow
+
+For AI-assisted version iteration, product-to-implementation routing, multi-agent acceptance, or automatic API example generation, use the repository workflow in `.agent/skills/api-example-release-iteration/SKILL.md`.
+
+Supporting documents:
+- `docs/ai-engineering/knowledge-index.md` - repository knowledge map for agents.
+- `docs/ai-engineering/release-iteration-gate.md` - product, architecture, review, test, and UX acceptance gates.
+- `docs/ai-engineering/role-routing.json` - shared Contract and independent platform role types with logical Codex profiles.
+- `docs/ai-engineering/repository-profile.json` - repository-specific SDK package names and version sources used by the shared tools.
+- `docs/ai-engineering/release-known-issues.md` - repository release-risk reference.
+
 ## Cross-Platform Rules
 
 1. Never share source files, build scripts, or SDK dependencies between platforms.
