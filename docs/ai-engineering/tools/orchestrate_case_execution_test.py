@@ -55,7 +55,10 @@ class RequirementOrchestratorTest(unittest.TestCase):
             check=False,
         )
 
-    def init_workspace(self, matrix_path, run_dir):
+    def init_workspace(self, matrix_path, run_dir, platform_sdk_versions=None):
+        version_args = []
+        for value in platform_sdk_versions or []:
+            version_args.extend(["--platform-sdk-version", value])
         result = self.run_orchestrator(
             "init",
             "--matrix",
@@ -64,6 +67,7 @@ class RequirementOrchestratorTest(unittest.TestCase):
             "Join channel audio",
             "--target-sdk-version",
             self.TARGET_SDK_VERSION,
+            *version_args,
             "--run-dir",
             str(run_dir),
         )
@@ -291,6 +295,37 @@ class RequirementOrchestratorTest(unittest.TestCase):
             self.assertEqual(package["requirement"]["key_apis"], ["enableSpatialAudio"])
             contract_prompt = (run_dir / "role-prompts/contract.md").read_text()
             self.assertNotIn("If Contract marks this platform required=false", contract_prompt)
+
+    def test_init_persists_and_prompts_staggered_platform_sdk_versions(self):
+        matrix_path = self.write_matrix()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = Path(tmpdir) / "run"
+            result = self.run_orchestrator(
+                "init",
+                "--matrix",
+                str(matrix_path),
+                "--feature",
+                "Join channel audio",
+                "--target-sdk-version",
+                "4.6.2",
+                "--platform-sdk-version",
+                "android=4.6.3",
+                "--run-dir",
+                str(run_dir),
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            package = json.loads((run_dir / "execution-package.json").read_text())
+            expected = {
+                "android": "4.6.3",
+                "ios": "4.6.2",
+                "macos": "4.6.2",
+                "windows": "4.6.2",
+            }
+            self.assertEqual(package["requirement"]["target_sdk_versions"], expected)
+            contract_prompt = (run_dir / "role-prompts/contract.md").read_text()
+            self.assertIn('"android": "4.6.3"', contract_prompt)
+            self.assertIn('"windows": "4.6.2"', contract_prompt)
 
     def test_repository_matrix_identity_is_portable(self):
         identity = orchestrator.stable_matrix_path(
@@ -964,7 +999,10 @@ class RequirementOrchestratorTest(unittest.TestCase):
             self.assertEqual(final_manifest["cross_platform_acceptance"]["result"], "BLOCKED")
             self.assertEqual(sorted(final_manifest["platforms"]), PLATFORMS)
             self.assertTrue(final_manifest["release"]["required"])
-            self.assertEqual(final_manifest["release"]["target_sdk_version"], "4.6.4")
+            self.assertEqual(
+                final_manifest["release"]["target_sdk_versions"],
+                {platform: "4.6.4" for platform in PLATFORMS},
+            )
             validation = subprocess.run(
                 [sys.executable, str(VALIDATOR), str(final_path)],
                 cwd=REPO_ROOT,

@@ -119,7 +119,7 @@ Testing:
 
 Release:
 - Required:
-- Target SDK version:
+- Target SDK versions by platform:
 - Checks:
 - Skipped checks:
 - External handoff: Jenkins packaging and QA

@@ -34,8 +34,8 @@ REQUIRED_TOP_LEVEL = {
     "release",
     "knowledge_updates",
 }
-REQUIREMENT_FIELDS = {"feature", "sdk_family", "key_apis", "target_sdk_version"}
-RELEASE_FIELDS = {"required", "target_sdk_version", "checks", "skipped_checks"}
+REQUIREMENT_FIELDS = {"feature", "sdk_family", "key_apis", "target_sdk_versions"}
+RELEASE_FIELDS = {"required", "target_sdk_versions", "checks", "skipped_checks"}
 CONTRACT_OUTPUT_FIELDS = {
     "scenario",
     "key_apis",
@@ -103,6 +103,20 @@ def validate_no_placeholders(value, path, errors):
             validate_no_placeholders(child, f"{path}[{index}]", errors)
 
 
+def validate_target_sdk_versions(value, path, errors):
+    if not isinstance(value, dict):
+        errors.append(f"{path} must be an object")
+        return
+    if set(value) != set(PLATFORMS):
+        errors.append(
+            f"{path} must define exactly " + ", ".join(PLATFORMS)
+        )
+    for platform in PLATFORMS:
+        version = value.get(platform)
+        if not SDK_VERSION_RE.fullmatch(str(version or "")):
+            errors.append(f"{path}.{platform} must use x.y.z format")
+
+
 def validate_manifest_shape(manifest, errors):
     for key in sorted(REQUIRED_TOP_LEVEL - set(manifest)):
         errors.append(f"missing top-level field: {key}")
@@ -121,11 +135,11 @@ def validate_manifest_shape(manifest, errors):
                 errors.append(f"requirement.{field} is required")
         for field in sorted(set(requirement) - REQUIREMENT_FIELDS):
             errors.append(f"unsupported requirement field: {field}")
-        target_sdk_version = requirement.get("target_sdk_version")
-        if is_non_empty(target_sdk_version) and not SDK_VERSION_RE.fullmatch(
-            str(target_sdk_version)
-        ):
-            errors.append("requirement.target_sdk_version must use x.y.z format")
+        target_sdk_versions = requirement.get("target_sdk_versions")
+        if is_non_empty(target_sdk_versions):
+            validate_target_sdk_versions(
+                target_sdk_versions, "requirement.target_sdk_versions", errors
+            )
 
 
 def validate_manifest(manifest):
@@ -932,9 +946,16 @@ def validate_release(manifest, errors):
     for field in sorted(set(release) - RELEASE_FIELDS):
         errors.append(f"unsupported release field: {field}")
     requirement = manifest.get("requirement", {})
-    target_sdk_version = requirement.get("target_sdk_version")
-    if release.get("target_sdk_version") != target_sdk_version:
-        errors.append("release.target_sdk_version must match requirement.target_sdk_version")
+    target_sdk_versions = requirement.get("target_sdk_versions")
+    release_target_sdk_versions = release.get("target_sdk_versions")
+    if is_non_empty(release_target_sdk_versions):
+        validate_target_sdk_versions(
+            release_target_sdk_versions, "release.target_sdk_versions", errors
+        )
+    if release_target_sdk_versions != target_sdk_versions:
+        errors.append(
+            "release.target_sdk_versions must match requirement.target_sdk_versions"
+        )
     checks = release.get("checks", [])
     if not checks:
         errors.append("release.checks must include SDK version checks")
@@ -959,14 +980,20 @@ def validate_release(manifest, errors):
         if result in {"FAIL", "BLOCKED"} and not check.get("reason"):
             errors.append(f"release.checks[{index}].reason is required when result is {result}")
         if check.get("name") in expected_sdk_checks:
-            if check.get("expected_version") != target_sdk_version:
+            platform = check["name"].removeprefix("sdk-version-")
+            target_sdk_version = (
+                target_sdk_versions.get(platform)
+                if isinstance(target_sdk_versions, dict)
+                else None
+            )
+            if target_sdk_version and check.get("expected_version") != target_sdk_version:
                 errors.append(
                     f"{check.get('name')} expected_version must match {target_sdk_version}"
                 )
             actual_versions = check.get("actual_versions")
             if not isinstance(actual_versions, dict) or not actual_versions:
                 errors.append(f"{check.get('name')} actual_versions must be a non-empty object")
-            elif result == "PASS" and any(
+            elif target_sdk_version and result == "PASS" and any(
                 version != target_sdk_version for version in actual_versions.values()
             ):
                 errors.append(

@@ -18,6 +18,7 @@ PROFILE_SOURCE_FIELDS = {
     "archive-name": {"path", "kind", "prefix", "suffix"},
 }
 SEMVER_CAPTURE = r"([0-9]+\.[0-9]+\.[0-9]+)"
+SDK_VERSION_RE = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 DEFAULT_PLATFORM_TARGETS = {
     "android": "Android/APIExample/",
     "ios": "iOS/APIExample/",
@@ -182,6 +183,28 @@ def load_repository_profile(profile_path=DEFAULT_REPOSITORY_PROFILE):
     return profile
 
 
+def resolve_target_sdk_versions(target_sdk_version, platform_sdk_versions=None):
+    if not target_sdk_version:
+        raise ValueError("target_sdk_version is required")
+    if not SDK_VERSION_RE.fullmatch(str(target_sdk_version)):
+        raise ValueError("target_sdk_version must use x.y.z format")
+    versions = {platform: target_sdk_version for platform in PLATFORMS}
+    seen = set()
+    for value in platform_sdk_versions or []:
+        if not isinstance(value, str) or value.count("=") != 1:
+            raise ValueError("platform SDK version override must use platform=x.y.z")
+        platform, version = value.split("=", 1)
+        if platform not in PLATFORMS:
+            raise ValueError(f"unknown platform: {platform}")
+        if platform in seen:
+            raise ValueError(f"duplicate platform SDK version: {platform}")
+        if not SDK_VERSION_RE.fullmatch(version):
+            raise ValueError(f"{platform} SDK version must use x.y.z format")
+        seen.add(platform)
+        versions[platform] = version
+    return versions
+
+
 def sdk_version_pattern(source):
     kind = source["kind"]
     if kind == "gradle-property":
@@ -195,7 +218,7 @@ def sdk_version_pattern(source):
 
 
 def collect_sdk_version_checks(
-    target_sdk_version,
+    target_sdk_versions,
     repo_root=REPO_ROOT,
     sources=None,
     profile_path=DEFAULT_REPOSITORY_PROFILE,
@@ -204,6 +227,7 @@ def collect_sdk_version_checks(
         sources = load_repository_profile(profile_path)["sdk_version_sources"]
     checks = []
     for platform in PLATFORMS:
+        target_sdk_version = target_sdk_versions[platform]
         entries = sources[platform]
         actual_versions = {}
         problems = []
@@ -303,9 +327,9 @@ def build_manifest_seed(requirement, source_case, version_sources):
         },
         "release": {
             "required": True,
-            "target_sdk_version": requirement["target_sdk_version"],
+            "target_sdk_versions": dict(requirement["target_sdk_versions"]),
             "checks": collect_sdk_version_checks(
-                requirement["target_sdk_version"], sources=version_sources
+                requirement["target_sdk_versions"], sources=version_sources
             ),
             "skipped_checks": [],
         },
@@ -337,10 +361,12 @@ def prepare_case_execution(
     sdk_family=None,
     key_apis=None,
     target_sdk_version=None,
+    platform_sdk_versions=None,
     repository_profile=DEFAULT_REPOSITORY_PROFILE,
 ):
-    if not target_sdk_version:
-        raise ValueError("target_sdk_version is required")
+    target_sdk_versions = resolve_target_sdk_versions(
+        target_sdk_version, platform_sdk_versions
+    )
     profile = load_repository_profile(repository_profile)
     backlog = generate_execution_units(matrix_path)
     matching = [
@@ -355,7 +381,7 @@ def prepare_case_execution(
         "feature": feature or selected["feature"],
         "sdk_family": sdk_family or selected["sdk_family"],
         "key_apis": key_apis or selected["key_apis"],
-        "target_sdk_version": target_sdk_version,
+        "target_sdk_versions": target_sdk_versions,
     }
     source_candidate = None
     if selected and selected["reference_candidates"]:
@@ -395,6 +421,12 @@ def main(argv=None):
     parser.add_argument("--sdk-family", help="Required when the feature is not actionable in the matrix")
     parser.add_argument("--key-api", action="append", help="Key SDK API; repeat for multiple APIs")
     parser.add_argument("--target-sdk-version", required=True)
+    parser.add_argument(
+        "--platform-sdk-version",
+        action="append",
+        default=[],
+        help="Override one platform as platform=x.y.z; repeat as needed",
+    )
     parser.add_argument("--repository-profile", default=str(DEFAULT_REPOSITORY_PROFILE))
     parser.add_argument("--index", type=int, default=0)
     parser.add_argument("--output")
@@ -407,6 +439,7 @@ def main(argv=None):
             sdk_family=args.sdk_family,
             key_apis=args.key_api,
             target_sdk_version=args.target_sdk_version,
+            platform_sdk_versions=args.platform_sdk_version,
             repository_profile=Path(args.repository_profile),
         )
     except (OSError, ValueError) as exc:

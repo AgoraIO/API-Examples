@@ -14,6 +14,7 @@ from prepare_case_execution import (
     collect_sdk_version_checks,
     load_repository_profile,
     prepare_case_execution,
+    resolve_target_sdk_versions,
 )
 from validate_acceptance_manifest import validate_manifest
 
@@ -23,6 +24,11 @@ PLATFORMS = ["android", "ios", "macos", "windows"]
 
 class PrepareCaseExecutionTest(unittest.TestCase):
     TARGET_SDK_VERSION = "4.6.4"
+
+    def target_sdk_versions(self, **overrides):
+        versions = {platform: self.TARGET_SDK_VERSION for platform in PLATFORMS}
+        versions.update(overrides)
+        return versions
 
     def write_matrix(self):
         handle = tempfile.NamedTemporaryFile("w", suffix=".md", delete=False)
@@ -59,9 +65,15 @@ class PrepareCaseExecutionTest(unittest.TestCase):
         self.assertNotIn("roles", manifest)
         self.assertEqual(sorted(package["role_contracts"]), ["contract", "implementation", "verification"])
         self.assertEqual(sorted(manifest["contract"]["output"]["platform_targets"]), PLATFORMS)
-        self.assertEqual(manifest["requirement"]["target_sdk_version"], self.TARGET_SDK_VERSION)
+        self.assertEqual(
+            manifest["requirement"]["target_sdk_versions"],
+            self.target_sdk_versions(),
+        )
         self.assertTrue(manifest["release"]["required"])
-        self.assertEqual(manifest["release"]["target_sdk_version"], self.TARGET_SDK_VERSION)
+        self.assertEqual(
+            manifest["release"]["target_sdk_versions"],
+            self.target_sdk_versions(),
+        )
         self.assertNotIn("qa_acceptance", manifest["release"])
         self.assertNotIn("publication_channel", manifest["requirement"])
         self.assertNotIn("publication", manifest["release"])
@@ -119,6 +131,44 @@ class PrepareCaseExecutionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "target_sdk_version is required"):
             prepare_case_execution(self.write_matrix(), feature="Join channel audio")
 
+    def test_platform_sdk_version_overrides_the_shared_baseline(self):
+        package = prepare_case_execution(
+            self.write_matrix(),
+            feature="Join channel audio",
+            target_sdk_version="4.6.2",
+            platform_sdk_versions=["android=4.6.3"],
+        )
+
+        expected = self.target_sdk_versions(
+            android="4.6.3", ios="4.6.2", macos="4.6.2", windows="4.6.2"
+        )
+        manifest = package["acceptance_manifest_seed"]
+        self.assertEqual(package["requirement"]["target_sdk_versions"], expected)
+        self.assertEqual(manifest["release"]["target_sdk_versions"], expected)
+        self.assertEqual(
+            {
+                check["name"]: check["expected_version"]
+                for check in manifest["release"]["checks"]
+            },
+            {f"sdk-version-{platform}": version for platform, version in expected.items()},
+        )
+
+    def test_rejects_invalid_platform_sdk_version_overrides(self):
+        cases = [
+            (["android"], "must use platform=x.y.z"),
+            (["linux=4.6.3"], "unknown platform: linux"),
+            (["android=next"], "android SDK version must use x.y.z format"),
+            (["android=4.6.3", "android=4.6.4"], "duplicate platform SDK version: android"),
+        ]
+
+        for overrides, message in cases:
+            with self.subTest(overrides=overrides), self.assertRaisesRegex(ValueError, message):
+                resolve_target_sdk_versions("4.6.2", overrides)
+
+    def test_rejects_invalid_baseline_sdk_version(self):
+        with self.assertRaisesRegex(ValueError, "target_sdk_version must use x.y.z format"):
+            resolve_target_sdk_versions("next")
+
     def test_collects_live_sdk_version_evidence(self):
         for distribution in ["Shengwang", "Agora"]:
             with self.subTest(distribution=distribution), tempfile.TemporaryDirectory() as tmpdir:
@@ -127,7 +177,7 @@ class PrepareCaseExecutionTest(unittest.TestCase):
 
                 profile = load_repository_profile(profile_path)
                 checks = collect_sdk_version_checks(
-                    self.TARGET_SDK_VERSION,
+                    self.target_sdk_versions(),
                     repo_root=root,
                     sources=profile["sdk_version_sources"],
                 )
@@ -146,7 +196,7 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                     encoding="utf-8",
                 )
                 checks = collect_sdk_version_checks(
-                    self.TARGET_SDK_VERSION,
+                    self.target_sdk_versions(),
                     repo_root=root,
                     profile_path=profile_path,
                 )
@@ -155,6 +205,36 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                 )
                 self.assertEqual(windows["result"], "BLOCKED")
                 self.assertIn("4.6.2", windows["reason"])
+
+    def test_collects_staggered_platform_sdk_versions(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            profile_path = self.write_repository_profile(root, "Agora")
+            (root / "Android/gradle.properties").write_text(
+                "rtc_sdk_version = 4.6.3\n", encoding="utf-8"
+            )
+            for path_text in ["iOS/Podfile", "macOS/Podfile", "windows/install.ps1"]:
+                path = root / path_text
+                path.write_text(
+                    path.read_text(encoding="utf-8").replace("4.6.4", "4.6.2"),
+                    encoding="utf-8",
+                )
+
+            targets = {
+                "android": "4.6.3",
+                "ios": "4.6.2",
+                "macos": "4.6.2",
+                "windows": "4.6.2",
+            }
+            checks = collect_sdk_version_checks(
+                targets, repo_root=root, profile_path=profile_path
+            )
+
+            self.assertTrue(all(check["result"] == "PASS" for check in checks))
+            self.assertEqual(
+                {check["name"]: check["expected_version"] for check in checks},
+                {f"sdk-version-{platform}": version for platform, version in targets.items()},
+            )
 
     def write_repository_profile(self, root, distribution):
         sources = {

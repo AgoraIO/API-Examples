@@ -5,7 +5,12 @@
     "feature": "<feature>",
     "sdk_family": "<SDK family>",
     "key_apis": ["<SDK API>"],
-    "target_sdk_version": "<target SDK version>"
+    "target_sdk_versions": {
+      "android": "<Android target SDK version>",
+      "ios": "<iOS target SDK version>",
+      "macos": "<macOS target SDK version>",
+      "windows": "<Windows target SDK version>"
+    }
   },
   "contract": {
     "agent_id": "contract-agent-pending",
@@ -232,12 +237,17 @@
   },
   "release": {
     "required": true,
-    "target_sdk_version": "<target SDK version>",
+    "target_sdk_versions": {
+      "android": "<Android target SDK version>",
+      "ios": "<iOS target SDK version>",
+      "macos": "<macOS target SDK version>",
+      "windows": "<Windows target SDK version>"
+    },
     "checks": [
       {
         "name": "sdk-version-android",
         "result": "BLOCKED",
-        "expected_version": "<target SDK version>",
+        "expected_version": "<Android target SDK version>",
         "actual_versions": {},
         "evidence": "",
         "reason": "Pending live Android SDK version check."
@@ -245,7 +255,7 @@
       {
         "name": "sdk-version-ios",
         "result": "BLOCKED",
-        "expected_version": "<target SDK version>",
+        "expected_version": "<iOS target SDK version>",
         "actual_versions": {},
         "evidence": "",
         "reason": "Pending live iOS SDK version check."
@@ -253,7 +263,7 @@
       {
         "name": "sdk-version-macos",
         "result": "BLOCKED",
-        "expected_version": "<target SDK version>",
+        "expected_version": "<macOS target SDK version>",
         "actual_versions": {},
         "evidence": "",
         "reason": "Pending live macOS SDK version check."
@@ -261,7 +271,7 @@
       {
         "name": "sdk-version-windows",
         "result": "BLOCKED",
-        "expected_version": "<target SDK version>",
+        "expected_version": "<Windows target SDK version>",
         "actual_versions": {},
         "evidence": "",
         "reason": "Pending live Windows SDK version check."

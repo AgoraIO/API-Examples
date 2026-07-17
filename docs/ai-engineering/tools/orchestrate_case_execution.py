@@ -189,6 +189,7 @@ def init_workspace(args):
         sdk_family=args.sdk_family,
         key_apis=args.key_api,
         target_sdk_version=args.target_sdk_version,
+        platform_sdk_versions=args.platform_sdk_version,
         repository_profile=profile_path,
     )
     package["matrix_path"] = stable_matrix_path(matrix_path)
@@ -262,7 +263,8 @@ def write_prompt(run_dir, name, role, platform, package, routing, dependencies):
 Requirement: {requirement['feature']}
 SDK family: {requirement['sdk_family']}
 Key APIs: {', '.join(requirement['key_apis'])}
-Target SDK version: {requirement['target_sdk_version']}
+Target SDK versions:
+{json.dumps(requirement['target_sdk_versions'], indent=2, ensure_ascii=False)}
 Role: {role}
 Platform: {platform or 'shared'}
 Target: {target}
@@ -1314,7 +1316,7 @@ def assemble_workspace(args):
         "differences": args.cross_platform_difference,
     }
     manifest["release"]["checks"] = collect_sdk_version_checks(
-        manifest["requirement"]["target_sdk_version"], profile_path=profile_path
+        manifest["requirement"]["target_sdk_versions"], profile_path=profile_path
     )
     errors = validate_manifest(manifest)
     errors.extend(validate_evidence_files(manifest, run_dir))
@@ -1537,6 +1539,12 @@ def main(argv=None):
     init_parser.add_argument("--sdk-family", help="Required for a feature outside the matrix backlog")
     init_parser.add_argument("--key-api", action="append", help="Key SDK API; repeat as needed")
     init_parser.add_argument("--target-sdk-version", required=True)
+    init_parser.add_argument(
+        "--platform-sdk-version",
+        action="append",
+        default=[],
+        help="Override one platform as platform=x.y.z; repeat as needed",
+    )
     init_parser.add_argument("--run-dir", required=True)
     init_parser.add_argument("--index", type=int, default=0)
     init_parser.add_argument("--routing-config", default=str(DEFAULT_ROUTING_CONFIG))

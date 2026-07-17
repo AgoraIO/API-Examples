@@ -15,7 +15,7 @@ Contract runs once. In a shared checkout, Android/iOS/macOS/Windows Implementati
 
 ## Intake Gate
 
-Before Contract starts, identify feature behavior, SDK family, key APIs, target SDK version, reference case, expected user flow, repository scope, and available target verification hosts. Confirm that the checked-in repository profile describes the current SDK package names and version sources. All four top-level platforms are required by default. Contract may choose the appropriate project variant per platform.
+Before Contract starts, identify feature behavior, SDK family, key APIs, target SDK version for each platform, reference case, expected user flow, repository scope, and available target verification hosts. Platform targets may differ when SDK release lines are staggered. Confirm that the checked-in repository profile describes the current SDK package names and version sources. All four top-level platforms are required by default. Contract may choose the appropriate project variant per platform.
 
 ## Contract Gate
 
@@ -72,7 +72,7 @@ Any required platform blocker or cross-platform result other than `PASS` forces 
 
 ## Release Checklist
 
-Release is mandatory manifest data, not an agent. `requirement.target_sdk_version` and `release.target_sdk_version` must match. The orchestrator refreshes Android, iOS, macOS, and Windows dependency versions from live repository files during assembly. Non-`BLOCKED` acceptance requires all SDK-version checks to pass and permits no skipped repository release checks.
+Release is mandatory manifest data, not an agent. `requirement.target_sdk_versions` and `release.target_sdk_versions` must contain the same Android, iOS, macOS, and Windows mapping. The orchestrator compares each platform only with its own target while refreshing dependency versions from live repository files during assembly. Non-`BLOCKED` acceptance requires all SDK-version checks to pass and permits no skipped repository release checks. A platform remaining on an older SDK is valid and does not require changing the script or repository profile.
 
 Jenkins packaging, QA validation, artifact URLs, and external website publication are downstream processes outside this repository workflow. A final `PASS` means the API Example source and repository checks are ready for that external handoff; the manifest does not represent packaging or QA completion.
 
@@ -107,7 +107,8 @@ The validator enforces platform completeness, unique agent/run provenance, Contr
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py init \
   --matrix docs/ai-engineering/case-maintenance-matrix.md \
   --feature "<feature>" \
-  --target-sdk-version "<version>" \
+  --target-sdk-version "4.6.2" \
+  --platform-sdk-version "android=4.6.3" \
   --run-dir /tmp/api-example-requirement
 
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py dispatch \
@@ -120,7 +121,7 @@ python3 docs/ai-engineering/tools/orchestrate_case_execution.py dispatch \
   --run-dir /tmp/api-example-requirement --phase verification --model "<model>"
 ```
 
-If the product requirement is not yet an actionable matrix row, initialize it directly with `--sdk-family` and one or more `--key-api` arguments.
+`--target-sdk-version` is the baseline for all four platforms. Repeat `--platform-sdk-version platform=x.y.z` for each differing platform; omit overrides when all four use one version. If the product requirement is not yet an actionable matrix row, initialize it directly with `--sdk-family` and one or more `--key-api` arguments.
 
 Omitting `--platform` dispatches all four platform roles. Implementation runs are serialized in the shared checkout and reconciled after each run; Verification runs execute concurrently. Each independent `codex exec` run has a timeout, host provenance, a target-project working directory, and a hashed JSONL log. The execution package and input snapshots bind the checked-in repository profile by path and SHA-256. A prior `FAIL`/`BLOCKED` platform artifact can be replaced with `--retry`.
 

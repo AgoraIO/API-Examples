@@ -15,7 +15,7 @@ Identify before editing:
 - New case, existing case update, docs-only, or SDK-version work.
 - Reference case for behavior and parity.
 - Verification budget and available platform hosts.
-- Target RTC SDK version.
+- Target RTC SDK version for each platform. Platforms may remain on different release lines.
 
 Android, iOS, macOS, and Windows are required by default. Contract may choose the appropriate full/audio/Compose/UIKit/Objective-C project for each platform; marking a platform not required needs an explicit waiver reason.
 
@@ -53,9 +53,12 @@ Initialize one requirement:
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py init \
   --matrix docs/ai-engineering/case-maintenance-matrix.md \
   --feature "<feature>" \
-  --target-sdk-version "<version>" \
+  --target-sdk-version "4.6.2" \
+  --platform-sdk-version "android=4.6.3" \
   --run-dir /tmp/api-example-requirement
 ```
+
+`--target-sdk-version` supplies the baseline for all four platforms. Repeat `--platform-sdk-version platform=x.y.z` only for platforms whose target differs. The execution package and manifest store the resolved four-platform mapping, so staggered platform releases never require script or repository-profile changes.
 
 The default `docs/ai-engineering/repository-profile.json` supplies repository-specific SDK package names and version sources. Use `--repository-profile` only for a checked-in alternative profile. The execution package records its repository-relative path and SHA-256.
 

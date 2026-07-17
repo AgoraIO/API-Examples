@@ -128,7 +128,7 @@ def base_manifest():
             "feature": "Join channel audio",
             "sdk_family": "Full RTC",
             "key_apis": ["joinChannel", "setAudioProfile"],
-            "target_sdk_version": "4.6.4",
+            "target_sdk_versions": {platform: "4.6.4" for platform in PLATFORMS},
         },
         "contract": artifact(
             "contract",
@@ -154,7 +154,7 @@ def base_manifest():
         },
         "release": {
             "required": True,
-            "target_sdk_version": "4.6.4",
+            "target_sdk_versions": {platform: "4.6.4" for platform in PLATFORMS},
             "checks": [
                 {
                     "name": f"sdk-version-{platform}",
@@ -442,20 +442,47 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
         self.assert_error_contains(manifest, "unsupported requirement field: publication_channel")
         self.assert_error_contains(manifest, "unsupported release field: publication")
 
-    def test_release_target_version_must_match_requirement(self):
+    def test_release_target_versions_must_match_requirement(self):
         manifest = base_manifest()
-        manifest["release"]["target_sdk_version"] = "4.6.3"
+        manifest["release"]["target_sdk_versions"]["android"] = "4.6.3"
 
         self.assert_error_contains(
-            manifest, "release.target_sdk_version must match requirement.target_sdk_version"
+            manifest, "release.target_sdk_versions must match requirement.target_sdk_versions"
         )
 
-    def test_target_sdk_version_requires_semver_triplet(self):
+    def test_target_sdk_versions_require_all_platform_semver_triplets(self):
         manifest = base_manifest()
-        manifest["requirement"]["target_sdk_version"] = "next"
-        manifest["release"]["target_sdk_version"] = "next"
+        manifest["requirement"]["target_sdk_versions"]["android"] = "next"
+        manifest["release"]["target_sdk_versions"]["android"] = "next"
 
-        self.assert_error_contains(manifest, "requirement.target_sdk_version must use x.y.z format")
+        self.assert_error_contains(
+            manifest,
+            "requirement.target_sdk_versions.android must use x.y.z format",
+        )
+
+        manifest = base_manifest()
+        manifest["requirement"]["target_sdk_versions"]["android"] = ""
+        manifest["release"]["target_sdk_versions"]["android"] = ""
+        self.assert_error_contains(
+            manifest,
+            "requirement.target_sdk_versions.android must use x.y.z format",
+        )
+
+        manifest = base_manifest()
+        del manifest["requirement"]["target_sdk_versions"]["windows"]
+        del manifest["release"]["target_sdk_versions"]["windows"]
+        self.assert_error_contains(
+            manifest,
+            "requirement.target_sdk_versions must define exactly android, ios, macos, windows",
+        )
+
+        manifest = base_manifest()
+        manifest["requirement"]["target_sdk_versions"]["linux"] = "4.6.4"
+        manifest["release"]["target_sdk_versions"]["linux"] = "4.6.4"
+        self.assert_error_contains(
+            manifest,
+            "requirement.target_sdk_versions must define exactly android, ios, macos, windows",
+        )
 
     def test_release_sdk_check_requires_all_sources_to_match_target(self):
         manifest = base_manifest()
