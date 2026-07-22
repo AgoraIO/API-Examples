@@ -355,6 +355,10 @@
     {
       "name": "ains_mode",
       "value": "AI 降噪模式"
+    },
+    {
+      "name": "voice_pitch",
+      "value": "人声音调"
     }
   ]
 }
