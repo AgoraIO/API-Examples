@@ -101,6 +101,35 @@ struct JoinAudioChannel {
     this.channelProfileType = AudioConfigHelper.getChannelProfileType(text)
   }
 
+  private getAudioRouteName(route: Constants.AudioRouteTypes): string {
+    switch (route) {
+      case Constants.AudioRouteTypes.DEFAULT:
+        return 'DEFAULT'
+      case Constants.AudioRouteTypes.HEADSET:
+        return 'HEADSET'
+      case Constants.AudioRouteTypes.EARPIECE:
+        return 'EARPIECE'
+      case Constants.AudioRouteTypes.HEADSETNOMIC:
+        return 'HEADSETNOMIC'
+      case Constants.AudioRouteTypes.SPEAKERPHONE:
+        return 'SPEAKERPHONE'
+      case Constants.AudioRouteTypes.LOUDSPEAKER:
+        return 'LOUDSPEAKER'
+      case Constants.AudioRouteTypes.BLUETOOTH_DEVICE_HFP:
+        return 'BLUETOOTH_DEVICE_HFP'
+      case Constants.AudioRouteTypes.USBDEVICE:
+        return 'USBDEVICE'
+      case Constants.AudioRouteTypes.HDMI:
+        return 'HDMI'
+      case Constants.AudioRouteTypes.USB_HEADSET:
+        return 'USB_HEADSET'
+      case Constants.AudioRouteTypes.BLUETOOTH_DEVICE_A2DP:
+        return 'BLUETOOTH_DEVICE_A2DP'
+      default:
+        return `UNKNOWN(${route})`
+    }
+  }
+
   startServiceTask() {
     let wantAgentInfo: wantAgent.WantAgentInfo = {
       wants: [
@@ -150,6 +179,10 @@ struct JoinAudioChannel {
     config.mEventHandler = {};
     config.mEventHandler.onAudioVolumeIndication = (speakers: Array<AudioVolumeInfo>, totalVolume: number) => {
       Logger.info(TAG,`onAudioVolumeIndication totalVolume:${totalVolume}    speakers:${JSON.stringify(speakers)}`)
+    }
+    config.mEventHandler.onAudioRouteChanged = (route: Constants.AudioRouteTypes) => {
+      Logger.info(TAG, `mEventHandler.onAudioRouteChanged route:${route}`)
+      ShowToast.shortToast(`onAudioRouteChanged: ${this.getAudioRouteName(route)}`)
     }
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
