@@ -6,18 +6,144 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { TokenUtils } from '../../util/TokenUtils';
+import { fileIo } from '@kit.CoreFileKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 const TAG: string = 'PlayAudioFiles'
+const AUDIO_EFFECT_ID: number = 0
+const AUDIO_EFFECT_FILE_NAME: string = 'effectA.wav'
 
 @Entry
 @Component
 struct PlayAudioFiles {
   private rtcEngine: RtcEngine | undefined = undefined;
+  private effectFilePath: string = ''
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
   @State remoteUidList: number[] = []
+  @State isEffectReady: boolean = false
+  @State isEffectPreloaded: boolean = false
+  @State effectVolume: number = 100
+
+  private getResultText(result: number): string {
+    return result == Constants.ErrorCode.ERR_OK ? 'success' : `error(${result})`
+  }
+
+  private prepareEffectFile(context: common.UIAbilityContext): void {
+    const targetPath: string = `${context.filesDir}/${AUDIO_EFFECT_FILE_NAME}`
+    context.resourceManager.getRawFileContent(AUDIO_EFFECT_FILE_NAME)
+      .then((buffer: Uint8Array) => {
+        const file = fileIo.openSync(targetPath,
+          fileIo.OpenMode.CREATE | fileIo.OpenMode.WRITE_ONLY | fileIo.OpenMode.TRUNC)
+        let writtenLength: number = 0
+        try {
+          writtenLength = fileIo.writeSync(file.fd, buffer.buffer as ArrayBuffer)
+        } finally {
+          fileIo.closeSync(file)
+        }
+        if (writtenLength != buffer.byteLength) {
+          Logger.error(TAG, `prepareEffectFile incomplete:${writtenLength}/${buffer.byteLength}`)
+          ShowToast.longToast('prepareEffectFile: incomplete write')
+          return
+        }
+        this.effectFilePath = targetPath
+        this.isEffectReady = true
+        Logger.info(TAG, `prepareEffectFile success:${targetPath}`)
+      })
+      .catch((error: BusinessError) => {
+        this.effectFilePath = ''
+        this.isEffectReady = false
+        Logger.error(TAG, `prepareEffectFile failed. Code:${error.code}, message:${error.message}`)
+        ShowToast.longToast(`prepareEffectFile: error(${error.code})`)
+      })
+  }
+
+  private async startEffect(): Promise<void> {
+    const engine = this.rtcEngine
+    const effectFilePath: string = this.effectFilePath
+    if (engine == undefined || !this.isEffectReady || effectFilePath.length == 0) {
+      ShowToast.shortToast('Audio effect is not ready')
+      return
+    }
+
+    let didPreload: boolean = false
+    if (!this.isEffectPreloaded) {
+      const preloadResult: number = await engine.preloadEffect(AUDIO_EFFECT_ID, effectFilePath, 0)
+      Logger.info(TAG, `preloadEffect result:${preloadResult}`)
+      if (preloadResult != Constants.ErrorCode.ERR_OK) {
+        ShowToast.longToast(`preloadEffect: ${this.getResultText(preloadResult)}`)
+        return
+      }
+      this.isEffectPreloaded = true
+      didPreload = true
+    }
+
+    const playResult: number = await engine.playEffect(
+      AUDIO_EFFECT_ID,
+      effectFilePath,
+      -1,
+      1,
+      0,
+      this.effectVolume,
+      true,
+      0
+    )
+    Logger.info(TAG, `playEffect result:${playResult}`)
+    if (playResult == Constants.ErrorCode.ERR_OK) {
+      ShowToast.shortToast(didPreload ? 'preloadEffect/playEffect: success' : 'playEffect: success')
+    } else {
+      ShowToast.longToast(`playEffect: ${this.getResultText(playResult)}`)
+    }
+  }
+
+  private pauseEffect(): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    const result: number = this.rtcEngine.pauseEffect(AUDIO_EFFECT_ID)
+    Logger.info(TAG, `pauseEffect result:${result}`)
+    ShowToast.shortToast(`pauseEffect: ${this.getResultText(result)}`)
+  }
+
+  private resumeEffect(): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    const result: number = this.rtcEngine.resumeEffect(AUDIO_EFFECT_ID)
+    Logger.info(TAG, `resumeEffect result:${result}`)
+    ShowToast.shortToast(`resumeEffect: ${this.getResultText(result)}`)
+  }
+
+  private stopEffect(): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    const stopResult: number = this.rtcEngine.stopEffect(AUDIO_EFFECT_ID)
+    const unloadResult: number = this.rtcEngine.unloadEffect(AUDIO_EFFECT_ID)
+    this.isEffectPreloaded = false
+    Logger.info(TAG, `stopEffect result:${stopResult}, unloadEffect result:${unloadResult}`)
+    ShowToast.shortToast(
+      `stopEffect: ${this.getResultText(stopResult)}, unloadEffect: ${this.getResultText(unloadResult)}`)
+  }
+
+  private setEffectVolume(volume: number, showResult: boolean): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    this.effectVolume = Math.round(volume)
+    const setEffectsResult: number = this.rtcEngine.setEffectsVolume(this.effectVolume)
+    const setEffectResult: number = this.rtcEngine.setVolumeOfEffect(AUDIO_EFFECT_ID, this.effectVolume)
+    const effectsVolume: number = this.rtcEngine.getEffectsVolume()
+    const effectVolume: number = this.rtcEngine.getVolumeOfEffect(AUDIO_EFFECT_ID)
+    Logger.info(TAG,
+      `setEffectsVolume result:${setEffectsResult}, setVolumeOfEffect result:${setEffectResult}, ` +
+        `getEffectsVolume:${effectsVolume}, getVolumeOfEffect:${effectVolume}`)
+    if (showResult) {
+      ShowToast.shortToast(`effects volume: ${effectsVolume}, effect volume: ${effectVolume}`)
+    }
+  }
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -61,10 +187,16 @@ struct PlayAudioFiles {
     this.rtcEngine = RtcEngine.create(config)
 
     this.rtcEngine.enableAudio()
+    this.prepareEffectFile(context)
   }
 
   aboutToDisappear(): void {
     if (this.rtcEngine != undefined) {
+      if (this.isEffectPreloaded) {
+        this.rtcEngine.stopEffect(AUDIO_EFFECT_ID)
+        this.rtcEngine.unloadEffect(AUDIO_EFFECT_ID)
+        this.isEffectPreloaded = false
+      }
       if (this.isJoin) {
         this.rtcEngine.leaveChannel();
       }
@@ -187,47 +319,51 @@ struct PlayAudioFiles {
           })
         }.alignItems(VerticalAlign.Center)
 
-        //todo
-        if (false) {
-          Text($r('app.string.audio_effect')).padding({ top: 12, bottom: 6 })
-          Divider()
-          Row() {
-            Button($r('app.string.start'))
-              .layoutWeight(1)
-              .fontColor(Color.Blue)
-              .buttonStyle(ButtonStyleMode.NORMAL)
-              .onClick(() => {
-                this.rtcEngine?.playEffect(0, "https://webdemo.agora.io/ding.mp3", -1, 1, 0.0, 100, true, 0)
-              })
-            Button($r('app.string.resume'))
-              .layoutWeight(1)
-              .fontColor(Color.Blue)
-              .buttonStyle(ButtonStyleMode.NORMAL)
-              .onClick(() => {
-
-              })
-            Button($r('app.string.pause'))
-              .layoutWeight(1)
-              .fontColor(Color.Blue)
-              .buttonStyle(ButtonStyleMode.NORMAL)
-              .onClick(() => {
-
-              })
-            Button($r('app.string.stop'))
-              .layoutWeight(1)
-              .fontColor(Color.Blue)
-              .buttonStyle(ButtonStyleMode.NORMAL)
-              .onClick(() => {
-
-              })
-          }.alignItems(VerticalAlign.Center).padding({ top: 12, bottom: 6 })
-          Row() {
-            Text($r('app.string.volume')).layoutWeight(1)
-            Slider({ value: 100 }).layoutWeight(1.5).onChange((value) => {
-
+        Text($r('app.string.audio_effect')).padding({ top: 12, bottom: 6 })
+        Divider()
+        Row() {
+          Button($r('app.string.start'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .enabled(this.isEffectReady)
+            .onClick(async () => {
+              await this.startEffect()
             })
-          }.alignItems(VerticalAlign.Center)
-        }
+          Button($r('app.string.resume'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .enabled(this.isEffectPreloaded)
+            .onClick(() => {
+              this.resumeEffect()
+            })
+          Button($r('app.string.pause'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .enabled(this.isEffectPreloaded)
+            .onClick(() => {
+              this.pauseEffect()
+            })
+          Button($r('app.string.stop'))
+            .layoutWeight(1)
+            .fontColor(Color.Blue)
+            .buttonStyle(ButtonStyleMode.NORMAL)
+            .enabled(this.isEffectPreloaded)
+            .onClick(() => {
+              this.stopEffect()
+            })
+        }.alignItems(VerticalAlign.Center).padding({ top: 12, bottom: 6 })
+        Row() {
+          Text($r('app.string.volume')).layoutWeight(1)
+          Slider({ value: this.effectVolume, min: 0, max: 100, step: 1 })
+            .layoutWeight(1.5)
+            .enabled(this.isEffectPreloaded)
+            .onChange((value: number, mode: SliderChangeMode) => {
+              this.setEffectVolume(value, mode == SliderChangeMode.End || mode == SliderChangeMode.Click)
+            })
+        }.alignItems(VerticalAlign.Center)
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(3)
