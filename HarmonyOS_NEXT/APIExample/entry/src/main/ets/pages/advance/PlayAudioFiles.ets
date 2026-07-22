@@ -53,6 +53,9 @@ struct PlayAudioFiles {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
       ShowToast.longToast("onError " + err + " : " + message)
     }
+    config.mEventHandler.onAudioMixingPositionChanged = (position: bigint) => {
+      Logger.info(TAG, "mEventHandler.onAudioMixingPositionChanged: " + position.toString())
+    }
     config.mContext = context;
     Logger.info(TAG, "in thread create engine begin: ");
     this.rtcEngine = RtcEngine.create(config)
