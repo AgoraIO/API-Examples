@@ -351,6 +351,10 @@
     {
       "name": "click_select_router",
       "value": "Click Select Router"
+    },
+    {
+      "name": "ains_mode",
+      "value": "AINS Mode"
     }
   ]
 }

@@ -351,6 +351,10 @@
     {
       "name": "click_select_router",
       "value": "点击选择路由"
+    },
+    {
+      "name": "ains_mode",
+      "value": "AI 降噪模式"
     }
   ]
 }

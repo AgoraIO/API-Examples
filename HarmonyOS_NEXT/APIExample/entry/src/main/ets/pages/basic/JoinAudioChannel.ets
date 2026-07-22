@@ -16,6 +16,7 @@ import {
 } from './AudioConfigComponent';
 import {
   AudioConfigHelper,
+  AINS_MODE,
   AUDIO_PROFILE,
   AUDIO_SCENARIO,
   CHANNEL_PROFILE
@@ -99,6 +100,17 @@ struct JoinAudioChannel {
   onChannelProfileSelect: OnSelectListener = (index: number, text: string) => {
     Logger.info(TAG, `onChannelProfileSelect index ${index}  text ${text}}`)
     this.channelProfileType = AudioConfigHelper.getChannelProfileType(text)
+  }
+  onAinsModeSelect: OnSelectListener = (index: number, text: string) => {
+    let enabled = index > 0
+    let mode = enabled ? index - 1 : 0
+    let result = this.rtcEngine?.setAINSMode(enabled, mode)
+    Logger.info(TAG, `setAINSMode enabled:${enabled} mode:${text} result:${result}`)
+    if (result == Constants.ErrorCode.ERR_OK) {
+      ShowToast.shortToast(`AINS: ${text}`)
+    } else {
+      ShowToast.longToast(`setAINSMode failed: ${result}`)
+    }
   }
 
   private getAudioRouteName(route: Constants.AudioRouteTypes): string {
@@ -392,6 +404,12 @@ struct JoinAudioChannel {
           name: $r('app.string.audio_profile'),
           items: AUDIO_PROFILE,
           onSelect: this.onAudioProfileSelect
+        })
+        AudioChannelSpinner({
+          isEnable: this.isJoin,
+          name: $r('app.string.ains_mode'),
+          items: AINS_MODE,
+          onSelect: this.onAinsModeSelect
         })
         AudioChannelSpinner({
           isEnable: !this.isJoin,
