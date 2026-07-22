@@ -123,7 +123,7 @@ struct CustomVideoSource {
             VideoPixelFormat.VIDEO_PIXEL_I420);
           frame.buffer = frameBuffer.buffer as ArrayBuffer;
           frame.rotation = 0;
-          frame.yStride = width;
+          frame.stride = width;
           frame.height = height;
           frame.timestamp = 0;
           let ret = this.rtcEngine?.pushExternalVideoFrame(frame)
