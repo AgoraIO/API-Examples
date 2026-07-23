@@ -383,6 +383,30 @@
     {
       "name": "unload_all",
       "value": "全部卸载"
+    },
+    {
+      "name": "remote_subscribe_fallback",
+      "value": "远端订阅降级"
+    },
+    {
+      "name": "fallback_disabled",
+      "value": "关闭"
+    },
+    {
+      "name": "fallback_low_stream",
+      "value": "降级到小流"
+    },
+    {
+      "name": "fallback_audio_only",
+      "value": "降级到纯音频"
+    },
+    {
+      "name": "remote_user_high_priority",
+      "value": "远端用户高优先级"
+    },
+    {
+      "name": "video_image_source",
+      "value": "图片视频轨"
     }
   ]
 }

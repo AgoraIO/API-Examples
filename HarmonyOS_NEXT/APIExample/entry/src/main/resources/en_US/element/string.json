@@ -383,6 +383,30 @@
     {
       "name": "unload_all",
       "value": "Unload All"
+    },
+    {
+      "name": "remote_subscribe_fallback",
+      "value": "Remote Subscribe Fallback"
+    },
+    {
+      "name": "fallback_disabled",
+      "value": "Disabled"
+    },
+    {
+      "name": "fallback_low_stream",
+      "value": "Low Stream"
+    },
+    {
+      "name": "fallback_audio_only",
+      "value": "Audio Only"
+    },
+    {
+      "name": "remote_user_high_priority",
+      "value": "Remote User High Priority"
+    },
+    {
+      "name": "video_image_source",
+      "value": "Video Image Source"
     }
   ]
 }
