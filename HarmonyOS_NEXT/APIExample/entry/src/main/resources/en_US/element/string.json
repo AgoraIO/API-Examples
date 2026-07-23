@@ -359,6 +359,30 @@
     {
       "name": "voice_pitch",
       "value": "Voice Pitch"
+    },
+    {
+      "name": "all_audio_effects",
+      "value": "All Audio Effects"
+    },
+    {
+      "name": "play_all",
+      "value": "Play All"
+    },
+    {
+      "name": "resume_all",
+      "value": "Resume All"
+    },
+    {
+      "name": "pause_all",
+      "value": "Pause All"
+    },
+    {
+      "name": "stop_all",
+      "value": "Stop All"
+    },
+    {
+      "name": "unload_all",
+      "value": "Unload All"
     }
   ]
 }

@@ -359,6 +359,30 @@
     {
       "name": "voice_pitch",
       "value": "人声音调"
+    },
+    {
+      "name": "all_audio_effects",
+      "value": "全部音效"
+    },
+    {
+      "name": "play_all",
+      "value": "全部播放"
+    },
+    {
+      "name": "resume_all",
+      "value": "全部恢复"
+    },
+    {
+      "name": "pause_all",
+      "value": "全部暂停"
+    },
+    {
+      "name": "stop_all",
+      "value": "全部停止"
+    },
+    {
+      "name": "unload_all",
+      "value": "全部卸载"
     }
   ]
 }
