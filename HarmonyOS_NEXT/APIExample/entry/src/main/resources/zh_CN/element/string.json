@@ -407,6 +407,10 @@
     {
       "name": "video_image_source",
       "value": "图片视频轨"
+    },
+    {
+      "name": "get_ntp_time",
+      "value": "获取 NTP 时间"
     }
   ]
 }

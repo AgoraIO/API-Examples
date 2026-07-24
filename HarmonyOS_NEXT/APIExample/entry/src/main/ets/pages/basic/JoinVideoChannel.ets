@@ -21,6 +21,17 @@ struct JoinVideoChannel {
   @State localUid: number = 0
   @State remoteUid: number = 0
 
+  private getNtpWallTime(): void {
+    const engine = this.rtcEngine
+    if (engine == undefined) {
+      return
+    }
+    const ntpWallTime: bigint = engine.getNtpWallTimeInMs()
+    const ntpWallTimeInMs: string = ntpWallTime.toString()
+    Logger.info(TAG, `getNtpWallTimeInMs result:${ntpWallTimeInMs}`)
+    ShowToast.shortToast(`getNtpWallTimeInMs: ${ntpWallTimeInMs} ms`)
+  }
+
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
     let config: RtcEngineConfig = new RtcEngineConfig();
@@ -124,6 +135,13 @@ struct JoinVideoChannel {
       }
       .align(Alignment.TopStart)
       .flexGrow(1)
+
+      Button($r('app.string.get_ntp_time'))
+        .onClick(() => {
+          this.getNtpWallTime()
+        })
+        .alignSelf(ItemAlign.End)
+        .margin({ top: 6, right: 12, bottom: 6 })
 
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })
