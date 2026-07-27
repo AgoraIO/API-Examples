@@ -15,6 +15,8 @@ const TAG: string = 'JoinVideoChannel'
 @Component
 struct JoinVideoChannel {
   private rtcEngine: RtcEngine | undefined = undefined;
+  private localXComponentController: XComponentController = new XComponentController()
+  private remoteXComponentController: XComponentController = new XComponentController()
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
@@ -105,9 +107,10 @@ struct JoinVideoChannel {
             XComponent({
               id: 'preview_local',
               type: XComponentType.SURFACE,
-              libraryname: Constants.AGORA_LIB_NAME,
+              controller: this.localXComponentController,
             }).onLoad(() => {
-              let localCanvas = new VideoCanvas("preview_local");
+              const surfaceId = this.localXComponentController.getXComponentSurfaceId()
+              let localCanvas = new VideoCanvas(surfaceId, true);
               localCanvas.uid = this.localUid;
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
               localCanvas.mirrorMode = 0;
@@ -119,13 +122,14 @@ struct JoinVideoChannel {
             XComponent({
               id: 'preview_remote',
               type: XComponentType.SURFACE,
-              libraryname: Constants.AGORA_LIB_NAME,
+              controller: this.remoteXComponentController,
             }).onLoad(() => {
-              let localCanvas = new VideoCanvas("preview_remote");
-              localCanvas.uid = this.remoteUid;
-              localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
-              localCanvas.mirrorMode = 0;
-              this.rtcEngine?.setupRemoteVideo(localCanvas);
+              const surfaceId = this.remoteXComponentController.getXComponentSurfaceId()
+              let remoteCanvas = new VideoCanvas(surfaceId, true);
+              remoteCanvas.uid = this.remoteUid;
+              remoteCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
+              remoteCanvas.mirrorMode = 0;
+              this.rtcEngine?.setupRemoteVideo(remoteCanvas);
             }).width('50%')
           }
         }
