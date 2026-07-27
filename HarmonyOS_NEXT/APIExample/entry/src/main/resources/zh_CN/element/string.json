@@ -413,6 +413,34 @@
       "value": "获取 NTP 时间"
     },
     {
+      "name": "item_useraccount",
+      "value": "User Account 入会"
+    },
+    {
+      "name": "text_input_user_account",
+      "value": "请输入用户账号"
+    },
+    {
+      "name": "mapped_int_uid",
+      "value": "映射 Int UID"
+    },
+    {
+      "name": "register_user_account",
+      "value": "注册账号"
+    },
+    {
+      "name": "preload_user_account_channel",
+      "value": "预加载频道"
+    },
+    {
+      "name": "channel_name_empty",
+      "value": "频道名不能为空"
+    },
+    {
+      "name": "user_account_empty",
+      "value": "用户账号不能为空"
+    },
+    {
       "name": "item_voiceeffects",
       "value": "美声与音效"
     },

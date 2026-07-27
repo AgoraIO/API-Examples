@@ -413,6 +413,34 @@
       "value": "Get NTP Time"
     },
     {
+      "name": "item_useraccount",
+      "value": "Join with User Account"
+    },
+    {
+      "name": "text_input_user_account",
+      "value": "Please input user account"
+    },
+    {
+      "name": "mapped_int_uid",
+      "value": "Mapped Int UID"
+    },
+    {
+      "name": "register_user_account",
+      "value": "Register Account"
+    },
+    {
+      "name": "preload_user_account_channel",
+      "value": "Preload Channel"
+    },
+    {
+      "name": "channel_name_empty",
+      "value": "The channel name is empty!"
+    },
+    {
+      "name": "user_account_empty",
+      "value": "The user account is empty!"
+    },
+    {
       "name": "item_voiceeffects",
       "value": "Voice Effects"
     },

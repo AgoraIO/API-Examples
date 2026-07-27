@@ -9,6 +9,7 @@
     "pages/advance/MediaMetadataWrap",
     "pages/advance/VoiceEffects",
     "pages/advance/JoinMultiChannel",
+    "pages/advance/UserAccount",
     "pages/advance/CustomAudioSource",
     "pages/advance/CustomVideoSource",
     "pages/advance/OriginVideoDataWrap",
