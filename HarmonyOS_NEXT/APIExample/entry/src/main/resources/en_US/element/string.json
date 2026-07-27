@@ -467,6 +467,46 @@
     {
       "name": "reverb_value",
       "value": "Reverb Value"
+    },
+    {
+      "name": "item_videobeauty",
+      "value": "Video Beauty"
+    },
+    {
+      "name": "beauty_effect",
+      "value": "Beauty Effect"
+    },
+    {
+      "name": "beauty_contrast",
+      "value": "Lightening Contrast"
+    },
+    {
+      "name": "beauty_contrast_low",
+      "value": "Low"
+    },
+    {
+      "name": "beauty_contrast_normal",
+      "value": "Normal"
+    },
+    {
+      "name": "beauty_contrast_high",
+      "value": "High"
+    },
+    {
+      "name": "beauty_lightening",
+      "value": "Lightening"
+    },
+    {
+      "name": "beauty_smoothness",
+      "value": "Smoothness"
+    },
+    {
+      "name": "beauty_redness",
+      "value": "Redness"
+    },
+    {
+      "name": "beauty_sharpness",
+      "value": "Sharpness"
     }
   ]
 }

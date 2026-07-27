@@ -8,6 +8,7 @@
     "pages/advance/LiveStreaming",
     "pages/advance/MediaMetadataWrap",
     "pages/advance/VoiceEffects",
+    "pages/advance/VideoBeauty",
     "pages/advance/JoinMultiChannel",
     "pages/advance/UserAccount",
     "pages/advance/CustomAudioSource",

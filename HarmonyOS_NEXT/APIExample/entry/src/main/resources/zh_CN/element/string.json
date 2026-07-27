@@ -467,6 +467,46 @@
     {
       "name": "reverb_value",
       "value": "混响数值"
+    },
+    {
+      "name": "item_videobeauty",
+      "value": "视频美颜"
+    },
+    {
+      "name": "beauty_effect",
+      "value": "美颜"
+    },
+    {
+      "name": "beauty_contrast",
+      "value": "美白对比度"
+    },
+    {
+      "name": "beauty_contrast_low",
+      "value": "低"
+    },
+    {
+      "name": "beauty_contrast_normal",
+      "value": "正常"
+    },
+    {
+      "name": "beauty_contrast_high",
+      "value": "高"
+    },
+    {
+      "name": "beauty_lightening",
+      "value": "美白"
+    },
+    {
+      "name": "beauty_smoothness",
+      "value": "平滑"
+    },
+    {
+      "name": "beauty_redness",
+      "value": "红润"
+    },
+    {
+      "name": "beauty_sharpness",
+      "value": "锐利"
     }
   ]
 }

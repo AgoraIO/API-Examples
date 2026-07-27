@@ -44,6 +44,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/VoiceEffects'
     },
     {
+      title: $r('app.string.item_videobeauty'),
+      url: 'pages/advance/VideoBeauty'
+    },
+    {
       title: $r('app.string.item_customaudiosource'),
       url: 'pages/advance/CustomAudioSource'
     },
