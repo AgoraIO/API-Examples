@@ -36,6 +36,10 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/MediaMetadataWrap'
     },
     {
+      title: $r('app.string.item_voiceeffects'),
+      url: 'pages/advance/VoiceEffects'
+    },
+    {
       title: $r('app.string.item_customaudiosource'),
       url: 'pages/advance/CustomAudioSource'
     },

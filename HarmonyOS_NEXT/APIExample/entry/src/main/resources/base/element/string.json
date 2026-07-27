@@ -411,6 +411,34 @@
     {
       "name": "get_ntp_time",
       "value": "Get NTP Time"
+    },
+    {
+      "name": "item_voiceeffects",
+      "value": "Voice Effects"
+    },
+    {
+      "name": "voice_beautifier_preset",
+      "value": "Voice Beautifier"
+    },
+    {
+      "name": "audio_effect_preset",
+      "value": "Audio Effect Preset"
+    },
+    {
+      "name": "equalization_band",
+      "value": "Equalization Band"
+    },
+    {
+      "name": "equalization_gain",
+      "value": "Equalization Gain"
+    },
+    {
+      "name": "reverb_key",
+      "value": "Reverb Key"
+    },
+    {
+      "name": "reverb_value",
+      "value": "Reverb Value"
     }
   ]
 }

@@ -218,7 +218,7 @@
     },
     {
       "name": "audio_effect",
-      "value": "音效"
+      "value": "单个音效文件"
     },
     {
       "name": "start",
@@ -362,7 +362,7 @@
     },
     {
       "name": "all_audio_effects",
-      "value": "全部音效"
+      "value": "全部音效文件"
     },
     {
       "name": "play_all",
@@ -411,6 +411,34 @@
     {
       "name": "get_ntp_time",
       "value": "获取 NTP 时间"
+    },
+    {
+      "name": "item_voiceeffects",
+      "value": "美声与音效"
+    },
+    {
+      "name": "voice_beautifier_preset",
+      "value": "美声预设"
+    },
+    {
+      "name": "audio_effect_preset",
+      "value": "人声音效预设"
+    },
+    {
+      "name": "equalization_band",
+      "value": "均衡频段"
+    },
+    {
+      "name": "equalization_gain",
+      "value": "均衡增益"
+    },
+    {
+      "name": "reverb_key",
+      "value": "混响参数"
+    },
+    {
+      "name": "reverb_value",
+      "value": "混响数值"
     }
   ]
 }
