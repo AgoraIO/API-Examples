@@ -32,8 +32,8 @@ if [[ -z "${APP_ID:-}" ]]; then
     echo "[ERROR] APP_ID is required"
     exit 1
 fi
-if [[ -z "${HMOS_SIGNING_SECRET:-}" ]]; then
-    echo "[ERROR] HMOS_SIGNING_SECRET is required"
+if [[ -z "${HMOS_KEY_PWD:-}" ]]; then
+    echo "[ERROR] HMOS_KEY_PWD is required"
     exit 1
 fi
 
@@ -80,7 +80,7 @@ artifact_timestamp="${ARTIFACT_TIMESTAMP:-$(date '+%Y%m%d%H%M%S')}"
 signed_hap="${project_dir}/APIExample_${build_number}_${sdk_version}_${artifact_timestamp}.hap"
 
 "${java_bin}" -jar "${sign_tool}" sign-app \
-    -keyAlias "${HMOS_SIGNING_SECRET}" \
+    -keyAlias "${HMOS_KEY_PWD}" \
     -signAlg "SHA256withECDSA" \
     -mode "localSign" \
     -appCertFile "${certificate_file}" \
@@ -88,8 +88,8 @@ signed_hap="${project_dir}/APIExample_${build_number}_${sdk_version}_${artifact_
     -keystoreFile "${keystore_file}" \
     -inFile "${unsigned_hap}" \
     -outFile "${signed_hap}" \
-    -keyPwd "${HMOS_SIGNING_SECRET}" \
-    -keystorePwd "${HMOS_SIGNING_SECRET}" \
+    -keyPwd "${HMOS_KEY_PWD}" \
+    -keystorePwd "${HMOS_KEY_PWD}" \
     -signCode "1"
 
 if [[ ! -s "${signed_hap}" ]]; then
