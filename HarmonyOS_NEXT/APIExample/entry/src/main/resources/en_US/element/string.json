@@ -353,10 +353,6 @@
       "value": "Click Select Router"
     },
     {
-      "name": "ains_mode",
-      "value": "AINS Mode"
-    },
-    {
       "name": "voice_pitch",
       "value": "Voice Pitch"
     },

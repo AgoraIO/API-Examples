@@ -104,13 +104,6 @@ export const AUDIO_PROFILE = [
 
 ]
 
-export const AINS_MODE = [
-  'OFF',
-  'BALANCE',
-  'AGGRESSIVE',
-  'AGGRESSIVE_LOW_LATENCY'
-]
-
 export const CHANNEL_PROFILE = [
   AudioConfigHelper.CHANNEL_PROFILE_COMMUNICATION,
   AudioConfigHelper.CHANNEL_PROFILE_LIVE_BROADCASTING
