@@ -13,24 +13,44 @@ if [[ -z "${sdk_url:-}" ]]; then
 fi
 
 sdk_file_name="$(basename "${sdk_url%%\?*}")"
-if [[ "${sdk_file_name}" != *.har ]]; then
-    echo "[ERROR] sdk_url must point to a .har file: ${sdk_file_name}"
+if [[ "${sdk_file_name}" != *.zip ]]; then
+    echo "[ERROR] sdk_url must point to a FULL SDK .zip file: ${sdk_file_name}"
     exit 1
 fi
-
-mkdir -p "${libs_dir}"
-sdk_temp_file="${libs_dir}/AgoraRtcSdk.har.download"
-curl -fL --retry 3 --output "${sdk_temp_file}" "${sdk_url}"
-mv "${sdk_temp_file}" "${libs_dir}/AgoraRtcSdk.har"
-
-detected_version="$(printf '%s' "${sdk_file_name}" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)"
-export SDK_VERSION="${SDK_VERSION:-${detected_version:-unknown}}"
 
 stage_dir="$(mktemp -d "${TMPDIR:-/tmp}/apiexample-hmos.XXXXXX")"
 trap 'rm -rf "${stage_dir}"' EXIT
 
-sdk_name="${sdk_file_name%.har}"
-sample_dir="${stage_dir}/${sdk_name}/rtc/samples/API-Example"
+sdk_archive="${stage_dir}/${sdk_file_name}"
+sdk_extract_dir="${stage_dir}/sdk"
+mkdir -p "${sdk_extract_dir}"
+curl -fL --retry 3 --output "${sdk_archive}" "${sdk_url}"
+unzip -q "${sdk_archive}" -d "${sdk_extract_dir}"
+
+sdk_hars=()
+while IFS= read -r sdk_har; do
+    sdk_hars+=("${sdk_har}")
+done < <(find "${sdk_extract_dir}" -type f -path '*/rtc/sdk/AgoraRtcSdk.har')
+
+if [[ "${#sdk_hars[@]}" -ne 1 ]]; then
+    echo "[ERROR] Expected exactly one rtc/sdk/AgoraRtcSdk.har in ${sdk_file_name}, found ${#sdk_hars[@]}"
+    exit 1
+fi
+
+sdk_har="${sdk_hars[0]}"
+sdk_root="${sdk_har%/rtc/sdk/AgoraRtcSdk.har}"
+sdk_name="$(basename "${sdk_root}")"
+
+mkdir -p "${libs_dir}"
+cp -f "${sdk_har}" "${libs_dir}/AgoraRtcSdk.har"
+
+package_metadata="${stage_dir}/oh-package.json5"
+tar -xOzf "${sdk_har}" package/oh-package.json5 > "${package_metadata}"
+detected_version="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["version"])' "${package_metadata}")"
+export SDK_VERSION="${SDK_VERSION:-${detected_version}}"
+
+sample_dir="${sdk_root}/rtc/samples/API-Example"
+rm -rf "${sample_dir}"
 mkdir -p "${sample_dir}"
 rsync -a \
     --exclude '.hvigor/' \
@@ -43,7 +63,7 @@ timestamp="$(date '+%Y%m%d%H%M%S')"
 export ARTIFACT_TIMESTAMP="${timestamp}"
 zip_file="${repo_root}/APIExample_${build_number}_${SDK_VERSION}_${timestamp}.zip"
 (
-    cd "${stage_dir}"
+    cd "$(dirname "${sdk_root}")"
     zip -qry "${zip_file}" "${sdk_name}"
 )
 
