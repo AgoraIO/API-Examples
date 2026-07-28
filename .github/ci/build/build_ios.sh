@@ -152,6 +152,10 @@ if [ $compress_apiexample = true ]; then
 fi 
 
 if [ $compile_project = true ]; then
+	if ! python3 ./.github/ci/build/check_ios_signing_assets.py \
+		--export-options "./iOS/${ios_direction}/ExportOptions.plist"; then
+		echo "WARNING: iOS signing asset preflight could not complete; continuing packaging"
+	fi
 	cd ./$unzip_name/samples/${ios_direction}
 	./cloud_build.sh || exit 1
 	cd -

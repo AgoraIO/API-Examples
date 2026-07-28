@@ -1,0 +1,283 @@
+{
+  "version": 4,
+  "final_status": "BLOCKED",
+  "requirement": {
+    "feature": "<feature>",
+    "sdk_family": "<SDK family>",
+    "key_apis": ["<SDK API>"],
+    "target_sdk_versions": {
+      "android": "<Android target SDK version>",
+      "ios": "<iOS target SDK version>",
+      "macos": "<macOS target SDK version>",
+      "windows": "<Windows target SDK version>"
+    }
+  },
+  "contract": {
+    "agent_id": "contract-agent-pending",
+    "dispatch": {
+      "mode": "pending",
+      "prompt": "role-prompts/contract.md",
+      "artifact": "role-artifacts/contract.json"
+    },
+    "status": "BLOCKED",
+    "evidence": "Pending shared Contract.",
+    "summary": "Pending shared behavior, reference, and platform targets.",
+    "output": {
+      "scenario": "<observable behavior>",
+      "key_apis": ["<SDK API>"],
+      "non_goals": [],
+      "reference": {
+        "required": false,
+        "source_case": "",
+        "contract_result": "SKIPPED"
+      },
+      "cross_platform_requirements": ["<shared behavior>"],
+      "platform_targets": {
+        "android": {
+          "required": true,
+          "target_project": "Android/APIExample/",
+          "key_constraints": [],
+          "files_allowed": ["Android/APIExample/"],
+          "waiver_reason": ""
+        },
+        "ios": {
+          "required": true,
+          "target_project": "iOS/APIExample/",
+          "key_constraints": [],
+          "files_allowed": ["iOS/APIExample/"],
+          "waiver_reason": ""
+        },
+        "macos": {
+          "required": true,
+          "target_project": "macOS/",
+          "key_constraints": [],
+          "files_allowed": ["macOS/"],
+          "waiver_reason": ""
+        },
+        "windows": {
+          "required": true,
+          "target_project": "windows/",
+          "key_constraints": [],
+          "files_allowed": ["windows/"],
+          "waiver_reason": ""
+        }
+      }
+    }
+  },
+  "platforms": {
+    "android": {
+      "implementation": {
+        "agent_id": "android-implementation-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/android-implementation.md",
+          "artifact": "role-artifacts/android-implementation.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending Android implementation.",
+        "summary": "Pending Android changes.",
+        "output": {
+          "target_project": "Android/APIExample/",
+          "query_cases": "Pending.",
+          "upsert_case": "Pending.",
+          "files_changed": [],
+          "matrix_updates": []
+        }
+      },
+      "verification": {
+        "agent_id": "android-verification-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/android-verification.md",
+          "artifact": "role-artifacts/android-verification.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending Android verification.",
+        "summary": "Pending Android review and build.",
+        "output": {
+          "result": "BLOCKED",
+          "findings": [],
+          "parity_result": "BLOCKED",
+          "entry_point": "<Android entry point>",
+          "ux_notes": "",
+          "commands": [],
+          "build_result": "BLOCKED",
+          "skipped_checks": []
+        }
+      }
+    },
+    "ios": {
+      "implementation": {
+        "agent_id": "ios-implementation-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/ios-implementation.md",
+          "artifact": "role-artifacts/ios-implementation.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending iOS implementation.",
+        "summary": "Pending iOS changes.",
+        "output": {
+          "target_project": "iOS/APIExample/",
+          "query_cases": "Pending.",
+          "upsert_case": "Pending.",
+          "files_changed": [],
+          "matrix_updates": []
+        }
+      },
+      "verification": {
+        "agent_id": "ios-verification-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/ios-verification.md",
+          "artifact": "role-artifacts/ios-verification.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending iOS verification.",
+        "summary": "Pending iOS review and build.",
+        "output": {
+          "result": "BLOCKED",
+          "findings": [],
+          "parity_result": "BLOCKED",
+          "entry_point": "<iOS entry point>",
+          "ux_notes": "",
+          "commands": [],
+          "build_result": "BLOCKED",
+          "skipped_checks": []
+        }
+      }
+    },
+    "macos": {
+      "implementation": {
+        "agent_id": "macos-implementation-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/macos-implementation.md",
+          "artifact": "role-artifacts/macos-implementation.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending macOS implementation.",
+        "summary": "Pending macOS changes.",
+        "output": {
+          "target_project": "macOS/",
+          "query_cases": "Pending.",
+          "upsert_case": "Pending.",
+          "files_changed": [],
+          "matrix_updates": []
+        }
+      },
+      "verification": {
+        "agent_id": "macos-verification-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/macos-verification.md",
+          "artifact": "role-artifacts/macos-verification.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending macOS verification.",
+        "summary": "Pending macOS review and build.",
+        "output": {
+          "result": "BLOCKED",
+          "findings": [],
+          "parity_result": "BLOCKED",
+          "entry_point": "<macOS entry point>",
+          "ux_notes": "",
+          "commands": [],
+          "build_result": "BLOCKED",
+          "skipped_checks": []
+        }
+      }
+    },
+    "windows": {
+      "implementation": {
+        "agent_id": "windows-implementation-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/windows-implementation.md",
+          "artifact": "role-artifacts/windows-implementation.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending Windows implementation.",
+        "summary": "Pending Windows changes.",
+        "output": {
+          "target_project": "windows/",
+          "query_cases": "Pending.",
+          "upsert_case": "Pending.",
+          "files_changed": [],
+          "matrix_updates": []
+        }
+      },
+      "verification": {
+        "agent_id": "windows-verification-agent-pending",
+        "dispatch": {
+          "mode": "pending",
+          "prompt": "role-prompts/windows-verification.md",
+          "artifact": "role-artifacts/windows-verification.json"
+        },
+        "status": "BLOCKED",
+        "evidence": "Pending Windows verification.",
+        "summary": "Pending Windows review and MSBuild evidence.",
+        "output": {
+          "result": "BLOCKED",
+          "findings": [],
+          "parity_result": "BLOCKED",
+          "entry_point": "<Windows entry point>",
+          "ux_notes": "",
+          "commands": [],
+          "build_result": "BLOCKED",
+          "skipped_checks": []
+        }
+      }
+    }
+  },
+  "cross_platform_acceptance": {
+    "result": "BLOCKED",
+    "evidence": "Pending all required platform verification.",
+    "differences": []
+  },
+  "release": {
+    "required": true,
+    "target_sdk_versions": {
+      "android": "<Android target SDK version>",
+      "ios": "<iOS target SDK version>",
+      "macos": "<macOS target SDK version>",
+      "windows": "<Windows target SDK version>"
+    },
+    "checks": [
+      {
+        "name": "sdk-version-android",
+        "result": "BLOCKED",
+        "expected_version": "<Android target SDK version>",
+        "actual_versions": {},
+        "evidence": "",
+        "reason": "Pending live Android SDK version check."
+      },
+      {
+        "name": "sdk-version-ios",
+        "result": "BLOCKED",
+        "expected_version": "<iOS target SDK version>",
+        "actual_versions": {},
+        "evidence": "",
+        "reason": "Pending live iOS SDK version check."
+      },
+      {
+        "name": "sdk-version-macos",
+        "result": "BLOCKED",
+        "expected_version": "<macOS target SDK version>",
+        "actual_versions": {},
+        "evidence": "",
+        "reason": "Pending live macOS SDK version check."
+      },
+      {
+        "name": "sdk-version-windows",
+        "result": "BLOCKED",
+        "expected_version": "<Windows target SDK version>",
+        "actual_versions": {},
+        "evidence": "",
+        "reason": "Pending live Windows SDK version check."
+      }
+    ],
+    "skipped_checks": []
+  },
+  "knowledge_updates": []
+}

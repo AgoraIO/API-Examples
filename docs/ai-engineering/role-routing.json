@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "profiles": {
+    "standard": {
+      "reasoning_effort": "medium"
+    },
+    "deep": {
+      "reasoning_effort": "high"
+    },
+    "review": {
+      "reasoning_effort": "high"
+    }
+  },
+  "phases": [
+    "contract",
+    "implementation",
+    "verification"
+  ],
+  "roles": {
+    "contract": {
+      "profile": "standard",
+      "phase": "contract",
+      "sandbox": "read-only"
+    },
+    "implementation": {
+      "profile": "deep",
+      "phase": "implementation",
+      "sandbox": "workspace-write"
+    },
+    "verification": {
+      "profile": "review",
+      "phase": "verification",
+      "sandbox": "workspace-write"
+    }
+  }
+}
