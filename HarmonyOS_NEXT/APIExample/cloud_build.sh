@@ -50,14 +50,18 @@ app_id="${app_id#\'}"
 app_id="${app_id%\'}"
 app_id="${app_id#\"}"
 app_id="${app_id%\"}"
+if [[ ! "${app_id}" =~ ^[[:xdigit:]]{32}$ ]]; then
+    echo "[ERROR] APP_ID must be a 32-character hexadecimal value"
+    exit 1
+fi
 escaped_app_id="${app_id//&/\\&}"
 
 key_center="${project_dir}/entry/src/main/ets/common/KeyCenter.ets"
 sed -E -i '' \
-    "s#^export const AppID: string = .*$#export const AppID: string = '${escaped_app_id}'#" \
+    "s#^export const AppID: string[[:space:]]*=.*\$#export const AppID: string = '${escaped_app_id}'#" \
     "${key_center}"
 sed -E -i '' \
-    "s#^export const AppCertificate: string = .*$#export const AppCertificate: string = ''#" \
+    "s#^export const AppCertificate: string[[:space:]]*=.*\$#export const AppCertificate: string = ''#" \
     "${key_center}"
 
 "${java_bin}" -version
