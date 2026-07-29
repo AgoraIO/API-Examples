@@ -9,6 +9,7 @@ hvigor_bin="${HVIGOR_BIN:-${deveco_home}/tools/hvigor/bin/hvigorw}"
 java_bin="${JAVA_BIN:-${deveco_home}/jbr/Contents/Home/bin/java}"
 node_home="${HMOS_NODE_HOME:-${deveco_home}/tools/node}"
 node_bin="${node_home}/bin/node"
+deveco_sdk_home="${deveco_home}/sdk"
 sign_tool="${HMOS_SIGN_TOOL_JAR:-${deveco_home}/sdk/default/openharmony/toolchains/lib/hap-sign-tool.jar}"
 
 signing_dir="${HMOS_SIGN_CONFIG_DIR:-/Users/admin/.ohos/config/apiexample-config}"
@@ -30,6 +31,13 @@ require_executable() {
     fi
 }
 
+require_directory() {
+    if [[ ! -d "$1" ]]; then
+        echo "[ERROR] Required directory not found: $1"
+        exit 1
+    fi
+}
+
 if [[ -z "${APP_ID:-}" ]]; then
     echo "[ERROR] APP_ID is required"
     exit 1
@@ -43,6 +51,7 @@ require_executable "${ohpm_bin}"
 require_executable "${hvigor_bin}"
 require_executable "${java_bin}"
 require_executable "${node_bin}"
+require_directory "${deveco_sdk_home}"
 require_file "${sign_tool}"
 require_file "${profile_file}"
 require_file "${keystore_file}"
@@ -50,6 +59,7 @@ require_file "${certificate_file}"
 
 export NODE_HOME="${node_home}"
 export PATH="${node_home}/bin:${PATH}"
+export DEVECO_SDK_HOME="${deveco_sdk_home}"
 
 app_id="${APP_ID}"
 app_id="${app_id#\'}"
