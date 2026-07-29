@@ -10,7 +10,7 @@ Android platform entry point. Read this first, then go to the relevant project's
 | `APIExample-Audio/` | voice-sdk | Java + XML | Audio-only — no video APIs |
 | `APIExample-Compose/` | full-sdk | Kotlin + Compose | Compose UI, mirrors APIExample cases |
 
-SDK version: each project's `gradle.properties` → `rtc_sdk_version` (currently `4.6.3`)
+SDK version: each project's `gradle.properties` → `rtc_sdk_version` (currently `4.7.0`)
 
 ## Project Selection
 
