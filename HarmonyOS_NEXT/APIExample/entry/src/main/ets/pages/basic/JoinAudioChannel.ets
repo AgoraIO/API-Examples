@@ -45,6 +45,7 @@ struct JoinAudioChannel {
   @State remoteUidList: number[] = []
   @State isMicophotoOpen: boolean = false
   @State isEarMonitorChecked: boolean = false
+  @State localVoicePitch: number = 1.0
   private channelProfileType = Constants.ChannelProfile.COMMUNICATION
   private audioScenarioType = Constants.AudioScenarioType.DEFAULT
   private audioProfileType = Constants.AudioProfileType.DEFAULT
@@ -100,6 +101,34 @@ struct JoinAudioChannel {
     Logger.info(TAG, `onChannelProfileSelect index ${index}  text ${text}}`)
     this.channelProfileType = AudioConfigHelper.getChannelProfileType(text)
   }
+  private getAudioRouteName(route: Constants.AudioRouteTypes): string {
+    switch (route) {
+      case Constants.AudioRouteTypes.DEFAULT:
+        return 'DEFAULT'
+      case Constants.AudioRouteTypes.HEADSET:
+        return 'HEADSET'
+      case Constants.AudioRouteTypes.EARPIECE:
+        return 'EARPIECE'
+      case Constants.AudioRouteTypes.HEADSETNOMIC:
+        return 'HEADSETNOMIC'
+      case Constants.AudioRouteTypes.SPEAKERPHONE:
+        return 'SPEAKERPHONE'
+      case Constants.AudioRouteTypes.LOUDSPEAKER:
+        return 'LOUDSPEAKER'
+      case Constants.AudioRouteTypes.BLUETOOTH_DEVICE_HFP:
+        return 'BLUETOOTH_DEVICE_HFP'
+      case Constants.AudioRouteTypes.USBDEVICE:
+        return 'USBDEVICE'
+      case Constants.AudioRouteTypes.HDMI:
+        return 'HDMI'
+      case Constants.AudioRouteTypes.USB_HEADSET:
+        return 'USB_HEADSET'
+      case Constants.AudioRouteTypes.BLUETOOTH_DEVICE_A2DP:
+        return 'BLUETOOTH_DEVICE_A2DP'
+      default:
+        return `UNKNOWN(${route})`
+    }
+  }
 
   startServiceTask() {
     let wantAgentInfo: wantAgent.WantAgentInfo = {
@@ -150,6 +179,10 @@ struct JoinAudioChannel {
     config.mEventHandler = {};
     config.mEventHandler.onAudioVolumeIndication = (speakers: Array<AudioVolumeInfo>, totalVolume: number) => {
       Logger.info(TAG,`onAudioVolumeIndication totalVolume:${totalVolume}    speakers:${JSON.stringify(speakers)}`)
+    }
+    config.mEventHandler.onAudioRouteChanged = (route: Constants.AudioRouteTypes) => {
+      Logger.info(TAG, `mEventHandler.onAudioRouteChanged route:${route}`)
+      ShowToast.shortToast(`onAudioRouteChanged: ${this.getAudioRouteName(route)}`)
     }
     config.mEventHandler.onUserJoined = (uid: number, collapse: number) => {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
@@ -305,72 +338,98 @@ struct JoinAudioChannel {
       }
       .align(Alignment.TopStart)
 
-      Column({ space: 5 }) {
-        Row() {
-          Text('')
-          Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
-          $r('app.string.close_microphone'))
-            .onClick(this.handleMicospeakerClick)
-            .enabled(this.isJoin)
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
+      Scroll() {
+        Column({ space: 5 }) {
+          Row() {
+            Text('')
+            Button((this.isJoin && !this.isMicophotoOpen) ? $r('app.string.open_microphone') :
+            $r('app.string.close_microphone'))
+              .onClick(this.handleMicospeakerClick)
+              .enabled(this.isJoin)
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
 
-        Row() {
-          Text($r('app.string.audio_router'))
-          AVCastPicker({
-            normalColor: Color.Red,
-            customPicker: () => this.customPickerBuilder()
+          Row() {
+            Text($r('app.string.audio_router'))
+            AVCastPicker({
+              normalColor: Color.Red,
+              customPicker: () => this.customPickerBuilder()
+            })
+              .width(40)
+              .height(40)
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
+
+          AudioChannelToggle({
+            isEnable: this.isJoin,
+            name: $r('app.string.inear_monitor'),
+            isCheck: false,
+            onCheck: this.onInEarMonitorCheck
           })
-            .width(40)
-            .height(40)
+          AudioChannelSlider({
+            isEnable: this.isJoin && this.isEarMonitorChecked,
+            name: $r('app.string.inear_monitor_vol'),
+            onSlide: this.onInEarMonitorVolSlide
+          })
+          AudioChannelSlider({
+            isEnable: this.isJoin,
+            name: $r('app.string.playout_vol'),
+            onSlide: this.onPlayoutVolSlide
+          })
+          AudioChannelSlider({
+            isEnable: this.isJoin,
+            name: $r('app.string.recording_vol'),
+            onSlide: this.onRecordingVolSlide
+          })
+          AudioChannelSpinner({
+            name: $r('app.string.scenario'),
+            items: AUDIO_SCENARIO,
+            onSelect: this.onScenarioSelect
+          })
+          AudioChannelSpinner({
+            // isEnable: !this.isJoin,
+            name: $r('app.string.audio_profile'),
+            items: AUDIO_PROFILE,
+            onSelect: this.onAudioProfileSelect
+          })
+          Row() {
+            Text($r('app.string.voice_pitch')).layoutWeight(1)
+            Text(this.localVoicePitch.toFixed(1)).width(32)
+            Slider({ value: this.localVoicePitch, min: 0.5, max: 2.0, step: 0.1 })
+              .enabled(this.isJoin)
+              .opacity(this.isJoin ? 1 : 0.4)
+              .width('50%')
+              .onChange((value: number, mode: SliderChangeMode) => {
+                this.localVoicePitch = value
+                let result = this.rtcEngine?.setLocalVoicePitch(value)
+                Logger.info(TAG, `setLocalVoicePitch pitch:${value} result:${result}`)
+                if (mode == SliderChangeMode.End || mode == SliderChangeMode.Click) {
+                  if (result == Constants.ErrorCode.ERR_OK) {
+                    ShowToast.shortToast(`Voice Pitch: ${value.toFixed(1)}`)
+                  } else {
+                    ShowToast.longToast(`setLocalVoicePitch failed: ${result}`)
+                  }
+                }
+              })
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
+          .alignItems(VerticalAlign.Center)
+          AudioChannelSpinner({
+            isEnable: !this.isJoin,
+            name: $r('app.string.channel_profile'),
+            items: CHANNEL_PROFILE,
+            onSelect: this.onChannelProfileSelect
+          })
         }
+        .alignItems(HorizontalAlign.End)
         .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-
-        AudioChannelToggle({
-          isEnable: this.isJoin,
-          name: $r('app.string.inear_monitor'),
-          isCheck: false,
-          onCheck: this.onInEarMonitorCheck
-        })
-        AudioChannelSlider({
-          isEnable: this.isJoin && this.isEarMonitorChecked,
-          name: $r('app.string.inear_monitor_vol'),
-          onSlide: this.onInEarMonitorVolSlide
-        })
-        AudioChannelSlider({
-          isEnable: this.isJoin,
-          name: $r('app.string.playout_vol'),
-          onSlide: this.onPlayoutVolSlide
-        })
-        AudioChannelSlider({
-          isEnable: this.isJoin,
-          name: $r('app.string.recording_vol'),
-          onSlide: this.onRecordingVolSlide
-        })
-        AudioChannelSpinner({
-          name: $r('app.string.scenario'),
-          items: AUDIO_SCENARIO,
-          onSelect: this.onScenarioSelect
-        })
-        AudioChannelSpinner({
-          // isEnable: !this.isJoin,
-          name: $r('app.string.audio_profile'),
-          items: AUDIO_PROFILE,
-          onSelect: this.onAudioProfileSelect
-        })
-        AudioChannelSpinner({
-          isEnable: !this.isJoin,
-          name: $r('app.string.channel_profile'),
-          items: CHANNEL_PROFILE,
-          onSelect: this.onChannelProfileSelect
-        })
       }
       .layoutWeight(1)
       .margin({ top: 10, bottom: 10 })
-      .justifyContent(FlexAlign.Center)
-      .alignItems(HorizontalAlign.End)
+      .scrollBar(BarState.Auto)
       .width('100%')
 
       Row() {

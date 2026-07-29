@@ -15,11 +15,24 @@ const TAG: string = 'JoinVideoChannel'
 @Component
 struct JoinVideoChannel {
   private rtcEngine: RtcEngine | undefined = undefined;
+  private localXComponentController: XComponentController = new XComponentController()
+  private remoteXComponentController: XComponentController = new XComponentController()
   @State message: string = 'Hello World';
   @State channelName: string = ''
   @State isJoin: boolean = false
   @State localUid: number = 0
   @State remoteUid: number = 0
+
+  private getNtpWallTime(): void {
+    const engine = this.rtcEngine
+    if (engine == undefined) {
+      return
+    }
+    const ntpWallTime: bigint = engine.getNtpWallTimeInMs()
+    const ntpWallTimeInMs: string = ntpWallTime.toString()
+    Logger.info(TAG, `getNtpWallTimeInMs result:${ntpWallTimeInMs}`)
+    ShowToast.shortToast(`getNtpWallTimeInMs: ${ntpWallTimeInMs} ms`)
+  }
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -94,9 +107,10 @@ struct JoinVideoChannel {
             XComponent({
               id: 'preview_local',
               type: XComponentType.SURFACE,
-              libraryname: Constants.AGORA_LIB_NAME,
+              controller: this.localXComponentController,
             }).onLoad(() => {
-              let localCanvas = new VideoCanvas("preview_local");
+              const surfaceId = this.localXComponentController.getXComponentSurfaceId()
+              let localCanvas = new VideoCanvas(surfaceId, true);
               localCanvas.uid = this.localUid;
               localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
               localCanvas.mirrorMode = 0;
@@ -108,13 +122,14 @@ struct JoinVideoChannel {
             XComponent({
               id: 'preview_remote',
               type: XComponentType.SURFACE,
-              libraryname: Constants.AGORA_LIB_NAME,
+              controller: this.remoteXComponentController,
             }).onLoad(() => {
-              let localCanvas = new VideoCanvas("preview_remote");
-              localCanvas.uid = this.remoteUid;
-              localCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
-              localCanvas.mirrorMode = 0;
-              this.rtcEngine?.setupRemoteVideo(localCanvas);
+              const surfaceId = this.remoteXComponentController.getXComponentSurfaceId()
+              let remoteCanvas = new VideoCanvas(surfaceId, true);
+              remoteCanvas.uid = this.remoteUid;
+              remoteCanvas.renderMode = VideoCanvas.RENDER_MODE_HIDDEN;
+              remoteCanvas.mirrorMode = 0;
+              this.rtcEngine?.setupRemoteVideo(remoteCanvas);
             }).width('50%')
           }
         }
@@ -124,6 +139,13 @@ struct JoinVideoChannel {
       }
       .align(Alignment.TopStart)
       .flexGrow(1)
+
+      Button($r('app.string.get_ntp_time'))
+        .onClick(() => {
+          this.getNtpWallTime()
+        })
+        .alignSelf(ItemAlign.End)
+        .margin({ top: 6, right: 12, bottom: 6 })
 
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
         TextInput({ placeholder: $r('app.string.text_input_channel_name') })

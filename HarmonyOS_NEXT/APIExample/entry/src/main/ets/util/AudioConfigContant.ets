@@ -17,20 +17,20 @@ export class AudioConfigHelper {
   // public static readonly CHANNEL_PROFILE_CLOUD_GAMING = 'CLOUD_GAMING'
   // public static readonly CHANNEL_PROFILE_COMMUNICATION_1v1 = 'COMMUNICATION_1v1'
 
-  public static getAudioRouteType(position: number) {
-    let type = Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE
+  public static getAudioRouteType(position: number): Constants.AudioRouteTypes {
+    let type: Constants.AudioRouteTypes = Constants.AudioRouteTypes.EARPIECE
     switch (position) {
       case 0:
-        type = Constants.AudioRouteTypes.AUDIO_ROUTE_SPEAKERPHONE
+        type = Constants.AudioRouteTypes.SPEAKERPHONE
         break
       case 1:
-        type = Constants.AudioRouteTypes.AUDIO_ROUTE_EARPIECE
+        type = Constants.AudioRouteTypes.EARPIECE
         break
       case 2:
-        type = Constants.AudioRouteTypes.AUDIO_ROUTE_HEADSET
+        type = Constants.AudioRouteTypes.HEADSET
         break
       case 3:
-        type = Constants.AudioRouteTypes.AUDIO_ROUTE_BLUETOOTH_DEVICE_HFP
+        type = Constants.AudioRouteTypes.BLUETOOTH_DEVICE_HFP
         break
     }
     return type

@@ -1,4 +1,5 @@
 import {
+  AudioVolumeInfo,
   Constants,
   LastmileProbeConfig,
   LastmileProbeResult,
@@ -25,6 +26,9 @@ struct PlayAudioFiles {
   @State isAudioEchoTesting: boolean = false
   @State isVideoEchoTesting: boolean = false
   @State audioEchoTestingText: string = ''
+  @State isRecordingDeviceTesting: boolean = false
+  @State isRecordingSignalMuted: boolean = false
+  @State recordingVolume: number = 0
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -35,6 +39,13 @@ struct PlayAudioFiles {
     config.mEventHandler.onError = (err: number, message: string) => {
       Logger.info(TAG, "mEventHandler.onError: " + err + " message " + message);
       ShowToast.longToast("onError " + err + " : " + message)
+    }
+    config.mEventHandler.onAudioVolumeIndication = (speakers: Array<AudioVolumeInfo>, totalVolume: number) => {
+      Logger.info(TAG,
+        `mEventHandler.onAudioVolumeIndication totalVolume:${totalVolume} speakers:${JSON.stringify(speakers)}`)
+      if (this.isRecordingDeviceTesting) {
+        this.recordingVolume = totalVolume
+      }
     }
     config.mEventHandler.onLastmileProbeResult = (result: LastmileProbeResult) => {
       let map = new Map<String, String>()
@@ -92,6 +103,12 @@ struct PlayAudioFiles {
       this.audioEchoCountDown = undefined
     }
     if (this.rtcEngine != undefined) {
+      if (this.isRecordingDeviceTesting) {
+        if (this.isRecordingSignalMuted) {
+          this.rtcEngine.muteRecordingSignal(false)
+        }
+        this.rtcEngine.stopRecordingDeviceTest()
+      }
       Logger.info(TAG, "destroy begin")
       RtcEngine.destroy().then(() => {
         Logger.info(TAG, "destroy done")
@@ -110,6 +127,54 @@ struct PlayAudioFiles {
       text += key + " : " + value + "\n"
     })
     this.lastmileResultText = text
+  }
+
+  startRecordingDeviceTest(): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    let result = this.rtcEngine.startRecordingDeviceTest(200)
+    Logger.info(TAG, `startRecordingDeviceTest result:${result}`)
+    if (result == 0) {
+      this.isRecordingDeviceTesting = true
+      this.recordingVolume = 0
+      ShowToast.shortToast('Recording device test started')
+    } else {
+      ShowToast.longToast(`startRecordingDeviceTest failed: ${result}`)
+    }
+  }
+
+  stopRecordingDeviceTest(): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    if (this.isRecordingSignalMuted) {
+      this.rtcEngine.muteRecordingSignal(false)
+    }
+    let result = this.rtcEngine.stopRecordingDeviceTest()
+    Logger.info(TAG, `stopRecordingDeviceTest result:${result}`)
+    if (result == 0) {
+      this.isRecordingDeviceTesting = false
+      this.isRecordingSignalMuted = false
+      this.recordingVolume = 0
+      ShowToast.shortToast('Recording device test stopped')
+    } else {
+      ShowToast.longToast(`stopRecordingDeviceTest failed: ${result}`)
+    }
+  }
+
+  setRecordingSignalMuted(muted: boolean): void {
+    if (this.rtcEngine == undefined) {
+      return
+    }
+    let result = this.rtcEngine.muteRecordingSignal(muted)
+    Logger.info(TAG, `muteRecordingSignal muted:${muted} result:${result}`)
+    if (result == 0) {
+      this.isRecordingSignalMuted = muted
+      ShowToast.shortToast(muted ? 'Recording signal muted' : 'Recording signal resumed')
+    } else {
+      ShowToast.longToast(`muteRecordingSignal failed: ${result}`)
+    }
   }
 
   build() {
@@ -141,6 +206,39 @@ struct PlayAudioFiles {
             this.isLastmileTesting = true
           })
         Text(this.lastmileResultText).padding({ top: 6, bottom: 6 })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+      .padding({
+        left: 12,
+        right: 12,
+        top: 6,
+        bottom: 6
+      })
+
+      Column() {
+        Text('Recording Device Test').padding({ top: 6, bottom: 6 })
+        Divider()
+        Button(this.isRecordingDeviceTesting ? $r('app.string.stop') : $r('app.string.start'))
+          .margin({ top: 6, bottom: 6 })
+          .onClick(() => {
+            if (this.isRecordingDeviceTesting) {
+              this.stopRecordingDeviceTest()
+            } else {
+              this.startRecordingDeviceTest()
+            }
+          })
+        Text(`Microphone Volume: ${this.recordingVolume}`).padding({ top: 6, bottom: 6 })
+        Row() {
+          Text('Mute Recording Signal').layoutWeight(1)
+          Toggle({ type: ToggleType.Switch, isOn: this.isRecordingSignalMuted })
+            .enabled(this.isRecordingDeviceTesting)
+            .onChange((isOn: boolean) => {
+              this.setRecordingSignalMuted(isOn)
+            })
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Center)
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)

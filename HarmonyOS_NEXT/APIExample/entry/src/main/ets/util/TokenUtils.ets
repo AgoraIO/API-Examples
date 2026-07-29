@@ -6,21 +6,21 @@ import Logger from './Logger';
 
 export class TokenUtils {
   static async genRtcToken(channelName: string, uid: string) : Promise<string> {
-    const session = rcp.createSession({
-      headers: { 'Content-Type': 'application/json' }
-    });
-    let body = JSON.stringify({
-      "appId": AppID,
-      "appCertificate": AppCertificate,
-      "channelName": channelName,
-      "expire": 900, //s
-      "src": "HMOS",
-      "ts": systemDateTime.getTime(false),
-      "type": 1, // 1: RTC Token ; 2: RTM Token
-      "uid": uid
-    })
     let token = ''
     try{
+      const session = rcp.createSession({
+        headers: { 'Content-Type': 'application/json' }
+      });
+      let body = JSON.stringify({
+        "appId": AppID,
+        "appCertificate": AppCertificate,
+        "channelName": channelName,
+        "expire": 900, //s
+        "src": "HMOS",
+        "ts": systemDateTime.getTime(false),
+        "type": 1, // 1: RTC Token ; 2: RTM Token
+        "uid": uid
+      })
       let response = await session.post("https://toolbox.bj2.agoralab.co/v1/token/generate", body)
       Logger.info(`Response complete: statueCode=${response.statusCode}`);
       let decoder = util.TextDecoder.create('utf-8');

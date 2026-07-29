@@ -32,8 +32,20 @@ export const ADVANCE_ITEMS: ExampleItem[] =
       url: 'pages/advance/JoinMultiChannel'
     },
     {
+      title: $r('app.string.item_useraccount'),
+      url: 'pages/advance/UserAccount'
+    },
+    {
       title: $r('app.string.item_mediametadata'),
       url: 'pages/advance/MediaMetadataWrap'
+    },
+    {
+      title: $r('app.string.item_voiceeffects'),
+      url: 'pages/advance/VoiceEffects'
+    },
+    {
+      title: $r('app.string.item_videobeauty'),
+      url: 'pages/advance/VideoBeauty'
     },
     {
       title: $r('app.string.item_customaudiosource'),

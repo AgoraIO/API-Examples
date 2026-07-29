@@ -218,7 +218,7 @@
     },
     {
       "name": "audio_effect",
-      "value": "音效"
+      "value": "单个音效文件"
     },
     {
       "name": "start",
@@ -351,6 +351,158 @@
     {
       "name": "click_select_router",
       "value": "点击选择路由"
+    },
+    {
+      "name": "voice_pitch",
+      "value": "人声音调"
+    },
+    {
+      "name": "all_audio_effects",
+      "value": "全部音效文件"
+    },
+    {
+      "name": "play_all",
+      "value": "全部播放"
+    },
+    {
+      "name": "resume_all",
+      "value": "全部恢复"
+    },
+    {
+      "name": "pause_all",
+      "value": "全部暂停"
+    },
+    {
+      "name": "stop_all",
+      "value": "全部停止"
+    },
+    {
+      "name": "unload_all",
+      "value": "全部卸载"
+    },
+    {
+      "name": "remote_subscribe_fallback",
+      "value": "远端订阅降级"
+    },
+    {
+      "name": "fallback_disabled",
+      "value": "关闭"
+    },
+    {
+      "name": "fallback_low_stream",
+      "value": "降级到小流"
+    },
+    {
+      "name": "fallback_audio_only",
+      "value": "降级到纯音频"
+    },
+    {
+      "name": "remote_user_high_priority",
+      "value": "远端用户高优先级"
+    },
+    {
+      "name": "video_image_source",
+      "value": "图片视频轨"
+    },
+    {
+      "name": "get_ntp_time",
+      "value": "获取 NTP 时间"
+    },
+    {
+      "name": "item_useraccount",
+      "value": "User Account 入会"
+    },
+    {
+      "name": "text_input_user_account",
+      "value": "请输入用户账号"
+    },
+    {
+      "name": "mapped_int_uid",
+      "value": "映射 Int UID"
+    },
+    {
+      "name": "register_user_account",
+      "value": "注册账号"
+    },
+    {
+      "name": "preload_user_account_channel",
+      "value": "预加载频道"
+    },
+    {
+      "name": "channel_name_empty",
+      "value": "频道名不能为空"
+    },
+    {
+      "name": "user_account_empty",
+      "value": "用户账号不能为空"
+    },
+    {
+      "name": "item_voiceeffects",
+      "value": "美声与音效"
+    },
+    {
+      "name": "voice_beautifier_preset",
+      "value": "美声预设"
+    },
+    {
+      "name": "audio_effect_preset",
+      "value": "人声音效预设"
+    },
+    {
+      "name": "equalization_band",
+      "value": "均衡频段"
+    },
+    {
+      "name": "equalization_gain",
+      "value": "均衡增益"
+    },
+    {
+      "name": "reverb_key",
+      "value": "混响参数"
+    },
+    {
+      "name": "reverb_value",
+      "value": "混响数值"
+    },
+    {
+      "name": "item_videobeauty",
+      "value": "视频美颜"
+    },
+    {
+      "name": "beauty_effect",
+      "value": "美颜"
+    },
+    {
+      "name": "beauty_contrast",
+      "value": "美白对比度"
+    },
+    {
+      "name": "beauty_contrast_low",
+      "value": "低"
+    },
+    {
+      "name": "beauty_contrast_normal",
+      "value": "正常"
+    },
+    {
+      "name": "beauty_contrast_high",
+      "value": "高"
+    },
+    {
+      "name": "beauty_lightening",
+      "value": "美白"
+    },
+    {
+      "name": "beauty_smoothness",
+      "value": "平滑"
+    },
+    {
+      "name": "beauty_redness",
+      "value": "红润"
+    },
+    {
+      "name": "beauty_sharpness",
+      "value": "锐利"
     }
   ]
 }
