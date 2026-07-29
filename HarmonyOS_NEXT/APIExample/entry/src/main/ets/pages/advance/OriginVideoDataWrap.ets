@@ -5,6 +5,9 @@ import {
     VideoCanvas,
     VideoEncoderConfiguration
 } from '@shengwang/rtc-full';
+import { image } from '@kit.ImageKit';
+import { photoAccessHelper } from '@kit.MediaLibraryKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 import { TitleBar } from '../../common/TitleBar';
 import Logger from '../../util/Logger';
 import ShowToast from '../../util/ShowToast';
@@ -12,7 +15,7 @@ import { AppID } from '../../common/KeyCenter';
 import PermissionHelper from '../../util/PermissionHelper';
 import { common } from '@kit.AbilityKit';
 import { GlobalInfo } from '../Data';
-import { OriginVideoData } from 'librawdataprocessing.so';
+import { OriginVideoData, SnapshotFrame } from 'librawdataprocessing.so';
 
 const TAG: string = 'OriginVideoData'
 
@@ -26,6 +29,7 @@ struct OriginVideoDataWrap {
   @State isJoin: boolean = false
   @State localUid: number = 0
   @State remoteUid: number = 0
+  @State isSavingSnapshot: boolean = false
 
   aboutToAppear(): void {
     Logger.info(TAG, 'aboutToAppear')
@@ -74,6 +78,8 @@ struct OriginVideoDataWrap {
   }
 
   aboutToDisappear(): void {
+    this.native?.enable(false)
+    this.native = undefined
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
         this.rtcEngine.stopPreview();
@@ -85,6 +91,83 @@ struct OriginVideoDataWrap {
       });
       Logger.info(TAG, "destroy end")
       this.rtcEngine = undefined;
+    }
+  }
+
+  private async takeSnapshot(): Promise<void> {
+    if (this.native == undefined || this.isSavingSnapshot) {
+      return
+    }
+    this.isSavingSnapshot = true
+    let result = this.native.takeSnapshot((frame: SnapshotFrame) => {
+      this.saveSnapshot(frame)
+    })
+    if (result != 0) {
+      this.isSavingSnapshot = false
+      Logger.error(TAG, `takeSnapshot failed: ${result}`)
+      ShowToast.longToast($r('app.string.screenshot_save_failed'))
+    }
+  }
+
+  private async saveSnapshot(frame: SnapshotFrame): Promise<void> {
+    let pixelMap: image.PixelMap | undefined = undefined
+    let imagePacker: image.ImagePacker | undefined = undefined
+    let photoHelper: photoAccessHelper.PhotoAccessHelper | undefined = undefined
+    try {
+      if (frame.errorCode != 0 || frame.width <= 0 || frame.height <= 0 || frame.data.byteLength == 0) {
+        throw new Error(`Invalid snapshot frame: ${frame.errorCode}`)
+      }
+
+      pixelMap = await image.createPixelMap(frame.data, {
+        size: { width: frame.width, height: frame.height },
+        srcPixelFormat: image.PixelMapFormat.NV21,
+        pixelFormat: image.PixelMapFormat.RGBA_8888,
+        editable: true
+      })
+      if (frame.rotation != 0) {
+        await pixelMap.rotate(frame.rotation)
+      }
+
+      imagePacker = image.createImagePacker()
+      let jpegData = await imagePacker.packToData(pixelMap, { format: 'image/jpeg', quality: 90 })
+      let context = getContext(this) as common.UIAbilityContext;
+      photoHelper = photoAccessHelper.getPhotoAccessHelper(context)
+      let request = photoAccessHelper.MediaAssetChangeRequest.createAssetRequest(
+        context,
+        photoAccessHelper.PhotoType.IMAGE,
+        'jpg',
+        { title: `IMG_AGORA_${Date.now()}` }
+      )
+      request.addResource(photoAccessHelper.ResourceType.IMAGE_RESOURCE, jpegData)
+      await photoHelper.applyChanges(request)
+      ShowToast.longToast($r('app.string.screenshot_saved'))
+    } catch (error) {
+      let err = error as BusinessError
+      Logger.error(TAG, `saveSnapshot failed. Code: ${err.code}, message: ${err.message}`)
+      ShowToast.longToast($r('app.string.screenshot_save_failed'))
+    } finally {
+      this.isSavingSnapshot = false
+      if (imagePacker != undefined) {
+        try {
+          await imagePacker.release()
+        } catch (error) {
+          Logger.error(TAG, `release ImagePacker failed: ${(error as BusinessError).message}`)
+        }
+      }
+      if (pixelMap != undefined) {
+        try {
+          await pixelMap.release()
+        } catch (error) {
+          Logger.error(TAG, `release PixelMap failed: ${(error as BusinessError).message}`)
+        }
+      }
+      if (photoHelper != undefined) {
+        try {
+          await photoHelper.release()
+        } catch (error) {
+          Logger.error(TAG, `release PhotoAccessHelper failed: ${(error as BusinessError).message}`)
+        }
+      }
     }
   }
 
@@ -131,12 +214,23 @@ struct OriginVideoDataWrap {
       }
       .align(Alignment.TopStart)
       .flexGrow(1)
-      Button($r('app.string.screenshot'))
-        .id('button_screenshot')
-        .enabled(this.isJoin)
-        .onClick(() => {
-          this.native?.takeSnapshot();
+      Row() {
+        SaveButton({
+          icon: SaveIconStyle.LINES,
+          text: SaveDescription.SAVE_TO_GALLERY,
+          buttonType: ButtonType.Capsule
         })
+          .id('button_screenshot')
+          .enabled(this.isJoin && !this.isSavingSnapshot)
+          .onClick((event: ClickEvent, result: SaveButtonOnClickResult) => {
+            if (result == SaveButtonOnClickResult.SUCCESS) {
+              this.takeSnapshot()
+            } else {
+              Logger.error(TAG, `SaveButton authorization failed: ${result}`)
+              ShowToast.longToast($r('app.string.screenshot_permission_denied'))
+            }
+          })
+      }
         .margin(12)
         .flexGrow(0)
       Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {

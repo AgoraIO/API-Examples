@@ -69,6 +69,18 @@
       "value": "截图"
     },
     {
+      "name": "screenshot_saved",
+      "value": "截图已保存，可在相册中查看"
+    },
+    {
+      "name": "screenshot_save_failed",
+      "value": "截图保存失败"
+    },
+    {
+      "name": "screenshot_permission_denied",
+      "value": "无法获取截图保存授权"
+    },
+    {
       "name": "ex_channel_name",
       "value": "Ex频道名"
     },

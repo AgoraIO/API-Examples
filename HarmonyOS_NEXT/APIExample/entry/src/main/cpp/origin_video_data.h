@@ -12,6 +12,8 @@
 #include "utils.h"
 #include "napi/native_api.h"
 #include "IAgoraRtcEngine.h"
+#include <atomic>
+#include <mutex>
 
 static thread_local napi_ref g_origin_video_data_ref = nullptr;
 
@@ -25,11 +27,10 @@ private:
     explicit OriginVideoData();
     ~OriginVideoData();
 
-    void SaveI420Buffer(const uint8_t *buf, int width, int height, std::string filename);
-
     static napi_value New(napi_env env, napi_callback_info info);
     static napi_value Enable(napi_env env, napi_callback_info info);
     static napi_value TakeSnapshot(napi_env env, napi_callback_info info);
+    static void CallSnapshotCallback(napi_env env, napi_value callback, void *context, void *data);
 
     // IVideoFrameObserver
     bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE sourceType, VideoFrame &videoFrame);
@@ -50,7 +51,9 @@ private:
     agora::rtc::IRtcEngine *rtcEngine_;
     napi_env env_;
     napi_ref wrapper_;
-    bool takeSnapshot_;
+    std::atomic<bool> takeSnapshot_;
+    std::mutex snapshotMutex_;
+    napi_threadsafe_function snapshotCallback_;
 };
 
 #endif // APIEXAMPLE_ORIGIN_VIDEO_DATA_H
