@@ -49,7 +49,6 @@ struct LiveStreaming {
   @State lowLegacyLiving: boolean = false
   @State pullLowStream: boolean = false
   @State remoteFallbackIndex: number = 1
-  @State isRemoteUserHighPriority: boolean = false
   @State isVideoImageSourceReady: boolean = false
   @State isVideoImageSourceEnabled: boolean = false
 
@@ -101,22 +100,6 @@ struct LiveStreaming {
     return result == Constants.ErrorCode.ERR_OK
   }
 
-  private updateRemoteUserPriority(isHighPriority: boolean): void {
-    const engine = this.rtcEngine
-    if (engine == undefined || this.remoteUid == -1) {
-      ShowToast.shortToast('Remote user is not available')
-      return
-    }
-    const priority: Constants.UserPriority = isHighPriority ?
-      Constants.UserPriority.HIGH : Constants.UserPriority.NORANL
-    const result: number = engine.setRemoteUserPriority(this.remoteUid, priority)
-    Logger.info(TAG, `setRemoteUserPriority(${this.remoteUid}, ${priority}) result:${result}`)
-    if (result == Constants.ErrorCode.ERR_OK) {
-      this.isRemoteUserHighPriority = isHighPriority
-    }
-    ShowToast.shortToast(`setRemoteUserPriority: ${this.getResultText(result)}`)
-  }
-
   private updateVideoImageSource(enabled: boolean, showResult: boolean): boolean {
     const engine = this.rtcEngine
     if (engine == undefined || !this.isVideoImageSourceReady || this.videoImageFilePath.length == 0) {
@@ -154,14 +137,12 @@ struct LiveStreaming {
       Logger.info(TAG, "mEventHandler.onUserJoined: " + uid + " , " + collapse);
       if (this.remoteUid == -1) {
         this.remoteUid = uid
-        this.isRemoteUserHighPriority = false
       }
     };
     config.mEventHandler.onUserOffline = (uid: number, reason: number) => {
       Logger.info(TAG, "mEventHandler.onUserOffline: " + uid + " , " + reason)
       if (this.remoteUid == uid) {
         this.remoteUid = -1
-        this.isRemoteUserHighPriority = false
       }
     };
     config.mEventHandler.onJoinChannelSuccess = (cid: string, uid: number, elapsed: number) => {
@@ -174,7 +155,6 @@ struct LiveStreaming {
       this.isJoin = false
       this.localUid = -1
       this.remoteUid = -1
-      this.isRemoteUserHighPriority = false
       this.isVideoImageSourceEnabled = false
     }
     config.mEventHandler.onError = (err: number, message: string) => {
@@ -301,26 +281,6 @@ struct LiveStreaming {
           Divider().margin({ left: 12, right: 12 })
 
           Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
-            Text($r('app.string.remote_user_high_priority'))
-              .flexGrow(1)
-
-            Toggle({ type: ToggleType.Switch, isOn: this.isRemoteUserHighPriority })
-              .enabled(this.remoteUid != -1)
-              .onChange((isOn: boolean) => {
-                this.updateRemoteUserPriority(isOn)
-              })
-              .flexGrow(0)
-          }
-          .padding({
-            top: 8,
-            bottom: 8,
-            left: 12,
-            right: 12
-          })
-
-          Divider().margin({ left: 12, right: 12 })
-
-          Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
             Text($r('app.string.video_image_source'))
               .flexGrow(1)
 
@@ -340,11 +300,12 @@ struct LiveStreaming {
         }
         .width('100%')
       }
-      .layoutWeight(1)
       .width('100%')
       .scrollBar(BarState.Auto)
 
-    }.width('100%').height('100%')
+    }
+    .width('100%')
+    .padding({ bottom: 16 })
   }
 
   build() {
@@ -501,7 +462,7 @@ struct LiveStreaming {
     }
     .backgroundColor($r('app.color.background_shallow_grey'))
     .bindSheet(this.showSetting, this.buildSettingSheet(), {
-      detents: [SheetSize.MEDIUM, SheetSize.LARGE, 200],
+      detents: [SheetSize.FIT_CONTENT],
       backgroundColor: Color.White,
       blurStyle: BlurStyle.Thick,
       showClose: false,

@@ -409,10 +409,6 @@
       "value": "Audio Only"
     },
     {
-      "name": "remote_user_high_priority",
-      "value": "Remote User High Priority"
-    },
-    {
       "name": "video_image_source",
       "value": "Video Image Source"
     },

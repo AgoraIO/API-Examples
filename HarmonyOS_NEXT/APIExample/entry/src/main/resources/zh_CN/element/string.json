@@ -409,12 +409,8 @@
       "value": "降级到纯音频"
     },
     {
-      "name": "remote_user_high_priority",
-      "value": "远端用户高优先级"
-    },
-    {
       "name": "video_image_source",
-      "value": "图片视频轨"
+      "value": "垫片推流"
     },
     {
       "name": "get_ntp_time",
