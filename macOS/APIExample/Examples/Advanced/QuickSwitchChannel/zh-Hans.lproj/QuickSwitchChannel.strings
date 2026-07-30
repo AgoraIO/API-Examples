@@ -1,12 +1,11 @@
+/* Element = "buttonCell"; title = "Switch Channel"; ObjectID = "3HM-bj-L6q"; */
+"3HM-bj-L6q.title" = "切换频道";
 
-/* Class = "NSButtonCell"; title = "Switch Channel"; ObjectID = "3HM-bj-L6q"; */
-"3HM-bj-L6q.title" = "Switch Channel";
-
-/* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+/* Element = "box"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
 "BP9-4w-AfJ.title" = "Box";
 
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
-"Lhu-U1-6qh.title" = "Join";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入频道";
 
-/* Class = "NSViewController"; title = "Raw Video Data"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "Raw Video Data";
+/* Element = "viewController"; title = "Raw Video Data"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "视频裸数据";

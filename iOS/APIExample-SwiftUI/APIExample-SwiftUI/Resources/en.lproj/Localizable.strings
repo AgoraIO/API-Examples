@@ -1,10 +1,11 @@
-/* 
-  Localization.strings
-  APIExample
+/*
+  Localizable.strings
+  APIExample-SwiftUI
 
-  Created by 张乾泽 on 2020/10/7.
-  Copyright © 2020 Agora Corp. All rights reserved.
+  English keys follow the current SwiftUI source. Simplified Chinese values
+  are maintained in the parallel zh-Hans localization.
 */
+
 "Join" = "Join Channel";
 "anti shake" = "Anti-shake";
 "Enter channel name" = "Enter channel name";
@@ -16,7 +17,6 @@
 "Live Streaming" = "RTC Live Streaming/Host/Audience";
 "RTMP Streaming" = "RTMP Streaming";
 "Transcoding" = "Transcoding";
-"Media Injection" = "Media Injection";
 "Video Metadata" = "SEI Message";
 "Voice Changer" = "Voice Effects/Beautifier";
 "Custom Audio Source" = "Custom Audio Source";
@@ -31,13 +31,11 @@
 "Join Multiple Channels" = "Join Multiple Channels";
 "Stream Encryption" = "Media Stream Encryption";
 "Audio Mixing" = "Audio File Mixing";
-"Raw Media Data" = "Raw Audio/Video Data";
 "Raw Video Data" = "Raw Video Data";
 "Simple Filter Extension" = "Plugin System";
 "Precall Test" = "Pre-call Network/Device Test";
 "Media Player" = "Media Player";
 "Screen Share" = "Screen Share";
-"Super Resolution" = "Super Resolution";
 "Media Channel Relay" = "Cross Channel Stream Relay";
 "Set Resolution" = "Set Video Resolution";
 "Set Fps" = "Set Video Frame Rate";
@@ -112,8 +110,8 @@
 "Wet Level" = "Early Reflection Level";
 "Room Size" = "Room Size";
 "Wet Delay" = "Early Reflection Delay";
-"Strength" = "Reverb Intensity";
-"ARKit is not available on this device." = "ARKit is not available on this device.";
+"Strength" = "Strength";
+"ARKit is not available on this device." = "ARKit is not available on this device";
 "This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR features are only supported on iOS devices with A9 processor or later";
 "Move Camera to find a planar\n(Shown as Red Rectangle)" = "Move camera to find a plane\n(Shown as red rectangle)";
 "Tap to place remote video canvas" = "Tap screen to place video canvas";
@@ -125,7 +123,6 @@
 "Pick Role" = "Select Role";
 "Create Data Stream" = "Create Data Stream";
 "Raw Audio Data" = "Raw Audio Data";
-"Group Video Chat" = "Group Video Call";
 "Screen Share + Camera" = "Screen Share + Camera";
 "please input channel name!" = "Please enter channel name!";
 "Video Process" = "Video Enhancement";
@@ -149,19 +146,10 @@
 "Mutli Camera(iOS13.0+)" = "Multi Camera (iOS13.0+)";
 "Open Rear Camera" = "Open Rear Camera";
 "Close Rear Camera" = "Close Rear Camera";
-"Third Beautify" = "Third-party Beautification";
-"Sense Beautify" = "SenseTime Beautification";
-"FU Beautify" = "FaceUnity Beautification";
-"Byted Effect" = "ByteDance Beautification";
 "license authorization failed, please check whether the license file is correct" = "License authorization failed, please check if license file is correct";
 "Quick input APPID and Token methods" = "Quick methods to input APPID and Token";
-"I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff." = "I: If phone and Mac are logged into same Apple ID, Mac copies will auto-sync to other devices with same account. Phone can directly paste by tapping input box.\n\n II: Use https://cl1p.net/ online clipboard:\n\n1. Enter URL starting with cl1p.net. Example: cl1p.net/uqztgjnqcalmd\n\n2. Paste anything you want.\n\n3. On another device, enter same URL to get your content.";
-
+"I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n\nII: use https://cl1p.net/ online clipboard:\n\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n\n2.Paste in anything you want.\n\n\n3.On another computer enter the same URL and get your stuff." = "I: If phone and Mac are logged into same Apple ID, Mac copies will auto-sync to other devices with same account. Phone can directly paste by tapping input box.\n\nII: Use https://cl1p.net/ online clipboard:\n\n1. Enter URL starting with cl1p.net. Example: cl1p.net/uqztgjnqcalmd\n\n2. Paste anything you want.\n\n3. On another device, enter same URL to get your content.";
 "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "Once enabled, this cannot be disabled and only takes effect when enabled on both primary and secondary ends";
-"ARKit is not available on this device." = "ARKit is not available on this device";
-"This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR features are only supported on iOS devices with A9 processor or later";
-"Move Camera to find a planar\n(Shown as Red Rectangle)" = "Move camera to find a plane\n(Shown as red rectangle)";
-"Tap to place remote video canvas" = "Tap screen to place video canvas";
 "Recording" = "Start Recording";
 "Stop Recording" = "Stop Recording";
 "PIP Support iOS 15+" = "Picture In Picture requires iOS 15+";
@@ -175,9 +163,7 @@
 "Audio Router(Third Party Player)" = "Audio Router (Third Party Player)";
 "Player Type(ijkplayer/avplayer)" = "Player Selection (ijkplayer/native)";
 "Audio Waveform" = "Audio Spectrum";
-
 "Set AINS Mode" = "Set AI Noise Suppression mode";
-
 "AGGRESSIVE" = "Aggressive Mode";
 "BALANCED" = "(Default) Balanced Mode";
 "ULTRALOWLATENCY" = "Ultra Low Latency Mode";
@@ -213,7 +199,6 @@
 "Relay" = "Relay";
 "Pause" = "Pause";
 "Resume" = "Resume";
-"Stop" = "Stop";
 "Play" = "Play";
 "software" = "Software";
 "hardware" = "Hardware";
@@ -232,7 +217,6 @@
 "Low light Enhancement" = "Low Light Enhancement";
 "Video Dencise" = "Video Denoising";
 "Color Enhancement" = "Color Enhancement";
-"Strength" = "Strength";
 "Skin Protect" = "Skin Protection";
 "Virtual Background" = "Virtual Background";
 "Open" = "Open";
@@ -277,3 +261,23 @@
 "Set Layers Config(Maximum 3)" = "Set Layers Config(Maximum 3)";
 "Maxmum 3 layers can be selected" = "Maxmum 3 layers can be selected";
 "LocalCompositeGraph" = "LocalCompositeGraph";
+"3D Voice" = "3D Voice";
+"Neutral" = "Neutral";
+"Sweet" = "Sweet";
+"Solid" = "Solid";
+"Bass" = "Bass";
+"ARKit" = "ARKit";
+"Simulcast" = "Simulcast";
+"Multipath" = "Multipath";
+"The camera has changed" = "The camera has changed";
+"Role" = "Role";
+"Mode" = "Mode";
+"Customize Voice Effects" = "Customize Voice Effects";
+"Pitch" = "Pitch";
+"BandFreq" = "Band Frequency";
+"BandGain" = "Band Gain";
+"ReverbKey" = "Reverb Key";
+"ReverbValue" = "Reverb Value";
+"AINSModel" = "AINS Mode";
+"Please the input APPID" = "Please enter App ID";
+"Please the input Token" = "Please enter Token";

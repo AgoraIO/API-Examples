@@ -1,24 +1,32 @@
+/* Element = "buttonCell"; title = "Start streaming"; ObjectID = "0fK-HU-248"; */
+"0fK-HU-248.title" = "开始推流";
 
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "4rc-r1-Ay6"; */
-"4rc-r1-Ay6.title" = "Leave Channel";
+/* Element = "box"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
 
-/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "Iws-j3-l2h"; */
-"Iws-j3-l2h.title" = "1V1";
+/* Element = "buttonCell"; title = "Start streaming"; ObjectID = "JuU-kX-SM0"; */
+"JuU-kX-SM0.title" = "开始推流";
 
-/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "Mmi-d8-vOm"; */
-"Mmi-d8-vOm.title" = "1V15";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入频道";
 
-/* Class = "NSTextFieldCell"; placeholderString = "join Channel"; ObjectID = "PtD-n2-sEW"; */
-"PtD-n2-sEW.placeholderString" = "Enter Channel Name";
+/* Element = "buttonCell"; title = "Start streaming"; ObjectID = "NaG-XB-zRS"; */
+"NaG-XB-zRS.title" = "开始推流";
 
-/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "VNU-so-ajb"; */
-"VNU-so-ajb.title" = "1V3";
+/* Element = "buttonCell"; title = "Start collection"; ObjectID = "UNg-f5-Jxh"; */
+"UNg-f5-Jxh.title" = "开始采集";
 
-/* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "Video Call/Live Streaming";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "实时视频通话/直播";
 
-/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "cH4-ft-u77"; */
-"cH4-ft-u77.title" = "1V8";
+/* Element = "buttonCell"; title = "Start collecting"; ObjectID = "irM-5L-9uT"; */
+"irM-5L-9uT.title" = "开始采集";
 
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "guU-jX-Wkg"; */
-"guU-jX-Wkg.title" = "Join Channel";
+/* Element = "buttonCell"; title = "Start collecting"; ObjectID = "n4E-Pl-sJq"; */
+"n4E-Pl-sJq.title" = "开始采集";
+
+/* Element = "buttonCell"; title = "Start streaming"; ObjectID = "u8r-u9-ylV"; */
+"u8r-u9-ylV.title" = "开始推流";
+
+/* Element = "buttonCell"; title = "Start collecting"; ObjectID = "wsu-5T-ZW5"; */
+"wsu-5T-ZW5.title" = "开始采集";

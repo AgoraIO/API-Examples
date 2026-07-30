@@ -1,9 +1,14 @@
+/* Element = "textField"; placeholder = "Please input data"; ObjectID = "DPe-Im-fsd"; */
+"DPe-Im-fsd.placeholder" = "请输入数据";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GGI-Cu-Sy1"; */
-"GGI-Cu-Sy1.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GGI-Cu-Sy1"; */
+"GGI-Cu-Sy1.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "yhH-81-equ"; */
-"yhH-81-equ.normalTitle" = "Join";
+/* Element = "button"; configuration.title = "Send"; ObjectID = "kTh-3L-D7c"; */
+"kTh-3L-D7c.configuration.title" = "发送";
 
-"kTh-3L-D7c" = "Send";
-"DPe-Im-fsd.placeholder" = "Please enter data";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "kTh-3L-D7c"; */
+"kTh-3L-D7c.normalTitle" = "截图";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "yhH-81-equ"; */
+"yhH-81-equ.normalTitle" = "加入频道";

@@ -1,49 +1,56 @@
+/* Element = "label"; text = "publish Track:"; ObjectID = "0lb-hX-kmd"; */
+"0lb-hX-kmd.text" = "推送音轨:";
 
-/* Class = "UILabel"; text = "00 : 00"; ObjectID = "4et-fL-YHJ"; */
+/* Element = "label"; text = "00 : 00"; ObjectID = "4et-fL-YHJ"; */
 "4et-fL-YHJ.text" = "00 : 00";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "Leb-Wc-wyE"; */
-"Leb-Wc-wyE.normalTitle" = "Publish";
+/* Element = "button"; configuration.title = "track"; ObjectID = "RyY-Fu-0JL"; */
+"RyY-Fu-0JL.configuration.title" = "音轨";
 
-/* Class = "UIButton"; normalTitle = "Open"; ObjectID = "bBH-Cp-zvD"; */
-"bBH-Cp-zvD.normalTitle" = "Open";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "RyY-Fu-0JL"; */
+"RyY-Fu-0JL.normalTitle" = "截图";
 
-/* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "gpl-j7-fNe"; */
-"gpl-j7-fNe.normalTitle" = "Pause";
+/* Element = "label"; text = "play Track:"; ObjectID = "aiy-MM-lxz"; */
+"aiy-MM-lxz.text" = "播放音轨:";
 
-/* Class = "UIButton"; normalTitle = "Unpublish"; ObjectID = "grZ-Qq-vYc"; */
-"grZ-Qq-vYc.normalTitle" = "Unpublish";
+/* Element = "button"; normalTitle = "Open"; ObjectID = "bBH-Cp-zvD"; */
+"bBH-Cp-zvD.normalTitle" = "打开";
 
-/* Class = "UITextField"; text = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4"; ObjectID = "jtM-0I-8yU"; */
-"jtM-0I-8yU.text" = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+/* Element = "button"; normalTitle = "Pause"; ObjectID = "gpl-j7-fNe"; */
+"gpl-j7-fNe.normalTitle" = "暂停";
 
-/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
-"jxp-ZN-2yG.title" = "Join Channel Audio";
+/* Element = "textField"; text = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4"; ObjectID = "jtM-0I-8yU"; */
+"jtM-0I-8yU.text" = "https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/resources/sample.mp4";
 
-/* Class = "UILabel"; text = "Publish Volume"; ObjectID = "kIh-KH-AhZ"; */
-"kIh-KH-AhZ.text" = "Publish Volume";
+/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "实时音频通话/直播";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join Channel";
+/* Element = "label"; text = "Publish Volume"; ObjectID = "kIh-KH-AhZ"; */
+"kIh-KH-AhZ.text" = "发流音量";
 
-/* Class = "UILabel"; text = "Playout Volume"; ObjectID = "nDn-o2-Vmd"; */
-"nDn-o2-Vmd.text" = "Playout Volume";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "uBn-Om-6Vs"; */
-"uBn-Om-6Vs.normalTitle" = "Stop";
+/* Element = "label"; text = "Playout Volume"; ObjectID = "nDn-o2-Vmd"; */
+"nDn-o2-Vmd.text" = "播放音量";
 
-/* Class = "UIButton"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
-"vdv-zd-3aD.normalTitle" = "Play";
+/* Element = "button"; normalTitle = "Stop"; ObjectID = "uBn-Om-6Vs"; */
+"uBn-Om-6Vs.normalTitle" = "停止";
 
-/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "vfb-Ay-x4e"; */
-"vfb-Ay-x4e.normalTitle" = "Publish";
+/* Element = "button"; configuration.title = "track"; ObjectID = "uFn-ej-UAH"; */
+"uFn-ej-UAH.configuration.title" = "音轨";
 
-"vm5-sM-0Lw.normalTitle" = "Unpublish";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "uFn-ej-UAH"; */
+"uFn-ej-UAH.normalTitle" = "截图";
 
-"aiy-MM-lxz.text" = "Play Track:";
-"uFn-ej-UAH.normalTitle" = "Track 1";
-"0lb-hX-kmd.text" = "Publish Track:";
-"RyY-Fu-0JL.normalTitle" = "Track 1";
+/* Element = "button"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
+"vdv-zd-3aD.normalTitle" = "播放";
+
+/* Element = "button"; normalTitle = "Publish"; ObjectID = "vfb-Ay-x4e"; */
+"vfb-Ay-x4e.normalTitle" = "发流";
+
+/* Element = "button"; normalTitle = "stopPublish"; ObjectID = "vm5-sM-0Lw"; */
+"vm5-sM-0Lw.normalTitle" = "停止发流";

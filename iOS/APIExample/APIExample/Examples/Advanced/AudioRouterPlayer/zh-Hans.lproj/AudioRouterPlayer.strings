@@ -1,25 +1,17 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "label"; text = "Loudspeaker"; ObjectID = "M22-MV-Wnj"; */
+"M22-MV-Wnj.text" = "扬声器";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
-"Iy0-Dq-h5x.title" = "Join Channel";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
-"VpM-9W-auG.normalTitle" = "Button";
+/* Element = "button"; configuration.title = "Chose Player Type(ThirdParty/avplayer)"; ObjectID = "nd3-pG-lkL"; */
+"nd3-pG-lkL.configuration.title" = "选择播放器类型（第三方/AVPlayer）";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join Channel";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "nd3-pG-lkL"; */
+"nd3-pG-lkL.normalTitle" = "截图";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
-"kf0-3f-UI5.normalTitle" = "Button";
-
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "Join Channel Video";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
-"wHl-zh-dFe.normalTitle" = "Button";
-
-"M22-MV-Wnj.text" = "Speaker";
-
-"nd3-pG-lkL.title" = "Player Type Options (ijkplayer/native)";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "视频实时通话";

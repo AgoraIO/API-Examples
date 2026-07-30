@@ -187,6 +187,8 @@
 		AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Simulcast.storyboard; path = Base.lproj/Simulcast.storyboard; sourceTree = "<group>"; };
 		AB84741C2DF9CD9300B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
 		AB84741E2DF9CD9B00B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
+		ABB90ACA2DF728F8007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Multipath.strings"; sourceTree = "<group>"; };
+		ABB90ACC2DF7293C007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Simulcast.strings"; sourceTree = "<group>"; };
 		B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
@@ -1395,6 +1397,7 @@
 			children = (
 				AB84740D2DF9CD7900B4DB73 /* Multipath.storyboard */,
 				AB84741C2DF9CD9300B4DB73 /* en */,
+				ABB90ACA2DF728F8007FDDEB /* zh-Hans */,
 			);
 			name = Multipath.storyboard;
 			sourceTree = "<group>";
@@ -1404,6 +1407,7 @@
 			children = (
 				AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */,
 				AB84741E2DF9CD9B00B4DB73 /* en */,
+				ABB90ACC2DF7293C007FDDEB /* zh-Hans */,
 			);
 			name = Simulcast.storyboard;
 			sourceTree = "<group>";

@@ -1,9 +1,8 @@
+/* Element = "label"; text = "Please obtain the pornographic identification results through the console webhook."; ObjectID = "9PU-6P-kJP"; */
+"9PU-6P-kJP.text" = "请通过控制台webhook获取鉴黄结果";
 
-/* Class = "UILabel"; text = "Use the camera point to picture and check content inspect effect"; ObjectID = "9PU-6P-kJP"; */
-"9PU-6P-kJP.text" = "Please get content moderation results through console webhook";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "Nsf-MZ-fEg"; */
+"Nsf-MZ-fEg.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "Nsf-MZ-fEg"; */
-"Nsf-MZ-fEg.normalTitle" = "Join";
-
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "PmB-t9-yOK"; */
-"PmB-t9-yOK.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "PmB-t9-yOK"; */
+"PmB-t9-yOK.placeholder" = "输入频道名";

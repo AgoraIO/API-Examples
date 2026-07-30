@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string-array name="encoder_type">
+        <item>自动选择</item>
+        <item>硬编</item>
+        <item>软编</item>
+    </string-array>
+
+    <string-array name="beauty_style_type">
+        <item>关闭</item>
+        <item>类型1</item>
+        <item>类型2</item>
+    </string-array>
+    <string-array name="beauty_style_color_2">
+        <item>关闭</item>
+        <item>黑色</item>
+        <item>棕色</item>
+    </string-array>
+    <string-array name="beauty_style_color_5">
+        <item>无</item>
+        <item>1号色</item>
+        <item>2号色</item>
+        <item>3号色</item>
+        <item>4号色</item>
+        <item>5号色</item>
+    </string-array>
+
+    <string-array name="makeup_area_type2">
+        <item>关闭</item>
+        <item>类型1</item>
+        <item>类型2</item>
+    </string-array>
+    <string-array name="makeup_area_type3">
+        <item>关闭</item>
+        <item>类型1</item>
+        <item>类型2</item>
+        <item>类型3</item>
+    </string-array>
+    <string-array name="makeup_area_type4">
+        <item>关闭</item>
+        <item>类型1</item>
+        <item>类型2</item>
+        <item>类型3</item>
+        <item>类型4</item>
+    </string-array>
+</resources>

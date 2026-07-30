@@ -1,0 +1,41 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "5e2-Co-Njw"; */
+"5e2-Co-Njw.placeholder" = "输入频道名称";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "6Gh-RS-A4a"; */
+"6Gh-RS-A4a.normalTitle" = "加入频道";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "broadcaster"; ObjectID = "Ndo-QX-Iu2"; */
+"Ndo-QX-Iu2.segmentTitles[0]" = "主播";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "audience"; ObjectID = "Ndo-QX-Iu2"; */
+"Ndo-QX-Iu2.segmentTitles[1]" = "观众";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "layer1"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[0]" = "layer1";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "layer2"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[1]" = "layer2";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "layer3"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[2]" = "layer3";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "layer4"; ObjectID = "U1z-4a-YlJ"; */
+"U1z-4a-YlJ.segmentTitles[3]" = "layer4";
+
+/* Element = "label"; text = "Layer1:720p30fps"; ObjectID = "UWR-35-F2N"; */
+"UWR-35-F2N.text" = "Layer1:720p30fps";
+
+/* Element = "label"; text = "Set Layers Config(Maxmum 3)"; ObjectID = "hpC-Ye-fr0"; */
+"hpC-Ye-fr0.text" = "配置多流(最多3个)";
+
+/* Element = "label"; text = "Role"; ObjectID = "jqT-oo-y5b"; */
+"jqT-oo-y5b.text" = "角色";
+
+/* Element = "label"; text = "Layer3:360p15fps"; ObjectID = "rVA-VO-4Uc"; */
+"rVA-VO-4Uc.text" = "Layer3:360p15fps";
+
+/* Element = "label"; text = "Layer4:270p15fps"; ObjectID = "sxa-4Z-Tbn"; */
+"sxa-4Z-Tbn.text" = "Layer4:270p15fps";
+
+/* Element = "label"; text = "Layer2:540p15fps"; ObjectID = "vWw-Mu-4r1"; */
+"vWw-Mu-4r1.text" = "Layer2:540p15fps";

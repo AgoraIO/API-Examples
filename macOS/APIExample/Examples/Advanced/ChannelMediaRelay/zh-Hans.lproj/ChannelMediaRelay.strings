@@ -1,21 +1,14 @@
+/* Element = "buttonCell"; title = "Pause Relay"; ObjectID = "1CI-ah-KbX"; */
+"1CI-ah-KbX.title" = "暂停转发";
 
-/* Class = "NSTextFieldCell"; placeholderString = "Relay Channnel Name"; ObjectID = "Ab2-sI-Ld3"; */
-"Ab2-sI-Ld3.placeholderString" = "Target Relay Channel Name";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "5CP-OV-fSv"; */
+"5CP-OV-fSv.title" = "加入频道";
 
-/* Class = "NSButtonCell"; title = "Stop Relay"; ObjectID = "Hvn-10-7hC"; */
-"Hvn-10-7hC.title" = "Stop Relay";
+/* Element = "viewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
+"IBJ-wZ-9Xx.title" = "加入多频道";
 
-/* Class = "NSViewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
-"IBJ-wZ-9Xx.title" = "Join Multiple Channels";
+/* Element = "buttonCell"; title = "Start Relay"; ObjectID = "NQw-hk-hUl"; */
+"NQw-hk-hUl.title" = "开始转发";
 
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "Xtr-fU-GZ5"; */
-"Xtr-fU-GZ5.title" = "Leave Channel";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Zjl-Vt-wOj"; */
-"Zjl-Vt-wOj.title" = "Join Channel";
-
-/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "p0a-zy-yqS"; */
-"p0a-zy-yqS.placeholderString" = "Enter Channel Name";
-
-/* Class = "NSButtonCell"; title = "Start Relay"; ObjectID = "u6j-cJ-1Pe"; */
-"u6j-cJ-1Pe.title" = "Start Relay";
+/* Element = "box"; title = "Box"; ObjectID = "YuQ-EP-LeE"; */
+"YuQ-EP-LeE.title" = "Box";

@@ -1,7 +1,5 @@
+/* Element = "box"; title = "Box"; ObjectID = "I4o-9l-2Vv"; */
+"I4o-9l-2Vv.title" = "Box";
 
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "mmH-hT-gAv"; */
-"I4o-9l-2Vv.title" = "Please add the correct channel at the end of the URL";
-
-"mmH-hT-gAv.title" = "Play";
-
-"RaA-AV-UE8.title" = "Please use another device as a host to start a live channel, and fill in the corresponding channel name in the input box above.";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "mmH-hT-gAv"; */
+"mmH-hT-gAv.title" = "请在url末尾添加正确的频道";

@@ -175,7 +175,8 @@
 		4C9306A02CB961150085EFF9 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		4C9306A12CB961150085EFF9 /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
 		4C9306A22CB961150085EFF9 /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
-		4C9306A32CB961150085EFF9 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		C0DE47012CB961150085EFF9 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C0DE47022CB961150085EFF9 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4C9306A42CB961150085EFF9 /* AR.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = AR.scnassets; sourceTree = "<group>"; };
 		4C9306A52CB961150085EFF9 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
 		4C9306A62CB961150085EFF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1014,6 +1015,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 4C9306802CB9607E0085EFF9;
 			productRefGroup = 4C93068A2CB9607E0085EFF9 /* Products */;
@@ -1261,6 +1263,18 @@
 			targetProxy = 4C9307E92CB963390085EFF9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4C9306A32CB961150085EFF9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C0DE47012CB961150085EFF9 /* en */,
+				C0DE47022CB961150085EFF9 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4C9306952CB9607F0085EFF9 /* Debug */ = {

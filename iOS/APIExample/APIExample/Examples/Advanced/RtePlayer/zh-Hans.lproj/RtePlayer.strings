@@ -1,11 +1,17 @@
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "button"; configuration.title = "Play"; ObjectID = "17J-Ix-Qot"; */
+"17J-Ix-Qot.configuration.title" = "播放";
 
-/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
-"Lzz-2R-G7f.text" = "Ultra Low Latency";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "17J-Ix-Qot"; */
+"17J-Ix-Qot.normalTitle" = "截图";
 
-"17J-Ix-Qot.normalTitle" = "Play";
-"tqt-S5-7Lt.normalTitle" = "Stop";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-"BMd-dm-te6.text" = "Please use another device as a host to start a live streaming channel, and enter the corresponding channel name in the input box above.";
+/* Element = "button"; configuration.title = "Stop"; ObjectID = "tqt-S5-7Lt"; */
+"tqt-S5-7Lt.configuration.title" = "停止";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "tqt-S5-7Lt"; */
+"tqt-S5-7Lt.normalTitle" = "截图";

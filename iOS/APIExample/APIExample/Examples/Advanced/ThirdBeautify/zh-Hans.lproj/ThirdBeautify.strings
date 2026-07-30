@@ -1,9 +1,8 @@
+/* Element = "button"; configuration.title = "join"; ObjectID = "5sl-Dr-7g0"; */
+"5sl-Dr-7g0.configuration.title" = "加入频道";
 
-/* Class = "UIButton"; configuration.title = "join"; ObjectID = "5sl-Dr-7g0"; */
-"5sl-Dr-7g0.configuration.title" = "join";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "5sl-Dr-7g0"; */
+"5sl-Dr-7g0.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "5sl-Dr-7g0"; */
-"5sl-Dr-7g0.normalTitle" = "Join Channel";
-
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "iNv-W6-5tF"; */
-"iNv-W6-5tF.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "iNv-W6-5tF"; */
+"iNv-W6-5tF.placeholder" = "输入频道名";

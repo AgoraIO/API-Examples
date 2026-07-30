@@ -1,15 +1,14 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "请输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "label"; text = "Volume"; ObjectID = "OWd-ri-4Z3"; */
+"OWd-ri-4Z3.text" = "音量";
 
-/* Class = "UILabel"; text = "Volume"; ObjectID = "OWd-ri-4Z3"; */
-"OWd-ri-4Z3.text" = "Volume";
+/* Element = "label"; text = "Grey Filter"; ObjectID = "Rng-Da-M39"; */
+"Rng-Da-M39.text" = "灰色滤镜";
 
-/* Class = "UIViewController"; title = "Simple Audio Filter"; ObjectID = "jxp-ZN-2yG"; */
-"jxp-ZN-2yG.title" = "Audio Plugin";
+/* Element = "viewController"; title = "Simple Filter"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "虚拟节拍器";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
-
-/* Class = "UILabel"; text = "Grey Filter"; ObjectID = "Rng-Da-M39"; */
-"Rng-Da-M39.text" = "Grey Filter";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

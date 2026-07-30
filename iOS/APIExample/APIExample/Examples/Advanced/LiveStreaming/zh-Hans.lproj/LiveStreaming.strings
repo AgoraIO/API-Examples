@@ -1,27 +1,86 @@
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "label"; text = "CenterStage"; ObjectID = "7gz-OE-0O4"; */
+"7gz-OE-0O4.text" = "人物居中";
 
-/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
-"Lzz-2R-G7f.text" = "Ultra Low Latency";
+/* Element = "label"; text = "video image"; ObjectID = "8kn-Rl-VMd"; */
+"8kn-Rl-VMd.text" = "视频画面";
 
-/* Class = "UILabel"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
-"XcJ-am-UAb.text" = "Co-host";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
-"w4q-aT-JBc.normalTitle" = "Local Snapshot";
-"lpn-6Z-VV3.normalTitle" = "Remote Snapshot";
+/* Element = "label"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
+"Lzz-2R-G7f.text" = "极速直播";
 
-"ohV-am-Acd.text" = "First Frame";
+/* Element = "button"; configuration.title = "default color"; ObjectID = "Q0N-nV-bez"; */
+"Q0N-nV-bez.configuration.title" = "默认颜色";
 
-"Q0N-nV-bez.normalTitle" = "Default Background";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
+"Q0N-nV-bez.normalTitle" = "截图";
 
-"S19-UR-C2c.normalTitle" = "Preload";
-"8kn-Rl-VMd.text" = "Placeholder Stream";
-"dZm-Rf-imt.normalTitle" = "Camera Focus";
-"ug1-fz-GYz.normalTitle" = "Camera Focus";
+/* Element = "button"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.configuration.title" = "预加载";
 
-"ZB2-jf-zOV.normalTitle" = "Video Business Scenario";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.normalTitle" = "截图";
 
-"tOf-AP-HSe.placeholder" = "Local render frame rate (1-60), default 15";
-"UFF-wU-Wze.placeholder" = "Remote render frame rate (1-60), default 15";
+/* Element = "textField"; placeholder = "Remote render rate (1-60), default 15"; ObjectID = "UFF-wU-Wze"; */
+"UFF-wU-Wze.placeholder" = "远端渲染帧率（1-60，默认 15）";
+
+/* Element = "label"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
+"XcJ-am-UAb.text" = "连麦";
+
+/* Element = "button"; configuration.title = "Video Scenario"; ObjectID = "ZB2-jf-zOV"; */
+"ZB2-jf-zOV.configuration.title" = "视频场景";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "ZB2-jf-zOV"; */
+"ZB2-jf-zOV.normalTitle" = "截图";
+
+/* Element = "label"; text = "Large and small flow"; ObjectID = "auZ-cF-RlC"; */
+"auZ-cF-RlC.text" = "大小流";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "auto"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[0]" = "自动";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "soft"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[1]" = "软编";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "hard"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[2]" = "硬编";
+
+/* Element = "label"; text = "(Default: Mainstream)"; ObjectID = "fim-uQ-jK3"; */
+"fim-uQ-jK3.text" = "（默认：大流）";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Element = "button"; configuration.title = "Remote screenshot"; ObjectID = "lpn-6Z-VV3"; */
+"lpn-6Z-VV3.configuration.title" = "远端截图";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "lpn-6Z-VV3"; */
+"lpn-6Z-VV3.normalTitle" = "截图";
+
+/* Element = "label"; text = "B frame"; ObjectID = "m3M-Tw-nzd"; */
+"m3M-Tw-nzd.text" = "B 帧";
+
+/* Element = "label"; text = "watermark"; ObjectID = "nSq-Vu-o9H"; */
+"nSq-Vu-o9H.text" = "水印";
+
+/* Element = "label"; text = "First Frame Optimization"; ObjectID = "ohV-am-Acd"; */
+"ohV-am-Acd.text" = "首帧出图";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "pha-4w-IfR"; */
+"pha-4w-IfR.normalTitle" = "截图";
+
+/* Element = "textField"; placeholder = "Local render rate (1-60), default 15"; ObjectID = "tOf-AP-HSe"; */
+"tOf-AP-HSe.placeholder" = "本地渲染帧率（1-60，默认 15）";
+
+/* Element = "button"; configuration.title = "CameraFocal"; ObjectID = "ug1-fz-GYz"; */
+"ug1-fz-GYz.configuration.title" = "相机对焦";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "ug1-fz-GYz"; */
+"ug1-fz-GYz.normalTitle" = "截图";
+
+/* Element = "button"; configuration.title = "Local screenshot"; ObjectID = "w4q-aT-JBc"; */
+"w4q-aT-JBc.configuration.title" = "本地截图";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
+"w4q-aT-JBc.normalTitle" = "截图";
