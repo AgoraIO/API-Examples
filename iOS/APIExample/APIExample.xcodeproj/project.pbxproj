@@ -193,7 +193,6 @@
 		F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */; };
 		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
 		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
-		F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = F728B9DF2CA29625007813BB /* PictureInPicture.strings */; };
 		F734791C2DF5C9CD0030C0CE /* beauty_material.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */; };
 		F734791E2DF5CA0D0030C0CE /* AgoraBeauty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */; };
 		F73479242DF5CA820030C0CE /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */; };
@@ -370,7 +369,8 @@
 		67B8C7B728057D1500195106 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawVideoData.storyboard; sourceTree = "<group>"; };
 		67B8C7BA28057D1800195106 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawVideoData.strings"; sourceTree = "<group>"; };
 		67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
-		67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
+		F7CB2F0B27EB318200CB19D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SpatialAudio.storyboard; sourceTree = "<group>"; };
+		F7CB2F0C27EB318200CB19D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SpatialAudio.strings"; sourceTree = "<group>"; };
 		6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -434,7 +434,8 @@
 		DDCED0302CBAA093004B1C9D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RtePlayer.strings"; sourceTree = "<group>"; };
 		DDCED0322CBAA093004B1C9D /* RtePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtePlayer.swift; sourceTree = "<group>"; };
 		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
-		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TransparentRender.storyboard; sourceTree = "<group>"; };
+		F7FD50272C205CF40050B344 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TransparentRender.storyboard; sourceTree = "<group>"; };
+		F7FD50282C205CF40050B344 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TransparentRender.strings"; sourceTree = "<group>"; };
 		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
 		E7163F7D2964149800EBBD55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ARKit.strings"; sourceTree = "<group>"; };
 		E7163F7E2964149800EBBD55 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
@@ -483,7 +484,8 @@
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
-		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
+		F7A49CB02900FC6400F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
+		F7A49CB12900FC6400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KtvCopyrightMusic.strings"; sourceTree = "<group>"; };
 		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
 		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
 		E7A49CB729011E7500F06DD4 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
@@ -509,7 +511,6 @@
 		F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
 		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
 		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
-		F728B9DF2CA29625007813BB /* PictureInPicture.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = PictureInPicture.strings; sourceTree = "<group>"; };
 		F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = beauty_material.bundle; sourceTree = "<group>"; };
 		F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeauty.swift; sourceTree = "<group>"; };
 		F73479202DF5CA140030C0CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AgoraBeauty.strings"; sourceTree = "<group>"; };
@@ -1189,7 +1190,6 @@
 				F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */,
 				F728B9D62CA295D7007813BB /* PixelBufferPIPViewController */,
 				E728B84428B5FFCB00674A4A /* PictureInPicture.swift */,
-				F728B9DF2CA29625007813BB /* PictureInPicture.strings */,
 			);
 			path = PictureInPicture;
 			sourceTree = "<group>";
@@ -1516,7 +1516,6 @@
 				5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */,
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
-				F728B9E02CA29625007813BB /* PictureInPicture.strings in Resources */,
 				E726BFFC2A949F70006870E2 /* AudioRouterPlayer.storyboard in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */,
@@ -1833,6 +1832,33 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7CB2F0B27EB318200CB19D2 /* Base */,
+				F7CB2F0C27EB318200CB19D2 /* zh-Hans */,
+			);
+			name = SpatialAudio.storyboard;
+			sourceTree = "<group>";
+		};
+		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7FD50272C205CF40050B344 /* Base */,
+				F7FD50282C205CF40050B344 /* zh-Hans */,
+			);
+			name = TransparentRender.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7A49CB02900FC6400F06DD4 /* Base */,
+				F7A49CB12900FC6400F06DD4 /* zh-Hans */,
+			);
+			name = KtvCopyrightMusic.storyboard;
+			sourceTree = "<group>";
+		};
 		033A9F25252D70E400BC26E1 /* JoinChannelVideo.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

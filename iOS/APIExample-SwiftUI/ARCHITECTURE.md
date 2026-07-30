@@ -111,7 +111,7 @@ APIExample-SwiftUI/
     │       ├── Simulcast/                   # "Simulcast"
     │       └── Multipath/                   # "Multipath"
     │
-    ├── Resources/                           # Audio/video sample files
+    ├── Resources/                           # Audio/video sample files and en/zh-Hans localizations
     ├── Assets.xcassets/
     └── Preview Content/
 ```
