@@ -6,11 +6,20 @@
 
 #include "media_metadata.h"
 #include <cassert>
+#include <string>
 
 MediaMetadata::MediaMetadata(uintptr_t rtcEngineHandler)
-    : rtcEngine_(reinterpret_cast<agora::rtc::IRtcEngine *>(rtcEngineHandler)), env_(nullptr), wrapper_(nullptr) {}
+    : rtcEngine_(reinterpret_cast<agora::rtc::IRtcEngine *>(rtcEngineHandler)), env_(nullptr), wrapper_(nullptr),
+      metadataCallback_(nullptr) {}
 
-MediaMetadata::~MediaMetadata() { napi_delete_reference(env_, wrapper_); }
+MediaMetadata::~MediaMetadata() {
+    ReleaseMetadataCallback();
+    delete[] pendingData_;
+    pendingData_ = nullptr;
+    if (env_ != nullptr && wrapper_ != nullptr) {
+        napi_delete_reference(env_, wrapper_);
+    }
+}
 
 bool MediaMetadata::onReadyToSendMetadata(Metadata &metadata, agora::rtc::VIDEO_SOURCE_TYPE source_type) {
     if(pendingData_){
@@ -26,7 +35,51 @@ bool MediaMetadata::onReadyToSendMetadata(Metadata &metadata, agora::rtc::VIDEO_
 }
 
 void MediaMetadata::onMetadataReceived(const Metadata &metadata) {
-    AG_INFO("MediaMetadata::onMetadataReceived -- data=%{public}s", metadata.buffer);
+    if (metadata.buffer == nullptr || metadata.size <= 0) {
+        AG_ERROR("MediaMetadata::onMetadataReceived -- invalid metadata");
+        return;
+    }
+
+    auto *message = new std::string(reinterpret_cast<const char *>(metadata.buffer), metadata.size);
+    AG_INFO("MediaMetadata::onMetadataReceived -- data=%{public}s, size=%{public}d", message->c_str(), metadata.size);
+    napi_status status = napi_closing;
+    {
+        std::lock_guard<std::mutex> lock(callbackMutex_);
+        if (metadataCallback_ != nullptr) {
+            status = napi_call_threadsafe_function(metadataCallback_, message, napi_tsfn_nonblocking);
+        }
+    }
+    if (status != napi_ok) {
+        delete message;
+    }
+}
+
+void MediaMetadata::CallMetadataCallback(napi_env env, napi_value callback,
+                                         [[maybe_unused]] void *context, void *data) {
+    auto *message = static_cast<std::string *>(data);
+    if (message == nullptr) {
+        return;
+    }
+    if (env == nullptr || callback == nullptr) {
+        delete message;
+        return;
+    }
+
+    napi_value value;
+    if (napi_create_string_utf8(env, message->data(), message->size(), &value) == napi_ok) {
+        napi_value undefined;
+        napi_get_undefined(env, &undefined);
+        napi_call_function(env, undefined, callback, 1, &value, nullptr);
+    }
+    delete message;
+}
+
+void MediaMetadata::ReleaseMetadataCallback() {
+    std::lock_guard<std::mutex> lock(callbackMutex_);
+    if (metadataCallback_ != nullptr) {
+        napi_release_threadsafe_function(metadataCallback_, napi_tsfn_abort);
+        metadataCallback_ = nullptr;
+    }
 }
 
 void MediaMetadata::Destructor(napi_env env, void *nativeObject, [[maybe_unused]] void *finalize_hint) {
@@ -95,8 +148,8 @@ napi_value MediaMetadata::New(napi_env env, napi_callback_info info) {
 napi_value MediaMetadata::Enable(napi_env env, napi_callback_info info) {
     AG_INFO("MediaMetadata::Enable called");
 
-    size_t argc = 1;
-    napi_value args[1];
+    size_t argc = 2;
+    napi_value args[2];
     napi_value jsThis;
     napi_get_cb_info(env, info, &argc, args, &jsThis, nullptr);
     bool enable;
@@ -109,9 +162,39 @@ napi_value MediaMetadata::Enable(napi_env env, napi_callback_info info) {
     int ret = -1;
 
     if (enable) {
-        ret = obj->rtcEngine_->registerMediaMetadataObserver(obj, IMetadataObserver::METADATA_TYPE::VIDEO_METADATA);
+        obj->ReleaseMetadataCallback();
+        if (argc >= 2) {
+            napi_valuetype callbackType = napi_undefined;
+            if (napi_typeof(env, args[1], &callbackType) != napi_ok || callbackType != napi_function) {
+                ret = -2;
+            } else {
+                napi_value resourceName;
+                napi_create_string_utf8(env, "MediaMetadataReceived", NAPI_AUTO_LENGTH, &resourceName);
+                napi_threadsafe_function callback = nullptr;
+                napi_status status = napi_create_threadsafe_function(
+                    env, args[1], nullptr, resourceName, 0, 1, nullptr, nullptr, nullptr,
+                    CallMetadataCallback, &callback);
+                if (status == napi_ok) {
+                    {
+                        std::lock_guard<std::mutex> lock(obj->callbackMutex_);
+                        obj->metadataCallback_ = callback;
+                    }
+                    ret = obj->rtcEngine_->registerMediaMetadataObserver(
+                        obj, IMetadataObserver::METADATA_TYPE::VIDEO_METADATA);
+                    if (ret != 0) {
+                        obj->ReleaseMetadataCallback();
+                    }
+                } else {
+                    ret = -3;
+                }
+            }
+        } else {
+            ret = obj->rtcEngine_->registerMediaMetadataObserver(
+                obj, IMetadataObserver::METADATA_TYPE::VIDEO_METADATA);
+        }
     } else {
         ret = obj->rtcEngine_->unregisterMediaMetadataObserver(obj, IMetadataObserver::METADATA_TYPE::VIDEO_METADATA);
+        obj->ReleaseMetadataCallback();
     }
 
     napi_value num;

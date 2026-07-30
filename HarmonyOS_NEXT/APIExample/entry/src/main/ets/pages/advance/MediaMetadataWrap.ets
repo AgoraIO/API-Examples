@@ -72,10 +72,19 @@ struct MediaMetadataWrap {
     this.rtcEngine.enableVideo()
 
     this.native = new MediaMetadata(this.rtcEngine.getNativeHandle());
-    this.native.enable(true)
+    const result: number = this.native.enable(true, (data: string) => {
+      Logger.info(TAG, `onMetadataReceived: ${data}`)
+      ShowToast.longToast(`Metadata received: ${data}`)
+    })
+    Logger.info(TAG, `enable media metadata result: ${result}`)
+    if (result != Constants.ErrorCode.ERR_OK) {
+      ShowToast.longToast(`enable media metadata failed: ${result}`)
+    }
   }
 
   aboutToDisappear(): void {
+    this.native?.enable(false)
+    this.native = undefined
     if (this.rtcEngine != undefined) {
       if (this.isJoin) {
         this.rtcEngine.stopPreview();

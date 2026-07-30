@@ -24,6 +24,6 @@ export interface SnapshotFrame {
 
 export class MediaMetadata {
   constructor(arg: bigint);
-  enable: (enable:boolean) => number;
+  enable: (enable:boolean, onMetadataReceived?: (data: string) => void) => number;
   send: (data: string) => number;
 }
