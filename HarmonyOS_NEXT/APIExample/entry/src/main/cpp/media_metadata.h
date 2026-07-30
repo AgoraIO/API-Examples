@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "napi/native_api.h"
 #include "IAgoraRtcEngine.h"
+#include <mutex>
 
 static thread_local napi_ref g_media_metadata_ref = nullptr;
 
@@ -27,6 +28,8 @@ private:
     static napi_value New(napi_env env, napi_callback_info info);
     static napi_value Enable(napi_env env, napi_callback_info info);
     static napi_value Send(napi_env env, napi_callback_info info);
+    static void CallMetadataCallback(napi_env env, napi_value callback, void *context, void *data);
+    void ReleaseMetadataCallback();
 
     // IMetadataObserver
     int getMaxMetadataSize() override { return DEFAULT_METADATA_SIZE_IN_BYTE; }
@@ -38,5 +41,7 @@ private:
     napi_ref wrapper_;
     unsigned char* pendingData_ = nullptr;
     int pendingDataSize_ = 0;
+    std::mutex callbackMutex_;
+    napi_threadsafe_function metadataCallback_;
 };
 #endif // APIEXAMPLE_MEDIA_METADATA_H

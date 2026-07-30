@@ -69,6 +69,18 @@
       "value": "Screenshot"
     },
     {
+      "name": "screenshot_saved",
+      "value": "Screenshot saved. You can view it in Photos."
+    },
+    {
+      "name": "screenshot_save_failed",
+      "value": "Failed to save screenshot."
+    },
+    {
+      "name": "screenshot_permission_denied",
+      "value": "Unable to get permission to save the screenshot."
+    },
+    {
       "name": "ex_channel_name",
       "value": "ExChannelName"
     },
@@ -395,10 +407,6 @@
     {
       "name": "fallback_audio_only",
       "value": "Audio Only"
-    },
-    {
-      "name": "remote_user_high_priority",
-      "value": "Remote User High Priority"
     },
     {
       "name": "video_image_source",

@@ -69,6 +69,18 @@
       "value": "截图"
     },
     {
+      "name": "screenshot_saved",
+      "value": "截图已保存，可在相册中查看"
+    },
+    {
+      "name": "screenshot_save_failed",
+      "value": "截图保存失败"
+    },
+    {
+      "name": "screenshot_permission_denied",
+      "value": "无法获取截图保存授权"
+    },
+    {
       "name": "ex_channel_name",
       "value": "Ex频道名"
     },
@@ -397,12 +409,8 @@
       "value": "降级到纯音频"
     },
     {
-      "name": "remote_user_high_priority",
-      "value": "远端用户高优先级"
-    },
-    {
       "name": "video_image_source",
-      "value": "图片视频轨"
+      "value": "垫片推流"
     },
     {
       "name": "get_ntp_time",
