@@ -25,7 +25,8 @@ macOS/
 │   │           └── SKILL.md          # Per-example agent guide (present or forthcoming)
 │   ├── Common/              # Shared utilities (KeyCenter, GlobalSettings, LogUtils, Util)
 │   ├── Resources/
-│   ├── Base.lproj/          # Storyboard and localization
+│   ├── Base.lproj/          # Base storyboards
+│   ├── zh-Hans.lproj/       # Simplified Chinese project localization
 │   ├── AppDelegate.swift
 │   └── ViewController.swift # Main window controller
 ├── SimpleFilter/            # Specialized filter example

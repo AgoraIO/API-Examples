@@ -1,18 +1,20 @@
+/* Element = "button"; configuration.title = "Publish"; ObjectID = "EYp-Uv-8h9"; */
+"EYp-Uv-8h9.configuration.title" = "发布";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "EYp-Uv-8h9"; */
-"EYp-Uv-8h9.normalTitle" = "Push Stream";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "EYp-Uv-8h9"; */
+"EYp-Uv-8h9.normalTitle" = "推流";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UILabel"; text = "Transcoding"; ObjectID = "mdz-Cd-XO9"; */
-"mdz-Cd-XO9.text" = "Transcoding";
+/* Element = "label"; text = "Transcoding"; ObjectID = "mdz-Cd-XO9"; */
+"mdz-Cd-XO9.text" = "转码";
 
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "Join Channel Video";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "视频实时通话";
 
-/* Class = "UITextField"; text = "rtmp://push.webdemo.agoraio.cn/lbhd/test"; ObjectID = "yNO-I8-w8H"; */
+/* Element = "textField"; text = "rtmp://push.webdemo.agoraio.cn/lbhd/test"; ObjectID = "yNO-I8-w8H"; */
 "yNO-I8-w8H.text" = "rtmp://push.webdemo.agoraio.cn/lbhd/test";

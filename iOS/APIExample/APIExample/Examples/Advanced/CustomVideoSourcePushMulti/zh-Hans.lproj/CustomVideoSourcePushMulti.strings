@@ -1,16 +1,29 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "button"; configuration.title = "Create VideoTrack"; ObjectID = "Her-yf-kmE"; */
+"Her-yf-kmE.configuration.title" = "创建采集Track";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "a4k-1t-KLv"; */
-"a4k-1t-KLv.title" = "Join Channel";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "Her-yf-kmE"; */
+"Her-yf-kmE.normalTitle" = "截图";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
+/* Element = "navigationItem"; title = "Join Channel"; ObjectID = "a4k-1t-KLv"; */
+"a4k-1t-KLv.title" = "加入频道";
 
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "pjq-Wh-4Ys"; */
-"pjq-Wh-4Ys.title" = "Join Channel Video";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-"xi9-eb-Hiz.normalTitle" = "Destroy Track";
-"zBJ-mw-TwL.normalTitle" = "Create Capture Track (Encoded)";
-"Her-yf-kmE.normalTitle" = "Create Capture Track";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "pjq-Wh-4Ys"; */
+"pjq-Wh-4Ys.title" = "视频实时通话";
+
+/* Element = "button"; configuration.title = "Destory Track"; ObjectID = "xi9-eb-Hiz"; */
+"xi9-eb-Hiz.configuration.title" = "销毁Track";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "xi9-eb-Hiz"; */
+"xi9-eb-Hiz.normalTitle" = "截图";
+
+/* Element = "button"; configuration.title = "Create Video Track(Encode)"; ObjectID = "zBJ-mw-TwL"; */
+"zBJ-mw-TwL.configuration.title" = "创建采集Track(编码)";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "zBJ-mw-TwL"; */
+"zBJ-mw-TwL.normalTitle" = "截图";

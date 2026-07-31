@@ -1,12 +1,56 @@
+/* Element = "label"; text = "captureAudio"; ObjectID = "EeY-25-Tss"; */
+"EeY-25-Tss.text" = "采集音频";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; text = "ScreenShare"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.text" = "ScreenShare";
+/* Element = "textField"; text = "ScreenShare"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.text" = "屏幕共享";
 
-/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
-"jxp-ZN-2yG.title" = "Join Channel Audio";
+/* Element = "label"; text = "captureVideo"; ObjectID = "Hr8-te-ztM"; */
+"Hr8-te-ztM.text" = "采集视频";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
+/* Element = "button"; configuration.title = "stopScreen"; ObjectID = "Ite-nb-Fye"; */
+"Ite-nb-Fye.configuration.title" = "停止屏幕共享";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "Ite-nb-Fye"; */
+"Ite-nb-Fye.normalTitle" = "截图";
+
+/* Element = "button"; configuration.title = "startScreen"; ObjectID = "QUG-ji-HaF"; */
+"QUG-ji-HaF.configuration.title" = "开始屏幕共享";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "QUG-ji-HaF"; */
+"QUG-ji-HaF.normalTitle" = "截图";
+
+/* Element = "label"; text = "captureSignalVolume"; ObjectID = "d7R-BO-VFF"; */
+"d7R-BO-VFF.text" = "采集信号音量";
+
+/* Element = "button"; configuration.title = "15fps"; ObjectID = "doI-u6-5jw"; */
+"doI-u6-5jw.configuration.title" = "15fps";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "doI-u6-5jw"; */
+"doI-u6-5jw.normalTitle" = "截图";
+
+/* Element = "button"; configuration.title = "video"; ObjectID = "gVR-0u-aAP"; */
+"gVR-0u-aAP.configuration.title" = "视频";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "gVR-0u-aAP"; */
+"gVR-0u-aAP.normalTitle" = "截图";
+
+/* Element = "label"; text = "ScreenScenarioType"; ObjectID = "igD-m4-EKM"; */
+"igD-m4-EKM.text" = "屏幕共享场景";
+
+/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "实时音频通话/直播";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Element = "button"; configuration.title = "updateScreen"; ObjectID = "o17-gA-vcA"; */
+"o17-gA-vcA.configuration.title" = "更新屏幕共享";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "o17-gA-vcA"; */
+"o17-gA-vcA.normalTitle" = "截图";
+
+/* Element = "label"; text = "captureFrameRate"; ObjectID = "yy3-y8-YOa"; */
+"yy3-y8-YOa.text" = "采集帧率";

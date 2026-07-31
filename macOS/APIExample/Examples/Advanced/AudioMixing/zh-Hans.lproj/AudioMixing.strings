@@ -1,78 +1,56 @@
+/* Element = "buttonCell"; title = "Resume"; ObjectID = "8GX-mr-P4n"; */
+"8GX-mr-P4n.title" = "恢复播放";
 
-/* Class = "NSButtonCell"; title = "Resume"; ObjectID = "8GX-mr-P4n"; */
-"8GX-mr-P4n.title" = "Resume";
-
-/* Class = "NSTextFieldCell"; title = "00 : 00"; ObjectID = "8Kf-Su-NKI"; */
+/* Element = "textFieldCell"; title = "00 : 00"; ObjectID = "8Kf-Su-NKI"; */
 "8Kf-Su-NKI.title" = "00 : 00";
 
-/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "8bV-OK-zbc"; */
-"8bV-OK-zbc.title" = "1V15";
+/* Element = "textFieldCell"; title = "Loop Back Recording"; ObjectID = "8qO-PU-Fev"; */
+"8qO-PU-Fev.title" = "系统音频混音";
 
-/* Class = "NSTextFieldCell"; title = "Audio Effect Controls"; ObjectID = "EBL-gG-Ubf"; */
-"EBL-gG-Ubf.title" = "Audio Effect Controls";
+/* Element = "textFieldCell"; title = "Audio Effect Controls"; ObjectID = "EBL-gG-Ubf"; */
+"EBL-gG-Ubf.title" = "音效控制";
 
-/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "EhX-UJ-wov"; */
-"EhX-UJ-wov.placeholderString" = "Enter Channel Name";
+/* Element = "buttonCell"; title = "Play"; ObjectID = "IUe-EM-mfG"; */
+"IUe-EM-mfG.title" = "播放";
 
-/* Class = "NSButtonCell"; title = "Play"; ObjectID = "IUe-EM-mfG"; */
-"IUe-EM-mfG.title" = "Play";
+/* Element = "buttonCell"; title = "Pause"; ObjectID = "LgF-bS-HZ9"; */
+"LgF-bS-HZ9.title" = "暂停";
 
-/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "J6a-ul-c2H"; */
-"J6a-ul-c2H.title" = "1V3";
+/* Element = "buttonCell"; title = "disable"; ObjectID = "OcI-Tl-32x"; */
+"OcI-Tl-32x.title" = "关闭";
 
-/* Class = "NSButtonCell"; title = "Pause"; ObjectID = "LgF-bS-HZ9"; */
-"LgF-bS-HZ9.title" = "Pause";
+/* Element = "buttonCell"; title = "Stop"; ObjectID = "PAO-8S-8lX"; */
+"PAO-8S-8lX.title" = "停止";
 
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "P4E-oB-5Di"; */
-"P4E-oB-5Di.title" = "Join Channel";
+/* Element = "box"; title = "Box"; ObjectID = "PxV-Ne-Xed"; */
+"PxV-Ne-Xed.title" = "Box";
 
-/* Class = "NSButtonCell"; title = "Stop"; ObjectID = "PAO-8S-8lX"; */
-"PAO-8S-8lX.title" = "Stop";
+/* Element = "buttonCell"; title = "Resume"; ObjectID = "R5O-SE-8mk"; */
+"R5O-SE-8mk.title" = "恢复播放";
 
-/* Class = "NSButtonCell"; title = "Resume"; ObjectID = "R5O-SE-8mk"; */
-"R5O-SE-8mk.title" = "Resume";
+/* Element = "buttonCell"; title = "enable"; ObjectID = "SNu-S9-xaT"; */
+"SNu-S9-xaT.title" = "开启";
 
-/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "ch0-OR-L16"; */
-"ch0-OR-L16.title" = "1V1";
+/* Element = "buttonCell"; title = "Play Additional Effect"; ObjectID = "cuY-mv-20C"; */
+"cuY-mv-20C.title" = "播放附加音效";
 
-/* Class = "NSButtonCell"; title = "Stop"; ObjectID = "eUh-bN-yCK"; */
-"eUh-bN-yCK.title" = "Stop";
+/* Element = "buttonCell"; title = "Stop"; ObjectID = "eUh-bN-yCK"; */
+"eUh-bN-yCK.title" = "停止";
 
-/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "gWk-wf-hPu"; */
-"gWk-wf-hPu.title" = "1V8";
+/* Element = "buttonCell"; title = "Stop Additional Effect"; ObjectID = "iQT-DV-ynF"; */
+"iQT-DV-ynF.title" = "停止附加音效";
 
-/* Class = "NSTextFieldCell"; title = "Mixing Volume"; ObjectID = "hQ4-2Z-Twn"; */
-"hQ4-2Z-Twn.title" = "Mixing Volume";
+/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "实时音频通话/直播";
 
-/* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
-"jAv-ZA-ecf.title" = "Join Channel Audio";
+/* Element = "buttonCell"; title = "Pause"; ObjectID = "mcr-Pl-O4W"; */
+"mcr-Pl-O4W.title" = "暂停";
 
-/* Class = "NSTextFieldCell"; title = "Effect Volume"; ObjectID = "kh5-ZD-Sm3"; */
-"kh5-ZD-Sm3.title" = "Effect Volume";
+/* Element = "buttonCell"; title = "Start"; ObjectID = "pNA-hI-TUH"; */
+"pNA-hI-TUH.title" = "开始混音";
 
-/* Class = "NSTextFieldCell"; title = "Mixing Playback Volume"; ObjectID = "m1U-uA-7L4"; */
-"m1U-uA-7L4.title" = "Mixing Playback Volume";
+/* Element = "textFieldCell"; title = "Audio Mixing Controls"; ObjectID = "sLt-IU-VEu"; */
+"sLt-IU-VEu.title" = "混音控制";
 
-/* Class = "NSButtonCell"; title = "Pause"; ObjectID = "mcr-Pl-O4W"; */
-"mcr-Pl-O4W.title" = "Pause";
-
-/* Class = "NSTextFieldCell"; title = "Mixing Publish Volume"; ObjectID = "pHa-mK-6Ko"; */
-"pHa-mK-6Ko.title" = "Mixing Publish Volume";
-
-/* Class = "NSButtonCell"; title = "Start"; ObjectID = "pNA-hI-TUH"; */
-"pNA-hI-TUH.title" = "Start Mixing";
-
-/* Class = "NSTextFieldCell"; title = "Audio Mixing Controls"; ObjectID = "sLt-IU-VEu"; */
-"sLt-IU-VEu.title" = "Audio Mixing Controls";
-
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
-"szu-uz-G6W.title" = "Leave Channel";
-
-/* Class = "NSTextFieldCell"; title = "Loop Back Recording"; ObjectID = "8qO-PU-Fev"; */
-"8qO-PU-Fev.title" = "System Audio Mixing";
-
-/* Class = "NSButtonCell"; title = "enable"; ObjectID = "SNu-S9-xaT"; */
-"SNu-S9-xaT.title" = "Enable";
-
-/* Class = "NSButtonCell"; title = "disable"; ObjectID = "OcI-Tl-32x"; */
-"OcI-Tl-32x.title" = "Disable";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "tOH-0i-cWb"; */
+"tOH-0i-cWb.title" = "加入频道";

@@ -19,8 +19,8 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ce-FF-K4n">
                                 <rect key="frame" x="130.5" y="432.5" width="153" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Ktv copyright music"/>
+                                <state key="normal" title="KTV Copyright Music"/>
+                                <buttonConfiguration key="configuration" style="filled" title="KTV Copyright Music"/>
                                 <connections>
                                     <action selector="onTapKtvCopyrightButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="21C-cd-bOP"/>
                                 </connections>

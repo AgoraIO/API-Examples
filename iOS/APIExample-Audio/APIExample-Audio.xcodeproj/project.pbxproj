@@ -44,7 +44,6 @@
 		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709B23A2806B0EA000BCC58 /* RawAudioData.swift */; };
 		6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6709B23E2806BB4A000BCC58 /* RawAudioData.storyboard */; };
-		671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */; };
 		671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */; };
 		671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */; };
 		67B8C7B52805757200195106 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C7B42805757200195106 /* MediaUtils.m */; };
@@ -59,7 +58,6 @@
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		DD8A1F812CA54F90001CEC51 /* AgoraPCMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F802CA54F90001CEC51 /* AgoraPCMPlayer.swift */; };
-		E70EE9E728F6A6FF00EE9E7F /* JoinChannelAudioToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E228F6A6FF00EE9E7F /* JoinChannelAudioToken.strings */; };
 		E70EE9E828F6A6FF00EE9E7F /* JoinChannelAudioToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */; };
 		E70EE9E928F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */; };
 		E72055EC28F94C400030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055EB28F94C400030E6D1 /* Util.swift */; };
@@ -68,7 +66,6 @@
 		E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877C928A2611C00CA2F58 /* ToastView.swift */; };
 		E748789E28ADE03400CA2F58 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E748789C28ADE03400CA2F58 /* VideoView.swift */; };
 		E748789F28ADE03400CA2F58 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E748789D28ADE03400CA2F58 /* VideoView.xib */; };
-		E74878A628ADE21200CA2F58 /* RhythmPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */; };
 		E74878A728ADE21200CA2F58 /* RhythmPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */; };
 		E74878A828ADE21200CA2F58 /* RhythmPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */; };
 		E7A49CBC29023BD300F06DD4 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CBB29023BD300F06DD4 /* AlertManager.swift */; };
@@ -414,7 +411,6 @@
 		671BD6B227E1DB2D0076D5E1 /* CustomAudioRender */ = {
 			isa = PBXGroup;
 			children = (
-				671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */,
 				671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */,
 				671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */,
 			);
@@ -480,7 +476,6 @@
 		E70EE9E128F6A6FF00EE9E7F /* JoinChannelAudio(Token) */ = {
 			isa = PBXGroup;
 			children = (
-				E70EE9E228F6A6FF00EE9E7F /* JoinChannelAudioToken.strings */,
 				E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */,
 				E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */,
 			);
@@ -500,7 +495,6 @@
 		E74878A028ADE21200CA2F58 /* RhythmPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */,
 				E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */,
 				E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */,
 			);
@@ -591,8 +585,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E74878A628ADE21200CA2F58 /* RhythmPlayer.strings in Resources */,
-				E70EE9E728F6A6FF00EE9E7F /* JoinChannelAudioToken.strings in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
@@ -610,7 +602,6 @@
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
-				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				E748789F28ADE03400CA2F58 /* VideoView.xib in Resources */,
 				E74878A828ADE21200CA2F58 /* RhythmPlayer.storyboard in Resources */,
@@ -805,18 +796,11 @@
 			name = RawAudioData.storyboard;
 			sourceTree = "<group>";
 		};
-		671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				671BD6B427E1DB2D0076D5E1 /* zh-Hans */,
-			);
-			name = CustomAudioRender.strings;
-			sourceTree = "<group>";
-		};
 		671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				671BD6B627E1DB2D0076D5E1 /* Base */,
+				671BD6B427E1DB2D0076D5E1 /* zh-Hans */,
 			);
 			name = CustomAudioRender.storyboard;
 			sourceTree = "<group>";
@@ -829,34 +813,20 @@
 			name = Popover.storyboard;
 			sourceTree = "<group>";
 		};
-		E70EE9E228F6A6FF00EE9E7F /* JoinChannelAudioToken.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E70EE9E328F6A6FF00EE9E7F /* zh-Hans */,
-			);
-			name = JoinChannelAudioToken.strings;
-			sourceTree = "<group>";
-		};
 		E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E70EE9E628F6A6FF00EE9E7F /* Base */,
+				E70EE9E328F6A6FF00EE9E7F /* zh-Hans */,
 			);
 			name = JoinChannelAudioToken.storyboard;
-			sourceTree = "<group>";
-		};
-		E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E74878A228ADE21200CA2F58 /* zh-Hans */,
-			);
-			name = RhythmPlayer.strings;
 			sourceTree = "<group>";
 		};
 		E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E74878A528ADE21200CA2F58 /* Base */,
+				E74878A228ADE21200CA2F58 /* zh-Hans */,
 			);
 			name = RhythmPlayer.storyboard;
 			sourceTree = "<group>";
@@ -1005,7 +975,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1075,7 +1045,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

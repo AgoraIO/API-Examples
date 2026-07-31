@@ -1,23 +1,17 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "button"; configuration.title = "Open Back Camera"; ObjectID = "TiR-fT-BhI"; */
+"TiR-fT-BhI.configuration.title" = "打开后置摄像头";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
-"Iy0-Dq-h5x.title" = "Join Channel";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "TiR-fT-BhI"; */
+"TiR-fT-BhI.normalTitle" = "截图";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
-"VpM-9W-auG.normalTitle" = "Button";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "视频实时通话";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
-"kf0-3f-UI5.normalTitle" = "Button";
-
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "Video Call";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
-"wHl-zh-dFe.normalTitle" = "Button";
-
-"TiR-fT-BhI.normalTitle" = "Open Back Camera";
+/* Element = "navigationItem"; title = "Title"; ObjectID = "qMF-jR-Ncf"; */
+"qMF-jR-Ncf.title" = "标题";

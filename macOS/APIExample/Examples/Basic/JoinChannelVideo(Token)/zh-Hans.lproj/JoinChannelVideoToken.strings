@@ -1,28 +1,20 @@
+/* Element = "box"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
 
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "4rc-r1-Ay6"; */
-"4rc-r1-Ay6.title" = "Leave Channel";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入频道";
 
-/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "Iws-j3-l2h"; */
-"Iws-j3-l2h.title" = "1V1";
+/* Element = "textFieldCell"; placeholderString = "Please the input AppID"; ObjectID = "PUf-pH-zWX"; */
+"PUf-pH-zWX.placeholderString" = "请输入 App ID";
 
-/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "Mmi-d8-vOm"; */
-"Mmi-d8-vOm.title" = "1V15";
+/* Element = "textFieldCell"; title = "Token"; ObjectID = "TSJ-u1-PfO"; */
+"TSJ-u1-PfO.title" = "Token";
 
-/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "PtD-n2-sEW"; */
-"PtD-n2-sEW.placeholderString" = "Enter Channel Name";
+/* Element = "textFieldCell"; title = "AppID"; ObjectID = "UCG-Zk-hiI"; */
+"UCG-Zk-hiI.title" = "AppID";
 
-/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "VNU-so-ajb"; */
-"VNU-so-ajb.title" = "1V3";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "实时视频通话/直播";
 
-/* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "Real-time Video Call/Live Streaming";
-
-/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "cH4-ft-u77"; */
-"cH4-ft-u77.title" = "1V8";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "guU-jX-Wkg"; */
-"guU-jX-Wkg.title" = "Join Channel";
-
-"JGsy-2x-qyo.placeholderString" = "Enter AppID";
-
-"JMT-BK-gML.placeholderString" = "Enter Token";
+/* Element = "tokenFieldCell"; placeholderString = "Please the input token"; ObjectID = "ZMh-gp-u55"; */
+"ZMh-gp-u55.placeholderString" = "请输入Token";

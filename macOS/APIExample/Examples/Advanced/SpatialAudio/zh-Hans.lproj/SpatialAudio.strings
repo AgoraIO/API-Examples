@@ -1,60 +1,59 @@
+/* Element = "textFieldCell"; title = "Please move the red icon to experience the 3D audio effect."; ObjectID = "0XP-YK-KuI"; */
+"0XP-YK-KuI.title" = "请移动红色图标体验 3D 音频效果";
 
-/* Class = "NSTextFieldCell"; title = "Move the red icon to experience 3D audio effects"; ObjectID = "0XP-YK-KuI"; */
-"0XP-YK-KuI.title" = "Move the red icon to experience 3D audio effects";
+/* Element = "buttonCell"; title = "Join Channel"; ObjectID = "55m-Re-Kgb"; */
+"55m-Re-Kgb.title" = "加入频道";
 
-/* Class = "NSButtonCell"; title = "Join Channel"; ObjectID = "55m-Re-Kgb"; */
-"55m-Re-Kgb.title" = "Join Channel";
+/* Element = "textFieldCell"; title = "Channel"; ObjectID = "8kK-yU-WUO"; */
+"8kK-yU-WUO.title" = "频道号";
 
-/* Class = "NSTextFieldCell"; title = "Channel ID"; ObjectID = "8kK-yU-WUO"; */
-"8kK-yU-WUO.title" = "Channel ID";
+/* Element = "textFieldCell"; title = "barrier"; ObjectID = "DuM-M6-we2"; */
+"DuM-M6-we2.title" = "音障";
 
-/* Class = "NSTextFieldCell"; title = "Sound Barrier"; ObjectID = "DuM-M6-we2"; */
-"DuM-M6-we2.title" = "Sound Barrier";
-
-/* Class = "NSBox"; title = "Box"; ObjectID = "F9J-RG-ORp"; */
+/* Element = "box"; title = "Box"; ObjectID = "F9J-RG-ORp"; */
 "F9J-RG-ORp.title" = "Box";
 
-/* Class = "NSTextFieldCell"; title = "Attenuation"; ObjectID = "Olg-lx-iDF"; */
-"Olg-lx-iDF.title" = "Attenuation";
+/* Element = "textFieldCell"; title = "Attenuatuin"; ObjectID = "Olg-lx-iDF"; */
+"Olg-lx-iDF.title" = "衰减";
 
-/* Class = "NSTextFieldCell"; title = "Attenuation"; ObjectID = "Rvd-Eg-yDs"; */
-"Rvd-Eg-yDs.title" = "Attenuation";
+/* Element = "textFieldCell"; title = "Attenuatuin"; ObjectID = "Rvd-Eg-yDs"; */
+"Rvd-Eg-yDs.title" = "衰减";
 
-/* Class = "NSTextFieldCell"; title = "Mute"; ObjectID = "SPa-zU-xrL"; */
-"SPa-zU-xrL.title" = "Mute";
+/* Element = "textFieldCell"; title = "Mute"; ObjectID = "SPa-zU-xrL"; */
+"SPa-zU-xrL.title" = "静音";
 
-/* Class = "NSTextFieldCell"; placeholderString = "Enter Channel ID"; ObjectID = "Seb-dp-fRr"; */
-"Seb-dp-fRr.placeholderString" = "Enter Channel ID";
+/* Element = "textFieldCell"; placeholderString = "Please Input Channel"; ObjectID = "Seb-dp-fRr"; */
+"Seb-dp-fRr.placeholderString" = "请输入频道名";
 
-/* Class = "NSBox"; title = "Box"; ObjectID = "UVp-jP-AeX"; */
+/* Element = "box"; title = "Box"; ObjectID = "UVp-jP-AeX"; */
 "UVp-jP-AeX.title" = "Box";
 
-/* Class = "NSTextFieldCell"; title = "Airborne Simulation"; ObjectID = "XQd-ik-fGe"; */
-"XQd-ik-fGe.title" = "Airborne Simulation";
+/* Element = "textFieldCell"; title = "Airborne Simulation"; ObjectID = "XQd-ik-fGe"; */
+"XQd-ik-fGe.title" = "空气传播模拟";
 
-/* Class = "NSBox"; title = "Box"; ObjectID = "Zpd-F6-3hM"; */
+/* Element = "box"; title = "Box"; ObjectID = "Zpd-F6-3hM"; */
 "Zpd-F6-3hM.title" = "Box";
 
-/* Class = "NSTextFieldCell"; title = "Microphone"; ObjectID = "dgP-7k-2RR"; */
-"dgP-7k-2RR.title" = "Microphone";
+/* Element = "textFieldCell"; title = "Mic"; ObjectID = "dgP-7k-2RR"; */
+"dgP-7k-2RR.title" = "麦克风";
 
-/* Class = "NSTextFieldCell"; title = "Voice Blur"; ObjectID = "dps-1x-WRS"; */
-"dps-1x-WRS.title" = "Voice Blur";
+/* Element = "textFieldCell"; title = "Voice Blur"; ObjectID = "dps-1x-WRS"; */
+"dps-1x-WRS.title" = "声音模糊";
 
-/* Class = "NSTextFieldCell"; title = "Mute"; ObjectID = "e6q-8k-QYN"; */
-"e6q-8k-QYN.title" = "Mute";
+/* Element = "textFieldCell"; title = "Mute"; ObjectID = "e6q-8k-QYN"; */
+"e6q-8k-QYN.title" = "静音";
 
-/* Class = "NSTextFieldCell"; title = "Voice Blur"; ObjectID = "i8Q-uY-ZPE"; */
-"i8Q-uY-ZPE.title" = "Voice Blur";
+/* Element = "textFieldCell"; title = "Voice Blur"; ObjectID = "i8Q-uY-ZPE"; */
+"i8Q-uY-ZPE.title" = "声音模糊";
 
-/* Class = "NSButtonCell"; title = "123"; ObjectID = "q1C-6O-FWQ"; */
+/* Element = "buttonCell"; title = "123"; ObjectID = "q1C-6O-FWQ"; */
 "q1C-6O-FWQ.title" = "123";
 
-/* Class = "NSButtonCell"; title = "123"; ObjectID = "ujV-mS-k6K"; */
+/* Element = "buttonCell"; title = "123"; ObjectID = "ujV-mS-k6K"; */
 "ujV-mS-k6K.title" = "123";
 
-/* Class = "NSTextFieldCell"; title = "Airborne Simulation"; ObjectID = "w1T-YB-klu"; */
-"w1T-YB-klu.title" = "Airborne Simulation";
+/* Element = "textFieldCell"; title = "Airborne Simulation"; ObjectID = "w1T-YB-klu"; */
+"w1T-YB-klu.title" = "空气传播模拟";
 
-/* Class = "NSTextFieldCell"; title = "Room"; ObjectID = "wB6-0F-DcM"; */
-"wB6-0F-DcM.title" = "Room";
+/* Element = "textFieldCell"; title = "Room"; ObjectID = "wB6-0F-DcM"; */
+"wB6-0F-DcM.title" = "房间";

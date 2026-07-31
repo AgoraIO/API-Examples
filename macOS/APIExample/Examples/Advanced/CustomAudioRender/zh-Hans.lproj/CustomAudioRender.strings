@@ -1,24 +1,8 @@
+/* Element = "box"; title = "Box"; ObjectID = "NGa-Jk-hrb"; */
+"NGa-Jk-hrb.title" = "Box";
 
-/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "0pq-4D-qgt"; */
-"0pq-4D-qgt.title" = "1V8";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "OlB-dA-sCQ"; */
+"OlB-dA-sCQ.title" = "加入频道";
 
-/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "J5P-DD-2lM"; */
-"J5P-DD-2lM.title" = "1V1";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "LpP-rx-fDz"; */
-"LpP-rx-fDz.title" = "Join Channel";
-
-/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "Q9k-KS-Bb9"; */
-"Q9k-KS-Bb9.title" = "1V3";
-
-/* Class = "NSViewController"; title = "Custom Audio Render"; ObjectID = "rPb-ur-msx"; */
-"rPb-ur-msx.title" = "Custom Audio Render";
-
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "sav-ba-mHX"; */
-"sav-ba-mHX.title" = "Leave Channel";
-
-/* Class = "NSTextFieldCell"; placeholderString = "Join Channel"; ObjectID = "uZ0-mF-1r9"; */
-"uZ0-mF-1r9.placeholderString" = "Enter Channel Name";
-
-/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "zRn-Ca-xYL"; */
-"zRn-Ca-xYL.title" = "1V15";
+/* Element = "viewController"; title = "Custom Audio Render"; ObjectID = "rPb-ur-msx"; */
+"rPb-ur-msx.title" = "音频自渲染";

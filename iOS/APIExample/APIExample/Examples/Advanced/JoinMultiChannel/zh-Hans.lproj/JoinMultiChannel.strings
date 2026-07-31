@@ -1,12 +1,20 @@
+/* Element = "viewController"; title = "Join Multiple Channel"; ObjectID = "4JZ-MT-fZb"; */
+"4JZ-MT-fZb.title" = "加入多频道";
 
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "4JZ-MT-fZb"; */
-"4JZ-MT-fZb.title" = "Join Multiple Channels";
+/* Element = "button"; configuration.title = "take Snapshot Ex"; ObjectID = "75n-CG-1tV"; */
+"75n-CG-1tV.configuration.title" = "截图";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "BpR-ES-aVX"; */
-"BpR-ES-aVX.title" = "Join Channel";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "75n-CG-1tV"; */
+"75n-CG-1tV.normalTitle" = "截图";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join";
+/* Element = "button"; configuration.title = "Leave ChannelEx"; ObjectID = "Rad-Lg-o3J"; */
+"Rad-Lg-o3J.configuration.title" = "离开Ex频道";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "Rad-Lg-o3J"; */
+"Rad-Lg-o3J.normalTitle" = "截图";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

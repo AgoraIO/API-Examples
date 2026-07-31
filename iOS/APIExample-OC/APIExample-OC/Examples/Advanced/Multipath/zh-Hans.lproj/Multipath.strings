@@ -1,0 +1,32 @@
+/* Element = "label"; text = "Mode"; ObjectID = "CQP-o3-nsl"; */
+"CQP-o3-nsl.text" = "模式";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "dynamic"; ObjectID = "CnA-Yb-o6A"; */
+"CnA-Yb-o6A.segmentTitles[0]" = "动态";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "duplicate"; ObjectID = "CnA-Yb-o6A"; */
+"CnA-Yb-o6A.segmentTitles[1]" = "复制";
+
+/* Element = "label"; text = "Role"; ObjectID = "G2E-c3-kzq"; */
+"G2E-c3-kzq.text" = "角色";
+
+/* Element = "label"; text = "Mode"; ObjectID = "Nh9-6c-VAa"; */
+"Nh9-6c-VAa.text" = "模式";
+
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "VTF-4P-n1I"; */
+"VTF-4P-n1I.placeholder" = "输入频道名称";
+
+/* Element = "label"; text = "--"; ObjectID = "mcr-bl-bnc"; */
+"mcr-bl-bnc.text" = "--";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "sd1-uc-igv"; */
+"sd1-uc-igv.normalTitle" = "加入频道";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "broadcaster"; ObjectID = "vn7-ux-djR"; */
+"vn7-ux-djR.segmentTitles[0]" = "主播";
+
+/* Element = "segmentedControl"; segmentTitles[n] = "audience"; ObjectID = "vn7-ux-djR"; */
+"vn7-ux-djR.segmentTitles[1]" = "观众";
+
+/* Element = "label"; text = "Enable"; ObjectID = "yx2-9h-YtM"; */
+"yx2-9h-YtM.text" = "开/关";

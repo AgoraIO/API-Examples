@@ -1,48 +1,53 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "label"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
+"Lzz-2R-G7f.text" = "极速直播";
 
-/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
-"Lzz-2R-G7f.text" = "Ultra Low Latency";
+/* Element = "button"; configuration.title = "default color"; ObjectID = "Q0N-nV-bez"; */
+"Q0N-nV-bez.configuration.title" = "默认颜色";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
-"Q0N-nV-bez.normalTitle" = "Default Background Color";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
+"Q0N-nV-bez.normalTitle" = "默认背景色";
 
-/* Class = "UIButton"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.configuration.title" = "Preload";
+/* Element = "button"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.configuration.title" = "预加载";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.normalTitle" = "Button";
+/* Element = "button"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
+"S19-UR-C2c.normalTitle" = "默认背景色";
 
-/* Class = "UILabel"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
-"XcJ-am-UAb.text" = "Co-host";
+/* Element = "label"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
+"XcJ-am-UAb.text" = "连麦";
 
-/* Class = "UILabel"; text = "Dual Stream"; ObjectID = "auZ-cF-RlC"; */
-"auZ-cF-RlC.text" = "Dual Stream";
+/* Element = "label"; text = "Large and small flow"; ObjectID = "auZ-cF-RlC"; */
+"auZ-cF-RlC.text" = "大小流";
 
-/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[0] = "Auto"; ObjectID = "b7R-QN-CCh"; */
-"b7R-QN-CCh.segmentTitles[0]" = "Auto";
+/* Element = "segmentedControl"; segmentTitles[n] = "auto"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[0]" = "自动";
 
-/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[1] = "Software Encoding"; ObjectID = "b7R-QN-CCh"; */
-"b7R-QN-CCh.segmentTitles[1]" = "Software Encoding";
+/* Element = "segmentedControl"; segmentTitles[n] = "soft"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[1]" = "软编";
 
-/* Class = "UISegmentedControl"; b7R-QN-CCh.segmentTitles[2] = "Hardware Encoding"; ObjectID = "b7R-QN-CCh"; */
-"b7R-QN-CCh.segmentTitles[2]" = "Hardware Encoding";
+/* Element = "segmentedControl"; segmentTitles[n] = "hard"; ObjectID = "b7R-QN-CCh"; */
+"b7R-QN-CCh.segmentTitles[2]" = "硬编";
 
-/* Class = "UILabel"; text = "(Default: High Stream)"; ObjectID = "fim-uQ-jK3"; */
-"fim-uQ-jK3.text" = "(Default: High Stream)";
+/* Element = "label"; text = "(Default: Mainstream)"; ObjectID = "fim-uQ-jK3"; */
+"fim-uQ-jK3.text" = "（默认：大流）";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join Channel";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UILabel"; text = "B Frame"; ObjectID = "m3M-Tw-nzd"; */
-"m3M-Tw-nzd.text" = "B Frame";
+/* Element = "label"; text = "B frame"; ObjectID = "m3M-Tw-nzd"; */
+"m3M-Tw-nzd.text" = "B 帧";
 
-/* Class = "UILabel"; text = "Watermark"; ObjectID = "nSq-Vu-o9H"; */
-"nSq-Vu-o9H.text" = "Watermark";
+/* Element = "label"; text = "watermark"; ObjectID = "nSq-Vu-o9H"; */
+"nSq-Vu-o9H.text" = "水印";
 
-/* Class = "UILabel"; text = "First Frame Optimization"; ObjectID = "ohV-am-Acd"; */
-"ohV-am-Acd.text" = "First Frame Optimization";
+/* Element = "label"; text = "First Frame Optimization"; ObjectID = "ohV-am-Acd"; */
+"ohV-am-Acd.text" = "首帧出图";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
-"w4q-aT-JBc.normalTitle" = "Screenshot";
+/* Element = "button"; configuration.title = "screenshot"; ObjectID = "w4q-aT-JBc"; */
+"w4q-aT-JBc.configuration.title" = "截图";
+
+/* Element = "button"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
+"w4q-aT-JBc.normalTitle" = "默认背景色";

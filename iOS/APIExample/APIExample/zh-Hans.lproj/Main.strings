@@ -1,27 +1,44 @@
+/* Element = "label"; text = "Label"; ObjectID = "2VP-yo-86d"; */
+"2VP-yo-86d.text" = "标签";
 
-/* Class = "UIViewController"; title = "Agora API Examples"; ObjectID = "BYZ-38-t0r"; */
-"BYZ-38-t0r.title" = "Agora API Examples";
+/* Element = "barButtonItem"; title = "Settings"; ObjectID = "492-pb-Xmc"; */
+"492-pb-Xmc.title" = "设置";
 
-/* Class = "UILabel"; text = "0"; ObjectID = "GRE-S2-EUw"; */
+/* Element = "textField"; placeholder = "Please enter"; ObjectID = "AaW-co-Otq"; */
+"AaW-co-Otq.placeholder" = "请输入";
+
+/* Element = "viewController"; title = "Agora API Examples"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "Agora API 示例";
+
+/* Element = "label"; text = "Label"; ObjectID = "GJJ-sr-QDR"; */
+"GJJ-sr-QDR.text" = "标签";
+
+/* Element = "label"; text = "0"; ObjectID = "GRE-S2-EUw"; */
 "GRE-S2-EUw.text" = "0";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "O4p-Hd-Lr5"; */
-"O4p-Hd-Lr5.title" = "Join Channel";
+/* Element = "navigationItem"; title = "Join Channel"; ObjectID = "O4p-Hd-Lr5"; */
+"O4p-Hd-Lr5.title" = "加入频道";
 
-/* Class = "UILabel"; text = "Label"; ObjectID = "Ruy-K9-CLg"; */
-"Ruy-K9-CLg.text" = "Label";
+/* Element = "label"; text = "Label"; ObjectID = "Ruy-K9-CLg"; */
+"Ruy-K9-CLg.text" = "标签";
 
-/* Class = "UINavigationItem"; title = "Agora API Example"; ObjectID = "Ygc-Og-WKK"; */
-"Ygc-Og-WKK.title" = "Agora API Example";
+/* Element = "navigationItem"; title = "Agora API Example"; ObjectID = "Ygc-Og-WKK"; */
+"Ygc-Og-WKK.title" = "Agora API 示例";
 
-/* Class = "UIViewController"; title = "Log View Controller"; ObjectID = "ekP-NH-UjU"; */
-"ekP-NH-UjU.title" = "Log View Controller";
+/* Element = "label"; text = "Label"; ObjectID = "d6u-rE-3US"; */
+"d6u-rE-3US.text" = "标签";
 
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "iib-g5-GmB"; */
-"iib-g5-GmB.title" = "Join Channel Video";
+/* Element = "label"; text = "Label"; ObjectID = "dW4-HZ-foF"; */
+"dW4-HZ-foF.text" = "标签";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join channel";
+/* Element = "viewController"; title = "Log View Controller"; ObjectID = "ekP-NH-UjU"; */
+"ekP-NH-UjU.title" = "日志";
+
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "iib-g5-GmB"; */
+"iib-g5-GmB.title" = "视频实时通话";
+
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

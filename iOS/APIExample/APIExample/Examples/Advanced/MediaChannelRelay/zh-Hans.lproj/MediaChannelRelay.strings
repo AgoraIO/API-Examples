@@ -1,47 +1,26 @@
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "button"; normalTitle = "Pause"; ObjectID = "Gga-mz-OMe"; */
+"Gga-mz-OMe.normalTitle" = "暂停";
 
+/* Element = "button"; normalTitle = "Stop"; ObjectID = "Kw7-C4-nP2"; */
+"Kw7-C4-nP2.normalTitle" = "停止";
 
+/* Element = "textField"; placeholder = "Enter target relay channel name"; ObjectID = "aLa-HX-eD8"; */
+"aLa-HX-eD8.placeholder" = "输入流转发目标频道名";
 
-/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "Kw7-C4-nP2"; */
+/* Element = "button"; normalTitle = "Resume"; ObjectID = "cyy-Qo-vGd"; */
+"cyy-Qo-vGd.normalTitle" = "恢复";
 
-"Kw7-C4-nP2.normalTitle" = "Stop";
+/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "实时音频通话/直播";
 
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
+/* Element = "button"; normalTitle = "Relay"; ObjectID = "sK1-s8-Hpa"; */
+"sK1-s8-Hpa.normalTitle" = "转发";
 
-/* Class = "UITextField"; placeholder = "Enter target relay channel name"; ObjectID = "aLa-HX-eD8"; */
-
-"aLa-HX-eD8.placeholder" = "Enter target relay channel name";
-
-
-
-/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
-
-"jxp-ZN-2yG.title" = "Join Channel Audio";
-
-
-
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-
-"kbN-ZR-nNn.normalTitle" = "Join";
-
-
-
-/* Class = "UIButton"; normalTitle = "Relay"; ObjectID = "sK1-s8-Hpa"; */
-
-"sK1-s8-Hpa.normalTitle" = "Relay";
-
-
-
-/* Class = "UILabel"; text = "Send stream to another channel"; ObjectID = "sNN-B3-EH6"; */
-
-"sNN-B3-EH6.text" = "Send stream to another channel";
-
-
-/* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "Gga-mz-OMe"; */
-"Gga-mz-OMe.normalTitle" = "Pause";
-
-
-/* Class = "UIButton"; normalTitle = "Resume"; ObjectID = "cyy-Qo-vGd"; */
-"cyy-Qo-vGd.normalTitle" = "Resume";
+/* Element = "label"; text = "Send stream to another channel"; ObjectID = "sNN-B3-EH6"; */
+"sNN-B3-EH6.text" = "发送流到另一个频道";
