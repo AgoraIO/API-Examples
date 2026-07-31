@@ -131,6 +131,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         et_channel = view.findViewById(R.id.et_channel);
         audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
         channelProfileInput = view.findViewById(R.id.channel_profile_spinner);
+        channelProfileInput.setSelection(1);
         audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
         audioRouteInput = view.findViewById(R.id.audio_route_spinner);
         audioScenarioInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
