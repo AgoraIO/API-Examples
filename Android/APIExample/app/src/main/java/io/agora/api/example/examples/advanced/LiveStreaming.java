@@ -308,7 +308,15 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             rtcEngineConfig.mAppId = getAgoraAppId();
             rtcEngineConfig.mContext = context.getApplicationContext();
             rtcEngineConfig.mEventHandler = iRtcEngineEventHandler;
-            /* Sets the channel profile of the Agora RtcEngine. */
+            /* The channel profile.
+             CHANNEL_PROFILE_COMMUNICATION(0): Communication. Agora recommends using the live streaming profile
+             for a better audio and video experience.
+             CHANNEL_PROFILE_LIVE_BROADCASTING(1): (Default) Live streaming.
+             CHANNEL_PROFILE_GAME(2): Gaming.
+             Deprecated: Use CHANNEL_PROFILE_LIVE_BROADCASTING instead.
+             CHANNEL_PROFILE_CLOUD_GAMING(3): Interaction. The scenario is optimized for latency. Use this
+             profile if the use case requires frequent interactions between users.
+             Deprecated: Use CHANNEL_PROFILE_LIVE_BROADCASTING instead.*/
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             rtcEngineConfig.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();

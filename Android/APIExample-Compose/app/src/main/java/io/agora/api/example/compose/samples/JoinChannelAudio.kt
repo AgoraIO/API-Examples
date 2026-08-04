@@ -111,7 +111,7 @@ fun JoinChannelAudio() {
             }
         }).apply {
             enableAudio()
-            setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION)
+            setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
         }
     }
     DisposableEffect(lifecycleOwner) {
@@ -286,6 +286,7 @@ private fun JoinChannelAudioView(
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
                         "Communication 1v1" to Constants.CHANNEL_PROFILE_COMMUNICATION_1v1,
                     ),
+                    selected = 1,
                 ) { _, option ->
                     rtcEngine?.setChannelProfile(option.second)
                 }

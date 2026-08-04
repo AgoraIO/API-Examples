@@ -102,12 +102,15 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
-            /* Sets the channel profile of the Agora RtcEngine.
-             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-             Use this profile in one-on-one calls or group calls, where all users can talk freely.
-             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-             an audience can only receive streams.*/
+            /* The channel profile.
+             CHANNEL_PROFILE_COMMUNICATION(0): Communication. Agora recommends using the live streaming profile
+             for a better audio and video experience.
+             CHANNEL_PROFILE_LIVE_BROADCASTING(1): (Default) Live streaming.
+             CHANNEL_PROFILE_GAME(2): Gaming.
+             Deprecated: Use CHANNEL_PROFILE_LIVE_BROADCASTING instead.
+             CHANNEL_PROFILE_CLOUD_GAMING(3): Interaction. The scenario is optimized for latency. Use this
+             profile if the use case requires frequent interactions between users.
+             Deprecated: Use CHANNEL_PROFILE_LIVE_BROADCASTING instead.*/
             config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             /*
              * IRtcEngineEventHandler is an abstract class providing default implementation.
