@@ -500,7 +500,7 @@ struct PlayerUpdatedInfo {
 };
 
 /**
- * The custom data source provides a data stream input callback, and the player will continue to call back this interface, requesting the user to fill in the data that needs to be played.
+ * @brief The custom data source provides a data stream input callback, and the player will continue to call back this interface, requesting the user to fill in the data that needs to be played.
  */
 class IMediaPlayerCustomDataProvider {
 public:

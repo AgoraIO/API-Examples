@@ -101,7 +101,8 @@ struct LocalSpatialAudioConfig {
   LocalSpatialAudioConfig() : rtcEngine(NULL) {}
 };
 
-/** The IBaseSpatialAudioEngine class provides the common methods of ICloudSpatialAudioEngine and ILocalSpatialAudioEngine.
+/**
+ * @brief The base spatial audio engine interface.
  */
 class ILocalSpatialAudioEngine: public RefCountInterface {
  protected:
@@ -109,13 +110,13 @@ class ILocalSpatialAudioEngine: public RefCountInterface {
 
  public:
   /**
-   * @brief Destroys `IBaseSpatialAudioEngine`.
+   * @brief Destroys `ILocalSpatialAudioEngine`.
    *
    * @details
-   * This method releases all resources under `IBaseSpatialAudioEngine`. When the user does not need
+   * This method releases all resources under `ILocalSpatialAudioEngine`. When the user does not need
    * to use the spatial audio effect, you can call this method to release resources for other
    * operations.
-   * After calling this method, you can no longer use any of the APIs under `IBaseSpatialAudioEngine`.
+   * After calling this method, you can no longer use any of the APIs under `ILocalSpatialAudioEngine`.
    *
    * @note Call this method before the `release` method under `IRtcEngine`.
    *
@@ -336,9 +337,8 @@ class ILocalSpatialAudioEngine: public RefCountInterface {
    * - Call this method after the `joinChannel(const char* token, const char* channelId, const char*
    * info, uid_t uid)` or `joinChannel(const char* token, const char* channelId, uid_t uid, const
    * ChannelMediaOptions& options)` method.
-   * - When using the spatial audio effect, if you need to set whether to stop subscribing to the
-   * audio stream of a specified user, Agora recommends calling this method instead of the
-   * `muteLocalAudioStream` method in `IRtcEngine`.
+   * - When using the spatial audio effect, if you need to set whether to stop publishing the local audio stream, Agora recommends calling this method instead of the
+   * one in `IRtcEngine`.
    * - A successful call of this method triggers the `onUserMuteAudio` and `onRemoteAudioStateChanged`
    * callbacks on the remote client.
    *
@@ -364,7 +364,7 @@ class ILocalSpatialAudioEngine: public RefCountInterface {
    * ChannelMediaOptions& options)` method.
    * - When using the spatial audio effect, if you need to set whether to stop subscribing to the
    * audio streams of all remote users, Agora recommends calling this method instead of the
-   * `muteAllRemoteAudioStreams` method in `IRtcEngine`.
+   * one in `IRtcEngine`.
    * - After calling this method, you need to call `updateSelfPosition` and `updateRemotePosition` to
    * update the spatial location of the local user and the remote user; otherwise, the settings in
    * this method do not take effect.

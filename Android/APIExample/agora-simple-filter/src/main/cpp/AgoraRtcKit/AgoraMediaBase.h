@@ -572,6 +572,7 @@ enum VIDEO_PIXEL_FORMAT {
   /**
    * 17: The ID3D11TEXTURE2D format. Currently supported types are `DXGI_FORMAT_B8G8R8A8_UNORM`,
    * `DXGI_FORMAT_B8G8R8A8_TYPELESS` and `DXGI_FORMAT_NV12`.
+   * @note This enumeration applies to screen-captured video only. Camera-captured video is not supported.
    */
   VIDEO_TEXTURE_ID3D11TEXTURE2D = 17,
   /**
@@ -954,13 +955,14 @@ struct ExternalVideoFrame {
    */
   float matrix[16];
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default
-   * value is `NULL`.
+   * The MetaData buffer. The default value is `NULL`.
+   * @note The default maximum metadata size is 1024 bytes. If the input size exceeds the current
+   * metadata limit, the SDK truncates the payload to the effective limit.
    */
   uint8_t* metadataBuffer;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value
-   * is `0`.
+   * The MetaData size. The default value is `0`.
+   * @note The default maximum metadata size is 1024 bytes.
    */
   int metadataSize;
   /**
@@ -1103,13 +1105,15 @@ struct VideoFrame {
    */
   int avsync_type;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default
-   * value is `NULL`.
+   * The MetaData buffer. The default value is `NULL`.
+   * @note This buffer is only guaranteed to be valid during the current callback. If you need to
+   * use it asynchronously or after the callback returns, make a copy first.
    */
   uint8_t* metadata_buffer;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value
-   * is `0`.
+   * The MetaData size. The default value is `0`.
+   * @note This size is only meaningful while `metadata_buffer` is valid during the current
+   * callback.
    */
   int metadata_size;
   /**
@@ -1167,7 +1171,7 @@ struct VideoFrame {
 };
 
 /**
- * The IVideoFrameObserver class.
+ * @brief The IVideoFrameObserver class.
  */
 class IVideoFrameObserver {
  public:
@@ -1383,7 +1387,10 @@ struct SnapshotConfig {
   const char* filePath;
 
   /**
-   * The position of the snapshot video frame in the video pipeline. See `VIDEO_MODULE_POSITION`.
+   * The position of the video observation. See `VIDEO_MODULE_POSITION`.
+   * Allowed values vary depending on the `uid` parameter passed in `takeSnapshot` or `takeSnapshotEx`:
+   * - `uid` = 0: Position 2, 4 and 8 are allowed.
+   * - `uid` != 0: Only position 2 is allowed.
    */
   media::base::VIDEO_MODULE_POSITION position;
   SnapshotConfig() :filePath(NULL), position(media::base::POSITION_PRE_ENCODER) {}
@@ -1685,13 +1692,14 @@ class IAudioFrameObserverBase {
    */
   virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) = 0;
   /**
-   * Occurs when the before-mixing playback audio frame is received.
-   * @param channelId The channel name
-   * @param userId ID of the remote user.
-   * @param audioFrame The reference to the audio frame: AudioFrame.
+   * @brief Retrieves the audio frame before mixing of subscribed remote users.
+   *
+   * @param channelId The channel ID.
+   * @param userId The ID of subscribed remote users.
+   * @param audioFrame The raw audio data. See `AudioFrame`.
+   *
    * @return
-   * - true: The before-mixing playback audio frame is valid and is encoded and sent.
-   * - false: The before-mixing playback audio frame is invalid and is not encoded or sent.
+   * Without practical meaning.
    */
   virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, base::user_id_t userId,
                                                 AudioFrame& audioFrame) {
@@ -1946,7 +1954,7 @@ class IVideoEncodedFrameObserver {
 };
 
 /**
- * The IVideoFrameObserver class.
+ * @brief The IVideoFrameObserver class.
  */
 class IVideoFrameObserver {
  public:
@@ -2019,7 +2027,7 @@ class IVideoFrameObserver {
                                    VideoFrame& videoFrame) = 0;
 
   /**
-   * @brief Occurs each time the SDK receives a video frame before encoding.
+   * @brief Occurs each time the SDK receives a pre-encoded video frame.
    *
    * @details
    * After you successfully register the video frame observer, the SDK triggers this callback each
@@ -2119,6 +2127,9 @@ class IVideoFrameObserver {
    * - When the video processing mode is `PROCESS_MODE_READ_WRITE`:
    *   - `true`: Sets the SDK to receive the video frame.
    *   - `false`: Sets the SDK to discard the video frame.
+   * @note If your business logic requires metadata to stay synchronized with the current decoded
+   * frame, prefer reading the metadata carried in `videoFrame` instead of consuming it from a
+   * separate metadata observer callback.
    */
   virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid,
                                   VideoFrame& videoFrame) = 0;
@@ -2449,6 +2460,9 @@ struct MediaRecorderConfiguration {
         videoSourceType(rtc::VIDEO_SOURCE_CAMERA_PRIMARY) {}
 };
 
+/**
+ * @brief The IFaceInfoObserver class.
+ */
 class IFaceInfoObserver {
  public:
   /**
@@ -2522,6 +2536,9 @@ struct RecorderInfo {
       : fileName(name), durationMs(dur), fileSize(size) {}
 };
 
+/**
+ * @brief The IMediaRecorderObserver class.
+ */
 class IMediaRecorderObserver {
  public:
   /**

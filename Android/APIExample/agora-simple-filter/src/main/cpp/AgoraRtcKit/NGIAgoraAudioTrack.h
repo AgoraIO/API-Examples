@@ -243,6 +243,13 @@ class ILocalAudioTrackObserver {
    */
   virtual void onLocalAudioTrackStateChanged(LOCAL_AUDIO_STREAM_STATE state,
                                              LOCAL_AUDIO_STREAM_REASON reasonCode) = 0;
+
+  /**
+   * Occurs when the error of a local audio track occurs.
+   *
+   * @param errorCode The error code of the local audio track.
+   */
+  virtual void onLocalAudioTrackError(int errorCode) = 0;
 };
 
 /**
@@ -920,6 +927,15 @@ class IRemoteAudioTrack : public IAudioTrack {
    - < 0: Failure.
    */
   virtual int adjustAudioDeceleration(int percentage, aosl_ref_t ares = AOSL_REF_INVALID) = 0;  
+
+  /** enable audio fast acceleration during audio packets burst arrival.
+
+   @param enable Whether to enable audio burst acceleration.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableAudioBurstAccelerate(bool enable, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
 
   /** enable spatial audio
    

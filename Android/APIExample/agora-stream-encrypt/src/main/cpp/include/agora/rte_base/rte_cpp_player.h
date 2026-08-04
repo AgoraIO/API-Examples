@@ -7,6 +7,7 @@
 #pragma once
 #include <functional>
 #include <string>
+#include <vector>
 
 #include "rte_base/c/c_rte.h"
 #include "rte_base/c/c_player.h"
@@ -277,6 +278,164 @@ class PlayerInfo {
     ::RtePlayerInfo c_player_info;
 };
 
+
+
+/**
+ * @brief Audio volume information for a stream.
+ *
+ * @since v4.5.3
+ *
+ * @details This object contains the audio volume information for a stream, including the channel
+ * it belongs to, the stream id (which corresponds to the RTC uid), and the current volume level.
+ */
+class StreamAudioVolumeInfo {
+ public:
+  StreamAudioVolumeInfo(){ RteStreamAudioVolumeInfoInit(&c_stream_audio_volume_info, nullptr); }
+  ~StreamAudioVolumeInfo(){ RteStreamAudioVolumeInfoDeinit(&c_stream_audio_volume_info, nullptr); }
+  
+  explicit StreamAudioVolumeInfo(const RteStreamAudioVolumeInfo* other) {
+    if (other != nullptr) {
+      RteStreamAudioVolumeInfoInit(&c_stream_audio_volume_info, nullptr);
+      RteStreamAudioVolumeInfoCopy(&c_stream_audio_volume_info, other, nullptr);
+    }
+  }
+
+  StreamAudioVolumeInfo(const StreamAudioVolumeInfo& other) {
+    RteStreamAudioVolumeInfoInit(&c_stream_audio_volume_info, nullptr);
+    RteStreamAudioVolumeInfoCopy(&c_stream_audio_volume_info, &other.c_stream_audio_volume_info, nullptr);
+  }
+
+  StreamAudioVolumeInfo(StreamAudioVolumeInfo&& other) {
+    c_stream_audio_volume_info = other.c_stream_audio_volume_info;
+    other.c_stream_audio_volume_info = {};
+  }
+
+
+  StreamAudioVolumeInfo& operator=(const StreamAudioVolumeInfo& other) {
+    RteStreamAudioVolumeInfoCopy(&c_stream_audio_volume_info, &other.c_stream_audio_volume_info, nullptr);
+    return *this;
+  }
+
+  StreamAudioVolumeInfo& operator=(StreamAudioVolumeInfo&& other) {
+    c_stream_audio_volume_info = other.c_stream_audio_volume_info;
+    other.c_stream_audio_volume_info = {};
+    return *this;
+  }
+
+  StreamAudioVolumeInfo& operator=(const RteStreamAudioVolumeInfo* other) {
+    RteStreamAudioVolumeInfoCopy(&c_stream_audio_volume_info, other, nullptr);
+    return *this;
+  }
+
+  /**
+   * @brief Gets the RTC channel name for this stream.
+   *
+   * @since v4.5.3
+   *
+   * @return std::string The channel name.
+   */
+  std::string ChannelName() const {
+    return c_stream_audio_volume_info.channel_name != nullptr
+               ? std::string(c_stream_audio_volume_info.channel_name)
+               : std::string();
+  }
+
+  /**
+   * @brief Gets the stream identifier.
+   *
+   * @since v4.5.3
+   *
+   * @return std::string The stream id.
+   */
+  std::string StreamId() const {
+    return c_stream_audio_volume_info.stream_id != nullptr
+               ? std::string(c_stream_audio_volume_info.stream_id)
+               : std::string();
+  }
+
+  /**
+   * @brief Gets the audio volume level for this stream.
+   *
+   * @since v4.5.3
+   *
+   * @return int32_t The volume. The value range is [0, 255].
+   */
+  int32_t Volume() const { return c_stream_audio_volume_info.volume; }
+
+  const RteStreamAudioVolumeInfo* get_underlying_impl() const { return &c_stream_audio_volume_info; }
+
+ protected:
+
+  RteStreamAudioVolumeInfo c_stream_audio_volume_info = {};
+};
+
+/**
+ * @brief Stream data of the Player.
+ *
+ * @since v4.5.3
+ *
+ * @details This object contains the stream data of the Player, including the volume information of
+ * each audio stream before audio mixing.
+ */
+class PlayerStreamData {
+ public:
+  PlayerStreamData(){ RtePlayerStreamDataInit(&c_stream_data_, nullptr); }
+  ~PlayerStreamData(){ RtePlayerStreamDataDeinit(&c_stream_data_, nullptr); }
+  
+  explicit PlayerStreamData(const RtePlayerStreamData* other) {
+    if (other != nullptr) {
+      RtePlayerStreamDataInit(&c_stream_data_, nullptr);
+      RtePlayerStreamDataCopy(&c_stream_data_, other, nullptr);
+    }
+  }
+
+  PlayerStreamData(const PlayerStreamData& other) {
+    RtePlayerStreamDataInit(&c_stream_data_, nullptr);
+    RtePlayerStreamDataCopy(&c_stream_data_, &other.c_stream_data_, nullptr);
+  }
+
+  PlayerStreamData& operator=(const PlayerStreamData& other) {
+    RtePlayerStreamDataCopy(&c_stream_data_, &other.c_stream_data_, nullptr);
+    return *this;
+  }
+
+  PlayerStreamData& operator=(PlayerStreamData&& other) {
+    c_stream_data_ = other.c_stream_data_;
+    other.c_stream_data_ = {};
+    return *this;
+  }
+
+  PlayerStreamData& operator=(const RtePlayerStreamData* other) {
+    RtePlayerStreamDataCopy(&c_stream_data_, other, nullptr);
+    return *this;
+  }
+
+  /**
+   * @brief Gets the list of per-stream audio volume entries in this stream data.
+   *
+   * @since v4.5.3
+   *
+   * @return std::vector<StreamAudioVolumeInfo> The audio volume list. May be empty if no data is available.
+   */
+  std::vector<StreamAudioVolumeInfo> AudioVolumes() const { 
+    std::vector<StreamAudioVolumeInfo> audio_volumes; 
+
+    if (c_stream_data_.audio_volumes_cnt > 0 && c_stream_data_.audio_volumes != nullptr) {
+      audio_volumes.reserve(c_stream_data_.audio_volumes_cnt);
+      for (int32_t i = 0; i < c_stream_data_.audio_volumes_cnt; ++i) {
+        audio_volumes.emplace_back(&c_stream_data_.audio_volumes[i]);
+      }
+    }
+
+    return audio_volumes;
+  }
+  
+  RtePlayerStreamData* get_underlying_impl() { return &c_stream_data_; }
+
+ protected:
+  RtePlayerStreamData c_stream_data_ = {};
+};
+
 static void onStateChanged(::RtePlayerObserver *observer,
                           RtePlayerState old_state, RtePlayerState new_state,
                           RteError *err);
@@ -294,6 +453,8 @@ static void onMetadata(::RtePlayerObserver *observer, ::RtePlayerMetadataType ty
 static void onPlayerInfoUpdated(::RtePlayerObserver *observer, const RtePlayerInfo *info);
 
 static void onAudioVolumeIndication(::RtePlayerObserver *observer, int32_t volume);
+
+static void onStreamDataReceived(::RtePlayerObserver *observer, RtePlayerStreamData *stream_data);
 
 
 /**
@@ -313,6 +474,7 @@ class PlayerObserver {
     c_player_observer->on_metadata = rte::onMetadata;
     c_player_observer->on_player_info_updated = rte::onPlayerInfoUpdated;
     c_player_observer->on_audio_volume_indication = rte::onAudioVolumeIndication;
+    c_player_observer->on_stream_data_received = rte::onStreamDataReceived;
   }
   virtual ~PlayerObserver(){ RtePlayerObserverDestroy(c_player_observer, nullptr); }
 
@@ -439,6 +601,23 @@ class PlayerObserver {
    */
   virtual void onAudioVolumeIndication(int32_t volume) {};
 
+  /**
+   * @brief Stream data callback.
+   *
+   * @since v4.5.3
+   *
+   * @details This callback reports the stream data of the Player. The current PlayerStreamData
+   * object contains the volume information of each audio stream before audio mixing.
+   *
+   * @example If you use the Agora cloud transcoding service for audio mixing and use Player to
+   * play the mixed audio RTE URL, you can use this callback to get the volume information of each
+   * audio stream before mixing.
+   *
+   * @param stream_data The received stream data.
+   * @return void
+   */
+  virtual void onStreamDataReceived(const PlayerStreamData *stream_data) {};
+
  private:
   friend class Player;
 
@@ -496,6 +675,14 @@ void onAudioVolumeIndication(::RtePlayerObserver *observer, int32_t volume){
   auto *player_observer = static_cast<PlayerObserver *>(observer->base_observer.me_in_target_lang);
   if (player_observer != nullptr){
     player_observer->onAudioVolumeIndication(volume);
+  }
+}
+
+void onStreamDataReceived(::RtePlayerObserver *observer, RtePlayerStreamData *stream_data) {
+  auto *player_observer = static_cast<PlayerObserver *>(observer->base_observer.me_in_target_lang);
+  if (player_observer != nullptr) {
+    PlayerStreamData cpp_data(stream_data);
+    player_observer->onStreamDataReceived(&cpp_data);
   }
 }
 
@@ -966,8 +1153,7 @@ class PlayerConfig {
    * If you have higher requirements for video resolution switching, you can `contact technical
    * support` to enable
    * the ABR (Adaptive Bitrate) feature. Once enabled, you can customize the resolution for each video
-   * quality layer, and the audience can switch between all video quality layers as needed. For
-   * detailed implementation, see `Audience-side URL streaming`.
+   * quality layer, and the audience can switch between all video quality layers as needed.
    * Applicable scenarios: In unstable network environments, the audience can choose an appropriate
    * video quality level based on actual network conditions to ensure a smooth viewing experience.
    * Call timing: This method must be called before `SetConfigs(PlayerConfig* config, Error* err)`.

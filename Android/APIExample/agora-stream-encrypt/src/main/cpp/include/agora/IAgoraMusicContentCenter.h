@@ -319,6 +319,9 @@ protected:
 };
 
 
+/**
+ * @brief The IMusicContentCenterEventHandler class.
+ */
 class IMusicContentCenterEventHandler {
 public:
     /**
@@ -340,7 +343,7 @@ public:
      * @brief Callback for retrieving the music resource list.
      *
      * @details
-     * When you call the `getMusicCollectionWithMusicChartId` method to get the music resource list of a
+     * When you call the `getMusicCollectionByMusicChartId` method to get the music resource list of a
      * specific chart or call `searchMusic` to search for music resources, the SDK
      * triggers this callback to report the detailed information of the music resource list.
      *
@@ -449,6 +452,9 @@ struct MusicContentCenterConfiguration {
         appId(appid),token(token),mccUid(id),eventHandler(handler),maxCacheSize(maxSize), mccDomain(apiurl){}
 };
 
+/**
+ * @brief The IMusicPlayer interface.
+ */
 class IMusicPlayer : public IMediaPlayer {
 protected:
     virtual ~IMusicPlayer() {};
@@ -476,7 +482,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int open(int64_t songCode, int64_t startPos = 0) = 0;
 
@@ -501,12 +507,15 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      *   - -2: Invalid parameter. Please reset the parameter.
      */
     virtual int setPlayMode(MusicPlayMode mode) = 0;
 };
 
+/**
+ * @brief The IMusicContentCenter interface.
+ */
 class IMusicContentCenter
 {
 protected:
@@ -526,7 +535,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int initialize(const MusicContentCenterConfiguration & configuration) = 0;
 
@@ -541,12 +550,12 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int renewToken(const char* token) = 0;
 
     /**
-     * @brief Releases all resources used by the Music Content Center.
+     * @brief Releases all resources used by the MusicContentCenter.
      *
      * @details
      * This method must be called before the `release` method of `IRtcEngine`.
@@ -555,13 +564,13 @@ public:
     virtual void release() = 0;
 
     /**
-     * @brief Registers the Music Content Center event handler.
+     * @brief Registers the MusicContentCenter event handler.
      *
      * @param eventHandler The event handler to register. See `IMusicContentCenterEventHandler`.
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int registerEventHandler(IMusicContentCenterEventHandler* eventHandler) = 0;
     
@@ -570,7 +579,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int unregisterEventHandler() = 0;
 
@@ -601,7 +610,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int destroyMusicPlayer(agora_refptr<IMusicPlayer> music_player) = 0;
     
@@ -616,7 +625,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getMusicCharts(agora::util::AString& requestId) = 0;
     
@@ -643,7 +652,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getMusicCollectionByMusicChartId(agora::util::AString& requestId, int32_t musicChartId, int32_t page, int32_t pageSize, const char* jsonOption = nullptr) = 0;
     
@@ -667,7 +676,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int searchMusic(agora::util::AString& requestId, const char* keyWord, int32_t page, int32_t pageSize, const char* jsonOption = nullptr) = 0;
     
@@ -702,7 +711,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int preload(int64_t songCode, const char* jsonOption) __deprecated = 0;
 
@@ -713,7 +722,7 @@ public:
      * You can call this method to preload the music resource you want to play. After successfully
      * calling this method, the SDK triggers the `onPreLoadEvent` callback to report the preload event.
      * Before calling this method to preload a music resource, you need to call
-     * `getMusicCollectionWithMusicChartId` or `searchMusic`
+     * `getMusicCollectionByMusicChartId` or `searchMusic`
      * to get the music resource you want to play, and obtain the song code (`songCode`) from the
      * `onMusicCollectionResult` callback.
      *
@@ -725,7 +734,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure. 
      */
     virtual int preload(agora::util::AString& requestId, int64_t songCode) = 0;
 
@@ -742,7 +751,7 @@ public:
      *
      * @return
      * - 0: Success. The music resource has been deleted.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int removeCache(int64_t songCode) = 0;
 
@@ -765,7 +774,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getCaches(MusicCacheInfo *cacheInfo, int32_t* cacheInfoSize) = 0;
 
@@ -780,7 +789,7 @@ public:
      *
      * @return
      * - 0: Success. The music resource has been preloaded.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int isPreloaded(int64_t songCode) = 0;
 
@@ -799,7 +808,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getLyric(agora::util::AString& requestId, int64_t songCode, int32_t lyricType = 0) = 0;
 
@@ -808,7 +817,7 @@ public:
      *
      * @details
      * Before calling this method, you need to obtain the song code of the corresponding music resource.
-     * You can get it by calling `getMusicCollectionWithMusicChartId` or `searchMusic`,
+     * You can get it by calling `getMusicCollectionByMusicChartId` or `searchMusic`,
      * and retrieve the song code from the `onMusicCollectionResult` callback triggered by those
      * methods.
      * After you call this method, the SDK triggers the `onSongSimpleInfoResult` callback to report the
@@ -819,7 +828,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getSongSimpleInfo(agora::util::AString& requestId, int64_t songCode) = 0;
 
@@ -835,7 +844,7 @@ public:
      * resource.
      *
      * @param songCode The song code of the music resource, used to identify the resource. You can
-     * obtain it by calling `getMusicCollectionWithMusicChartId` or `searchMusic`,
+     * obtain it by calling `getMusicCollectionByMusicChartId` or `searchMusic`,
      * and retrieve the song code from the `onMusicCollectionResult` callback triggered by those
      * methods.
      * @param jsonOption Extended JSON field, default is NULL. Currently supports the following values:
@@ -847,7 +856,7 @@ public:
      *
      * @return
      * - 0: Success.
-     * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+     * - < 0: Failure.
      */
     virtual int getInternalSongCode(int64_t songCode, const char* jsonOption, int64_t& internalSongCode) = 0;
 

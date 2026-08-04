@@ -1214,6 +1214,18 @@ struct AudioVolumeInformation {
  */
 class ILocalUserObserver {
  public:
+  enum USER_STREAMS_BITMASK {
+    USER_STREAMS_BITMASK_AUDIO = 1 << 0,
+    USER_STREAMS_BITMASK_VIDEO_LOW = 1 << 1,
+    USER_STREAMS_BITMASK_VIDEO_HIGH = 1 << 2,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_1 = 1 << 3,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_2 = 1 << 4,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_3 = 1 << 5,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_4 = 1 << 6,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_5 = 1 << 7,
+    USER_STREAMS_BITMASK_VIDEO_LAYER_6 = 1 << 8,
+  };
+
   virtual ~ILocalUserObserver() {}
 
   virtual void onAudioTrackPublishStart(agora_refptr<ILocalAudioTrack> audioTrack) = 0;
@@ -1585,6 +1597,14 @@ class ILocalUserObserver {
    * @param state The remote user state.Just & #REMOTE_USER_STATE
    */
   virtual void onUserStateChanged(user_id_t userId, uint32_t state){}
+
+  /**
+   * Occurs when the remote user published streams are updated.
+   * @param uid The uid of the remote user.
+   * @param streams The remote user published streams in bitmask.
+   *                See #USER_STREAMS_BITMASK.
+   */
+  virtual void onUserStreamsChanged(user_id_t userId, uint32_t streams) {}
 
   virtual void onVideoRenderingTracingResult(user_id_t user_id, MEDIA_TRACE_EVENT currentState, VideoRenderingTracingInfo tracingInfo) {}
 
