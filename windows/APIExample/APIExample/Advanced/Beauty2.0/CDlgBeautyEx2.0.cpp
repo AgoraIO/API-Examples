@@ -109,7 +109,7 @@ void CDlgBeautyEx2::InitializeBeautyResources()
 	(*m_rtcEngine)->setParameters("{\"rtc.video.yuvconverter_enable_hardware_buffer\":true}");
 	
 	CString strExePath = GetExePath();
-	CString strModelPath = strExePath + _T("\\beauty_agora\\beauty_material.bundle\\beauty_material_v2.0.0");
+	CString strModelPath = strExePath + _T("\\beauty_agora\\beauty_material_functional");
 	
 	if (!PathFileExists(strModelPath)) {
 		CString strMsg;

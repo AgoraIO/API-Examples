@@ -193,7 +193,7 @@
 		F728B9DC2CA295D7007813BB /* PixelBufferPIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */; };
 		F728B9DD2CA295D7007813BB /* PixelBufferPIPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */; };
 		F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */; };
-		F734791C2DF5C9CD0030C0CE /* beauty_material.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */; };
+		F734791C2DF5C9CD0030C0CE /* AgoraBeautyMaterial.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F734791B2DF5C9CD0030C0CE /* AgoraBeautyMaterial.bundle */; };
 		F734791E2DF5CA0D0030C0CE /* AgoraBeauty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */; };
 		F73479242DF5CA820030C0CE /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F73479222DF5CA820030C0CE /* AgoraBeauty.storyboard */; };
 		F73479262DF5CAEB0030C0CE /* AgoraBeautyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */; };
@@ -511,7 +511,7 @@
 		F728B9D32CA295D7007813BB /* PixelBufferPIPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPService.swift; sourceTree = "<group>"; };
 		F728B9D42CA295D7007813BB /* PixelBufferPIPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferPIPViewController.swift; sourceTree = "<group>"; };
 		F728B9D52CA295D7007813BB /* PixelBufferRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelBufferRenderView.swift; sourceTree = "<group>"; };
-		F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = beauty_material.bundle; sourceTree = "<group>"; };
+		F734791B2DF5C9CD0030C0CE /* AgoraBeautyMaterial.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AgoraBeautyMaterial.bundle; sourceTree = "<group>"; };
 		F734791D2DF5CA0D0030C0CE /* AgoraBeauty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeauty.swift; sourceTree = "<group>"; };
 		F73479202DF5CA140030C0CE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AgoraBeauty.strings"; sourceTree = "<group>"; };
 		F73479232DF5CA820030C0CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AgoraBeauty.storyboard; sourceTree = "<group>"; };
@@ -783,7 +783,7 @@
 			isa = PBXGroup;
 			children = (
 				DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */,
-				F734791B2DF5C9CD0030C0CE /* beauty_material.bundle */,
+				F734791B2DF5C9CD0030C0CE /* AgoraBeautyMaterial.bundle */,
 				DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */,
 				8B349FE22681E2CE007247F2 /* agora-logo.png */,
 				576CA80925A9CC3A0091520B /* output.raw */,
@@ -1550,7 +1550,7 @@
 				DD6ED7F12CB69FFB007B3B5D /* LocalCompositeGraph.storyboard in Resources */,
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
-				F734791C2DF5C9CD0030C0CE /* beauty_material.bundle in Resources */,
+				F734791C2DF5C9CD0030C0CE /* AgoraBeautyMaterial.bundle in Resources */,
 				E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */,
 				E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */,
 				8B5E5B5B274CEFE20040E97D /* RhythmPlayer.storyboard in Resources */,

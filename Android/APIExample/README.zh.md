@@ -41,14 +41,23 @@
 
 本项目包含第三方美颜集成示例，在没有配置资源和证书的情况下，默认是无法启用的。资源证书配置方法如下：
 
-#### Agora 美颜
+#### Agora 美颜 2.0
 
-1. 联系 Agora 技术支持获取美颜资源
-2. 将美颜资源放到对应路径下
+Agora 美颜 2.0 资源包不包含在仓库中。本地构建前：
 
-| 美颜资源 | 项目路径                             |
-|------|----------------------------------|
-| 美颜资源 | app/src/main/assets/beauty_agora |
+1. 从 Agora 技术支持获取 `AgoraBeautyMaterial.zip`。
+2. 将 `AgoraBeautyMaterial.zip` 解压到 `app/src/main/assets/beauty_agora/`。
+
+解压后的资源目录结构如下：
+
+```text
+app/src/main/assets/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+该资源目录已被 Git 忽略。
 
 #### 相芯美颜
 

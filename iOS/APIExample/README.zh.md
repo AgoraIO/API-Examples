@@ -49,6 +49,23 @@ pod install
 
 连接 iPhone 或 iPad 真机后，即可在 Xcode 中构建并运行项目。
 
+### Agora 美颜 2.0 资源
+
+Agora 美颜 2.0 资源包不包含在仓库中。本地构建前，从 Agora 技术支持获取 `AgoraBeautyMaterial.bundle.zip`，并解压到 `iOS/APIExample/APIExample/Resources/`。
+
+解压后的资源目录结构如下：
+
+```text
+iOS/APIExample/APIExample/Resources/
+└── AgoraBeautyMaterial.bundle/
+    ├── beauty_material_functional/
+    │   ├── config.json
+    │   └── ...
+    └── ...
+```
+
+解压后的 bundle 已被 Git 忽略。
+
 ## 联系我们
 
 - 常见问题请查看 [Agora FAQ](https://docs.agora.io/en/faq)

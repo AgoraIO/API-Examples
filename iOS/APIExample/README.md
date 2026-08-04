@@ -71,6 +71,23 @@ To build and run the sample application, get an App Id:
 
 You are all set. Now connect your iPhone or iPad device and run the project.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.bundle.zip` from Agora technical support and extract it to `iOS/APIExample/APIExample/Resources/`.
+
+The extracted resources should have the following structure:
+
+```text
+iOS/APIExample/APIExample/Resources/
+└── AgoraBeautyMaterial.bundle/
+    ├── beauty_material_functional/
+    │   ├── config.json
+    │   └── ...
+    └── ...
+```
+
+The extracted bundle is ignored by Git.
+
 ## Contact Us
 
 - For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first

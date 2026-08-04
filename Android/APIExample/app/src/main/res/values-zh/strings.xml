@@ -437,4 +437,12 @@
     <string name="multipath_mode">Multipath Mode</string>
     <string name="multipath_type">Multipath Type</string>
     <string name="set_layers_config">设置层级配置（最多3层）</string>
+    <string name="agora_beauty_style_basic">基础美颜</string>
+    <string name="agora_beauty_style_ordinary">自然美颜</string>
+    <string name="agora_beauty_style_anchor">主播美颜</string>
+    <string name="agora_makeup_style_young">学妹妆</string>
+    <string name="agora_makeup_style_mature">学姐妆</string>
+    <string name="agora_filter_style_daily">日常</string>
+    <string name="agora_filter_style_moonlight">月光</string>
+    <string name="agora_filter_style_cream">奶油</string>
 </resources>

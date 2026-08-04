@@ -594,7 +594,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 if (!shapeBeauty.isChecked()) {
                     return;
                 }
-                AgoraBeautySDK.getBeautyConfig().setBeautyShapeStyle(spinnerShapeBeautifyStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyShapeStyle(getMaterialKey(spinnerShapeBeautifyStyle, R.array.agora_beauty_style_keys));
                 sbShapeBeautifyStyleIntensity.setProgress(AgoraBeautySDK.getBeautyConfig().getBeautyShapeStrength());
                 updateBasicBeautyOption();
                 checkEnable();
@@ -648,7 +648,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 if (!makeUp.isChecked()) {
                     return;
                 }
-                AgoraBeautySDK.getBeautyConfig().setBeautyMakeupStyle(spinnerFaceMakeupStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyMakeupStyle(getMaterialKey(spinnerFaceMakeupStyle, R.array.agora_makeup_style_keys));
                 sbFaceMakeupStyleIntensity.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBeautyMakeupStrength() * 10));
                 updateMakeupOptionsByStyle();
                 checkEnable();
@@ -657,7 +657,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 if (!filter.isChecked()) {
                     return;
                 }
-                AgoraBeautySDK.getBeautyConfig().setBeautyFilter(spinnerFilterStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyFilter(getMaterialKey(spinnerFilterStyle, R.array.agora_filter_style_keys));
                 sbFilterStyleIntensity.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getFilterStrength() * 10));
                 checkEnable();
                 return;
@@ -781,6 +781,12 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
         }
     }
 
+    private String getMaterialKey(Spinner spinner, int keyArrayRes) {
+        String[] keys = getResources().getStringArray(keyArrayRes);
+        int position = spinner.getSelectedItemPosition();
+        return position >= 0 && position < keys.length ? keys[position] : null;
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -844,7 +850,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 return;
             }
             if (isChecked) {
-                AgoraBeautySDK.getBeautyConfig().setBeautyShapeStyle(spinnerShapeBeautifyStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyShapeStyle(getMaterialKey(spinnerShapeBeautifyStyle, R.array.agora_beauty_style_keys));
                 sbShapeBeautifyStyleIntensity.setProgress(AgoraBeautySDK.getBeautyConfig().getBeautyShapeStrength());
                 updateBasicBeautyOption();
                 checkEnable();
@@ -859,7 +865,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 return;
             }
             if (isChecked) {
-                AgoraBeautySDK.getBeautyConfig().setBeautyMakeupStyle(spinnerFaceMakeupStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyMakeupStyle(getMaterialKey(spinnerFaceMakeupStyle, R.array.agora_makeup_style_keys));
                 sbFaceMakeupStyleIntensity.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBeautyMakeupStrength() * 10));
                 updateMakeupOptionsByStyle();
                 checkEnable();
@@ -893,7 +899,7 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
                 return;
             }
             if (isChecked) {
-                AgoraBeautySDK.getBeautyConfig().setBeautyFilter(spinnerFilterStyle.getSelectedItem().toString());
+                AgoraBeautySDK.getBeautyConfig().setBeautyFilter(getMaterialKey(spinnerFilterStyle, R.array.agora_filter_style_keys));
                 sbFilterStyleIntensity.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getFilterStrength() * 10));
                 checkEnable();
             } else {

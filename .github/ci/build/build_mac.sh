@@ -71,6 +71,12 @@ source "$(dirname "$0")/common_functions.sh"
 # Run version validation
 run_version_validation "macOS" "APIExample" "macos" || exit 1
 
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
+rm -rf macOS/APIExample/Resources/AgoraBeautyMaterial.bundle
+unzip -q AgoraBeautyMaterial.bundle.zip -d macOS/APIExample/Resources || exit 1
+rm -f AgoraBeautyMaterial.bundle.zip
+test -f macOS/APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
+
 # Validate SDK version in Podfile (skip only for main branch)
 if [ "$BRANCH_NAME" != "main" ]; then
     if [ -z "$BRANCH_VERSION" ]; then
@@ -143,5 +149,3 @@ if [ $compress_apiexample = true ]; then
     
     ls -al $WORKSPACE/
 fi
-
-

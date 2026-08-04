@@ -44,6 +44,21 @@
 
 > 若遇权限或执行策略报错，可尝试以管理员运行，或调整本机 PowerShell 执行策略后再试。
 
+### Agora 美颜 2.0 资源
+
+Agora 美颜 2.0 资源包不包含在仓库中。本地构建前，从 Agora 技术支持获取 `AgoraBeautyMaterial.zip`，并解压到 `windows/APIExample/Release/beauty_agora/`。
+
+解压后的资源目录结构如下：
+
+```text
+windows/APIExample/Release/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+`Release` 目录已被 Git 忽略。
+
 ## 基础场景
 
 ### 直播互动

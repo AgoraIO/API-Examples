@@ -460,4 +460,12 @@
     <string name="multipath_mode">Multipath Mode</string>
     <string name="multipath_type">Multipath Type</string>
     <string name="set_layers_config">Set Layers Config(Maximum 3)</string>
+    <string name="agora_beauty_style_basic">Basic</string>
+    <string name="agora_beauty_style_ordinary">Ordinary</string>
+    <string name="agora_beauty_style_anchor">Anchor</string>
+    <string name="agora_makeup_style_young">Young</string>
+    <string name="agora_makeup_style_mature">Mature</string>
+    <string name="agora_filter_style_daily">Daily</string>
+    <string name="agora_filter_style_moonlight">Moonlight</string>
+    <string name="agora_filter_style_cream">Cream</string>
 </resources>

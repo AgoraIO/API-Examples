@@ -12,8 +12,10 @@ import io.agora.rtc2.RtcEngine
  */
 object AgoraBeautySDK {
     private const val TAG = "AgoraBeautySDK"
+    private const val FUNCTIONAL_MATERIAL_DIRECTORY = "beauty_material_functional"
     private var rtcEngine: RtcEngine? = null
     private var videoEffectObject: IVideoEffectObject? = null
+    private var beautyMaterialCopied = false
 
     // Beauty config
     @JvmStatic
@@ -22,14 +24,34 @@ object AgoraBeautySDK {
 
     @JvmStatic
     fun initBeautySDK(context: Context, rtcEngine: RtcEngine): Boolean {
+        this.rtcEngine = rtcEngine
         rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true)
-        val storagePath = context.getExternalFilesDir("")?.absolutePath ?: return false
-        val modelsPath = "$storagePath/beauty_agora/beauty_material"
-        copyAssets(context, "beauty_agora/beauty_material", modelsPath)
+        val storagePath = context.getExternalFilesDir("")?.absolutePath
+        if (storagePath == null) {
+            rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", false)
+            this.rtcEngine = null
+            return false
+        }
+        val materialDirectory = java.io.File(storagePath, "beauty_agora")
+        if (!beautyMaterialCopied) {
+            materialDirectory.deleteRecursively()
+            copyAssets(context, "beauty_agora", materialDirectory.path)
+            if (!java.io.File(materialDirectory, "$FUNCTIONAL_MATERIAL_DIRECTORY/config.json").isFile) {
+                rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", false)
+                this.rtcEngine = null
+                return false
+            }
+            beautyMaterialCopied = true
+        }
         videoEffectObject = rtcEngine.createVideoEffectObject(
-            "$modelsPath/beauty_material_v2.0.0",
+            "${materialDirectory.path}/$FUNCTIONAL_MATERIAL_DIRECTORY",
             Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE
         )
+        if (videoEffectObject == null) {
+            rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", false)
+            this.rtcEngine = null
+            return false
+        }
         // Fix lipstick ghosting issue
         rtcEngine.setParameters("{\"rtc.video.yuvconverter_enable_hardware_buffer\":true}")
         Log.d(TAG, "initBeautySDK called")
@@ -51,6 +73,8 @@ object AgoraBeautySDK {
                 Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE
             )
         }
+        rtcEngine = null
+        videoEffectObject = null
     }
 
     @JvmStatic

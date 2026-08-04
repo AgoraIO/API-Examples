@@ -4,7 +4,11 @@ setlocal enabledelayedexpansion
 echo "compile start..."
 
 REM --- 1. Install Dependencies ---
-powershell.exe -ExecutionPolicy Bypass -File "%~dp0install.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "%~dp0install.ps1" -RequireBeautyMaterial
+if %ERRORLEVEL% NEQ 0 (
+    echo Dependency installation failed!
+    exit /b %ERRORLEVEL%
+)
 
 REM --- 2. Find MSBuild ---
 set "MSBuildPath="
@@ -49,6 +53,11 @@ xcopy /Y /S Release\*.dll Output\ >nul 2>&1
 
 REM Copy resources
 xcopy /Y /S /I APIExample\res Output\res >nul 2>&1
+xcopy /Y /S /I Release\beauty_agora Output\beauty_agora >nul 2>&1
+if not exist Output\beauty_agora\beauty_material_functional\config.json (
+    echo Agora beauty material is missing from the output package!
+    exit /b 1
+)
 xcopy /Y APIExample\*.ini Output\ >nul 2>&1
 
 REM Copy SDK and ThirdParty DLLs (Agora uses sdk\x86 for Win32)
