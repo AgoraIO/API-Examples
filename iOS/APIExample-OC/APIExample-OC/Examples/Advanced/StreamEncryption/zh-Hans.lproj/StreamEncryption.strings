@@ -1,8 +1,8 @@
 /* Element = "button"; configuration.title = "Button"; ObjectID = "99i-oC-tHx"; */
-"99i-oC-tHx.configuration.title" = "Button";
+"99i-oC-tHx.configuration.title" = "加密方式";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "99i-oC-tHx"; */
-"99i-oC-tHx.normalTitle" = "截图";
+"99i-oC-tHx.normalTitle" = "加密方式";
 
 /* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.placeholder" = "输入频道名";

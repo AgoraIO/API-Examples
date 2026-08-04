@@ -5,19 +5,19 @@
 "KHn-B1-epr.configuration.title" = "美妆";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "KHn-B1-epr"; */
-"KHn-B1-epr.normalTitle" = "截图";
+"KHn-B1-epr.normalTitle" = "美妆";
 
 /* Element = "button"; configuration.title = "Beauty"; ObjectID = "QZu-iN-Fi6"; */
 "QZu-iN-Fi6.configuration.title" = "美颜";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "QZu-iN-Fi6"; */
-"QZu-iN-Fi6.normalTitle" = "截图";
+"QZu-iN-Fi6.normalTitle" = "美颜";
 
 /* Element = "button"; configuration.title = "Sticker"; ObjectID = "aoR-43-iFs"; */
 "aoR-43-iFs.configuration.title" = "贴纸";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "aoR-43-iFs"; */
-"aoR-43-iFs.normalTitle" = "截图";
+"aoR-43-iFs.normalTitle" = "贴纸";
 
 /* Element = "label"; text = "remote user"; ObjectID = "gvH-ac-Awc"; */
 "gvH-ac-Awc.text" = "远端用户";

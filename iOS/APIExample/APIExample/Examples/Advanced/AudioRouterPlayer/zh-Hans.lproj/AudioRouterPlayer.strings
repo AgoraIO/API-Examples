@@ -11,7 +11,7 @@
 "nd3-pG-lkL.configuration.title" = "选择播放器类型（第三方/AVPlayer）";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "nd3-pG-lkL"; */
-"nd3-pG-lkL.normalTitle" = "截图";
+"nd3-pG-lkL.normalTitle" = "选择播放器类型（第三方/AVPlayer）";
 
 /* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
 "p70-sh-D1h.title" = "视频实时通话";

@@ -41,7 +41,7 @@
 "iUn-XK-AS2.text" = "音频属性配置";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "iZP-Ce-Oxt"; */
-"iZP-Ce-Oxt.normalTitle" = "截图";
+"iZP-Ce-Oxt.normalTitle" = "音频属性配置";
 
 /* Element = "button"; normalTitle = "Resume"; ObjectID = "jRA-VE-1PM"; */
 "jRA-VE-1PM.normalTitle" = "恢复播放";
@@ -56,7 +56,7 @@
 "m2n-wi-5Xx.normalTitle" = "播放";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
-"myR-6e-1zj.normalTitle" = "截图";
+"myR-6e-1zj.normalTitle" = "音频使用场景";
 
 /* Element = "button"; normalTitle = "Stop"; ObjectID = "nzY-OP-Heo"; */
 "nzY-OP-Heo.normalTitle" = "停止";

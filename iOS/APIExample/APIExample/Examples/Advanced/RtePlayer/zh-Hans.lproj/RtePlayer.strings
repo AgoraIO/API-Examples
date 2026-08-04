@@ -2,7 +2,7 @@
 "17J-Ix-Qot.configuration.title" = "播放";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "17J-Ix-Qot"; */
-"17J-Ix-Qot.normalTitle" = "截图";
+"17J-Ix-Qot.normalTitle" = "播放";
 
 /* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.placeholder" = "输入频道名";
@@ -14,4 +14,4 @@
 "tqt-S5-7Lt.configuration.title" = "停止";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "tqt-S5-7Lt"; */
-"tqt-S5-7Lt.normalTitle" = "截图";
+"tqt-S5-7Lt.normalTitle" = "停止";

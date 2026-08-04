@@ -5,7 +5,7 @@
 "TiR-fT-BhI.configuration.title" = "打开后置摄像头";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "TiR-fT-BhI"; */
-"TiR-fT-BhI.normalTitle" = "截图";
+"TiR-fT-BhI.normalTitle" = "打开后置摄像头";
 
 /* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";

@@ -20,22 +20,22 @@
 "QU9-AY-IUX.configuration.title" = "开始";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "QU9-AY-IUX"; */
-"QU9-AY-IUX.normalTitle" = "截图";
+"QU9-AY-IUX.normalTitle" = "开始";
 
 /* Element = "label"; text = "InEar Monitoring Volume"; ObjectID = "VMe-lv-SUb"; */
 "VMe-lv-SUb.text" = "耳返音量";
 
 /* Element = "button"; configuration.title = "Button"; ObjectID = "ZSJ-cf-f63"; */
-"ZSJ-cf-f63.configuration.title" = "Button";
+"ZSJ-cf-f63.configuration.title" = "音频使用场景";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "ZSJ-cf-f63"; */
-"ZSJ-cf-f63.normalTitle" = "截图";
+"ZSJ-cf-f63.normalTitle" = "音频使用场景";
 
 /* Element = "label"; text = "Audio Profile"; ObjectID = "iUn-XK-AS2"; */
 "iUn-XK-AS2.text" = "音频参数配置";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "iZP-Ce-Oxt"; */
-"iZP-Ce-Oxt.normalTitle" = "截图";
+"iZP-Ce-Oxt.normalTitle" = "音频参数配置";
 
 /* Element = "label"; text = "InEar Monitoring"; ObjectID = "iru-5f-bbo"; */
 "iru-5f-bbo.text" = "耳返";
@@ -47,4 +47,4 @@
 "kbN-ZR-nNn.normalTitle" = "加入频道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
-"myR-6e-1zj.normalTitle" = "截图";
+"myR-6e-1zj.normalTitle" = "音频使用场景";

@@ -14,7 +14,7 @@
 "7n8-3r-Ce8.configuration.title" = "(默认)均衡降噪模式";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "7n8-3r-Ce8"; */
-"7n8-3r-Ce8.normalTitle" = "截图";
+"7n8-3r-Ce8.normalTitle" = "(默认)均衡降噪模式";
 
 /* Element = "label"; text = "Style Transformation"; ObjectID = "86e-GB-8dT"; */
 "86e-GB-8dT.text" = "风格转换";
@@ -26,13 +26,13 @@
 "D5S-zC-yH4.text" = "室内声学";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Fzr-9u-xYR"; */
-"Fzr-9u-xYR.normalTitle" = "截图";
+"Fzr-9u-xYR.normalTitle" = "语音转换";
 
 /* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
 "GWc-L5-fZV.placeholder" = "输入频道名";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "JlT-dt-wGb"; */
-"JlT-dt-wGb.normalTitle" = "截图";
+"JlT-dt-wGb.normalTitle" = "风格转换";
 
 /* Element = "label"; text = "N/A"; ObjectID = "PNk-wE-Qwv"; */
 "PNk-wE-Qwv.text" = "不适用";
@@ -44,31 +44,31 @@
 "Sff-hC-KgZ.text" = "混响属性";
 
 /* Element = "label"; text = "Pitch Correction"; ObjectID = "TKQ-E0-tL2"; */
-"TKQ-E0-tL2.text" = "高音修正";
+"TKQ-E0-tL2.text" = "音高校正";
 
 /* Element = "label"; text = "Voice AI Tuner"; ObjectID = "U7m-qC-Efb"; */
 "U7m-qC-Efb.text" = "AI 音色调节";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "YHG-YI-kRP"; */
-"YHG-YI-kRP.normalTitle" = "截图";
+"YHG-YI-kRP.normalTitle" = "美声/音效";
 
 /* Element = "button"; normalTitle = "Change Voice"; ObjectID = "d0c-fe-ELJ"; */
 "d0c-fe-ELJ.normalTitle" = "变声";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "dm0-GV-3am"; */
-"dm0-GV-3am.normalTitle" = "截图";
+"dm0-GV-3am.normalTitle" = "波段频率";
 
 /* Element = "label"; text = "Customize Voice Effects"; ObjectID = "g02-yj-XcN"; */
 "g02-yj-XcN.text" = "自定义音效";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "gyg-kR-fNp"; */
-"gyg-kR-fNp.normalTitle" = "截图";
+"gyg-kR-fNp.normalTitle" = "音高校正";
 
 /* Element = "label"; text = "N/A"; ObjectID = "j5u-0S-mBh"; */
 "j5u-0S-mBh.text" = "不适用";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "jlA-wY-PwX"; */
-"jlA-wY-PwX.normalTitle" = "截图";
+"jlA-wY-PwX.normalTitle" = "混响属性";
 
 /* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";
@@ -86,13 +86,13 @@
 "tRN-v8-ddi.text" = "美声/音效预设";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "vr8-dh-GeV"; */
-"vr8-dh-GeV.normalTitle" = "截图";
+"vr8-dh-GeV.normalTitle" = "音色转换";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "wL9-fx-76f"; */
-"wL9-fx-76f.normalTitle" = "截图";
+"wL9-fx-76f.normalTitle" = "AI 音色调节";
 
 /* Element = "label"; text = "Voice Formant"; ObjectID = "yst-66-AHA"; */
 "yst-66-AHA.text" = "语音共振峰";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "zDI-bd-cnc"; */
-"zDI-bd-cnc.normalTitle" = "截图";
+"zDI-bd-cnc.normalTitle" = "室内声学";

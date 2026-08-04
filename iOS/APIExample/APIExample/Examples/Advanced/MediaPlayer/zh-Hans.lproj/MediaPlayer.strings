@@ -11,7 +11,7 @@
 "RyY-Fu-0JL.configuration.title" = "音轨";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "RyY-Fu-0JL"; */
-"RyY-Fu-0JL.normalTitle" = "截图";
+"RyY-Fu-0JL.normalTitle" = "音轨";
 
 /* Element = "label"; text = "play Track:"; ObjectID = "aiy-MM-lxz"; */
 "aiy-MM-lxz.text" = "播放音轨:";
@@ -44,7 +44,7 @@
 "uFn-ej-UAH.configuration.title" = "音轨";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "uFn-ej-UAH"; */
-"uFn-ej-UAH.normalTitle" = "截图";
+"uFn-ej-UAH.normalTitle" = "音轨";
 
 /* Element = "button"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
 "vdv-zd-3aD.normalTitle" = "播放";

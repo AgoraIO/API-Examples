@@ -2,16 +2,16 @@
 "4WV-kQ-0aJ.text" = "10";
 
 /* Element = "button"; configuration.title = "Start Lastmile Test"; ObjectID = "75u-n0-U1P"; */
-"75u-n0-U1P.configuration.title" = "开始Lastmile网络测试";
+"75u-n0-U1P.configuration.title" = "开始 Lastmile 网络测试";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "75u-n0-U1P"; */
-"75u-n0-U1P.normalTitle" = "截图";
+"75u-n0-U1P.normalTitle" = "开始 Lastmile 网络测试";
 
 /* Element = "button"; configuration.title = "Start Camera Test"; ObjectID = "Dxh-vp-2Jy"; */
 "Dxh-vp-2Jy.configuration.title" = "开始摄像头测试";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Dxh-vp-2Jy"; */
-"Dxh-vp-2Jy.normalTitle" = "截图";
+"Dxh-vp-2Jy.normalTitle" = "开始摄像头测试";
 
 /* Element = "label"; text = "Now you should hear what you said..."; ObjectID = "MdV-HB-V93"; */
 "MdV-HB-V93.text" = "现在你应该能听到前10秒的声音...";
