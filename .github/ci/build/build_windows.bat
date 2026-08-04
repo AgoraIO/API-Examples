@@ -116,9 +116,9 @@ if "%compile_project%"=="true" (
     echo "Compiling project to generate executable..."
     cd windows\APIExample
     call cloud_build.bat
-    if %ERRORLEVEL% NEQ 0 (
+    if errorlevel 1 (
         echo Build failed!
-        exit /b %ERRORLEVEL%
+        exit /b 1
     )
     cd ..\..
 ) else (
