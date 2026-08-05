@@ -111,12 +111,6 @@ else
    mkdir ./$unzip_name/samples
 fi
 
-curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
-rm -rf macOS/APIExample/Resources/AgoraBeautyMaterial.bundle
-unzip -q AgoraBeautyMaterial.bundle.zip -d macOS/APIExample/Resources || exit 1
-rm -f AgoraBeautyMaterial.bundle.zip
-test -f macOS/APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
-
 cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
 ls -al ./$unzip_name/samples/API-Example/
 if [ $sdk_url_flag = true ]; then
@@ -149,4 +143,10 @@ if [ $compress_apiexample = true ]; then
     mv global_result.zip $global_des_path
     
     ls -al $WORKSPACE/
+fi
+
+if [ $compile_project = true ]; then
+    cd ./$unzip_name/samples/APIExample
+    ./cloud_build.sh || exit 1
+    cd -
 fi

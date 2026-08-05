@@ -8,8 +8,15 @@ if [ "$WORKSPACE" = "" ]; then
 	WORKSPACE=$PWD
 fi
 
+cd ${PROJECT_PATH}
 
-cd ${PROJECT_PATH} && pod install || exit 1
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
+rm -rf APIExample/Resources/AgoraBeautyMaterial.bundle
+unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
+rm -f AgoraBeautyMaterial.bundle.zip
+test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
+
+pod install || exit 1
 
 # Build environment
 CONFIGURATION="Debug"
