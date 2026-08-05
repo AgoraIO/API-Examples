@@ -586,6 +586,20 @@ class IVideoRenderer : public IVideoSinkBase {
    */
   virtual int setRenderMode(void* view, media::base::RENDER_MODE_TYPE renderMode, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
   /**
+   * Sets the render rotation.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRotation(agora::rtc::VIDEO_ORIENTATION rotation, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  /**
+   * Sets the render rotation.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRotation(void* view, agora::rtc::VIDEO_ORIENTATION rotation, aosl_ref_t ares = AOSL_REF_INVALID) = 0;
+  /**
    * Sets whether to mirror the video.
    * @param mirror Whether to mirror the video:
    * - `true`: Mirror the video.

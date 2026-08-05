@@ -77,7 +77,7 @@ class AgoraBeauty: BaseViewController {
     
     private func setupBeautyManager() {
         beautyManager = AgoraBeautyManager(agoraKit: agoraKit)
-        beautyManager.beautyMakeupStyle = "default makeup style".localized
+        beautyManager.beautyMakeupStyle = "Makeup-Young"
         beautyManager.makeUpEnable = false
     }
     

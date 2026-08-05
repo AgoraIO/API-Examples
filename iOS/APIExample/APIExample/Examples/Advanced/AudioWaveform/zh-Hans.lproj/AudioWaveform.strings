@@ -8,7 +8,7 @@
 "iUn-XK-AS2.text" = "音频参数配置";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "iZP-Ce-Oxt"; */
-"iZP-Ce-Oxt.normalTitle" = "截图";
+"iZP-Ce-Oxt.normalTitle" = "音频参数配置";
 
 /* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
 "jxp-ZN-2yG.title" = "实时音频通话/直播";
@@ -17,4 +17,4 @@
 "kbN-ZR-nNn.normalTitle" = "加入频道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
-"myR-6e-1zj.normalTitle" = "截图";
+"myR-6e-1zj.normalTitle" = "音频使用场景";

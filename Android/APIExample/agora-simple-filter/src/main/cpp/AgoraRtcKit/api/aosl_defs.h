@@ -25,6 +25,17 @@
 #define aosl_stringify_1(x) #x
 #define aosl_stringify(x) aosl_stringify_1(x)
 
+#ifndef __AOSL_SANITIZE_ADDRESS__
+#if defined (__SANITIZE_ADDRESS__)
+/* gcc */
+#define __AOSL_SANITIZE_ADDRESS__
+#elif defined (__has_feature)
+#if __has_feature(address_sanitizer)
+/* clang */
+#define __AOSL_SANITIZE_ADDRESS__
+#endif
+#endif
+#endif
 
 #ifndef __MAKERCORE_ASSEMBLY__
 
@@ -33,9 +44,12 @@ extern "C" {
 #endif
 
 
-#ifdef _MSC_VER
+#if defined (_MSC_VER) && !defined (__GNUC__)
 #ifndef __inline__
 #define __inline__ __inline
+#endif
+#if defined (__cplusplus) && !defined (__typeof__)
+#define __typeof__ decltype
 #endif
 #endif
 
@@ -179,6 +193,20 @@ __asm__ (".section __TEXT,__const\n\t" \
 	__declspec(allocate(".CRT$XIG")) int (*_##name##_##what##_ctor_f) (void) = _##name##_##what##_ctor;
 #else
 #error Unsupported Toolchain!
+#endif
+
+/**
+ * Get the current call-site return address.
+ * Remarks:
+ *     This is a low-level helper used by APIs such as AOSL_SO_GROUP() to
+ *     identify the calling module. The exact value is compiler/toolchain
+ *     dependent and should only be treated as an opaque code address.
+ **/
+#if defined (__GNUC__)
+#define aosl_return_address() __builtin_return_address(0)
+#elif defined (_WIN32)
+#include <intrin.h>
+#define aosl_return_address() _ReturnAddress()
 #endif
 
 

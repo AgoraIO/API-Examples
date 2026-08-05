@@ -11,10 +11,10 @@
 "GWc-L5-fZV.placeholder" = "输入频道名";
 
 /* Element = "button"; configuration.title = "Leave ChannelEx"; ObjectID = "Rad-Lg-o3J"; */
-"Rad-Lg-o3J.configuration.title" = "离开Ex频道";
+"Rad-Lg-o3J.configuration.title" = "离开 Ex 频道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Rad-Lg-o3J"; */
-"Rad-Lg-o3J.normalTitle" = "截图";
+"Rad-Lg-o3J.normalTitle" = "离开 Ex 频道";
 
 /* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";

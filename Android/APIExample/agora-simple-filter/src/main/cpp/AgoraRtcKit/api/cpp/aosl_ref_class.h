@@ -32,11 +32,18 @@
 #endif
 
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
-#include <memory>
 #include <type_traits>
 #include <utility>
 #endif
 
+/**
+ * C++ wrapper around aosl_ref_t with lambda helpers for hold/read/write,
+ * MPQ dispatch, prepare/resume, and destroy semantics.
+ * Remarks:
+ *      The class keeps the same core lifetime model as aosl_ref_t:
+ *      hold/read/write are normal ref users, while unsafe is the advanced path
+ *      used when destroy must not wait in the same manner.
+ **/
 class aosl_ref_class {
 public:
 	class aosl_ref_t_oop {
@@ -50,7 +57,7 @@ public:
 	public:
 		static aosl_ref_t_oop *create (void *arg = NULL, aosl_ref_dtor_t dtor = NULL, bool destroy_wait = true)
 		{
-			return (aosl_ref_t_oop *)aosl_ref_create (arg, dtor, (int)destroy_wait);
+			return (aosl_ref_t_oop *)aosl_ref_create_flags (AOSL_REF_NEWID, arg, dtor, (int)destroy_wait);
 		}
 
 		static aosl_ref_t_oop *from_aosl_ref_t (aosl_ref_t ref)
@@ -1278,6 +1285,9 @@ public:
 
 	aosl_ref_class (aosl_ref_t_oop *obj)
 	{
+		if (aosl_ref_invalid (obj))
+			abort ();
+
 		refoop = obj;
 		if (aosl_ref_magic (obj->ref (), &refmagic) < 0)
 			refmagic = AOSL_REF_MAGIC_INVALID;
@@ -1285,6 +1295,9 @@ public:
 
 	aosl_ref_class (aosl_ref_t ref)
 	{
+		if (aosl_ref_invalid (ref))
+			abort ();
+
 		refoop = aosl_ref_t_oop::from_aosl_ref_t (ref);
 		if (aosl_ref_magic (ref, &refmagic) < 0)
 			refmagic = AOSL_REF_MAGIC_INVALID;
@@ -1603,28 +1616,6 @@ public:
 		return refoop->set_scope (scope_ref);
 	}
 
-	int destroy (bool do_delete = true)
-	{
-		if (!aosl_ref_invalid (refoop->ref ())) {
-			/**
-			 * if the ref is valid, then just call the destroy
-			 * function and do not delete this object directly
-			 * even the return value indicates failure.
-			 **/
-			return refoop->destroy (do_delete);
-		}
-
-		if (do_delete) {
-			/**
-			 * delete this object directly only when the ref
-			 * is invalid and the do_delete argument is true.
-			 **/
-			::delete this;
-		}
-
-		return 0;
-	}
-
 #if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
 	/* __ref_destroy_exec_lambda_t: void (int err) */
 	template <typename __ref_destroy_exec_lambda_t,
@@ -1636,6 +1627,12 @@ public:
 #endif
 
 public:
+	/**
+	 * Defining the operator delete for this class is useless, because
+	 * the destructor will be called automatically before the delete,
+	 * but this is not the expected behavior obviously.
+	 **/
+
 	class deleter {
 	public:
 		void operator () (aosl_ref_class *obj_ptr) const
@@ -1646,9 +1643,16 @@ public:
 	};
 
 protected:
-	/* We do not allow delete this object directly. */
+	/* We do not allow define an object of this class directly. */
 	virtual ~aosl_ref_class ()
 	{
+		/**
+		 * We make sure the ref object has been destroyed and can not be accessed anymore
+		 * before the destructor via the 'unsafe' function:
+		 * 1. the ref object has been destroyed already, then unsafe would fail to get it;
+		 * 2. the ref object is still alive, then unsafe would get it and abort it;
+		 **/
+		refoop->unsafe (____ref_abort_f, 0);
 	}
 
 private:
@@ -1657,6 +1661,26 @@ private:
 		aosl_ref_class *__this = (aosl_ref_class *)arg;
 		::delete __this;
 	}
+
+	static void ____ref_abort_f (void *arg, uintptr_t argc, uintptr_t argv [])
+	{
+		abort ();
+	}
+
+	int destroy (bool do_delete = true)
+	{
+		if (!aosl_ref_invalid (refoop->ref ())) {
+			/**
+			 * if the ref is valid, then just call the destroy
+			 * function and do not delete this object directly
+			 * even the return value indicates failure.
+			 **/
+			return refoop->destroy (do_delete);
+		}
+
+		return 0;
+	}
+	template<typename T> friend class aosl_ref_unique_ptr;
 
 #ifdef __AOSL_MPQ_H__
 	/* MPQ relative encapsulations */
@@ -2300,7 +2324,6 @@ private:
 #endif /* C++11 */
 };
 
-
 /**
  * The T_ref_cls argument of this template must be
  * aosl_ref_class or its derivatives.
@@ -2312,10 +2335,18 @@ private:
 
 public:
 	aosl_ref_unique_ptr (): _ptr (NULL) {}
-	aosl_ref_unique_ptr (T_ref_cls *p): _ptr (p) {}
+	aosl_ref_unique_ptr (T_ref_cls *p): _ptr (p)
+	{
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+		static_assert (std::is_base_of<aosl_ref_class, T_ref_cls>::value, "T_ref_cls must derive from aosl_ref_class.");
+#endif
+	}
 
 	aosl_ref_unique_ptr &operator = (T_ref_cls *p)
 	{
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+		static_assert (std::is_base_of<aosl_ref_class, T_ref_cls>::value, "T_ref_cls must derive from aosl_ref_class.");
+#endif
 		reset ();
 		_ptr = p;
 		return *this;
@@ -2345,6 +2376,9 @@ public:
 
 	void reset (T_ref_cls *p = NULL)
 	{
+#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
+		static_assert (std::is_base_of<aosl_ref_class, T_ref_cls>::value, "T_ref_cls must derive from aosl_ref_class.");
+#endif
 		if (_ptr != p) {
 			if (_ptr != NULL) {
 	/* C++11 lambda encapsulations */

@@ -403,20 +403,37 @@
     </string-array>
 
     <string-array name="agora_beauty_style">
-        <item>模板女</item>
-        <item>模板男</item>
-        <item>模板自然</item>
+        <item>@string/agora_beauty_style_basic</item>
+        <item>@string/agora_beauty_style_ordinary</item>
+        <item>@string/agora_beauty_style_anchor</item>
+    </string-array>
+
+    <string-array name="agora_beauty_style_keys">
+        <item>Beauty-Basic</item>
+        <item>Beauty-Ordinary</item>
+        <item>Beauty-Anchor</item>
     </string-array>
 
     <string-array name="agora_makeup_style">
-        <item>学妹妆</item>
-        <item>学姐妆</item>
+        <item>@string/agora_makeup_style_young</item>
+        <item>@string/agora_makeup_style_mature</item>
+    </string-array>
+
+    <string-array name="agora_makeup_style_keys">
+        <item>Makeup-Young</item>
+        <item>Makeup-Mature</item>
     </string-array>
 
     <string-array name="agora_filter_style">
-        <item>原生</item>
-        <item>冷白</item>
-        <item>嫩白</item>
+        <item>@string/agora_filter_style_daily</item>
+        <item>@string/agora_filter_style_moonlight</item>
+        <item>@string/agora_filter_style_cream</item>
+    </string-array>
+
+    <string-array name="agora_filter_style_keys">
+        <item>Filter-Daily</item>
+        <item>Filter-Moonlight</item>
+        <item>Filter-Cream</item>
     </string-array>
 
     <string-array name="layer_mode">

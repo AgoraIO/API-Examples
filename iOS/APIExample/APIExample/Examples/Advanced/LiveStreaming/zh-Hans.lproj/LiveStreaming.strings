@@ -14,13 +14,13 @@
 "Q0N-nV-bez.configuration.title" = "默认颜色";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
-"Q0N-nV-bez.normalTitle" = "截图";
+"Q0N-nV-bez.normalTitle" = "默认颜色";
 
 /* Element = "button"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.configuration.title" = "预加载";
+"S19-UR-C2c.configuration.title" = "预加载频道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.normalTitle" = "截图";
+"S19-UR-C2c.normalTitle" = "预加载频道";
 
 /* Element = "textField"; placeholder = "Remote render rate (1-60), default 15"; ObjectID = "UFF-wU-Wze"; */
 "UFF-wU-Wze.placeholder" = "远端渲染帧率（1-60，默认 15）";
@@ -32,7 +32,7 @@
 "ZB2-jf-zOV.configuration.title" = "视频场景";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "ZB2-jf-zOV"; */
-"ZB2-jf-zOV.normalTitle" = "截图";
+"ZB2-jf-zOV.normalTitle" = "视频场景";
 
 /* Element = "label"; text = "Large and small flow"; ObjectID = "auZ-cF-RlC"; */
 "auZ-cF-RlC.text" = "大小流";
@@ -56,7 +56,7 @@
 "lpn-6Z-VV3.configuration.title" = "远端截图";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "lpn-6Z-VV3"; */
-"lpn-6Z-VV3.normalTitle" = "截图";
+"lpn-6Z-VV3.normalTitle" = "远端截图";
 
 /* Element = "label"; text = "B frame"; ObjectID = "m3M-Tw-nzd"; */
 "m3M-Tw-nzd.text" = "B 帧";
@@ -68,7 +68,7 @@
 "ohV-am-Acd.text" = "首帧出图";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "pha-4w-IfR"; */
-"pha-4w-IfR.normalTitle" = "截图";
+"pha-4w-IfR.normalTitle" = "相机防抖";
 
 /* Element = "textField"; placeholder = "Local render rate (1-60), default 15"; ObjectID = "tOf-AP-HSe"; */
 "tOf-AP-HSe.placeholder" = "本地渲染帧率（1-60，默认 15）";
@@ -77,10 +77,10 @@
 "ug1-fz-GYz.configuration.title" = "相机对焦";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "ug1-fz-GYz"; */
-"ug1-fz-GYz.normalTitle" = "截图";
+"ug1-fz-GYz.normalTitle" = "相机对焦";
 
 /* Element = "button"; configuration.title = "Local screenshot"; ObjectID = "w4q-aT-JBc"; */
 "w4q-aT-JBc.configuration.title" = "本地截图";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
-"w4q-aT-JBc.normalTitle" = "截图";
+"w4q-aT-JBc.normalTitle" = "本地截图";

@@ -38,6 +38,21 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 
 > If you run into permission or execution policy errors, try running as administrator, or adjust the local PowerShell execution policy and try again.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.zip` from Agora technical support and extract it to `windows/APIExample/Release/beauty_agora/`.
+
+The extracted resources should have the following structure:
+
+```text
+windows/APIExample/Release/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+The `Release` directory is ignored by Git.
+
 ## Basic Scene
 
 

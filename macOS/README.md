@@ -64,6 +64,23 @@ To build and run the sample application, get an App Id:
 
 Then you can compile and run the project using `APIExample.xcworkspace`.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.bundle.zip` from Agora technical support and extract it to `macOS/APIExample/Resources/`.
+
+The extracted resources should have the following structure:
+
+```text
+macOS/APIExample/Resources/
+└── AgoraBeautyMaterial.bundle/
+    ├── beauty_material_functional/
+    │   ├── config.json
+    │   └── ...
+    └── ...
+```
+
+The extracted bundle is ignored by Git.
+
 
 ## Contact Us
 

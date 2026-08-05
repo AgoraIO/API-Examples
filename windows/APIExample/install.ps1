@@ -1,8 +1,30 @@
+param(
+    [switch]$RequireBeautyMaterial
+)
+
 $agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.7.0_FULL.zip'
 $ThirdPartysrc = 'https://demo-app-download.agora.io/api_example/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_des = 'AgoraSdk.zip'
 $agora_local_sdk = '../../sdk'
+$beauty_url = 'https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.zip'
+$beauty_destination = Join-Path $PSScriptRoot 'Release\beauty_agora'
+
+if ($RequireBeautyMaterial) {
+    $beauty_zip = Join-Path $PSScriptRoot 'AgoraBeautyMaterial.zip'
+    Invoke-WebRequest -UseBasicParsing -Uri $beauty_url -Headers @{
+        'X-JFrog-Art-Api' = $env:JFROG_API_KEY
+    } -OutFile $beauty_zip
+    if (Test-Path $beauty_destination) {
+        Remove-Item $beauty_destination -Recurse -Force
+    }
+    Expand-Archive -Path $beauty_zip -DestinationPath $beauty_destination -Force
+    Remove-Item $beauty_zip -Force
+    $beauty_config = Join-Path $beauty_destination 'beauty_material_functional\config.json'
+    if (-not (Test-Path $beauty_config -PathType Leaf)) {
+        throw "Beauty material extraction did not create $beauty_config"
+    }
+}
 
 if (-not (Test-Path ThirdParty)){
 	echo "download $ThirdPartydes"

@@ -11,6 +11,12 @@ fi
 
 cd ${PROJECT_PATH}
 
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
+rm -rf APIExample/Resources/AgoraBeautyMaterial.bundle
+unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
+rm -f AgoraBeautyMaterial.bundle.zip
+test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
+
 echo "start download fu resource : $fu_lib"
 curl -L -O "$fu_lib"
 unzip -o vender_fu_iOS.zip

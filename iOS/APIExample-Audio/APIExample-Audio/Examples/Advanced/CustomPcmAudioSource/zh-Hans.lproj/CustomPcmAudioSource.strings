@@ -2,7 +2,7 @@
 "6VE-rp-0Wl.normalTitle" = "加入频道";
 
 /* Element = "label"; text = "Push PCM"; ObjectID = "Dbo-LJ-5lv"; */
-"Dbo-LJ-5lv.text" = "播放 PCM";
+"Dbo-LJ-5lv.text" = "推送 PCM";
 
 /* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "SdL-FU-6ht"; */
 "SdL-FU-6ht.placeholder" = "输入频道名";

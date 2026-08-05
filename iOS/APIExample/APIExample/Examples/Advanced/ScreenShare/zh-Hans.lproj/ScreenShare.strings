@@ -14,13 +14,13 @@
 "Ite-nb-Fye.configuration.title" = "停止屏幕共享";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Ite-nb-Fye"; */
-"Ite-nb-Fye.normalTitle" = "截图";
+"Ite-nb-Fye.normalTitle" = "停止屏幕共享";
 
 /* Element = "button"; configuration.title = "startScreen"; ObjectID = "QUG-ji-HaF"; */
 "QUG-ji-HaF.configuration.title" = "开始屏幕共享";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "QUG-ji-HaF"; */
-"QUG-ji-HaF.normalTitle" = "截图";
+"QUG-ji-HaF.normalTitle" = "开始屏幕共享";
 
 /* Element = "label"; text = "captureSignalVolume"; ObjectID = "d7R-BO-VFF"; */
 "d7R-BO-VFF.text" = "采集信号音量";
@@ -29,13 +29,13 @@
 "doI-u6-5jw.configuration.title" = "15fps";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "doI-u6-5jw"; */
-"doI-u6-5jw.normalTitle" = "截图";
+"doI-u6-5jw.normalTitle" = "15fps";
 
 /* Element = "button"; configuration.title = "video"; ObjectID = "gVR-0u-aAP"; */
 "gVR-0u-aAP.configuration.title" = "视频";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "gVR-0u-aAP"; */
-"gVR-0u-aAP.normalTitle" = "截图";
+"gVR-0u-aAP.normalTitle" = "视频";
 
 /* Element = "label"; text = "ScreenScenarioType"; ObjectID = "igD-m4-EKM"; */
 "igD-m4-EKM.text" = "屏幕共享场景";
@@ -50,7 +50,7 @@
 "o17-gA-vcA.configuration.title" = "更新屏幕共享";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "o17-gA-vcA"; */
-"o17-gA-vcA.normalTitle" = "截图";
+"o17-gA-vcA.normalTitle" = "更新屏幕共享";
 
 /* Element = "label"; text = "captureFrameRate"; ObjectID = "yy3-y8-YOa"; */
 "yy3-y8-YOa.text" = "采集帧率";

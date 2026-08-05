@@ -293,6 +293,20 @@ enum CHANNEL_PROFILE_TYPE {
 };
 
 /**
+ * The channel types.
+ */
+enum CHANNEL_TYPE {
+  /**
+   * 0: Standard channel type.
+   */
+  CHANNEL_TYPE_STANDARD = 0,
+  /**
+   * 1: Channel type with a large-scale scenario, for example, more than 200 broadcasters.
+   */
+  CHANNEL_TYPE_LARGE_SCALE = 1,
+};
+
+/**
  * The warning codes.
  */
 enum WARN_CODE_TYPE {
@@ -403,6 +417,10 @@ enum WARN_CODE_TYPE {
    * 1032: Audio Device Module: The playback audio volume is too low.
    */
   WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL = 1032,
+  /**
+   * 1033: Audio device module: The audio capturing device is occupied.
+   */
+  WARN_ADM_RECORD_IS_OCCUPIED = 1033,
   /**
    * 1040: Audio device module: An exception occurs with the audio drive.
    * Choose one of the following solutions:
@@ -789,6 +807,71 @@ enum ERROR_CODE_TYPE {
    * camera permission is granted.
    */
   ERR_VDM_CAMERA_NOT_AUTHORIZED = 1501,
+  
+  // Video Effect (Beauty) errors: 1700~1799
+  /**
+   * 1700: The video effect asset is invalid. The asset bundle may be corrupted,
+   * the configuration file cannot be parsed, or required fields are missing.
+   */
+  ERR_VIDEOEFFECT_ASSET_INVALID = 1700,
+  /**
+   * 1701: Failed to save the video effect configuration. The file write
+   * operation failed, possibly due to insufficient disk space or permission issues.
+   */
+  ERR_VIDEOEFFECT_SAVE_FAILED = 1701,
+  /**
+   * 1702: The video effect engine is in an invalid state. The beauty processing
+   * engine is not initialized or the render engine instance does not exist.
+   */
+  ERR_VIDEOEFFECT_ENGINE_INVALID = 1702,
+  /**
+   * 1704: The target video effect node is not active. Call
+   * addOrUpdateVideoEffect to activate the node first.
+   */
+  ERR_VIDEOEFFECT_NODE_NOT_ACTIVE = 1704,
+  /**
+   * 1705: The video effect parameter is invalid. For example, the nodeId,
+   * actionId, option, or key is invalid or empty.
+   */
+  ERR_VIDEOEFFECT_INVALID_PARAM = 1705,
+  /**
+   * 1706: The video effect is not supported on this device.
+   */
+  ERR_VIDEOEFFECT_NOT_SUPPORTED = 1706,
+  /**
+   * 1707: The video effect bundle path is invalid. The path is empty or
+   * does not exist on the file system.
+   */
+  ERR_VIDEOEFFECT_INVALID_BUNDLE_PATH = 1707,
+  /**
+   * 2007: Audio Device Module: An error occurs in starting the application loopback.
+   */
+  ERR_ADM_APPLICATION_LOOPBACK = 2007,
+  /**
+   * 2008: Audio Device Module: The application loopback was stopped unexpectedly, typically due to the application exiting or the user disabling loopback.
+   */
+  ERR_ADM_APPLICATION_LOOPBACK_STOPPED = 2008,
+  /**
+   * 2009: Audio Device Module: An error occurred while starting the system loopback. 
+   * This may be due to system restrictions, device conflicts, or other internal errors.
+   */
+  ERR_ADM_SYSTEM_LOOPBACK = 2009,
+  /**
+   * 2010: Audio Device Module: The system loopback was stopped unexpectedly, typically due to the user disabling loopback or a system error occurred.
+   */
+  ERR_ADM_SYSTEM_LOOPBACK_STOPPED = 2010,
+  /**
+   * 2011: Audio Device Module: No permission to start the loopback.
+   */
+  ERR_ADM_LOOPBACK_NO_PERMISSION = 2011,
+  /**
+   * 2012: Audio Device Module: Silent detected in loopback.
+    */
+  ERR_ADM_LOOPBACK_SILENT_DETECTED = 2012,
+  /**
+   * 2013: Audio Device Module: Silent recovered in loopback.
+   */
+  ERR_ADM_LOOPBACK_SILENT_RECOVERED = 2013,
 };
 
 enum LICENSE_ERROR_TYPE {
@@ -2253,11 +2336,12 @@ struct SimulcastStreamConfig {
 /**
  * @brief Configure video streams of different quality levels.
  *
- * @since v4.6.0
+ * @technical preview
  */
 struct SimulcastConfig {
   /**
    * @brief Index of video streams of different quality levels.
+   * @technical preview
    */
   enum StreamLayerIndex {
    /**
@@ -2295,7 +2379,7 @@ struct SimulcastConfig {
   };
   /**
    * @brief Configures the parameters of a specific layer in multi-quality video streams.
-   *
+   * @technical preview
    * @details
    * Used to configure the resolution, frame rate, and enable status of a specific layer in
    * multi-quality video streams.
@@ -2631,7 +2715,6 @@ struct WatermarkConfig {
 enum MultipathMode {
   /**
     * Duplicate mode, the same piece of data is redundantly transmitted over all available paths.
-    * @technical preview
     */
   Duplicate= 0,
   /**
@@ -5146,6 +5229,8 @@ enum CONNECTION_CHANGED_REASON_TYPE {
   CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED_BY_USER = 18,
   /**
    * 19: The user joined the same channel from different devices with the same UID.
+   * @note Joining a channel with the same UID is an undefined behavior. Agora does not guarantee
+   * `reason` 19 to be triggered every time such a behavior occurs.
    */
   CONNECTION_CHANGED_SAME_UID_LOGIN = 19,
   /**
@@ -5332,6 +5417,11 @@ struct VideoCanvas {
    */
   media::base::VIDEO_MODULE_POSITION position;
 
+  /**
+   * The clockwise rotation information. You can set it as 0, 90, 180 or 270.
+   */
+  VIDEO_ORIENTATION rotation;
+
   VideoCanvas()
       : uid(0),
         subviewUid(0),
@@ -5344,7 +5434,8 @@ struct VideoCanvas {
         mediaPlayerId(-ERR_NOT_READY),
         cropArea(0, 0, 0, 0),
         enableAlphaMask(false),
-        position(media::base::POSITION_POST_CAPTURER) {}
+        position(media::base::POSITION_POST_CAPTURER), 
+        rotation(VIDEO_ORIENTATION_0) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt)
       : uid(0),
@@ -5358,7 +5449,8 @@ struct VideoCanvas {
         mediaPlayerId(-ERR_NOT_READY),
         cropArea(0, 0, 0, 0),
         enableAlphaMask(false),
-        position(media::base::POSITION_POST_CAPTURER) {}
+        position(media::base::POSITION_POST_CAPTURER), 
+        rotation(VIDEO_ORIENTATION_0) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u)
       : uid(u),
@@ -5372,7 +5464,8 @@ struct VideoCanvas {
         mediaPlayerId(-ERR_NOT_READY),
         cropArea(0, 0, 0, 0),
         enableAlphaMask(false),
-        position(media::base::POSITION_POST_CAPTURER) {}
+        position(media::base::POSITION_POST_CAPTURER), 
+        rotation(VIDEO_ORIENTATION_0) {}
 
   VideoCanvas(view_t v, media::base::RENDER_MODE_TYPE m, VIDEO_MIRROR_MODE_TYPE mt, uid_t u,
               uid_t subu)
@@ -5387,7 +5480,8 @@ struct VideoCanvas {
         mediaPlayerId(-ERR_NOT_READY),
         cropArea(0, 0, 0, 0),
         enableAlphaMask(false),
-        position(media::base::POSITION_POST_CAPTURER) {}
+        position(media::base::POSITION_POST_CAPTURER), 
+        rotation(VIDEO_ORIENTATION_0) {}
 };
 
 /**
@@ -5476,7 +5570,7 @@ struct FaceShapeAreaOptions {
     FACE_SHAPE_AREA_NONE = -1,
     /**
      * (100): Head, used to achieve a smaller head effect. The value range is 0 to 100, and the default
-     * value is 50. The larger the value, the more noticeable the adjustment.
+     * value is 0. The larger the value, the more noticeable the adjustment.
      */
     FACE_SHAPE_AREA_HEADSCALE = 100,
     /**
@@ -5524,8 +5618,14 @@ struct FaceShapeAreaOptions {
      */
     FACE_SHAPE_AREA_CHIN = 108,
     /**
+     * (109): Face Small, reduces the overall face size for a slimmer appearance.
+     * The value range is [0, 100]. The default value is 0.
+     * The larger the value, the more pronounced the overall face size reduction effect.
+     */
+    FACE_SHAPE_AREA_FACESMALL = 109,
+    /**
      * (200): Eyes, used to achieve a larger eye effect. The value range is 0 to 100, and the default
-     * value is 50. The larger the value, the more noticeable the adjustment.
+     * value is 0. The larger the value, the more noticeable the adjustment.
      */
     FACE_SHAPE_AREA_EYESCALE = 200,
     /**
@@ -5569,6 +5669,12 @@ struct FaceShapeAreaOptions {
      */
     FACE_SHAPE_AREA_EYEOUTERCORNER = 206,
     /**
+     * (207): Eye Angle, adjusts the tilt angle of the eyes (cat-eye effect).
+     * The value range is [-100, 100]. The default value is 0.
+     * The larger the value, the more the outer corners of the eyes are lifted upward.
+     */
+    FACE_SHAPE_AREA_EYEANGLE = 207,
+    /**
      * (300): Nose length, used to achieve a longer nose effect. The range is [-100, 100], with a
      * default value of 0.
      */
@@ -5580,7 +5686,7 @@ struct FaceShapeAreaOptions {
      */
     FACE_SHAPE_AREA_NOSEWIDTH = 301,
     /**
-     * (302): Nose wing adjustment. The value range is 0 to 100, and the default value is 10. The larger
+     * (302): Nose wing adjustment. The value range is 0 to 100, and the default value is 0. The larger
      * the value, the more noticeable the adjustment.
      * @since v4.6.0
      */
@@ -5592,19 +5698,19 @@ struct FaceShapeAreaOptions {
      */
     FACE_SHAPE_AREA_NOSEROOT = 303,
     /**
-     * (304): Nose bridge adjustment. The value range is 0 to 100, and the default value is 50. The
+     * (304): Nose bridge adjustment. The value range is 0 to 100, and the default value is 0. The
      * larger the value, the more noticeable the adjustment.
      * @since v4.6.0
      */
     FACE_SHAPE_AREA_NOSEBRIDGE = 304,
     /**
-     * (305): Nose tip adjustment. The value range is 0 to 100, and the default value is 50. The larger
+     * (305): Nose tip adjustment. The value range is 0 to 100, and the default value is 0. The larger
      * the value, the more noticeable the adjustment.
      * @since v4.6.0
      */
     FACE_SHAPE_AREA_NOSETIP = 305,
     /**
-     * (306): Overall nose adjustment. The range is [-100, 100], with a default value of 50. The greater
+     * (306): Overall nose adjustment. The range is [-100, 100], with a default value of 0. The greater
      * the absolute value, the more noticeable the adjustment. Negative values indicate the opposite
      * direction.
      * @since v4.6.0
@@ -5612,7 +5718,7 @@ struct FaceShapeAreaOptions {
     FACE_SHAPE_AREA_NOSEGENERAL = 306,
     /**
      * (400): Mouth, used to achieve a larger mouth effect. The range is [-100, 100], with a default
-     * value of 20. The greater the absolute value, the more noticeable the adjustment. Negative values
+     * value of 0. The greater the absolute value, the more noticeable the adjustment. Negative values
      * indicate the opposite direction.
      * @since v4.6.0
      */
@@ -6088,6 +6194,75 @@ struct AudioTrackConfig {
   AudioTrackConfig() : enableLocalPlayback(true),enableAudioProcessing(false) {}
 };
 
+/** The type of loopback audio source mode
+*/
+enum LOOPBACK_AUDIO_TRACK_TYPE {
+  /** 
+   * 0: loopback the whole system
+   */
+  LOOPBACK_SYSTEM = 0,
+  /** 
+   * 1: loopback the whole system exclude self
+   */
+  LOOPBACK_SYSTEM_EXCLUDE_SELF = 1,
+  /** 
+   * 2: loopback the specific application
+   */
+  LOOPBACK_APPLICATION = 2,
+  /** 
+   * 3: loopback the specific process
+   */
+  LOOPBACK_PROCESS = 3,
+};
+
+/** Defines options for a custom loopback audio track. */
+struct LoopbackAudioTrackConfig {
+  /**
+   * Specifies the loopback source type.
+   * Possible values are defined by LOOPBACK_AUDIO_TRACK_TYPE (e.g., system audio, specific application, or process).
+   * Default: LOOPBACK_SYSTEM.
+   */
+  LOOPBACK_AUDIO_TRACK_TYPE loopbackType;
+
+  /**
+   * Initial playback volume for the loopback audio, valid in the range [0, 400].
+   * 0: mute; 100: original volume; 400: maximum amplified volume.
+   * Default is 100.
+   */
+  int volume;
+
+  /**
+   * Playback device name to capture loopback audio from.
+   *
+   * Platform-specific notes:
+   * - **Windows:** Not supported for now. The `deviceName` parameter is ignored on Windows.
+   * - **macOS:** For `LOOPBACK_SYSTEM` or `LOOPBACK_SYSTEM_EXCLUDE_SELF`, if set, uses the named virtual device; if NULL, uses the default.
+   *   For `LOOPBACK_APPLICATION` and `LOOPBACK_PROCESS`, ignored.
+   *
+   * If set, the name must exactly match the target playback device.
+   * Set to NULL to use the platform default selection.
+   */
+  const char* deviceName;
+
+  /**
+   * Name of the application to capture audio from.
+   * Only used if loopbackType is LOOPBACK_APPLICATION; otherwise ignored.
+   * Must be an exact, case-sensitive match of the application name.
+   * Set to NULL if not capturing a specific application.
+   */
+  const char* appName;
+
+  /**
+   * Process ID of the target application to capture audio from.
+   * Only used if loopbackType is LOOPBACK_PROCESS; otherwise ignored.
+   * Default is -1.
+   */
+  unsigned int processId;
+
+  LoopbackAudioTrackConfig()
+    : loopbackType(LOOPBACK_SYSTEM), volume(100), deviceName(NULL), appName(NULL), processId(-1) {}
+};
+
 /**
  * Preset local voice reverberation options.
  * bitmap allocation:
@@ -6475,6 +6650,7 @@ struct ScreenAudioParameters {
 struct ScreenCaptureParameters {
 
   /**
+   * @technical preview
    * Determines whether to capture system audio during screen sharing:
    * - `true`: Capture.
    * - `false`: (Default)  Do not capture.
@@ -6485,6 +6661,7 @@ struct ScreenCaptureParameters {
    */
   bool captureAudio;
   /**
+   * @technical preview
    * The audio configuration for the shared screen stream.
    * @note This parameter only takes effect when `captureAudio` is `true`.
    * See `ScreenAudioParameters`.

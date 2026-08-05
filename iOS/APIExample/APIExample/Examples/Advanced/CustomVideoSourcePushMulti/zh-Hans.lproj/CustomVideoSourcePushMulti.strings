@@ -2,10 +2,10 @@
 "GWc-L5-fZV.placeholder" = "输入频道名";
 
 /* Element = "button"; configuration.title = "Create VideoTrack"; ObjectID = "Her-yf-kmE"; */
-"Her-yf-kmE.configuration.title" = "创建采集Track";
+"Her-yf-kmE.configuration.title" = "创建视频轨道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Her-yf-kmE"; */
-"Her-yf-kmE.normalTitle" = "截图";
+"Her-yf-kmE.normalTitle" = "创建视频轨道";
 
 /* Element = "navigationItem"; title = "Join Channel"; ObjectID = "a4k-1t-KLv"; */
 "a4k-1t-KLv.title" = "加入频道";
@@ -17,13 +17,13 @@
 "pjq-Wh-4Ys.title" = "视频实时通话";
 
 /* Element = "button"; configuration.title = "Destory Track"; ObjectID = "xi9-eb-Hiz"; */
-"xi9-eb-Hiz.configuration.title" = "销毁Track";
+"xi9-eb-Hiz.configuration.title" = "销毁视频轨道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "xi9-eb-Hiz"; */
-"xi9-eb-Hiz.normalTitle" = "截图";
+"xi9-eb-Hiz.normalTitle" = "销毁视频轨道";
 
 /* Element = "button"; configuration.title = "Create Video Track(Encode)"; ObjectID = "zBJ-mw-TwL"; */
-"zBJ-mw-TwL.configuration.title" = "创建采集Track(编码)";
+"zBJ-mw-TwL.configuration.title" = "创建编码视频轨道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "zBJ-mw-TwL"; */
-"zBJ-mw-TwL.normalTitle" = "截图";
+"zBJ-mw-TwL.normalTitle" = "创建编码视频轨道";

@@ -28,6 +28,7 @@ public:
   /**
    * Gets the unique source ID of the media player source.
    * @return
+   * @technical preview
    * - >=0: The source ID of this media player source.
    * - < 0: Failure.
    */
@@ -35,6 +36,7 @@ public:
 
   /**
    * Opens a media file with a specified URL.
+   * @technical preview
    * @param url The path of the media file. Both the local path and online path are supported.
    * @param startPos The starting position (ms) for playback. Default value is 0.
    * @return
@@ -45,6 +47,7 @@ public:
 
   /**
    * Opens a media file with a media file source.
+   * @technical preview
    * @param source Media file source that you want to play, see `MediaSource`
    * @return
    * - 0: Success.
@@ -54,6 +57,7 @@ public:
     
   /**
    * Plays the media file.
+   * @technical preview
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -62,6 +66,7 @@ public:
 
   /**
    * Pauses the playback.
+   * @technical preview
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -70,6 +75,7 @@ public:
 
   /**
    * Stops the playback.
+   * @technical preview
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -78,6 +84,7 @@ public:
 
   /**
    * Resumes the playback.
+   * @technical preview
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -86,6 +93,7 @@ public:
 
   /**
    * Sets the playback position of the media file.
+   * @technical preview
    * @param newPos The new playback position (ms).
    * @return
    * - 0: Success.
@@ -95,6 +103,7 @@ public:
 
   /**
    * Gets the duration of the media file.
+   * @technical preview
    * @param [out] duration A reference to the duration of the media file.
    * @return
    * - 0: Success.
@@ -104,6 +113,7 @@ public:
 
   /**
    * Gets the current playback position of the media file.
+   * @technical preview
    * @param [out] pos A reference to the current playback position (ms).
    * @return
    * - 0: Success.
@@ -113,6 +123,7 @@ public:
 
   /**
    * Gets the number of the media streams in the media source.
+   * @technical preview
    * @param [out] count The number of the media streams in the media source.
    * @return
    * - 0: Success.
@@ -122,6 +133,7 @@ public:
 
   /**
    * Gets the detailed information of a media stream.
+   * @technical preview
    * @param index The index of the media stream.
    * @param [out] info The detailed information of the media stream. See \ref media::base::PlayerStreamInfo "PlayerStreamInfo" for details.
    * @return
@@ -132,6 +144,7 @@ public:
 
   /**
    * Sets whether to loop the media file for playback.
+   * @technical preview
    * @param loopCount The number of times of looping the media file.
    * - 0: Play the media file once.
    * - 1: Play the media file twice.
@@ -144,6 +157,7 @@ public:
 
   /**
    * Changes the playback speed.
+   * @technical preview
    * @param speed The playback speed ref [50-400].
    * @return
    * - 0: Success.
@@ -153,6 +167,7 @@ public:
 
   /**
    * Selects an audio track of the media file for playback.
+   * @technical preview
    * @param index The index of the audio track in media file.
    * @return
    * - 0: Success.
@@ -162,6 +177,7 @@ public:
 
   /**
    * Selects multi audio track of the media file for playback or publish to channel.
+   * @technical preview
    * @param playoutTrackIndex The index of the audio track in media file for local playback.
    * @param publishTrackIndex The index of the audio track in the media file published to the remote.
    *
@@ -179,6 +195,7 @@ public:
 
   /**
    * Changes the player option before playing a file.
+   * @technical preview
    * @param key The key of the option paramemter.
    * @param value The value of option parameter.
    * @return
@@ -189,6 +206,7 @@ public:
 
   /**
    * Changes the player option before playing a file.
+   * @technical preview
    * @param key The key of the option paramemter.
    * @param value The value of option parameter.
    * @return
@@ -199,6 +217,7 @@ public:
 
   /**
    * Takes a screenshot when playing a video file.
+   * @technical preview
    * @param filename The filename of the screenshot file.
    * @return
    * - 0: Success.
@@ -208,6 +227,7 @@ public:
 
   /**
    * Selects internal subtitles for a video file.
+   * @technical preview
    * @param index The index of the internal subtitles.
    * @return
    * - 0: Success.
@@ -217,6 +237,7 @@ public:
 
   /**
    * Sets an external subtitle file for a video file.
+   * @technical preview
    * @param url The URL of the subtitle file.
    * @return
    * - 0: Success.
@@ -226,6 +247,7 @@ public:
 
   /**
    * Gets the playback state.
+   * @technical preview
    * @return The current playback state. See {@link media::base::MEDIA_PLAYER_STATE MEDIA_PLAYER_STATE} for details.
    */
   virtual media::base::MEDIA_PLAYER_STATE getState() = 0;
@@ -233,6 +255,7 @@ public:
   /**
    * Registers a media player source observer.
    *
+   * @technical preview
    * Once the media player source observer is registered, you can use the observer to monitor the state change of the media player.
    * @param observer The pointer to the IMediaPlayerSourceObserver object.
    * @return
@@ -243,6 +266,7 @@ public:
 
   /**
    * Releases the media player source observer.
+   * @technical preview
    * @param observer The pointer to the IMediaPlayerSourceObserver object.
    * @return
    * - 0: Success.
@@ -252,7 +276,7 @@ public:
 
   /**
    * Registers the audio frame observer.
-   *
+   * @technical preview
    * @param observer The pointer to the {@link media::IAudioPcmFrameSink observer} object.
    * @return
    * - 0: Success.
@@ -262,6 +286,7 @@ public:
 
   /**
    * Releases the audio frame observer.
+   * @technical preview
    * @param observer The pointer to the {@link media::IAudioPcmFrameSink observer} object.
    * @return
    * - 0: Success.
@@ -271,6 +296,7 @@ public:
 
   /**
    * Open the Agora CDN media source.
+   * @technical preview
    * @param src The src of the media file that you want to play.
    * @param startPos The  playback position (ms).
    * 
@@ -284,7 +310,7 @@ public:
 
   /**
    * Gets the number of  Agora CDN lines.
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @return
@@ -296,7 +322,7 @@ public:
 
   /**
    * Switch Agora CDN lines.
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @param index Specific CDN line index.
@@ -308,7 +334,7 @@ public:
 
   /**
    * Gets the line of the current CDN.
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @return
@@ -319,7 +345,7 @@ public:
 
   /**
    * Enable automatic CDN line switching.
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @param enable Whether enable.
@@ -331,7 +357,7 @@ public:
 
   /**
    * Update the CDN source token and timestamp.
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @param token token.
@@ -344,7 +370,7 @@ public:
 
   /**
    * Switch the CDN source when open a media through "openWithAgoraCDNSrc" API
-   * 
+   * @technical preview
    * @deprecated 4.6.0
    * 
    * @param src Specific src.
@@ -357,6 +383,7 @@ public:
 
   /**
    * Switch the media source when open a media through "open" API
+   * @technical preview
    * @param src Specific src.
    * @param syncPts Live streaming must be set to false.
    * @return
@@ -367,6 +394,7 @@ public:
 
   /**
    * Preload a media source
+   * @technical preview
    * @param src Specific src.
    * @param startPos The starting position (ms) for playback. Default value is 0.
    * @return
@@ -377,6 +405,7 @@ public:
 
   /**
    * Unload a preloaded media source
+   * @technical preview
    * @param src Specific src.
    * @return
    * - 0: Success.
@@ -386,6 +415,7 @@ public:
 
   /**
    * Play a pre-loaded media source
+   * @technical preview
    * @param src Specific src.
    * @return
    * - 0: Success.

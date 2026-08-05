@@ -1342,6 +1342,17 @@ struct ChannelMediaOptions {
    * custom audio track ID through the `createCustomAudioTrack` method.
    */
   Optional<int> publishCustomAudioTrackId;
+  
+  /**
+   * Whether to publish the loopback audio from a specific source:
+   * - true: Publish the loopback audio from a specific source.
+   * - false: (Default) Do not publish the loopback audio from the specific source.
+   */
+  Optional<bool> publishLoopbackAudioTrack;
+  /**
+   * The loopback audio track id.
+   */
+  Optional<int>  publishLoopbackAudioTrackId;
   /**
    * Whether to publish the video captured from a custom source:
    * - `true`: Publish the video captured from the custom source.
@@ -1532,6 +1543,13 @@ struct ChannelMediaOptions {
    */
   Optional<MultipathType> preferMultipathType;
 
+  /**
+   * The channel type. See `CHANNEL_TYPE`.
+   * @note Valid only when calling channel joining methods (e.g. `joinChannel`, `joinChannelEx`); ignored by `updateChannelMediaOptions`.
+   * @since 4.6.3
+   */
+  Optional<CHANNEL_TYPE> channelType;
+
   ChannelMediaOptions() {}
   ~ChannelMediaOptions() {}
 
@@ -1559,6 +1577,8 @@ struct ChannelMediaOptions {
       SET_FROM(publishLipSyncTrack);
       SET_FROM(publishCustomAudioTrack);
       SET_FROM(publishCustomAudioTrackId);
+      SET_FROM(publishLoopbackAudioTrack);
+      SET_FROM(publishLoopbackAudioTrackId);
       SET_FROM(publishCustomVideoTrack);
       SET_FROM(publishEncodedVideoTrack);
       SET_FROM(publishMediaPlayerAudioTrack);
@@ -1584,6 +1604,7 @@ struct ChannelMediaOptions {
       SET_FROM(uplinkMultipathMode);
       SET_FROM(downlinkMultipathMode);
       SET_FROM(preferMultipathType);
+      SET_FROM(channelType);
 #undef SET_FROM
   }
 
@@ -1614,6 +1635,8 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishLipSyncTrack);
       ADD_COMPARE(publishCustomAudioTrack);
       ADD_COMPARE(publishCustomAudioTrackId);
+      ADD_COMPARE(publishLoopbackAudioTrack);
+      ADD_COMPARE(publishLoopbackAudioTrackId);
       ADD_COMPARE(publishCustomVideoTrack);
       ADD_COMPARE(publishEncodedVideoTrack);
       ADD_COMPARE(publishMediaPlayerAudioTrack);
@@ -1639,6 +1662,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(uplinkMultipathMode);
       ADD_COMPARE(downlinkMultipathMode);
       ADD_COMPARE(preferMultipathType);
+      ADD_COMPARE(channelType);
       END_COMPARE();
 
 #undef BEGIN_COMPARE
@@ -1672,6 +1696,8 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishLipSyncTrack);
         REPLACE_BY(publishCustomAudioTrack);
         REPLACE_BY(publishCustomAudioTrackId);
+        REPLACE_BY(publishLoopbackAudioTrack);
+        REPLACE_BY(publishLoopbackAudioTrackId);
         REPLACE_BY(publishCustomVideoTrack);
         REPLACE_BY(publishEncodedVideoTrack);
         REPLACE_BY(publishMediaPlayerAudioTrack);
@@ -1697,6 +1723,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(uplinkMultipathMode);
         REPLACE_BY(downlinkMultipathMode);
         REPLACE_BY(preferMultipathType);
+        REPLACE_BY(channelType);
 #undef REPLACE_BY
     }
     return *this;
@@ -2500,6 +2527,10 @@ class IRtcEngineEventHandler {
 
   /**
    * @brief Occurs when a specific remote user enables/disables the local video capturing function.
+   * 
+   * @deprecated This method is deprecated. Use the following enumerators from `onRemoteVideoStateChanged`:
+   * - `REMOTE_VIDEO_STATE_STOPPED`(0) and `REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED`(5).
+   * - `REMOTE_VIDEO_STATE_DECODING`(2) and `REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED`(6).
    *
    * @details
    * The SDK triggers this callback when the remote user resumes or stops capturing the video stream
@@ -2708,7 +2739,7 @@ class IRtcEngineEventHandler {
 
   /**
    * @brief Occurs when the state of virtual metronome changes.
-   *
+   * @deprecated v4.6.0
    * @details
    * When the state of the virtual metronome changes, the SDK triggers this callback to report the
    * current state of the virtual metronome. This callback indicates the state of the local audio
@@ -2992,7 +3023,7 @@ class IRtcEngineEventHandler {
    * occur.
    *
    * @note When the state is `LOCAL_AUDIO_STREAM_STATE_FAILED` (3), you can view the error information
-   * in the `error` parameter.
+   * in the `reason` parameter.
    *
    * @param state The state of the local audio. See `LOCAL_AUDIO_STREAM_STATE`.
    * @param reason Reasons for local audio state changes. See `LOCAL_AUDIO_STREAM_REASON`.
@@ -3658,14 +3689,17 @@ class IRtcEngineEventHandler {
   }
 
   /**
-   * @brief Report the multipath transmission statistics
-   *
-   * @post This callback is triggered after you set `enableMultipath` to `true` to enable multipath transmission.
+   * @brief Callback for multipath transmission statistics.
    *
    * @since 4.6.0
    *
-   * @param stats The multipath statistics. See the MultipathStats structure for details.
-   */  virtual void onMultipathStats(const MultipathStats& stats) {
+   * @details
+   * Call timing: This callback is triggered after you set `enableMultipath` to `true` to enable
+   * multipath transmission.
+   *
+   * @param stats Multipath transmission statistics. See `MultipathStats`.
+   */  
+  virtual void onMultipathStats(const MultipathStats& stats) {
     (void)stats;
   }
 
@@ -3757,7 +3791,7 @@ class IVideoDeviceManager {
   /**
    * Specifies the video capture device with the device ID.
    *
-   * @param deviceIdUTF8 he device ID. You can get the device ID by calling `enumerateVideoDevices`.
+   * @param deviceIdUTF8 The device ID. You can get the device ID by calling `enumerateVideoDevices`.
    * The maximum length is #MAX_DEVICE_ID_LENGTH.
    *
    * @return
@@ -3885,6 +3919,10 @@ class IVideoEffectObject : public RefCountInterface {
      * (4): Filter effect node.
      */
     FILTER       = 1U << 2,
+    /**
+     * (8): Sticker effect node.
+     */
+    STICKER      = 1U << 3,
   };
 
   /**
@@ -3960,6 +3998,21 @@ class IVideoEffectObject : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int performVideoEffectAction(uint32_t nodeId, VIDEO_EFFECT_ACTION actionId) = 0;
+    
+  /**
+   * @brief Sets the string parameter for the video effect.
+   *
+   * @since v4.6.0
+   *
+   * @param option The option category of the option.
+   * @param key The key name of the parameter.
+   * @param param The string value to set.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setVideoEffectStringParam(const char* option, const char* key, const char* param) = 0;
 
   /**
    * @brief Sets the float parameter for video effects.
@@ -4155,10 +4208,18 @@ struct RtcEngineContext {
    */
   bool autoRegisterAgoraExtensions;
 
+
+  /*
+   * Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
+   * Pointer to the set parameters in a JSON string.
+   * @technical preview
+  */
+  const char* parameters;
+
   RtcEngineContext()
       : eventHandler(NULL), appId(NULL), context(NULL), channelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING),
         license(NULL), audioScenario(AUDIO_SCENARIO_DEFAULT), areaCode(AREA_CODE_GLOB),
-        logConfig(), useExternalEglContext(false), domainLimit(false), autoRegisterAgoraExtensions(true) {}
+        logConfig(), useExternalEglContext(false), domainLimit(false), autoRegisterAgoraExtensions(true), parameters(NULL) {}
 };
 
 /** Definition of IMetadataObserver
@@ -4732,8 +4793,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - When preloading one channel, calling this method to pass in the new token.
    * - When preloading more than one channels:
    *   - If you use a wildcard token for all preloaded channels, call `updatePreloadChannelToken` to
-   * update the token.Note: When generating a wildcard token, ensure the user ID is not set as 0. See
-   * `Secure authentication with tokens`.
+   * update the token. Note: When generating a wildcard token, ensure the user ID is not set as 0. 
    *   - If you use different tokens to preload different channels, call this method to pass in your
    * user ID, channel name and the new token.
    * @param channelId The channel name that you want to preload. This parameter signifies the channel
@@ -4792,8 +4852,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - When preloading one channel, calling this method to pass in the new token.
    * - When preloading more than one channels:
    *   - If you use a wildcard token for all preloaded channels, call `updatePreloadChannelToken` to
-   * update the token.Note: When generating a wildcard token, ensure the user ID is not set as 0. See
-   * `Secure authentication with tokens`.
+   * update the token. Note: When generating a wildcard token, ensure the user ID is not set as 0. 
    *   - If you use different tokens to preload different channels, call this method to pass in your
    * user ID, channel name and the new token.
    * @param channelId The channel name that you want to preload. This parameter signifies the channel
@@ -4858,7 +4917,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @details
    * By default, the user subscribes to the audio and video streams of all the other users in the
    * channel, giving rise to usage and **billings**. To stop subscribing to a specified stream or all
-   * remote streams, call the corresponding `mute` methods.
+   * remote streams, call `muteRemoteAudio/VideoStream` or `muteAllRemoteAudio/VideoStreams`.
    * Call timing: Call this method after `initialize`.
    * Related callbacks: A successful call of this method triggers the following callbacks:
    * - The local client: The `onJoinChannelSuccess` and `onConnectionStateChanged` callbacks.
@@ -4882,7 +4941,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * optional. You will automatically exit the channel 24 hours after successfully joining in.
    * - If you need to join different channels at the same time or switch between channels, Agora
    * recommends using a wildcard token so that you don't need to apply for a new token every time
-   * joining a channel. See `Secure authentication with tokens`.
+   * joining a channel. 
    * @param channelId The channel name. This parameter signifies the channel in which users engage in
    * real-time audio and video interaction. Under the premise of the same App ID, users who fill in
    * the same channel ID enter the same channel for audio and video interaction. The string length
@@ -4935,7 +4994,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * automatically subscribe to the audio and video streams of all remote users when joining a
    * channel. By default, the user subscribes to the audio and video streams of all the other users in
    * the channel, giving rise to usage and **billings**. To stop subscribing to other streams, set the
-   * `options` parameter or call the corresponding `mute` methods.
+   * `options` parameter or call `muteRemoteAudio/VideoStream` or `muteAllRemoteAudio/VideoStreams`.
    * Call timing: Call this method after `initialize`.
    * Related callbacks: A successful call of this method triggers the following callbacks:
    * - The local client: The `onJoinChannelSuccess` and `onConnectionStateChanged` callbacks.
@@ -4959,7 +5018,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * optional. You will automatically exit the channel 24 hours after successfully joining in.
    * - If you need to join different channels at the same time or switch between channels, Agora
    * recommends using a wildcard token so that you don't need to apply for a new token every time
-   * joining a channel. See `Secure authentication with tokens`.
+   * joining a channel.
    * @param channelId The channel name. This parameter signifies the channel in which users engage in
    * real-time audio and video interaction. Under the premise of the same App ID, users who fill in
    * the same channel ID enter the same channel for audio and video interaction. The string length
@@ -5146,10 +5205,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * as host. The user role ( `roles` ) determines the users' permissions at the SDK level, including
    * whether they can publish audio and video streams in a channel.
    * Call timing: You can call this method either before or after joining a channel.
-   * If you call this method to set the user role as the host before joining the channel and set the
+   * - If you call this method to set the user role as the host before joining the channel and set the
    * local video property through the `setupLocalVideo` method, the local video preview is
    * automatically enabled when the user joins the channel.
-   * If you call this method to set the user role after joining a channel, the SDK will automatically
+   * - If you call this method to set the user role after joining a channel, the SDK will automatically
    * call the `muteLocalAudioStream` and `muteLocalVideoStream` method to change the state for
    * publishing audio and video streams.
    * Related callbacks: If you call this method to switch the user role after joining the channel, the
@@ -5194,10 +5253,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * to determine the level of service that users can enjoy within their permissions. For example, an
    * audience member can choose to receive remote streams with low latency or ultra-low latency.
    * Call timing: You can call this method either before or after joining a channel.
-   * If you call this method to set the user role as the host before joining the channel and set the
+   * - If you call this method to set the user role as the host before joining the channel and set the
    * local video property through the `setupLocalVideo` method, the local video preview is
    * automatically enabled when the user joins the channel.
-   * If you call this method to set the user role after joining a channel, the SDK will automatically
+   * - If you call this method to set the user role after joining a channel, the SDK will automatically
    * call the `muteLocalAudioStream` and `muteLocalVideoStream` method to change the state for
    * publishing audio and video streams.
    * Related callbacks: If you call this method to switch the user role after joining the channel, the
@@ -6728,24 +6787,30 @@ class IRtcEngine : public agora::base::IEngineBase {
   virtual int enableAudioVolumeIndication(int interval, int smooth, bool reportVad) = 0;
 
   /**
-   * @brief Starts client-side audio recording with recording configuration.
+   * @brief Starts client-side audio recording and sets the recording sample rate.
    *
    * @details
    * The SDK supports recording on the client during a call. After calling this method, you can record
-   * the audio of users in the channel and obtain a recording file. The recording file supports the
-   * following formats only:
-   * - WAV: Higher audio fidelity, larger file size. For example, with a sample rate of 32000 Hz, a
-   * 10-minute recording is about 73 MB.
-   * - AAC: Lower audio fidelity, smaller file size. For example, with a sample rate of 32000 Hz and
-   * recording quality set to AUDIO_RECORDING_QUALITY_MEDIUM, a 10-minute recording is about 2 MB.
-   * Recording automatically stops when the user leaves the channel.
-   * Call timing: This method must be called after joining a channel.
+   * the audio of all users in the channel and obtain a recording file that includes all voices. The
+   * recording file supports the following formats only:
+   * - .wav: Large file size, higher audio fidelity.
+   * - .aac: Smaller file size, lower audio fidelity.
    *
-   * @param config Recording configuration. See `AudioRecordingConfiguration`.
+   * @note
+   * - Make sure the path you specify in this method exists and is writable.
+   * - This method must be called after `joinChannel(const char* token, const char* channelId, uid_t
+   * uid, const ChannelMediaOptions& options)`. If `leaveChannel(const LeaveChannelOptions& options)`
+   * is called while recording is in progress, the recording will automatically stop.
+   *
+   * @param filePath The absolute path where the recording file will be saved locally, including the
+   * file name and extension. For example: `C:\music\audio.aac`.
+   *                     Note:
+   * Make sure the specified path exists and is writable.
+   * @param quality Recording quality. See `AUDIO_RECORDING_QUALITY_TYPE`.
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int startAudioRecording(const char* filePath,
                                   AUDIO_RECORDING_QUALITY_TYPE quality) = 0;
@@ -6781,30 +6846,32 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int startAudioRecording(const char* filePath,
                                   int sampleRate,
                                   AUDIO_RECORDING_QUALITY_TYPE quality) = 0;
 
-  /** Starts an audio recording.
-
-  The SDK allows recording during a call, which supports either one of the
-  following two formats:
-
-  - .wav: Large file size with high sound fidelity
-  - .aac: Small file size with low sound fidelity
-
-  Ensure that the directory to save the recording file exists and is writable.
-  This method is usually called after the joinChannel() method.
-  The recording automatically stops when the leaveChannel() method is
-  called.
-
-  @param config Audio recording config.
-  @return
-  - 0: Success.
-  - < 0: Failure.
-  */
+  /**
+   * @brief Starts client-side audio recording with recording configuration.
+   *
+   * @details
+   * The SDK supports recording on the client during a call. After calling this method, you can record
+   * the audio of users in the channel and obtain a recording file. The recording file supports the
+   * following formats only:
+   * - WAV: Higher audio fidelity, larger file size. For example, with a sample rate of 32000 Hz, a
+   * 10-minute recording is about 73 MB.
+   * - AAC: Lower audio fidelity, smaller file size. For example, with a sample rate of 32000 Hz and
+   * recording quality set to AUDIO_RECORDING_QUALITY_MEDIUM, a 10-minute recording is about 2 MB.
+   * Recording automatically stops when the user leaves the channel.
+   * Call timing: This method must be called after joining a channel.
+   *
+   * @param config Recording configuration. See `AudioRecordingConfiguration`.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int startAudioRecording(const AudioRecordingConfiguration& config) = 0;
 
   /**
@@ -6830,7 +6897,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int stopAudioRecording() = 0;
 
@@ -6894,57 +6961,16 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int destroyMediaRecorder(agora_refptr<IMediaRecorder> mediaRecorder) = 0;
 
-  /** Starts playing and mixing the music file.
-
-  This method mixes the specified local audio file with the audio stream from
-  the microphone. You can choose whether the other user can hear the local
-  audio playback and specify the number of playback loops. This method also
-  supports online music playback.
-
-  After calling this method successfully, the SDK triggers the
-
-  \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (PLAY)
-  callback on the local client.
-  When the audio mixing file playback finishes after calling this method, the
-  SDK triggers the
-  \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (STOPPED)
-  callback on the local client.
-
-  @note
-  - Call this method after joining a channel, otherwise issues may occur.
-  - If the local audio mixing file does not exist, or if the SDK does not
-  support the file format or cannot access the music file URL, the SDK returns
-  #WARN_AUDIO_MIXING_OPEN_ERROR (701).
-  - If you want to play an online music file, ensure that the time interval
-  between calling this method is more than 100 ms, or the
-  `AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL(702)` error code occurs.
-
-  @param filePath Pointer to the absolute path (including the suffixes of the
-  filename) of the local or online audio file to mix, for example, c:/music/au
-  dio.mp4. Supported audio formats: 3GP, ASF, ADTS, AVI, MP3, MP4, MPEG-4,
-  SAMI, and WAVE.
-  @param loopback Sets which user can hear the audio mixing:
-  - true: Only the local user can hear the audio mixing.
-  - false: Both users can hear the audio mixing.
-
-  @param cycle Sets the number of playback loops:
-  - Positive integer: Number of playback loops.
-  - `-1`: Infinite playback loops.
-
-  @return
-  - 0: Success.
-  - < 0: Failure.
-  */
   /**
    * @brief Starts playing the music file.
    *
+   * @deprecated This method is deprecated. Use startAudioMixing(const char* filePath, bool loopback, int cycle, int startPos) instead.
    * @details
-   * For the audio file formats supported by this method, see `What formats of audio files does the
-   * Agora RTC SDK support`. If the local music file does not exist, the SDK does not support the file
+   * For the audio file formats supported by this method, see [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format). If the local music file does not exist, the SDK does not support the file
    * format, or the the SDK cannot access the music file URL, the SDK reports
    * AUDIO_MIXING_REASON_CAN_NOT_OPEN.
    * Call timing: You can call this method either before or after joining a channel.
@@ -6968,7 +6994,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @param filePath The file path. The SDK supports URLs and absolute path of local files. The
    * absolute path needs to be accurate to the file name and extension. Supported audio formats
-   * include MP3, AAC, M4A, MP4, WAV, and 3GP. See `Supported Audio Formats`.
+   * include MP3, AAC, M4A, MP4, WAV, and 3GP. See [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format).
    * Attention: If you have preloaded an audio effect into memory by calling `preloadEffect`, ensure
    * that the value of this parameter is the same as that of `filePath` in `preloadEffect`.
    * @param loopback Whether to only play music files on the local client:
@@ -6992,55 +7018,11 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int startAudioMixing(const char* filePath, bool loopback, int cycle) = 0;
 
-  /** Starts playing and mixing the music file.
-
-  This method mixes the specified local audio file with the audio stream from
-  the microphone. You can choose whether the other user can hear the local
-  audio playback and specify the number of playback loops. This method also
-  supports online music playback.
-
-  After calling this method successfully, the SDK triggers the
-
-  \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (PLAY)
-  callback on the local client.
-  When the audio mixing file playback finishes after calling this method, the
-  SDK triggers the
-  \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (STOPPED)
-  callback on the local client.
-
-  @note
-  - Call this method after joining a channel, otherwise issues may occur.
-  - If the local audio mixing file does not exist, or if the SDK does not
-  support the file format or cannot access the music file URL, the SDK returns
-  #WARN_AUDIO_MIXING_OPEN_ERROR (701).
-  - If you want to play an online music file, ensure that the time interval
-  between calling this method is more than 100 ms, or the
-  `AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL(702)` error code occurs.
-
-  @param filePath Pointer to the absolute path (including the suffixes of the
-  filename) of the local or online audio file to mix, for example, c:/music/au
-  dio.mp4. Supported audio formats: 3GP, ASF, ADTS, AVI, MP3, MP4, MPEG-4,
-  SAMI, and WAVE.
-  @param loopback Sets which user can hear the audio mixing:
-  - true: Only the local user can hear the audio mixing.
-  - false: Both users can hear the audio mixing.
-
-  @param cycle Sets the number of playback loops:
-  - Positive integer: Number of playback loops.
-  - `-1`: Infinite playback loops.
-
-  @param startPos The playback position (ms) of the music file.
-
-  @return
-  - 0: Success.
-  - < 0: Failure.
-  */
   /**
    * @brief Starts playing the music file.
    *
    * @details
-   * For the audio file formats supported by this method, see `What formats of audio files does the
-   * Agora RTC SDK support`. If the local music file does not exist, the SDK does not support the file
+   * For the audio file formats supported by this method, see [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format). If the local music file does not exist, the SDK does not support the file
    * format, or the the SDK cannot access the music file URL, the SDK reports
    * AUDIO_MIXING_REASON_CAN_NOT_OPEN.
    * Call timing: You can call this method either before or after joining a channel.
@@ -7145,8 +7127,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * you can call this method to set the playback language.
    *
    * @note
-   * - For the supported formats of audio files, see
-   * `https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats`.
+   * - For the supported formats of audio files, see [Which audio file formats does the Agora Video SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats).
    * - You need to call this method after calling `startAudioMixing(const char* filePath, bool
    * loopback, int cycle, int startPos)` and receiving the
    * `onAudioMixingStateChanged` `(AUDIO_MIXING_STATE_PLAYING)` callback.
@@ -7413,8 +7394,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @details
    * Ensure the size of all preloaded files does not exceed the limit.
-   * For the audio file formats supported by this method, see `What formats of audio files does the
-   * Agora RTC SDK support`.
+   * For the audio file formats supported by this method, see [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format).
    * Call timing: Agora recommends that you call this method before joining a channel.
    * 
    * @note
@@ -7466,7 +7446,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * this parameter is the same as that of `soundId` in `preloadEffect`.
    * @param filePath The file path. The SDK supports URLs and absolute path of local files. The
    * absolute path needs to be accurate to the file name and extension. Supported audio formats
-   * include MP3, AAC, M4A, MP4, WAV, and 3GP. See `Supported Audio Formats`.
+   * include MP3, AAC, M4A, MP4, WAV, and 3GP. See [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format).
    * Attention: If you have preloaded an audio effect into memory by calling `preloadEffect`, ensure
    * that the value of this parameter is the same as that of `filePath` in `preloadEffect`.
    * @param loopCount The number of times the audio effect loops.
@@ -8112,7 +8092,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * The SDK provides an easier-to-use method, `setAudioEffectPreset`, to directly implement preset
    * reverb effects for such as pop, R&B, and KTV.
    *
-   * @note You can call this method either before or after joining a channel.
+   * Call timing: You can call this method either before or after joining a channel.
    *
    * @param reverbKey The reverberation key. Agora provides five reverberation keys, see
    * `AUDIO_REVERB_TYPE`.
@@ -8184,7 +8164,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Sets the log file.
-   *
+   * @deprecated Use `context` in `initialize` to set up the log file path.
    * @details
    * Specifies an SDK output log file. The log file records all log data for the SDK’s operation.
    * Call timing: This method needs to be called immediately after `initialize`, otherwise the output
@@ -8202,7 +8182,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Sets the log output level of the SDK.
-   *
+   * @deprecated Use `logConfig` in `initialize` to set the log filter.
    * @details
    * This method sets the output log level of the SDK. You can use one or a combination of the log
    * filter levels. The log level follows the sequence of `LOG_FILTER_OFF`, `LOG_FILTER_CRITICAL`,
@@ -8221,6 +8201,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Sets the output log level of the SDK.
+   * @deprecated Use `context` in `initialize` to set the log level.
    *
    * @details
    * Choose a level to see the logs preceding that level.
@@ -8235,7 +8216,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Sets the log file size.
-   *
+   * @deprecated Use `logConfig` in `initialize` to set the log file size.
    * @details
    * By default, the SDK generates five SDK log files and five API call log files with the following
    * rules:
@@ -8358,7 +8339,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @param sourceType The type of the video source. See `VIDEO_SOURCE_TYPE`.
    * @param targetFps The capture frame rate (fps) of the local video. Sopported values are: 1, 7, 10,
-   * 15, 24, 30, 60.CAUTION: Set this parameter to a value lower than the actual video frame rate;
+   * 15, 24, 30, 60. CAUTION: Set this parameter to a value lower than the actual video frame rate;
    * otherwise, the settings do not take effect.
    *
    * @return
@@ -8389,9 +8370,12 @@ class IRtcEngine : public agora::base::IEngineBase {
   // The following APIs are either deprecated and going to deleted.
 
   /**
-   * Updates the display mode of the local video view.
+   * @brief Updates the display mode of the local video view.
    *
-   * After initializing the local video view, you can call this method to  update its rendering mode.
+   * @deprecated This method is deprecated since v4.0.0. Use `setLocalRenderMode(RENDER_MODE_TYPE
+   * renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode)` instead.
+   * 
+   * @details After initializing the local video view, you can call this method to  update its rendering mode.
    * It affects only the video view that the local user sees, not the published local video stream.
    *
    * @note
@@ -8409,6 +8393,8 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Sets the local video mirror mode.
+   * 
+   * @deprecated This method is deprecated. Use `setupLocalVideo` or `setLocalRenderMode` instead. 
    *
    * @param mirrorMode The local video mirror mode. See `VIDEO_MIRROR_MODE_TYPE`.
    *
@@ -8421,6 +8407,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * @brief Enables or disables dual-stream mode on the sender side.
    *
+   * @deprecated This method is deprecated since v4.2.0. Use `setDualStreamMode` instead.
    * @details
    * Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
    * - High-quality video stream: High bitrate, high resolution.
@@ -8448,6 +8435,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * @brief Sets the dual-stream mode on the sender side and the low-quality video stream.
    *
+   * @deprecated This method is deprecated since v4.2.0. Use `setDualStreamMode` instead.   
    * @details
    * You can call this method to enable or disable the dual-stream mode on the publisher side. Dual
    * streams are a pairing of a high-quality video stream and a low-quality video stream:
@@ -8513,7 +8501,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * @brief Sets the simulcast video stream configuration.
    *
-   * @since v4.6.0
+   * @technical preview
    *
    * @details
    * You can call this method to set video streams with different resolutions for the same video
@@ -9835,18 +9823,19 @@ class IRtcEngine : public agora::base::IEngineBase {
    * `LOCAL_VIDEO_STREAM_STATE_CAPTURING` (1).
    *
    * @note
-   * Due to the high performance requirements of this feature, you need to use it on the following
+   * - This method is for iOS and macOS only.
+   * - Due to the high performance requirements of this feature, you need to use it on the following
    * types of devices or devices with higher performance:
-   * - iPad:
-   *   - 12.9-inch iPad Pro (5th generation)
-   *   - 11-inch iPad Pro (3rd generation)
-   *   - iPad (9th generation)
-   *   - iPad mini (6th generation)
-   *   - iPad Air (5th generation)
-   * - 2020 M1 MacBook Pro 13-inch + iPhone 11 (using iPhone as external camera for the MacBook)
-   * Agora recommends that you call `isCameraCenterStageSupported` to check whether the current device
+   *   - iPad:
+   *     - 12.9-inch iPad Pro (5th generation)
+   *     - 11-inch iPad Pro (3rd generation)
+   *     - iPad (9th generation)
+   *     - iPad mini (6th generation)
+   *     - iPad Air (5th generation)
+   *   - 2020 M1 MacBook Pro 13-inch + iPhone 11 (using iPhone as external camera for the MacBook)
+   *   Agora recommends that you call `isCameraCenterStageSupported` to check whether the current device
    * supports portrait center stage before enabling this feature.
-   * This method is for iOS and macOS only.
+   * 
    *
    * @param enabled Whether to enable the portrait center stage:
    * - `true`: Enable portrait center stage.
@@ -9873,13 +9862,13 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @note This method applies to macOS and Windows only.
    *
    * @param thumbSize The target size of the screen or window thumbnail (the width and height are in
-   * pixels). See `SIZE`. The SDK scales the original image to make the length of the longest side of
+   * pixels). See [SIZE](https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-size). The SDK scales the original image to make the length of the longest side of
    * the image the same as that of the target size without distorting the original image. For example,
    * if the original image is 400 × 300 and thumbSize is 100 × 100, the actual size of the `thumbnail`
    * is 100 × 75. If the target size is larger than the original size, the thumbnail is the original
    * image and the SDK does not scale it.
    * @param iconSize The target size of the icon corresponding to the application program (the width
-   * and height are in pixels). See `SIZE`. The SDK scales the original image to make the length of
+   * and height are in pixels). See [SIZE](https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-size). The SDK scales the original image to make the length of
    * the longest side of the image the same as that of the target size without distorting the original
    * image. For example, if the original image is 400 × 300 and iconSize is 100 × 100, the actual size
    * of the ` icon` is 100 × 75. If the target size is larger than the original size, the icon is the
@@ -10032,6 +10021,25 @@ class IRtcEngine : public agora::base::IEngineBase {
    */
   virtual int getAudioDeviceInfo(DeviceInfo& deviceInfo) = 0;
 #endif  // __ANDROID__
+
+ /**
+  * Sets the rotation of remote render.
+  * 
+  * @since v4.6.4
+  * 
+  * @note
+  * For example, the sending end is a screen sharing scene. 
+  * When the screen of the sending end changes horizontally or vertically, 
+  * the rendered screen of the receiving end also wants to change synchronously with that of the peer end. 
+  * In this case, you can set the angle of the receiving end.
+  * 
+  * @param uid The user ID of the remote user.
+  * @param rotation The clockwise rotation angle. See #VIDEO_ORIENTATION.
+  * @return
+  * - 0: Success.
+  * - < 0: Failure.
+  */
+ virtual int setRemoteRenderRotation(uid_t uid, VIDEO_ORIENTATION rotation) = 0;
 
 #if defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || (defined(__linux__) && !defined(__ANDROID__) && !defined(__OHOS__))
 
@@ -10188,6 +10196,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * `publishScreenCaptureVideo` to `true` to start screen sharing.
    *
    * @note
+   * - This method is for Android and iOS only.
    * - On the iOS platform, screen sharing is only available on iOS 12.0 and later.
    * - If you are using the custom audio source instead of the SDK to capture audio, Agora recommends
    * you add the keep-alive processing logic to your application to avoid screen sharing stopping when
@@ -10211,7 +10220,6 @@ class IRtcEngine : public agora::base::IEngineBase {
    * - To avoid system audio capture failure when sharing screen, Agora recommends that you set the
    * audio application scenario to `AUDIO_SCENARIO_GAME_STREAMING` by using the `setAudioScenario`
    * method before joining the channel.
-   * - This method is for Android and iOS only.
    * - The billing for the screen sharing stream is based on the `dimensions` in
    * `ScreenVideoParameters`:
    *   - When you do not pass in a value, Agora bills you at 1280 × 720.
@@ -10311,8 +10319,6 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * @brief Configures `MediaProjection` outside of the SDK to capture screen video streams.
    *
-   * @technical preview
-   *
    * @details
    * After successfully calling this method, the external `MediaProjection` you set will replace the
    * `MediaProjection` requested by the SDK to capture the screen video stream.
@@ -10330,7 +10336,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * captureParams)`.
    *
    * @note
-   * Before calling this method, you must first apply for `MediaProjection` permission.
+   * Before calling this method, you must first apply for [`MediaProjection`](https://developer.android.com/reference/android/media/projection/MediaProjection) permission.
    * This method is for Android only.
    *
    * @param mediaProjection An `MediaProjection` object used to capture screen video streams.
@@ -10438,8 +10444,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @brief Starts pushing media streams to a CDN without transcoding.
    *
    * @details
-   * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-   * API`.
+   * Agora recommends that you use the server-side Media Push function. For details, see [Push streams using RESTful
+   * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
    * You can call this method to push an audio or video stream to the specified CDN address. This
    * method can push media streams to only one CDN address at a time, so if you need to push streams
    * to multiple addresses, call this method multiple times.
@@ -10470,8 +10476,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @brief Starts Media Push and sets the transcoding configuration.
    *
    * @details
-   * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-   * API`.
+   * Agora recommends that you use the server-side Media Push function. For details, see [Pushing streams using RESTful
+   * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
    * You can call this method to push a live audio-and-video stream to the specified CDN address and
    * set the transcoding configuration. This method can push media streams to only one CDN address at
    * a time, so if you need to push streams to multiple addresses, call this method multiple times.
@@ -10505,8 +10511,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @brief Updates the transcoding configuration.
    *
    * @details
-   * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-   * API`.
+   * Agora recommends that you use the server-side Media Push function. For details, see [Pushing streams using RESTful
+   * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
    * After you start pushing media streams to CDN with transcoding, you can dynamically update the
    * transcoding configuration according to the scenario. The SDK triggers the `onTranscodingUpdated`
    * callback after the transcoding configuration is updated.
@@ -10599,8 +10605,8 @@ class IRtcEngine : public agora::base::IEngineBase {
    * @brief Stops pushing media streams to a CDN.
    *
    * @details
-   * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-   * API`.
+   * Agora recommends that you use the server-side Media Push function. For details, see [Use RESTful
+   * API](https://docs.agora.io/en/media-push/develop/restful-api).
    * You can call this method to stop the live stream on the specified CDN address. This method can
    * stop pushing media streams to only one CDN address at a time, so if you need to stop pushing
    * streams to multiple addresses, call this method multiple times.
@@ -10929,7 +10935,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * stream will be destroyed when leaving the channel, and the data stream needs to be recreated if
    * needed.
    * If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
-   * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+   * real-time messaging and status synchronization, it is recommended to use [Signaling](https://docs.agora.io/en/signaling/overview/product-overview).
    *
    * @param streamId An output parameter; the ID of the data stream created.
    * @param reliable Sets whether the recipients are guaranteed to receive the data stream within five
@@ -10966,7 +10972,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * stream will be destroyed when leaving the channel, and the data stream needs to be recreated if
    * needed.
    * If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
-   * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+   * real-time messaging and status synchronization, it is recommended to use [Signaling](https://docs.agora.io/en/signaling/overview/product-overview).
    *
    * @param streamId An output parameter; the ID of the data stream created.
    * @param config The configurations for the data stream. See `DataStreamConfig`.
@@ -10995,7 +11001,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @note
    * If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
-   * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+   * real-time messaging and status synchronization, it is recommended to use [Signaling](https://docs.agora.io/en/signaling/overview/product-overview).
    * - This method needs to be called after `createDataStream(int* streamId, const DataStreamConfig&
    * config)` and joining the channel.
    * - This method applies to broadcasters only.
@@ -11072,8 +11078,7 @@ class IRtcEngine : public agora::base::IEngineBase {
   /**
    * @brief Adds a watermark image to the local video.
    *
-   * @deprecated Use addVideoWatermarkEx(const WatermarkConfig& config, const RtcConnection&
-   * connection) instead.
+   * @deprecated Use addVideoWatermark(const WatermarkConfig& configs) instead.
    *
    * @details
    * This method adds a PNG watermark image to the local video in the live streaming. Once the
@@ -11184,10 +11189,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    virtual int resumeAudio() __deprecated = 0;
 
   /**
-   * @brief Enables interoperability with the Agora Web SDK (applicable only in the live streaming
+   * @brief Enables interoperability with the Agora Web SDK (applicable only in the live streaming scenarios.
    *
-   * @deprecated The Agora NG SDK enables the interoperablity with the Web SDK.
-   * scenarios).
+   * @deprecated By default, the Agora RTC SDK enables the interoperablity with the Web SDK.
    *
    * @details
    * You can call this method to enable or disable interoperability with the Agora Web SDK. If a
@@ -11213,7 +11217,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Agora supports reporting and analyzing customized messages. This function is in the beta stage
    * with a free trial. The ability provided in its beta test version is reporting a maximum of 10
    * message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string
-   * not exceeding 100 bytes. To try out this function, contact `support@agora.io` and discuss the
+   * not exceeding 100 bytes. To try out this function, contact sales and discuss the
    * format of customized messages with us.
    *
    */
@@ -11227,6 +11231,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * This method enables you to add synchronized metadata in the video stream for more diversified
    *  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.
    * A successful call of this method triggers the `getMaxMetadataSize` callback.
+   * @note If your receiving-side logic requires metadata to stay synchronized with the current
+   * decoded frame, and you send external video frames to the SDK while also implementing the video
+   * frame observer, prefer attaching metadata to `pushVideoFrame` and reading it back from
+   * `onRenderVideoFrame`, instead of relying on this observer callback.
    *
    * @note Call this method before `joinChannel(const char* token, const char* channelId, uid_t uid,
    * const ChannelMediaOptions& options)`.
@@ -11373,7 +11381,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * then calling this method to join a channel can shorten the time it takes to enter the channel.
    * Once a user joins the channel, the user subscribes to the audio and video streams of all the
    * other users in the channel by default, giving rise to usage and billings. To stop subscribing to
-   * a specified stream or all remote streams, call the corresponding `mute` methods.
+   * a specified stream or all remote streams, call `muteRemoteAudio/VideoStream` or `muteAllRemoteAudio/VideoStreams`.
    * Call timing: Call this method after `initialize`.
    * Related callbacks: After the user successfully joins the channel, the SDK triggers the following
    * callbacks:
@@ -11401,7 +11409,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * optional. You will automatically exit the channel 24 hours after successfully joining in.
    * - If you need to join different channels at the same time or switch between channels, Agora
    * recommends using a wildcard token so that you don't need to apply for a new token every time
-   * joining a channel. See `Secure authentication with tokens`.
+   * joining a channel.
    * @param channelId The channel name. This parameter signifies the channel in which users engage in
    * real-time audio and video interaction. Under the premise of the same App ID, users who fill in
    * the same channel ID enter the same channel for audio and video interaction. The string length
@@ -11461,7 +11469,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * used to set media options, such as whether to publish audio and video streams within a channel.
    * By default, the user subscribes to the audio and video streams of all the other users in the
    * channel, giving rise to usage and **billings**. To stop subscribing to other streams, set the
-   * `options` parameter or call the corresponding `mute` methods.
+   * `options` parameter or call `muteRemoteAudio/VideoStream` or `muteAllRemoteAudio/VideoStreams`.
    * Call timing: Call this method after `initialize`.
    * Related callbacks: After the user successfully joins the channel, the SDK triggers the following
    * callbacks:
@@ -11489,7 +11497,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * optional. You will automatically exit the channel 24 hours after successfully joining in.
    * - If you need to join different channels at the same time or switch between channels, Agora
    * recommends using a wildcard token so that you don't need to apply for a new token every time
-   * joining a channel. See `Secure authentication with tokens`.
+   * joining a channel.
    * @param channelId The channel name. This parameter signifies the channel in which users engage in
    * real-time audio and video interaction. Under the premise of the same App ID, users who fill in
    * the same channel ID enter the same channel for audio and video interaction. The string length
@@ -11547,8 +11555,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * then calling this method to join a channel can shorten the time it takes to enter the channel.
    * Once a user joins the channel, the user subscribes to the audio and video streams of all the
    * other users in the channel by default, giving rise to usage and **billings**. If you want to stop
-   * subscribing to the media stream of other users, you can set the `options` parameter or call the
-   * corresponding `mute` method.
+   * subscribing to the media stream of other users, you can set the `options` parameter or call `muteRemoteAudio/VideoStream` or `muteAllRemoteAudio/VideoStreams`.
    * Call timing: Call this method after `initialize`.
    * Related callbacks: After the user successfully joins the channel, the SDK triggers the following
    * callbacks:
@@ -11576,7 +11583,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * optional. You will automatically exit the channel 24 hours after successfully joining in.
    * - If you need to join different channels at the same time or switch between channels, Agora
    * recommends using a wildcard token so that you don't need to apply for a new token every time
-   * joining a channel. See `Secure authentication with tokens`.
+   * joining a channel.
    * @param channelId The channel name. This parameter signifies the channel in which users engage in
    * real-time audio and video interaction. Under the premise of the same App ID, users who fill in
    * the same channel ID enter the same channel for audio and video interaction. The string length
@@ -11874,7 +11881,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Enables the virtual metronome.
-   *
+   * @deprecated v4.6.0
    * @details
    * - After enabling the virtual metronome, the SDK plays the specified audio effect file from the
    * beginning, and controls the playback duration of each file according to `beatsPerMinute` you set
@@ -11894,10 +11901,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @param sound1 The absolute path or URL address (including the filename extensions) of the file
    * for the downbeat. For example, `C:\music\audio.mp4`. For the audio file formats supported by this
-   * method, see `What formats of audio files does the Agora RTC SDK support`.
+   * method, see [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format).
    * @param sound2 The absolute path or URL address (including the filename extensions) of the file
    * for the upbeats. For example, `C:\music\audio.mp4`. For the audio file formats supported by this
-   * method, see `What formats of audio files does the Agora RTC SDK support`.
+   * method, see [What audio file formats does the Agora RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format).
    * @param config The metronome configuration. See `AgoraRhythmPlayerConfig`.
    *
    * @return
@@ -11909,7 +11916,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Disables the virtual metronome.
-   *
+   * @deprecated v4.6.0
    * @details
    * After calling `startRhythmPlayer`, you can call this method to disable the virtual metronome.
    *
@@ -11923,7 +11930,7 @@ class IRtcEngine : public agora::base::IEngineBase {
 
   /**
    * @brief Configures the virtual metronome.
-   *
+   * @deprecated v4.6.0
    * @details
    * - After calling `startRhythmPlayer`, you can call this method to reconfigure the virtual
    * metronome.
@@ -12121,13 +12128,13 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Call timing: This method must be called before joining a channel.
    *
    * @note This method takes effect only after deploying the Agora Hybrid Cloud solution. You can
-   * `contact sales` to learn more and deploy the Agora Hybrid Cloud.
+   * contact sales to learn more and deploy the Agora Hybrid Cloud.
    *
    * @param config Local Access Point configuration. See `LocalAccessPointConfiguration`.
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int setLocalAccessPoint(const LocalAccessPointConfiguration& config) = 0;
 
@@ -12142,6 +12149,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    * uid, const ChannelMediaOptions& options)`, `enableAudio` and `enableLocalAudio`.
    *
    * @param options The advanced options for audio. See `AdvancedAudioOptions`.
+   * @param sourceType The type of the audio source.
    *
    * @return
    * - 0: Success.
@@ -12167,7 +12175,7 @@ class IRtcEngine : public agora::base::IEngineBase {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int setAVSyncSource(const char* channelId, uid_t uid) = 0;
 

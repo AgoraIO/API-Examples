@@ -5,7 +5,7 @@
 "8Rv-nY-rrP.configuration.title" = "脸型";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "8Rv-nY-rrP"; */
-"8Rv-nY-rrP.normalTitle" = "截图";
+"8Rv-nY-rrP.normalTitle" = "脸型";
 
 /* Element = "switch"; title = "Face Beautify"; ObjectID = "Er0-F3-9xn"; */
 "Er0-F3-9xn.title" = "美颜";
@@ -14,7 +14,7 @@
 "FVk-N0-Zza.configuration.title" = "美妆";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "FVk-N0-Zza"; */
-"FVk-N0-Zza.normalTitle" = "截图";
+"FVk-N0-Zza.normalTitle" = "美妆";
 
 /* Element = "label"; text = "Virtual Background"; ObjectID = "OLG-wB-DHO"; */
 "OLG-wB-DHO.text" = "虚拟背景";
@@ -47,7 +47,7 @@
 "f1C-7c-nGG.text" = "红润";
 
 /* Element = "viewController"; title = "Simple Filter"; ObjectID = "jKA-9Y-IUF"; */
-"jKA-9Y-IUF.title" = "虚拟节拍器";
+"jKA-9Y-IUF.title" = "简易滤镜";
 
 /* Element = "label"; text = "Lightening"; ObjectID = "k4I-na-mXN"; */
 "k4I-na-mXN.text" = "美白";

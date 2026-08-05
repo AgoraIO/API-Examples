@@ -8,13 +8,13 @@
 "Q0N-nV-bez.configuration.title" = "默认颜色";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "Q0N-nV-bez"; */
-"Q0N-nV-bez.normalTitle" = "默认背景色";
+"Q0N-nV-bez.normalTitle" = "默认颜色";
 
 /* Element = "button"; configuration.title = "preload channel"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.configuration.title" = "预加载";
+"S19-UR-C2c.configuration.title" = "预加载频道";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "S19-UR-C2c"; */
-"S19-UR-C2c.normalTitle" = "默认背景色";
+"S19-UR-C2c.normalTitle" = "预加载频道";
 
 /* Element = "label"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
 "XcJ-am-UAb.text" = "连麦";
@@ -50,4 +50,4 @@
 "w4q-aT-JBc.configuration.title" = "截图";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "w4q-aT-JBc"; */
-"w4q-aT-JBc.normalTitle" = "默认背景色";
+"w4q-aT-JBc.normalTitle" = "截图";

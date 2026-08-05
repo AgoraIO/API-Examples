@@ -17,13 +17,13 @@
 "K2D-T9-l6m.configuration.title" = "转发";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "K2D-T9-l6m"; */
-"K2D-T9-l6m.normalTitle" = "暂停";
+"K2D-T9-l6m.normalTitle" = "转发";
 
 /* Element = "button"; configuration.title = "Resume"; ObjectID = "NsB-pv-Uey"; */
 "NsB-pv-Uey.configuration.title" = "恢复";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "NsB-pv-Uey"; */
-"NsB-pv-Uey.normalTitle" = "暂停";
+"NsB-pv-Uey.normalTitle" = "恢复";
 
 /* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";
@@ -35,4 +35,4 @@
 "rua-c8-U0p.configuration.title" = "停止";
 
 /* Element = "button"; normalTitle = "Button"; ObjectID = "rua-c8-U0p"; */
-"rua-c8-U0p.normalTitle" = "暂停";
+"rua-c8-U0p.normalTitle" = "停止";

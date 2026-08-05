@@ -44,14 +44,23 @@ This project contains third-party beauty integration examples, which cannot be e
 without configuring resources and certificates. The resource certificate configuration method is as
 follows:
 
-#### Agora
+#### Agora Beauty 2.0
 
-1. Contact Agora technical support to obtain beauty resources
-2. Put the beauty resources in the corresponding path
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally:
 
-| Agora Beauty Resources | Location                         |
-|------------------------|----------------------------------|
-| beauty resources       | app/src/main/assets/beauty_agora |
+1. Obtain `AgoraBeautyMaterial.zip` from Agora technical support.
+2. Extract `AgoraBeautyMaterial.zip` to `app/src/main/assets/beauty_agora/`.
+
+The extracted resources should have the following structure:
+
+```text
+app/src/main/assets/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+The material directory is ignored by Git.
 
 #### FaceUnity
 
