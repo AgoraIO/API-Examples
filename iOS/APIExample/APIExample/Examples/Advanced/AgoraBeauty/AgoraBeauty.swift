@@ -154,8 +154,8 @@ class AgoraBeautyMain: BaseViewController {
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
-            AgoraRtcEngineKit.destroy()
             beautyManager.destory()
+            AgoraRtcEngineKit.destroy()
         }
     }
     

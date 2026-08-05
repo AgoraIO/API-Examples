@@ -148,7 +148,7 @@ APIExample/
 | KTV Copyright Music | `advanced/KtvCopyrightMusic.java` | N/A (browser-based documentation link) | Demonstrates the KTV copyright music feature via documentation reference |
 | TransparentRendering | `advanced/TransparentRendering.java` | `setExternalVideoSource()`, `pushExternalVideoFrame()`, `createMediaPlayer()`, `startPreview()` | Demonstrates alpha-channel transparent video rendering |
 | Ultra Live Streaming with Url | `advanced/UrlLiveStream.java` | `Rte()`, `Player()`, `Canvas()`, `player.openWithUrl()`, `player.stop()` | Demonstrates ultra-low-latency live streaming playback via URL using the RTE SDK |
-| Agora beauty 2.0 | `advanced/AgoraBeauty.java` | `enableVirtualBackground()`, `setFaceShapeAreaOptions()` | Demonstrates built-in Agora beauty effects with face shaping and virtual background |
+| Agora beauty 2.0 | `advanced/AgoraBeauty.java` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Demonstrates built-in Agora beauty effects with face shaping and virtual background |
 | Simulcast | `advanced/Simulcast.java` | `setSimulcastConfig()`, `setRemoteVideoStreamType()` | Demonstrates publishing multiple quality streams with simulcast |
 | Multipath | `advanced/Multipath.java` | `joinChannel()`, `updateChannelMediaOptions()` | Demonstrates multi-path transmission for improved network reliability |
 | Audio Waveform | `audio/AudioWaveform.java` | `enableAudio()`, `enableAudioVolumeIndication()` | Demonstrates real-time audio waveform visualization |

@@ -101,7 +101,7 @@ All examples share utilities:
 | AudioProfile | `Advanced/AudioProfile/` | `setAudioProfile()`, `setAudioScenario()` | Audio profile and scenario configuration |
 | AudioVolume | `Advanced/AudioVolume/` | `adjustRecordingSignalVolume()`, `adjustPlaybackSignalVolume()`, `adjustUserPlaybackSignalVolume()` | Audio volume adjustment and control |
 | Beauty | `Advanced/Beauty/` | `setBeautyEffectOptions()`, `setVideoEncoderConfiguration()` | Beauty filter and enhancement effects |
-| Beauty2.0 | `Advanced/Beauty2.0/` | `setBeautyEffectOptions()` with v2.0 API | Enhanced beauty effects with v2.0 API |
+| Beauty2.0 | `Advanced/Beauty2.0/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `setVideoEffectFloatParam()` | Enhanced beauty effects with v2.0 API |
 | BeautyAudio | `Advanced/BeautyAudio/` | `setBeautyEffectOptions()`, `setAudioEffectPreset()` | Combined audio and video beauty effects |
 | CrossChannel | `Advanced/CrossChannel/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Media relay across multiple channels |
 | CustomAudioCapture | `Advanced/CustomAudioCapture/` | `setExternalAudioSource()`, `pushAudioFrame()` | Custom audio source capture |

@@ -33,7 +33,6 @@ class AgoraBeauty: BaseViewController {
     let backgroundTypes = AgoraVirtualBackgroundSourceType.allValues()
     var agoraKit: AgoraRtcEngineKit!
     var beautyManager: AgoraBeautyManager!
-    var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
     var whintening = 0.5
@@ -88,6 +87,7 @@ class AgoraBeauty: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        beautyManager.destory()
         AgoraRtcEngineKit.destroy()
     }
     
@@ -97,10 +97,10 @@ class AgoraBeauty: BaseViewController {
         channelField.field.placeholderString = "Channel Name".localized
         joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
         
-        lightenSlider.floatValue = beautifyOption.lighteningLevel
-        ruddySlider.floatValue = beautifyOption.rednessLevel
-        sharpSlider.floatValue = beautifyOption.sharpnessLevel
-        smoothingSlider.floatValue = beautifyOption.smoothnessLevel
+        lightenSlider.floatValue = beautyManager.lightness
+        ruddySlider.floatValue = beautyManager.redness
+        sharpSlider.floatValue = beautyManager.sharpness
+        smoothingSlider.floatValue = beautyManager.smoothness
         
         initSelectResolutionPicker()
         initSelectFpsPicker()
@@ -174,15 +174,7 @@ class AgoraBeauty: BaseViewController {
     }
     
     @IBAction func onBeautySliderChange(_ sender: NSSwitch) {
-        if sender.state == .on {
-            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
-                agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
-            } else {
-                showAlert(message: "The feature is unavailable in the device!")
-            }
-        } else {
-            agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
-        }
+        beautyManager.basicBeautyEnable = sender.state == .on
     }
     
     @IBAction func onLightenSliderChange(_ sender: NSSlider) {

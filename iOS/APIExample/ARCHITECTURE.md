@@ -32,7 +32,7 @@
 | ScreenShare | `Examples/Advanced/ScreenShare/ScreenShare.swift` | `startScreenCapture()`, `updateScreenCapture()`, `stopScreenCapture()`, `setScreenCaptureScenario()` | Screen capture and sharing via ReplayKit extension |
 | LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.swift` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()`, `enableVirtualBackground()` | Composite multiple video sources locally before publishing |
 | VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.swift` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `enableExtension()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
 | RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.swift` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.swift` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relay media stream to multiple destination channels |

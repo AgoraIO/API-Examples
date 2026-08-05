@@ -83,7 +83,7 @@ All examples share utilities from `APIExample/Common/`:
 | JoinChannelVideo | `Examples/Basic/JoinChannelVideo/` | `createAgoraRtcEngine()`, `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()`, `leaveChannel()`, `destroy()` | Basic video call — join channel and render local/remote video |
 | JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/` | `createAgoraRtcEngine()`, `joinChannel()` with token, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
 | JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/` | `createAgoraRtcEngine()`, `joinChannel()`, `startAudioRecording()`, `stopAudioRecording()` | Video call with local audio recording |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `setBeautyEffectOptions()`, `setVideoEncoderConfiguration()` | Beauty filter and enhancement effects |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Beauty filter and enhancement effects |
 | AudioMixing | `Examples/Advanced/AudioMixing/` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()` | Audio file mixing and playback control |
 | ChannelMediaRelay | `Examples/Advanced/ChannelMediaRelay/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Relay media streams across multiple channels |
 | ContentInspect | `Examples/Advanced/ContentInspect/` | `enableContentInspect()`, `disableContentInspect()` | Content inspection and moderation |

@@ -169,6 +169,7 @@ object AgoraBeautySDK {
             set(value) {
                 field = value
                 val effectObj = videoEffectObject ?: return
+                effectObj.setVideoEffectStringParam("beauty_effect_option", "whiten_lut_path", "")
                 effectObj.setVideoEffectFloatParam("beauty_effect_option", "lightness", value)
             }
 

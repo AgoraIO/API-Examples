@@ -160,6 +160,7 @@ class AgoraBeautyManager {
         }
         set {
             guard let effectObj = videoEffectObject else { return }
+            effectObj.setVideoEffectStringParam(option: "beauty_effect_option", key: "whiten_lut_path", stringValue: "")
             effectObj.setVideoEffectFloatParam(option: "beauty_effect_option", key: "lightness", floatValue: newValue)
         }
     }
