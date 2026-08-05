@@ -1,83 +1,54 @@
 #!/usr/bin/env sh
+set -eu
+
 export LANG=en_US.UTF-8
 export PATH=$PATH:/opt/homebrew/bin
 
 PROJECT_PATH=$PWD
+WORKSPACE=${WORKSPACE:-$PWD}
+SIGNING_TEAM="YS397FG5PA"
 
-if [ "$WORKSPACE" = "" ]; then
-	WORKSPACE=$PWD
-fi
+: "${BUILD_NUMBER:?BUILD_NUMBER is required}"
+: "${APP_ID:?APP_ID is required}"
+: "${JFROG_API_KEY:?JFROG_API_KEY is required}"
 
-cd ${PROJECT_PATH}
+cd "${PROJECT_PATH}"
 
-curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip"
 rm -rf APIExample/Resources/AgoraBeautyMaterial.bundle
-unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
+unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources
 rm -f AgoraBeautyMaterial.bundle.zip
-test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
+test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json
 
-pod install || exit 1
+pod install
 
 # Build environment
 CONFIGURATION="Debug"
 
 # Project file path
-APP_PATH="$(ls | grep xcworkspace)"
+APP_PATH=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)
+if [ -z "${APP_PATH}" ]; then
+	echo "Error: No Xcode workspace found in ${PROJECT_PATH}"
+	exit 1
+fi
+APP_PATH=${APP_PATH#./}
 
 # Project target name
-TARGET_NAME=${APP_PATH%%.*} 
+TARGET_NAME=${APP_PATH%%.*}
 
 KEYCENTER_PATH=$TARGET_NAME/Common/KeyCenter.swift
 
-# Project configuration path
-PBXPROJ_PATH=${TARGET_NAME}.xcodeproj/project.pbxproj
-
-# Main project configuration
-# Debug
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:CODE_SIGN_IDENTITY 'Developer ID Application'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
-# Release
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:CODE_SIGN_IDENTITY 'Developer ID Application'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:DEVELOPMENT_TEAM 'GM72UGLGZW'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:PROVISIONING_PROFILE_SPECIFIER 'App'" $PBXPROJ_PATH
-
-# SimpleFilter
-# Debug
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7E272518D600E95B87:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
-# Release
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
-/usr/libexec/PlistBuddy -c "Set :objects:8BD4AE7F272518D600E95B87:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
-
-# Modify build number
-# Debug
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5324F8A011008593CD:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
-# Release
-/usr/libexec/PlistBuddy -c "Set :objects:03896D5424F8A011008593CD:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
-
-
 # Read APPID environment variable
-echo AGORA_APP_ID: $APP_ID
+echo "AGORA_APP_ID is configured"
 
-echo PROJECT_PATH: $PROJECT_PATH
-echo TARGET_NAME: $TARGET_NAME
-echo KEYCENTER_PATH: $KEYCENTER_PATH
-echo APP_PATH: $APP_PATH
+echo PROJECT_PATH: "$PROJECT_PATH"
+echo TARGET_NAME: "$TARGET_NAME"
+echo KEYCENTER_PATH: "$KEYCENTER_PATH"
+echo APP_PATH: "$APP_PATH"
 
 # Modify Keycenter file
-sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" $KEYCENTER_PATH
-rm -f ${KEYCENTER_PATH}-e
-
-# Xcode clean
-xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
-
-# Timestamp
-CURRENT_TIME=$(date "+%Y-%m-%d %H-%M-%S")
+sed -i -e "s#<\#YOUR AppId\#>#\"$APP_ID\"#g" "${KEYCENTER_PATH}"
+rm -f "${KEYCENTER_PATH}-e"
 
 # Archive path
 ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
@@ -86,27 +57,53 @@ ARCHIVE_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive"
 
 # Plist path
 PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
+EXPORT_PATH="${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_export"
 
-echo PLIST_PATH: $PLIST_PATH
+echo PLIST_PATH: "$PLIST_PATH"
 
-# Archive using workspace (can also use project)
-xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}"
+# Archive with Xcode-managed development signing for the configured team.
+rm -rf "${ARCHIVE_PATH}" "${EXPORT_PATH}"
+xcodebuild \
+	-workspace "${APP_PATH}" \
+	-scheme "${TARGET_NAME}" \
+	-configuration "${CONFIGURATION}" \
+	-destination 'generic/platform=macOS' \
+	-archivePath "${ARCHIVE_PATH}" \
+	-allowProvisioningUpdates \
+	CODE_SIGN_STYLE=Automatic \
+	CODE_SIGN_IDENTITY="Apple Development" \
+	DEVELOPMENT_TEAM="${SIGNING_TEAM}" \
+	PROVISIONING_PROFILE_SPECIFIER= \
+	CURRENT_PROJECT_VERSION="${BUILD_NUMBER}" \
+	clean archive
 
-cd ${WORKSPACE}
+if [ ! -d "${ARCHIVE_PATH}/Products/Applications/${TARGET_NAME}.app" ]; then
+	echo "Error: Archive does not contain ${TARGET_NAME}.app"
+	exit 1
+fi
 
-# Compress archive
-7za a -tzip "${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" "${ARCHIVE_PATH}"
+mkdir -p "${EXPORT_PATH}"
+xcodebuild -exportArchive \
+	-archivePath "${ARCHIVE_PATH}" \
+	-exportPath "${EXPORT_PATH}" \
+	-exportOptionsPlist "${PLIST_PATH}" \
+	-allowProvisioningUpdates
 
-echo "start sign..."
+EXPORTED_APP="${EXPORT_PATH}/${TARGET_NAME}.app"
+if [ ! -d "${EXPORTED_APP}" ]; then
+	echo "Error: Xcode export did not produce ${TARGET_NAME}.app"
+	exit 1
+fi
+codesign --verify --deep --strict --verbose=2 "${EXPORTED_APP}"
 
-# Sign
-sh sign "${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}.xcarchive.zip" --type xcarchive --plist "${PLIST_PATH}" --application macApp
-
-
-SDK_VERSION=$(echo $sdk_url | cut -d "/" -f 5)
+SDK_VERSION=$(echo "${sdk_url:-unknown}" | cut -d "/" -f 5)
 OUTPUT_FILE=${WORKSPACE}/${TARGET_NAME}_${BUILD_NUMBER}_${SDK_VERSION}_$(date "+%Y%m%d%H%M%S").app.zip
-mv ${TARGET_NAME}_${BUILD_NUMBER}.app.zip $OUTPUT_FILE
+rm -f "${OUTPUT_FILE}"
+ditto -c -k --sequesterRsrc --keepParent "${EXPORTED_APP}" "${OUTPUT_FILE}"
+if [ ! -s "${OUTPUT_FILE}" ]; then
+	echo "Error: App package was not created"
+	exit 1
+fi
 
-rm -rf *.xcarchive
-rm -rf *.xcarchive.zip
-echo OUTPUT_FILE: $OUTPUT_FILE
+rm -rf "${ARCHIVE_PATH}" "${EXPORT_PATH}"
+echo OUTPUT_FILE: "$OUTPUT_FILE"
