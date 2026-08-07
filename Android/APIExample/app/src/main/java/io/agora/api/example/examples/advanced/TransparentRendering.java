@@ -114,7 +114,7 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*
@@ -295,7 +295,10 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
                 //  kAlphaStitchRight = 4
                 //};
                 frame.setAlphaStitchMode(3);
-                engine.pushExternalVideoFrame(frame);
+                int ret = engine.pushExternalVideoFrameById(frame, 0);
+                if (ret != Constants.ERR_OK) {
+                    Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
+                }
             }
         });
 

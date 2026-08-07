@@ -265,7 +265,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*
@@ -395,10 +395,11 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // audio config
-        engine.setAudioProfile(
-                Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
-                getAudioScenarioValue(audioScenario.getSelectedItem().toString())
+        int selectedAudioProfile = Constants.AudioProfile.getValue(
+                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())
         );
+        engine.setAudioProfile(selectedAudioProfile);
+        engine.setAudioScenario(getAudioScenarioValue(audioScenario.getSelectedItem().toString()));
 
         /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see

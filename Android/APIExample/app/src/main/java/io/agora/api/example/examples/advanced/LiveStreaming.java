@@ -320,7 +320,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
              profile if the use case requires frequent interactions between users.
              Deprecated: Use CHANNEL_PROFILE_LIVE_BROADCASTING instead.*/
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            rtcEngineConfig.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             rtcEngineConfig.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
             /*
@@ -343,7 +343,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             }
 
             engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
-            engine.enableDualStreamMode(true);
+            engine.setDualStreamMode(Constants.SimulcastStreamMode.ENABLE_SIMULCAST_STREAM);
 
             agoraFocalLengthInfos = engine.queryCameraFocalLengthCapability();
             ArrayList<String> strings = new ArrayList<>();

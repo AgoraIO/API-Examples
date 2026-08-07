@@ -100,7 +100,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             // RtcEngineEventHandler is an abstract class providing default implementation.
             // he SDK uses this class to report to the app on SDK runtime events.
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             // This parameter is for reporting the usages of APIExample to agora background.
@@ -154,7 +154,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                     showLongToast(getString(R.string.app_id_empty));
                     return;
                 }
-                if (createRtcEngine(appId)) {
+                if (engine != null || createRtcEngine(appId)) {
                     joinChannel(channelId, token);
                 }
 
@@ -254,7 +254,15 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             super.onConnectionStateChanged(state, reason);
             if (reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN || reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
                 engine.leaveChannel();
-                runOnUIThread(() -> join.setEnabled(true));
+                runOnUIThread(() -> {
+                    joined = false;
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.join));
+                    for (ViewGroup value : remoteViews.values()) {
+                        value.removeAllViews();
+                    }
+                    remoteViews.clear();
+                });
 
                 if (Constants.CONNECTION_CHANGED_INVALID_TOKEN == reason) {
                     showAlert(getString(R.string.token_invalid));

@@ -152,7 +152,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /*
@@ -359,12 +359,12 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         /*
          * Pushes the external video frame to the app.
          */
-        boolean success = engine.pushExternalVideoFrame(videoFrame);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, 0);
 
         i420Buffer.release();
 
-        if (!success) {
-            Log.w(TAG, "pushExternalVideoFrame error");
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
         }
     }
 
@@ -392,10 +392,10 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         /*
          * Pushes the external video frame to the app.
          */
-        boolean success = engine.pushExternalVideoFrame(videoFrame);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, 0);
 
-        if (!success) {
-            Log.w(TAG, "pushExternalVideoFrame error");
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
         }
     }
 
@@ -422,10 +422,10 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         /*
          * Pushes the external video frame to the app.
          */
-        boolean success = engine.pushExternalVideoFrame(videoFrame);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, 0);
 
-        if (!success) {
-            Log.w(TAG, "pushExternalVideoFrame error");
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
         }
     }
 
@@ -464,10 +464,10 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         /*
          * Pushes the external video frame to the app.
          */
-        boolean success = engine.pushExternalVideoFrame(videoFrame);
+        int ret = engine.pushExternalVideoFrameById(videoFrame, 0);
 
-        if (!success) {
-            Log.w(TAG, "pushExternalVideoFrame error");
+        if (ret != Constants.ERR_OK) {
+            Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
         }
     }
 

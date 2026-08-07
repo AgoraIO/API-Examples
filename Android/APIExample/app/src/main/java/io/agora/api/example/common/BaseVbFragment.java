@@ -77,7 +77,7 @@ public abstract class BaseVbFragment<T extends ViewBinding> extends BaseFragment
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = engineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*
