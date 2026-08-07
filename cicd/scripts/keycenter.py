@@ -40,6 +40,7 @@ def main():
         appString = "@\"" + appId + "\""
         tokenString = "@\"" + token + "\""
         contentNew = re.sub(r'<#Your App Id#>', appString, content)
+        contentNew = re.sub(r'<#YOUR APPID#>', appString, contentNew)
         contentNew = re.sub(r'<#Temp Access Token#>', tokenString, contentNew)
         f.seek(0)
         f.write(contentNew)

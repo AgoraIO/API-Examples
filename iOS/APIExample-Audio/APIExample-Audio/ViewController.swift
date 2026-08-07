@@ -35,7 +35,6 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
             MenuItem(name: "Audio Mixing".localized, storyboard: "AudioMixing", controller: ""),
-            MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio"),
         ]),

@@ -44,7 +44,6 @@
 | ARKit | `Examples/Advanced/ARKit/ARKit.swift` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
 | AudioRouterPlayer | `Examples/Advanced/AudioRouterPlayer/AudioRouterPlayer.swift` | `setEnableSpeakerphone()` | Control audio output routing with third-party player |
 | AudioWaveform | `Examples/Advanced/AudioWaveform/AudioWaveform.swift` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
-| FaceCapture | `Examples/Advanced/FaceCapture/FaceCapture.swift` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
 | TransparentRender | `Examples/Advanced/TransparentRender/TransparentRender.swift` | `createMediaPlayer()`, `setExternalVideoSource()`, `pushExternalVideoFrame()` | Render video with transparent background |
 | RtePlayer | `Examples/Advanced/RtePlayer/RtePlayer.swift` | `AgoraRte`, `AgoraRtePlayer`, `AgoraRteCanvas` | URL-based stream playback via RTE Player API |
 | Simulcast | `Examples/Advanced/Simulcast/Simulcast.swift` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
@@ -131,7 +130,6 @@ APIExample/
     │       ├── ARKit/                       # "ARKit"
     │       ├── AudioRouterPlayer/           # "Audio Router (Third Party Player)"
     │       ├── AudioWaveform/               # "Audio Waveform"
-    │       ├── FaceCapture/                 # "Face Capture"
     │       ├── TransparentRender/           # "Transparent Render"
     │       ├── RtePlayer/                   # "URL Streaming (RTE Player)"
     │       ├── Simulcast/                   # "Simulcast"

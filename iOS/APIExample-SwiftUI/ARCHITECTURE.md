@@ -27,8 +27,7 @@
 | LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `createMediaPlayer()` | Transcode multiple video sources locally before publishing |
 | LocalVideoComposition | `Examples/Advanced/LocalVideoComposition/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()` | Composite camera and screen capture into one stream |
 | VideoProcess | `Examples/Advanced/VideoProcess/` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `enableExtension()`, `createVideoEffectObject()`, `setFilterEffectOptions()` | Agora beauty extension with makeup and virtual background |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
@@ -37,7 +36,6 @@
 | KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/` | — | Links to KTV copyright music documentation |
 | ARKit | `Examples/Advanced/ARKit/` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
 | AudioWaveform | `Examples/Advanced/AudioWaveform/` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
-| FaceCapture | `Examples/Advanced/FaceCapture/` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
 | Simulcast | `Examples/Advanced/Simulcast/` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
 | Multipath | `Examples/Advanced/Multipath/` | `updateChannel()` | Multi-path network transmission configuration |
 
@@ -97,8 +95,7 @@ APIExample-SwiftUI/
     │       ├── LocalVideoTranscoding/       # "Local Video Transcoding"
     │       ├── LocalVideoComposition/       # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
-    │       ├── AgoraBeauty/                 # "Agora Beauty"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
     │       ├── CreateDataStream/            # "Create Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
@@ -107,7 +104,6 @@ APIExample-SwiftUI/
     │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
     │       ├── ARKit/                       # "ARKit"
     │       ├── AudioWaveform/               # "Audio Waveform"
-    │       ├── FaceCapture/                 # "Face Capture"
     │       ├── Simulcast/                   # "Simulcast"
     │       └── Multipath/                   # "Multipath"
     │

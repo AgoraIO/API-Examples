@@ -74,8 +74,6 @@
 		4C9309B02CBA91530085EFF9 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309562CBA91520085EFF9 /* RawVideoData.swift */; };
 		4C9309B12CBA91530085EFF9 /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309582CBA91520085EFF9 /* ARKit.swift */; };
 		4C9309B22CBA91530085EFF9 /* ARKitRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309592CBA91520085EFF9 /* ARKitRTC.swift */; };
-		4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */; };
-		4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095C2CBA91520085EFF9 /* FaceCapture.swift */; };
 		4C9309B52CBA91530085EFF9 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095E2CBA91520085EFF9 /* MutliCamera.swift */; };
 		4C9309B62CBA91530085EFF9 /* MutliCameraRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */; };
 		4C9309B72CBA91530085EFF9 /* StreamEncryptionRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */; };
@@ -255,8 +253,6 @@
 		4C9309562CBA91520085EFF9 /* RawVideoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
 		4C9309582CBA91520085EFF9 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
 		4C9309592CBA91520085EFF9 /* ARKitRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKitRTC.swift; sourceTree = "<group>"; };
-		4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCaptureRTC.swift; sourceTree = "<group>"; };
-		4C93095C2CBA91520085EFF9 /* FaceCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCapture.swift; sourceTree = "<group>"; };
 		4C93095E2CBA91520085EFF9 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
 		4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCameraRTC.swift; sourceTree = "<group>"; };
 		4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptionRTC.swift; sourceTree = "<group>"; };
@@ -626,7 +622,6 @@
 				4C9309662CBA91520085EFF9 /* CreateDataStream */,
 				4C9309872CBA91530085EFF9 /* CustomAudioRender */,
 				4C93096E2CBA91520085EFF9 /* CustomPCMAudioSource */,
-				4C93095A2CBA91520085EFF9 /* FaceCapture */,
 				4C9309712CBA91520085EFF9 /* JoinMultiChannel */,
 				4C9309692CBA91520085EFF9 /* KtvCopyrightMusic */,
 				4C9309632CBA91520085EFF9 /* LiveStreaming */,
@@ -684,15 +679,6 @@
 				4C9309592CBA91520085EFF9 /* ARKitRTC.swift */,
 			);
 			path = ARKit;
-			sourceTree = "<group>";
-		};
-		4C93095A2CBA91520085EFF9 /* FaceCapture */ = {
-			isa = PBXGroup;
-			children = (
-				4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */,
-				4C93095C2CBA91520085EFF9 /* FaceCapture.swift */,
-			);
-			path = FaceCapture;
 			sourceTree = "<group>";
 		};
 		4C93095D2CBA91520085EFF9 /* MutliCamera */ = {
@@ -1221,8 +1207,6 @@
 				4C9309D32CBA91530085EFF9 /* LocalVideoTranscoding.swift in Sources */,
 				4C93076C2CB961150085EFF9 /* VideoView.swift in Sources */,
 				4C9307722CB961150085EFF9 /* AgoraExtension.swift in Sources */,
-				4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */,
-				4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */,
 				4C9309DF2CBA91530085EFF9 /* VideoProcessRTC.swift in Sources */,
 				4C93076B2CB961150085EFF9 /* AgoraYUVImageSourcePush.m in Sources */,
 				4C9307C62CB961160085EFF9 /* ContentView.swift in Sources */,

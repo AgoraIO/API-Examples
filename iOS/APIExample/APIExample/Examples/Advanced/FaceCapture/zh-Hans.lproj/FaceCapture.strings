@@ -1,8 +1,0 @@
-/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "输入频道名";
-
-/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "加入频道";
-
-/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "视频实时通话";

@@ -126,7 +126,6 @@
 "Screen Share + Camera" = "屏幕共享 + 摄像头";
 "please input channel name!" = "请输入频道名！";
 "Video Process" = "视频增强";
-"Agora Beauty" = "Agora 美颜";
 "Rhythm Player" = "虚拟节拍器";
 "Spatial Audio" = "空间音效";
 "Please move the red icon to experience the 3D audio effect" = "请移动红色图标体验3D音频效果";
@@ -167,8 +166,6 @@
 "AGGRESSIVE" = "强降噪模式";
 "BALANCED" = "(默认)均衡降噪模式";
 "ULTRALOWLATENCY" = "低延时强降噪模式";
-"Face Capture" = "面捕数据";
-"Please contact Agora customer service to obtain a face capture certificate" = "请联系 Agora 客服获取面捕证书";
 "Audio Scenario" = "音频使用场景";
 "Audio Profile" = "音频参数配置";
 "RecordingVolume" = "采集音量";

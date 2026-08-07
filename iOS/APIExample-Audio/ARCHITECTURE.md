@@ -12,7 +12,7 @@
 | CustomAudioRender | `Examples/Advanced/CustomAudioRender/CustomAudioRender.swift` | `enableExternalAudioSink()`, `pullPlaybackAudioFrameRawData()` | Pull audio frames for custom rendering |
 | RawAudioData | `Examples/Advanced/RawAudioData/RawAudioData.swift` | `setAudioFrameDelegate()` | Capture raw audio PCM data via delegate |
 | AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.swift` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | PrecallTest | `Examples/Advanced/PrecallTest/PrecallTest.swift` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()`, `setEnableSpeakerphone()` | 3D spatial audio with media player integration |
 
@@ -56,7 +56,7 @@ APIExample-Audio/
     │       ├── CustomAudioRender/           # "Custom Audio Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
     │       ├── PrecallTest/                 # "Precall Test"
     │       └── SpatialAudio/                # "Spatial Audio"
     │

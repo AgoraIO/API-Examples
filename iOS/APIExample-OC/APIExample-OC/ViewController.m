@@ -71,7 +71,6 @@
         [[MenuItem alloc]initWithName:@"Media Player".localized storyboard:@"MediaPlayer" controller:@""],
         [[MenuItem alloc]initWithName:@"Screen Share".localized storyboard:@"ScreenShare" controller:@""],
         [[MenuItem alloc]initWithName:@"Video Process".localized storyboard:@"VideoProcess" controller:@""],
-        [[MenuItem alloc]initWithName:@"Rhythm Player".localized storyboard:@"RhythmPlayer" controller:@""],
         [[MenuItem alloc]initWithName:@"Create Data Stream".localized storyboard:@"CreateDataStream" controller:@""],
         [[MenuItem alloc]initWithName:@"Media Channel Relay".localized storyboard:@"MediaChannelRelay" controller:@""],
         [[MenuItem alloc]initWithName:@"Spatial Audio".localized storyboard:@"SpatialAudio" controller:@""],

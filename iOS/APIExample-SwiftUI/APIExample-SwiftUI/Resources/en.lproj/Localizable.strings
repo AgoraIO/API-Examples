@@ -126,7 +126,6 @@
 "Screen Share + Camera" = "Screen Share + Camera";
 "please input channel name!" = "Please enter channel name!";
 "Video Process" = "Video Enhancement";
-"Agora Beauty" = "Agora Beauty";
 "Rhythm Player" = "Virtual Metronome";
 "Spatial Audio" = "Spatial Audio";
 "Please move the red icon to experience the 3D audio effect" = "Please move the red icon to experience 3D audio effect";
@@ -167,8 +166,6 @@
 "AGGRESSIVE" = "Aggressive Mode";
 "BALANCED" = "(Default) Balanced Mode";
 "ULTRALOWLATENCY" = "Ultra Low Latency Mode";
-"Face Capture" = "Face Capture";
-"Please contact Agora customer service to obtain a face capture certificate" = "Please contact Agora support for face capture certificate";
 "Audio Scenario" = "Audio Scenario";
 "Audio Profile" = "Audio Profile";
 "RecordingVolume" = "Recording Volume";
