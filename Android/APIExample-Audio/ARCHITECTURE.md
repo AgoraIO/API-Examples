@@ -51,7 +51,7 @@ APIExample-Audio/
         │   │   ├── ProcessAudioRawData.java     # [13] "Raw Audio Data" — audio raw data processing
         │   │   ├── PlayAudioFiles.java          # [14] "Play Audio Files" — audio mixing
         │   │   ├── PreCallTest.java             # [15] "Pre-call Tests" — network/device test before joining
-        │   │   ├── RhythmPlayer.java            # [16] "Rhythm Player" — metronome/rhythm playback
+        │   │   ├── RhythmPlayer.java            # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   │   └── SpatialSound.java            # [17] "Spatial Audio" — 3D spatial audio
         │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
         │       └── AudioWaveform.java           # [18] "Audio Waveform" — audio visualization
@@ -79,7 +79,7 @@ APIExample-Audio/
 | Raw Audio Data | `advanced/ProcessAudioRawData.java` | `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Demonstrates processing raw audio data through the audio frame observer |
 | Play Audio Files | `advanced/PlayAudioFiles.java` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()`, `getAudioEffectManager()`, `adjustAudioMixingVolume()` | Demonstrates audio mixing and sound effect playback |
 | Pre-call Tests | `advanced/PreCallTest.java` | `startLastmileProbeTest()`, `stopLastmileProbeTest()`, `startEchoTest()`, `stopEchoTest()` | Demonstrates network quality probing and echo testing before joining a channel |
-| Rhythm Player | `advanced/RhythmPlayer.java` | `startRhythmPlayer()`, `stopRhythmPlayer()`, `enableAudioVolumeIndication()` | Demonstrates metronome/rhythm playback synchronized with audio streaming |
+| Rhythm Player (hidden) | `advanced/RhythmPlayer.java` | `startRhythmPlayer()`, `stopRhythmPlayer()`, `enableAudioVolumeIndication()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | Spatial Audio | `advanced/SpatialSound.java` | `ILocalSpatialAudioEngine.create()`, `updateSelfPosition()`, `updateRemotePosition()`, `updatePlayerPositionInfo()`, `setZones()`, `createMediaPlayer()` | Demonstrates 3D spatial audio positioning for remote users and media players |
 | Audio Waveform | `audio/AudioWaveform.java` | `enableAudio()`, `enableAudioVolumeIndication()` | Demonstrates real-time audio waveform visualization |
 

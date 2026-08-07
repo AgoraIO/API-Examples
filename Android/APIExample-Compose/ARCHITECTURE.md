@@ -55,7 +55,7 @@ APIExample-Compose/
         │   ├── MediaPlayer.kt               # Advanced: "Media Player" — play media files
         │   ├── ScreenSharing.kt             # Advanced: "Screen Sharing" — screen capture & share
         │   ├── VideoProcessExtension.kt     # Advanced: "Video Process Extension" — video filter
-        │   ├── RhythmPlayer.kt              # Advanced: "Rhythm Player" — metronome playback
+        │   ├── RhythmPlayer.kt              # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   ├── LocalVideoTranscoding.kt     # Advanced: "Local Video Transcoding" — local compositing
         │   ├── SendDataStream.kt            # Advanced: "Send Data Stream" — data channel messaging
         │   ├── HostAcrossChannel.kt         # Advanced: "Host Across Channel" — cross-channel relay
@@ -117,7 +117,7 @@ APIExample-Compose/
 | Media Player | `MediaPlayer.kt` | `joinChannel()`, `enableVideo()`, `createMediaPlayer()`, `open()`, `play()`, `stop()`, `updateChannelMediaOptions()` | Plays media files and publishes the player track to the channel |
 | Screen Sharing | `ScreenSharing.kt` | `joinChannel()`, `enableVideo()`, `startScreenCapture()`, `stopScreenCapture()`, `updateScreenCaptureParameters()`, `setScreenCaptureScenario()` | Captures and shares the device screen with scenario and audio options |
 | Video Process Extension | `VideoProcessExtension.kt` | `joinChannel()`, `enableVideo()`, `setBeautyEffectOptions()`, `setLowlightEnhanceOptions()`, `setColorEnhanceOptions()`, `setVideoDenoiserOptions()`, `enableVirtualBackground()`, `enableExtension()` | Applies beauty filters, low-light enhancement, color enhancement, denoiser, and virtual background |
-| Rhythm Player | `RhythmPlayer.kt` | `joinChannel()`, `startRhythmPlayer()`, `stopRhythmPlayer()`, `updateChannelMediaOptions()` | Plays a metronome beat track and publishes it to the channel |
+| Rhythm Player (hidden) | `RhythmPlayer.kt` | `joinChannel()`, `startRhythmPlayer()`, `stopRhythmPlayer()`, `updateChannelMediaOptions()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | Local Video Transcoding | `LocalVideoTranscoding.kt` | `joinChannel()`, `enableVideo()`, `startLocalVideoTranscoder()`, `stopLocalVideoTranscoder()`, `startCameraCapture()`, `stopCameraCapture()` | Composites camera and media player streams into a single transcoded video |
 | Send Data Stream | `SendDataStream.kt` | `joinChannel()`, `enableVideo()`, `createDataStream()`, `sendStreamMessage()` | Sends and receives real-time data messages through a data channel |
 | Host Across Channel | `HostAcrossChannel.kt` | `joinChannel()`, `enableVideo()`, `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relays media streams from one channel to another for cross-channel hosting |

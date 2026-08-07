@@ -24,7 +24,6 @@ import io.agora.api.example.compose.samples.PictureInPicture
 import io.agora.api.example.compose.samples.PlayAudioFiles
 import io.agora.api.example.compose.samples.PreCallTest
 import io.agora.api.example.compose.samples.RTMPStreaming
-import io.agora.api.example.compose.samples.RhythmPlayer
 import io.agora.api.example.compose.samples.ScreenSharing
 import io.agora.api.example.compose.samples.SendDataStream
 import io.agora.api.example.compose.samples.SpatialSound
@@ -63,7 +62,6 @@ val AdvanceExampleList = listOf(
     Example(R.string.example_mediaplayer) { MediaPlayer() },
     Example(R.string.example_screensharing) { ScreenSharing() },
     Example(R.string.example_videoprocessextension) { VideoProcessExtension() },
-    Example(R.string.example_rhythmplayer) { RhythmPlayer() },
     Example(R.string.example_localvideotranscoding) { LocalVideoTranscoding() },
     Example(R.string.example_senddatastream) { SendDataStream() },
     Example(R.string.example_hostacrosschannel) { HostAcrossChannel() },
