@@ -79,12 +79,12 @@ All examples share utilities from `APIExample/Common/`:
 
 | Case | Path | Key APIs | Description |
 |------|------|----------|-------------|
-| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/` | `createAgoraRtcEngine()`, `joinChannel()`, `leaveChannel()`, `destroy()` | Basic audio call — join channel and manage audio stream |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/` | `createAgoraRtcEngine()`, `setAudioScenario()`, `joinChannel()`, `leaveChannel()`, `destroy()` | Basic audio call — select an audio scenario, join a channel, and manage the audio stream |
 | JoinChannelVideo | `Examples/Basic/JoinChannelVideo/` | `createAgoraRtcEngine()`, `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()`, `leaveChannel()`, `destroy()` | Basic video call — join channel and render local/remote video |
 | JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/` | `createAgoraRtcEngine()`, `joinChannel()` with token, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
 | JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/` | `createAgoraRtcEngine()`, `joinChannel()`, `startAudioRecording()`, `stopAudioRecording()` | Video call with local audio recording |
 | AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Beauty filter and enhancement effects |
-| AudioMixing | `Examples/Advanced/AudioMixing/` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()` | Audio file mixing and playback control |
+| AudioMixing | `Examples/Advanced/AudioMixing/` | `setAudioScenario()`, `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()` | Audio scenario selection, file mixing, and playback control |
 | ChannelMediaRelay | `Examples/Advanced/ChannelMediaRelay/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Relay media streams across multiple channels |
 | ContentInspect | `Examples/Advanced/ContentInspect/` | `enableContentInspect()`, `disableContentInspect()` | Content inspection and moderation |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Custom data stream creation and messaging |
@@ -94,9 +94,8 @@ All examples share utilities from `APIExample/Common/`:
 | CustomVideoSourceMediaIO | `Examples/Advanced/CustomVideoSourceMediaIO/` | `setExternalVideoSource()`, `pushVideoFrame()` with MediaIO | Custom video source with media I/O |
 | CustomVideoSourcePush | `Examples/Advanced/CustomVideoSourcePush/` | `setExternalVideoSource()`, `pushVideoFrame()` | Custom video source push |
 | CustomVideoSourcePushMulti | `Examples/Advanced/CustomVideoSourcePushMulti/` | `setExternalVideoSource()`, `pushVideoFrame()` with multiple sources | Multiple custom video sources |
-| FaceCapture | `Examples/Advanced/FaceCapture/` | `enableFaceDetection()`, `getFaceDetectionResult()` | Face detection and capture |
 | JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/` | `createRtcChannel()`, `joinChannel()` on multiple channels | Join and manage multiple channels simultaneously |
-| LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `startRtmpStreamWithTranscoding()`, `stopRtmpStream()` | RTMP live streaming with transcoding |
+| LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `addVideoWatermark()` with `WatermarkConfig`, `startRtmpStreamWithTranscoding()`, `stopRtmpStream()` | Live streaming with watermark configuration and RTMP transcoding |
 | LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoding()`, `updateLocalTranscodingConfig()`, `stopLocalVideoTranscoding()` | Local video transcoding and composition |
 | MediaPlayer | `Examples/Advanced/MediaPlayer/` | `createMediaPlayer()`, `open()`, `play()`, `pause()`, `stop()` | Media file playback and control |
 | MultiCameraSourece | `Examples/Advanced/MultiCameraSourece/` | `enumerateDevices()`, `setDevice()` with multiple cameras | Multiple camera source selection |
@@ -109,7 +108,7 @@ All examples share utilities from `APIExample/Common/`:
 | RtePlayer | `Examples/Advanced/RtePlayer/` | `createMediaPlayer()`, `open()` with RTE protocol | RTE protocol media playback |
 | RTMPStreaming | `Examples/Advanced/RTMPStreaming/` | `startRtmpStreamWithTranscoding()`, `updateRtmpTranscodingConfig()`, `stopRtmpStream()` | RTMP streaming with live transcoding |
 | ScreenShare | `Examples/Advanced/ScreenShare/` | `startScreenCapture()`, `updateScreenCaptureParameters()`, `stopScreenCapture()` | Screen sharing and capture |
-| SimpleFilter | `Examples/Advanced/SimpleFilter/` | `setVideoEncoderConfiguration()`, `setBeautyEffectOptions()` | Simple video filter effects |
+| SimpleFilter | `Examples/Advanced/SimpleFilter/` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `onEventWithContext()` | Simple audio and video filter extensions with context-aware event callbacks |
 | Simulcast | `Examples/Advanced/Simulcast/` | `setSimulcastConfig()`, `enableSimulcast()` | Simulcast streaming with multiple bitrates |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/` | `getLocalSpatialAudioEngine()`, `updateSelfPosition()`, `updateRemotePosition()` | 3D spatial audio positioning |
 | StreamEncryption | `Examples/Advanced/StreamEncryption/` | `enableEncryption()`, `setEncryptionConfig()` | Stream encryption and security |

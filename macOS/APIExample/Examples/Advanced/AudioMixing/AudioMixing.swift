@@ -64,7 +64,7 @@ class AudioMixing: BaseViewController {
     var audioScenarios = AgoraAudioScenario.allValues()
     var selectedAudioScenario: AgoraAudioScenario? {
         let index = self.selectAudioScenarioPicker.indexOfSelectedItem
-        if index >= 0 && index < Configs.Resolutions.count {
+        if index >= 0 && index < audioScenarios.count {
             return audioScenarios[index]
         } else {
             return nil

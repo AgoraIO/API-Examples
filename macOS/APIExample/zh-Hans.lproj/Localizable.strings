@@ -59,6 +59,10 @@
 "Chat Room Gaming" = "娱乐语聊房";
 "Education" = "教育";
 "Game Streaming" = "高音质语聊房";
+"Chat Room" = "语聊房";
+"Chorus" = "实时合唱";
+"Meeting" = "会议场景";
+"AI Client" = "对话式 AI 客户端";
 "Chat Room Entertainment" = "游戏开黑";
 "Show Room" = "秀场";
 "Cancel" = "取消";
@@ -216,8 +220,6 @@
 "AGGRESSIVE" = "强降噪模式";
 "BALANCED" = "(默认)均衡降噪模式";
 "ULTRALOWLATENCY" = "低延时强降噪模式";
-"Face Capture" = "面捕数据";
-"Please contact Agora customer service to obtain a face capture certificate" = "请联系 Agora 客服获取面捕证书";
 "Start Video Echo Test" = "开始视频回路测试";
 "Stop Video Echo Test" = "停止视频回路测试";
 

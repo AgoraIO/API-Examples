@@ -514,14 +514,18 @@ class LiveStreamingMain: BaseViewController {
     private func onWaterMark(_ isOn: Bool) {
         if isOn {
             if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
-                if let url = URL(string: filepath) {
-                    let waterMark = WatermarkOptions()
-                    waterMark.visibleInPreview = true
-                    let localVideo = self.videos[0]
-                    waterMark.positionInPortraitMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
-                    waterMark.positionInLandscapeMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
-                    agoraKit.addVideoWatermark(url, options: waterMark)
-                }
+                let options = WatermarkOptions()
+                options.visibleInPreview = true
+                let localVideo = self.videos[0]
+                options.positionInPortraitMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+                options.positionInLandscapeMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+
+                let config = WatermarkConfig()
+                config.id = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+                config.type = .image
+                config.imageUrl = URL(fileURLWithPath: filepath)
+                config.options = options
+                agoraKit.addVideoWatermark(config)
             }
         } else {
             agoraKit.clearVideoWatermarks()
