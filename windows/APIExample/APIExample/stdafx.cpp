@@ -38,7 +38,6 @@ wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
-wchar_t advancedFaceCapture[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
 wchar_t advancedMediaRecorder[INFO_LEN]			= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
@@ -497,7 +496,6 @@ void InitKeyInfomation()
 
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
-	_tcscpy_s(advancedFaceCapture, INFO_LEN, Str(_T("Advanced.FaceCapture")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
 	_tcscpy_s(advancedMediaRecorder, INFO_LEN, Str(_T("Advanced.MediaRecorder")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));

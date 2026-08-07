@@ -104,10 +104,9 @@ All examples share utilities:
 | Beauty2.0 | `Advanced/Beauty2.0/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `setVideoEffectFloatParam()` | Enhanced beauty effects with v2.0 API |
 | BeautyAudio | `Advanced/BeautyAudio/` | `setBeautyEffectOptions()`, `setAudioEffectPreset()` | Combined audio and video beauty effects |
 | CrossChannel | `Advanced/CrossChannel/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Media relay across multiple channels |
-| CustomAudioCapture | `Advanced/CustomAudioCapture/` | `setExternalAudioSource()`, `pushAudioFrame()` | Custom audio source capture |
+| CustomAudioCapture | `Advanced/CustomAudioCapture/` | `createCustomAudioTrack()`, `pushAudioFrame()`, `destroyCustomAudioTrack()` | Custom audio source capture |
 | CustomEncrypt | `Advanced/CustomEncrypt/` | `setEncryptionConfig()`, `enableEncryption()` | Custom stream encryption |
 | CustomVideoCapture | `Advanced/CustomVideoCapture/` | `setExternalVideoSource()`, `pushVideoFrame()` | Custom video source capture |
-| FaceCapture | `Advanced/FaceCapture/` | `enableFaceDetection()`, `getFaceDetectionResult()` | Face detection and capture |
 | LocalVideoTranscoding | `Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoding()`, `updateLocalTranscodingConfig()`, `stopLocalVideoTranscoding()` | Local video transcoding and composition |
 | MediaEncrypt | `Advanced/MediaEncrypt/` | `setEncryptionConfig()`, `enableEncryption()` | Media stream encryption |
 | MediaPlayer | `Advanced/MediaPlayer/` | `createMediaPlayer()`, `open()`, `play()`, `pause()`, `stop()` | Media file playback and control |

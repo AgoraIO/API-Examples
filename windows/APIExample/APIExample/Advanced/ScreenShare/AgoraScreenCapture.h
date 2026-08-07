@@ -137,8 +137,14 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     
 private:
+	struct DisplayCaptureSource {
+		int64_t sourceId;
+		agora::rtc::Rectangle position;
+	};
+
 	CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWnd;
     CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWndExecluded;
+	std::vector<DisplayCaptureSource> m_displaySources;
 	CScreenCaputreEventHandler m_eventHandler;
 
 	IRtcEngine* m_rtcEngine = nullptr;

@@ -36,7 +36,6 @@ extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
-extern wchar_t advancedFaceCapture[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedMediaRecorder[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
@@ -368,5 +367,4 @@ extern wchar_t CrossChannelCtrlToken[INFO_LEN];
 extern wchar_t CrossChannelCtrlUid[INFO_LEN];
 
 extern wchar_t Multipath[INFO_LEN];
-
 

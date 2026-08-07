@@ -6,6 +6,26 @@
 
 IMPLEMENT_DYNAMIC(CAgoraAudioProfile, CDialogEx)
 
+namespace {
+const AUDIO_PROFILE_TYPE kAudioProfiles[] = {
+	AUDIO_PROFILE_DEFAULT,
+	AUDIO_PROFILE_SPEECH_STANDARD,
+	AUDIO_PROFILE_MUSIC_STANDARD,
+	AUDIO_PROFILE_MUSIC_STANDARD_STEREO,
+	AUDIO_PROFILE_MUSIC_HIGH_QUALITY,
+	AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO,
+};
+
+const AUDIO_SCENARIO_TYPE kAudioScenarios[] = {
+	AUDIO_SCENARIO_DEFAULT,
+	AUDIO_SCENARIO_GAME_STREAMING,
+	AUDIO_SCENARIO_CHATROOM,
+	AUDIO_SCENARIO_CHORUS,
+	AUDIO_SCENARIO_MEETING,
+	AUDIO_SCENARIO_AI_CLIENT,
+};
+}
+
 CAgoraAudioProfile::CAgoraAudioProfile(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_AUDIO_PROFILE, pParent)
 {
@@ -209,12 +229,11 @@ BOOL CAgoraAudioProfile::OnInitDialog()
 
 	nIndex = 0;
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_DEFAULT"));
-	/*m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_EDUCATION"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_HIGH_DEFINITION"));*/
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHORUS"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_MEETING"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_AI_CLIENT"));
 	ResumeStatus();
 
 	return TRUE;
@@ -267,6 +286,12 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 	{
 		int nProfileSel = m_cmbAudioProfile.GetCurSel();
 		int nScenSel = m_cmbAudioScenario.GetCurSel();
+		if (nProfileSel < 0 || nProfileSel >= static_cast<int>(_countof(kAudioProfiles)) ||
+			nScenSel < 0 || nScenSel >= static_cast<int>(_countof(kAudioScenarios)))
+		{
+			AfxMessageBox(_T("Select a valid audio profile and scenario"));
+			return;
+		}
 		CString strInfo;
 		CString strAudioProfile;
 		CString strAudioScenario;
@@ -274,16 +299,15 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 		m_cmbAudioScenario.GetWindowText(strAudioScenario);
 		strInfo.Format(_T("Profile:%s,\nScenario:%s"), strAudioProfile, strAudioScenario);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		AUDIO_SCENARIO_TYPE type = AUDIO_SCENARIO_DEFAULT;
-		if (nScenSel == 1)
-			type = AUDIO_SCENARIO_GAME_STREAMING;
-		// set audio profile.
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
+		// ComboBox positions do not match the sparse SDK scenario values.
+		m_rtcEngine->setAudioProfile(kAudioProfiles[nProfileSel]);
+		m_rtcEngine->setAudioScenario(kAudioScenarios[nScenSel]);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
 	}
 	else
 	{
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
+		m_rtcEngine->setAudioProfile(AUDIO_PROFILE_DEFAULT);
+		m_rtcEngine->setAudioScenario(AUDIO_SCENARIO_DEFAULT);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset default audio profile"));
 	}

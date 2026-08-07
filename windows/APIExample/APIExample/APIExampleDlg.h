@@ -33,7 +33,6 @@
 #include "Advanced/MediaRecorder/CAgoraMediaRecorder.h"
 #include "Advanced/PushExternalVideoYUV/PushExternalVideoYUV.h"
 #include "Advanced/MultiVideoSourceTracks/MultiVideoSourceTracks.h"
-#include "Advanced/FaceCapture/CAgoraFaceCaptureDlg.h"
 #include "Advanced/TransparentBg/TransparentBgDialog.h"
 #include "Advanced/RtePlayer/RtePlayerDlg.h"
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
@@ -112,7 +111,6 @@ private:
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
     PushExternalVideoYUV        *m_pPushExternalVideoYUV = nullptr;
     MultiVideoSourceTracks      *m_pMultiVideoSourceTracks = nullptr;
-    CAgoraFaceCaptureDlg        *m_pAgoraFaceCaptureDlg = nullptr;
     CAgoraCrossChannelDlg       *m_pAgoraCrossChannelDlg = nullptr;
     CMultipathDlg               *m_pMultipathDlg = nullptr;
     CSimulcastDlg               *m_pSimulcastDlg = nullptr;
@@ -150,4 +148,3 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnClose();
 };
-

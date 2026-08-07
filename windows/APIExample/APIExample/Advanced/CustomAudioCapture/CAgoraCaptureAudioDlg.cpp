@@ -135,6 +135,24 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 		m_initialize = true;
 
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+	if (!mediaEngine) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("query media engine failed"));
+		m_rtcEngine->release(nullptr);
+		m_rtcEngine = nullptr;
+		m_initialize = false;
+		return false;
+	}
+	AudioTrackConfig audioTrackConfig;
+	audioTrackConfig.enableLocalPlayback = false;
+	m_customAudioTrackId = mediaEngine->createCustomAudioTrack(AUDIO_TRACK_MIXABLE, audioTrackConfig);
+	if (m_customAudioTrackId == INVALID_TRACK_ID) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("create custom audio track failed"));
+		mediaEngine.reset();
+		m_rtcEngine->release(nullptr);
+		m_rtcEngine = nullptr;
+		m_initialize = false;
+		return false;
+	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
@@ -150,6 +168,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
 	m_agAudioCaptureDevice.engine_ = m_rtcEngine;
+	m_agAudioCaptureDevice.audioTrackId_ = m_customAudioTrackId;
 	return true;
 }
 
@@ -171,6 +190,12 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		m_agAudioCaptureDevice.Stop();
 		m_agAudioCaptureDevice.engine_ = NULL;
+		m_agAudioCaptureDevice.audioTrackId_ = INVALID_TRACK_ID;
+		if (m_customAudioTrackId != INVALID_TRACK_ID) {
+			mediaEngine->destroyCustomAudioTrack(m_customAudioTrackId);
+			m_customAudioTrackId = INVALID_TRACK_ID;
+		}
+		mediaEngine.reset();
 		//release engine.
 		if (m_initialize) {
 			m_rtcEngine->release(nullptr);
@@ -254,7 +279,9 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
 		ChannelMediaOptions option;
-		option.publishCustomAudioTrack = true;
+		option.publishMicrophoneTrack = !m_extenalCaptureAudio;
+		option.publishCustomAudioTrack = m_extenalCaptureAudio;
+		option.publishCustomAudioTrackId = static_cast<int>(m_customAudioTrackId);
 		option.publishCameraTrack = true;
 		option.autoSubscribeAudio = true;
 		option.autoSubscribeVideo = true;
@@ -275,11 +302,9 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 
 // start or stop capture.
 // if bEnable is true start capture otherwise stop capture.
-void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
-	
-	SIZE_T			nBufferSize = 0;
+BOOL CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 	if (bEnable == (BOOL)m_extenalCaptureAudio)
-		return;
+		return TRUE;
 	if (bEnable)
 	{
 		//select media capture.
@@ -288,15 +313,17 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		m_agAudioCaptureDevice.InitAudioFrame();
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
-			return;
+			return FALSE;
 		//start audio capture.
-		m_agAudioCaptureDevice.Start();
+		if (!m_agAudioCaptureDevice.Start())
+			return FALSE;
 	}
 	else {
 		//stop audio capture.
 		m_agAudioCaptureDevice.Stop();
 	}
-	m_extenalCaptureAudio = !m_extenalCaptureAudio;
+	m_extenalCaptureAudio = bEnable;
+	return TRUE;
 }
 
 void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
@@ -337,24 +364,27 @@ void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 {
 	if ( !m_extenalCaptureAudio ){
+		if (!EnableCaputre(TRUE)) {
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start external audio capture failed"));
+			return;
+		}
+		if (!EnableExtendAudioCapture(TRUE)) {
+			EnableCaputre(FALSE);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish external audio track failed"));
+			return;
+		}
 		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
-		//use external audio source.
-		EnableExtendAudioCapture(TRUE);
-		//start capture
-		EnableCaputre(TRUE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use external audio source"));
-	//	m_agAudioCaptureDevice.SetCaptureDlg(this);
 	}
 	else {
-		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
-		//use inner audio source.
-		EnableExtendAudioCapture(FALSE);
-		//stop capture.
+		if (!EnableExtendAudioCapture(FALSE)) {
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish microphone track failed"));
+			return;
+		}
 		EnableCaputre(FALSE);
+		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use inner audio source"));
-	//	m_agAudioCaptureDevice.SetCaptureDlg(nullptr);
 	}
-
 }
 
 
@@ -366,14 +396,14 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 */
 BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
 {
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
-	int nRet = 0;
-	if ( bEnable )
-		nRet = mediaEngine->setExternalAudioSource(true,m_agAudioCaptureDevice.m_audioFrame.samplesPerSec , m_agAudioCaptureDevice.m_audioFrame.channels);
-	else
-		nRet = mediaEngine->setExternalAudioSource(false, m_agAudioCaptureDevice.m_audioFrame.samplesPerSec, m_agAudioCaptureDevice.m_audioFrame.channels);
+	if (!m_joinChannel)
+		return TRUE;
+
+	ChannelMediaOptions options;
+	options.publishMicrophoneTrack = !bEnable;
+	options.publishCustomAudioTrack = bEnable;
+	options.publishCustomAudioTrackId = static_cast<int>(m_customAudioTrackId);
+	int nRet = m_rtcEngine->updateChannelMediaOptions(options);
 	return nRet == 0 ? TRUE : FALSE;
 }
 
@@ -645,5 +675,3 @@ BOOL CAgoraCaptureAduioDlg::PreTranslateMessage(MSG* pMsg)
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
-
-
