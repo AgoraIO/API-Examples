@@ -59,7 +59,7 @@ def parse_matrix_cell(cell):
     value = strip_code(cell)
     if value in {"MISSING", "UNKNOWN"}:
         return value, ""
-    match = re.fullmatch(r"(DONE|PARTIAL|N/A)\((.+)\)", value)
+    match = re.fullmatch(r"(DONE|HIDDEN|PARTIAL|N/A)\((.+)\)", value)
     if match:
         return match.group(1), match.group(2)
     return "", ""

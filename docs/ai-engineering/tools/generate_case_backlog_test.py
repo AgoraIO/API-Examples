@@ -10,6 +10,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 GENERATOR = REPO_ROOT / "docs/ai-engineering/tools/generate_case_backlog.py"
 
+sys.path.insert(0, str(GENERATOR.parent))
+from generate_case_backlog import parse_matrix_cell
+
 
 class CaseBacklogGeneratorTest(unittest.TestCase):
     def run_generator(self, matrix_text):
@@ -80,6 +83,24 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
         self.assertEqual(payload["execution_units"][1]["status_note"], "Advanced/Metadata; smoke pending")
         self.assertEqual(payload["execution_units"][1]["severity"], "Unspecified")
         self.assertEqual(payload["execution_units"][1]["priority"], 95)
+
+    def test_hidden_cell_is_parsed_but_not_added_to_backlog(self):
+        matrix = textwrap.dedent(
+            """
+            | Feature | SDK Family | Key APIs | Android full | Notes |
+            | --- | --- | --- | --- | --- |
+            | Rhythm player | Full RTC | `startRhythmPlayer` | `HIDDEN(advanced/RhythmPlayer.java)` | Deprecated API retained for reference. |
+            """
+        )
+
+        result = self.run_generator(matrix)
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["execution_units"], [])
+        self.assertEqual(
+            parse_matrix_cell("HIDDEN(advanced/RhythmPlayer.java)"),
+            ("HIDDEN", "advanced/RhythmPlayer.java"),
+        )
 
     def test_unknown_platform_column_fails(self):
         matrix = textwrap.dedent(

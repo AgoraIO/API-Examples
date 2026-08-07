@@ -370,6 +370,21 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
         self.assert_error_contains(manifest, "Windows matrix update to DONE requires build_result=PASS")
 
+    def test_hidden_matrix_update_is_allowed(self):
+        manifest = base_manifest()
+        manifest["platforms"]["android"]["implementation"]["output"]["matrix_updates"] = [
+            {
+                "feature": "Join channel audio",
+                "platform_unit": "Android full",
+                "from": "DONE",
+                "to": "HIDDEN",
+                "to_cell": "HIDDEN(basic/JoinChannelAudio.java)",
+                "evidence": "The retained case is intentionally hidden.",
+            }
+        ]
+
+        self.assertEqual(validate_manifest(manifest), [])
+
     def test_matrix_update_must_match_current_requirement(self):
         manifest = base_manifest()
         manifest["platforms"]["windows"]["implementation"]["output"]["matrix_updates"] = [
