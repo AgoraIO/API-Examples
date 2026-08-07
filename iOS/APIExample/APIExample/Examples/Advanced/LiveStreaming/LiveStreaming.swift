@@ -133,17 +133,17 @@ class LiveStreamingEntry: UIViewController {
     
     @IBAction func onTapVideoScenarioButton(_ sender: UIButton) {
         let pickerView = PickerView()
-        pickerView.dataArray = [
-            AgoraApplicationScenarioType.applicationLiveShowScenario.description(),
-            AgoraApplicationScenarioType.applicationGeneralScenario.description(),
-            AgoraApplicationScenarioType.applicationMeetingScenario.description(),
-            AgoraApplicationScenarioType.application1V1Scenario.description()
+        let scenarios: [AgoraApplicationScenarioType] = [
+            .applicationLiveShowScenario,
+            .applicationGeneralScenario,
+            .applicationMeetingScenario,
+            .application1V1Scenario
         ]
+        pickerView.dataArray = scenarios.map { $0.description() }
         AlertManager.show(view: pickerView, alertPostion: .bottom)
-        pickerView.pickerViewSelectedValueClosure = { [weak self, weak pickerView] key in
+        pickerView.pickerViewSelectedValueClosure = { [weak self] key in
             guard let self = self else { return }
-            let idx = pickerView?.dataArray?.firstIndex(where: { $0 == key}) ?? 0
-            let type = AgoraApplicationScenarioType(rawValue: idx) ?? .applicationGeneralScenario
+            guard let type = scenarios.first(where: { $0.description() == key }) else { return }
             self.defaultVideoScenario = type
             self.videoScenarioButton?.setTitle(key, for: .normal)
         }
@@ -432,13 +432,17 @@ class LiveStreamingMain: BaseViewController {
     @IBAction func onTapWatermarkSwitch(_ sender: UISwitch) {
         if sender.isOn {
             if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
-                if let url = URL.init(string: filepath) {
-                    let waterMark = WatermarkOptions()
-                    waterMark.visibleInPreview = true
-                    waterMark.positionInPortraitMode = CGRect(x: 10, y: 80, width: 60, height: 60)
-                    waterMark.positionInLandscapeMode = CGRect(x: 10, y: 80, width: 60, height: 60)
-                    agoraKit.addVideoWatermark(url, options: waterMark)
-                }
+                let options = WatermarkOptions()
+                options.visibleInPreview = true
+                options.positionInPortraitMode = CGRect(x: 10, y: 80, width: 60, height: 60)
+                options.positionInLandscapeMode = CGRect(x: 10, y: 80, width: 60, height: 60)
+
+                let config = WatermarkConfig()
+                config.id = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+                config.type = .image
+                config.imageUrl = URL(fileURLWithPath: filepath)
+                config.options = options
+                agoraKit.addVideoWatermark(config)
             }
         } else {
             agoraKit.clearVideoWatermarks()

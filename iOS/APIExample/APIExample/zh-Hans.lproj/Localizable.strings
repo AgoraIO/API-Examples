@@ -186,6 +186,9 @@
 
 "General"= "通用场景";
 "Meeting"= "会议场景";
+"Chat Room" = "语聊房";
+"Chorus" = "实时合唱";
+"AI Client" = "对话式 AI 客户端";
 "1v1"= "1v1 视频通话";
 "Live Show"= "秀场直播";
 

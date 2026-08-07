@@ -59,7 +59,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Local Composite Graph".localized, storyboard: "LocalCompositeGraph", controller: ""),
             MenuItem(name: "Video Process".localized, storyboard: "VideoProcess", controller: "VideoProcess"),
             MenuItem(name: "Agora Beauty".localized, storyboard: "AgoraBeauty", controller: "AgoraBeauty"),
-            MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
+            // Hidden because the Rhythm Player APIs are deprecated since RTC SDK 4.6.0.
+            // MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),

@@ -33,7 +33,7 @@
 | LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.swift` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()`, `enableVirtualBackground()` | Composite multiple video sources locally before publishing |
 | VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.swift` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
 | AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden from the menu because the Rhythm Player APIs are deprecated since RTC SDK 4.6.0 |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.swift` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.swift` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
@@ -120,7 +120,7 @@ APIExample/
     │       ├── LocalCompositeGraph/         # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
     │       ├── AgoraBeauty/                 # "Agora Beauty"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
     │       ├── CreateDataStream/            # "Create Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"

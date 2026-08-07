@@ -94,13 +94,17 @@ extension AgoraAudioScenario {
         switch self {
         case .default: return "Default".localized
         case .gameStreaming: return "Game Streaming".localized
+        case .chatRoom: return "Chat Room".localized
+        case .chorus: return "Chorus".localized
+        case .meeting: return "Meeting".localized
+        case .aiClient: return "AI Client".localized
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraAudioScenario] {
-        return [.default, .gameStreaming]
+        return [.default, .gameStreaming, .chatRoom, .chorus, .meeting, .aiClient]
     }
 }
 

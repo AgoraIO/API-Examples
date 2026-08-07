@@ -180,9 +180,7 @@ extension TransparentRenderViewController: AgoraRtcMediaPlayerVideoFrameDelegate
         newVideoFrame.format = 12
         newVideoFrame.textureBuf = videoFrame.pixelBuffer
         newVideoFrame.rotation = videoFrame.rotation
-        let pb = videoFrame.pixelBuffer
         newVideoFrame.alphaStitchMode = .alphaStitchRight
-        let _ = agoraKit.pushExternalVideoFrame(newVideoFrame)
-//        LogUtils.log(message: "pushExternalVideoFrame: \(ret)", level: .info)
+        let _ = agoraKit.pushExternalVideoFrame(newVideoFrame, videoTrackId: 0)
     }
 }
