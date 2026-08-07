@@ -132,7 +132,6 @@
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
     <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
-    <string name="item_face_capture">Face Capture</string>
     <string name="item_simulcast">Simulcast</string>
     <string name="item_multipath">Multipath</string>
 
@@ -205,7 +204,6 @@
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="agora_beauty">his example demonstrates how to integrate agora beauty 2.0.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
-    <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
     <string name="transparent_rendering">This example demonstrates how to use transparent rendering.</string>
     <string name="tip_ultra_live_streaming_with_url">This example demonstrates how to use ultra live stream with url.</string>
     <string name="tip_simulcast">This example demonstrates how to use Simulcast</string>
@@ -421,7 +419,6 @@
     <string name="player_stream">Player Stream</string>
     <string name="publish_stream">Publish Stream</string>
     <string name="audio_stream_index">AudioStream%d</string>
-    <string name="face_capture_authentication">Please contact Agora customer service to obtain the face capture certificate and configure it to the AUTHENTICATION constant.</string>
     <string name="notifications_enable_tip">Please turn on notification permission to prevent background recording from being interrupted.</string>
     <string name="notifications_enable_screen_tip">Please turn on notification permission to prevent background
         screen sharing from being interrupted.</string>

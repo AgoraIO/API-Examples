@@ -126,7 +126,6 @@
     <string name="item_ktv_copyright_music">KTV版权音乐</string>
     <string name="item_media_recorder">本地/远端录制</string>
     <string name="item_localvideotranscoding">本地合图</string>
-    <string name="item_face_capture">获取面捕数据</string>
     <string name="item_simulcast">同源多流</string>
     <string name="item_multipath">网络传输高级功能</string>
 
@@ -198,7 +197,6 @@
     <string name="third_party_beauty">此示例演示了如何集成第三方美颜sdk</string>
     <string name="agora_beauty">此示例演示了如何集成 Agora 美颜 2.0</string>
     <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
-    <string name="face_capture_tip">此示例演示如何使用面捕功能获取面捕数据</string>
     <string name="transparent_rendering">此示例演示如何使用透明渲染功能播放Mp4视频</string>
     <string name="tip_ultra_live_streaming_with_url">此示例演示如何使用URL拉流来极速直播</string>
     <string name="tip_simulcast">此示例演示如何使用同源多流</string>
@@ -399,7 +397,6 @@
     <string name="player_stream">播放音轨</string>
     <string name="publish_stream">推送音轨</string>
     <string name="audio_stream_index">音轨%d</string>
-    <string name="face_capture_authentication">请联系 Agora 客服获取面捕证书并配置到 AUTHENTICATION 常量上</string>
     <string name="notifications_enable_tip">请打开通知权限，防止后台录音中断</string>
     <string name="notifications_enable_screen_tip">请打开通知权限，防止后台共享屏幕中断</string>
     <string name="video_metadata">视频元数据</string>

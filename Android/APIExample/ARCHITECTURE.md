@@ -62,7 +62,6 @@ APIExample/
         │   │   ├── ProcessRawData.java          # [20] "Raw Video Data" — video raw data processing
         │   │   ├── SimpleExtension.java         # [21] "Simple Extension" — custom video extension
         │   │   ├── PictureInPicture.java        # [22] "Picture In Picture" — PiP mode
-        │   │   ├── FaceCapture.java             # [23] "Face Capture" — face detection
         │   │   ├── VideoQuickSwitch.java        # [24] "Quick Switch Channel" — fast channel switching
         │   │   ├── JoinMultipleChannel.java     # [25] "Join Multiple Channel" — multi-channel join
         │   │   ├── ChannelEncryption.java       # [26] "Media Stream Encryption" — built-in encryption
@@ -73,7 +72,7 @@ APIExample/
         │   │   ├── ScreenSharing.java           # [31] "Screen Sharing" — screen capture & share
         │   │   ├── VideoProcessExtension.java   # [32] "Video Process Extension" — video filter extension
         │   │   ├── LocalVideoTranscoding.java   # [33] "LocalVideoTranscoding" — local video compositing
-        │   │   ├── RhythmPlayer.java            # [34] "Rhythm Player" — metronome/rhythm playback
+        │   │   ├── RhythmPlayer.java            # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   │   ├── SendDataStream.java          # [35] "Send Data Stream" — data channel messaging
         │   │   ├── HostAcrossChannel.java       # [36] "Relay Streams across Channels" — cross-channel relay
         │   │   ├── SpatialSound.java            # [37] "Spatial Audio" — 3D spatial audio
@@ -128,7 +127,6 @@ APIExample/
 | Raw Video Data | `advanced/ProcessRawData.java` | `registerVideoFrameObserver()`, `startPreview()` | Demonstrates processing raw video data through the video frame observer |
 | Simple Extension | `advanced/SimpleExtension.java` | `enableExtension()`, `setExtensionProperty()`, `enableAudioVolumeIndication()` | Demonstrates loading and configuring a custom audio/video extension |
 | Picture In Picture | `advanced/PictureInPicture.java` | `joinChannel()`, `setupLocalVideo()`, `enableVideo()` | Demonstrates Android Picture-in-Picture mode during a video call |
-| Face Capture | `advanced/FaceCapture.java` | `enableExtension()`, `setExtensionProperty()`, `registerVideoFrameObserver()`, `registerFaceInfoObserver()` | Demonstrates face capture and lip-sync driven video using extensions |
 | Quick Switch Channel | `advanced/VideoQuickSwitch.java` | `joinChannel()`, `leaveChannel()`, `startPreview()`, `setClientRole()` | Demonstrates fast channel switching for audience members |
 | Join Multiple Channel | `advanced/JoinMultipleChannel.java` | `joinChannel()`, `joinChannelEx()`, `leaveChannelEx()`, `startPreview()`, `takeSnapshotEx()` | Demonstrates joining two channels simultaneously using RtcEngineEx |
 | Media Stream Encryption | `advanced/ChannelEncryption.java` | `enableEncryption()` | Demonstrates built-in media stream encryption |
@@ -139,7 +137,7 @@ APIExample/
 | Scree Sharing | `advanced/ScreenSharing.java` | `startScreenCapture()`, `stopScreenCapture()`, `updateScreenCaptureParameters()`, `setScreenCaptureScenario()` | Demonstrates screen capture and sharing during a video call |
 | Video Enhancement | `advanced/VideoProcessExtension.java` | `setBeautyEffectOptions()`, `setFilterEffectOptions()`, `setLowlightEnhanceOptions()`, `setVideoDenoiserOptions()`, `setColorEnhanceOptions()`, `enableVirtualBackground()`, `setFaceShapeBeautyOptions()`, `setFaceShapeAreaOptions()` | Demonstrates built-in video enhancement including beauty, filter, denoising, and virtual background |
 | LocalVideoTranscoding | `advanced/LocalVideoTranscoding.java` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()`, `stopScreenCapture()`, `enableVirtualBackground()` | Demonstrates compositing multiple local video sources into a single stream |
-| Rhythm Player | `advanced/RhythmPlayer.java` | `startRhythmPlayer()`, `stopRhythmPlayer()`, `enableAudioVolumeIndication()` | Demonstrates metronome/rhythm playback synchronized with audio streaming |
+| Rhythm Player (hidden) | `advanced/RhythmPlayer.java` | `startRhythmPlayer()`, `stopRhythmPlayer()`, `enableAudioVolumeIndication()` | Source retained for reference; hidden from the case list because the Rhythm Player APIs are deprecated since RTC SDK 4.6.0 |
 | Send Data Stream | `advanced/SendDataStream.java` | `createDataStream()`, `sendStreamMessage()` | Demonstrates sending and receiving data channel messages |
 | Relay Streams across Channels | `advanced/HostAcrossChannel.java` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Demonstrates relaying media streams from one channel to another |
 | Spatial Audio | `advanced/SpatialSound.java` | `enableAudio()`, `setRemoteUserSpatialAudioParams()`, `createMediaPlayer()` | Demonstrates 3D spatial audio positioning for remote users |
