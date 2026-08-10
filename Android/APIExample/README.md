@@ -62,6 +62,19 @@ app/src/main/assets/beauty_agora/
 
 The material directory is ignored by Git.
 
+#### SenseTime
+
+1. Contact SenseTime customer service to obtain the download link and certificate of the beauty sdk
+2. Unzip the beauty sdk, and copy the following resources to the corresponding path
+
+| SenseTime Beauty SDK Path                                            | Location                                                 |
+|----------------------------------------------------------------------|----------------------------------------------------------|
+| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
+| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
+
 #### FaceUnity
 
 1. Contact FaceUnity customer service to obtain beauty resources and certificates

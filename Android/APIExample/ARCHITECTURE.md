@@ -142,7 +142,7 @@ APIExample/
 | Relay Streams across Channels | `advanced/HostAcrossChannel.java` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Demonstrates relaying media streams from one channel to another |
 | Spatial Audio | `advanced/SpatialSound.java` | `enableAudio()`, `setRemoteUserSpatialAudioParams()`, `createMediaPlayer()` | Demonstrates 3D spatial audio positioning for remote users |
 | Content Inspect | `advanced/ContentInspect.java` | `enableContentInspect()` | Demonstrates real-time content moderation on video streams |
-| Third-party beauty | `advanced/ThirdPartyBeauty.java` | `registerVideoFrameObserver()` | Demonstrates integration with third-party beauty SDKs (e.g. FaceUnity) |
+| Third-party beauty | `advanced/ThirdPartyBeauty.java` | `registerVideoFrameObserver()` | Demonstrates integration with FaceUnity and SenseTime beauty SDKs |
 | KTV Copyright Music | `advanced/KtvCopyrightMusic.java` | N/A (browser-based documentation link) | Demonstrates the KTV copyright music feature via documentation reference |
 | TransparentRendering | `advanced/TransparentRendering.java` | `setExternalVideoSource()`, `pushExternalVideoFrame()`, `createMediaPlayer()`, `startPreview()` | Demonstrates alpha-channel transparent video rendering |
 | Ultra Live Streaming with Url | `advanced/UrlLiveStream.java` | `Rte()`, `Player()`, `Canvas()`, `player.openWithUrl()`, `player.stop()` | Demonstrates ultra-low-latency live streaming playback via URL using the RTE SDK |

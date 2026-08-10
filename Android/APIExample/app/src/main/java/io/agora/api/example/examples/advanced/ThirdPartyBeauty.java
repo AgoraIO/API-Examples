@@ -23,6 +23,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.examples.advanced.beauty.FaceUnityBeautySDK;
+import io.agora.api.example.examples.advanced.beauty.SenseTimeBeautySDK;
 
 /**
  * The type Third party beauty.
@@ -52,7 +53,12 @@ public class ThirdPartyBeauty extends BaseFragment {
         List<Integer> beautyActionIds = new ArrayList<>();
         List<String> beautyLabels = new ArrayList<>();
 
+        SenseTimeBeautySDK.INSTANCE.initBeautySDK(requireContext());
         FaceUnityBeautySDK.INSTANCE.initBeauty(requireContext());
+
+        // SenseTime Beauty
+        beautyActionIds.add(R.id.action_third_party_beauty_to_scene_time);
+        beautyLabels.add(getString(R.string.scenetime_beauty));
 
         // FaceUnity Beauty
         beautyActionIds.add(R.id.action_third_party_beauty_to_faceunity);
@@ -87,6 +93,7 @@ public class ThirdPartyBeauty extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SenseTimeBeautySDK.INSTANCE.unInitBeautySDK();
         FaceUnityBeautySDK.INSTANCE.unInitBeauty();
     }
 }

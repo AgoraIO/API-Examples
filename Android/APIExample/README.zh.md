@@ -59,6 +59,19 @@ app/src/main/assets/beauty_agora/
 
 该资源目录已被 Git 忽略。
 
+#### 商汤美颜
+
+1. 联系商汤客服获取美颜sdk下载链接以及证书
+2. 解压美颜sdk，并将以下资源复制到对应路径
+
+| 商汤SDK文件/目录                                                           | 项目路径                                                     |
+|----------------------------------------------------------------------|----------------------------------------------------------|
+| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
+| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
+
 #### 相芯美颜
 
 1. 联系相芯客服获取美颜资源以及证书
