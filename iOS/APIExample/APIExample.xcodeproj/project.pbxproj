@@ -76,6 +76,11 @@
 		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		0AC9459113B4F0B1EFAF4EFE /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */; };
+		10166B872AA1DDAFFDC71269 /* SenseBeautyRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 72375779AFD65DD129FAF105 /* SenseBeautyRender.m */; };
+		28423C7DAE300A777F786938 /* VideoProcessingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 224A00264C169D6854B06570 /* VideoProcessingManager.m */; };
+		3A39663442C88AA53AEF94BC /* EffectsCommonObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C999757ADC0F02649B176208 /* EffectsCommonObject.m */; };
+		49613930F283D92C8E32833D /* SenseBeautifyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D9083FB1BBB6D04AF5BE03 /* SenseBeautifyVC.m */; };
+		5054DEDFD3B8622CF3192CD2 /* EffectsProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 6234843FF07B935FFC02AB7A /* EffectsProcess.m */; };
 		5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744CE0525BA99FF0099AB66 /* VideoChat.swift */; };
 		5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5744CE0625BA99FF0099AB66 /* VideoChat.storyboard */; };
 		576CA80A25A9CC3A0091520B /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 576CA80925A9CC3A0091520B /* output.raw */; };
@@ -84,6 +89,7 @@
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
 		576EA59025AEDD3C000B3D79 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 57FE7C4726B2D103002D9043 /* CircularBuffer.c */; };
+		66983AE1EB1868311773D0E5 /* EffectsDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = AA7E29F940E47D3EB9FD0957 /* EffectsDetector.m */; };
 		670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 670936FF282DFE1600BC3954 /* ContentInspect.storyboard */; };
 		6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709B23A2806B0EA000BCC58 /* RawAudioData.swift */; };
 		6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6709B23E2806BB4A000BCC58 /* RawAudioData.storyboard */; };
@@ -95,6 +101,7 @@
 		67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C7B828057D1500195106 /* RawVideoData.storyboard */; };
 		67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */; };
 		67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */; };
+		7A4FF31E1ACA8DACEF0CC6DE /* EffectsLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B317938C6E8C6A4EE12AB83 /* EffectsLicense.m */; };
 		8407E0942472320800AC5DE8 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		8B10BE1126AFFFA6002E1373 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */; };
@@ -121,6 +128,7 @@
 		8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC751D2273E502700552265 /* LiveStreaming.storyboard */; };
 		8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D4273E502700552265 /* LiveStreaming.swift */; };
 		8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D9273E57C900552265 /* VideoProcess.swift */; };
+		8F57EC2E3001C94625E36005 /* EffectsAnimal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DBD6198BDA74EC494123339 /* EffectsAnimal.m */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -129,8 +137,11 @@
 		ABB399F22DF9605B00AF5033 /* Simulcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB399EC2DF9605B00AF5033 /* Simulcast.swift */; };
 		ABB399F32DF9605B00AF5033 /* Multipath.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EA2DF9605B00AF5033 /* Multipath.storyboard */; };
 		ABB399F42DF9605B00AF5033 /* Simulcast.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB399EF2DF9605B00AF5033 /* Simulcast.storyboard */; };
+		B636350BC3C1E206016620E0 /* Effects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB4BF66ABB1F733D265CF71 /* Effects.m */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		D4962B442F6689A001EBE668 /* EFMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3875B62F3243B3CF0D453CAF /* EFMotionManager.m */; };
+		DC121667695DB246115030CD /* EffectsAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = ACED6A4CBD7DB10EBCC981E8 /* EffectsAttribute.m */; };
 		DD6DCEE22CBD1D68008D7B72 /* hlg-hdr.yuv in Resources */ = {isa = PBXBuildFile; fileRef = DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */; };
 		DD6ED7F12CB69FFB007B3B5D /* LocalCompositeGraph.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */; };
 		DD6ED7F32CB69FFB007B3B5D /* LocalCompositeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6ED7EF2CB69FFB007B3B5D /* LocalCompositeGraph.swift */; };
@@ -185,6 +196,8 @@
 		E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D332907E74A00F06DD4 /* BundleUtil.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
 		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
+		E986961B46231F8163D6456D /* SenseBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA7993DC75813765F1AF9A03 /* SenseBeautify.storyboard */; };
+		EDA97A2F343A3BA3624AAA5D /* EFGlobalSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 846F0C22D2FE5CBAEDFC42C9 /* EFGlobalSingleton.m */; };
 		F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F728B9CD2CA295D7007813BB /* PictureInPicture.storyboard */; };
 		F728B9D82CA295D7007813BB /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9CE2CA295D7007813BB /* ChannelViewController.swift */; };
 		F728B9DB2CA295D7007813BB /* PIPBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F728B9D22CA295D7007813BB /* PIPBaseViewController.swift */; };
@@ -335,8 +348,17 @@
 		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
 		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		04225D244BD950D6A60AA5E3 /* Pods-audioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.debug.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		0621233B3B3FD80035BA62CB /* Base */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SenseBeautify.storyboard; sourceTree = "<group>"; };
 		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B317938C6E8C6A4EE12AB83 /* EffectsLicense.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsLicense.m; sourceTree = "<group>"; };
+		12393E14422D0C1C67F7DABD /* EffectsAttribute.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsAttribute.h; sourceTree = "<group>"; };
+		224A00264C169D6854B06570 /* VideoProcessingManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = VideoProcessingManager.m; sourceTree = "<group>"; };
 		23B93D5F4D8304FBAAE2A23E /* Pods-SimpleFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		2D4154965AA9C052B405E7F6 /* SenseBeautifyVC.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SenseBeautifyVC.h; sourceTree = "<group>"; };
+		30D9083FB1BBB6D04AF5BE03 /* SenseBeautifyVC.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SenseBeautifyVC.m; sourceTree = "<group>"; };
+		32DF89EDFDDE9581BEA4F7D5 /* EffectsAnimal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsAnimal.h; sourceTree = "<group>"; };
+		3875B62F3243B3CF0D453CAF /* EFMotionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EFMotionManager.m; sourceTree = "<group>"; };
+		3BB4BF66ABB1F733D265CF71 /* Effects.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Effects.m; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		4B422A0CD53DE0FBBEBCB2CA /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		5744CE0525BA99FF0099AB66 /* VideoChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChat.swift; sourceTree = "<group>"; };
@@ -352,6 +374,8 @@
 		57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		5A45F3A50A20714335E46364 /* Pods_Agora_ScreenShare_Extension_Socket_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_Socket_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		5FBAFF115B372D5EDE5DF458 /* EffectsProcess.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsProcess.h; sourceTree = "<group>"; };
+		6234843FF07B935FFC02AB7A /* EffectsProcess.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsProcess.m; sourceTree = "<group>"; };
 		670936FE282DFE1600BC3954 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ContentInspect.storyboard; sourceTree = "<group>"; };
 		67093701282DFE1B00BC3954 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ContentInspect.strings"; sourceTree = "<group>"; };
 		6709B23A2806B0EA000BCC58 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
@@ -367,11 +391,15 @@
 		67B8C7B728057D1500195106 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawVideoData.storyboard; sourceTree = "<group>"; };
 		67B8C7BA28057D1800195106 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawVideoData.strings"; sourceTree = "<group>"; };
 		67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
-		F7CB2F0B27EB318200CB19D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SpatialAudio.storyboard; sourceTree = "<group>"; };
-		F7CB2F0C27EB318200CB19D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SpatialAudio.strings"; sourceTree = "<group>"; };
+		6E972D48B62C5DF86EEB1DAF /* VideoProcessingManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = VideoProcessingManager.h; sourceTree = "<group>"; };
 		6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; sourceTree = "<group>"; };
+		72375779AFD65DD129FAF105 /* SenseBeautyRender.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SenseBeautyRender.m; sourceTree = "<group>"; };
+		7CD9DA3435391D65537F1E32 /* EFGlobalSingleton.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EFGlobalSingleton.h; sourceTree = "<group>"; };
+		7DB5758B38DCA9DE302090EB /* SenseBeautyRender.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SenseBeautyRender.h; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		846F0C22D2FE5CBAEDFC42C9 /* EFGlobalSingleton.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EFGlobalSingleton.m; sourceTree = "<group>"; };
 		8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8918483B31EF4D04AD69528C /* EFMotionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EFMotionManager.h; sourceTree = "<group>"; };
 		8B10BE0D26AFFFA6002E1373 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B10BE0F26AFFFA6002E1373 /* SimpleFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
 		8B10BE1026AFFFA6002E1373 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -406,12 +434,17 @@
 		8BC751D4273E502700552265 /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		8BC751D9273E57C900552265 /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
 		8BF2243D275FA1A500B65EF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleFilter.strings"; sourceTree = "<group>"; };
+		8DBD6198BDA74EC494123339 /* EffectsAnimal.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsAnimal.m; sourceTree = "<group>"; };
 		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		9844B3E7D162DC43FFF87D13 /* Effects.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Effects.h; sourceTree = "<group>"; };
+		A211C8B11C9A8E8E28BBD191 /* EffectsDetector.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsDetector.h; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		A8CA55BBA9FD9089D1FE876D /* EffectsLicense.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsLicense.h; sourceTree = "<group>"; };
+		AA7E29F940E47D3EB9FD0957 /* EffectsDetector.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsDetector.m; sourceTree = "<group>"; };
 		AB8473EC2DF960D800B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
 		ABB399E72DF9605B00AF5033 /* Multipath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multipath.swift; sourceTree = "<group>"; };
 		ABB399E82DF9605B00AF5033 /* Multipath.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Multipath.storyboard; path = Base.lproj/Multipath.storyboard; sourceTree = "<group>"; };
@@ -420,8 +453,13 @@
 		ABB399F62DF9608700AF5033 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
 		ABB90ACE2DF72E2F007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Simulcast.strings"; sourceTree = "<group>"; };
 		ABB90AD02DF72E8D007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Multipath.strings"; sourceTree = "<group>"; };
+		ACED6A4CBD7DB10EBCC981E8 /* EffectsAttribute.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsAttribute.m; sourceTree = "<group>"; };
+		B5BED75DAF7F75615310244E /* zh-Hans */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SenseBeautify.strings"; sourceTree = "<group>"; };
+		BA06B2EBCD5509FBE031F777 /* EffectsCommonObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectsCommonObject.h; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C999757ADC0F02649B176208 /* EffectsCommonObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EffectsCommonObject.m; sourceTree = "<group>"; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		D15BB1E763F188A30470219A /* EffectMacro.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EffectMacro.h; sourceTree = "<group>"; };
 		DD6DCEE12CBD1D68008D7B72 /* hlg-hdr.yuv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "hlg-hdr.yuv"; sourceTree = "<group>"; };
 		DD6ED7EB2CB69FFB007B3B5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalCompositeGraph.storyboard; sourceTree = "<group>"; };
 		DD6ED7ED2CB69FFB007B3B5D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalCompositeGraph.strings"; sourceTree = "<group>"; };
@@ -432,8 +470,6 @@
 		DDCED0302CBAA093004B1C9D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RtePlayer.strings"; sourceTree = "<group>"; };
 		DDCED0322CBAA093004B1C9D /* RtePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtePlayer.swift; sourceTree = "<group>"; };
 		DDFD50252C205BF20050B344 /* TransparentRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentRender.swift; sourceTree = "<group>"; };
-		F7FD50272C205CF40050B344 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TransparentRender.storyboard; sourceTree = "<group>"; };
-		F7FD50282C205CF40050B344 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TransparentRender.strings"; sourceTree = "<group>"; };
 		DDFD50292C2065D00050B344 /* yuv_limit_range_alpha_1280_540_right.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuv_limit_range_alpha_1280_540_right.mp4; sourceTree = "<group>"; };
 		E7163F7D2964149800EBBD55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ARKit.strings"; sourceTree = "<group>"; };
 		E7163F7E2964149800EBBD55 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
@@ -479,8 +515,6 @@
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
-		F7A49CB02900FC6400F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
-		F7A49CB12900FC6400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KtvCopyrightMusic.strings"; sourceTree = "<group>"; };
 		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
 		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
 		E7A49CB729011E7500F06DD4 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
@@ -513,6 +547,12 @@
 		F73479252DF5CAEB0030C0CE /* AgoraBeautyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraBeautyManager.swift; sourceTree = "<group>"; };
 		F73B01D22CCB84590077B7D2 /* APIReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIReporter.h; sourceTree = "<group>"; };
 		F73B01D32CCB84590077B7D2 /* APIReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIReporter.m; sourceTree = "<group>"; };
+		F7A49CB02900FC6400F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
+		F7A49CB12900FC6400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/KtvCopyrightMusic.strings"; sourceTree = "<group>"; };
+		F7CB2F0B27EB318200CB19D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SpatialAudio.storyboard; sourceTree = "<group>"; };
+		F7CB2F0C27EB318200CB19D2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SpatialAudio.strings"; sourceTree = "<group>"; };
+		F7FD50272C205CF40050B344 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TransparentRender.storyboard; sourceTree = "<group>"; };
+		F7FD50282C205CF40050B344 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/TransparentRender.strings"; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -879,6 +919,17 @@
 			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
+		047A5C4316EA23A3E1583092 /* SenseBeautify */ = {
+			isa = PBXGroup;
+			children = (
+				2D4154965AA9C052B405E7F6 /* SenseBeautifyVC.h */,
+				30D9083FB1BBB6D04AF5BE03 /* SenseBeautifyVC.m */,
+				E9A9E9421071189FCADF07E4 /* Manager */,
+				BA7993DC75813765F1AF9A03 /* SenseBeautify.storyboard */,
+			);
+			path = SenseBeautify;
+			sourceTree = "<group>";
+		};
 		5744CE0225BA99FF0099AB66 /* VideoChat */ = {
 			isa = PBXGroup;
 			children = (
@@ -1132,6 +1183,15 @@
 			path = TransparentRender;
 			sourceTree = "<group>";
 		};
+		E6A5AF82C3B9A87CA080B694 /* SenseRender */ = {
+			isa = PBXGroup;
+			children = (
+				7DB5758B38DCA9DE302090EB /* SenseBeautyRender.h */,
+				72375779AFD65DD129FAF105 /* SenseBeautyRender.m */,
+			);
+			path = SenseRender;
+			sourceTree = "<group>";
+		};
 		E7163F7B2964149800EBBD55 /* ARKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -1232,6 +1292,7 @@
 			isa = PBXGroup;
 			children = (
 				E76347BD2AAEF4AF005D130F /* FURender */,
+				E6A5AF82C3B9A87CA080B694 /* SenseRender */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -1279,6 +1340,7 @@
 				E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */,
 				E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */,
 				E7A49CEF29029E0000F06DD4 /* FUBeautify */,
+				047A5C4316EA23A3E1583092 /* SenseBeautify */,
 			);
 			path = ThirdBeautify;
 			sourceTree = "<group>";
@@ -1299,6 +1361,34 @@
 			children = (
 				E7A49CF629029E0000F06DD4 /* FUManager.h */,
 				E7A49CF829029E0000F06DD4 /* FUManager.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		E9A9E9421071189FCADF07E4 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				7CD9DA3435391D65537F1E32 /* EFGlobalSingleton.h */,
+				846F0C22D2FE5CBAEDFC42C9 /* EFGlobalSingleton.m */,
+				8918483B31EF4D04AD69528C /* EFMotionManager.h */,
+				3875B62F3243B3CF0D453CAF /* EFMotionManager.m */,
+				D15BB1E763F188A30470219A /* EffectMacro.h */,
+				9844B3E7D162DC43FFF87D13 /* Effects.h */,
+				3BB4BF66ABB1F733D265CF71 /* Effects.m */,
+				32DF89EDFDDE9581BEA4F7D5 /* EffectsAnimal.h */,
+				8DBD6198BDA74EC494123339 /* EffectsAnimal.m */,
+				12393E14422D0C1C67F7DABD /* EffectsAttribute.h */,
+				ACED6A4CBD7DB10EBCC981E8 /* EffectsAttribute.m */,
+				BA06B2EBCD5509FBE031F777 /* EffectsCommonObject.h */,
+				C999757ADC0F02649B176208 /* EffectsCommonObject.m */,
+				A211C8B11C9A8E8E28BBD191 /* EffectsDetector.h */,
+				AA7E29F940E47D3EB9FD0957 /* EffectsDetector.m */,
+				A8CA55BBA9FD9089D1FE876D /* EffectsLicense.h */,
+				0B317938C6E8C6A4EE12AB83 /* EffectsLicense.m */,
+				5FBAFF115B372D5EDE5DF458 /* EffectsProcess.h */,
+				6234843FF07B935FFC02AB7A /* EffectsProcess.m */,
+				6E972D48B62C5DF86EEB1DAF /* VideoProcessingManager.h */,
+				224A00264C169D6854B06570 /* VideoProcessingManager.m */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1401,6 +1491,7 @@
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
 				E76F80122AF0A7A200CCB9D6 /* ShellScript */,
+				DB2429109D6D95174925E0A2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1552,6 +1643,7 @@
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 				F728B9D72CA295D7007813BB /* PictureInPicture.storyboard in Resources */,
+				E986961B46231F8163D6456D /* SenseBeautify.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1646,6 +1738,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DB2429109D6D95174925E0A2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E76F80122AF0A7A200CCB9D6 /* ShellScript */ = {
@@ -1782,6 +1891,18 @@
 				F728B9DE2CA295D7007813BB /* PixelBufferRenderView.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 				67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */,
+				49613930F283D92C8E32833D /* SenseBeautifyVC.m in Sources */,
+				EDA97A2F343A3BA3624AAA5D /* EFGlobalSingleton.m in Sources */,
+				D4962B442F6689A001EBE668 /* EFMotionManager.m in Sources */,
+				B636350BC3C1E206016620E0 /* Effects.m in Sources */,
+				8F57EC2E3001C94625E36005 /* EffectsAnimal.m in Sources */,
+				DC121667695DB246115030CD /* EffectsAttribute.m in Sources */,
+				3A39663442C88AA53AEF94BC /* EffectsCommonObject.m in Sources */,
+				66983AE1EB1868311773D0E5 /* EffectsDetector.m in Sources */,
+				7A4FF31E1ACA8DACEF0CC6DE /* EffectsLicense.m in Sources */,
+				5054DEDFD3B8622CF3192CD2 /* EffectsProcess.m in Sources */,
+				28423C7DAE300A777F786938 /* VideoProcessingManager.m in Sources */,
+				10166B872AA1DDAFFDC71269 /* SenseBeautyRender.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1815,33 +1936,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7CB2F0B27EB318200CB19D2 /* Base */,
-				F7CB2F0C27EB318200CB19D2 /* zh-Hans */,
-			);
-			name = SpatialAudio.storyboard;
-			sourceTree = "<group>";
-		};
-		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7FD50272C205CF40050B344 /* Base */,
-				F7FD50282C205CF40050B344 /* zh-Hans */,
-			);
-			name = TransparentRender.storyboard;
-			sourceTree = "<group>";
-		};
-		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F7A49CB02900FC6400F06DD4 /* Base */,
-				F7A49CB12900FC6400F06DD4 /* zh-Hans */,
-			);
-			name = KtvCopyrightMusic.storyboard;
-			sourceTree = "<group>";
-		};
 		033A9F25252D70E400BC26E1 /* JoinChannelVideo.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2056,6 +2150,15 @@
 			name = RawVideoData.storyboard;
 			sourceTree = "<group>";
 		};
+		67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7CB2F0B27EB318200CB19D2 /* Base */,
+				F7CB2F0C27EB318200CB19D2 /* zh-Hans */,
+			);
+			name = SpatialAudio.storyboard;
+			sourceTree = "<group>";
+		};
 		8B5E5B55274CBF760040E97D /* VideoProcess.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2121,6 +2224,15 @@
 			name = Simulcast.storyboard;
 			sourceTree = "<group>";
 		};
+		BA7993DC75813765F1AF9A03 /* SenseBeautify.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0621233B3B3FD80035BA62CB /* Base */,
+				B5BED75DAF7F75615310244E /* zh-Hans */,
+			);
+			name = SenseBeautify.storyboard;
+			sourceTree = "<group>";
+		};
 		DD6ED7EC2CB69FFB007B3B5D /* LocalCompositeGraph.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2137,6 +2249,15 @@
 				DDCED0302CBAA093004B1C9D /* zh-Hans */,
 			);
 			name = RtePlayer.storyboard;
+			sourceTree = "<group>";
+		};
+		DDFD50272C205CF40050B344 /* TransparentRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7FD50272C205CF40050B344 /* Base */,
+				F7FD50282C205CF40050B344 /* zh-Hans */,
+			);
+			name = TransparentRender.storyboard;
 			sourceTree = "<group>";
 		};
 		E7163F7F2964149800EBBD55 /* ARKit.storyboard */ = {
@@ -2200,6 +2321,15 @@
 				E7899BD82861673600851463 /* zh-Hans */,
 			);
 			name = CreateDataStream.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7A49CB02900FC6400F06DD4 /* Base */,
+				F7A49CB12900FC6400F06DD4 /* zh-Hans */,
+			);
+			name = KtvCopyrightMusic.storyboard;
 			sourceTree = "<group>";
 		};
 		E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */ = {

@@ -17,6 +17,11 @@ unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
 rm -f AgoraBeautyMaterial.bundle.zip
 test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
 
+echo "start download sense resource : $sense_lib"
+curl -L -O "$sense_lib"
+unzip -o vender_sense_iOS.zip
+rm -f vender_sense_iOS.zip
+
 echo "start download fu resource : $fu_lib"
 curl -L -O "$fu_lib"
 unzip -o vender_fu_iOS.zip
@@ -26,6 +31,7 @@ rm -f vender_fu_iOS.zip
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
 # Enable third-party beauty filters
+sed -i -e "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
 sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
 
 echo "work space: $WORKSPACE"

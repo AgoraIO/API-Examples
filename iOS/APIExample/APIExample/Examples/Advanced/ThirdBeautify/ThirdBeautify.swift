@@ -33,10 +33,14 @@ class ThirdBeautifyEntry: BaseViewController {
         
         let actionSheetVC = UIAlertController(title: "Third Beautify".localized, message: nil, preferredStyle: .actionSheet)
         
+        let sense = UIAlertAction(title: "Sense Beautify".localized, style: .default) { _ in
+            self.jumpHandler(type: .sense)
+        }
         let fu = UIAlertAction(title: "FU Beautify".localized, style: .default) { _ in
             self.jumpHandler(type: .fu)
         }
         let cancel = UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil)
+        actionSheetVC.addAction(sense)
         actionSheetVC.addAction(fu)
         actionSheetVC.addAction(cancel)
 //        present(actionSheetVC, animated: true, completion: nil)
