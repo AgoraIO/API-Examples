@@ -17,15 +17,19 @@ unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
 rm -f AgoraBeautyMaterial.bundle.zip
 test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
 
-echo "start download sense resource : $sense_lib"
-curl -L -O "$sense_lib"
-unzip -o vender_sense_iOS.zip
+echo "start download sense resource from Artifactory"
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o vender_sense_iOS.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sense_iOS.zip" || exit 1
+rm -rf SenseLib
+unzip -q vender_sense_iOS.zip || exit 1
 rm -f vender_sense_iOS.zip
+test -f SenseLib/SENSEME.lic || exit 1
 
-echo "start download fu resource : $fu_lib"
-curl -L -O "$fu_lib"
-unzip -o vender_fu_iOS.zip
+echo "start download fu resource from Artifactory"
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o vender_fu_iOS.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_fu_iOS.zip" || exit 1
+rm -rf FULib
+unzip -q vender_fu_iOS.zip || exit 1
 rm -f vender_fu_iOS.zip
+test -f FULib/authpack.h || exit 1
 
 # Enable third-party player configuration
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
