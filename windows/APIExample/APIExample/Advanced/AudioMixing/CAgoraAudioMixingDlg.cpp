@@ -516,7 +516,7 @@ void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE
 
 void CAgoraAudioMixingDlg::OnBnClickedButtonMixingStart()
 {
-	CString audioUrl = GetExePath() + _T("\\ID_MUSIC_01.m4a");
+	CString audioUrl = GetExePath() + _T("\\res\\ID_MUSIC_01.m4a");
 	int ret = m_rtcEngine->startAudioMixing(cs2utf8(audioUrl).c_str(), false, -1, 0);
 
 	CString strInfo;
