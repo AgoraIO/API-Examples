@@ -51,9 +51,33 @@ REM Copy executables and DLLs from Release
 xcopy /Y /S Release\*.exe Output\ >nul 2>&1
 xcopy /Y /S Release\*.dll Output\ >nul 2>&1
 
+REM Copy runtime images that are loaded from the executable directory
+xcopy /Y APIExample\Advanced\LocalVideoTranscoding\agora.png Output\ >nul 2>&1
+xcopy /Y APIExample\Advanced\LocalVideoTranscoding\agora.jpg Output\ >nul 2>&1
+
 REM Copy resources
 xcopy /Y /S /I APIExample\res Output\res >nul 2>&1
 xcopy /Y /S /I Release\beauty_agora Output\beauty_agora >nul 2>&1
+if not exist Output\agora.png (
+    echo Local video transcoding PNG is missing from the output package!
+    exit /b 1
+)
+if not exist Output\agora.jpg (
+    echo Local video transcoding JPG is missing from the output package!
+    exit /b 1
+)
+if not exist Output\res\hdr_1280_720.yuv (
+    echo Custom video capture resource is missing from the output package!
+    exit /b 1
+)
+if not exist Output\res\yuvj_full_range_alpha_1280_540_left.mp4 (
+    echo Transparent background resource is missing from the output package!
+    exit /b 1
+)
+if not exist Output\res\bg_blue.png (
+    echo Live broadcasting image is missing from the output package!
+    exit /b 1
+)
 if not exist Output\beauty_agora\beauty_material_functional\config.json (
     echo Agora beauty material is missing from the output package!
     exit /b 1

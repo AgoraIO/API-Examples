@@ -256,7 +256,7 @@ void CTransparentBgDlg::StartPlay()
         m_mediaPlayer->registerVideoFrameObserver(this);
         m_mediaPlayer->registerPlayerSourceObserver(this);
         MediaSource mediaSource;
-        CString videoUrl = GetExePath() + _T("\\yuvj_full_range_alpha_1280_540_left.mp4");
+        CString videoUrl = GetExePath() + _T("\\res\\yuvj_full_range_alpha_1280_540_left.mp4");
         std::string tmp = cs2utf8(videoUrl);
         mediaSource.url = tmp.c_str();
         CString pathInfo;
