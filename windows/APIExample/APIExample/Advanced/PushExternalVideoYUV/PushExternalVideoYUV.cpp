@@ -275,7 +275,10 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 
-			yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+			if (!yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4))) {
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("open sample.yuv failed"));
+				AfxMessageBox(_T("open sample.yuv failed"));
+			}
 		}
 	}
 	else {

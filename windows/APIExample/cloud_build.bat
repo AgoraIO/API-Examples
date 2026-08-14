@@ -50,6 +50,7 @@ mkdir Output
 REM Copy executables and DLLs from Release
 xcopy /Y /S Release\*.exe Output\ >nul 2>&1
 xcopy /Y /S Release\*.dll Output\ >nul 2>&1
+xcopy /Y Release\sample.yuv Output\ >nul 2>&1
 
 REM Copy runtime images that are loaded from the executable directory
 xcopy /Y APIExample\Advanced\LocalVideoTranscoding\agora.png Output\ >nul 2>&1
@@ -64,6 +65,10 @@ if not exist Output\agora.png (
 )
 if not exist Output\agora.jpg (
     echo Local video transcoding JPG is missing from the output package!
+    exit /b 1
+)
+if not exist Output\sample.yuv (
+    echo Custom video capture sample is missing from the output package!
     exit /b 1
 )
 if not exist Output\res\hdr_1280_720.yuv (
