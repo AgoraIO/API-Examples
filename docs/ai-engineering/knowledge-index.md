@@ -13,7 +13,7 @@ Use sources in this order:
 5. Project `ARCHITECTURE.md` for case index, registration rules, and canonical file layout.
 6. `docs/ai-engineering/repository-profile.json` for repository-specific SDK package names and version sources.
 7. `docs/ai-engineering/case-maintenance-matrix.md` for cross-platform parity planning and known gaps.
-8. Existing project `.agent/skills/*/SKILL.md` or `.agents/skills/*/SKILL.md` for case query, creation, and review procedures.
+8. Existing project `.agents/skills/*/SKILL.md` for case query, creation, and review procedures.
 9. `docs/ai-engineering/release-known-issues.md` for release packaging and pipeline risks.
 10. Repository hooks and platform build scripts for final verification.
 
@@ -62,7 +62,7 @@ If the product request does not name a platform, default to Android, iOS, macOS,
 | `macOS/` | `upsert-case`, `review-case` |
 | `windows/` | `upsert-case`, `review-case` |
 
-The repository-level orchestration skill is `.agent/skills/api-example-release-iteration/SKILL.md`.
+The repository-level orchestration skill is `.agents/skills/api-example-release-iteration/SKILL.md`.
 
 ## Repository Profile
 
@@ -152,7 +152,7 @@ Where to write it:
 - Cross-platform routing or implementation traps: `docs/ai-engineering/knowledge-index.md`.
 - Release, signing, CI, packaging, license, or SDK-version risks: `docs/ai-engineering/release-known-issues.md`.
 - Case coverage state: `docs/ai-engineering/case-maintenance-matrix.md`.
-- Project-specific implementation traps: the target project `ARCHITECTURE.md`, `.agent/skills/*/SKILL.md`, or `.agents/skills/*/SKILL.md`.
+- Project-specific implementation traps: the target project `ARCHITECTURE.md` or `.agents/skills/*/SKILL.md`.
 
 Do not duplicate the same rule in every file. Put the durable rule at the lowest scope that future agents must read.
 

@@ -18,7 +18,7 @@ Do not fill this template with stale values from an older run. Re-check the live
 ## Sources Used
 
 - `AGENTS.md`
-- `.agent/skills/api-example-release-iteration/SKILL.md`
+- `.agents/skills/api-example-release-iteration/SKILL.md`
 - `docs/ai-engineering/knowledge-index.md`
 - `docs/ai-engineering/repository-profile.json`
 - `docs/ai-engineering/release-iteration-gate.md`

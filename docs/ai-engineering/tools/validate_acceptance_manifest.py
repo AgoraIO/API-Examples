@@ -1090,8 +1090,6 @@ def is_durable_knowledge_path(path_text):
     return (
         normalized in DURABLE_KNOWLEDGE_PATHS
         or normalized.endswith("/ARCHITECTURE.md")
-        or normalized.startswith(".agent/skills/")
-        or "/.agent/skills/" in normalized
         or normalized.startswith(".agents/skills/")
         or "/.agents/skills/" in normalized
     )

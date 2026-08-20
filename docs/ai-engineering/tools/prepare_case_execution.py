@@ -210,8 +210,13 @@ def sdk_version_pattern(source):
     if kind == "gradle-property":
         return rf"(?m)^\s*{re.escape(source['key'])}\s*=\s*{SEMVER_CAPTURE}\s*$"
     if kind == "cocoapods":
+        # Anchor to the start of a line and reject Ruby comments so a commented-out
+        # `# pod 'Pkg', 'x.y.z'` line can never be accepted as a live declaration.
         package = re.escape(source["package"])
-        return rf"pod\s+['\"]{package}['\"]\s*,\s*['\"]{SEMVER_CAPTURE}['\"]"
+        return (
+            rf"(?m)^(?!\s*#)\s*pod\s+['\"]{package}['\"]"
+            rf"\s*,\s*['\"]{SEMVER_CAPTURE}['\"]"
+        )
     if kind == "archive-name":
         return re.escape(source["prefix"]) + SEMVER_CAPTURE + re.escape(source["suffix"])
     raise ValueError(f"unsupported SDK version source kind: {kind}")
@@ -240,7 +245,11 @@ def collect_sdk_version_checks(
                 continue
             pattern = sdk_version_pattern(source)
             matches = sorted(set(re.findall(pattern, path.read_text(encoding="utf-8"))))
-            if len(matches) != 1:
+            if not matches:
+                actual_versions[path_text] = ""
+                problems.append(f"no active SDK version declaration in {path_text}")
+                continue
+            if len(matches) > 1:
                 actual_versions[path_text] = ""
                 problems.append(f"expected one SDK version in {path_text}, found {len(matches)}")
                 continue

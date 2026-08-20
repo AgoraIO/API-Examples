@@ -27,7 +27,7 @@ Each platform directory contains its own `AGENTS.md` with platform-specific rule
 
 ## AI Engineering Workflow
 
-For AI-assisted version iteration, product-to-implementation routing, multi-agent acceptance, or automatic API example generation, use the repository workflow in `.agent/skills/api-example-release-iteration/SKILL.md`.
+For AI-assisted version iteration, product-to-implementation routing, multi-agent acceptance, or automatic API example generation, use the repository workflow in `.agents/skills/api-example-release-iteration/SKILL.md`.
 
 Supporting documents:
 - `docs/ai-engineering/knowledge-index.md` - repository knowledge map for agents.
@@ -64,4 +64,13 @@ See `HOOKS-GUIDE.md` for details and troubleshooting.
 
 ## Sensitive Configuration
 
-API keys and App IDs are never committed. Each platform stores them in a `KeyCenter` file (Swift/OC) or `KeyCenter.java` / `KeyCenter.kt` (Android) or `CConfig` (Windows). These files are git-ignored and must be populated locally before building.
+Never commit a real App ID, App Certificate, or token. The mechanism differs by platform, and only Android keeps credentials in a git-ignored file:
+
+| Platform | Where the App ID goes | Tracked by git? |
+|----------|----------------------|-----------------|
+| Android | `local.properties` at each project root, key `AGORA_APP_ID`, read by `app/build.gradle`(`.kts`) into `BuildConfig.AGORA_APP_ID` | No — `local.properties` is git-ignored |
+| iOS | `<Project>/Common/KeyCenter.swift`, or `KeyCenter.h` / `KeyCenter.m` for `APIExample-OC` | **Yes** |
+| macOS | `APIExample/Common/KeyCenter.swift` | **Yes** |
+| Windows | `APIExample/APIExample/CConfig.h` and `CConfig.cpp` | **Yes** |
+
+The iOS, macOS, and Windows credential files are tracked placeholder files, not git-ignored. Editing one to build locally leaves a real credential in a tracked file, so never stage it. The safety net is the gitleaks pre-commit hook (see Git Hooks above), not `.gitignore` — do not rely on git ignoring these paths.

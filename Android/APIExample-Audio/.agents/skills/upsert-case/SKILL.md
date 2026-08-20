@@ -1,3 +1,18 @@
+---
+name: upsert-case
+description: >
+  Add a new audio API example case or modify an existing one in the APIExample-Audio
+  Android demo — updates the Fragment source, XML layout, string resources, nav_graph
+  registration, and ARCHITECTURE.md together. Use when: adding a new Agora voice API
+  demo screen, modifying an existing audio case's implementation or registration, or
+  updating an audio case's strings, layout, nav entry, or architecture docs. This
+  project uses voice-sdk only and must never call video APIs.
+  Keywords: add case, modify case, update case, new fragment, nav_graph, @Example,
+  BaseFragment, APIExample-Audio, audio case, voice API, demo case.
+---
+
+# Upsert Case — APIExample-Audio
+
 ## What this skill is for
 
 Use this skill to add or update a case in `APIExample-Audio/`. It owns the full change closure: case source, XML layout, strings, `nav_graph.xml`, and `ARCHITECTURE.md`, while preserving the voice-SDK-only constraint.

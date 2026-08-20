@@ -206,6 +206,51 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                 self.assertEqual(windows["result"], "BLOCKED")
                 self.assertIn("4.6.2", windows["reason"])
 
+    def test_rejects_commented_out_cocoapods_declaration(self):
+        for comment_line in [
+            "  # pod 'AgoraRtcEngine_iOS', '4.6.4'",
+            "#pod 'AgoraRtcEngine_iOS', '4.6.4'",
+            "\t#  pod 'AgoraRtcEngine_iOS', '4.6.4'",
+        ]:
+            with self.subTest(comment_line=comment_line), tempfile.TemporaryDirectory() as tmpdir:
+                root = Path(tmpdir)
+                profile_path = self.write_repository_profile(root, "Agora")
+                (root / "iOS/Podfile").write_text(
+                    f"def common_pods\n{comment_line}\n"
+                    "   pod 'sdk', :path => 'sdk.podspec'\nend\n",
+                    encoding="utf-8",
+                )
+
+                checks = collect_sdk_version_checks(
+                    self.target_sdk_versions(),
+                    repo_root=root,
+                    profile_path=profile_path,
+                )
+                ios = next(check for check in checks if check["name"] == "sdk-version-ios")
+
+                self.assertEqual(ios["result"], "BLOCKED")
+                self.assertEqual(ios["actual_versions"]["iOS/Podfile"], "")
+                self.assertIn("no active SDK version declaration in iOS/Podfile", ios["reason"])
+
+    def test_accepts_cocoapods_declaration_with_trailing_comment(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            profile_path = self.write_repository_profile(root, "Agora")
+            (root / "iOS/Podfile").write_text(
+                "  pod 'AgoraRtcEngine_iOS', '4.6.4' # pinned for this release\n",
+                encoding="utf-8",
+            )
+
+            checks = collect_sdk_version_checks(
+                self.target_sdk_versions(),
+                repo_root=root,
+                profile_path=profile_path,
+            )
+            ios = next(check for check in checks if check["name"] == "sdk-version-ios")
+
+            self.assertEqual(ios["result"], "PASS")
+            self.assertEqual(ios["actual_versions"]["iOS/Podfile"], "4.6.4")
+
     def test_collects_staggered_platform_sdk_versions(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

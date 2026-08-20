@@ -21,7 +21,7 @@ Android, iOS, macOS, and Windows are required by default. Contract may choose th
 
 ## Source Route
 
-Read root `AGENTS.md`, the repository profile, this knowledge index and gate, then each platform/project `AGENTS.md`, `ARCHITECTURE.md`, and available `query-cases`, `upsert-case`, and `review-case` skills. Project skills may use either `.agent/skills/` or `.agents/skills/`. Read `release-known-issues.md` only for release, SDK version, CI, signing, packaging, license, or third-party asset work.
+Read root `AGENTS.md`, the repository profile, this knowledge index and gate, then `<platform>/AGENTS.md`, `<project>/AGENTS.md`, `<project>/ARCHITECTURE.md`, and the available `query-cases`, `upsert-case`, and `review-case` skills. Every project keeps its skills under `.agents/skills/`. Read `docs/ai-engineering/release-known-issues.md` only for release, SDK version, CI, signing, packaging, license, or third-party asset work.
 
 ## Agent Topology
 

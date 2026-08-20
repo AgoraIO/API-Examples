@@ -1,0 +1,64 @@
+name: AI Engineering Checks
+
+# Guards the AI engineering assets (AGENTS.md routing, SKILL.md bundles) and the
+# orchestration tooling under docs/ai-engineering/tools/. These checks are file-only:
+# they never build a platform sample, so they stay fast enough to run on every PR.
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - 'dev/**'
+    paths:
+      - '**/AGENTS.md'
+      - '**/ARCHITECTURE.md'
+      - '**/SKILL.md'
+      - '**/.agents/**'
+      - 'docs/ai-engineering/**'
+      - '.github/workflows/ai-engineering-checks.yml'
+  pull_request:
+    paths:
+      - '**/AGENTS.md'
+      - '**/ARCHITECTURE.md'
+      - '**/SKILL.md'
+      - '**/.agents/**'
+      - 'docs/ai-engineering/**'
+      - '.github/workflows/ai-engineering-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-engineering-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint assets and run tooling tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          # The tooling uses str.removeprefix, so 3.9 is the floor. Pin 3.11 for stability.
+          python-version: '3.11'
+
+      - name: Lint AI engineering assets
+        run: python3 docs/ai-engineering/tools/lint_agent_assets.py
+
+      - name: Run AI engineering tooling tests
+        run: |
+          python3 -m unittest \
+            docs/ai-engineering/tools/lint_agent_assets_test.py \
+            docs/ai-engineering/tools/validate_acceptance_manifest_test.py \
+            docs/ai-engineering/tools/generate_case_backlog_test.py \
+            docs/ai-engineering/tools/prepare_case_execution_test.py \
+            docs/ai-engineering/tools/orchestrate_case_execution_test.py

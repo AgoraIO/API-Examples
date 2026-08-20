@@ -34,7 +34,7 @@ macOS/
 ├── APIExample.xcworkspace/  # Xcode workspace
 ├── libs/                    # SDK libraries
 ├── Pods/                    # CocoaPods dependencies
-├── .agent/skills/           # Agent skills
+├── .agents/skills/          # Agent skills
 │   ├── create-api-example/
 │   ├── find-api-example/
 │   └── migrate-api-to-project/

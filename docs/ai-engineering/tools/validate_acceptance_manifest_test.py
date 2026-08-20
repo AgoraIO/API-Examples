@@ -671,11 +671,20 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
         self.assert_error_contains(manifest, "knowledge_updates require at least one durable knowledge")
 
-    def test_durable_knowledge_accepts_both_skill_directory_conventions(self):
-        self.assertTrue(is_durable_knowledge_path(".agent/skills/review-case/SKILL.md"))
+    def test_durable_knowledge_accepts_repository_and_project_skill_paths(self):
+        self.assertTrue(is_durable_knowledge_path(".agents/skills/review-case/SKILL.md"))
         self.assertTrue(
             is_durable_knowledge_path(
                 "Android/APIExample/.agents/skills/review-case/SKILL.md"
+            )
+        )
+
+    def test_durable_knowledge_rejects_legacy_agent_skill_directory(self):
+        # The repository standardized on `.agents/skills/`; the legacy `.agent/skills/`
+        # spelling must not silently pass or the naming split can reappear.
+        self.assertFalse(
+            is_durable_knowledge_path(
+                "Android/APIExample/.agent/skills/review-case/SKILL.md"
             )
         )
 
