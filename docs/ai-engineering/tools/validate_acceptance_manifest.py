@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from generate_case_backlog import PLATFORM_PROJECTS, parse_matrix_cell
+from prepare_case_execution import collect_sdk_version_checks, load_repository_profile
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -17,6 +18,12 @@ PLATFORMS = ["android", "ios", "macos", "windows"]
 PLATFORM_ROOTS = {
     "android": "Android/",
     "ios": "iOS/",
+    "macos": "macOS/",
+    "windows": "windows/",
+}
+MAIN_PLATFORM_TARGETS = {
+    "android": "Android/APIExample/",
+    "ios": "iOS/APIExample/",
     "macos": "macOS/",
     "windows": "windows/",
 }
@@ -35,7 +42,14 @@ REQUIRED_TOP_LEVEL = {
     "knowledge_updates",
 }
 REQUIREMENT_FIELDS = {"feature", "sdk_family", "key_apis", "target_sdk_versions"}
-RELEASE_FIELDS = {"required", "target_sdk_versions", "checks", "skipped_checks"}
+RELEASE_FIELDS = {
+    "required",
+    "repository_profile",
+    "repository_profile_sha256",
+    "target_sdk_versions",
+    "checks",
+    "skipped_checks",
+}
 CONTRACT_OUTPUT_FIELDS = {
     "scenario",
     "key_apis",
@@ -238,16 +252,17 @@ def validate_contract(manifest, errors, seen_agent_ids):
                     f"contract.output.platform_targets.{platform}.files_allowed is required when Contract passes"
                 )
         target_project = target.get("target_project")
+        expected_target = MAIN_PLATFORM_TARGETS[platform]
         if is_non_empty(target_project):
             validate_paths(
                 [target_project],
                 f"contract.output.platform_targets.{platform}.target_project",
                 errors,
             )
-            if not path_is_within(target_project, PLATFORM_ROOTS[platform]):
-                errors.append(
-                    f"contract.output.platform_targets.{platform}.target_project must be inside {PLATFORM_ROOTS[platform]}"
-                )
+        if target_project != expected_target:
+            errors.append(
+                f"contract.output.platform_targets.{platform}.target_project must be exactly {expected_target}"
+            )
         validate_paths(
             target.get("files_allowed", []),
             f"contract.output.platform_targets.{platform}.files_allowed",
@@ -255,9 +270,10 @@ def validate_contract(manifest, errors, seen_agent_ids):
         )
         allowed_paths = target.get("files_allowed", [])
         for allowed_path in allowed_paths if isinstance(allowed_paths, list) else []:
-            if not path_is_within(allowed_path, PLATFORM_ROOTS[platform]):
+            if not path_is_within(allowed_path, MAIN_PLATFORM_TARGETS[platform]):
                 errors.append(
-                    f"contract.output.platform_targets.{platform}.files_allowed must stay inside {PLATFORM_ROOTS[platform]}: {allowed_path}"
+                    f"contract.output.platform_targets.{platform}.files_allowed must stay inside "
+                    f"{MAIN_PLATFORM_TARGETS[platform]}: {allowed_path}"
                 )
     for platform in sorted(set(targets) - set(PLATFORMS)):
         errors.append(f"contract.output.platform_targets has unsupported platform: {platform}")
@@ -514,10 +530,11 @@ def validate_platform_implementation(platform, target, output, verification, man
 
 def is_platform_build_command(platform, command, working_directory=None):
     if (
-        platform not in PLATFORM_ROOTS
+        platform not in MAIN_PLATFORM_TARGETS
         or not isinstance(command, str)
         or not is_non_empty(working_directory)
-        or not path_is_within(working_directory, PLATFORM_ROOTS[platform])
+        or normalize_manifest_path(working_directory).rstrip("/")
+        != normalize_manifest_path(MAIN_PLATFORM_TARGETS[platform]).rstrip("/")
     ):
         return False
     try:
@@ -883,10 +900,34 @@ def validate_platform_verification(
             not command_log
             or not str(command.get("evidence")).startswith(f"{command_log}#")
             or "exit_code=" not in str(command.get("evidence"))
+            or "cwd=" not in str(command.get("evidence"))
+            or "cwd_source=" not in str(command.get("evidence"))
         ):
             errors.append(
-                f"platforms.{platform}.verification.output.commands[{index}].evidence must bind to dispatch.command_log and exit_code"
+                f"platforms.{platform}.verification.output.commands[{index}].evidence must bind "
+                "to dispatch.command_log, exit_code, cwd, and cwd_source"
             )
+        elif command.get("result") in {"PASS", "FAIL"}:
+            evidence_fields = parse_command_evidence(
+                command.get("evidence"), command_log
+            )
+            evidence_cwd = evidence_fields.get("cwd")
+            cwd_source = evidence_fields.get("cwd_source")
+            expected_cwd = dispatch.get("working_directory")
+            if (
+                not evidence_cwd
+                or normalize_manifest_path(evidence_cwd).rstrip("/")
+                != normalize_manifest_path(expected_cwd).rstrip("/")
+            ):
+                errors.append(
+                    f"platforms.{platform}.verification.output.commands[{index}].evidence cwd "
+                    f"must match dispatch.working_directory {expected_cwd}"
+                )
+            if cwd_source not in {"command_event", "dispatch"}:
+                errors.append(
+                    f"platforms.{platform}.verification.output.commands[{index}].evidence "
+                    "cwd_source must be command_event or dispatch"
+                )
     for index, skipped in enumerate(output.get("skipped_checks", [])):
         if not isinstance(skipped, dict) or not skipped.get("reason"):
             errors.append(
@@ -906,9 +947,25 @@ def validate_platform_verification(
             errors.append(
                 f"platforms.{platform}.verification.output.build_result=PASS requires a bound PASS build command"
             )
-    if platform == "windows" and output.get("build_result") == "PASS" and host_platform != "win32":
+    required_build_host = {
+        "ios": "darwin",
+        "macos": "darwin",
+        "windows": "win32",
+    }.get(platform)
+    has_pass_build_command = any(
+        isinstance(command, dict)
+        and command.get("kind") == "build"
+        and command.get("result") == "PASS"
+        for command in commands
+    )
+    if (
+        required_build_host
+        and (output.get("build_result") == "PASS" or has_pass_build_command)
+        and host_platform != required_build_host
+    ):
         errors.append(
-            "platforms.windows.verification.output.build_result=PASS requires host_platform=win32"
+            f"platforms.{platform}.verification.output.build_result=PASS requires "
+            f"host_platform={required_build_host}"
         )
     if required and manifest.get("final_status") == "PASS" and output.get("skipped_checks"):
         errors.append("final_status=PASS cannot include skipped checks")
@@ -945,6 +1002,15 @@ def validate_release(manifest, errors):
         errors.append("release.required must be true")
     for field in sorted(set(release) - RELEASE_FIELDS):
         errors.append(f"unsupported release field: {field}")
+    profile_value = release.get("repository_profile")
+    if not isinstance(profile_value, str) or not profile_value:
+        errors.append("release.repository_profile is required")
+    else:
+        profile_path = Path(profile_value)
+        if profile_path.is_absolute() or ".." in profile_path.parts:
+            errors.append("release.repository_profile must be repository-relative")
+    if not SHA256_RE.fullmatch(str(release.get("repository_profile_sha256") or "")):
+        errors.append("release.repository_profile_sha256 must be a SHA-256 hash")
     requirement = manifest.get("requirement", {})
     target_sdk_versions = requirement.get("target_sdk_versions")
     release_target_sdk_versions = release.get("target_sdk_versions")
@@ -1008,6 +1074,49 @@ def validate_release(manifest, errors):
             errors.append(f"release.skipped_checks[{index}].reason is required")
     if manifest.get("final_status") != "BLOCKED" and release.get("skipped_checks"):
         errors.append("non-BLOCKED acceptance cannot include skipped release checks")
+
+
+def validate_repository_release(manifest, repo_root=REPO_ROOT):
+    errors = []
+    release = manifest.get("release")
+    if not isinstance(release, dict):
+        return errors
+    profile_value = release.get("repository_profile")
+    profile_sha256 = release.get("repository_profile_sha256")
+    if not isinstance(profile_value, str) or not profile_value:
+        return errors
+    relative_path = Path(profile_value)
+    if relative_path.is_absolute() or ".." in relative_path.parts:
+        return errors
+    root = Path(repo_root).resolve()
+    profile_path = (root / relative_path).resolve()
+    try:
+        profile_path.relative_to(root)
+    except ValueError:
+        errors.append("release.repository_profile must resolve inside the repository")
+        return errors
+    if not profile_path.is_file():
+        errors.append(f"release.repository_profile does not exist: {profile_value}")
+        return errors
+    actual_sha256 = hashlib.sha256(profile_path.read_bytes()).hexdigest()
+    if profile_sha256 != actual_sha256:
+        errors.append("release.repository_profile_sha256 does not match repository profile")
+        return errors
+    try:
+        load_repository_profile(profile_path)
+        expected_checks = collect_sdk_version_checks(
+            release.get("target_sdk_versions", {}),
+            repo_root=root,
+            profile_path=profile_path,
+        )
+    except (OSError, ValueError, KeyError) as exc:
+        errors.append(f"failed to evaluate release.repository_profile: {exc}")
+        return errors
+    if release.get("checks") != expected_checks:
+        errors.append(
+            "release.checks must match live repository SDK checks from the bound repository profile"
+        )
+    return errors
 
 def validate_knowledge_updates(manifest, errors):
     updates = manifest.get("knowledge_updates", [])
@@ -1115,6 +1224,99 @@ def path_is_within(path_text, allowed_text):
     return path == allowed or path.startswith(f"{allowed}/")
 
 
+def parse_command_evidence(evidence, command_log):
+    if not isinstance(evidence, str) or not isinstance(command_log, str):
+        return {}
+    prefix = f"{command_log}#"
+    if not evidence.startswith(prefix):
+        return {}
+    event_id, separator, details = evidence[len(prefix) :].partition("; ")
+    if not separator or not event_id:
+        return {}
+    fields = {"event_id": event_id}
+    for detail in details.split("; "):
+        key, equals, value = detail.partition("=")
+        if equals and key:
+            fields[key] = value
+    return fields
+
+
+def extract_command_events(jsonl):
+    events = []
+    for line in jsonl.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        item = event.get("item")
+        if event.get("type") != "item.completed" or not isinstance(item, dict):
+            continue
+        if item.get("type") != "command_execution" or not isinstance(item.get("exit_code"), int):
+            continue
+        events.append(
+            {
+                "id": str(item.get("id") or f"command-{len(events)}"),
+                "command": item.get("command"),
+                "exit_code": item["exit_code"],
+                "cwd": item.get("cwd") or item.get("working_directory"),
+            }
+        )
+    return events
+
+
+def normalize_command(command):
+    if isinstance(command, list):
+        command = " ".join(str(part) for part in command)
+    command = str(command or "")
+    try:
+        tokens = shlex.split(command)
+    except ValueError:
+        return " ".join(command.split())
+    if not tokens:
+        return ""
+    executable = tokens[0].replace("\\", "/").rsplit("/", 1)[-1].lower()
+    if executable in {"sh", "bash", "zsh"}:
+        command_option = next(
+            (
+                index
+                for index, token in enumerate(tokens[:-1])
+                if token.startswith("-") and "c" in token
+            ),
+            None,
+        )
+        if command_option is not None:
+            command = tokens[command_option + 1]
+    elif executable in {
+        "cmd",
+        "cmd.exe",
+        "powershell",
+        "powershell.exe",
+        "pwsh",
+        "pwsh.exe",
+    }:
+        command_option = next(
+            (
+                index
+                for index, token in enumerate(tokens[:-1])
+                if token.lower() in {"/c", "-command", "-c"}
+            ),
+            None,
+        )
+        if command_option is not None:
+            command = " ".join(tokens[command_option + 1 :])
+    return " ".join(command.split())
+
+
+def command_event_cwd_matches(event_cwd, working_directory):
+    if not isinstance(event_cwd, str) or not event_cwd.strip():
+        return False
+    normalized_cwd = event_cwd.replace("\\", "/").rstrip("/")
+    normalized_expected = normalize_manifest_path(working_directory).rstrip("/")
+    if normalized_cwd == normalized_expected:
+        return True
+    return normalized_cwd.endswith(f"/{normalized_expected}")
+
+
 def iter_manifest_artifacts(manifest):
     contract = manifest.get("contract")
     if isinstance(contract, dict):
@@ -1183,6 +1385,10 @@ def validate_evidence_files(manifest, evidence_root):
                 errors.append(
                     f"{artifact_path}.dispatch.{hash_field} does not match {path_text}"
                 )
+            elif path_field == "command_log" and artifact_path.endswith(".verification"):
+                validate_command_log_evidence(
+                    artifact_path, artifact, path, errors
+                )
             elif path_field == "repository_delta":
                 try:
                     delta = json.loads(path.read_text(encoding="utf-8"))
@@ -1210,6 +1416,78 @@ def validate_evidence_files(manifest, evidence_root):
     return errors
 
 
+def validate_command_log_evidence(artifact_path, artifact, log_path, errors):
+    try:
+        events = extract_command_events(log_path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        errors.append(f"{artifact_path}.dispatch.command_log cannot be read: {exc}")
+        return
+    dispatch = artifact.get("dispatch", {})
+    command_log = dispatch.get("command_log")
+    working_directory = dispatch.get("working_directory")
+    output = artifact.get("output", {})
+    commands = output.get("commands", []) if isinstance(output, dict) else []
+    used = set()
+    for index, command in enumerate(commands):
+        if not isinstance(command, dict) or command.get("result") not in {"PASS", "FAIL"}:
+            continue
+        field_name = f"{artifact_path}.output.commands[{index}].evidence"
+        fields = parse_command_evidence(command.get("evidence"), command_log)
+        if not fields:
+            errors.append(f"{field_name} is not valid bound command evidence")
+            continue
+        candidates = [
+            event_index
+            for event_index, event in enumerate(events)
+            if event_index not in used
+            and event["id"] == fields.get("event_id")
+            and normalize_command(event["command"])
+            == normalize_command(command.get("command"))
+        ]
+        if not candidates:
+            errors.append(f"{field_name} has no matching command_execution event")
+            continue
+        match_index = next(
+            (
+                event_index
+                for event_index in candidates
+                if events[event_index].get("cwd")
+                and command_event_cwd_matches(
+                    events[event_index]["cwd"], working_directory
+                )
+            ),
+            None,
+        )
+        if match_index is None:
+            match_index = next(
+                (
+                    event_index
+                    for event_index in candidates
+                    if not events[event_index].get("cwd")
+                ),
+                None,
+            )
+        if match_index is None:
+            errors.append(
+                f"{field_name} command_execution cwd must match "
+                f"dispatch.working_directory {working_directory}"
+            )
+            continue
+        event = events[match_index]
+        used.add(match_index)
+        expected_cwd_source = "command_event" if event.get("cwd") else "dispatch"
+        if fields.get("cwd_source") != expected_cwd_source:
+            errors.append(
+                f"{field_name} cwd_source must be {expected_cwd_source} for its "
+                "command_execution event"
+            )
+        if fields.get("exit_code") != str(event["exit_code"]):
+            errors.append(f"{field_name} exit_code does not match command_execution event")
+        actual_result = "PASS" if event["exit_code"] == 0 else "FAIL"
+        if command.get("result") != actual_result:
+            errors.append(f"{field_name} result does not match command_execution exit_code")
+
+
 def main(argv):
     if len(argv) != 2:
         print("usage: validate_acceptance_manifest.py <manifest.json>", file=sys.stderr)
@@ -1224,6 +1502,7 @@ def main(argv):
         print(f"invalid JSON: {exc}", file=sys.stderr)
         return 2
     errors = validate_manifest(manifest)
+    errors.extend(validate_repository_release(manifest))
     errors.extend(validate_evidence_files(manifest, manifest_path.parent))
     if errors:
         for error in errors:

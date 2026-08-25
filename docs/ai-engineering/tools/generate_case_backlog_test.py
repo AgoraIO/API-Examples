@@ -34,11 +34,11 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
     def test_generates_execution_units_for_missing_and_partial_cells(self):
         matrix = textwrap.dedent(
             """
-            | Feature | SDK Family | Key APIs | Android full | Android Compose | Windows | Notes |
-            | --- | --- | --- | --- | --- | --- | --- |
-            | Join channel audio | Full RTC | `joinChannel`, `setAudioProfile` | `DONE(basic/JoinChannelAudio.java)` | `DONE(samples/JoinChannelAudio.kt)` | `MISSING` | Windows has no basic audio-only join case. |
-            | Media metadata | Full RTC | `registerMediaMetadataObserver` | `DONE(advanced/MediaMetadata.java)` | `DONE(samples/MediaMetadata.kt)` | `PARTIAL(Advanced/Metadata; smoke pending)` | Runtime metadata smoke pending. |
-            | Audio mixing | Full RTC | `startAudioMixing` | `DONE(advanced/PlayAudioFiles.java)` | `DONE(samples/PlayAudioFiles.kt)` | `DONE(Advanced/AudioMixing/)` | Full coverage. |
+            | Feature | SDK Family | Key APIs | Android full | iOS UIKit | macOS | Windows | Notes |
+            | --- | --- | --- | --- | --- | --- | --- | --- |
+            | Join channel audio | Full RTC | `joinChannel`, `setAudioProfile` | `DONE(basic/JoinChannelAudio.java)` | `DONE(Basic/JoinChannelAudio/)` | `DONE(Basic/JoinChannelAudio/)` | `MISSING` | Windows has no basic audio-only join case. |
+            | Media metadata | Full RTC | `registerMediaMetadataObserver` | `DONE(advanced/MediaMetadata.java)` | `DONE(Advanced/VideoMetadata/)` | `DONE(Advanced/VideoMetadata/)` | `PARTIAL(Advanced/Metadata; smoke pending)` | Runtime metadata smoke pending. |
+            | Audio mixing | Full RTC | `startAudioMixing` | `DONE(advanced/PlayAudioFiles.java)` | `DONE(Advanced/AudioMixing/)` | `DONE(Advanced/AudioMixing/)` | `DONE(Advanced/AudioMixing/)` | Full coverage. |
 
             ## Confirmed Gaps
 
@@ -72,10 +72,15 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
                     "path": "basic/JoinChannelAudio.java",
                 },
                 {
-                    "platform_unit": "Android Compose",
-                    "project": "Android/APIExample-Compose/",
-                    "path": "samples/JoinChannelAudio.kt",
-                }
+                    "platform_unit": "iOS UIKit",
+                    "project": "iOS/APIExample/",
+                    "path": "Basic/JoinChannelAudio/",
+                },
+                {
+                    "platform_unit": "macOS",
+                    "project": "macOS/",
+                    "path": "Basic/JoinChannelAudio/",
+                },
             ],
         )
         self.assertEqual(payload["execution_units"][1]["platform_unit"], "Windows")
@@ -87,9 +92,9 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
     def test_hidden_cell_is_parsed_but_not_added_to_backlog(self):
         matrix = textwrap.dedent(
             """
-            | Feature | SDK Family | Key APIs | Android full | Notes |
-            | --- | --- | --- | --- | --- |
-            | Rhythm player | Full RTC | `startRhythmPlayer` | `HIDDEN(advanced/RhythmPlayer.java)` | Deprecated API retained for reference. |
+            | Feature | SDK Family | Key APIs | Android full | iOS UIKit | macOS | Windows | Notes |
+            | --- | --- | --- | --- | --- | --- | --- | --- |
+            | Rhythm player | Full RTC | `startRhythmPlayer` | `HIDDEN(advanced/RhythmPlayer.java)` | `HIDDEN(Advanced/RhythmPlayer/)` | `N/A(no case)` | `N/A(no case)` | Deprecated API retained for reference. |
             """
         )
 
@@ -105,9 +110,9 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
     def test_unknown_platform_column_fails(self):
         matrix = textwrap.dedent(
             """
-            | Feature | SDK Family | Key APIs | Unknown Platform | Notes |
-            | --- | --- | --- | --- | --- |
-            | Feature A | Full RTC | `apiA` | `MISSING` | Missing. |
+            | Feature | SDK Family | Key APIs | Android full | iOS UIKit | macOS | Unknown Platform | Notes |
+            | --- | --- | --- | --- | --- | --- | --- | --- |
+            | Feature A | Full RTC | `apiA` | `DONE(path)` | `DONE(path)` | `DONE(path)` | `MISSING` | Missing. |
             """
         )
 
@@ -119,9 +124,9 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
     def test_confirmed_gap_alias_applies_priority(self):
         matrix = textwrap.dedent(
             """
-            | Feature | SDK Family | Key APIs | Android full | Windows | Notes |
-            | --- | --- | --- | --- | --- | --- |
-            | Join channel audio | Full RTC | `joinChannel`, `setAudioProfile` | `DONE(basic/JoinChannelAudio.java)` | `MISSING` | Windows has no basic audio-only join case. |
+            | Feature | SDK Family | Key APIs | Android full | iOS UIKit | macOS | Windows | Notes |
+            | --- | --- | --- | --- | --- | --- | --- | --- |
+            | Join channel audio | Full RTC | `joinChannel`, `setAudioProfile` | `DONE(basic/JoinChannelAudio.java)` | `DONE(Basic/JoinChannelAudio/)` | `DONE(Basic/JoinChannelAudio/)` | `MISSING` | Windows has no basic audio-only join case. |
 
             ## Confirmed Gaps
 
@@ -139,6 +144,21 @@ class CaseBacklogGeneratorTest(unittest.TestCase):
         self.assertEqual(unit["platform_unit"], "Windows")
         self.assertEqual(unit["severity"], "High")
         self.assertEqual(unit["priority"], 10)
+
+    def test_legacy_project_variant_column_fails_even_without_actionable_status(self):
+        matrix = textwrap.dedent(
+            """
+            | Feature | SDK Family | Key APIs | Android full | Android Compose | iOS UIKit | macOS | Windows | Notes |
+            | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+            | Feature A | Full RTC | `apiA` | `DONE(path)` | `DONE(path)` | `DONE(path)` | `DONE(path)` | `DONE(path)` | Covered. |
+            """
+        )
+
+        result = self.run_generator(matrix)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("platform columns must be exactly", result.stderr)
+        self.assertIn("Android Compose", result.stderr)
 
 
 if __name__ == "__main__":

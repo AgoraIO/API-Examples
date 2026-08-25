@@ -18,7 +18,12 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
 import orchestrate_case_execution as orchestrator
-from orchestrate_case_execution import collect_repository_fingerprints, run_codex_role
+from orchestrate_case_execution import (
+    bind_verification_command_evidence,
+    collect_repository_fingerprints,
+    run_codex_role,
+    validate_verification_host,
+)
 
 
 class RequirementOrchestratorTest(unittest.TestCase):
@@ -76,7 +81,7 @@ class RequirementOrchestratorTest(unittest.TestCase):
     def write_fake_codex(
         self, directory, implementation_sleep=0, fail_implementation_platform=None
     ):
-        path = Path(directory) / "fake-codex"
+        path = Path(directory) / "fake-codex.py"
         path.write_text(
             textwrap.dedent(
                 f"""\
@@ -144,19 +149,23 @@ class RequirementOrchestratorTest(unittest.TestCase):
                             "matrix_updates": [],
                         }}
                     else:
-                        if platform == "windows" and sys.platform != "win32":
+                        host_mismatch = (
+                            (platform == "windows" and sys.platform != "win32")
+                            or (platform in {{"ios", "macos"}} and sys.platform != "darwin")
+                        )
+                        if host_mismatch:
                             status = "BLOCKED"
                             output = {{
                                 "result": "BLOCKED",
-                                "findings": ["Windows build requires a Windows host."],
+                                "findings": [f"{{platform}} build requires its native host."],
                                 "parity_result": "PASS",
                                 "entry_point": "Basic > Join channel audio",
                                 "ux_notes": "Static review only on this host.",
                                 "commands": [],
                                 "build_result": "BLOCKED",
                                 "skipped_checks": [{{
-                                    "name": "Windows MSBuild",
-                                    "reason": "Current host is not Windows.",
+                                    "name": f"{{platform}} native build",
+                                    "reason": "Current host cannot provide native build evidence.",
                                 }}],
                             }}
                         else:
@@ -192,6 +201,7 @@ class RequirementOrchestratorTest(unittest.TestCase):
                             "command": build_commands[platform],
                             "status": "completed",
                             "exit_code": 0,
+                            "cwd": str(Path.cwd()),
                         }},
                     }}), flush=True)
                 """
@@ -237,6 +247,14 @@ class RequirementOrchestratorTest(unittest.TestCase):
                 "docs/ai-engineering/repository-profile.json",
             )
             self.assertEqual(len(package["repository_profile_sha256"]), 64)
+            self.assertEqual(
+                manifest["release"]["repository_profile"],
+                package["repository_profile"],
+            )
+            self.assertEqual(
+                manifest["release"]["repository_profile_sha256"],
+                package["repository_profile_sha256"],
+            )
 
     def test_execution_configuration_rejects_repository_profile_drift(self):
         routing_path = REPO_ROOT / "docs/ai-engineering/role-routing.json"
@@ -295,6 +313,26 @@ class RequirementOrchestratorTest(unittest.TestCase):
             self.assertEqual(package["requirement"]["key_apis"], ["enableSpatialAudio"])
             contract_prompt = (run_dir / "role-prompts/contract.md").read_text()
             self.assertNotIn("If Contract marks this platform required=false", contract_prompt)
+
+    def test_contract_prompt_includes_platform_units_and_prepared_reference(self):
+        matrix_path = self.write_matrix()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = Path(tmpdir) / "run"
+            self.init_workspace(matrix_path, run_dir)
+
+            package = json.loads((run_dir / "execution-package.json").read_text())
+            contract_prompt = (run_dir / "role-prompts/contract.md").read_text()
+
+            self.assertIn("Selected platform units:", contract_prompt)
+            self.assertIn(
+                json.dumps(package["platform_units"], indent=2, ensure_ascii=False),
+                contract_prompt,
+            )
+            self.assertIn("Prepared reference contract:", contract_prompt)
+            self.assertIn(
+                json.dumps(package["reference_contract"], indent=2, ensure_ascii=False),
+                contract_prompt,
+            )
 
     def test_init_persists_and_prompts_staggered_platform_sdk_versions(self):
         matrix_path = self.write_matrix()
@@ -765,6 +803,132 @@ class RequirementOrchestratorTest(unittest.TestCase):
                         timeout_seconds=5,
                     )
 
+    def test_non_darwin_host_rejects_apple_build_pass(self):
+        result = {
+            "status": "PASS",
+            "output": {
+                "result": "PASS",
+                "commands": [
+                    {
+                        "kind": "build",
+                        "command": "xcodebuild -scheme APIExample build",
+                        "result": "PASS",
+                    }
+                ],
+                "build_result": "PASS",
+            },
+        }
+
+        for platform in ["ios", "macos"]:
+            with self.subTest(platform=platform):
+                with self.assertRaisesRegex(ValueError, "requires a Darwin host"):
+                    validate_verification_host(platform, result, "linux")
+
+    def test_command_evidence_requires_dispatched_working_directory(self):
+        output = {
+            "commands": [
+                {
+                    "kind": "build",
+                    "command": "xcodebuild -scheme APIExample build",
+                    "result": "PASS",
+                }
+            ]
+        }
+        wrong_cwd_event = json.dumps(
+            {
+                "type": "item.completed",
+                "item": {
+                    "id": "build",
+                    "type": "command_execution",
+                    "command": "xcodebuild -scheme APIExample build",
+                    "exit_code": 0,
+                    "cwd": str(REPO_ROOT / "iOS/APIExample-Audio"),
+                },
+            }
+        )
+
+        with self.assertRaisesRegex(ValueError, "cwd does not match"):
+            bind_verification_command_evidence(
+                output,
+                wrong_cwd_event,
+                "dispatch-logs/ios-verification.jsonl",
+                "ios",
+                "iOS/APIExample/",
+            )
+
+    def test_command_evidence_uses_dispatch_cwd_when_event_omits_it(self):
+        output = {
+            "commands": [
+                {
+                    "kind": "build",
+                    "command": "xcodebuild -scheme APIExample build",
+                    "result": "PASS",
+                }
+            ]
+        }
+        missing_cwd_event = json.dumps(
+            {
+                "type": "item.completed",
+                "item": {
+                    "id": "build",
+                    "type": "command_execution",
+                    "command": "/bin/zsh -lc 'xcodebuild -scheme APIExample build'",
+                    "exit_code": 0,
+                },
+            }
+        )
+
+        bind_verification_command_evidence(
+            output,
+            missing_cwd_event,
+            "dispatch-logs/ios-verification.jsonl",
+            "ios",
+            "iOS/APIExample/",
+        )
+
+        self.assertEqual(
+            output["commands"][0]["evidence"],
+            "dispatch-logs/ios-verification.jsonl#build; exit_code=0; "
+            "cwd=iOS/APIExample/; cwd_source=dispatch",
+        )
+
+    def test_command_evidence_preserves_verified_cwd_binding(self):
+        output = {
+            "commands": [
+                {
+                    "kind": "build",
+                    "command": "xcodebuild -scheme APIExample build",
+                    "result": "PASS",
+                }
+            ]
+        }
+        event = json.dumps(
+            {
+                "type": "item.completed",
+                "item": {
+                    "id": "build",
+                    "type": "command_execution",
+                    "command": "xcodebuild -scheme APIExample build",
+                    "exit_code": 0,
+                    "cwd": str(REPO_ROOT / "iOS/APIExample"),
+                },
+            }
+        )
+
+        bind_verification_command_evidence(
+            output,
+            event,
+            "dispatch-logs/ios-verification.jsonl",
+            "ios",
+            "iOS/APIExample/",
+        )
+
+        self.assertEqual(
+            output["commands"][0]["evidence"],
+            "dispatch-logs/ios-verification.jsonl#build; exit_code=0; "
+            "cwd=iOS/APIExample/; cwd_source=command_event",
+        )
+
     def test_verification_semantic_failure_becomes_retryable(self):
         matrix_path = self.write_matrix()
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -813,7 +977,7 @@ class RequirementOrchestratorTest(unittest.TestCase):
             self.assertIn("-C", command)
             self.assertIn(str(REPO_ROOT / "windows"), command)
 
-    def test_platform_prompt_uses_target_selected_by_completed_contract(self):
+    def test_platform_dispatch_rejects_non_main_project_selected_by_contract(self):
         matrix_path = self.write_matrix()
         with tempfile.TemporaryDirectory() as tmpdir:
             run_dir = Path(tmpdir) / "run"
@@ -839,10 +1003,11 @@ class RequirementOrchestratorTest(unittest.TestCase):
                 "--dry-run",
             )
 
-            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-            prompt = (run_dir / "role-prompts/ios-implementation.md").read_text()
-            self.assertIn("Target: iOS/APIExample-OC/", prompt)
-            self.assertIn("If Contract marks this platform required=false", prompt)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(
+                "contract.output.platform_targets.ios.target_project must be exactly iOS/APIExample/",
+                result.stderr,
+            )
 
     def test_verification_uses_corresponding_platform_implementation(self):
         matrix_path = self.write_matrix()
@@ -1017,6 +1182,22 @@ class RequirementOrchestratorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             run_dir = Path(tmpdir) / "run"
             self.init_workspace(matrix_path, run_dir)
+            manifest_path = run_dir / "acceptance-manifest.json"
+            manifest = json.loads(manifest_path.read_text())
+            ios = next(
+                check
+                for check in manifest["release"]["checks"]
+                if check["name"] == "sdk-version-ios"
+            )
+            ios.update(
+                {
+                    "result": "PASS",
+                    "actual_versions": {"iOS/APIExample/sdk.podspec": self.TARGET_SDK_VERSION},
+                    "evidence": "Untrusted pre-assembly value.",
+                    "reason": "",
+                }
+            )
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
             codex_bin = self.write_fake_codex(tmpdir)
             self.dispatch_contract(run_dir, codex_bin)
             for phase in ["implementation", "verification"]:
@@ -1049,6 +1230,7 @@ class RequirementOrchestratorTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("sdk-version-android", result.stderr)
+            self.assertIn("non-BLOCKED acceptance requires sdk-version-ios=PASS", result.stderr)
             self.assertNotIn("qa_acceptance", result.stderr)
 
     def test_assemble_rejects_matrix_path_changed_since_init(self):

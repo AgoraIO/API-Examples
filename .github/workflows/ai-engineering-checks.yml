@@ -1,8 +1,8 @@
 name: AI Engineering Checks
 
 # Guards the AI engineering assets (AGENTS.md routing, SKILL.md bundles) and the
-# orchestration tooling under docs/ai-engineering/tools/. These checks are file-only:
-# they never build a platform sample, so they stay fast enough to run on every PR.
+# orchestration tooling under docs/ai-engineering/tools/. These checks are file-only
+# and run on every host family used by verification; platform builds remain in Azure.
 
 on:
   push:
@@ -36,9 +36,16 @@ concurrency:
 
 jobs:
   checks:
-    name: Lint assets and run tooling tests
-    runs-on: ubuntu-latest
+    name: Tooling checks (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -52,13 +59,13 @@ jobs:
           python-version: '3.11'
 
       - name: Lint AI engineering assets
-        run: python3 docs/ai-engineering/tools/lint_agent_assets.py
+        run: python docs/ai-engineering/tools/lint_agent_assets.py
 
       - name: Run AI engineering tooling tests
-        run: |
-          python3 -m unittest \
-            docs/ai-engineering/tools/lint_agent_assets_test.py \
-            docs/ai-engineering/tools/validate_acceptance_manifest_test.py \
-            docs/ai-engineering/tools/generate_case_backlog_test.py \
-            docs/ai-engineering/tools/prepare_case_execution_test.py \
-            docs/ai-engineering/tools/orchestrate_case_execution_test.py
+        run: >
+          python -m unittest
+          docs/ai-engineering/tools/lint_agent_assets_test.py
+          docs/ai-engineering/tools/validate_acceptance_manifest_test.py
+          docs/ai-engineering/tools/generate_case_backlog_test.py
+          docs/ai-engineering/tools/prepare_case_execution_test.py
+          docs/ai-engineering/tools/orchestrate_case_execution_test.py

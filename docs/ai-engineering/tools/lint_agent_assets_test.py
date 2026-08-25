@@ -65,6 +65,7 @@ class LintAgentAssetsTest(unittest.TestCase):
 
             self.assertEqual(findings, [], self.messages(findings))
             self.assertIn("Android/APIExample/.agents/skills/upsert-case/SKILL.md", payload["checked_files"])
+            self.assertIn("Android/APIExample/ARCHITECTURE.md", payload["checked_files"])
             self.assertEqual(payload["findings"], [])
 
     def test_flags_legacy_agent_skills_directory(self):
@@ -197,6 +198,26 @@ class LintAgentAssetsTest(unittest.TestCase):
 
             self.assertEqual(self.rules(findings), ["asset-reference"])
             self.assertIn(".agents/skills/review-case/", self.messages(findings))
+
+    def test_flags_architecture_md_pointing_at_missing_skill_directory(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            self.write_clean_tree(tmpdir)
+            self.write(
+                tmpdir,
+                "Android/APIExample/ARCHITECTURE.md",
+                """
+                ```text
+                APIExample/
+                .agents/skills/query-cases/  # Missing inventory skill
+                ```
+                """,
+            )
+
+            payload, findings = lint(tmpdir)
+
+            self.assertIn("Android/APIExample/ARCHITECTURE.md", payload["checked_files"])
+            self.assertEqual(self.rules(findings), ["asset-reference"])
+            self.assertIn(".agents/skills/query-cases/", self.messages(findings))
 
     def test_flags_skill_pointing_at_missing_bundled_reference(self):
         with tempfile.TemporaryDirectory() as tmpdir:

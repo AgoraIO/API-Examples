@@ -17,7 +17,7 @@ Identify before editing:
 - Verification budget and available platform hosts.
 - Target RTC SDK version for each platform. Platforms may remain on different release lines.
 
-Android, iOS, macOS, and Windows are required by default. Contract may choose the appropriate full/audio/Compose/UIKit/Objective-C project for each platform; marking a platform not required needs an explicit waiver reason.
+Android, iOS, macOS, and Windows are required by default. Their targets are fixed to `Android/APIExample/`, `iOS/APIExample/`, `macOS/`, and `windows/`. Audio, Compose, SwiftUI, and Objective-C variants are outside this workflow; marking a primary platform not required needs an explicit waiver reason.
 
 ## Source Route
 
@@ -60,7 +60,7 @@ python3 docs/ai-engineering/tools/orchestrate_case_execution.py init \
 
 `--target-sdk-version` supplies the baseline for all four platforms. Repeat `--platform-sdk-version platform=x.y.z` only for platforms whose target differs. The execution package and manifest store the resolved four-platform mapping, so staggered platform releases never require script or repository-profile changes.
 
-The default `docs/ai-engineering/repository-profile.json` supplies repository-specific SDK package names and version sources. Use `--repository-profile` only for a checked-in alternative profile. The execution package records its repository-relative path and SHA-256.
+The default `docs/ai-engineering/repository-profile.json` supplies repository-specific SDK package names and version sources. Use `--repository-profile` only for a checked-in alternative profile. The execution package, input snapshots, and acceptance manifest record its repository-relative path and SHA-256; the standalone validator recomputes release checks from that binding.
 
 For a new requirement not yet actionable in the matrix, also pass `--sdk-family "<family>"` and repeat `--key-api "<API>"` as needed.
 
@@ -102,7 +102,7 @@ python3 docs/ai-engineering/tools/orchestrate_case_execution.py assemble \
 
 ## Platform Rules
 
-- Contract selects the target project and allowed files for each platform.
+- Contract preserves the fixed primary target project and defines allowed files for each platform.
 - The dispatcher runs platform roles from that target project. In a shared checkout it refreshes the package/dependency snapshot, completes and reconciles one Implementation before starting the next, derives that role's cumulative net repository delta, and rejects changes outside Contract paths.
 - Each Implementation agent follows only its platform/project instructions.
 - Platform source files, dependencies, and build scripts are never shared across roots.
@@ -117,7 +117,7 @@ On macOS, Windows Verification may perform repository-local static review only. 
 
 ## Matrix And Release
 
-Each platform Implementation may propose zero or more matrix updates. `DONE` requires final `PASS`, platform parity/build `PASS`, and no skipped checks. Release data is limited to repository SDK-version consistency. Jenkins packaging, QA validation, artifact distribution, and external website publication are outside this workflow and must not be recorded as manifest gates.
+Each platform Implementation may propose zero or more matrix updates. `DONE` requires final `PASS`, platform parity/build `PASS`, and no skipped checks. Release data is limited to repository SDK-version consistency. An externally injected SDK without a trustworthy tracked version source keeps its platform SDK check and final acceptance `BLOCKED`; build success is not version evidence. Jenkins packaging, QA validation, artifact distribution, and external website publication are outside this workflow and must not be recorded as manifest gates.
 
 ## Final Output
 

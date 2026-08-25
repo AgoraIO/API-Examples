@@ -21,8 +21,10 @@ from prepare_case_execution import (
     prepare_case_execution,
 )
 from validate_acceptance_manifest import (
+    MAIN_PLATFORM_TARGETS,
     PLATFORM_ROOTS,
     is_platform_build_command,
+    normalize_command,
     path_is_within,
     validate_contract,
     validate_evidence_files,
@@ -258,6 +260,17 @@ def write_prompt(run_dir, name, role, platform, package, routing, dependencies):
             "waiver_reason field, use SKIPPED for Verification result/parity_result/build_result, "
             "and report no executed build command."
         )
+    contract_context = ""
+    if role == "contract":
+        contract_context = f"""Selected platform units:
+{json.dumps(package['platform_units'], indent=2, ensure_ascii=False)}
+
+Prepared reference contract:
+{json.dumps(package['reference_contract'], indent=2, ensure_ascii=False)}
+
+Use this routing and reference context when producing platform_targets and reference. Every
+target_project must remain the main APIExample project declared for that platform.
+"""
     body = f"""# {name} Agent Task
 
 Requirement: {requirement['feature']}
@@ -272,6 +285,8 @@ Model profile: {routing['roles'][role]['profile']}
 
 Required output:
 {json.dumps(package['role_contracts'][role], indent=2, ensure_ascii=False)}
+
+{contract_context}
 
 Dependency artifacts:
 {format_dependency_context(dependencies)}
@@ -300,6 +315,12 @@ def host_constraint(platform):
             "Do not download Windows SDK archives, emulate Windows, cross-compile, or use a "
             "substitute compiler as platform evidence. Run repository-local static checks only "
             "and report unavailable Windows build/runtime evidence as BLOCKED."
+        )
+    if platform in {"ios", "macos"} and sys.platform != "darwin":
+        return (
+            f"This host is {sys.platform}. {sys.platform} cannot provide {platform} Xcode build "
+            "evidence. Run repository-local static checks only and report unavailable native "
+            "build/runtime evidence as BLOCKED. A build_result=PASS requires host_platform=darwin."
         )
     return ""
 
@@ -532,10 +553,10 @@ def resolve_working_directory(package, spec, dependencies):
     if not spec["platform"]:
         return REPO_ROOT
     target = resolved_platform_target(package, spec["platform"], dependencies)
-    platform_root = PLATFORM_ROOTS[spec["platform"]]
-    if not path_is_within(target, platform_root):
+    expected_target = MAIN_PLATFORM_TARGETS[spec["platform"]]
+    if target != expected_target:
         raise ValueError(
-            f"{spec['platform']} target must be inside {platform_root}: {target}"
+            f"{spec['platform']} target must be exactly {expected_target}: {target}"
         )
     path = (REPO_ROOT / target).resolve()
     try:
@@ -750,7 +771,7 @@ def resolve_model(profile, override):
 def read_codex_version(codex_bin):
     try:
         result = subprocess.run(
-            [codex_bin, "--version"],
+            [*codex_command_prefix(codex_bin), "--version"],
             cwd=REPO_ROOT,
             text=True,
             stdout=subprocess.PIPE,
@@ -764,6 +785,13 @@ def read_codex_version(codex_bin):
     if not result.stdout.strip():
         raise ValueError("Codex version output is empty")
     return result.stdout.strip()
+
+
+def codex_command_prefix(codex_bin):
+    path = str(codex_bin)
+    if Path(path).suffix.lower() == ".py":
+        return [sys.executable, path]
+    return [path]
 
 
 def write_input_snapshot(run_dir, phase, name, dependencies, resolved_routing):
@@ -1001,7 +1029,7 @@ def build_codex_command(
 ):
     raw_result_path.parent.mkdir(parents=True, exist_ok=True)
     command = [
-        codex_bin,
+        *codex_command_prefix(codex_bin),
         "exec",
         "-C",
         str(working_directory),
@@ -1175,8 +1203,6 @@ def terminate_process_tree(process):
 
 
 def validate_verification_host(platform, agent_result, host_platform):
-    if platform != "windows" or host_platform == "win32":
-        return
     output = agent_result.get("output", {})
     has_build_execution = any(
         isinstance(command, dict)
@@ -1184,11 +1210,21 @@ def validate_verification_host(platform, agent_result, host_platform):
         and command.get("result") in {"PASS", "FAIL"}
         for command in output.get("commands", [])
     )
-    if agent_result.get("status") == "WAIVED":
+    has_pass_build = any(
+        isinstance(command, dict)
+        and command.get("kind") == "build"
+        and command.get("result") == "PASS"
+        for command in output.get("commands", [])
+    )
+    if (
+        platform == "windows"
+        and host_platform != "win32"
+        and agent_result.get("status") == "WAIVED"
+    ):
         if output.get("build_result") == "PASS" or has_build_execution:
             raise ValueError("WAIVED Windows Verification cannot report build execution")
         return
-    if (
+    if platform == "windows" and host_platform != "win32" and (
         agent_result.get("status") != "BLOCKED"
         or output.get("result") != "BLOCKED"
         or output.get("build_result") != "BLOCKED"
@@ -1196,6 +1232,15 @@ def validate_verification_host(platform, agent_result, host_platform):
     ):
         raise ValueError(
             "Windows Verification build evidence requires a Windows host; "
+            f"current host_platform={host_platform}"
+        )
+    if (
+        platform in {"ios", "macos"}
+        and host_platform != "darwin"
+        and (output.get("build_result") == "PASS" or has_pass_build)
+    ):
+        raise ValueError(
+            f"{platform} Verification build PASS requires a Darwin host; "
             f"current host_platform={host_platform}"
         )
 
@@ -1218,27 +1263,55 @@ def bind_verification_command_evidence(
                 f"{declared.get('command')}"
             )
         declared_text = normalize_command(declared.get("command"))
+        candidates = [
+            event_index
+            for event_index, event in enumerate(events)
+            if event_index not in used and normalize_command(event["command"]) == declared_text
+        ]
+        if not candidates:
+            raise ValueError(
+                f"Verification command {index} has no matching command_execution event: {declared.get('command')}"
+            )
         match_index = next(
             (
                 event_index
-                for event_index, event in enumerate(events)
-                if event_index not in used and normalize_command(event["command"]) == declared_text
+                for event_index in candidates
+                if events[event_index].get("cwd")
+                and command_event_cwd_matches(
+                    events[event_index]["cwd"], working_directory_manifest
+                )
             ),
             None,
         )
         if match_index is None:
+            # Codex CLI 0.144.x omits cwd from command_execution events. In that
+            # format the subprocess cwd and `codex exec -C` target are the bound
+            # source; recognized build commands separately reject cwd overrides.
+            match_index = next(
+                (
+                    event_index
+                    for event_index in candidates
+                    if not events[event_index].get("cwd")
+                ),
+                None,
+            )
+        if match_index is None:
+            actual_cwds = [events[event_index].get("cwd") for event_index in candidates]
             raise ValueError(
-                f"Verification command {index} has no matching command_execution event: {declared.get('command')}"
+                f"Verification command {index} cwd does not match dispatched working directory "
+                f"{working_directory_manifest}: {actual_cwds}"
             )
         used.add(match_index)
         event = events[match_index]
+        cwd_source = "command_event" if event.get("cwd") else "dispatch"
         actual_result = "PASS" if event["exit_code"] == 0 else "FAIL"
         if result != actual_result:
             raise ValueError(
                 f"Verification command {declared.get('command')} declared {result} but exit_code={event['exit_code']}"
             )
         declared["evidence"] = (
-            f"{log_path}#{event['id']}; exit_code={event['exit_code']}"
+            f"{log_path}#{event['id']}; exit_code={event['exit_code']}; "
+            f"cwd={working_directory_manifest}; cwd_source={cwd_source}"
         )
 
 
@@ -1259,15 +1332,20 @@ def extract_command_events(jsonl):
                 "id": str(item.get("id") or f"command-{len(events)}"),
                 "command": item.get("command"),
                 "exit_code": item["exit_code"],
+                "cwd": item.get("cwd") or item.get("working_directory"),
             }
         )
     return events
 
 
-def normalize_command(command):
-    if isinstance(command, list):
-        command = " ".join(str(part) for part in command)
-    return " ".join(str(command or "").split())
+def command_event_cwd_matches(event_cwd, working_directory_manifest):
+    if not isinstance(event_cwd, str) or not event_cwd.strip():
+        return False
+    expected = (REPO_ROOT / working_directory_manifest).resolve()
+    actual = Path(event_cwd)
+    if not actual.is_absolute():
+        actual = REPO_ROOT / actual
+    return actual.resolve() == expected
 
 
 def extract_run_id(jsonl):
@@ -1315,6 +1393,10 @@ def assemble_workspace(args):
         "evidence": args.cross_platform_evidence,
         "differences": args.cross_platform_difference,
     }
+    manifest["release"]["repository_profile"] = package["repository_profile"]
+    manifest["release"]["repository_profile_sha256"] = package[
+        "repository_profile_sha256"
+    ]
     manifest["release"]["checks"] = collect_sdk_version_checks(
         manifest["requirement"]["target_sdk_versions"], profile_path=profile_path
     )

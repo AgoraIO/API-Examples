@@ -15,7 +15,7 @@ Contract runs once. In a shared checkout, Android/iOS/macOS/Windows Implementati
 
 ## Intake Gate
 
-Before Contract starts, identify feature behavior, SDK family, key APIs, target SDK version for each platform, reference case, expected user flow, repository scope, and available target verification hosts. Platform targets may differ when SDK release lines are staggered. Confirm that the checked-in repository profile describes the current SDK package names and version sources. All four top-level platforms are required by default. Contract may choose the appropriate project variant per platform.
+Before Contract starts, identify feature behavior, SDK family, key APIs, target SDK version for each platform, reference case, expected user flow, repository scope, and available target verification hosts. SDK targets may differ when release lines are staggered. Confirm that the checked-in repository profile describes the current SDK package names and version sources. All four primary projects are required by default: `Android/APIExample/`, `iOS/APIExample/`, `macOS/`, and `windows/`. Contract may waive a platform with an explicit reason, but may not substitute an audio, Compose, SwiftUI, or Objective-C variant for a primary project.
 
 ## Contract Gate
 
@@ -25,6 +25,7 @@ Contract passes only when:
 - A reference source and result are recorded when parity is required.
 - Cross-platform invariant behavior is explicit.
 - Android, iOS, macOS, and Windows each have `required`, `target_project`, constraints, and allowed files.
+- Every required `target_project` matches the fixed primary-project mapping from the Intake Gate.
 - Lifecycle, callback threading, registration, SDK family, and credential boundaries are explicit.
 
 Nearby cases guide framework patterns; product behavior comes from the shared Contract/reference.
@@ -49,7 +50,7 @@ Each Verification independently checks:
 - Contract/reference parity, SDK types/defaults, lifecycle, threading, errors, and cleanup.
 - Registration, display name, inputs, feedback, layout, and audio/video affordances.
 - The strongest valid build or static command on the current verification host.
-- Each executed PASS/FAIL command is bound to the hashed Codex JSONL command event and exit code; build results use recognized platform build actions from the Contract working directory.
+- Each executed PASS/FAIL command is bound to the hashed Codex JSONL command event and exit code; build results use recognized platform build actions from the Contract working directory. When the Codex event includes `cwd`, it must match; current CLI versions that omit it record `cwd_source=dispatch`, backed by both the process cwd and `codex exec -C` target.
 - Dispatch provenance records the host platform. Windows build `PASS` requires a Windows host.
 - The Verification run does not modify tracked or untracked repository content.
 - Concrete reasons for every skipped check.
@@ -72,9 +73,11 @@ Any required platform blocker or cross-platform result other than `PASS` forces 
 
 ## Release Checklist
 
-Release is mandatory manifest data, not an agent. `requirement.target_sdk_versions` and `release.target_sdk_versions` must contain the same Android, iOS, macOS, and Windows mapping. The orchestrator compares each platform only with its own target while refreshing dependency versions from live repository files during assembly. Non-`BLOCKED` acceptance requires all SDK-version checks to pass and permits no skipped repository release checks. A platform remaining on an older SDK is valid and does not require changing the script or repository profile.
+Release is mandatory manifest data, not an agent. `requirement.target_sdk_versions` and `release.target_sdk_versions` must contain the same Android, iOS, macOS, and Windows mapping. The manifest binds `release.repository_profile` by repository-relative path and SHA-256; assembly and the standalone validator recompute SDK checks from that live profile. The orchestrator compares each platform only with its own target while refreshing dependency versions from live repository files during assembly. Non-`BLOCKED` acceptance requires all SDK-version checks to pass and permits no skipped repository release checks. A platform remaining on an older SDK is valid and does not require changing the script or repository profile.
 
 Jenkins packaging, QA validation, artifact URLs, and external website publication are downstream processes outside this repository workflow. A final `PASS` means the API Example source and repository checks are ready for that external handoff; the manifest does not represent packaging or QA completion.
+
+When a primary project receives an SDK outside tracked repository files, declare that boundary as `external-injection` in the repository profile. Its SDK-version check remains `BLOCKED` until a trustworthy project-owned version source is available. A successful project build proves compatibility with the injected binaries, not their exact SDK version; do not change packaging scripts, pod metadata, or comments solely to force the repository gate to pass.
 
 ## Manifest V4
 

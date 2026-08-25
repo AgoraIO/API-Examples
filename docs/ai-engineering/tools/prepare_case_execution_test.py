@@ -14,6 +14,7 @@ from prepare_case_execution import (
     collect_sdk_version_checks,
     load_repository_profile,
     prepare_case_execution,
+    primary_project_version_sources,
     resolve_target_sdk_versions,
 )
 from validate_acceptance_manifest import validate_manifest
@@ -71,6 +72,11 @@ class PrepareCaseExecutionTest(unittest.TestCase):
         )
         self.assertTrue(manifest["release"]["required"])
         self.assertEqual(
+            manifest["release"]["repository_profile"],
+            "docs/ai-engineering/repository-profile.json",
+        )
+        self.assertRegex(manifest["release"]["repository_profile_sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(
             manifest["release"]["target_sdk_versions"],
             self.target_sdk_versions(),
         )
@@ -97,6 +103,18 @@ class PrepareCaseExecutionTest(unittest.TestCase):
         self.assertEqual(targets["macos"]["target_project"], "macOS/")
         self.assertEqual(targets["windows"]["target_project"], "windows/")
         self.assertTrue(all(target["required"] for target in targets.values()))
+        self.assertEqual(
+            {
+                platform: unit["target_project"]
+                for platform, unit in package["platform_units"].items()
+            },
+            {
+                "android": "Android/APIExample/",
+                "ios": "iOS/APIExample/",
+                "macos": "macOS/",
+                "windows": "windows/",
+            },
+        )
 
     def test_selects_highest_priority_feature_when_omitted(self):
         package = prepare_case_execution(
@@ -190,7 +208,7 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                     )
                 )
 
-                archive = root / "windows/install.ps1"
+                archive = root / "windows/APIExample/install.ps1"
                 archive.write_text(
                     f"{distribution}_Native_SDK_for_Windows_v4.6.2_FULL.zip\n",
                     encoding="utf-8",
@@ -206,6 +224,69 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                 self.assertEqual(windows["result"], "BLOCKED")
                 self.assertIn("4.6.2", windows["reason"])
 
+    def test_ignores_non_primary_project_sdk_version_sources(self):
+        sources = {
+            "android": [
+                {
+                    "path": "Android/APIExample/gradle.properties",
+                    "kind": "gradle-property",
+                    "key": "rtc_sdk_version",
+                },
+                {
+                    "path": "Android/APIExample-Compose/gradle.properties",
+                    "kind": "gradle-property",
+                    "key": "rtc_sdk_version",
+                },
+            ],
+            "ios": [
+                {
+                    "path": "iOS/APIExample/Podfile",
+                    "kind": "cocoapods",
+                    "package": "AgoraRtcEngine_iOS",
+                },
+                {
+                    "path": "iOS/APIExample-SwiftUI/Podfile",
+                    "kind": "cocoapods",
+                    "package": "AgoraRtcEngine_iOS",
+                },
+            ],
+            "macos": [
+                {
+                    "path": "macOS/Podfile",
+                    "kind": "cocoapods",
+                    "package": "AgoraRtcEngine_macOS",
+                }
+            ],
+            "windows": [
+                {
+                    "path": "windows/APIExample/install.ps1",
+                    "kind": "archive-name",
+                    "prefix": "Agora_Native_SDK_for_Windows_v",
+                    "suffix": "_FULL.zip",
+                }
+            ],
+        }
+
+        selected = primary_project_version_sources(sources)
+
+        self.assertEqual(len(selected["android"]), 1)
+        self.assertEqual(
+            selected["android"][0]["path"], "Android/APIExample/gradle.properties"
+        )
+        self.assertEqual(len(selected["ios"]), 1)
+        self.assertEqual(selected["ios"][0]["path"], "iOS/APIExample/Podfile")
+
+    def test_requires_primary_project_sdk_version_source(self):
+        sources = {
+            "android": [{"path": "Android/APIExample-Compose/gradle.properties"}],
+            "ios": [{"path": "iOS/APIExample/Podfile"}],
+            "macos": [{"path": "macOS/Podfile"}],
+            "windows": [{"path": "windows/APIExample/install.ps1"}],
+        }
+
+        with self.assertRaisesRegex(ValueError, "no android SDK version source"):
+            primary_project_version_sources(sources)
+
     def test_rejects_commented_out_cocoapods_declaration(self):
         for comment_line in [
             "  # pod 'AgoraRtcEngine_iOS', '4.6.4'",
@@ -215,7 +296,7 @@ class PrepareCaseExecutionTest(unittest.TestCase):
             with self.subTest(comment_line=comment_line), tempfile.TemporaryDirectory() as tmpdir:
                 root = Path(tmpdir)
                 profile_path = self.write_repository_profile(root, "Agora")
-                (root / "iOS/Podfile").write_text(
+                (root / "iOS/APIExample/Podfile").write_text(
                     f"def common_pods\n{comment_line}\n"
                     "   pod 'sdk', :path => 'sdk.podspec'\nend\n",
                     encoding="utf-8",
@@ -229,14 +310,16 @@ class PrepareCaseExecutionTest(unittest.TestCase):
                 ios = next(check for check in checks if check["name"] == "sdk-version-ios")
 
                 self.assertEqual(ios["result"], "BLOCKED")
-                self.assertEqual(ios["actual_versions"]["iOS/Podfile"], "")
-                self.assertIn("no active SDK version declaration in iOS/Podfile", ios["reason"])
+                self.assertEqual(ios["actual_versions"]["iOS/APIExample/Podfile"], "")
+                self.assertIn(
+                    "no active SDK version declaration in iOS/APIExample/Podfile", ios["reason"]
+                )
 
     def test_accepts_cocoapods_declaration_with_trailing_comment(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             profile_path = self.write_repository_profile(root, "Agora")
-            (root / "iOS/Podfile").write_text(
+            (root / "iOS/APIExample/Podfile").write_text(
                 "  pod 'AgoraRtcEngine_iOS', '4.6.4' # pinned for this release\n",
                 encoding="utf-8",
             )
@@ -249,16 +332,49 @@ class PrepareCaseExecutionTest(unittest.TestCase):
             ios = next(check for check in checks if check["name"] == "sdk-version-ios")
 
             self.assertEqual(ios["result"], "PASS")
-            self.assertEqual(ios["actual_versions"]["iOS/Podfile"], "4.6.4")
+            self.assertEqual(ios["actual_versions"]["iOS/APIExample/Podfile"], "4.6.4")
+
+    def test_external_injection_remains_blocked_without_repository_version_evidence(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            profile_path = self.write_repository_profile(root, "Agora")
+            profile = json.loads(profile_path.read_text(encoding="utf-8"))
+            profile["sdk_version_sources"]["ios"] = [
+                {
+                    "path": "iOS/APIExample/Podfile",
+                    "kind": "external-injection",
+                    "reason": "RTC SDK binaries are injected outside the repository.",
+                }
+            ]
+            profile_path.write_text(json.dumps(profile), encoding="utf-8")
+            podspec = root / "iOS/APIExample/sdk.podspec"
+            podspec.parent.mkdir(parents=True, exist_ok=True)
+            podspec.write_text(
+                "spec.version = \"4.6.4\"\n",
+                encoding="utf-8",
+            )
+
+            checks = collect_sdk_version_checks(
+                self.target_sdk_versions(), repo_root=root, profile_path=profile_path
+            )
+            ios = next(check for check in checks if check["name"] == "sdk-version-ios")
+            self.assertEqual(ios["result"], "BLOCKED")
+            self.assertEqual(ios["actual_versions"], {"iOS/APIExample/Podfile": ""})
+            self.assertEqual(ios["evidence"], "")
+            self.assertIn("injected outside the repository", ios["reason"])
 
     def test_collects_staggered_platform_sdk_versions(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             profile_path = self.write_repository_profile(root, "Agora")
-            (root / "Android/gradle.properties").write_text(
+            (root / "Android/APIExample/gradle.properties").write_text(
                 "rtc_sdk_version = 4.6.3\n", encoding="utf-8"
             )
-            for path_text in ["iOS/Podfile", "macOS/Podfile", "windows/install.ps1"]:
+            for path_text in [
+                "iOS/APIExample/Podfile",
+                "macOS/Podfile",
+                "windows/APIExample/install.ps1",
+            ]:
                 path = root / path_text
                 path.write_text(
                     path.read_text(encoding="utf-8").replace("4.6.4", "4.6.2"),
@@ -285,14 +401,14 @@ class PrepareCaseExecutionTest(unittest.TestCase):
         sources = {
             "android": [
                 {
-                    "path": "Android/gradle.properties",
+                    "path": "Android/APIExample/gradle.properties",
                     "kind": "gradle-property",
                     "key": "rtc_sdk_version",
                 }
             ],
             "ios": [
                 {
-                    "path": "iOS/Podfile",
+                    "path": "iOS/APIExample/Podfile",
                     "kind": "cocoapods",
                     "package": f"{distribution}RtcEngine_iOS",
                 }
@@ -306,7 +422,7 @@ class PrepareCaseExecutionTest(unittest.TestCase):
             ],
             "windows": [
                 {
-                    "path": "windows/install.ps1",
+                    "path": "windows/APIExample/install.ps1",
                     "kind": "archive-name",
                     "prefix": f"{distribution}_Native_SDK_for_Windows_v",
                     "suffix": "_FULL.zip",
@@ -314,10 +430,10 @@ class PrepareCaseExecutionTest(unittest.TestCase):
             ],
         }
         contents = {
-            "Android/gradle.properties": "rtc_sdk_version = 4.6.4\n",
-            "iOS/Podfile": f"pod '{distribution}RtcEngine_iOS', '4.6.4'\n",
+            "Android/APIExample/gradle.properties": "rtc_sdk_version = 4.6.4\n",
+            "iOS/APIExample/Podfile": f"pod '{distribution}RtcEngine_iOS', '4.6.4'\n",
             "macOS/Podfile": f"pod '{distribution}RtcEngine_macOS', '4.6.4'\n",
-            "windows/install.ps1": (
+            "windows/APIExample/install.ps1": (
                 f"{distribution}_Native_SDK_for_Windows_v4.6.4_FULL.zip\n"
             ),
         }

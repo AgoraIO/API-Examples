@@ -39,10 +39,9 @@ windows/
 │   ├── APIExample.sln           # Visual Studio solution
 │   ├── cicd/                    # CI/CD scripts
 │   └── .vscode/                 # VS Code configuration
-├── .agents/skills/              # Agent skills
-│   ├── create-api-example/
-│   ├── find-api-example/
-│   └── migrate-api-to-project/
+├── .agents/skills/query-cases/  # Read-only case and registration discovery
+├── .agents/skills/upsert-case/  # Add or modify a case
+├── .agents/skills/review-case/  # Review lifecycle, threading, and conventions
 ├── AGENTS.md                    # Agent guide
 └── ARCHITECTURE.md              # This file
 ```

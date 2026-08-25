@@ -65,5 +65,6 @@ For broader tasks, use the skills in `.agents/skills/`:
 
 | Task | Skill | When to use |
 |------|-------|-------------|
+| Find an existing example | `.agents/skills/query-cases/` | Need to locate a case by feature or API and verify its menu/storyboard registration |
 | Add or modify an example | `.agents/skills/upsert-case/` | Need to create a new API demo or update an existing one |
 | Code review | `.agents/skills/review-case/` | Review example code for lifecycle, thread safety, and convention compliance |

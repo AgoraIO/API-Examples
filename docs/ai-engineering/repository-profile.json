@@ -6,38 +6,13 @@
         "path": "Android/APIExample/gradle.properties",
         "kind": "gradle-property",
         "key": "rtc_sdk_version"
-      },
-      {
-        "path": "Android/APIExample-Audio/gradle.properties",
-        "kind": "gradle-property",
-        "key": "rtc_sdk_version"
-      },
-      {
-        "path": "Android/APIExample-Compose/gradle.properties",
-        "kind": "gradle-property",
-        "key": "rtc_sdk_version"
       }
     ],
     "ios": [
       {
         "path": "iOS/APIExample/Podfile",
-        "kind": "cocoapods",
-        "package": "AgoraRtcEngine_iOS"
-      },
-      {
-        "path": "iOS/APIExample-Audio/Podfile",
-        "kind": "cocoapods",
-        "package": "AgoraAudio_iOS"
-      },
-      {
-        "path": "iOS/APIExample-OC/Podfile",
-        "kind": "cocoapods",
-        "package": "AgoraRtcEngine_iOS"
-      },
-      {
-        "path": "iOS/APIExample-SwiftUI/Podfile",
-        "kind": "cocoapods",
-        "package": "AgoraRtcEngine_iOS"
+        "kind": "external-injection",
+        "reason": "The RTC SDK frameworks are injected outside the repository, so their version cannot be verified from tracked project files."
       }
     ],
     "macos": [

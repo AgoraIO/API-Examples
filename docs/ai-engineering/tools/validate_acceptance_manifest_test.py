@@ -13,11 +13,15 @@ if str(TOOLS_DIR) not in sys.path:
 
 from validate_acceptance_manifest import (
     is_durable_knowledge_path,
+    validate_command_log_evidence,
     validate_evidence_files,
     validate_manifest,
+    validate_repository_release,
 )
+from prepare_case_execution import collect_sdk_version_checks
 
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
 PLATFORMS = ["android", "ios", "macos", "windows"]
 TARGETS = {
     "android": "Android/APIExample/",
@@ -112,7 +116,8 @@ def base_manifest():
                             "command": BUILD_COMMANDS[platform],
                             "result": "PASS",
                             "evidence": (
-                                f"dispatch-logs/{platform}-verification.jsonl#build; exit_code=0"
+                                f"dispatch-logs/{platform}-verification.jsonl#build; "
+                                f"exit_code=0; cwd={target}; cwd_source=command_event"
                             ),
                         }
                     ],
@@ -154,6 +159,10 @@ def base_manifest():
         },
         "release": {
             "required": True,
+            "repository_profile": "docs/ai-engineering/repository-profile.json",
+            "repository_profile_sha256": hashlib.sha256(
+                (REPO_ROOT / "docs/ai-engineering/repository-profile.json").read_bytes()
+            ).hexdigest(),
             "target_sdk_versions": {platform: "4.6.4" for platform in PLATFORMS},
             "checks": [
                 {
@@ -506,6 +515,72 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
         self.assert_error_contains(manifest, "sdk-version-android actual versions must all match 4.6.4")
 
+    def test_blocked_external_sdk_check_is_valid_only_for_blocked_acceptance(self):
+        manifest = base_manifest()
+        manifest["final_status"] = "BLOCKED"
+        ios = next(
+            check
+            for check in manifest["release"]["checks"]
+            if check["name"] == "sdk-version-ios"
+        )
+        ios.update(
+            {
+                "result": "BLOCKED",
+                "actual_versions": {"iOS/APIExample/Podfile": ""},
+                "evidence": "",
+                "reason": "The RTC SDK is injected outside tracked repository files.",
+            }
+        )
+
+        self.assertEqual(validate_manifest(manifest), [])
+
+        for final_status in ["PASS", "PASS WITH RISKS"]:
+            with self.subTest(final_status=final_status):
+                manifest["final_status"] = final_status
+                self.assert_error_contains(
+                    manifest,
+                    "non-BLOCKED acceptance requires sdk-version-ios=PASS",
+                )
+
+    def test_repository_release_rejects_forged_external_sdk_pass(self):
+        manifest = base_manifest()
+        targets = {platform: "4.7.0" for platform in PLATFORMS}
+        manifest["requirement"]["target_sdk_versions"] = targets
+        manifest["release"]["target_sdk_versions"] = targets
+        manifest["release"]["checks"] = collect_sdk_version_checks(targets)
+        ios = next(
+            check
+            for check in manifest["release"]["checks"]
+            if check["name"] == "sdk-version-ios"
+        )
+        self.assertEqual(ios["result"], "BLOCKED")
+        ios.update(
+            {
+                "result": "PASS",
+                "actual_versions": {"iOS/APIExample/Podfile": "4.7.0"},
+                "evidence": "Forged repository evidence.",
+                "reason": "",
+            }
+        )
+
+        errors = validate_repository_release(manifest)
+
+        self.assertIn(
+            "release.checks must match live repository SDK checks from the bound repository profile",
+            errors,
+        )
+
+    def test_repository_release_rejects_profile_hash_drift(self):
+        manifest = base_manifest()
+        manifest["release"]["repository_profile_sha256"] = "0" * 64
+
+        errors = validate_repository_release(manifest)
+
+        self.assertIn(
+            "release.repository_profile_sha256 does not match repository profile",
+            errors,
+        )
+
     def test_rejects_external_ci_and_qa_metadata(self):
         manifest = base_manifest()
         manifest["release"]["qa_acceptance"] = {}
@@ -617,6 +692,54 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
             "platforms.windows.verification.output.build_result=PASS requires host_platform=win32",
         )
 
+    def test_apple_build_pass_requires_darwin_host_provenance(self):
+        for platform in ["ios", "macos"]:
+            with self.subTest(platform=platform):
+                manifest = base_manifest()
+                manifest["platforms"][platform]["verification"]["dispatch"][
+                    "host_platform"
+                ] = "linux"
+
+                self.assert_error_contains(
+                    manifest,
+                    f"platforms.{platform}.verification.output.build_result=PASS requires host_platform=darwin",
+                )
+
+    def test_rejects_non_main_project_target_inside_platform_root(self):
+        manifest = base_manifest()
+        target = manifest["contract"]["output"]["platform_targets"]["ios"]
+        target["target_project"] = "iOS/APIExample-OC/"
+        target["files_allowed"] = ["iOS/APIExample-OC/"]
+
+        self.assert_error_contains(
+            manifest,
+            "contract.output.platform_targets.ios.target_project must be exactly iOS/APIExample/",
+        )
+
+    def test_rejects_files_allowed_in_sibling_project(self):
+        manifest = base_manifest()
+        target = manifest["contract"]["output"]["platform_targets"]["ios"]
+        target["files_allowed"] = ["iOS/APIExample-OC/"]
+
+        self.assert_error_contains(
+            manifest,
+            "contract.output.platform_targets.ios.files_allowed must stay inside iOS/APIExample/",
+        )
+
+    def test_command_evidence_cwd_must_match_dispatch_working_directory(self):
+        manifest = base_manifest()
+        command = manifest["platforms"]["ios"]["verification"]["output"]["commands"][0]
+        command["evidence"] = (
+            "dispatch-logs/ios-verification.jsonl#build; exit_code=0; "
+            "cwd=iOS/APIExample-Audio/; cwd_source=command_event"
+        )
+
+        self.assert_error_contains(
+            manifest,
+            "platforms.ios.verification.output.commands[0].evidence cwd must match "
+            "dispatch.working_directory iOS/APIExample/",
+        )
+
     def test_rejects_platform_target_outside_its_platform_root(self):
         manifest = base_manifest()
         target = manifest["contract"]["output"]["platform_targets"]["android"]
@@ -625,7 +748,7 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
         self.assert_error_contains(
             manifest,
-            "contract.output.platform_targets.android.target_project must be inside Android/",
+            "contract.output.platform_targets.android.target_project must be exactly Android/APIExample/",
         )
 
     def test_rejects_platform_target_that_escapes_root_with_parent_segments(self):
@@ -636,7 +759,7 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
         self.assert_error_contains(
             manifest,
-            "contract.output.platform_targets.android.target_project must be inside Android/",
+            "contract.output.platform_targets.android.target_project must be exactly Android/APIExample/",
         )
 
     def test_rejects_dispatch_path_outside_workspace(self):
@@ -712,6 +835,23 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
                         content = json.dumps(
                             {"changed_files": item["output"]["files_changed"]}
                         ).encode()
+                    elif path_field == "command_log" and "commands" in item.get("output", {}):
+                        command = item["output"]["commands"][0]
+                        content = (
+                            json.dumps(
+                                {
+                                    "type": "item.completed",
+                                    "item": {
+                                        "id": "build",
+                                        "type": "command_execution",
+                                        "command": command["command"],
+                                        "exit_code": 0,
+                                        "cwd": item["dispatch"]["working_directory"],
+                                    },
+                                }
+                            )
+                            + "\n"
+                        ).encode()
                     else:
                         content = f"{index}:{path_field}\n".encode()
                     path.write_bytes(content)
@@ -723,6 +863,75 @@ class AcceptanceManifestValidatorTest(unittest.TestCase):
 
             errors = validate_evidence_files(manifest, root)
             self.assertTrue(any("contract.dispatch.prompt_sha256 does not match" in error for error in errors))
+
+    def test_evidence_validation_rejects_command_event_from_wrong_cwd(self):
+        manifest = base_manifest()
+        verification = manifest["platforms"]["ios"]["verification"]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log_path = root / verification["dispatch"]["command_log"]
+            log_path.parent.mkdir(parents=True)
+            command = verification["output"]["commands"][0]
+            content = (
+                json.dumps(
+                    {
+                        "type": "item.completed",
+                        "item": {
+                            "id": "build",
+                            "type": "command_execution",
+                            "command": f"/bin/zsh -lc '{command['command']}'",
+                            "exit_code": 0,
+                            "cwd": "iOS/APIExample-Audio/",
+                        },
+                    }
+                )
+                + "\n"
+            )
+            log_path.write_text(content, encoding="utf-8")
+            verification["dispatch"]["command_log_sha256"] = hashlib.sha256(
+                content.encode()
+            ).hexdigest()
+
+            errors = validate_evidence_files(manifest, root)
+
+            self.assertTrue(
+                any("command_execution cwd must match" in error for error in errors),
+                errors,
+            )
+
+    def test_evidence_validation_accepts_dispatch_cwd_when_event_omits_it(self):
+        manifest = base_manifest()
+        verification = manifest["platforms"]["ios"]["verification"]
+        command = verification["output"]["commands"][0]
+        command["evidence"] = (
+            "dispatch-logs/ios-verification.jsonl#build; exit_code=0; "
+            "cwd=iOS/APIExample/; cwd_source=dispatch"
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            log_path = root / verification["dispatch"]["command_log"]
+            log_path.parent.mkdir(parents=True)
+            content = (
+                json.dumps(
+                    {
+                        "type": "item.completed",
+                        "item": {
+                            "id": "build",
+                            "type": "command_execution",
+                            "command": f"/bin/zsh -lc '{command['command']}'",
+                            "exit_code": 0,
+                        },
+                    }
+                )
+                + "\n"
+            )
+            log_path.write_text(content, encoding="utf-8")
+            errors = []
+            validate_command_log_evidence(
+                "platforms.ios.verification", verification, log_path, errors
+            )
+
+            self.assertEqual(errors, [])
 
     def test_evidence_validation_rejects_delta_content_mismatch(self):
         manifest = base_manifest()

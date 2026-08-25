@@ -32,43 +32,35 @@ The repository has four independent platform families:
 
 Never share source files, build scripts, SDK dependencies, or generated project metadata across platform roots unless a platform rule explicitly says to do so.
 
-## Project Selection
+## Primary Project Selection
 
-| Request Type | Default Target |
+Repository-level AI engineering always targets these four primary APIExample projects:
+
+| Platform | Target |
 | --- | --- |
-| Android full RTC, video, screen sharing, beauty, extensions | `Android/APIExample/` |
-| Android voice-only or audio-only SDK behavior | `Android/APIExample-Audio/` |
-| Android Compose case or Compose parity work | `Android/APIExample-Compose/` |
-| iOS UIKit Swift full RTC | `iOS/APIExample/` |
-| iOS SwiftUI parity work | `iOS/APIExample-SwiftUI/` |
-| iOS Objective-C parity work | `iOS/APIExample-OC/` |
-| iOS audio-only SDK behavior | `iOS/APIExample-Audio/` |
-| macOS Swift Cocoa sample | `macOS/` |
-| Windows C++ MFC sample | `windows/` |
+| Android | `Android/APIExample/` |
+| iOS | `iOS/APIExample/` |
+| macOS | `macOS/` |
+| Windows | `windows/` |
 
-If the product request does not name a platform, default to Android, iOS, macOS, and Windows. Narrow the scope only when the user or Contract records an explicit waiver reason. Treat each required platform as a separate implementation and verification unit.
+Audio, Compose, SwiftUI, and Objective-C variants remain independent repository projects, but they are outside the repository-level release-iteration matrix, backlog, Contract, and acceptance scope. If the product request does not name a platform, require all four primary projects. Narrow the scope only when the user or Contract records an explicit waiver reason. Treat each required primary project as a separate implementation and verification unit.
 
 ## Existing Local Skills
 
 | Scope | Skills |
 | --- | --- |
 | `Android/APIExample/` | `query-cases`, `upsert-case`, `review-case` |
-| `Android/APIExample-Audio/` | `query-cases`, `upsert-case`, `review-case` |
-| `Android/APIExample-Compose/` | `query-cases`, `upsert-case`, `review-case` |
 | `iOS/APIExample/` | `query-cases`, `upsert-case`, `review-case` |
-| `iOS/APIExample-Audio/` | `query-cases`, `upsert-case`, `review-case` |
-| `iOS/APIExample-OC/` | `query-cases`, `upsert-case`, `review-case` |
-| `iOS/APIExample-SwiftUI/` | `query-cases`, `upsert-case`, `review-case` |
-| `macOS/` | `upsert-case`, `review-case` |
-| `windows/` | `upsert-case`, `review-case` |
+| `macOS/` | `query-cases`, `upsert-case`, `review-case` |
+| `windows/` | `query-cases`, `upsert-case`, `review-case` |
 
 The repository-level orchestration skill is `.agents/skills/api-example-release-iteration/SKILL.md`.
 
 ## Repository Profile
 
-`docs/ai-engineering/repository-profile.json` contains the SDK version sources that differ between API Examples distributions. Shared Python tools parse source kinds such as Gradle properties, CocoaPods packages, and SDK archive names without embedding distribution package names in code.
+`docs/ai-engineering/repository-profile.json` contains the SDK version sources that differ between API Examples distributions. Shared Python tools parse source kinds such as Gradle properties, CocoaPods packages, and SDK archive names without embedding distribution package names in code. An `external-injection` entry records that a primary project has no trustworthy tracked version source and deliberately keeps that platform's SDK check blocked.
 
-The orchestrator stores the profile path and SHA-256 in the execution package and input snapshots. Dispatch and assembly stop if the checked-in profile changes after initialization. Coverage state and historical knowledge do not belong in this profile; keep them in the matrix and durable knowledge documents.
+The orchestrator stores the profile path and SHA-256 in the execution package, input snapshots, and acceptance manifest. Dispatch and assembly stop if the checked-in profile changes after initialization, and the standalone manifest validator recomputes release checks from the bound live profile. Coverage state and historical knowledge do not belong in this profile; keep them in the matrix and durable knowledge documents.
 
 ## Codex Role Routing
 
@@ -100,7 +92,7 @@ For case backfill work, generate candidate platform execution units from the mat
 python3 docs/ai-engineering/tools/generate_case_backlog.py
 ```
 
-Use the generated priority to select the next product requirement, then deliver that requirement across all four official platform families. Contract selects the applicable project variant inside each platform.
+Use the generated priority to select the next product requirement, then deliver that requirement across all four primary APIExample projects. Contract must preserve the fixed target mapping above.
 
 ## Case Implementation Knowledge
 
@@ -208,8 +200,10 @@ Use `docs/ai-engineering/templates/release-dry-run-template.md` as the starting 
 | iOS/macOS certificates expire on build machines | Inspect or print certificate expiration during release preparation. |
 | SDK dependency version is not bumped on release branch | Verify platform SDK version files against the release target. |
 | Model-declared build result is not backed by command telemetry | Bind each executed verification command to the hashed Codex JSONL log and exit code, and accept build status only for recognized platform build tools. |
+| Codex command telemetry omits `cwd` | Record `cwd_source=dispatch`; the dispatcher pins both its process cwd and `codex exec -C` to the main project, while build-command validation rejects directory changes and sibling-project paths. If a future command event supplies `cwd`, require it to match the dispatch target. |
 | Platform run misses nested instructions | Start `codex exec` in the Contract-selected target so root/platform/project `AGENTS.md` files load automatically. |
 | External packaging metadata leaks into repository acceptance | Keep Jenkins jobs, artifact URLs, QA evidence, and website publication outside the acceptance manifest. |
+| An externally injected SDK is assigned a version through unrelated pod metadata | Mark the source as `external-injection`; keep the repository SDK gate blocked until tracked project evidence exists. |
 | Windows packaging fails from path length or permissions | Run Windows script preflight after path or packaging changes. |
 
 ## Output Contract

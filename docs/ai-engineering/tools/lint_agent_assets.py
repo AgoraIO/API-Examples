@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint the repository AI engineering assets: AGENTS.md, SKILL.md, and skill bundles.
+"""Lint the repository AI engineering assets and skill bundles.
 
 Each rule guards a drift class that has actually broken these assets before:
 
@@ -7,7 +7,7 @@ Each rule guards a drift class that has actually broken these assets before:
 - `skill-frontmatter`      a SKILL.md has no YAML frontmatter, so it cannot be selected
 - `skill-name`             `name` is missing, malformed, or disagrees with its directory
 - `skill-description`      `description` is missing or exceeds the specification limit
-- `asset-reference`        an AGENTS.md or SKILL.md points at a file that does not exist
+- `asset-reference`        an AGENTS.md, ARCHITECTURE.md, or SKILL.md points at a missing file
 
 Exit code is 0 when every rule passes and 1 when any finding is reported.
 """
@@ -42,7 +42,7 @@ SKIP_DIR_NAMES = {
     "xcuserdata",
 }
 
-ASSET_FILE_NAMES = ("AGENTS.md", "SKILL.md")
+ASSET_FILE_NAMES = ("AGENTS.md", "ARCHITECTURE.md", "SKILL.md")
 
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
 FRONTMATTER_KEY_RE = re.compile(r"^([A-Za-z0-9_-]+):\s*(.*)$")
@@ -55,6 +55,13 @@ MAX_SKILL_NAME_LENGTH = 64
 MAX_SKILL_DESCRIPTION_LENGTH = 1024
 
 INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
+# ARCHITECTURE directory trees commonly put exact skill paths inside fenced code
+# blocks rather than inline code spans. Match those paths without interpreting
+# arbitrary project source paths as agent-asset references.
+BARE_SKILL_REFERENCE_RE = re.compile(
+    r"(?<![A-Za-z0-9_.<>/-])"
+    r"((?:[A-Za-z0-9_.-]+/)*\.agents/skills/[a-z0-9]+(?:-[a-z0-9]+)*/)"
+)
 PLACEHOLDER_CHARS = set("<>*?|$()[]")
 # Only references that identify an agent asset are resolved. Project source paths are
 # written relative to a source root that varies per platform, so checking them here
@@ -267,8 +274,12 @@ def check_asset_references(asset_path, root):
     for line_number, line in enumerate(
         asset_path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1
     ):
-        for match in INLINE_CODE_RE.finditer(line):
-            ref = match.group(1).strip().rstrip(",.;:")
+        references = [match.group(1) for match in INLINE_CODE_RE.finditer(line)]
+        references.extend(
+            match.group(1) for match in BARE_SKILL_REFERENCE_RE.finditer(line)
+        )
+        for raw_ref in references:
+            ref = raw_ref.strip().rstrip(",.;:")
             if not is_asset_reference(ref):
                 continue
             if ref in seen:

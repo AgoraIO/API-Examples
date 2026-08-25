@@ -13,12 +13,7 @@ DEFAULT_MATRIX = REPO_ROOT / "docs/ai-engineering/case-maintenance-matrix.md"
 NON_PLATFORM_COLUMNS = {"Feature", "SDK Family", "Key APIs", "Notes"}
 PLATFORM_PROJECTS = {
     "Android full": "Android/APIExample/",
-    "Android audio": "Android/APIExample-Audio/",
-    "Android Compose": "Android/APIExample-Compose/",
     "iOS UIKit": "iOS/APIExample/",
-    "iOS SwiftUI": "iOS/APIExample-SwiftUI/",
-    "iOS Objective-C": "iOS/APIExample-OC/",
-    "iOS audio": "iOS/APIExample-Audio/",
     "macOS": "macOS/",
     "Windows": "windows/",
 }
@@ -92,6 +87,17 @@ def find_matrix_table(lines):
     raise ValueError("could not find pilot matrix table with Feature and Key APIs columns")
 
 
+def validate_matrix_header(header):
+    expected = list(PLATFORM_PROJECTS)
+    actual = [column for column in header if column not in NON_PLATFORM_COLUMNS]
+    if actual != expected:
+        raise ValueError(
+            "platform columns must be exactly: "
+            + ", ".join(expected)
+            + f"; found: {', '.join(actual) or 'none'}"
+        )
+
+
 def find_confirmed_gap_table(lines):
     for index, line in enumerate(lines):
         if not line.startswith("|"):
@@ -158,6 +164,7 @@ def find_reference_candidates(header, row, target_platform):
 def generate_execution_units(matrix_path):
     lines = matrix_path.read_text(encoding="utf-8").splitlines()
     header, rows = find_matrix_table(lines)
+    validate_matrix_header(header)
     gap_severities = build_gap_severity_map(lines)
     feature_index = header.index("Feature")
     sdk_index = header.index("SDK Family")

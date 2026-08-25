@@ -237,6 +237,8 @@
   },
   "release": {
     "required": true,
+    "repository_profile": "docs/ai-engineering/repository-profile.json",
+    "repository_profile_sha256": "<SHA-256 of repository-profile.json>",
     "target_sdk_versions": {
       "android": "<Android target SDK version>",
       "ios": "<iOS target SDK version>",

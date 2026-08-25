@@ -27,7 +27,7 @@ For a new feature outside the matrix backlog, add `--sdk-family "Full RTC" --key
 
 `--target-sdk-version` is a baseline expanded to Android, iOS, macOS, and Windows. Repeat `--platform-sdk-version platform=x.y.z` for any platform on a different SDK line. For example, the command above resolves to Android 4.6.3 and iOS/macOS/Windows 4.6.2. The final mapping is stored in the execution package and manifest; platform release cadence changes do not require edits to Python or the repository profile.
 
-The default `docs/ai-engineering/repository-profile.json` defines repository-specific SDK version sources. Shared tools support Gradle property, CocoaPods package, and SDK archive-name sources without hard-coding a distribution in Python. `init` accepts `--repository-profile` for a checked-in alternative and binds its path and SHA-256 into the execution package.
+The default `docs/ai-engineering/repository-profile.json` defines repository-specific SDK version sources. Shared tools support Gradle property, CocoaPods package, SDK archive-name, and explicit external-injection sources without hard-coding a distribution in Python. An external-injection source keeps its platform SDK check `BLOCKED` because tracked project files cannot prove the injected binary version. `init` accepts `--repository-profile` for a checked-in alternative and binds its path and SHA-256 into the execution package, input snapshots, and acceptance manifest.
 
 Dispatch Contract, then the two platform phases:
 
@@ -59,7 +59,7 @@ python3 docs/ai-engineering/tools/orchestrate_case_execution.py assemble \
   --cross-platform-evidence "Windows-host verification pending"
 ```
 
-Manifest v4 stores one shared Contract and one Implementation/Verification pair per official platform. Implementation retries preserve attempt history and expose one cumulative net delta whose file list must match the manifest. Matrix updates are applied only after structural and evidence-file validation and never for final `BLOCKED`. Assembly also refreshes all live platform SDK dependency versions.
+Manifest v4 stores one shared Contract and one Implementation/Verification pair per official platform. Implementation retries preserve attempt history and expose one cumulative net delta whose file list must match the manifest. Matrix updates are applied only after structural and evidence-file validation and never for final `BLOCKED`. Assembly also refreshes all repository-verifiable platform SDK dependency versions and preserves `BLOCKED` for external injection boundaries.
 
 Assembly does not accept CI job URLs, package artifact URLs, or QA metadata. Jenkins packaging, QA validation, artifact distribution, and website publication are external handoff processes rather than repository acceptance gates.
 
@@ -91,7 +91,7 @@ python3 docs/ai-engineering/tools/prepare_case_execution.py \
 python3 docs/ai-engineering/tools/validate_acceptance_manifest.py <manifest.json>
 ```
 
-The standalone validator resolves evidence paths relative to the manifest and recomputes prompt, role-artifact, input-snapshot, command-log, and repository-delta hashes.
+The standalone validator resolves evidence paths relative to the manifest, verifies the bound repository profile hash, recomputes live SDK checks, and recomputes prompt, role-artifact, input-snapshot, command-log, and repository-delta hashes.
 
 Routine manifests and dispatch logs stay outside the repository unless the user requests an evidence snapshot.
 

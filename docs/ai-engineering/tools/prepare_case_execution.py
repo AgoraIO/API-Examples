@@ -2,6 +2,7 @@
 """Prepare one cross-platform API Examples requirement package."""
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -15,6 +16,7 @@ DEFAULT_REPOSITORY_PROFILE = REPO_ROOT / "docs/ai-engineering/repository-profile
 PROFILE_SOURCE_FIELDS = {
     "gradle-property": {"path", "kind", "key"},
     "cocoapods": {"path", "kind", "package"},
+    "external-injection": {"path", "kind", "reason"},
     "archive-name": {"path", "kind", "prefix", "suffix"},
 }
 SEMVER_CAPTURE = r"([0-9]+\.[0-9]+\.[0-9]+)"
@@ -27,12 +29,7 @@ DEFAULT_PLATFORM_TARGETS = {
 }
 PLATFORM_UNIT_GROUPS = {
     "Android full": "android",
-    "Android audio": "android",
-    "Android Compose": "android",
     "iOS UIKit": "ios",
-    "iOS SwiftUI": "ios",
-    "iOS Objective-C": "ios",
-    "iOS audio": "ios",
     "macOS": "macos",
     "Windows": "windows",
 }
@@ -222,6 +219,26 @@ def sdk_version_pattern(source):
     raise ValueError(f"unsupported SDK version source kind: {kind}")
 
 
+def primary_project_version_sources(sources):
+    selected = {}
+    for platform, target in DEFAULT_PLATFORM_TARGETS.items():
+        target_path = Path(target)
+        platform_sources = []
+        for source in sources[platform]:
+            source_path = Path(source["path"])
+            try:
+                source_path.relative_to(target_path)
+            except ValueError:
+                continue
+            platform_sources.append(source)
+        if not platform_sources:
+            raise ValueError(
+                f"repository profile has no {platform} SDK version source inside {target}"
+            )
+        selected[platform] = platform_sources
+    return selected
+
+
 def collect_sdk_version_checks(
     target_sdk_versions,
     repo_root=REPO_ROOT,
@@ -230,6 +247,7 @@ def collect_sdk_version_checks(
 ):
     if sources is None:
         sources = load_repository_profile(profile_path)["sdk_version_sources"]
+    sources = primary_project_version_sources(sources)
     checks = []
     for platform in PLATFORMS:
         target_sdk_version = target_sdk_versions[platform]
@@ -242,6 +260,10 @@ def collect_sdk_version_checks(
             if not path.exists():
                 actual_versions[path_text] = ""
                 problems.append(f"missing {path_text}")
+                continue
+            if source["kind"] == "external-injection":
+                actual_versions[path_text] = ""
+                problems.append(f"{path_text}: {source['reason']}")
                 continue
             pattern = sdk_version_pattern(source)
             matches = sorted(set(re.findall(pattern, path.read_text(encoding="utf-8"))))
@@ -263,10 +285,10 @@ def collect_sdk_version_checks(
                 "result": result,
                 "expected_version": target_sdk_version,
                 "actual_versions": actual_versions,
-                "evidence": (
-                    "; ".join(f"{path}={version}" for path, version in actual_versions.items())
-                    if actual_versions
-                    else ""
+                "evidence": "; ".join(
+                    f"{path}={version}"
+                    for path, version in actual_versions.items()
+                    if version
                 ),
                 "reason": "" if not problems else f"Expected {target_sdk_version}; " + "; ".join(problems),
             }
@@ -274,7 +296,22 @@ def collect_sdk_version_checks(
     return checks
 
 
-def build_manifest_seed(requirement, source_case, version_sources):
+def repository_profile_binding(profile_path):
+    resolved = Path(profile_path).resolve()
+    try:
+        relative = resolved.relative_to(REPO_ROOT.resolve()).as_posix()
+    except ValueError as exc:
+        raise ValueError("repository profile must be inside the repository") from exc
+    return relative, hashlib.sha256(resolved.read_bytes()).hexdigest()
+
+
+def build_manifest_seed(
+    requirement,
+    source_case,
+    version_sources,
+    repository_profile,
+    repository_profile_sha256,
+):
     reference_required = bool(source_case)
     reference_result = "BLOCKED" if reference_required else "SKIPPED"
     targets = default_platform_targets()
@@ -336,6 +373,8 @@ def build_manifest_seed(requirement, source_case, version_sources):
         },
         "release": {
             "required": True,
+            "repository_profile": repository_profile,
+            "repository_profile_sha256": repository_profile_sha256,
             "target_sdk_versions": dict(requirement["target_sdk_versions"]),
             "checks": collect_sdk_version_checks(
                 requirement["target_sdk_versions"], sources=version_sources
@@ -376,7 +415,9 @@ def prepare_case_execution(
     target_sdk_versions = resolve_target_sdk_versions(
         target_sdk_version, platform_sdk_versions
     )
-    profile = load_repository_profile(repository_profile)
+    profile_path = Path(repository_profile).resolve()
+    profile = load_repository_profile(profile_path)
+    profile_manifest_path, profile_sha256 = repository_profile_binding(profile_path)
     backlog = generate_execution_units(matrix_path)
     matching = [
         unit for unit in backlog["execution_units"] if feature is None or unit["feature"] == feature
@@ -416,7 +457,11 @@ def prepare_case_execution(
             "Validate the manifest before applying matrix updates.",
         ],
         "acceptance_manifest_seed": build_manifest_seed(
-            requirement, source_case, profile["sdk_version_sources"]
+            requirement,
+            source_case,
+            profile["sdk_version_sources"],
+            profile_manifest_path,
+            profile_sha256,
         ),
         "validation_command": "python3 docs/ai-engineering/tools/validate_acceptance_manifest.py <manifest.json>",
         "blockers": blockers,
