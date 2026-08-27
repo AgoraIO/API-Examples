@@ -22,6 +22,7 @@ object AgoraBeautySDK {
 
     @JvmStatic
     fun initBeautySDK(context: Context, rtcEngine: RtcEngine): Boolean {
+        this.rtcEngine = rtcEngine
         rtcEngine.enableExtension("agora_video_filters_clear_vision", "clear_vision", true)
         val storagePath = context.getExternalFilesDir("")?.absolutePath ?: return false
         val modelsPath = "$storagePath/beauty_agora/beauty_material"
@@ -39,11 +40,12 @@ object AgoraBeautySDK {
     @JvmStatic
     fun unInitBeautySDK() {
         Log.d(TAG, "unInitBeautySDK called")
+        val engine = rtcEngine
+        val effectObject = videoEffectObject
+        videoEffectObject = null
         beautyConfig.reset()
-        rtcEngine?.let {
-            videoEffectObject?.let { vEffectObject ->
-                it.destroyVideoEffectObject(vEffectObject)
-            }
+        engine?.let {
+            effectObject?.let(it::destroyVideoEffectObject)
             it.enableExtension(
                 "agora_video_filters_clear_vision",
                 "clear_vision",
@@ -51,6 +53,7 @@ object AgoraBeautySDK {
                 Constants.MediaSourceType.PRIMARY_CAMERA_SOURCE
             )
         }
+        rtcEngine = null
     }
 
     @JvmStatic

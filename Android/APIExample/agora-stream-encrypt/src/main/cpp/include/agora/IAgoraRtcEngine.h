@@ -11227,6 +11227,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * This method enables you to add synchronized metadata in the video stream for more diversified
    *  live interactive streaming, such as sending shopping links, digital coupons, and online quizzes.
    * A successful call of this method triggers the `getMaxMetadataSize` callback.
+   * @note If your receiving-side logic requires metadata to stay synchronized with the current
+   * decoded frame, and you send external video frames to the SDK while also implementing the video
+   * frame observer, prefer attaching metadata to `pushVideoFrame` and reading it back from
+   * `onRenderVideoFrame`, instead of relying on this observer callback.
    *
    * @note Call this method before `joinChannel(const char* token, const char* channelId, uid_t uid,
    * const ChannelMediaOptions& options)`.

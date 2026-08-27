@@ -358,10 +358,10 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
     public void onDestroy() {
         super.onDestroy();
         /*leaveChannel and Destroy the RtcEngine instance*/
+        AgoraBeautySDK.unInitBeautySDK();
         if (engine != null) {
             engine.leaveChannel();
         }
-        AgoraBeautySDK.unInitBeautySDK();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -509,89 +509,67 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
         if (!makeUp.isChecked()) {
             return;
         }
-        sbMakeupFilterStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getMakeupFilterStrength() * 10));
+        isProgrammaticChange = true;
+        try {
+            sbMakeupFilterStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getMakeupFilterStrength() * 10));
 
-        int facialStyleValue = AgoraBeautySDK.getBeautyConfig().getFacialStyle();
-        int facialPosition;
-        if (facialStyleValue == 2) {
-            facialPosition = 1;
-        } else if (facialStyleValue == 4) {
-            facialPosition = 2;
-        } else if (facialStyleValue == 5) {
-            facialPosition = 3;
-        } else if (facialStyleValue == 6) {
-            facialPosition = 4;
-        } else {
-            facialPosition = 0;
+            setSpinnerSelection(spinnerFacialStyle, findStylePosition(
+                    AgoraBeautySDK.getBeautyConfig().getFacialStyle(), 0, 2, 3, 5, 6));
+            sbFacialStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getFacialStrength() * 10));
+
+            setSpinnerSelection(spinnerWocanStyle, AgoraBeautySDK.getBeautyConfig().getWocanStyle());
+            sbWocanStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getWocanStrength() * 10));
+
+            setSpinnerSelection(spinnerBrowStyle, AgoraBeautySDK.getBeautyConfig().getBrowStyle());
+            setSpinnerSelection(spinnerBrowColor, AgoraBeautySDK.getBeautyConfig().getBrowColor());
+            sbBrowStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBrowStrength() * 10));
+
+            setSpinnerSelection(spinnerLashStyle, findStylePosition(
+                    AgoraBeautySDK.getBeautyConfig().getLashStyle(), 0, 3, 5));
+            setSpinnerSelection(spinnerLashColor, AgoraBeautySDK.getBeautyConfig().getLashColor());
+            sbLashStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getLashStrength() * 10));
+
+            setSpinnerSelection(spinnerShadowStyle, findStylePosition(
+                    AgoraBeautySDK.getBeautyConfig().getShadowStyle(), 0, 1, 6));
+            sbShadowStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getShadowStrength() * 10));
+
+            setSpinnerSelection(spinnerPupilStyle, AgoraBeautySDK.getBeautyConfig().getPupilStyle());
+            sbPupilStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getPupilStrength() * 10));
+
+            setSpinnerSelection(spinnerBlushStyle, findStylePosition(
+                    AgoraBeautySDK.getBeautyConfig().getBlushStyle(), 0, 1, 2, 4, 9));
+            setSpinnerSelection(spinnerBlushColor, AgoraBeautySDK.getBeautyConfig().getBlushColor());
+            sbBlushStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBlushStrength() * 10));
+
+            setSpinnerSelection(spinnerLipStyle, findStylePosition(
+                    AgoraBeautySDK.getBeautyConfig().getLipStyle(), 0, 1, 2, 3, 6));
+            setSpinnerSelection(spinnerLipColor, AgoraBeautySDK.getBeautyConfig().getLipColor());
+            sbLipStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getLipStrength() * 10));
+        } finally {
+            isProgrammaticChange = false;
         }
-        spinnerFacialStyle.setSelection(facialPosition);
-        sbFacialStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getFacialStrength() * 10));
+    }
 
-        spinnerWocanStyle.setSelection(AgoraBeautySDK.getBeautyConfig().getWocanStyle());
-        sbWocanStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getFacialStrength() * 10));
+    private void setSpinnerSelection(Spinner spinner, int position) {
+        int itemCount = spinner.getAdapter() == null ? 0 : spinner.getAdapter().getCount();
+        spinner.setSelection(position >= 0 && position < itemCount ? position : 0);
+    }
 
-        spinnerBrowStyle.setSelection(AgoraBeautySDK.getBeautyConfig().getBrowStyle());
-        spinnerBrowColor.setSelection(AgoraBeautySDK.getBeautyConfig().getBrowColor());
-        sbBrowStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBrowStrength() * 10));
-
-        int lashStyle = AgoraBeautySDK.getBeautyConfig().getLashStyle();
-        int lashPosition = 0;
-        if (lashStyle == 3) {
-            lashPosition = 1;
-        } else if (lashStyle == 5) {
-            lashPosition = 2;
+    private int findStylePosition(int styleValue, int... supportedValues) {
+        for (int position = 0; position < supportedValues.length; position++) {
+            if (supportedValues[position] == styleValue) {
+                return position;
+            }
         }
-        spinnerBrowStyle.setSelection(lashPosition);
-        spinnerBrowColor.setSelection(AgoraBeautySDK.getBeautyConfig().getBrowColor());
-        sbBrowStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBrowStrength() * 10));
-
-        int shadowStyle = AgoraBeautySDK.getBeautyConfig().getShadowStyle();
-        int shadowPosition = 0;
-        if (shadowStyle == 1) {
-            shadowPosition = 1;
-        } else if (lashStyle == 6) {
-            shadowPosition = 2;
-        }
-        spinnerShadowStyle.setSelection(shadowPosition);
-        sbBrowStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getShadowStrength() * 10));
-
-        spinnerPupilStyle.setSelection(AgoraBeautySDK.getBeautyConfig().getPupilStyle());
-        sbPupilStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getPupilStrength() * 10));
-
-        int blushStyle = AgoraBeautySDK.getBeautyConfig().getBlushStyle();
-        int blushPosition = 0;
-        if (blushStyle == 1) {
-            blushPosition = 1;
-        } else if (lashStyle == 2) {
-            blushPosition = 2;
-        } else if (lashStyle == 4) {
-            blushPosition = 3;
-        } else if (lashStyle == 8) {
-            blushPosition = 4;
-        }
-        spinnerBlushStyle.setSelection(blushPosition);
-        spinnerBlushColor.setSelection(AgoraBeautySDK.getBeautyConfig().getBlushColor());
-        sbBlushStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getBlushStrength() * 10));
-
-        int lipStyle = AgoraBeautySDK.getBeautyConfig().getLipStyle();
-        int lipPosition = 0;
-        if (lipStyle == 1) {
-            lipPosition = 1;
-        } else if (lipStyle == 2) {
-            lipPosition = 2;
-        } else if (lipStyle == 3) {
-            lipPosition = 3;
-        } else if (lipStyle == 6) {
-            lipPosition = 4;
-        }
-        spinnerLipStyle.setSelection(lipPosition);
-        spinnerLipColor.setSelection(AgoraBeautySDK.getBeautyConfig().getLipColor());
-        sbLipStrength.setProgress((int) (AgoraBeautySDK.getBeautyConfig().getLipStrength() * 10));
+        return 0;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (isProgrammaticChange) {
+            return;
+        }
         switch (parent.getId()) {
             case R.id.spinner_shape_beautify_style:
                 if (!shapeBeauty.isChecked()) {

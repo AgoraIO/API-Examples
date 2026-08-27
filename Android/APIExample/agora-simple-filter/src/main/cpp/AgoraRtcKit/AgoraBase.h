@@ -3527,6 +3527,15 @@ enum LOCAL_VIDEO_EVENT_TYPE {
    * 4: (Android only) An internal error occurs during the screen capture.
    */
   LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_SYSTEM_INTERNAL_ERROR = 4,
+  /**
+   * 5: (Android only) The requested wide-angle or ultra-wide-angle camera is applied.
+   */
+  LOCAL_VIDEO_EVENT_TYPE_CAMERA_FOCAL_LENGTH_APPLIED = 5,
+  /**
+   * 6: (Android only) The requested wide-angle or ultra-wide-angle camera cannot be opened, and
+   * the SDK falls back to the default camera.
+   */
+  LOCAL_VIDEO_EVENT_TYPE_CAMERA_FOCAL_LENGTH_FALLBACK_TO_DEFAULT = 6,
 };
 
 /**
