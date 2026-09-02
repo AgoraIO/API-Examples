@@ -98,6 +98,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
     private int canvasRenderMode = Constants.RENDER_MODE_HIDDEN;
     private final VideoEncoderConfiguration videoEncoderConfiguration = new VideoEncoderConfiguration();
     private AgoraFocalLengthInfo[] agoraFocalLengthInfos;
+    private CameraCapturerConfiguration cameraCapturerConfiguration;
+    private String selectedCameraDescription;
 
     @Nullable
     @Override
@@ -208,6 +210,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 AgoraFocalLengthInfo info = agoraFocalLengthInfos[position];
+                selectedCameraDescription = String.valueOf(parent.getSelectedItem());
                 CAMERA_DIRECTION direction = CAMERA_DIRECTION.CAMERA_FRONT;
                 if (info.cameraDirection == CAMERA_DIRECTION.CAMERA_REAR.getValue()) {
                     direction = CAMERA_DIRECTION.CAMERA_REAR;
@@ -222,11 +225,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
                 } else if (info.focalLengthType == CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO.getValue()) {
                     focalLengthType = CAMERA_FOCAL_LENGTH_TYPE.CAMERA_FOCAL_LENGTH_TELEPHOTO;
                 }
-                CameraCapturerConfiguration config = new CameraCapturerConfiguration(
+                cameraCapturerConfiguration = new CameraCapturerConfiguration(
                         direction, focalLengthType
                 );
                 int ret = engine.setCameraCapturerConfiguration(
-                        config
+                        cameraCapturerConfiguration
                 );
                 Log.d(TAG, "setCameraCapturerConfiguration ret=" + ret);
             }
@@ -540,6 +543,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
         local.backgroundColor = canvasBgColor;
         engine.setupLocalVideo(local);
         engine.setDefaultAudioRoutetoSpeakerphone(true);
+        if (cameraCapturerConfiguration != null) {
+            int ret = engine.setCameraCapturerConfiguration(cameraCapturerConfiguration);
+            Log.d(TAG, "setCameraCapturerConfiguration before startPreview ret=" + ret);
+        }
         engine.startPreview();
 
         // Enable video module
@@ -688,6 +695,18 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener,
         public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+        }
+
+        @Override
+        public void onLocalVideoEvent(Constants.VideoSourceType source, int event) {
+            super.onLocalVideoEvent(source, event);
+            if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_CAMERA_FOCAL_LENGTH_APPLIED) {
+                Log.i(TAG, "Camera opened: " + selectedCameraDescription + ", source=" + source);
+                runOnUIThread(() -> showLongToast("Camera opened: " + selectedCameraDescription));
+            } else if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_CAMERA_FOCAL_LENGTH_FALLBACK_TO_DEFAULT) {
+                Log.w(TAG, "The requested camera focal length cannot be opened; fallback to default, source=" + source);
+                runOnUIThread(() -> showLongToast("The requested camera cannot be opened. The default camera is being used."));
+            }
         }
 
         /**Occurs when a user leaves the channel.

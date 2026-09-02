@@ -11,10 +11,12 @@ fi
 
 cd ${PROJECT_PATH}
 
-echo "start download fu resource : $fu_lib"
-curl -L -O "$fu_lib"
-unzip -o vender_fu_iOS.zip
+echo "start download fu resource from Artifactory"
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o vender_fu_iOS.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_fu_iOS.zip" || exit 1
+rm -rf FULib
+unzip -q vender_fu_iOS.zip || exit 1
 rm -f vender_fu_iOS.zip
+test -f FULib/authpack.h || exit 1
 
 # Enable third-party player configuration
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile

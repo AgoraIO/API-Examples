@@ -954,13 +954,14 @@ struct ExternalVideoFrame {
    */
   float matrix[16];
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default
-   * value is `NULL`.
+   * The MetaData buffer. The default value is `NULL`.
+   * @note The default maximum metadata size is 1024 bytes. If the input size exceeds the current
+   * metadata limit, the SDK truncates the payload to the effective limit.
    */
   uint8_t* metadataBuffer;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value
-   * is `0`.
+   * The MetaData size. The default value is `0`.
+   * @note The default maximum metadata size is 1024 bytes.
    */
   int metadataSize;
   /**
@@ -1103,13 +1104,15 @@ struct VideoFrame {
    */
   int avsync_type;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default
-   * value is `NULL`.
+   * The MetaData buffer. The default value is `NULL`.
+   * @note This buffer is only guaranteed to be valid during the current callback. If you need to
+   * use it asynchronously or after the callback returns, make a copy first.
    */
   uint8_t* metadata_buffer;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value
-   * is `0`.
+   * The MetaData size. The default value is `0`.
+   * @note This size is only meaningful while `metadata_buffer` is valid during the current
+   * callback.
    */
   int metadata_size;
   /**
@@ -2119,6 +2122,9 @@ class IVideoFrameObserver {
    * - When the video processing mode is `PROCESS_MODE_READ_WRITE`:
    *   - `true`: Sets the SDK to receive the video frame.
    *   - `false`: Sets the SDK to discard the video frame.
+   * @note If your business logic requires metadata to stay synchronized with the current decoded
+   * frame, prefer reading the metadata carried in `videoFrame` instead of consuming it from a
+   * separate metadata observer callback.
    */
   virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid,
                                   VideoFrame& videoFrame) = 0;
