@@ -61,11 +61,12 @@ object AgoraBeautySDK {
     @JvmStatic
     fun unInitBeautySDK() {
         Log.d(TAG, "unInitBeautySDK called")
+        val engine = rtcEngine
+        val effectObject = videoEffectObject
+        videoEffectObject = null
         beautyConfig.reset()
-        rtcEngine?.let {
-            videoEffectObject?.let { vEffectObject ->
-                it.destroyVideoEffectObject(vEffectObject)
-            }
+        engine?.let {
+            effectObject?.let(it::destroyVideoEffectObject)
             it.enableExtension(
                 "agora_video_filters_clear_vision",
                 "clear_vision",
@@ -74,7 +75,6 @@ object AgoraBeautySDK {
             )
         }
         rtcEngine = null
-        videoEffectObject = null
     }
 
     @JvmStatic

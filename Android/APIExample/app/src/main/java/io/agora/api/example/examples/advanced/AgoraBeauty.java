@@ -358,10 +358,10 @@ public class AgoraBeauty extends BaseFragment implements View.OnClickListener, C
     public void onDestroy() {
         super.onDestroy();
         /*leaveChannel and Destroy the RtcEngine instance*/
+        AgoraBeautySDK.unInitBeautySDK();
         if (engine != null) {
             engine.leaveChannel();
         }
-        AgoraBeautySDK.unInitBeautySDK();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
