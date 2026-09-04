@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -79,7 +79,7 @@ fun Settings(onBackClick: () -> Unit) {
                 ) { _, option ->
                     SettingPreferences.setVideoDimensions(option.second)
                 }
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
                 val frameRates = listOf(
                     VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_1,
@@ -97,7 +97,7 @@ fun Settings(onBackClick: () -> Unit) {
                 ) { _, option ->
                     SettingPreferences.setVideoFrameRate(option.second)
                 }
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
                 val orientationMode = listOf(
                     VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE,
@@ -112,7 +112,7 @@ fun Settings(onBackClick: () -> Unit) {
                     SettingPreferences.setOrientationMode(option.second)
                 }
 
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
                 DropdownMenuRaw(
                     title = stringResource(id = R.string.area),
@@ -130,7 +130,7 @@ fun Settings(onBackClick: () -> Unit) {
                     SettingPreferences.setArea(option.second)
                 }
 
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
                 Spacer(Modifier.height(16.dp))
                 Text(

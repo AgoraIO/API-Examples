@@ -1,11 +1,12 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinCompose)
 }
 
 val sdkVersionFile = file("../gradle.properties")
@@ -17,12 +18,12 @@ val localSdkPath = "${rootProject.projectDir.absolutePath}/../../sdk"
 
 android {
     namespace = "io.agora.api.example.compose"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.agora.api.example.compose"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -62,6 +63,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("myConfig")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -73,41 +75,45 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+
     packaging {
+        jniLibs {
+            pickFirsts += "**/libaosl.so"
+            pickFirsts += "**/libc++_shared.so"
+        }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    android.applicationVariants.all {
-        outputs.all {
-            if (this is ApkVariantOutputImpl) {
-                this.outputFileName =
-                    "${rootProject.name}_${agoraSdkVersion}_${
-                        SimpleDateFormat("yyyyMMddHHmm").format(
-                            Date()
-                        )
-                    }.apk"
-            }
-        }
-    }
+}
+base {
+    archivesName.set(
+        "${rootProject.name}_${agoraSdkVersion}_${
+            SimpleDateFormat("yyyyMMddHHmm").format(
+                Date()
+            )
+        }"
+    )
+}
+
+android {
     sourceSets {
         getByName("main") {
             if (File(localSdkPath).exists()) {
-                jniLibs.srcDirs(localSdkPath)
+                jniLibs.directories.add(localSdkPath)
             }
         }
-
+    }
+}
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
