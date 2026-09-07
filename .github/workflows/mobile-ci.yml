@@ -29,6 +29,8 @@ jobs:
           cache: gradle
           cache-dependency-path: Android/APIExample/**/*.gradle*
       - uses: android-actions/setup-android@v3
+      - name: Configure Android build
+        run: printf 'AGORA_APP_ID=00000000000000000000000000000000\n' > local.properties
       - name: Validate Gradle configuration
         run: ./gradlew :app:tasks --all
       - name: Validate Android XML resources
