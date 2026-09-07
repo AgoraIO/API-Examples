@@ -230,6 +230,8 @@
 "Eyebrow Style Off" = "关闭";
 "Eyebrow Style Type 1" = "类型1";
 "Eyebrow Style Type 2" = "类型2";
+"Eyebrow Style Type 3" = "类型3";
+"Eyebrow Style Type 4" = "类型4";
 
 "Eyebrow Color None" = "无";
 "Eyebrow Color Black" = "类型1";
@@ -263,6 +265,8 @@
 
 "Live Channel Name" = "直播频道名";
 "default makeup style" = "学妹妆";
+"Wocan" = "卧蚕";
+"Wocan Strength" = "卧蚕强度";
 
 "Male Template Title" = "模板男";
 "Female Template Title" = "模板女";

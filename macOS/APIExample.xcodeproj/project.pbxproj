@@ -145,7 +145,6 @@
 		E7AD0DF929CD84F800C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DF829CD84F800C9A4B0 /* sample.mov */; };
 		E7AD0E0129CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DFD29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.storyboard */; };
 		E7AD0E0229CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DFF29CDA4F100C9A4B0 /* CustomVideoSourcePushMulti.swift */; };
-		F7453DBC2E03BCA5008DDFC8 /* AgoraBeautyMaterial.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F7453DBB2E03BCA5008DDFC8 /* AgoraBeautyMaterial.bundle */; };
 		F7F28B932E03BADD003B150D /* AgoraBeauty.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7F28B8B2E03BADD003B150D /* AgoraBeauty.storyboard */; };
 		F7F28B942E03BADD003B150D /* AgoraBeautyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F28B8D2E03BADD003B150D /* AgoraBeautyManager.swift */; };
 		F7F28B952E03BADD003B150D /* AgoraBeauty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F28B8C2E03BADD003B150D /* AgoraBeauty.swift */; };
@@ -989,6 +988,7 @@
 				03896D2A24F8A00F008593CD /* Resources */,
 				032C0FA2254873AC00D80A57 /* Embed Frameworks */,
 				D1D867115490181C41253FA3 /* [CP] Embed Pods Frameworks */,
+				F7453DBD2E03BCA5008DDFC8 /* Copy Optional Beauty Resources */,
 			);
 			buildRules = (
 			);
@@ -1105,7 +1105,6 @@
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
 				DD33C1AA2CBF9DEA0046F50C /* RtePlayer.storyboard in Resources */,
-				F7453DBC2E03BCA5008DDFC8 /* AgoraBeautyMaterial.bundle in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				AB1B2D922EC701AF007C8776 /* LocalVideoTranscoding.storyboard in Resources */,
 				E7AD0DEB29CAAF2B00C9A4B0 /* JoinChannelVideoRecorder.storyboard in Resources */,
@@ -1191,6 +1190,25 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F7453DBD2E03BCA5008DDFC8 /* Copy Optional Beauty Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Optional Beauty Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\n\nSOURCE=\"${PROJECT_DIR:?}/APIExample/Resources/AgoraBeautyMaterial.bundle\"\nDESTINATION=\"${TARGET_BUILD_DIR:?}/${UNLOCALIZED_RESOURCES_FOLDER_PATH:?}/AgoraBeautyMaterial.bundle\"\n\n/bin/rm -rf \"${DESTINATION}\"\nif [ -d \"${SOURCE}\" ]; then\n    /usr/bin/ditto \"${SOURCE}\" \"${DESTINATION}\"\nelse\n    echo \"warning: AgoraBeautyMaterial.bundle is unavailable. Internal builds can provide it by running cloud_build.sh with JFROG_API_KEY.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -1,0 +1,47 @@
+name: Mobile CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android-static:
+    name: Android Static Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Android/APIExample
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+          cache-dependency-path: Android/APIExample/**/*.gradle*
+      - uses: android-actions/setup-android@v3
+      - name: Validate Gradle configuration
+        run: ./gradlew :app:tasks --all
+      - name: Validate Android XML resources
+        run: python3 -c 'import pathlib, xml.etree.ElementTree as ET; [ET.parse(path) for path in pathlib.Path("app/src/main").rglob("*.xml")]'
+
+  ios-static:
+    name: iOS Static Checks
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Xcode projects
+        run: plutil -lint iOS/APIExample/APIExample.xcodeproj/project.pbxproj macOS/APIExample.xcodeproj/project.pbxproj
+      - name: Parse Swift sources
+        run: find iOS/APIExample/APIExample macOS/APIExample -name '*.swift' ! -name 'KeyCenter.swift' -print0 | xargs -0 xcrun swiftc -frontend -parse
+      - name: Validate localizations
+        run: find iOS/APIExample/APIExample macOS/APIExample -name '*.strings' -print0 | xargs -0 plutil -lint

@@ -637,13 +637,25 @@ class AgoraBeautyManager {
             "name": "Eyebrow Style".localized,
             "key": "browStyle",
             "type": "segment",
-            "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
-        ], [
+            "title": ["Eyebrow Style Off".localized,
+                      "Eyebrow Style Type 1".localized,
+                      "Eyebrow Style Type 2".localized,
+                      "Eyebrow Style Type 3".localized],
+            "value": [0,
+                      1,
+                      2,
+                      3]
+        ],[
             "name": "Eyebrow Color".localized,
             "key": "browColor",
             "type": "segment",
-            "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
-        ], [
+            "title": [
+                "Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized
+            ],
+            "value": [0,
+                     1,
+                     2]
+        ],  [
             "name": "Eyebrow Strength".localized,
             "key": "browStrength",
             "type": "slider",
@@ -652,15 +664,23 @@ class AgoraBeautyManager {
             "name": "Eyelash Style".localized,
             "key": "lashStyle",
             "type": "segment",
-            "value": ["Eyebrow Style Off".localized,
+            "title": ["Eyebrow Style Off".localized,
                       "Eyebrow Style Type 1".localized,
-                      "Eyebrow Style Type 2".localized
+                      "Eyebrow Style Type 2".localized],
+            "value": [0,
+                      3,
+                      5
                      ]
         ], [
             "name": "Eyelash Color".localized,
             "key": "lashColor",
             "type": "segment",
-            "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
+            "title": [
+                "Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized
+            ],
+            "value": [0,
+                     1,
+                     2]
         ], [
             "name": "Eyelash Strength".localized,
             "key": "lashStrength",
@@ -670,39 +690,54 @@ class AgoraBeautyManager {
             "name": "Eyeshadow Style".localized,
             "key": "shadowStyle",
             "type": "segment",
-            "value": ["Eyebrow Style Off".localized,
-                      "Eyebrow Style Type 1".localized,
-                      "Eyebrow Style Type 2".localized
-                     ]
+            "title": [
+                "Eyebrow Style Off".localized,
+                "Eyebrow Style Type 1".localized,
+                "Eyebrow Style Type 2".localized
+            ],
+            "value": [0,
+                     1,
+                     6]
         ], [
             "name": "Eyeshadow Strength".localized,
             "key": "shadowStrength",
             "type": "slider",
             "value": [0, 1]
         ], [
-            "name": "Pupil Style".localized,
-            "key": "pupilStyle",
-            "type": "segment",
-            "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
-        ], [
-            "name": "Pupil Strength".localized,
-            "key": "pupilStrength",
-            "type": "slider",
-            "value": [0, 1]
-        ], [
             "name": "Blush Style".localized,
             "key": "blushStyle",
             "type": "segment",
-            "value": ["Eyebrow Style Off".localized, "Eyebrow Style Type 1".localized, "Eyebrow Style Type 2".localized]
+            "title": ["Eyebrow Style Off".localized,
+                      "Eyebrow Style Type 1".localized,
+                      "Eyebrow Style Type 2".localized,
+                      "Eyebrow Style Type 3".localized,
+                      "Eyebrow Style Type 4".localized],
+            "value": [
+                0,
+                1,
+                2,
+                4,
+                9
+            ]
         ], [
             "name": "Blush Color".localized,
             "key": "blushColor",
             "type": "segment",
-            "value": [
+            "title": [
                 "Blush Color None".localized,
                 "Blush Color Shade 1".localized,
                 "Blush Color Shade 2".localized,
-                "Blush Color Shade 3".localized
+                "Blush Color Shade 3".localized,
+                "Blush Color Shade 4".localized,
+                "Blush Color Shade 5".localized
+            ],
+            "value": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
             ]
         ], [
             "name": "Blush Strength".localized,
@@ -713,20 +748,64 @@ class AgoraBeautyManager {
             "name": "Lip Style".localized,
             "key": "lipStyle",
             "type": "segment",
-            "value": ["Eyebrow Color None".localized, "Eyebrow Color Black".localized, "Eyebrow Color Brown".localized]
+            "title": [
+                "Eyebrow Style Off".localized,
+                "Eyebrow Style Type 1".localized,
+                "Eyebrow Style Type 2".localized,
+                "Eyebrow Style Type 3".localized,
+                "Eyebrow Style Type 4".localized,
+            ],
+            "value": [0,
+                     1,
+                     2,
+                     3,
+                     6]
         ], [
             "name": "Lip Color".localized,
             "key": "lipColor",
             "type": "segment",
-            "value": [
+            "title": [
                 "Blush Color None".localized,
                 "Blush Color Shade 1".localized,
                 "Blush Color Shade 2".localized,
-                "Blush Color Shade 3".localized
+                "Blush Color Shade 3".localized,
+                "Blush Color Shade 4".localized,
+                "Blush Color Shade 5".localized
+            ],
+            "value": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
             ]
         ], [
             "name": "Lip Strength".localized,
             "key": "lipStrength",
+            "type": "slider",
+            "value": [0, 1]
+        ], [
+            "name": "Wocan".localized,
+            "key": "wocanStyle",
+            "type": "segment",
+            "title": [
+                "Eyebrow Style Off".localized,
+                "Eyebrow Style Type 1".localized,
+                "Eyebrow Style Type 2".localized,
+                "Eyebrow Style Type 3".localized,
+                "Eyebrow Style Type 4".localized,
+            ],
+            "value": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ]
+        ], [
+            "name": "Wocan Strength".localized,
+            "key": "wocanStrength",
             "type": "slider",
             "value": [0, 1]
         ]
