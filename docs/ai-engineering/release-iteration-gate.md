@@ -110,8 +110,7 @@ The validator enforces platform completeness, unique agent/run provenance, Contr
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py init \
   --matrix docs/ai-engineering/case-maintenance-matrix.md \
   --feature "<feature>" \
-  --target-sdk-version "4.6.2" \
-  --platform-sdk-version "android=4.6.3" \
+  --target-sdk-version "4.7.0" \
   --run-dir /tmp/api-example-requirement
 
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py dispatch \

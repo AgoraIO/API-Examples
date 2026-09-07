@@ -8,14 +8,14 @@ This repository contains sample projects for the Agora RTC Native SDK, including
 
 | Platform | Language    | Project Location                                           | SDK                                                                       |
 |----------|-------------|------------------------------------------------------------|---------------------------------------------------------------------------|
-| Android  | Java        | [/Android/APIExample](/Android/APIExample)                 | [RTC Java Video SDK](https://docs.agora.io/en/sdks?platform=android)      |
-| Android  | Kotlin      | [/Android/APIExample-Compose](/Android/APIExample-Compose) | [RTC Java Video SDK](https://docs.agora.io/en/sdks?platform=android)      |
-| Android  | Java        | [/Android/APIExample-Audio](/Android/APIExample-Audio)     | [RTC Java Audio SDK](https://docs.agora.io/en/sdks?platform=android)      |
-| iOS      | Swift       | [/iOS/APIExample](/iOS/APIExample)                         | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
-| iOS      | Objective-C | [/iOS/APIExample-OC](/iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
-| iOS      | Swift       | [/iOS/APIExample-Audio](/iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://docs.agora.io/en/sdks?platform=ios)   |
-| macOS    | Swift       | [/macOS](/macOS)                                           | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=macos) |
-| Windows  | C++         | [/windows](/windows)                                       | [RTC C++ Video SDK](https://docs.agora.io/en/sdks?platform=windows)       |
+| Android  | Java        | [Android/APIExample](Android/APIExample)                 | [RTC Java Video SDK](https://docs.agora.io/en/sdks?platform=android)      |
+| Android  | Kotlin      | [Android/APIExample-Compose](Android/APIExample-Compose) | [RTC Java Video SDK](https://docs.agora.io/en/sdks?platform=android)      |
+| Android  | Java        | [Android/APIExample-Audio](Android/APIExample-Audio)     | [RTC Java Audio SDK](https://docs.agora.io/en/sdks?platform=android)      |
+| iOS      | Swift       | [iOS/APIExample](iOS/APIExample)                         | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
+| iOS      | Objective-C | [iOS/APIExample-OC](iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=ios)   |
+| iOS      | Swift       | [iOS/APIExample-Audio](iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://docs.agora.io/en/sdks?platform=ios)   |
+| macOS    | Swift       | [macOS](macOS)                                           | [RTC Objective-C Video SDK](https://docs.agora.io/en/sdks?platform=macos) |
+| Windows  | C++         | [windows](windows)                                       | [RTC C++ Video SDK](https://docs.agora.io/en/sdks?platform=windows)       |
 
 You can refer to each individual platform to learn more about the projects.
 

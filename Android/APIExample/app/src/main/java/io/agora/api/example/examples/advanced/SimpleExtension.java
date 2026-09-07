@@ -61,7 +61,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     /**
      * The constant EXTENSION_VENDOR_NAME.
      */
-    public static final String EXTENSION_VENDOR_NAME = "Agora"; // Provider name used for registering in agora-bytedance.cpp
+    public static final String EXTENSION_VENDOR_NAME = "Agora"; // Provider name used for registering in agora-simple-filter.cpp
     /**
      * The constant EXTENSION_VIDEO_FILTER_WATERMARK.
      */
@@ -187,7 +187,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             //Name of dynamic link library is provided by plug-in vendor,
-            //e.g. libagora-bytedance.so whose EXTENSION_NAME should be "agora-bytedance"
+            // e.g. libagora-simple-filter.so whose EXTENSION_NAME should be "agora-simple-filter"
             //and one or more plug-ins can be added
             config.addExtension(EXTENSION_NAME);
             config.mExtensionObserver = this;

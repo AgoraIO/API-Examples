@@ -79,7 +79,10 @@
 #if __has_include(Sensetime)
     [self.timer invalidate];
     self.timer = nil;
-    [self reset];
+    if (_videoProcessing != nil) {
+        [self reset];
+        [_videoProcessing cleanup];
+    }
     _videoProcessing = nil;
 #endif
 }

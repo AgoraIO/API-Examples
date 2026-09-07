@@ -6,7 +6,9 @@ This project presents you a set of API examples to help you understand how to us
 
 ## Prerequisites
 
-- Android Studio 3.0+
+- Android Studio Ladybug (2024.2.1) or later
+- JDK 17
+- Android SDK Platform 35
 - Physical Android device
 - Android simulator is supported
 
@@ -44,6 +46,11 @@ This project contains third-party beauty integration examples, which cannot be e
 without configuring resources and certificates. The resource certificate configuration method is as
 follows:
 
+During Gradle configuration, the project automatically downloads and caches the SenseTime 9.3.1
+Android libraries declared in `app/vendors.gradle`. The first Gradle sync therefore requires network
+access. This download does not include the SenseTime assets or license listed below; provide those
+files separately.
+
 #### Agora Beauty 2.0
 
 The Agora Beauty 2.0 material package is not included in this repository. Before building locally:
@@ -70,9 +77,9 @@ The material directory is ignored by Git.
 | SenseTime Beauty SDK Path                                            | Location                                                 |
 |----------------------------------------------------------------------|----------------------------------------------------------|
 | Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
-| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
-| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
-| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| Android/sample/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/sample/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/sample/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
 | SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
 
 #### FaceUnity
@@ -119,7 +126,7 @@ Android/APIExample/agora-simple-filter/src/main/cpp
 This project contains custom stream encrypt examples, which cannot be enabled by default. 
 The configuration method is as follows:
 
-1. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs; Replace the hight_level_api/include .h files in the Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora directory.
+1. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs; Replace the high_level_api/include .h files in the Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora directory.
 
 ```text
 Android/APIExample/agora-stream-encrypt/src/main/agoraLibs

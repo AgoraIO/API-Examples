@@ -18,14 +18,13 @@ Provider model names remain runtime inputs through `--model` or `CODEX_MODEL_STA
 python3 docs/ai-engineering/tools/orchestrate_case_execution.py init \
   --matrix docs/ai-engineering/case-maintenance-matrix.md \
   --feature "Join channel audio" \
-  --target-sdk-version "4.6.2" \
-  --platform-sdk-version "android=4.6.3" \
+  --target-sdk-version "4.7.0" \
   --run-dir /tmp/api-example-requirement
 ```
 
 For a new feature outside the matrix backlog, add `--sdk-family "Full RTC" --key-api "<API>"`; repeat `--key-api` for multiple APIs.
 
-`--target-sdk-version` is a baseline expanded to Android, iOS, macOS, and Windows. Repeat `--platform-sdk-version platform=x.y.z` for any platform on a different SDK line. For example, the command above resolves to Android 4.6.3 and iOS/macOS/Windows 4.6.2. The final mapping is stored in the execution package and manifest; platform release cadence changes do not require edits to Python or the repository profile.
+`--target-sdk-version` is a baseline expanded to Android, iOS, macOS, and Windows. The command above resolves every platform to 4.7.0. Repeat `--platform-sdk-version platform=x.y.z` for any platform on a different SDK line. The final mapping is stored in the execution package and manifest; platform release cadence changes do not require edits to Python or the repository profile.
 
 The default `docs/ai-engineering/repository-profile.json` defines repository-specific SDK version sources. Shared tools support Gradle property, CocoaPods package, SDK archive-name, and explicit external-injection sources without hard-coding a distribution in Python. An external-injection source keeps its platform SDK check `BLOCKED` because tracked project files cannot prove the injected binary version. `init` accepts `--repository-profile` for a checked-in alternative and binds its path and SHA-256 into the execution package, input snapshots, and acceptance manifest.
 
@@ -85,8 +84,7 @@ python3 docs/ai-engineering/tools/orchestrate_case_execution.py dispatch \
 ```bash
 python3 docs/ai-engineering/tools/prepare_case_execution.py \
   --feature "Join channel audio" \
-  --target-sdk-version "4.6.2" \
-  --platform-sdk-version "android=4.6.3" \
+  --target-sdk-version "4.7.0" \
   --repository-profile docs/ai-engineering/repository-profile.json
 python3 docs/ai-engineering/tools/validate_acceptance_manifest.py <manifest.json>
 ```

@@ -492,6 +492,7 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         }
         apiReporter.reportFuncEvent("release", emptyMap(), emptyMap())
         apiReporter.endDurationEvent("initialize-release", emptyMap())
+        apiReporter.release()
 
         LogUtils.i(TAG, "release")
         isReleased = true
@@ -855,9 +856,8 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
         val buffer = videoFrame.buffer
         YuvConverter.setEnablePboOpt(true)
         YuvConverter.setEnableConvertPerLog(true)
-        val i420Buffer = buffer as? I420Buffer ?: buffer.toI420()
-        val width = i420Buffer.width
-        val height = i420Buffer.height
+        val width = buffer.width
+        val height = buffer.height
         val nv21Size = (width * height * 3.0f / 2.0f + 0.5f).toInt()
         if (nv21ByteBuffer == null || nv21ByteBuffer?.capacity() != nv21Size) {
             nv21ByteBuffer?.clear()
@@ -865,19 +865,23 @@ class SenseTimeBeautyAPIImpl : SenseTimeBeautyAPI, IVideoFrameObserver {
             return null
         }
         val nv21ByteArray = ByteArray(nv21Size)
+        val i420Buffer = buffer as? I420Buffer ?: buffer.toI420()
 
-        YuvHelper.I420ToNV12(
-            i420Buffer.dataY, i420Buffer.strideY,
-            i420Buffer.dataV, i420Buffer.strideV,
-            i420Buffer.dataU, i420Buffer.strideU,
-            nv21ByteBuffer, width, height
-        )
-        nv21ByteBuffer?.position(0)
-        nv21ByteBuffer?.get(nv21ByteArray)
-        if (buffer !is I420Buffer) {
-            i420Buffer.release()
+        try {
+            YuvHelper.I420ToNV12(
+                i420Buffer.dataY, i420Buffer.strideY,
+                i420Buffer.dataV, i420Buffer.strideV,
+                i420Buffer.dataU, i420Buffer.strideU,
+                nv21ByteBuffer, width, height
+            )
+            nv21ByteBuffer?.position(0)
+            nv21ByteBuffer?.get(nv21ByteArray)
+            return nv21ByteArray
+        } finally {
+            if (buffer !is I420Buffer) {
+                i420Buffer.release()
+            }
         }
-        return nv21ByteArray
     }
 
     // IVideoFrameObserver implements

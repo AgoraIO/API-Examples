@@ -6,7 +6,9 @@
 
 ## 环境准备
 
-- Android Studio 3.0+
+- Android Studio Ladybug (2024.2.1) 或更高版本
+- JDK 17
+- Android SDK Platform 35
 - Android 真机设备
 - 支持模拟器
 

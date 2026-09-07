@@ -112,6 +112,23 @@
 #endif
 }
 
+- (void)releaseOutputResources {
+#if __has_include("st_mobile_common.h")
+    if (self.effectsProcess && (_outTexture || _outputPixelBuffer || _outputCVTexture)) {
+        [self.effectsProcess deleteTexture:&_outTexture
+                               pixelBuffer:&_outputPixelBuffer
+                                 cvTexture:&_outputCVTexture];
+    }
+#endif
+    _outTexture = 0;
+    _outputPixelBuffer = NULL;
+    _outputCVTexture = NULL;
+}
+
+- (void)cleanup {
+    [self releaseOutputResources];
+}
+
 - (CVPixelBufferRef)videoProcessHandler:(CVPixelBufferRef)pixelBuffer {
     if (!pixelBuffer) return pixelBuffer;
 
@@ -127,22 +144,24 @@
     int width = (int)CVPixelBufferGetWidth(pixelBuffer);
     int heigh = (int)CVPixelBufferGetHeight(pixelBuffer);
 #if __has_include("st_mobile_common.h")
-    if (_outTexture) {
+    if (_outTexture && _outputPixelBuffer && _outputCVTexture) {
         int _cacheW = (int)CVPixelBufferGetWidth(_outputPixelBuffer);
         int _cacheH = (int)CVPixelBufferGetHeight(_outputPixelBuffer);
         if (_cacheH != heigh || _cacheW != width) {
-            GLuint testTexture = 0; //TODO: shengtao
-            [self.effectsProcess deleteTexture:&testTexture pixelBuffer:&_outputPixelBuffer cvTexture:&_outputCVTexture];
-            _outTexture = 0;
-            _outputPixelBuffer = NULL;
-            _outputCVTexture = NULL;
+            [self releaseOutputResources];
         }
-    } else {
+    }
+    if (!_outTexture || !_outputPixelBuffer || !_outputCVTexture) {
         [self.effectsProcess createGLObjectWith:width
                                          height:heigh
                                         texture:&_outTexture
                                     pixelBuffer:&_outputPixelBuffer
                                       cvTexture:&_outputCVTexture];
+        if (!_outTexture || !_outputPixelBuffer || !_outputCVTexture) {
+            [self releaseOutputResources];
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            return pixelBuffer;
+        }
     }
     st_mobile_human_action_t detectResult;
     memset(&detectResult, 0, sizeof(st_mobile_human_action_t));
@@ -168,7 +187,11 @@
 
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
 
-    return  self->_outputPixelBuffer;
+    return self->_outputPixelBuffer ?: pixelBuffer;
+}
+
+- (void)dealloc {
+    [self cleanup];
 }
 
 - (void)getDeviceOrientation:(CMAccelerometerData *)accelerometerData {

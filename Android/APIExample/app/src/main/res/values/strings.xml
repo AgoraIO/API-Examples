@@ -108,7 +108,7 @@
     <string name="item_multiVideoSourceTracks">Multi Video Source Tracks</string>
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Multiple Video Sources</string>
-    <string name="item_screensharing">Scree Sharing</string>
+    <string name="item_screensharing">Screen Sharing</string>
     <string name="item_customaudiosource">Custom Audio Sources</string>
     <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
@@ -347,8 +347,6 @@
     <string name="faceunity_beauty">FaceUnityBeauty</string>
     <string name="body_beauty">Body Beauty</string>
     <string name="faceunity_integrate_tip">FaceUnity library is not integrated! Please read README before compiling</string>
-    <string name="bytedance_beauty">ByteDance Beauty</string>
-    <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please read README before compiling</string>
 
     <string name="private_clound">Private Cloud</string>
     <string name="ip_address">IP Address</string>

@@ -8,14 +8,14 @@
 
 | 平台      | 语言          | 项目位置                                                       | SDK                                                                           |
 |---------|-------------|------------------------------------------------------------|-------------------------------------------------------------------------------|
-| Android | Java        | [/Android/APIExample](/Android/APIExample)                 | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
-| Android | Kotlin      | [/Android/APIExample-Compose](/Android/APIExample-Compose) | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
-| Android | Java        | [/Android/APIExample-Audio](/Android/APIExample-Audio)     | [RTC Java Audio SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
-| iOS     | Swift       | [/iOS/APIExample](/iOS/APIExample)                         | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
-| iOS     | Objective-C | [/iOS/APIExample-OC](/iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
-| iOS     | Swift       | [/iOS/APIExample-Audio](/iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
-| macOS   | Swift       | [/macOS](/macOS)                                           | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/macos/resources) |
-| Windows | C++         | [/windows](/windows)                                       | [RTC C++ Video SDK](https://doc.shengwang.cn/doc/rtc/windows/resources)       |
+| Android | Java        | [Android/APIExample](Android/APIExample)                 | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| Android | Kotlin      | [Android/APIExample-Compose](Android/APIExample-Compose) | [RTC Java Video SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| Android | Java        | [Android/APIExample-Audio](Android/APIExample-Audio)     | [RTC Java Audio SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
+| iOS     | Swift       | [iOS/APIExample](iOS/APIExample)                         | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS     | Objective-C | [iOS/APIExample-OC](iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS     | Swift       | [iOS/APIExample-Audio](iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| macOS   | Swift       | [macOS](macOS)                                           | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/macos/resources) |
+| Windows | C++         | [windows](windows)                                       | [RTC C++ Video SDK](https://doc.shengwang.cn/doc/rtc/windows/resources)       |
 
 你可以进入不同平台的项目进行试用或参考源代码。
 

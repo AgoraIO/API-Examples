@@ -56,7 +56,7 @@ get_branch_name() {
 # Function: Extract version from branch name
 # Args:
 #   $1 - Branch name
-# Returns: Version string (e.g., "4.6.2") or empty if no version is present
+# Returns: Version string (e.g., "4.7.0") or empty if no version is present
 extract_branch_version() {
     local branch_name="$1"
     
@@ -71,7 +71,7 @@ extract_branch_version() {
 # Args:
 #   $1 - Project path (e.g., "iOS/APIExample" or "macOS")
 #   $2 - Project name (e.g., "APIExample")
-#   $3 - Branch version (e.g., "4.6.2")
+#   $3 - Branch version (e.g., "4.7.0")
 #   $4 - Platform (optional: "ios" or "macos", defaults to "ios")
 # Returns: 0 on success, 1 on failure
 validate_project_version() {
@@ -225,7 +225,7 @@ run_version_validation() {
         echo "Error: Branch naming is not compliant!"
         echo "=========================================="
         echo "Current branch: $BRANCH_NAME"
-        echo "Branch name must contain version number (e.g., dev/4.6.2, release/4.6.2)"
+        echo "Branch name must contain version number (e.g., dev/4.7.0, release/4.7.0)"
         echo ""
         echo "Branch naming rules:"
         echo "  - Version branches must contain x.x.x"

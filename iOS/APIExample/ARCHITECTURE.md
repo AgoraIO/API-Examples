@@ -40,7 +40,7 @@
 | ContentInspect | `Examples/Advanced/ContentInspect/ContentInspect.swift` | `enableContentInspect()`, `switchCamera()` | Moderate content in video stream |
 | MutliCamera | `Examples/Advanced/MutliCamera/MutliCamera.swift` | `enableMultiCamera()`, `startCameraCapture()`, `stopCameraCapture()` | Capture from front and back cameras simultaneously (iOS 13+) |
 | KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/KtvCopyrightMusic.swift` | — | Links to KTV copyright music documentation |
-| ThirdBeautify | `Examples/Advanced/ThirdBeautify/ThirdBeautify.swift` | `enableExtension()` | Third-party beauty SDK integration (ByteDance / FaceUnity / SenseTime) |
+| ThirdBeautify | `Examples/Advanced/ThirdBeautify/ThirdBeautify.swift` | `enableExtension()` | Third-party beauty SDK integration (FaceUnity / SenseTime) |
 | ARKit | `Examples/Advanced/ARKit/ARKit.swift` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
 | AudioRouterPlayer | `Examples/Advanced/AudioRouterPlayer/AudioRouterPlayer.swift` | `setEnableSpeakerphone()` | Control audio output routing with third-party player |
 | AudioWaveform | `Examples/Advanced/AudioWaveform/AudioWaveform.swift` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
@@ -56,7 +56,6 @@ APIExample/
 ├── Podfile                                  # CocoaPods dependencies (AgoraRtcEngine_iOS, Floaty, AGEVideoLayout, etc.)
 ├── SimpleFilter/                            # Optional C++ audio/video extension module
 ├── Agora-ScreenShare-Extension/             # ReplayKit broadcast extension for screen sharing
-├── ByteEffectLib/                           # Optional ByteDance beauty SDK resources
 ├── FULib/                                   # Optional FaceUnity beauty SDK resources
 ├── SenseLib/                                # Optional SenseTime beauty SDK resources
 ├── libs/                                    # Local SDK frameworks (when not using CocoaPods)

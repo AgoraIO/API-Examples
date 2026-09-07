@@ -50,7 +50,7 @@ Audio, Compose, SwiftUI, and Objective-C variants are outside this matrix and do
 
 Seeded from the primary project `ARCHITECTURE.md` indexes and source trees, then re-verified against `dev/4.7.0` (`ee77cc85`). Paths are relative to the projects listed in Platform Units.
 
-Inventory scope: the initial rows were derived from the `Android/APIExample/` case index and its counterparts in the other three primary projects. Features that exist only outside the Android primary project are not inventoried yet, including `ARKit`, `FaceCapture`, `MutliCamera`/`MultiCameraSourece`, `RawMediaData`, `CustomVideoSourceMediaIO`, `VideoChat`, and Windows-only dialogs such as `AudioProfile`, `AudioVolume`, `RegionConn`, `ReportInCall`, `RTMPinject`, and `MultiVideoSource`. Their absence from this matrix is an inventory gap, not a coverage claim.
+Inventory scope: the initial rows were derived from the `Android/APIExample/` case index and its counterparts in the other three primary projects. Features that exist only outside the Android primary project are not inventoried yet, including `ARKit`, `MutliCamera`/`MultiCameraSourece`, `RawMediaData`, `CustomVideoSourceMediaIO`, `VideoChat`, and Windows-only dialogs such as `AudioProfile`, `AudioVolume`, `RegionConn`, `ReportInCall`, `RTMPinject`, and `MultiVideoSource`. Their absence from this matrix is an inventory gap, not a coverage claim.
 
 | Feature | SDK Family | Key APIs | Android full | iOS UIKit | macOS | Windows | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |

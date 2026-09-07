@@ -2,8 +2,9 @@ package io.agora.beautyapi.sensetime.utils
 
 import io.agora.rtc2.RtcEngine
 import org.json.JSONObject
-import java.util.concurrent.Executors
 import java.lang.ref.WeakReference
+import java.util.concurrent.Executors
+import java.util.concurrent.RejectedExecutionException
 
 enum class APIType(val value: Int) {
     KTV(1),             // Karaoke
@@ -54,7 +55,7 @@ class APIReporter(
 
     // Report regular scenario API
     fun reportFuncEvent(name: String, value: Map<String, Any>, ext: Map<String, Any>) {
-        executorService.submit {
+        submitReport {
             rtcEngineRef.get()?.let {
                 val eventMap = mapOf(ApiEventKey.TYPE to ApiEventType.API.value, ApiEventKey.DESC to name)
                 val labelMap = mapOf(
@@ -95,7 +96,7 @@ class APIReporter(
 
     // Report custom information
     fun reportCustomEvent(name: String, ext: Map<String, Any>) {
-        executorService.submit {
+        submitReport {
             rtcEngineRef.get()?.let {
                 val eventMap = mapOf(ApiEventKey.TYPE to ApiEventType.CUSTOM.value, ApiEventKey.DESC to name)
                 val labelMap = mapOf(ApiEventKey.TIMESTAMP to getCurrentTs(), ApiEventKey.EXT to ext)
@@ -114,10 +115,14 @@ class APIReporter(
         durationEventStartMap.clear()
     }
 
+    fun release() {
+        executorService.shutdown()
+    }
+
     // ---------------------- private ----------------------
 
     private fun configParameters() {
-        executorService.submit {
+        submitReport {
             rtcEngineRef.get()?.let {
                 // it.setParameters("{\"rtc.qos_for_test_purpose\": true}") // Used for test environment
                 // Data reporting
@@ -133,7 +138,7 @@ class APIReporter(
     }
 
     private fun innerReportCostEvent(ts: Long, name: String, cost: Int, ext: Map<String, Any>) {
-        executorService.submit {
+        submitReport {
             rtcEngineRef.get()?.let {
 //                writeLog("reportCostEvent: $name cost: $cost ms", Constants.LOG_LEVEL_INFO)
                 val eventMap = mapOf(ApiEventKey.TYPE to ApiEventType.COST.value, ApiEventKey.DESC to name)
@@ -142,6 +147,15 @@ class APIReporter(
                 val label = convertToJSONString(labelMap) ?: ""
                 it.sendCustomReportMessage(messageId, category, event, label, cost)
             }
+        }
+    }
+
+    private fun submitReport(report: () -> Unit) {
+        if (executorService.isShutdown) return
+        try {
+            executorService.submit(report)
+        } catch (_: RejectedExecutionException) {
+            // release() may race with an in-flight frame finishing its report.
         }
     }
 

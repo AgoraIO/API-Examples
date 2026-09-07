@@ -16,7 +16,6 @@ Packaging.log
 *.app
 FULib/
 SenseLib/
-ByteEffectLib/
 
 # Xcode
 #

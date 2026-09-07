@@ -11,7 +11,6 @@ import UIKit
 enum ThirdBeautifyType: String {
     case sense = "SenseBeautify"
     case fu = "FUBeautify"
-    case bytedEffect = "BytedEffect"
 }
 
 class ThirdBeautifyEntry: BaseViewController {

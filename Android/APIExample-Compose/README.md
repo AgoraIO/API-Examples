@@ -6,7 +6,9 @@ This project presents you a set of API examples to help you understand how to us
 
 ## Prerequisites
 
-- Android Studio 3.0+
+- Android Studio Ladybug (2024.2.1) or later
+- JDK 17
+- Android SDK Platform 35
 - Physical Android device
 - Android simulator is supported
 

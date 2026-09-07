@@ -23,18 +23,14 @@ This section shows you how to prepare, build, and run the sample application.
 
 ### Prepare Dependencies
 
-Change directory into **iOS** folder, run following command to install project dependencies,
+Change to the sample directory and install the project dependencies with CocoaPods. See the [official CocoaPods guide](https://guides.cocoapods.org/using/getting-started.html) for installation instructions.
 
-use cocoapods
-
-[install cocoapods](http://t.zoukankan.com/lijiejoy-p-9680485.html)
-
-
-```
+```bash
+cd iOS/APIExample-Audio
 pod install
 ```
 
-Verify `APIExample.xcworkspace` has been properly generated.
+Verify `APIExample-Audio.xcworkspace` has been properly generated.
 
 ### Obtain an App Id
 
@@ -79,7 +75,7 @@ You are all set. Now connect your iPhone or iPad device and run the project.
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - You can find full API documentation at [Document Center](https://docs.agora.io/en/)
 - If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
+- You can file bugs about this sample at [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## License
 

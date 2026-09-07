@@ -164,7 +164,7 @@ The `Release` directory is ignored by Git.
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - You can find full API documentation at [Document Center](https://docs.agora.io/en/)
 - If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Broadcasting/issues)
+- You can file bugs about this sample at [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## License
 

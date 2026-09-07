@@ -6,7 +6,9 @@
 
 ## 环境准备
 
-- Android Studio 3.0+
+- Android Studio Ladybug (2024.2.1) 或更高版本
+- JDK 17
+- Android SDK Platform 35
 - Android 真机设备
 - 支持模拟器
 
@@ -41,6 +43,8 @@
 
 本项目包含第三方美颜集成示例，在没有配置资源和证书的情况下，默认是无法启用的。资源证书配置方法如下：
 
+Gradle 配置阶段会根据 `app/vendors.gradle` 自动下载并缓存商汤 9.3.1 Android 依赖库，因此首次 Gradle Sync 需要联网。该下载不包含下方列出的商汤素材和许可证，这些文件仍需单独提供。
+
 #### Agora 美颜 2.0
 
 Agora 美颜 2.0 资源包不包含在仓库中。本地构建前：
@@ -67,9 +71,9 @@ app/src/main/assets/beauty_agora/
 | 商汤SDK文件/目录                                                           | 项目路径                                                     |
 |----------------------------------------------------------------------|----------------------------------------------------------|
 | Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
-| Android/smaple/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
-| Android/smaple/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
-| Android/smaple/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| Android/sample/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/sample/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/sample/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
 | SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
 
 #### 相芯美颜
@@ -113,7 +117,7 @@ Android/APIExample/agora-simple-filter/src/main/cpp
 
 本项目包含自定义加密示例，默认是不启用的。配置方法如下：
 
-1. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-stream-encrypt/src/main/agoraLibs，将 hight_level_api/include 头文件替换到 Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora 目录中
+1. 手动下载[Agora SDK包](https://doc.shengwang.cn/doc/rtc/android/resources), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-stream-encrypt/src/main/agoraLibs，将 high_level_api/include 头文件替换到 Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora 目录中
 
 ```text
 Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
