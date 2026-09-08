@@ -5,7 +5,8 @@ func joinChannel() {
 }
 
 // ❌ INCORRECT: Not calling destroy
-override func viewWillClose() {
+override func viewWillBeRemovedFromSplitView() {
     agoraKit.leaveChannel(nil)
-    // Missing: agoraKit.destroy()
+    // Missing: AgoraRtcEngineKit.destroy()
+    super.viewWillBeRemovedFromSplitView()
 }

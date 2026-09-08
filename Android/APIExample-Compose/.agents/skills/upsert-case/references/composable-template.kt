@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
@@ -26,10 +25,9 @@ import io.agora.rtc2.RtcStats
 @Composable
 fun ExampleCase() {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     var channelName by rememberSaveable { mutableStateOf("") }
-    var isJoined by rememberSaveable { mutableStateOf(false) }
-    var localUid by rememberSaveable { mutableIntStateOf(0) }
+    var isJoined by remember { mutableStateOf(false) }
+    var localUid by remember { mutableIntStateOf(0) }
 
     val rtcEngine = remember {
         RtcEngine.create(RtcEngineConfig().apply {
@@ -54,11 +52,9 @@ fun ExampleCase() {
         })
     }
 
-    DisposableEffect(lifecycleOwner) {
+    DisposableEffect(rtcEngine) {
         onDispose {
-            if (isJoined) {
-                rtcEngine.leaveChannel()
-            }
+            rtcEngine.leaveChannel()
             RtcEngine.destroy()
         }
     }

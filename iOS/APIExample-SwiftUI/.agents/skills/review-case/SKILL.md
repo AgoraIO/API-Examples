@@ -3,7 +3,6 @@ name: review-case
 description: >
   Structured code review for a case in the APIExample-SwiftUI project.
   Checks engine lifecycle, SwiftUI state ownership, thread safety, permissions, and API correctness.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -40,21 +39,26 @@ metadata:
 ### 2. SwiftUI State Ownership
 
 **Check:**
-- Main view declares RTC object as `@ObservedObject`, not `@StateObject`
+- A main view that constructs its RTC object declares it as `@StateObject`
+- `@ObservedObject` is used only when a stable owner constructs and injects the RTC object
 - Entry view does not hold a reference to the RTC object
 - `@Published` properties used for state that drives UI updates
 
 **Correct:**
 ```swift
 struct MyCase: View {
-    @ObservedObject private var rtc = MyCaseRTC()  // correct
+    @StateObject private var rtc = MyCaseRTC()
+}
+
+struct InjectedCase: View {
+    @ObservedObject var rtc: MyCaseRTC
 }
 ```
 
 **Wrong:**
 ```swift
 struct MyCase: View {
-    @StateObject private var rtc = MyCaseRTC()  // wrong — SwiftUI owns lifetime, may outlive view
+    @ObservedObject private var rtc = MyCaseRTC()  // recreated view does not own object identity
 }
 ```
 
@@ -115,6 +119,15 @@ func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: I
 - Media player destroyed if created
 - Screen capture stopped if started
 - Multi-camera capture stopped if started
+
+---
+
+### 8. Xcode Target Membership
+
+For a new or moved case, verify `APIExample-SwiftUI.xcodeproj/project.pbxproj` explicitly
+adds every Swift file to the `APIExample-SwiftUI` target's Sources build phase and every new
+asset or localized file to its Resources build phase. A file existing in the folder is not
+enough. Do not require a project-file edit for an existing build input that was only modified.
 
 ---
 

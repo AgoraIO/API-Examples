@@ -1,17 +1,17 @@
-// Message Map Pattern - Thread-safe UI updates
+// In the dialog class declaration (.h):
+// afx_msg LRESULT OnMsgJoinChannel(WPARAM wParam, LPARAM lParam);
+// afx_msg LRESULT OnMsgError(WPARAM wParam, LPARAM lParam);
+// DECLARE_MESSAGE_MAP()
 
-// Header
+// At file scope in the .cpp, not inside the class declaration:
 BEGIN_MESSAGE_MAP(CExampleDlg, CDialogEx)
-    ON_BN_CLICKED(IDC_BUTTON_JOIN, &CExampleDlg::OnBnClickedButtonJoin)
-    ON_MESSAGE(WM_MSGID(EID_JOIN_CHANNEL_SUCCESS), &CExampleDlg::OnMsgEngineEvent)
+    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CExampleDlg::OnMsgJoinChannel)
+    ON_MESSAGE(WM_MSGID(EID_ERROR), &CExampleDlg::OnMsgError)
 END_MESSAGE_MAP()
 
-// Implementation
-void CExampleDlg::OnBnClickedButtonJoin() {
-    JoinChannel();
-}
-
-LRESULT CExampleDlg::OnMsgEngineEvent(WPARAM wParam, LPARAM lParam) {
-    // Handle engine events on main thread
+LRESULT CExampleDlg::OnMsgError(WPARAM wParam, LPARAM lParam) {
+    if (!m_rtcEngine) return 0;
+    // The message ID selects this handler; wParam is the error code posted by onError.
+    TRACE(_T("RTC error: %d\n"), (int)wParam);
     return 0;
 }

@@ -3,7 +3,6 @@ name: review-case
 description: >
   Code review for API examples. Ensures examples follow project conventions,
   handle lifecycle correctly, manage threads safely, and use APIs properly.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -11,370 +10,100 @@ metadata:
   platform: macOS
 ---
 
-# Review Case Skill — macOS
+# Review Case — macOS
 
-## When to Use
+Review the selected AppKit case against its behavior contract, current SDK headers, and
+live source. Use `APIExample/Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift`,
+`APIExample/Common/NetworkManager/NetworkManager.swift`, and the project `AGENTS.md` as
+references. Report findings first; do not silently rewrite the case during review.
 
-Use this skill when you need to:
-- Review a new or modified example for correctness
-- Ensure the example follows project conventions
-- Verify lifecycle management and thread safety
-- Check API usage and error handling
+## Lifecycle and Ownership
 
-## Review Dimensions (Priority Order)
+- Create the case engine once with `AgoraRtcEngineKit.sharedEngine(with:delegate:)` and an
+  `AgoraRtcEngineConfig` containing `KeyCenter.AppId`.
+- The main controller inherits `BaseViewController`; the menu host calls
+  `viewWillBeRemovedFromSplitView()` when replacing its content.
+- On removal, invalidate pending Token/join work, leave the channel, stop case-owned media,
+  call `AgoraRtcEngineKit.destroy()`, and clear the engine reference. Repeated cleanup must
+  be safe. A late asynchronous response must not use the destroyed engine.
+- Complete destruction before another case creates an engine. Never destroy from an SDK
+  delegate callback.
 
-### 1. Engine Lifecycle (CRITICAL)
-
-**Check:**
-- [ ] Engine is created in `initializeAgoraEngine()` or similar
-- [ ] Engine is initialized with `AgoraRtcEngineConfig`
-- [ ] `leaveChannel()` is called before `destroy()`
-- [ ] `destroy()` is called in `viewWillClose()` or cleanup method
-- [ ] No engine leaks (engine not recreated on every join)
-
-**Correct Pattern:**
 ```swift
-override func viewDidLoad() {
-    super.viewDidLoad()
-    initializeAgoraEngine()  // Create once
-}
-
-override func viewWillClose() {
-    leaveChannel()
-    agoraKit.destroy()
-    super.viewWillClose()
-}
-
-func joinChannel() {
-    agoraKit.joinChannel(byToken: token, channelName: channel, info: nil, uid: 0)
-}
-
-func leaveChannel() {
-    agoraKit.leaveChannel(nil)
-}
-```
-
-**Incorrect Pattern:**
-See `references/incorrect-lifecycle.swift` for common mistakes.
-
----
-
-### 2. Thread Safety (CRITICAL)
-
-**Check:**
-- [ ] All UI updates in delegate callbacks use `DispatchQueue.main.async`
-- [ ] No direct UI updates from background threads
-- [ ] Video/audio frame callbacks dispatch to main thread before updating UI
-
-**Correct Pattern:**
-```swift
-func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-    // Callback may arrive on background thread
-    DispatchQueue.main.async {
-        self.statusLabel.stringValue = "Joined channel"
+override func viewWillBeRemovedFromSplitView() {
+    // Invalidate outstanding requests using the case's request ID or cancellation state.
+    agoraKit?.leaveChannel(nil)
+    if agoraKit != nil {
+        AgoraRtcEngineKit.destroy()
+        agoraKit = nil
     }
+    super.viewWillBeRemovedFromSplitView()
 }
 ```
 
-**Incorrect Pattern:**
-See `references/incorrect-thread-safety.swift` for common mistakes.
+## Threading and Permissions
 
----
+- Dispatch AppKit mutations to the main queue; SDK callbacks may arrive on another thread.
+  Avoid routing expensive frame processing through the UI queue merely to update a label.
+- Request camera/microphone access with `AVCaptureDevice.requestAccess(for:)` before using
+  the corresponding device; handle denial without starting capture or joining anyway.
+- Do not suggest iOS-only permission APIs such as AVAudioSession on macOS.
+- Check object/request validity again inside asynchronous permission and Token callbacks.
 
-### 3. Permission Handling (HIGH)
+## Token and Error Handling
 
-**Check:**
-- [ ] Microphone permission requested before `enableAudio()`
-- [ ] Camera permission requested before `enableVideo()`
-- [ ] Permissions checked before accessing devices
-- [ ] Review guidance stays macOS-specific and does not suggest iOS-only APIs such as `AVAudioSession.sharedInstance().requestRecordPermission`
+`KeyCenter` contains AppId and Certificate; it has no Token method. Use the existing
+`NetworkManager.shared.generateToken(channelName:uid:success:)` flow or the case's explicit
+Token input. Store the active channel and UID in the case, and use the same values when
+refreshing. The helper can return nil; do not treat a failed Token request as successful
+authentication when the project requires a certificate.
 
-**Correct Pattern:**
-```swift
-func initializeAgoraEngine() {
-    // Request permissions first
-    AVCaptureDevice.requestAccess(for: .video) { granted in
-        if granted {
-            self.agoraKit.enableVideo()
-        }
-    }
-    
-    AVCaptureDevice.requestAccess(for: .audio) { granted in
-        if granted {
-            self.agoraKit.enableAudio()
-        }
-    }
-}
-```
+- Check join/configuration return codes and implement `rtcEngine(_:didOccurError:)`.
+- Handle `rtcEngine(_:tokenPrivilegeWillExpire:)` when using expiring tokens. After fetching
+  a replacement, validate that the case/request is still active before calling
+  `renewToken(_:)`; do not rejoin the channel solely to renew a token.
+- Keep logs and errors useful without exposing App Certificates or tokens.
 
----
+## API and Media Correctness
 
-### 4. Error Handling (HIGH)
+- Compare exact method names, argument labels, enums, defaults and return values with the
+  selected SDK. The channel join overload used by the current basic case is
+  `joinChannel(byToken:channelId:uid:mediaOptions:)`.
+- Configure channel profile, client role, capture, canvases and encoder settings as needed
+  by the contract before joining. Audio-only behavior must not enable video capture.
+- Construct a canvas with `AgoraRtcVideoCanvas()`, then assign uid/view/renderMode. Do not
+  invent convenience initializers.
+- On exit stop any audio mixing, preview, screen/camera capture, custom media, player, timer
+  or observer owned by this case before destroying the engine.
 
-**Check:**
-- [ ] `joinChannel()` failures are handled
-- [ ] Token expiration is handled
-- [ ] Network errors are logged or displayed
-- [ ] Invalid parameters are validated
+## Structure and Registration
 
-**Correct Pattern:**
-```swift
-func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-    DispatchQueue.main.async {
-        self.showError("Error: \(errorCode.rawValue)")
-    }
-}
+- Keep the implementation under `APIExample/Examples/Basic/` or `Advanced/`, using Swift
+  and AppKit. Follow existing threading and language conventions in the edited code.
+- Verify `APIExample/ViewController.swift` supplies the right MenuItem, storyboard name
+  and controller identifier; confirm the storyboard actually loads that controller.
+- New source files must belong to the APIExample Xcode target's Sources build phase;
+  storyboards, localized files and media assets must belong to Resources. Existing-file
+  edits need no project-file change unless a build input was added or moved.
+- Update the Case Index when paths, behavior or key APIs change. Check source before relying
+  on an index entry to establish implementation or registration completeness.
 
-func rtcEngine(_ engine: AgoraRtcEngineKit, tokenPrivilegeWillExpire token: String) {
-    // Refresh token before expiration
-    let newToken = KeyCenter.Token(channelName: self.channelName)
-    self.agoraKit.renewToken(newToken)
-}
-```
+## Verification and Output
 
----
+Run the project's documented build or the strongest applicable static check for the change.
+Use `PASS`, `FAIL`, `BLOCKED` or `NOT_RUN`, recording the command and evidence. Compilation
+alone does not establish device permissions, RTC connectivity or lifecycle behavior.
 
-### 5. Code Convention (MEDIUM)
+For each actionable finding provide severity, file/line, trigger, impact and a concrete
+correction. Include unresolved validation and intentional platform differences. Do not
+approve leaked engines, UI mutations off the main thread, missing cleanup, invalid target
+membership or hardcoded credentials.
 
-**Check:**
-- [ ] Class name follows pattern: `<ExampleName>Main`
-- [ ] Extends `BaseViewController`
-- [ ] File name matches class name (PascalCase)
-- [ ] Properties are properly declared with `@IBOutlet` or `var`
-- [ ] Methods are organized with `// MARK:` sections
-- [ ] Comments explain non-obvious logic
+## Reference Snippets
 
-**Correct Pattern:**
-```swift
-class ScreenShareMain: BaseViewController {
-    
-    var agoraKit: AgoraRtcEngineKit!
-    var remoteUid: UInt = 0
-    
-    @IBOutlet weak var Container: AGEVideoContainer!
-    
-    // MARK: - Lifecycle
-    override func viewDidLoad() { ... }
-    
-    // MARK: - Agora Engine Setup
-    func initializeAgoraEngine() { ... }
-    
-    // MARK: - Actions
-    @IBAction func joinButtonTapped(_ sender: Any) { ... }
-}
-```
+These are illustrative fragments to adapt to the selected case and its real ownership:
 
----
-
-### 6. API Usage Correctness (MEDIUM)
-
-**Check:**
-- [ ] SDK methods called in correct order
-- [ ] Required parameters are provided
-- [ ] Optional parameters are used correctly
-- [ ] Return values are checked where necessary
-- [ ] Deprecated APIs are not used
-
-**Correct Pattern:**
-```swift
-// Correct order: enable -> setup -> join
-agoraKit.enableVideo()
-agoraKit.setupLocalVideo(AgoraRtcVideoCanvas(uid: 0))
-agoraKit.joinChannel(byToken: token, channelName: channel, info: nil, uid: 0)
-```
-
-**Incorrect Pattern:**
-```swift
-// ❌ Wrong order
-agoraKit.joinChannel(...)  // Join first
-agoraKit.enableVideo()     // Enable after join (too late)
-```
-
----
-
-### 7. Resource Cleanup (MEDIUM)
-
-**Check:**
-- [ ] Audio files are stopped and released
-- [ ] Video captures are stopped
-- [ ] Custom audio/video sources are cleaned up
-- [ ] Observers are unregistered
-- [ ] Timers are invalidated
-
-**Correct Pattern:**
-```swift
-func leaveChannel() {
-    agoraKit.stopAudioMixing()  // Stop audio
-    agoraKit.stopScreenCapture()  // Stop screen share
-    agoraKit.leaveChannel(nil)
-}
-
-override func viewWillClose() {
-    leaveChannel()
-    agoraKit.destroy()
-    super.viewWillClose()
-}
-```
-
----
-
-## Review Output Format
-
-When reviewing, provide feedback in this format:
-
-```
-## Review Results
-
-### ✅ Passed
-- Engine lifecycle correctly managed
-- Thread safety ensured with DispatchQueue.main.async
-- Permissions requested before device access
-
-### ⚠️ Issues Found
-
-**[HIGH] Thread Safety Issue**
-- File: `ScreenShare.swift`
-- Line: 45
-- Issue: UI update in delegate callback without DispatchQueue.main.async
-- Suggestion: Wrap UI update with `DispatchQueue.main.async { ... }`
-
-**[MEDIUM] Missing Error Handling**
-- File: `ScreenShare.swift`
-- Line: 78
-- Issue: joinChannel() result not checked
-- Suggestion: Implement `rtcEngine(_:didOccurError:)` delegate method
-
-### 🔧 Recommendations
-- Add logging for debugging
-- Consider adding retry logic for network failures
-```
-
----
-
-## Platform-Specific Checks
-
-### macOS-Specific
-
-**Check:**
-- [ ] Using Cocoa (AppKit) — not UIKit or SwiftUI
-- [ ] Window/view lifecycle properly handled
-- [ ] No Combine or async/await unless already in codebase
-- [ ] Storyboard/XIB files properly configured if used
-
-**Correct Pattern:**
-```swift
-// macOS: Use Cocoa
-import Cocoa
-import AgoraRtcKit
-
-class ExampleMain: BaseViewController {
-    @IBOutlet weak var Container: AGEVideoContainer!
-    // Cocoa-based UI
-}
-```
-
-**Incorrect Pattern:**
-```swift
-// ❌ iOS patterns in macOS
-import UIKit  // Wrong framework
-class ExampleMain: UIViewController { }  // Wrong base class
-```
-
----
-
-## NEVER List
-
-**Do NOT accept:**
-- Engine not destroyed (memory leak)
-- UI updates from background threads without DispatchQueue.main.async
-- Multiple engine instances in one example
-- Hardcoded App ID or token (must use KeyCenter)
-- Missing `leaveChannel()` before `destroy()`
-- Objective-C files (Swift only)
-- UIKit or SwiftUI (Cocoa only)
-- Examples outside `APIExample/Examples/[Basic|Advanced]/` structure
-- Missing delegate implementation for event handling
-- No error handling for joinChannel failures
-
----
-
-## Review Checklist
-
-Use this checklist when reviewing an example:
-
-**Lifecycle:**
-- [ ] Engine created once in initialization
-- [ ] `leaveChannel()` called before `destroy()`
-- [ ] `destroy()` called in cleanup
-- [ ] No engine leaks
-
-**Thread Safety:**
-- [ ] All UI updates use `DispatchQueue.main.async`
-- [ ] No direct UI updates from callbacks
-- [ ] Frame callbacks dispatch to main thread
-
-**Permissions:**
-- [ ] Microphone permission requested
-- [ ] Camera permission requested
-- [ ] Permissions checked before use
-
-**Error Handling:**
-- [ ] joinChannel failures handled
-- [ ] Token expiration handled
-- [ ] Network errors logged
-
-**Code Quality:**
-- [ ] Follows naming conventions
-- [ ] Properly organized with MARK sections
-- [ ] Comments explain non-obvious logic
-- [ ] No hardcoded credentials
-
-**API Usage:**
-- [ ] Methods called in correct order
-- [ ] Required parameters provided
-- [ ] Return values checked
-- [ ] No deprecated APIs
-
-**Resources:**
-- [ ] Audio/video properly stopped
-- [ ] Observers unregistered
-- [ ] Timers invalidated
-- [ ] No resource leaks
-
-**Platform:**
-- [ ] Using Cocoa (AppKit)
-- [ ] No UIKit or SwiftUI
-- [ ] Window lifecycle handled
-- [ ] No modern C++ patterns unless existing
-
----
-
-## Common Issues and Fixes
-
-### Issue: "Engine not initialized"
-**Cause:** `destroy()` called without `leaveChannel()` first
-**Fix:** Always call `leaveChannel()` before `destroy()`
-
-### Issue: "UI updates crash the app"
-**Cause:** Direct UI update from background thread
-**Fix:** Wrap with `DispatchQueue.main.async { ... }`
-
-### Issue: "Memory leak detected"
-**Cause:** `destroy()` not called or engine recreated
-**Fix:** Ensure `destroy()` in `viewWillClose()` and create engine once
-
-### Issue: "Token expired error"
-**Cause:** No token refresh handling
-**Fix:** Implement `tokenPrivilegeWillExpire()` delegate method
-
-### Issue: "No audio/video"
-**Cause:** Permissions not requested
-**Fix:** Request permissions before `enableAudio()` / `enableVideo()`
-
----
-
-## References
-
-- **Agora RTC SDK for macOS:** [Documentation](https://docs.agora.io/en/video-calling/reference/macos-sdk)
-- **Existing examples:** Review `APIExample/Examples/Basic/JoinChannelVideo/` for reference
-- **BaseViewController:** Check `APIExample/Common/` for base class implementation
+- `correct-lifecycle`: [snippet](references/correct-lifecycle.swift)
+- `incorrect-lifecycle`: [snippet](references/incorrect-lifecycle.swift)
+- `correct-thread-safety`: [snippet](references/correct-thread-safety.swift)
+- `incorrect-thread-safety`: [snippet](references/incorrect-thread-safety.swift)

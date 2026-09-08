@@ -22,7 +22,7 @@ Use this skill after a case has been created or modified in `APIExample/`. It ch
 
 ## Procedure
 
-1. Audit lifecycle, permission, threading, and registration rules.
+1. Audit lifecycle, permission, threading, and registration rules. Trace the Handler's Looper when assessing teardown: the BaseFragment handler runs on the main thread, including posted destroy calls. Verify destruction cannot overlap the next engine initialization.
 2. Check `@Example`, `nav_graph.xml`, `strings.xml`, and `ARCHITECTURE.md` for closure.
 3. Run the minimum build verification command.
 4. Report findings first, then verification results, then explicit unverified items.
@@ -40,6 +40,7 @@ Use this skill after a case has been created or modified in `APIExample/`. It ch
 
 ## Never
 
-- Never approve direct `RtcEngine.destroy()` on the main thread
+- Never describe `handler.post(RtcEngine::destroy)` as moving work off the main thread
+- Never approve destruction inside an SDK callback or asynchronous teardown that races the next engine initialization
 - Never approve missing `leaveChannel()` before destroy
 - Never skip the build command

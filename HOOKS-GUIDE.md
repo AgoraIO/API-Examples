@@ -7,6 +7,12 @@ This repository uses pre-commit to run two local checks:
 
 Chinese content in source files and documentation is allowed. It is not part of the commit-message rule.
 
+GitHub Actions repeats both policies for every pull request and for pushes to `main` and `dev/**`;
+see `.github/workflows/repository-policy.yml`. A repository administrator must add its
+`Sensitive information`, `Commit messages`, and `AI asset integrity` jobs to branch protection
+before they become required merge checks. The AI asset check runs in CI; run it locally using
+the virtual-environment commands in [docs/ai/README.md](docs/ai/README.md).
+
 ## Prerequisites
 
 Install these tools before installing the hooks:

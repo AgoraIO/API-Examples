@@ -121,12 +121,11 @@ Registration is **manual** via the `+[MenuSection menus]` method in `ViewControl
 
 Each example has its own `.storyboard` file. The VC with identifier `entry` (default `"EntryViewController"`) is instantiated directly from that storyboard.
 
-**To add a case, edit exactly two things:**
-1. Add a `MenuItem` to the `+[MenuSection menus]` method in `ViewController.m`:
-   ```objc
-   [[MenuItem alloc] initWithName:@"My New Case".localized storyboard:@"MyNewCase" controller:@""]
-   ```
-2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the `.h/.m` files and storyboard
+A registered case connects a `MenuItem` in `+[MenuSection menus]`, its `.h/.m` files, and
+its storyboard. The implementation must belong to the Xcode target's Sources build phase;
+the storyboard and new localized/media assets must belong to Resources. Follow
+[upsert-case](.agents/skills/upsert-case/SKILL.md) for the complete change procedure and
+update the Case Index when the case changes.
 
 ## Entry/Main ViewController Pattern
 
@@ -150,10 +149,14 @@ viewDidLoad    → [AgoraRtcEngineKit sharedEngineWithAppId:delegate:]
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear / dealloc
+viewDidDisappear: when isMovingFromParentViewController is true
                → [engine leaveChannel:]
                → [AgoraRtcEngineKit destroy]
 ```
+
+Navigation cleanup is guarded by `isMovingFromParentViewController`, as shown in the
+upsert and review skills. Merely covering the controller does not end the case;
+`dealloc` is not the primary scene-exit hook.
 
 ## Token Flow
 

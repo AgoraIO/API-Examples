@@ -3,7 +3,6 @@ name: review-case
 description: >
   Code review for API examples. Ensures examples follow project conventions,
   handle lifecycle correctly, manage threads safely, and use APIs properly.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -11,451 +10,98 @@ metadata:
   platform: Windows
 ---
 
-# Review Case Skill — Windows
-
-## When to Use
-
-Use this skill when you need to:
-- Review a new or modified example for correctness
-- Ensure the example follows project conventions
-- Verify lifecycle management and thread safety
-- Check API usage and error handling
-
-## Review Dimensions (Priority Order)
-
-### 1. Engine Lifecycle (CRITICAL)
-
-**Check:**
-- [ ] Engine is created in `InitializeAgoraEngine()` or similar
-- [ ] Engine is initialized with `RtcEngineContext`
-- [ ] `leaveChannel()` is called before `release()`
-- [ ] `release()` is called in the case's real cleanup path
-- [ ] No engine leaks (engine not recreated on every join)
-
-**Correct Pattern A — standalone dialog teardown:**
-```cpp
-BOOL CExampleDlg::OnInitDialog() {
-    CDialogEx::OnInitDialog();
-    InitializeAgoraEngine();  // Create once
-    return TRUE;
-}
-
-void CExampleDlg::PostNcDestroy() {
-    LeaveChannel();
-    if (m_rtcEngine) {
-        m_rtcEngine->release();
-        m_rtcEngine = nullptr;
-    }
-    CDialogEx::PostNcDestroy();
-    delete this;
-}
-
-void CExampleDlg::JoinChannel() {
-    if (!m_rtcEngine) return;
-    m_rtcEngine->joinChannel(token, channelName, "", 0);
-}
-
-void CExampleDlg::LeaveChannel() {
-    if (!m_rtcEngine) return;
-    m_rtcEngine->leaveChannel();
-}
-```
-
-**Correct Pattern B — scene-switching dialog teardown:**
-```cpp
-bool CExampleDlg::InitAgora() {
-    m_rtcEngine = createAgoraRtcEngine();
-    // initialize once when the scene becomes active
-    return m_rtcEngine != nullptr;
-}
-
-void CExampleDlg::UnInitAgora() {
-    if (!m_rtcEngine) return;
-    if (m_joinChannel) {
-        m_rtcEngine->leaveChannel();
-    }
-    m_rtcEngine->release(nullptr);
-    m_rtcEngine = nullptr;
-}
-
-void CExampleDlg::OnShowWindow(BOOL bShow, UINT nStatus) {
-    CDialogEx::OnShowWindow(bShow, nStatus);
-    if (!bShow) {
-        UnInitAgora();
-    }
-}
-```
-
-Accept either pattern as long as the dialog follows one lifecycle consistently and does not leak the engine across scene switches.
-
-**Incorrect Pattern:**
-See `references/incorrect-lifecycle.cpp` for common mistakes.
-
----
-
-### 2. Thread Safety (CRITICAL)
-
-**Check:**
-- [ ] All UI updates in event handler use message map pattern
-- [ ] Event handler posts messages to main thread via `PostMessage()`
-- [ ] No direct UI updates from background threads
-- [ ] Message handlers update UI on main thread
-
-**Correct Pattern:**
-```cpp
-// Event handler (may be called from background thread)
-void CExampleRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed) {
-    if (m_hMsgHandler) {
-        // Post message to main thread
-        ::PostMessage(m_hMsgHandler, WM_MSGID(EID_JOIN_CHANNEL_SUCCESS), (WPARAM)uid, 0);
-    }
-}
-
-// Message handler (runs on main thread)
-LRESULT CExampleDlg::OnMsgEngineEvent(WPARAM wParam, LPARAM lParam) {
-    // Safe to update UI here
-    m_statusText.SetWindowText(_T("Joined channel"));
-    return 0;
-}
-```
-
-**Incorrect Pattern:**
-See `references/incorrect-thread-safety.cpp` for common mistakes.
-
----
-
-### 3. Permission Handling (HIGH)
-
-**Check:**
-- [ ] Microphone permission checked before `enableAudio()`
-- [ ] Camera permission checked before `enableVideo()`
-- [ ] Device availability verified
-
-**Correct Pattern:**
-```cpp
-void CExampleDlg::InitializeAgoraEngine() {
-    m_rtcEngine = createAgoraRtcEngine();
-    if (!m_rtcEngine) return;
-    
-    RtcEngineContext context;
-    context.appId = CConfig::GetAppId();
-    context.eventHandler = &m_eventHandler;
-    m_eventHandler.SetMsgReceiver(m_hWnd);
-    
-    m_rtcEngine->initialize(context);
-    
-    // Check device availability
-    if (m_rtcEngine->enableVideo() == 0) {
-        // Video enabled successfully
-    }
-    if (m_rtcEngine->enableAudio() == 0) {
-        // Audio enabled successfully
-    }
-}
-```
-
----
-
-### 4. Error Handling (HIGH)
-
-**Check:**
-- [ ] `joinChannel()` return value checked
-- [ ] Token expiration is handled
-- [ ] Network errors are logged or displayed
-- [ ] Invalid parameters are validated
-- [ ] `onError()` callback implemented
-
-**Correct Pattern:**
-```cpp
-void CExampleDlg::JoinChannel() {
-    if (!m_rtcEngine) return;
-    
-    const char* token = CConfig::GetToken("test");
-    int ret = m_rtcEngine->joinChannel(token, "test", "", 0);
-    if (ret != 0) {
-        // Handle error
-        MessageBox(_T("Failed to join channel"), _T("Error"));
-    }
-}
-
-void CExampleRtcEngineEventHandler::onError(int err) {
-    if (m_hMsgHandler) {
-        ::PostMessage(m_hMsgHandler, WM_MSGID(EID_ERROR), (WPARAM)err, 0);
-    }
-}
-
-LRESULT CExampleDlg::OnMsgEngineEvent(WPARAM wParam, LPARAM lParam) {
-    if (wParam == EID_ERROR) {
-        int errorCode = (int)lParam;
-        // Handle error
-    }
-    return 0;
-}
-```
-
----
-
-### 5. Code Convention (MEDIUM)
-
-**Check:**
-- [ ] Dialog class name follows pattern: `C<ExampleName>Dlg`
-- [ ] Event handler class name: `C<ExampleName>RtcEngineEventHandler`
-- [ ] File names match class names (PascalCase with C prefix)
-- [ ] Member variables use `m_` prefix
-- [ ] Message map properly defined
-- [ ] Comments explain non-obvious logic
-
-**Correct Pattern:**
-```cpp
-// Header: CScreenShareDlg.h
-class CScreenShareRtcEngineEventHandler : public IRtcEngineEventHandler {
-    // ...
-};
-
-class CScreenShareDlg : public CDialogEx {
-    DECLARE_DYNAMIC(CScreenShareDlg)
-    
-private:
-    IRtcEngine* m_rtcEngine = nullptr;
-    CScreenShareRtcEngineEventHandler m_eventHandler;
-    uid_t m_remoteUid = 0;
-    bool m_isJoined = false;
-    
-    BEGIN_MESSAGE_MAP(CScreenShareDlg, CDialogEx)
-        ON_BN_CLICKED(IDC_BUTTON_JOIN, &CScreenShareDlg::OnBnClickedButtonJoin)
-    END_MESSAGE_MAP()
-};
-```
-
----
-
-### 6. API Usage Correctness (MEDIUM)
-
-**Check:**
-- [ ] SDK methods called in correct order
-- [ ] Required parameters are provided
-- [ ] Optional parameters are used correctly
-- [ ] Return values are checked where necessary
-- [ ] Deprecated APIs are not used
-
-**Correct Pattern:**
-```cpp
-// Correct order: create -> initialize -> enable -> join
-m_rtcEngine = createAgoraRtcEngine();
-m_rtcEngine->initialize(context);
-m_rtcEngine->enableVideo();
-m_rtcEngine->enableAudio();
-m_rtcEngine->joinChannel(token, channelName, "", 0);
-```
-
-**Incorrect Pattern:**
-```cpp
-// ❌ Wrong order
-m_rtcEngine->joinChannel(...);  // Join first
-m_rtcEngine->enableVideo();     // Enable after join (too late)
-```
-
----
-
-### 7. Resource Cleanup (MEDIUM)
-
-**Check:**
-- [ ] Audio files are stopped and released
-- [ ] Video captures are stopped
-- [ ] Custom audio/video sources are cleaned up
-- [ ] Observers are unregistered
-- [ ] Timers are killed
-
-**Correct Pattern:**
-```cpp
-void CExampleDlg::LeaveChannel() {
-    if (!m_rtcEngine) return;
-    
-    m_rtcEngine->stopAudioMixing();      // Stop audio
-    m_rtcEngine->stopScreenCapture();    // Stop screen share
-    m_rtcEngine->leaveChannel();
-    m_isJoined = false;
-}
-
-void CExampleDlg::PostNcDestroy() {
-    LeaveChannel();
-    if (m_rtcEngine) {
-        m_rtcEngine->release();
-        m_rtcEngine = nullptr;
-    }
-    CDialogEx::PostNcDestroy();
-    delete this;
-}
-```
-
----
-
-## Review Output Format
-
-When reviewing, provide feedback in this format:
-
-```
-## Review Results
-
-### ✅ Passed
-- Engine lifecycle correctly managed
-- Thread safety ensured with message map pattern
-- Error handling implemented for joinChannel
-
-### ⚠️ Issues Found
-
-**[HIGH] Thread Safety Issue**
-- File: `CScreenShareDlg.cpp`
-- Line: 45
-- Issue: Direct UI update in event handler without PostMessage
-- Suggestion: Use PostMessage to post event to main thread
-
-**[MEDIUM] Missing Error Handling**
-- File: `CScreenShareDlg.cpp`
-- Line: 78
-- Issue: joinChannel() return value not checked
-- Suggestion: Check return value and handle errors
-
-### 🔧 Recommendations
-- Add logging for debugging
-- Consider adding retry logic for network failures
-```
-
----
-
-## Platform-Specific Checks
-
-### Windows-Specific
-
-**Check:**
-- [ ] Using MFC — not WinForms or WPF
-- [ ] Using C++ — not C#
-- [ ] Following MFC naming conventions (C prefix, m_ prefix)
-- [ ] Message map properly defined
-- [ ] Dialog resource properly configured
-- [ ] No modern C++ patterns unless already in codebase
-
-**Correct Pattern:**
-```cpp
-// Windows: Use MFC
-#include "stdafx.h"
-#include "APIExample.h"
-
-class CExampleDlg : public CDialogEx {
-    DECLARE_DYNAMIC(CExampleDlg)
-    
-    BEGIN_MESSAGE_MAP(CExampleDlg, CDialogEx)
-        ON_BN_CLICKED(IDC_BUTTON_JOIN, &CExampleDlg::OnBnClickedButtonJoin)
-    END_MESSAGE_MAP()
-};
-```
-
-**Incorrect Pattern:**
-```cpp
-// ❌ Non-MFC patterns
-using namespace std;  // Avoid in MFC
-auto ptr = std::make_unique<IRtcEngine>();  // Modern C++ not typical in MFC
-```
-
----
-
-## NEVER List
-
-**Do NOT accept:**
-- Engine not released (memory leak)
-- Direct UI updates from event handler without PostMessage
-- Multiple engine instances in one example
-- Hardcoded App ID or token (must use CConfig)
-- Missing `leaveChannel()` before `release()`
-- C# or other languages (C++ only)
-- WinForms or WPF (MFC only)
-- Examples outside `APIExample/APIExample/[Basic|Advanced]/` structure
-- Missing event handler implementation
-- No error handling for joinChannel failures
-- Deviation from MFC naming conventions
-
----
-
-## Review Checklist
-
-Use this checklist when reviewing an example:
-
-**Lifecycle:**
-- [ ] Engine created once in initialization
-- [ ] `leaveChannel()` called before `release()`
-- [ ] `release()` called in `PostNcDestroy()`
-- [ ] No engine leaks
-
-**Thread Safety:**
-- [ ] All UI updates use message map pattern
-- [ ] Event handler posts messages via `PostMessage()`
-- [ ] No direct UI updates from callbacks
-- [ ] Message handlers run on main thread
-
-**Permissions:**
-- [ ] Microphone availability checked
-- [ ] Camera availability checked
-- [ ] Device errors handled
-
-**Error Handling:**
-- [ ] joinChannel return value checked
-- [ ] Token expiration handled
-- [ ] Network errors logged
-- [ ] onError() callback implemented
-
-**Code Quality:**
-- [ ] Follows MFC naming conventions
-- [ ] Message map properly defined
-- [ ] Comments explain non-obvious logic
-- [ ] No hardcoded credentials
-
-**API Usage:**
-- [ ] Methods called in correct order
-- [ ] Required parameters provided
-- [ ] Return values checked
-- [ ] No deprecated APIs
-
-**Resources:**
-- [ ] Audio/video properly stopped
-- [ ] Observers unregistered
-- [ ] Timers killed
-- [ ] No resource leaks
-
-**Platform:**
-- [ ] Using MFC (not WinForms/WPF)
-- [ ] Using C++ (not C#)
-- [ ] Following MFC conventions
-- [ ] No modern C++ patterns unless existing
-
----
-
-## Common Issues and Fixes
-
-### Issue: "Engine not initialized"
-**Cause:** `release()` called without `leaveChannel()` first
-**Fix:** Always call `leaveChannel()` before `release()`
-
-### Issue: "UI crashes or doesn't update"
-**Cause:** Direct UI update from event handler
-**Fix:** Use PostMessage to post event to main thread
-
-### Issue: "Memory leak detected"
-**Cause:** `release()` not called or engine recreated
-**Fix:** Ensure `release()` in `PostNcDestroy()` and create engine once
-
-### Issue: "Token expired error"
-**Cause:** No token refresh handling
-**Fix:** Implement token refresh in error handler
-
-### Issue: "No audio/video"
-**Cause:** Device not available or not enabled
-**Fix:** Check return values of `enableAudio()` / `enableVideo()`
-
----
-
-## References
-
-- **Agora RTC SDK for Windows:** [Documentation](https://docs.agora.io/en/video-calling/reference/windows-sdk)
-- **Existing examples:** Review `APIExample/APIExample/Basic/JoinChannelVideoByToken/` for reference
-- **MFC Documentation:** [Microsoft Foundation Classes](https://docs.microsoft.com/en-us/cpp/mfc/mfc-desktop-applications)
-- **Message Map:** [MFC Message Maps](https://docs.microsoft.com/en-us/cpp/mfc/message-maps)
+# Review Case — Windows
+
+Review the selected MFC case against its behavior contract, current SDK headers and live
+source. Read `APIExample/APIExample/APIExampleDlg.cpp` for scene ownership and
+`APIExample/APIExample/Basic/JoinChannelVideoByToken/` for a nearby implementation.
+Report findings first; do not silently rewrite the case during review.
+
+## Lifecycle and Ownership
+
+- The host precreates dialogs in `InitSceneDialog()`. `OnInitDialog()` initializes UI only.
+  A scene creates its engine in public `InitAgora()`, called from `CreateScene()`.
+- `ReleaseScene()` calls `UnInitAgora()` before hiding the dialog. Cleanup must leave the
+  channel, stop case-owned media, release the engine and clear the pointer even if joining
+  failed or is still pending. Make cleanup idempotent and finish it before another scene
+  creates an engine.
+- For the current SDK, `release(nullptr)` is synchronous; a non-null callback selects
+  asynchronous release. Never destroy from an SDK callback. If using async release, keep
+  the event handler alive until completion and serialize the next engine creation.
+- Keep the callback receiver stable until synchronous release completes, then detach it
+  and discard queued messages belonging to the old engine. Prevent late Token requests
+  from joining after a scene has exited.
+- A destructor is a fallback. `PostNcDestroy()` is sufficient only for a standalone window
+  whose actual exit path destroys it; it cannot replace `UnInitAgora()` for hidden scenes.
+  Do not add `delete this` to a precreated dialog without verifying host ownership.
+
+## Threading and Event Messages
+
+- Implement `IRtcEngineEventHandler`; post SDK events to the UI thread using `PostMessage`.
+  Never mutate MFC controls or block on a UI-thread response inside SDK callbacks.
+- Use event constants from `stdafx.h`, including `EID_JOINCHANNEL_SUCCESS` and `EID_ERROR`.
+  Each message-map handler must interpret the payload actually posted by its callback.
+  An error posted in wParam is an error code, not an event ID; the message ID selects the
+  handler. The SDK error callback signature is `onError(int err, const char* msg)`.
+- Copy callback data before asynchronous use; SDK string/struct pointers may expire on
+  callback return. Free owned payloads on post failure and when discarding queued events.
+- Put `DECLARE_MESSAGE_MAP()` inside the class declaration, and `BEGIN_MESSAGE_MAP` /
+  `END_MESSAGE_MAP` at file scope in the .cpp implementation.
+
+## Configuration, Tokens and Errors
+
+- Obtain App ID through `GET_APP_ID`, which wraps
+  `cs2utf8(CConfig::GetInstance()->GetAPP_ID())`. Keep the UTF-8 string alive through
+  `initialize()`. CConfig does not provide GetAppId or GetToken static methods.
+- Use the case's Token input or an existing asynchronous Token helper with the same
+  channel/UID as the join. Never embed real credentials in source, examples or logs.
+- Verify current join overloads, such as `joinChannel(token, channelId, info, uid)` or
+  `joinChannel(token, channelId, uid, options)`, against the SDK in this project.
+- Check initialization, configuration and join return codes. Release a partially
+  initialized engine on failure. A zero join return value means the request was accepted;
+  wait for the success callback before marking the UI joined.
+- For expiring tokens, handle the SDK Token callbacks, fetch a replacement for the active
+  request and call `renewToken()` only while that scene/engine is still active.
+- Log/display asynchronous errors without confusing every SDK error with a join failure.
+  Provide a recoverable UI state for denied permissions, invalid input and network failure.
+
+## Devices, Media and Cleanup
+
+- Check the devices needed by the case and handle Windows privacy/permission failures.
+  A successful `enableAudio()` or `enableVideo()` call alone does not prove a device exists
+  or capture is authorized. Avoid applying mobile permission APIs to an MFC desktop app.
+- Configure role/profile, tracks, capture and video canvases for the contract. Do not
+  enable camera capture for an audio-only case.
+- Stop and release case-owned capture, mixing, media players, custom sources, device
+  collections, observers, timers and worker threads before releasing their dependencies.
+
+## Structure and Registration
+
+- Use C++/MFC, the `C<ExampleName>Dlg` naming pattern and `m_` member prefixes; keep files
+  under `APIExample/APIExample/Basic/` or `Advanced/` and follow adjacent conventions.
+- Verify dialog resources/control IDs, message maps, header includes and host pointers.
+- Check all three host paths: `InitSceneDialog()`, `CreateScene()` and `ReleaseScene()`.
+  Register the label through `Language.h`, `stdafx.cpp`, `en.ini` and `zh-cn.ini`.
+- Confirm new source/header files belong to `APIExample.vcxproj` and `.filters`, and that
+  the dialog resource is included in `APIExample.rc`. Update the Case Index when needed;
+  use source to verify API names and registration rather than trusting the index alone.
+
+## Verification and Output
+
+Run the project's documented build or the strongest applicable static check for the
+change. Record commands and `PASS`, `FAIL`, `BLOCKED` or `NOT_RUN`. A header/API check on
+another OS does not establish a successful Windows MFC build or RTC session.
+
+For each actionable finding provide severity, file/line, trigger, impact and a concrete
+correction. Include unresolved validation and intentional platform differences. Do not
+approve leaked engines, UI mutations from SDK callbacks, stale callback access, invalid
+project/resource membership or hardcoded credentials.
+
+## Reference Snippets
+
+These are illustrative fragments to adapt to the selected case and its real ownership:
+
+- `correct-lifecycle`: [snippet](references/correct-lifecycle.cpp)
+- `incorrect-lifecycle`: [snippet](references/incorrect-lifecycle.cpp)
+- `correct-thread-safety`: [snippet](references/correct-thread-safety.cpp)
+- `incorrect-thread-safety`: [snippet](references/incorrect-thread-safety.cpp)

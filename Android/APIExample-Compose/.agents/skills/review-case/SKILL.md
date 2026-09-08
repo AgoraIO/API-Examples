@@ -32,7 +32,7 @@ Use this skill after a Compose case has been created or modified in `APIExample-
 
 - Run `./gradlew assembleDebug` from `APIExample-Compose/`
 - Confirm `Examples.kt`, `strings.xml`, and `ARCHITECTURE.md` are aligned
-- Confirm engine lifecycle and cleanup are owned by `DisposableEffect(lifecycleOwner)`, and `rememberSaveable` / `remember` boundaries still match current project practice
+- Confirm the effect cleans up the engine it captured, its keys match engine ownership, and live session state resets with engine recreation. A constant `Unit` key also disposes on leaving composition; do not reject it solely for being constant.
 
 ## Out of scope
 
@@ -41,6 +41,6 @@ Use this skill after a Compose case has been created or modified in `APIExample-
 
 ## Never
 
-- Never approve `DisposableEffect(Unit)` for case cleanup
+- Never approve effect-key changes that destroy an engine while the case continues to reuse that same remembered instance
 - Never approve `RtcEngine` stored in `rememberSaveable`
 - Never skip the build command

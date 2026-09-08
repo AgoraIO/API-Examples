@@ -127,12 +127,15 @@ struct MenuItem: Identifiable {
 
 Navigation uses SwiftUI `NavigationLink`. Each `MenuItem` holds an `AnyView` wrapping the Entry view.
 
-**To add a case, edit exactly two things:**
+**To add a case, update implementation, registration, and Xcode target membership:**
 1. Add a `MenuItem` to the `menus` array in `ContentView.swift`:
    ```swift
    MenuItem(name: "My New Case".localized, view: AnyView(MyNewCaseEntry()))
    ```
 2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift files
+3. Add the new Swift files to the `APIExample-SwiftUI` target's Sources build phase in
+   `APIExample-SwiftUI.xcodeproj/project.pbxproj`; add any new assets or localized files to
+   its Resources build phase
 
 ## Entry/RTC Pattern
 
@@ -149,7 +152,8 @@ Every example is split into two parts:
 - Implements all delegate callbacks
 
 **Main View** (`<ExampleName> : View`)
-- Holds the RTC object as `@ObservedObject`
+- Uses `@StateObject` when it creates and owns the RTC object
+- Uses `@ObservedObject` only when a stable owner creates and injects the RTC object
 - Calls `setupRTC()` in `.onAppear`
 - Calls `onDestroy()` in `.onDisappear`
 

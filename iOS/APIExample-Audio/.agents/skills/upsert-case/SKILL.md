@@ -3,8 +3,7 @@ name: upsert-case
 description: >
   Add a new audio API demo case or modify an existing one in the APIExample-Audio project.
   Uses AgoraAudio_iOS SDK — no video APIs available. Covers folder creation, Entry/Main Swift file,
-  storyboard, MenuItem registration, and Case Index update.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
+  storyboard, MenuItem registration, Xcode target membership, and Case Index update.
 license: MIT
 metadata:
   author: APIExample Team
@@ -17,7 +16,7 @@ metadata:
 ## When to Use
 
 - **Add**: the feature has no existing case in `Examples/Basic/` or `Examples/Advanced/`
-- **Modify**: the case already exists — skip Steps 1–3, go directly to Step 4+
+- **Modify**: the case already exists — follow the Modify Existing Case flow below
 
 Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case does not already exist.
 
@@ -28,10 +27,18 @@ Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case do
 
 | Scenario | Files |
 |----------|-------|
-| Add new case | New folder + `.swift` file + `.storyboard`, `ViewController.swift` (MenuItem), `ARCHITECTURE.md` (Case Index) |
-| Modify existing case | Existing `.swift` file(s), optionally `.storyboard`, `ARCHITECTURE.md` (Case Index) |
+| Add new case | New folder + `.swift` file + `.storyboard`, `ViewController.swift` (MenuItem), `APIExample-Audio.xcodeproj/project.pbxproj` (target membership), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `.swift` file(s), optionally `.storyboard`, `ARCHITECTURE.md` (Case Index); update the project file only for new or moved build inputs |
 
 ---
+
+## Modify Existing Case
+
+1. Locate the existing Swift implementation and change the actual runtime behavior first.
+2. Update storyboard outlets, actions, and controller identifiers when the behavior change needs it.
+3. Adjust registration in `ViewController.swift` only when the menu or navigation wiring changes.
+4. Update Xcode target membership for new or moved build inputs, then synchronize the Case Index.
+5. Build and review the changed behavior, lifecycle, and registration. Reusing an existing folder does not replace implementation work.
 
 ## Step 1 — Create the Example Folder
 
@@ -121,7 +128,15 @@ MenuItem(name: "<Display Name>".localized,
          controller: "<ExampleName>")
 ```
 
-## Step 5 — Update the Case Index
+## Step 5 — Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. For a new case, update
+`APIExample-Audio.xcodeproj/project.pbxproj` so the Swift file belongs to the
+`APIExample-Audio` target's Sources build phase and the storyboard belongs to its Resources
+build phase. Add any new localized or audio resources to Resources as well. Existing-file
+edits do not require a project-file change unless a build input was added or moved.
+
+## Step 6 — Update the Case Index
 
 Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 
@@ -139,6 +154,8 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - [ ] Storyboard has correct scene IDs
 - [ ] No video rendering views in the storyboard
 - [ ] MenuItem added to `ViewController.swift`
+- [ ] New Swift files are in the `APIExample-Audio` target's Sources build phase
+- [ ] New storyboards, localized files, and audio assets are in the target's Resources build phase
 - [ ] `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called in `willMove(toParent:)` when `parent == nil`
 - [ ] UI updates inside delegate callbacks dispatched to `DispatchQueue.main`
 - [ ] Microphone permission requested before `joinChannel()`
@@ -154,5 +171,6 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - NEVER create `AgoraRtcEngineKit` in the Entry VC
 - NEVER call `leaveChannel` or `destroy` in `viewDidDisappear` — use `willMove(toParent:)` with `parent == nil`
 - NEVER update UI directly inside `AgoraRtcEngineDelegate` callbacks — always `DispatchQueue.main.async { }`
+- NEVER add a source or resource file without adding it to the `APIExample-Audio` target
 - NEVER share an `AgoraRtcEngineKit` instance between cases
 - NEVER skip updating the Case Index in `ARCHITECTURE.md`

@@ -4,7 +4,6 @@ description: >
   Structured code review for a case in the APIExample-Audio project.
   Checks engine lifecycle, audio-only constraints, thread safety, permissions, and API correctness.
   This project uses AgoraAudio_iOS — video APIs must not appear.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -106,6 +105,16 @@ All `AgoraRtcEngineDelegate` callbacks may arrive on a background thread.
 - Echo test stopped (`stopEchoTest()`) if started
 - Last-mile probe stopped (`stopLastmileProbeTest()`) if started
 - Custom audio tracks destroyed on exit
+
+---
+
+### 9. Xcode Target Membership
+
+For a new or moved case, verify `APIExample-Audio.xcodeproj/project.pbxproj` explicitly adds
+every Swift file to the `APIExample-Audio` target's Sources build phase and every storyboard,
+localized file, or audio asset to its Resources build phase. A file existing in the folder
+is not enough. Do not require a project-file edit for an existing build input that was only
+modified.
 
 ---
 

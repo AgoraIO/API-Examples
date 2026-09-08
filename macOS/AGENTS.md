@@ -25,12 +25,14 @@ Configure your Agora App ID in `APIExample/Common/KeyCenter.swift`:
 struct KeyCenter {
     static let AppId: String = "<#YOUR_APP_ID#>"
     
-    // Token is optional for testing, but required for production
-    static func Token(channelName: String) -> String {
-        return "<#YOUR_TOKEN#>"
-    }
+    static let Certificate: String? = nil
 }
 ```
+
+The current KeyCenter has AppId and Certificate only. Cases obtain tokens through
+`NetworkManager.shared.generateToken(channelName:uid:success:)` in
+`APIExample/Common/NetworkManager/NetworkManager.swift`. Never stage real credentials in
+this tracked configuration file.
 
 ## Architecture Red Lines
 

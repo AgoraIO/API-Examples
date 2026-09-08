@@ -3,7 +3,6 @@ name: query-cases
 description: >
   Find existing API demo cases in the APIExample project by feature name, API name, or keyword.
   Use this before creating a new case to avoid duplication.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team

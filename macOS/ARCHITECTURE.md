@@ -69,7 +69,7 @@ All examples are registered in `APIExample/ViewController.swift` via a menu or l
 ### Common Utilities
 
 All examples share utilities from `APIExample/Common/`:
-- `KeyCenter` — App ID and token
+- `KeyCenter` — App ID and optional Certificate
 - `GlobalSettings` — Shared runtime configuration
 - `LogUtils` — SDK log path
 - `Util` — Privatization configuration
@@ -116,39 +116,28 @@ All examples share utilities from `APIExample/Common/`:
 
 ## Engine Lifecycle
 
-```
-1. Create Engine
-   createAgoraRtcEngine()
-   
-2. Initialize Engine
-   initialize(AgoraRtcEngineConfig)
-   
-3. Enable Features (optional)
-   enableVideo(), enableAudio()
-   
-4. Setup Local Media (optional)
-   setupLocalVideo(), startAudioMixing()
-   
-5. Join Channel
-   joinChannel(token, channelName, uid)
-   
-6. Handle Callbacks
-   onJoinChannelSuccess(), onUserJoined(), onUserOffline()
-   
-7. Leave Channel
-   leaveChannel()
-   
-8. Destroy Engine
-   destroy()
-```
+The main case controller creates its engine using
+`AgoraRtcEngineKit.sharedEngine(with:delegate:)` and `AgoraRtcEngineConfig`. After media
+configuration and permission checks, it joins with
+`joinChannel(byToken:channelId:uid:mediaOptions:)`.
+
+The host calls `viewWillBeRemovedFromSplitView()` when switching cases. Cleanup invalidates
+pending Token/join requests, stops case-owned media, calls `leaveChannel(nil)` and
+`AgoraRtcEngineKit.destroy()`, then clears the engine reference. SDK delegate callbacks may
+arrive on background threads; AppKit updates go to the main queue.
+
+See [upsert-case](.agents/skills/upsert-case/SKILL.md) and
+[review-case](.agents/skills/review-case/SKILL.md) for implementation and verification steps.
 
 ## Token Flow
 
-Token is obtained from `KeyCenter.swift` and passed to `joinChannel()`:
+`KeyCenter` supplies AppId and optional Certificate. The basic case uses
+`NetworkManager.shared.generateToken(channelName:uid:success:)` to obtain a Token for the
+same channel and UID passed to `joinChannel(byToken:channelId:uid:mediaOptions:)`. A case may
+also expose explicit Token input. There is no `KeyCenter.Token` API.
 
-```swift
-let token = KeyCenter.Token(channelName: channelName)
-agoraKit.joinChannel(byToken: token, channelName: channelName, info: nil, uid: 0)
-```
-
-For production, tokens should be generated server-side and refreshed before expiration.
+When Certificate is absent, the helper returns nil for projects that do not require Token
+authentication. When authentication is required, handle a failed request explicitly, and
+refresh expiring tokens using `renewToken(_:)`. Before using an asynchronous response,
+confirm the request still belongs to the active case and engine. Production tokens should
+be generated on a server.

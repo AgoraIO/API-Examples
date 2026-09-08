@@ -36,14 +36,14 @@ useDefault = true
 [[rules]]
 id = "agora-app-id-pattern"
 description = "Agora App ID Pattern"
-regex = '''(?i)(AGORA_APP_ID|AG_APP_ID|static\s+let\s+AppId:\s+String|static\s+let\s+AG_APP_ID:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,32})['"]?)'''
-secretGroup = 3
+regex = '''(?i)(?:AGORA_APP_ID|AG_APP_ID|APP_?ID)(?:\s*:\s*String)?\s*(?:=|\s)\s*@?['"]?([0-9a-zA-Z]{32})'''
+secretGroup = 1
 
 [[rules]]
 id = "agora-app-certificate-pattern"
 description = "Agora App Certificate Pattern"
-regex = '''(?i)(AGORA_APP_CERTIFICATE|AG_APP_CERTIFICATE|static\s+let\s+Certificate:\s+String\?|static\s+let\s+AG_APP_CERTIFICATE:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,32})['"]?)'''
-secretGroup = 3
+regex = '''(?i)(?:AGORA_APP_CERTIFICATE|AG_APP_CERTIFICATE|AGORA_APP_CERT|AG_APP_CERT|Certificate)(?:\s*:\s*String\??)?\s*=\s*@?['"]?([0-9a-zA-Z]{32})'''
+secretGroup = 1
 
 [[rules]]
 id = "basic-auth-key"
@@ -112,7 +112,7 @@ regex = '''(?i)sk-(live|test|proj)-[0-9a-zA-Z]{24,48}'''
 
 [allowlist]
 description = "global allow lists"
-regexes = ['''219-09-9999''', '''078-05-1120''', '''(9[0-9]{2}|666)-\d{2}-\d{4}''']
+regexes = ['''^0{32}$''', '''219-09-9999''', '''078-05-1120''', '''(9[0-9]{2}|666)-\d{2}-\d{4}''']
 paths = [
     '''gitleaks.toml''',
     '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket)$''',

@@ -22,7 +22,7 @@ Use this skill to add a new case or update an existing case in `APIExample/`. It
 3. `APIExample/app/src/main/java/io/agora/api/example/examples/**`
 4. `APIExample/app/src/main/res/navigation/nav_graph.xml`
 5. `APIExample/app/src/main/res/values/strings.xml`
-6. `APIExample/.agents/skills/upsert-case/references/fragment-template.java`
+6. [fragment-template.java](references/fragment-template.java)
 
 ## Procedure
 
@@ -47,5 +47,6 @@ Use this skill to add a new case or update an existing case in `APIExample/`. It
 
 - Never omit `setParameters(...)`
 - Never skip the `getPrivateCloudConfig()` null-check
-- Never call `RtcEngine.destroy()` directly on the main thread
+- Never call `RtcEngine.destroy()` inside an SDK callback or let pending destruction overlap the next engine initialization
+- Never assume `handler.post` runs destruction on a worker; BaseFragment's handler uses the main Looper
 - Never stop at “it compiles” without updating registration and `ARCHITECTURE.md`

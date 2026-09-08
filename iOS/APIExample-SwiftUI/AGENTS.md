@@ -17,7 +17,8 @@ static let AppId: String = "YOUR_APP_ID"
 static let Certificate: String? = nil   // leave nil if App Certificate is not enabled
 ```
 
-To obtain an App ID, see [README.md](README.md#obtain-an-app-id).
+Follow the [repository-wide sensitive configuration rules](../../AGENTS.md#sensitive-configuration)
+and never stage a real App ID or certificate in this tracked file.
 
 ## Skills
 

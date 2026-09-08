@@ -2,8 +2,8 @@
 name: upsert-case
 description: >
   Add a new API demo case or modify an existing one in the APIExample-OC (Objective-C + UIKit) project.
-  Covers folder creation, Entry/Main OC files, storyboard, MenuItem registration, and Case Index update.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
+  Covers folder creation, Entry/Main OC files, storyboard, MenuItem registration, Xcode target
+  membership, and Case Index update.
 license: MIT
 metadata:
   author: APIExample Team
@@ -16,7 +16,7 @@ metadata:
 ## When to Use
 
 - **Add**: the feature has no existing case in `Examples/Basic/` or `Examples/Advanced/`
-- **Modify**: the case already exists — skip Steps 1–3, go directly to Step 4+
+- **Modify**: the case already exists — follow the Modify Existing Case flow below
 
 Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case does not already exist.
 
@@ -24,10 +24,18 @@ Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case do
 
 | Scenario | Files |
 |----------|-------|
-| Add new case | New folder + `.h/.m` files + `.storyboard`, `ViewController.m` (MenuItem), `ARCHITECTURE.md` (Case Index) |
-| Modify existing case | Existing `.h/.m` files, optionally `.storyboard`, `ARCHITECTURE.md` (Case Index) |
+| Add new case | New folder + `.h/.m` files + `.storyboard`, `ViewController.m` (MenuItem), `APIExample-OC.xcodeproj/project.pbxproj` (target membership), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `.h/.m` files, optionally `.storyboard`, `ARCHITECTURE.md` (Case Index); update the project file only for new or moved build inputs |
 
 ---
+
+## Modify Existing Case
+
+1. Locate the existing .h/.m implementation and change the actual runtime behavior first.
+2. Update storyboard outlets, actions, and controller identifiers when the behavior change needs it.
+3. Adjust registration in `ViewController.m` only when the menu or navigation wiring changes.
+4. Update Xcode target membership for new or moved build inputs, then synchronize the Case Index.
+5. Build and review the changed behavior, lifecycle, and registration. Reusing an existing folder does not replace implementation work.
 
 ## Step 1 — Create the Example Folder
 
@@ -136,7 +144,16 @@ Add to `+[MenuSection menus]` in `ViewController.m`:
                     controller:@""]
 ```
 
-## Step 6 — Update the Case Index
+## Step 6 — Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. For a new case, update
+`APIExample-OC.xcodeproj/project.pbxproj` so the `.m` file belongs to the `APIExample-OC`
+target's Sources build phase, the header has a file reference, and the storyboard belongs
+to the target's Resources build phase. Add new localized or media resources to Resources
+as well. Existing-file edits do not require a project-file change unless a build input was
+added or moved.
+
+## Step 7 — Update the Case Index
 
 Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 
@@ -153,6 +170,8 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - [ ] Main inherits `BaseViewController` and conforms to `AgoraRtcEngineDelegate`
 - [ ] Storyboard has correct scene IDs
 - [ ] MenuItem added to `ViewController.m`
+- [ ] New Objective-C files are referenced and the `.m` file is in the `APIExample-OC` target's Sources build phase
+- [ ] New storyboards, localized files, and media assets are in the target's Resources build phase
 - [ ] `leaveChannel:` + `[AgoraRtcEngineKit destroy]` called when leaving
 - [ ] UI updates inside delegate callbacks dispatched via `dispatch_async(dispatch_get_main_queue(), ^{ })`
 - [ ] `__weak typeof(self) weakSelf = self` used in blocks that capture `self`
@@ -168,6 +187,7 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - NEVER use `__unsafe_unretained` for delegate references — use `__weak`
 - NEVER update UI directly inside `AgoraRtcEngineDelegate` callbacks — always `dispatch_async(dispatch_get_main_queue(), ^{ })`
 - NEVER add a new scene to `Main.storyboard` — each case must have its own `.storyboard` file
+- NEVER add a source or resource file without adding it to the `APIExample-OC` target
 - NEVER share an `AgoraRtcEngineKit` instance between cases
 - NEVER call `joinChannelByToken:` before requesting camera/microphone permissions
 - NEVER skip updating the Case Index in `ARCHITECTURE.md`

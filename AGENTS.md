@@ -27,14 +27,14 @@ Each platform directory contains its own `AGENTS.md` with platform-specific rule
 
 ## AI Engineering Workflow
 
-For AI-assisted version iteration, product-to-implementation routing, multi-agent acceptance, or automatic API example generation, use the repository workflow in `.agents/skills/api-example-release-iteration/SKILL.md`.
+For a requirement that may affect more than one project, use
+`.agents/skills/cross-platform-api-change/SKILL.md`. It requires one shared behavior contract,
+an explicit decision for all nine projects, per-project validation, and a final
+cross-platform comparison.
 
-Supporting documents:
-- `docs/ai-engineering/knowledge-index.md` - repository knowledge map for agents.
-- `docs/ai-engineering/release-iteration-gate.md` - product, architecture, review, test, and UX acceptance gates.
-- `docs/ai-engineering/role-routing.json` - shared Contract and independent platform role types with logical Codex profiles.
-- `docs/ai-engineering/repository-profile.json` - repository-specific SDK package names and version sources used by the shared tools.
-- `docs/ai-engineering/release-known-issues.md` - repository release-risk reference.
+Durable workflow documentation lives in `docs/ai/`. Start with `docs/ai/README.md`; use
+`docs/ai/change-contract-template.md` before implementation and record the final scope and
+evidence in `.github/pull_request_template.md`.
 
 ## Cross-Platform Rules
 
@@ -42,7 +42,7 @@ Supporting documents:
 2. Each platform manages its own SDK version — check the platform-level config file before assuming a version.
 3. All examples follow the same structural pattern within their platform: one self-contained class per API feature, managing its own engine lifecycle.
 4. Always call the SDK's leave-channel and destroy APIs when an example screen is closed.
-5. SDK event/delegate callbacks may arrive on a background thread — always dispatch UI updates to the main thread.
+5. SDK event/delegate callbacks may arrive on a background thread — follow the selected project's threading rules and keep UI or state updates framework-safe.
 
 ## Repository-Level Files
 
@@ -51,7 +51,10 @@ Supporting documents:
 | `HOOKS-GUIDE.md` | Git hook installation (sensitive-info detection, commit-message rules) |
 | `.pre-commit-config.yaml` | Pre-commit hook configuration |
 | `.gitleaks.toml` | Gitleaks allowlist configuration |
-| `azure-pipelines.yml` | CI/CD pipeline definition |
+| `.github/workflows/compile.yml` | Post-release compile-only checks using a placeholder App ID |
+| `.github/workflows/repository-policy.yml` | Remote sensitive-information, commit-message, and AI asset checks |
+| `.github/ci/build/` | Jenkins release packaging entry points |
+| `.github/ci/README.md` | CI ownership, entry points, and local verification |
 
 ## Git Hooks
 
@@ -71,6 +74,8 @@ Never commit a real App ID, App Certificate, or token. The mechanism differs by 
 | Android | `local.properties` at each project root, key `AGORA_APP_ID`, read by `app/build.gradle`(`.kts`) into `BuildConfig.AGORA_APP_ID` | No — `local.properties` is git-ignored |
 | iOS | `<Project>/Common/KeyCenter.swift`, or `KeyCenter.h` / `KeyCenter.m` for `APIExample-OC` | **Yes** |
 | macOS | `APIExample/Common/KeyCenter.swift` | **Yes** |
-| Windows | `APIExample/APIExample/CConfig.h` and `CConfig.cpp` | **Yes** |
+| Windows | `windows/APIExample/APIExample/stdafx.h` for the compile-time `APP_ID`; `CConfig.cpp` also reads `AppID.ini` beside the built executable when the placeholder remains | `stdafx.h`: **Yes**; generated `AppID.ini`: **No** |
 
 The iOS, macOS, and Windows credential files are tracked placeholder files, not git-ignored. Editing one to build locally leaves a real credential in a tracked file, so never stage it. The safety net is the gitleaks pre-commit hook (see Git Hooks above), not `.gitignore` — do not rely on git ignoring these paths.
+
+GitHub Actions compilation uses an all-zero 32-character placeholder App ID and does not run RTC sessions. It must not use repository secrets, App Certificates, or tokens. The compile workflow runs automatically only after changes reach `main`, when the referenced SDK version is available from public package repositories.

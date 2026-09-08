@@ -2,8 +2,8 @@
 name: upsert-case
 description: >
   Add a new API demo case or modify an existing one in the APIExample (UIKit + Swift) project.
-  Covers folder creation, Entry/Main Swift file, storyboard, MenuItem registration, and Case Index update.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
+  Covers folder creation, Entry/Main Swift file, storyboard, MenuItem registration, Xcode target
+  membership, and Case Index update.
 license: MIT
 metadata:
   author: APIExample Team
@@ -24,8 +24,8 @@ Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case do
 
 | Scenario | Files |
 |----------|-------|
-| Add new case | New folder + `.swift` file + `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` (MenuItem), `ARCHITECTURE.md` (Case Index) |
-| Modify existing case | Existing `.swift` file(s), optionally `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` if registration/wiring changed, `ARCHITECTURE.md` (Case Index) |
+| Add new case | New folder + `.swift` file + `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` (MenuItem), `APIExample.xcodeproj/project.pbxproj` (target membership), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `.swift` file(s), optionally `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` if registration/wiring changed, `ARCHITECTURE.md` (Case Index); update the project file only for new or moved build inputs |
 
 ---
 
@@ -146,7 +146,15 @@ MenuItem(name: "<Display Name>".localized,
 
 Place it in the correct section (Basic / Advanced).
 
-## Step 5 — Update the Case Index
+## Step 5 — Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. For a new case, update
+`APIExample.xcodeproj/project.pbxproj` so the Swift file belongs to the `APIExample`
+target's Sources build phase and the storyboard belongs to its Resources build phase.
+Add any new localized or media resources to Resources as well. Existing-file edits do not
+require a project-file change unless a build input was added or moved.
+
+## Step 6 — Update the Case Index
 
 Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 
@@ -166,6 +174,8 @@ Key APIs: list 2–5 core SDK methods the case demonstrates. Do not list `joinCh
 - [ ] Storyboard has correct scene IDs
 - [ ] Entry scene follows default UI convention (channel input + Join button), unless the user requested otherwise
 - [ ] MenuItem added to `ViewController.swift`
+- [ ] New Swift files are in the `APIExample` target's Sources build phase
+- [ ] New storyboards, localized files, and media assets are in the target's Resources build phase
 - [ ] `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called in `willMove(toParent:)` when `parent == nil`
 - [ ] UI updates inside delegate callbacks dispatched to `DispatchQueue.main`
 - [ ] Camera/microphone permissions requested before `joinChannel()`
@@ -180,6 +190,7 @@ Key APIs: list 2–5 core SDK methods the case demonstrates. Do not list `joinCh
 - NEVER call `leaveChannel` or `destroy` in `viewDidDisappear` — use `willMove(toParent:)` with `parent == nil`
 - NEVER update UI directly inside `AgoraRtcEngineDelegate` callbacks — always `DispatchQueue.main.async { }`
 - NEVER add a new scene to `Main.storyboard` — each case must have its own `.storyboard` file
+- NEVER add a source or resource file without adding it to the `APIExample` target
 - NEVER share an `AgoraRtcEngineKit` instance between cases
 - NEVER call `joinChannel` before requesting camera/microphone permissions
 - NEVER skip updating the Case Index in `ARCHITECTURE.md`

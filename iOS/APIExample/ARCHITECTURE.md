@@ -164,9 +164,11 @@ struct MenuItem {
 
 Most examples use path 2 (their own storyboard).
 
-**To add a case, edit exactly two things:**
-1. Add a `MenuItem` to the `menus` array in `ViewController.swift`
-2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift file(s) and storyboard
+A registered case connects the `MenuItem`, its Swift controller(s), and its storyboard.
+New source files must belong to the Xcode target's Sources build phase, and storyboards,
+localized files, and media assets must belong to Resources. Follow
+[upsert-case](.agents/skills/upsert-case/SKILL.md) for the complete change procedure and
+update the Case Index when the case changes.
 
 ## Entry/Main ViewController Pattern
 
@@ -190,10 +192,14 @@ viewDidLoad    → AgoraRtcEngineKit.sharedEngine(withAppId:delegate:)
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear / willMove(toParent:)
+willMove(toParent:) when parent == nil
                → engine.leaveChannel()
                → AgoraRtcEngineKit.destroy()
 ```
+
+For navigation-based cases, cleanup runs when the controller is removed from its parent.
+Temporary disappearance alone must not destroy the engine; follow the guarded cleanup in
+the upsert and review skills.
 
 ## Token Flow
 

@@ -40,6 +40,8 @@ public abstract class ExampleCaseTemplate extends BaseFragment {
         if (engine != null) {
             engine.leaveChannel();
         }
+        // BaseFragment's handler targets the main Looper. This defers work; it does not
+        // move destruction to a worker. Finish teardown before initializing another case.
         handler.post(RtcEngine::destroy);
         engine = null;
     }

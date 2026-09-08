@@ -3,7 +3,6 @@ name: review-case
 description: >
   Structured code review for a case in the APIExample (UIKit + Swift) project.
   Checks engine lifecycle, thread safety, permissions, error handling, API correctness, and code conventions.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -128,6 +127,15 @@ AgoraAudioSession.sharedInstance().requestRecordPermission { [weak self] granted
 - Media player destroyed if created (`agoraKit.destroy(mediaPlayer)`)
 - Screen capture stopped if started (`stopScreenCapture()`)
 - Multi-camera capture stopped if started (`stopCameraCapture(.cameraSecondary)`)
+
+---
+
+### 8. Xcode Target Membership
+
+For a new or moved case, verify `APIExample.xcodeproj/project.pbxproj` explicitly adds every
+Swift file to the `APIExample` target's Sources build phase and every storyboard, localized
+file, or media asset to its Resources build phase. A file existing in the folder is not
+enough. Do not require a project-file edit for an existing build input that was only modified.
 
 ---
 

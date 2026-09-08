@@ -1,0 +1,161 @@
+name: Compile CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compile-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLACEHOLDER_APP_ID: "00000000000000000000000000000000"
+
+jobs:
+  android:
+    name: Android (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Full
+            project: Android/APIExample
+          - name: Audio
+            project: Android/APIExample-Audio
+          - name: Compose
+            project: Android/APIExample-Compose
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+          cache-dependency-path: |
+            ${{ matrix.project }}/**/*.gradle*
+            ${{ matrix.project }}/gradle/wrapper/gradle-wrapper.properties
+      - uses: android-actions/setup-android@v3
+      - name: Configure compile-only App ID
+        working-directory: ${{ matrix.project }}
+        run: printf 'AGORA_APP_ID=%s\nAGORA_APP_CERT=\n' "$PLACEHOLDER_APP_ID" > local.properties
+      - name: Compile
+        working-directory: ${{ matrix.project }}
+        run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
+
+  ios:
+    name: iOS (${{ matrix.name }})
+    runs-on: macos-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Full
+            project: iOS/APIExample
+            workspace: APIExample.xcworkspace
+            scheme: APIExample
+            key_center: APIExample/Common/KeyCenter.swift
+            rtc_pod: AgoraRtcEngine_iOS
+          - name: Audio
+            project: iOS/APIExample-Audio
+            workspace: APIExample-Audio.xcworkspace
+            scheme: APIExample-Audio
+            key_center: APIExample-Audio/Common/KeyCenter.swift
+            rtc_pod: AgoraAudio_iOS
+          - name: SwiftUI
+            project: iOS/APIExample-SwiftUI
+            workspace: APIExample-SwiftUI.xcworkspace
+            scheme: APIExample-SwiftUI
+            key_center: APIExample-SwiftUI/Common/KeyCenter.swift
+            rtc_pod: AgoraRtcEngine_iOS
+          - name: Objective-C
+            project: iOS/APIExample-OC
+            workspace: APIExample-OC.xcworkspace
+            scheme: APIExample-OC
+            key_center: APIExample-OC/Common/KeyCenter.m
+            rtc_pod: AgoraRtcEngine_iOS
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select the published RTC pod
+        working-directory: ${{ matrix.project }}
+        env:
+          RTC_POD: ${{ matrix.rtc_pod }}
+        run: |
+          if grep -Eq "^[[:space:]]*pod 'sdk'" Podfile; then
+            rtc_version="$(grep -E "pod '$RTC_POD'" Podfile | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)"
+            test -n "$rtc_version"
+            perl -0pi -e "s/^[ \\t]*pod 'sdk', :path => 'sdk\\.podspec'/   pod '$RTC_POD', '$rtc_version'/m" Podfile
+          fi
+      - name: Configure compile-only App ID
+        working-directory: ${{ matrix.project }}
+        env:
+          KEY_CENTER: ${{ matrix.key_center }}
+        run: |
+          perl -0pi -e 's/<#YOUR AppId#>/"$ENV{PLACEHOLDER_APP_ID}"/g; s/<#APPID#>/"$ENV{PLACEHOLDER_APP_ID}"/g; s/<#YOUR APPID#>/@"$ENV{PLACEHOLDER_APP_ID}"/g' "$KEY_CENTER"
+          ! grep -Eq '<#[^#]+#>' "$KEY_CENTER"
+      - name: Install CocoaPods dependencies
+        working-directory: ${{ matrix.project }}
+        run: pod install --repo-update
+      - name: Compile
+        working-directory: ${{ matrix.project }}
+        env:
+          WORKSPACE_NAME: ${{ matrix.workspace }}
+          SCHEME: ${{ matrix.scheme }}
+        run: |
+          xcodebuild \
+            -workspace "$WORKSPACE_NAME" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/ios-${{ matrix.name }}" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure compile-only App ID
+        working-directory: macOS
+        run: |
+          perl -0pi -e 's/<#YOUR AppId#>/"$ENV{PLACEHOLDER_APP_ID}"/g' APIExample/Common/KeyCenter.swift
+          ! grep -Eq '<#[^#]+#>' APIExample/Common/KeyCenter.swift
+      - name: Install CocoaPods dependencies
+        working-directory: macOS
+        run: pod install --repo-update
+      - name: Compile
+        working-directory: macOS
+        run: |
+          xcodebuild \
+            -workspace APIExample.xcworkspace \
+            -scheme APIExample \
+            -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/macos" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+  windows:
+    name: Windows
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Install public dependencies
+        working-directory: windows/APIExample
+        shell: pwsh
+        run: ./install.ps1
+      - name: Compile
+        working-directory: windows/APIExample
+        shell: pwsh
+        run: msbuild APIExample.sln -m /p:Configuration=Release /p:Platform=Win32

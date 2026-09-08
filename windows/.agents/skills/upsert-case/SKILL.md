@@ -4,7 +4,6 @@ description: >
   Add a new API example or modify an existing one. Covers both creation and modification scenarios,
   including dialog class structure, registration in APIExampleDlg, localization wiring, and
   ARCHITECTURE.md updates.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -105,6 +104,14 @@ Create `APIExample/APIExample/[Basic|Advanced]/<ExampleName>/C<ExampleName>Dlg.c
 
 Use the template from `references/example-template.cpp` as a starting point. Replace `<ExampleName>` with your example name.
 
+Provide public `InitAgora()` and `UnInitAgora()` for host scene activation/exit.
+`OnInitDialog()` initializes UI only because the host precreates these windows. Cleanup
+must be idempotent, invalidate pending work, leave the channel, stop case-owned media and
+release the engine before the next scene starts. Keep the event receiver alive through
+release and discard old queued messages. The current SDK's `release(nullptr)` is
+synchronous; never release in an SDK callback. Adapt the skeleton's microphone-only join,
+device/permission checks, Token renewal and UI state to the selected case.
+
 ### Step 5: Register in APIExampleDlg
 
 Do not edit `CSceneDialog.cpp` for case registration. In this project, scene ownership lives in the main dialog:
@@ -144,7 +151,7 @@ Add a new row to the Case Index table in `ARCHITECTURE.md`:
 - [ ] Code compiles without errors
 - [ ] Example appears in the scene list
 - [ ] Example can join channel and receive callbacks
-- [ ] `leaveChannel()` and `release()` are called on close
+- [ ] `UnInitAgora()` cleans up when switching scenes, including a pending or failed join
 - [ ] UI updates happen on main thread (via message map)
 - [ ] Localized labels resolve correctly in both `en.ini` and `zh-cn.ini`
 - [ ] ARCHITECTURE.md Case Index is updated
@@ -192,9 +199,9 @@ After completing the upsert, verify:
 - [ ] Example is registered in `APIExampleDlg.h` and `APIExampleDlg.cpp`
 - [ ] Scene label is declared in `Language.h` and initialized in `stdafx.cpp`
 - [ ] Scene label has entries in both `en.ini` and `zh-cn.ini`
-- [ ] `InitializeAgoraEngine()` creates engine with correct config
-- [ ] `JoinChannel()` uses token from `CConfig`
-- [ ] `LeaveChannel()` and `release()` are called in `PostNcDestroy()`
+- [ ] `InitAgora()` creates/initializes the engine only on scene activation using `GET_APP_ID`
+- [ ] `JoinChannel()` uses the case's Token input or existing helper for the active channel/UID
+- [ ] `UnInitAgora()` leaves, stops case-owned media and releases on scene exit before hide; a destructor is only a fallback
 - [ ] All engine events posted to main thread via `PostMessage()`
 - [ ] `APIExample.vcxproj` and `.filters` include the new files when they were added outside the IDE
 - [ ] `ARCHITECTURE.md` Case Index includes new/updated example

@@ -2,8 +2,8 @@
 name: upsert-case
 description: >
   Add a new API demo case or modify an existing one in the APIExample-SwiftUI project.
-  Covers folder creation, Entry view, RTC class, MenuItem registration, and Case Index update.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
+  Covers folder creation, Entry view, RTC class, MenuItem registration, Xcode target membership,
+  and Case Index update.
 license: MIT
 metadata:
   author: APIExample Team
@@ -16,7 +16,7 @@ metadata:
 ## When to Use
 
 - **Add**: the feature has no existing case in `Examples/Basic/` or `Examples/Advanced/`
-- **Modify**: the case already exists — skip Steps 1–3, go directly to Step 4+
+- **Modify**: the case already exists — follow the Modify Existing Case flow below
 
 Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case does not already exist.
 
@@ -24,10 +24,18 @@ Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case do
 
 | Scenario | Files |
 |----------|-------|
-| Add new case | New folder + `<ExampleName>RTC.swift` + `<ExampleName>.swift`, `ContentView.swift` (MenuItem), `ARCHITECTURE.md` (Case Index) |
-| Modify existing case | Existing `*RTC.swift` and/or `*.swift` view files, `ARCHITECTURE.md` (Case Index) |
+| Add new case | New folder + `<ExampleName>RTC.swift` + `<ExampleName>.swift`, `ContentView.swift` (MenuItem), `APIExample-SwiftUI.xcodeproj/project.pbxproj` (target membership), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `*RTC.swift` and/or `*.swift` view files, `ARCHITECTURE.md` (Case Index); update the project file only for new or moved build inputs |
 
 ---
+
+## Modify Existing Case
+
+1. Locate the existing RTC class and SwiftUI view files and change the actual runtime behavior first.
+2. Update view state, actions, and navigation when the behavior change needs it.
+3. Adjust registration in `ContentView.swift` only when the menu or navigation wiring changes.
+4. Update Xcode target membership for new or moved build inputs, then synchronize the Case Index.
+5. Build and review the changed behavior, lifecycle, and registration. Reusing an existing folder does not replace implementation work.
 
 ## Step 1 — Create the Example Folder
 
@@ -109,7 +117,7 @@ struct <ExampleName>Entry: View {
 
 struct <ExampleName>: View {
     @State var configs: [String: Any] = [:]
-    @ObservedObject private var rtc = <ExampleName>RTC()
+    @StateObject private var rtc = <ExampleName>RTC()
 
     var body: some View {
         VStack { /* UI here */ }
@@ -127,7 +135,15 @@ Add to the `menus` array in `APIExample-SwiftUI/ContentView.swift`:
 MenuItem(name: "<Display Name>".localized, view: AnyView(<ExampleName>Entry()))
 ```
 
-## Step 5 — Update the Case Index
+## Step 5 — Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. For a new case, update
+`APIExample-SwiftUI.xcodeproj/project.pbxproj` so both Swift files belong to the
+`APIExample-SwiftUI` target's Sources build phase. Add any new assets or localized files to
+the same target's Resources build phase. Existing-file edits do not require a project-file
+change unless a build input was added or moved.
+
+## Step 6 — Update the Case Index
 
 Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 
@@ -142,11 +158,13 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - [ ] Folder created under correct category (Basic / Advanced)
 - [ ] RTC class inherits `NSObject`, conforms to `ObservableObject` and `AgoraRtcEngineDelegate`
 - [ ] Engine created in `setupRTC`, destroyed in `onDestroy`
-- [ ] Main view uses `@ObservedObject` (not `@StateObject`) for the RTC object
+- [ ] Main view uses `@StateObject` when it constructs the RTC object; `@ObservedObject` is used only for an externally owned, injected object
 - [ ] `setupRTC` called in `.onAppear`, `onDestroy` called in `.onDisappear`
 - [ ] `leaveChannel` + `AgoraRtcEngineKit.destroy()` called in `onDestroy`
 - [ ] UI updates inside delegate callbacks dispatched to `DispatchQueue.main`
 - [ ] MenuItem added to `ContentView.swift`
+- [ ] New Swift files are in the `APIExample-SwiftUI` target's Sources build phase
+- [ ] New assets or localized files are in the target's Resources build phase, when applicable
 - [ ] Case Index row added/updated in `ARCHITECTURE.md`
 - [ ] Project builds without errors
 
@@ -155,7 +173,8 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 ## NEVER
 
 - NEVER create `AgoraRtcEngineKit` in the Entry view
-- NEVER use `@StateObject` for the RTC object in the Main view — the Main view does not own its lifetime
+- NEVER construct an RTC object in a view and store it as `@ObservedObject` — use `@StateObject`; reserve `@ObservedObject` for an externally owned, injected object
+- NEVER add a source or resource file without adding it to the `APIExample-SwiftUI` target
 - NEVER call SDK APIs inside SwiftUI `body` — only in `.onAppear`, `.onDisappear`, or explicit user action handlers
 - NEVER update UI directly inside `AgoraRtcEngineDelegate` callbacks — always `DispatchQueue.main.async { }`
 - NEVER share an `AgoraRtcEngineKit` instance between cases

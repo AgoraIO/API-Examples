@@ -2,8 +2,8 @@
 name: upsert-case
 description: >
   Add a new API example or modify an existing one. Covers both creation and modification scenarios,
-  including file structure, per-example storyboard creation, registration, and ARCHITECTURE.md updates.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
+  including file structure, per-example storyboard creation, registration, Xcode target membership,
+  and ARCHITECTURE.md updates.
 license: MIT
 metadata:
   author: APIExample Team
@@ -32,8 +32,9 @@ Use this skill when you need to:
 3. Create the Swift implementation file
 4. Create the example storyboard
 5. Register the example in `ViewController.swift`
-6. Update `ARCHITECTURE.md` Case Index
-7. Verify compilation and functionality
+6. Add new source and resource files to the `APIExample` Xcode target
+7. Update `ARCHITECTURE.md` Case Index
+8. Verify compilation and functionality
 
 ### Scenario 2: Modify an Existing Example
 
@@ -57,6 +58,7 @@ Use this skill when you need to:
 | `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/<ExampleName>.swift` | Create | Main implementation file |
 | `APIExample/Examples/[Basic\|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard` | Create | Example UI and controller identifier |
 | `APIExample/ViewController.swift` | Modify | Register example in menu/list |
+| `APIExample.xcodeproj/project.pbxproj` | Modify | Add source and resources to the `APIExample` target |
 | `ARCHITECTURE.md` | Modify | Add entry to Case Index |
 
 ### Modify Existing Example
@@ -109,7 +111,15 @@ MenuItem(name: "Example Name".localized,
 
 Place it in the correct section (Basic / Advanced).
 
-### Step 6: Update ARCHITECTURE.md
+### Step 6: Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. Update
+`APIExample.xcodeproj/project.pbxproj` so the new Swift file belongs to the `APIExample`
+target's Sources build phase and the storyboard belongs to its Resources build phase. Add
+new localized or media resources to Resources as well. Existing-file edits do not require
+a project-file change unless a build input was added or moved.
+
+### Step 7: Update ARCHITECTURE.md
 
 Add a new row to the Case Index table in `ARCHITECTURE.md`:
 
@@ -119,14 +129,16 @@ Add a new row to the Case Index table in `ARCHITECTURE.md`:
 
 **Key APIs column:** List 2-5 core SDK methods used in this example.
 
-### Step 7: Verify
+### Step 8: Verify
 
 - [ ] Code compiles without errors
 - [ ] Example appears in the menu/list
 - [ ] Example can join channel and receive callbacks
-- [ ] `leaveChannel()` and `destroy()` are called on close
+- [ ] `leaveChannel()` and `AgoraRtcEngineKit.destroy()` are called in `viewWillBeRemovedFromSplitView()`
 - [ ] UI updates happen on main thread
 - [ ] Storyboard loads with the expected controller identifier
+- [ ] New Swift files are in the `APIExample` target's Sources build phase
+- [ ] New storyboards, localized files, and media assets are in the target's Resources build phase
 - [ ] ARCHITECTURE.md Case Index is updated
 
 ---
@@ -147,11 +159,12 @@ See `references/` directory for code patterns:
 - Create multiple engine instances in one example — use a single shared instance
 - Use Objective-C files — Swift only
 - Use UIKit or SwiftUI — Cocoa (AppKit) only
-- Hardcode App ID or token — use `KeyCenter`
+- Hardcode App ID or token — read App ID from `KeyCenter` and obtain a Token through the existing asynchronous helper or explicit user input
 - Forget to implement `AgoraRtcEngineDelegate` for event handling
 - Leave the channel without calling `leaveChannel()` first
 - Modify examples outside the `APIExample/Examples/[Basic|Advanced]/` structure
 - Register a new menu item without also creating the per-example storyboard under the same example folder
+- Add a source or resource file without adding it to the `APIExample` target
 - Forget to update `ARCHITECTURE.md` Case Index after adding/modifying an example
 
 ---
@@ -166,9 +179,10 @@ After completing the upsert, verify:
 - [ ] Storyboard exists at `APIExample/Examples/[Basic|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard`
 - [ ] Storyboard identifier matches the `controller` value registered in `ViewController.swift`
 - [ ] Example is registered in `ViewController.swift`
+- [ ] New source and resource files belong to the `APIExample` target
 - [ ] `initializeAgoraEngine()` creates engine with correct config
-- [ ] `joinChannel()` uses token from `KeyCenter`
-- [ ] `leaveChannel()` and `destroy()` are called in `viewWillClose()`
+- [ ] `joinChannel()` uses the active channel/UID and a Token from `NetworkManager` or explicit user input; late responses are invalidated on exit
+- [ ] `leaveChannel()` and `AgoraRtcEngineKit.destroy()` are called in `viewWillBeRemovedFromSplitView()`
 - [ ] All delegate callbacks dispatch UI updates to main thread
 - [ ] `ARCHITECTURE.md` Case Index includes new/updated example
 - [ ] Code compiles without warnings or errors

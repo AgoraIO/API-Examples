@@ -166,13 +166,13 @@ MyNewCase()                     ← public, stateful: owns RtcEngine, state, per
 val rtcEngine = remember {
     RtcEngine.create(RtcEngineConfig().apply {
         mContext = context
-        mAppId = AgoraConfig.getAppId()
+        mAppId = BuildConfig.AGORA_APP_ID
         mEventHandler = object : IRtcEngineEventHandler() { … }
     })
 }
-DisposableEffect(lifecycleOwner) {  // key must be lifecycleOwner, not Unit
+DisposableEffect(rtcEngine) {  // cleanup belongs to this engine
     onDispose {
-        if (isJoined) rtcEngine.leaveChannel()
+        rtcEngine.leaveChannel()
         RtcEngine.destroy()
     }
 }
@@ -190,9 +190,13 @@ permissionLauncher.launch(arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.per
 ```
 
 **State rules:**
-- `rememberSaveable` — values that must survive rotation (channelName, isJoined, uid)
-- `remember` — objects that must not be recreated (RtcEngine, collections)
+- `rememberSaveable` — user inputs that should survive recreation, such as channelName
+- `remember` — the engine, non-serializable objects, and live session state (isJoined, assigned uid); a new engine starts without a session
 - `IRtcEngineEventHandler` callbacks can mutate Compose state directly — the snapshot system is thread-safe
+
+`onDispose` runs when its effect leaves composition, even with a constant `Unit` key.
+Keys control effect replacement. If a lifecycle owner becomes a key, engine creation must
+follow the same ownership changes so the UI never reuses an engine that was just destroyed.
 
 ## Token Flow
 

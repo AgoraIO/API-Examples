@@ -17,16 +17,15 @@ start APIExample.sln
 
 ## App ID Configuration
 
-Configure your Agora App ID in `APIExample/APIExample/CConfig.h` and `CConfig.cpp`:
+For compile-time configuration, replace the `APP_ID` placeholder in
+`APIExample/APIExample/stdafx.h`:
 
 ```cpp
-// CConfig.h
-class CConfig {
-public:
-    static const char* GetAppId() { return "<#YOUR_APP_ID#>"; }
-    static const char* GetToken(const char* channelName) { return "<#YOUR_TOKEN#>"; }
-};
+#define APP_ID "<#YOUR_APP_ID#>"
 ```
+
+When that placeholder remains, `CConfig.cpp` reads `AppID.ini` beside the built executable
+and creates the file if needed. `stdafx.h` is tracked; never stage a real App ID in it.
 
 ## Architecture Red Lines
 
@@ -38,7 +37,7 @@ public:
 - Forget to call `leaveChannel()` and `release()` when closing an example
 - Update UI from background threads — always post messages to the main thread
 - Share engine instances between examples — each example manages its own lifecycle
-- Forget to implement `IAgoraRtcEngineEventHandler` for event handling
+- Forget to implement `IRtcEngineEventHandler` for event handling
 
 ## Rules
 
@@ -46,8 +45,8 @@ public:
 
 All work must conform to the rules defined in `ARCHITECTURE.md`:
 - Every example is a dialog class inheriting from `CDialogEx` or `CDialog`
-- Each example implements `IAgoraRtcEngineEventHandler` interface
-- Each example manages its own Agora engine lifecycle
+- Each example implements `IRtcEngineEventHandler` interface
+- Each example manages its engine through `InitAgora()` / `UnInitAgora()` on scene activation/exit
 - Message handlers are defined via `BEGIN_MESSAGE_MAP` / `END_MESSAGE_MAP`
 - All examples are registered in `APIExampleDlg.h` and `APIExampleDlg.cpp`
 - Configuration is managed centrally via `CConfig` class

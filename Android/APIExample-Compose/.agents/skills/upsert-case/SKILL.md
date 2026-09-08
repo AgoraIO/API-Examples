@@ -20,14 +20,14 @@ Use this skill to add or update a case in `APIExample-Compose/`. It owns the ful
 3. `APIExample-Compose/app/src/main/java/io/agora/api/example/compose/model/Examples.kt`
 4. `APIExample-Compose/app/src/main/java/io/agora/api/example/compose/samples/**`
 5. `APIExample-Compose/app/src/main/res/values/strings.xml`
-6. `APIExample-Compose/.agents/skills/upsert-case/references/composable-template.kt`
+6. [composable-template.kt](references/composable-template.kt)
 
 ## Procedure
 
 1. Run `query-cases` first when the target list placement or the closest nearby examples are unclear.
 2. Create or update the Composable source, `Examples.kt`, `strings.xml`, and `ARCHITECTURE.md` together as one change set.
 3. When the case title is user-facing, update both `res/values/strings.xml` and `res/values-zh/strings.xml` to keep locale coverage aligned with current project practice.
-4. Use `APIExample-Compose/.agents/skills/upsert-case/references/composable-template.kt` for Compose state, lifecycle, permission, and registration patterns.
+4. Use the reference template above for Compose state, lifecycle, permission, and registration patterns.
 5. Keep the public stateful Composable, the private preview/view split, and the `Examples.kt` plus string registration alignment consistent.
 6. Treat this skill as the current source of truth for case-creation closure even if older sections in `ARCHITECTURE.md` still describe a smaller file set; update `ARCHITECTURE.md` as part of the same change.
 
@@ -35,7 +35,7 @@ Use this skill to add or update a case in `APIExample-Compose/`. It owns the ful
 
 - Run `./gradlew assembleDebug` from `APIExample-Compose/`
 - Confirm the edited case updates `Examples.kt`, `strings.xml`, `values-zh/strings.xml` when needed, and `ARCHITECTURE.md`
-- Confirm the state model matches current project practice: `rememberSaveable` for UI/session state shown in the canonical Compose samples, and `remember` for `RtcEngine` and other non-serializable objects
+- Use `rememberSaveable` for user inputs, and keep joined status/assigned UID in `remember` with the current engine; a recreated engine starts without an RTC session. Keep `RtcEngine` and other non-serializable objects out of saved state.
 - Confirm the public Composable stays stateful and the preview stays on the private view function
 
 ## Out of scope
@@ -46,5 +46,5 @@ Use this skill to add or update a case in `APIExample-Compose/`. It owns the ful
 ## Never
 
 - Never use `rememberSaveable` for `RtcEngine`
-- Never use `DisposableEffect(Unit)` for teardown
+- Never key teardown to a changing object unless engine creation follows the same ownership changes; `DisposableEffect(rtcEngine)` pairs cleanup with a remembered engine
 - Never hardcode `mAreaCode`

@@ -3,7 +3,6 @@ name: review-case
 description: >
   Structured code review for a case in the APIExample-OC (Objective-C + UIKit) project.
   Checks engine lifecycle, thread safety, memory management, permissions, and OC conventions.
-compatibility: [Cursor, Kiro, Windsurf, Claude, Copilot]
 license: MIT
 metadata:
   author: APIExample Team
@@ -133,6 +132,16 @@ __weak typeof(self) weakSelf = self;
 - Media player destroyed if created (`[self.agoraKit destroyMediaPlayer:player]`)
 - Screen capture stopped if started
 - Multi-camera capture stopped if started
+
+---
+
+### 9. Xcode Target Membership
+
+For a new or moved case, verify `APIExample-OC.xcodeproj/project.pbxproj` contains file
+references for the `.h` and `.m` files, adds the `.m` file to the `APIExample-OC` target's
+Sources build phase, and adds every storyboard, localized file, or media asset to its
+Resources build phase. A file existing in the folder is not enough. Do not require a
+project-file edit for an existing build input that was only modified.
 
 ---
 
