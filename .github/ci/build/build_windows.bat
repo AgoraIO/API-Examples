@@ -80,33 +80,40 @@ echo compile_project: %compile_project%
 
 REM Package APIExample code (only when compress_apiexample=true)
 REM Run before compile so package content is not affected by compile
-set result_zip=APIExample_result.zip
-set des_path=%WORKSPACE%\Agora_Native_SDK_for_Windows_v%SDK_VER%_APIExample_%BUILD_NUMBER%.zip
+set "result_zip=APIExample_result.zip"
+set "des_path=%WORKSPACE%\Agora_Native_SDK_for_Windows_v%SDK_VER%_APIExample_%BUILD_NUMBER%.zip"
 if "%compress_apiexample%"=="true" (
     echo "Packaging APIExample code..."
-    
-    REM Compress windows\APIExample (code only) to zip
-    echo "Compressing APIExample code package..."
-    del /F /Q %result_zip% 2>nul
-    7z a -tzip %result_zip% -r windows\APIExample
+
+    REM Archive tracked source so reused workspaces cannot leak build output or
+    REM local configuration. Dependencies are intentionally excluded for Agora.
+    del /F /Q "%result_zip%" 2>nul
+    git archive --format=zip --output="%result_zip%" HEAD windows/APIExample
     if errorlevel 1 (
-        echo 7z compression failed!
+        echo git archive failed!
         exit /b 1
     )
-    
+
+    REM Preserve an SDK URL injected by this job.
+    7z u -tzip "%result_zip%" -r windows\APIExample\install.ps1 >nul
+    if errorlevel 1 (
+        echo Failed to update install.ps1 in APIExample package!
+        exit /b 1
+    )
+
     REM Copy to WORKSPACE with new naming format
     echo "Copying %result_zip% to %des_path%"
-    copy %result_zip% %des_path%
+    copy /Y "%result_zip%" "%des_path%"
     if errorlevel 1 (
         echo copy failed!
         exit /b 1
     )
-    
+
     REM Clean up temporary zip in repo root
-    del /F %result_zip%
-    
+    del /F /Q "%result_zip%"
+
     echo "Complete: APIExample code package created"
-    dir %WORKSPACE%\
+    dir "%WORKSPACE%\"
 ) else (
     echo "Skipping APIExample code packaging (compress_apiexample=false)"
 )

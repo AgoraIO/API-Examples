@@ -119,13 +119,15 @@ fi
 
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile $sdk_url_flag
 
-echo "start compress"
-7za a -tzip result.zip -r $unzip_name > log.txt
-echo "start move to"
-echo $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
-mv result.zip $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+if [ "$compress_apiexample" != true ]; then
+    echo "start compress"
+    7za a -tzip result.zip -r $unzip_name > log.txt
+    echo "start move to"
+    echo $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+    mv result.zip $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+fi
 
-if [ $compress_apiexample = true ]; then
+if [ "$compress_apiexample" = true ]; then
     # Use BRANCH_VERSION for the package name (already validated to match SDK version)
     sdk_version="${BRANCH_VERSION}"
     echo "Using version for package: $sdk_version"

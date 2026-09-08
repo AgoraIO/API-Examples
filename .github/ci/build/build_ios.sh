@@ -127,13 +127,15 @@ fi
 
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/${ios_direction}/Podfile $sdk_url_flag || exit 1
 
-echo "start compress"
-7za a -tzip result.zip -r $unzip_name > log.txt
-echo "start move to"
-echo $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
-mv result.zip $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
+if [ "$compress_apiexample" != true ]; then
+    echo "start compress"
+    7za a -tzip result.zip -r $unzip_name > log.txt
+    echo "start move to"
+    echo $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
+    mv result.zip $WORKSPACE/Agora_with${ios_direction}_${BUILD_NUMBER}_$zip_name
+fi
 
-if [ $compress_apiexample = true ]; then
+if [ "$compress_apiexample" = true ]; then
     echo "Using version for package: $API_EXAMPLES_SDK_VERSION"
     
     cp -rf ./iOS/${ios_direction} $global_dir/
