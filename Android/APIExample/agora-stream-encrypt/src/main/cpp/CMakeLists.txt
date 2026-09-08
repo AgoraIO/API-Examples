@@ -11,7 +11,7 @@ project(agora-stream-encrypt)
 set(agora-lib-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-rtc-sdk.so)
 link_libraries(${agora-lib-so})
 
-set(agora-ffmpeg-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-ffmpeg.so)
+set(agora-ffmpeg-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora_ffmpeg.so)
 link_libraries(${agora-ffmpeg-so})
 
 set(agora-soundtouch-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-soundtouch.so)
