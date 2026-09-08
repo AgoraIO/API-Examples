@@ -1211,9 +1211,10 @@ enum DEGRADATION_PREFERENCE {
    */
   MAINTAIN_AUTO = -1,
   /**
-   * 0: Prefers to reduce the video frame rate while maintaining video resolution during video
-   * encoding under limited bandwidth. This degradation preference is suitable for scenarios where
-   * video quality is prioritized.
+   * 0: Deprecated. Use `MAINTAIN_RESOLUTION` instead. During video encoding under limited
+   * bandwidth, this option has the same behavior as `MAINTAIN_RESOLUTION`: The SDK reduces the video
+   * frame rate while maintaining video resolution. This degradation preference is suitable for
+   * scenarios where video quality is prioritized.
    */
   MAINTAIN_QUALITY = 0,
   /**

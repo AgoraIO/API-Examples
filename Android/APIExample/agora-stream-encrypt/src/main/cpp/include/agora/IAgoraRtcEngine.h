@@ -4304,7 +4304,8 @@ public:
      * This callback is triggered when the SDK is ready to send metadata.
      *
      * @note Ensure that the size of the metadata does not exceed the value set in the
-     * `getMaxMetadataSize` callback.
+     * `getMaxMetadataSize` callback. If the size exceeds this value, the SDK truncates the excess
+     * part.
      *
      * @param source_type Video data type. See `VIDEO_SOURCE_TYPE`.
      * @param metadata The metadata that the user wants to send. See `Metadata`.
@@ -9922,13 +9923,16 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Call timing: You can call this method either before or after joining the channel, with the
    * following differences:
    * - Call this method before joining a channel, and then call `joinChannel(const char* token, const
-   * char* channelId, uid_t uid, const ChannelMediaOptions& options)` to join a channel
-   * and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen sharing.
-   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` to join a
-   * channel and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen
-   * sharing.
+   * char* channelId, uid_t uid, const ChannelMediaOptions& options)` to join a channel and set
+   * `publishScreenTrack` to `true` to start screen sharing.
+   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` and set
+   * `publishScreenTrack` to `true` to start screen sharing.
    *
-   * @note This method is for Windows and macOS only.
+   * @note
+   * - This method is for Windows and macOS only.
+   * - This method creates only the primary screen video track. To specify another screen video source
+   * by `sourceType`, use `startScreenCapture(VIDEO_SOURCE_TYPE sourceType, const
+   * ScreenCaptureConfiguration& config)` instead.
    *
    * @param displayId The display ID of the screen to be shared.Note: For the Windows platform, if you
    * need to simultaneously share two screens (main screen and secondary screen), you can set
@@ -9968,11 +9972,10 @@ class IRtcEngine : public agora::base::IEngineBase {
    * You can call this method either before or after joining the channel, with the following
    * differences:
    * - Call this method before joining a channel, and then call `joinChannel(const char* token, const
-   * char* channelId, uid_t uid, const ChannelMediaOptions& options)` to join a channel
-   * and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen sharing.
-   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` to join a
-   * channel and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen
-   * sharing.
+   * char* channelId, uid_t uid, const ChannelMediaOptions& options)` to join a channel and set
+   * `publishScreenTrack` to `true` to start screen sharing.
+   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` and set
+   * `publishScreenTrack` to `true` to start screen sharing.
    *
    * @note This method applies to Windows only.
    *
@@ -10083,10 +10086,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    * following differences:
    * - Call this method before joining a channel, and then call `joinChannel(const char* token, const
    * char* channelId, uid_t uid, const ChannelMediaOptions& options)` to join a channel
-   * and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen sharing.
-   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` to join a
-   * channel and set `publishScreenTrack` or `publishSecondaryScreenTrack` to `true` to start screen
-   * sharing.
+   * and set `publishScreenTrack` to `true` to start screen sharing.
+   * - Call this method after joining a channel, and then call `updateChannelMediaOptions` and set
+   * `publishScreenTrack` to `true` to start screen sharing.
    *
    * @note
    * The window sharing feature of the Agora SDK relies on WGC (Windows Graphics Capture) or GDI
@@ -10095,6 +10097,9 @@ class IRtcEngine : public agora::base::IEngineBase {
    * start window sharing on a device with a system earlier than Windows 10 2004. See
    * `ScreenCaptureParameters`.
    * This method applies to the macOS and Windows only.
+   * This method creates only the primary screen video track. To specify another screen video source
+   * by `sourceType`, use `startScreenCapture(VIDEO_SOURCE_TYPE sourceType, const
+   * ScreenCaptureConfiguration& config)` instead.
    *
    * @param windowId The ID of the window to be shared.
    * @param regionRect (Optional) Sets the relative location of the region to the screen. If you do
@@ -10804,10 +10809,13 @@ class IRtcEngine : public agora::base::IEngineBase {
    * Call timing: You can call this method either before or after joining the channel, with the
    * following differences:
    * - Call this method first and then call `joinChannel(const char* token, const char* channelId,
-   * uid_t uid, const ChannelMediaOptions& options)` to join channel and set
-   * `publishScreenCaptureVideo` to `true` to start screen sharing.
-   * - Call this method after joining a channel, then call `updateChannelMediaOptions` and set
-   * `publishScreenCaptureVideo` to `true` to start screen sharing.
+   * uid_t uid, const ChannelMediaOptions& options)` to join a channel, or call this method after
+   * joining a channel and then call `updateChannelMediaOptions`.
+   * - Set the publishing option corresponding to `sourceType` to `true` to start screen sharing:
+   *   - `VIDEO_SOURCE_SCREEN` or `VIDEO_SOURCE_SCREEN_PRIMARY`: `publishScreenTrack`
+   *   - `VIDEO_SOURCE_SCREEN_SECONDARY`: `publishSecondaryScreenTrack`
+   *   - `VIDEO_SOURCE_SCREEN_THIRD`: `publishThirdScreenTrack`
+   *   - `VIDEO_SOURCE_SCREEN_FOURTH`: `publishFourthScreenTrack`
    *
    * @note
    * - If you start screen capture by calling this method, you need to call

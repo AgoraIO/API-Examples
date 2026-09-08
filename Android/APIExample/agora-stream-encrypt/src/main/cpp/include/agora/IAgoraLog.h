@@ -125,6 +125,9 @@ struct LogConfig {
   /**
    * The complete path of the log files. Agora recommends using the default log directory. If you need
    * to modify the default directory, ensure that the directory you specify exists and is writable.
+   * The custom path must include the log file name, for example, `/path/to/agorasdk.log`; if you only
+   * specify a log directory, append a path separator to the end of the directory, and the SDK
+   * generates `agorasdk.log` in that directory.
    * The default log directory is:
    * - Android: /storage/emulated/0/Android/data/<packagename>/files/agorasdk.log.
    * - iOS: App Sandbox/Library/caches/agorasdk.log.
