@@ -55,11 +55,11 @@ Supporting documents:
 
 ## Git Hooks
 
-This repository enforces two rules via Git hooks:
-- No sensitive information (API keys, tokens) in committed code.
+When installed, the repository's local Git hooks enforce two rules:
+- No sensitive information (API keys, tokens) in staged changes.
 - Commit messages must be in English only (no Chinese characters).
 
-Run `.git-hooks/install-hooks.sh` once after cloning to activate the hooks.
+Install `pre-commit`, Gitleaks, and Python 3, then run `.git-hooks/install-hooks.sh` once after cloning. The script validates prerequisites but does not install them.
 See `HOOKS-GUIDE.md` for details and troubleshooting.
 
 ## Sensitive Configuration

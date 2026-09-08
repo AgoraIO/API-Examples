@@ -2,14 +2,14 @@ repos:
   - repo: local
     hooks:
       - id: gitleaks
-        name: Detect hardcoded secrets
-        description: Ensures no secrets are committed
-        entry: .git-hooks/run-gitleaks.sh protect
-        args: ["--config=.gitleaks.toml", "--staged", "--verbose"]
+        name: Scan staged changes for sensitive information
+        description: Rejects staged changes containing sensitive information
+        entry: .git-hooks/run-gitleaks.sh
+        args: ["--config=.gitleaks.toml", "--verbose"]
         language: system
         pass_filenames: false
         stages: [pre-commit]
-      
+
       - id: check-commit-message
         name: Check commit message for Chinese characters
         description: Ensures commit messages do not contain Chinese characters

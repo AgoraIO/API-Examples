@@ -34,18 +34,6 @@ title = "gitleaks config"
 useDefault = true
 
 [[rules]]
-id = "chinese-characters"
-description = "Detecting Chinese characters"
-regex = '''[\p{Han}]+'''
-tags = ["chinese"]
-
-[[rules]]
-id = "chinese-comments"
-description = "Detect Chinese comments"
-regex = '''(//|#|/\*|\*).*[\p{Han}]+'''
-tags = ["chinese", "comments"]
-
-[[rules]]
 id = "agora-app-id-pattern"
 description = "Agora App ID Pattern"
 regex = '''(?i)(AGORA_APP_ID|AG_APP_ID|static\s+let\s+AppId:\s+String|static\s+let\s+AG_APP_ID:\s+String)(\s*=\s*)(?:['"]?([0-9a-zA-Z]{1,32})['"]?)'''
@@ -129,17 +117,6 @@ paths = [
     '''gitleaks.toml''',
     '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket)$''',
     '''(go.mod|go.sum)$''',
-    '''iOS/.*\.strings''',
-    '''iOS/.*\.lproj/.*''',
-    '''iOS/Scenes/ConvoAI/.*''',
-    '''.*\.strings$''',
-    '''.*\.strings''',
-    '''.*\/zh-Hans\.lproj\/.*''',
-    '''.*\/zh-Hant\.lproj\/.*''',
-    '''.*\/zh\.lproj\/.*''',
     '''iOS/Pods/.*''',
-    '''.*\.bundle''',
-    '''README\.md''',
-    '''.*\.md''',
-    '''Android/.*/res/values(-zh)?/(strings|arrays)\.xml'''
+    '''.*\.bundle'''
 ]

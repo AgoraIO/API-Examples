@@ -1,35 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Try to find gitleaks in common locations
-GITLEAKS_CMD=""
+set -euo pipefail
 
-# Check if gitleaks is in PATH
-if command -v gitleaks &> /dev/null; then
-    GITLEAKS_CMD="gitleaks"
-# Check Homebrew locations (Intel Mac)
-elif [ -f "/usr/local/bin/gitleaks" ]; then
-    GITLEAKS_CMD="/usr/local/bin/gitleaks"
-# Check Homebrew locations (Apple Silicon Mac)
-elif [ -f "/opt/homebrew/bin/gitleaks" ]; then
-    GITLEAKS_CMD="/opt/homebrew/bin/gitleaks"
-# Check if installed via other package managers
-elif [ -f "$HOME/.local/bin/gitleaks" ]; then
-    GITLEAKS_CMD="$HOME/.local/bin/gitleaks"
-fi
-
-# If gitleaks not found, exit with error
-if [ -z "$GITLEAKS_CMD" ]; then
-    echo "============================================================"
-    echo "❌ ERROR: gitleaks not found!"
-    echo ""
-    echo "Please install gitleaks:"
-    echo "  macOS: brew install gitleaks"
-    echo "  Linux: https://github.com/gitleaks/gitleaks#installing"
-    echo ""
-    echo "After installation, run: ./.git-hooks/install-hooks.sh"
-    echo "============================================================"
+if ! command -v gitleaks >/dev/null 2>&1; then
+    echo "Error: gitleaks is required to scan staged changes." >&2
+    echo "Install it from https://github.com/gitleaks/gitleaks#installing" >&2
     exit 1
 fi
 
-# Run gitleaks with provided arguments
-exec "$GITLEAKS_CMD" "$@"
+# Gitleaks renamed "protect" to "git" in v8.19. Support both CLI forms.
+if gitleaks git --help >/dev/null 2>&1; then
+    exec gitleaks git --pre-commit --staged "$@"
+fi
+
+if gitleaks protect --help >/dev/null 2>&1; then
+    exec gitleaks protect --staged "$@"
+fi
+
+echo "Error: the installed gitleaks version does not support staged scans." >&2
+echo "Upgrade gitleaks and try again." >&2
+exit 1
