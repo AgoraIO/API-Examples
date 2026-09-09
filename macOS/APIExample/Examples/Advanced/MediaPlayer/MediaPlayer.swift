@@ -117,8 +117,8 @@ class MediaPlayer: BaseViewController {
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                    // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
             })

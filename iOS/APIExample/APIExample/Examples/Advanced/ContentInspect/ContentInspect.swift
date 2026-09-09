@@ -11,7 +11,7 @@
 /// 1.Enable content inspect: agoraKit.enableContentInspect(true, config:inspectConfig).
 /// 2.Call back mathod contentInspectResult of AgoraVideoFrameDelegate to get the inspect result.
 ///
-/// More detail: https://docs.agora.io/cn/content-moderation/landing-page?platform=iOS
+/// More detail: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agorartcenginekit/enablecontentinspect%28_%3Aconfig%3A%29
 
 import AgoraRtcKit
 

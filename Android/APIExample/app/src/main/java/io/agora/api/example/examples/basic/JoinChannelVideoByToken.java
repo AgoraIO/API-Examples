@@ -85,7 +85,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             // The context of Android Activity
             config.mContext = requireContext().getApplicationContext();
             // The App ID issued to you by Agora.
-            // See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+            // See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
             config.mAppId = appId;
             // The channel profile.
             // CHANNEL_PROFILE_COMMUNICATION(0): Communication. Agora recommends using the live streaming profile
@@ -217,8 +217,8 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+            // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
@@ -236,7 +236,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
          */
         @Override
         public void onError(int err) {

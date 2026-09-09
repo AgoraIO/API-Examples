@@ -25,7 +25,7 @@ If you have any problems or suggestions regarding the sample projects, feel free
 
 ## Related resources
 
-- Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
+- Check our [FAQ](https://docs.agora.io/en/api-reference/faq) to see if your issue has been recorded.
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials.
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case.
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community).

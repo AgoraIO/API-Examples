@@ -10,7 +10,7 @@
 
 ![](../pictures/ios_14_privacy.png)
 
-[解决方案](https://docs.agora.io/en/help/integration-issues/local_network_privacy)
+[解决方案](https://docs.agora.io/en/api-reference/faq/integration/local_network_privacy)
 
 ## 环境准备
 
@@ -51,7 +51,7 @@ pod install
 
 ## 联系我们
 
-- 常见问题请查看 [Agora FAQ](https://docs.agora.io/en/faq)
+- 常见问题请查看 [Agora FAQ](https://doc.shengwang.cn/faq/list)
 - 更多示例请查看 [AgoraIO](https://github.com/AgoraIO)
 - 复杂场景示例请查看 [AgoraIO Use Cases](https://github.com/AgoraIO-usecase)
 - 社区维护项目请查看 [AgoraIO Community](https://github.com/AgoraIO-Community)

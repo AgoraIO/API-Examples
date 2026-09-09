@@ -25,7 +25,7 @@
 
 ## 관련 자료
 
-- [FAQ](https://docs.agora.io/en/faq) 를 참조하여 기존 이슈 내용을 확인하세요.
+- [FAQ](https://docs.agora.io/en/api-reference/faq) 를 참조하여 기존 이슈 내용을 확인하세요.
 - 더 많은 튜토리얼을 확인하려면 [Agora SDK Samples](https://github.com/AgoraIO) 를 살펴보세요.
 - 더 복잡한 Use case는 [Agora Use Case](https://github.com/AgoraIO-usecase) 를 참조하세요.
 - [Agora Community](https://github.com/AgoraIO-Community) 에서 개발자 커뮤니티 Repository를 확인할 수 있습니다.

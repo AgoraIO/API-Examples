@@ -12,7 +12,7 @@
 /// 1.Enable content inspect: agoraKit.enableContentInspect(true, config:inspectConfig).
 /// 2.Call back mathod contentInspectResult of AgoraVideoFrameDelegate to get the inspect result.
 ///
-/// More detail: https://docs.agora.io/cn/content-moderation/landing-page?platform=macOS
+/// More detail: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agorartcenginekit/enablecontentinspect%28_%3Aconfig%3A%29
 
 
 import AgoraRtcKit
@@ -90,8 +90,8 @@ class ContentInspectViewController: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result ?? 0), please check your params")
             }
         })
@@ -136,7 +136,7 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+        /// Error code description: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error: \(errorCode.description)")
     }
@@ -166,4 +166,3 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
         agoraKit?.setupRemoteVideo(videoCanvas)
     }
 }
-

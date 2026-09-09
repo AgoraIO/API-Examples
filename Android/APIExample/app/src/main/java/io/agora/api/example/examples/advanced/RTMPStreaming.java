@@ -113,7 +113,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
              */
             config.mContext = context.getApplicationContext();
             /*
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
             /* The channel profile.
@@ -245,9 +245,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
 
         /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/authentication-workflow/android
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/deploy-token-server*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
             /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
@@ -259,8 +259,8 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+                // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 return;
             }
@@ -272,12 +272,12 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private void startPublish() {
         if (transCodeSwitch.isChecked()) {
             /*LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
-             * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
+             * See <a href="https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_livetranscoding.html"></a>*/
             transcoding.width = dimensions.height;
             transcoding.height = dimensions.width;
             /*The transcodingUser class which defines the video properties of the user displaying the
              * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
-             * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
+             * See <a href="https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_transcodinguser.html"></a>*/
             LiveTranscoding.TranscodingUser localTranscodingUser = new LiveTranscoding.TranscodingUser();
             localTranscodingUser.x = 0;
             localTranscodingUser.y = 0;
@@ -357,7 +357,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
          */
         @Override
         public void onError(int err) {

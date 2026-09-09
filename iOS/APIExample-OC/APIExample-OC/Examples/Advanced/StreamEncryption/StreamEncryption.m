@@ -139,8 +139,8 @@
        int ret = [self.agoraKit enableEncryption:YES encryptionConfig:config];
         if (ret != 0) {
             // for errors please take a look at:
-            // CN https://docs.agora.io/cn/live-streaming-premium-legacy/API%20Reference/oc/Classes/AgoraRtcChannel.html?platform=iOS#//api/name/enableEncryption:encryptionConfig:
-            // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
+            // CN https://doc.shengwang.cn/doc/rtc/ios/advanced-features/channel-encryption
+            // EN https://docs.agora.io/en/realtime-media/rtc/build/secure-and-protect-channels/media-stream-encryption
             [self showAlertWithTitle:@"Error" message:[NSString stringWithFormat:@"enableEncryption call failed: %d, please check your params", ret]];
         }
     }
