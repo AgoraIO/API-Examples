@@ -28,14 +28,14 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Token)".localized, storyboard: "JoinChannelAudioToken", controller: ""),
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
-        MenuSection(name: "Anvanced", rows: [
-            MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
+        MenuSection(name: "Advanced", rows: [
+            MenuItem(name: "Voice Effects".localized, storyboard: "VoiceChanger", controller: ""),
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: ""),
-            MenuItem(name: "Custom Audio Source(PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
+            MenuItem(name: "Custom Audio Source (PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
             MenuItem(name: "Audio Mixing".localized, storyboard: "AudioMixing", controller: ""),
-            MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
+            MenuItem(name: "Pre-call Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio"),
         ]),
     ]

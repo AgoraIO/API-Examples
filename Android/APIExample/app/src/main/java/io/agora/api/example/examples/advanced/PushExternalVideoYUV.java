@@ -59,7 +59,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * The type Push external video yuv.
  */
 @Example(
-        index = 16,
+        index = 20,
         group = ADVANCED,
         name = R.string.item_pushexternal,
         actionId = R.id.action_mainFragment_to_PushExternalVideo,

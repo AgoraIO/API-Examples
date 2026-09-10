@@ -41,8 +41,8 @@
 /* Class = "NSButtonCell"; title = "Stop Additional Effect"; ObjectID = "iQT-DV-ynF"; */
 "iQT-DV-ynF.title" = "Stop Additional Effect";
 
-/* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
-"jAv-ZA-ecf.title" = "Join Channel Audio";
+/* Class = "NSViewController"; title = "Audio Mixing"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "Audio Mixing";
 
 /* Class = "NSButtonCell"; title = "Pause"; ObjectID = "mcr-Pl-O4W"; */
 "mcr-Pl-O4W.title" = "Pause";

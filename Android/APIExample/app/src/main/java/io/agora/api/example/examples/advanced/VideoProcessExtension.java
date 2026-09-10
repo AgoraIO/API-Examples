@@ -57,7 +57,7 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
  * This demo demonstrates how to make a VideoProcessExtension
  */
 @Example(
-        index = 32,
+        index = 26,
         group = ADVANCED,
         name = R.string.item_videoProcessExtension,
         actionId = R.id.action_mainFragment_video_enhancement,

@@ -39,6 +39,12 @@ On Windows, create the environment with `py -3 -m venv .venv` and use
 Reuse it for later checks; do not install the validator into the system Python environment.
 
 The same checks run in `.github/workflows/repository-policy.yml` for pushes and pull requests.
+That workflow also compiles and executes selected Android/iOS template lifecycle regressions.
+After editing creation templates, run the relevant native checks documented in
+[CI template checks](../../.github/ci/README.md#template-checks). The post-release compile
+workflow also builds the complete Android Audio/Compose and four iOS templates in their real
+application targets. Structural validation alone does not establish template API correctness
+or safe asynchronous cleanup.
 
 The requirement contract owns shared behavior. Platform implementations may differ only
 when the SDK, UI framework, permission model, or operating system requires it, and the

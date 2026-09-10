@@ -12,14 +12,13 @@
 "Local or remote recording" = "本地/远端录制";
 "Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
-"Video Metadata" = "SEI消息";
-"Voice Changer" = "美声/音效";
+"Media Metadata" = "SEI消息";
+"Voice Effects" = "美声/音效";
 "Custom Audio Source" = "音频自采集";
-"Custom Audio Source(PCM)" = "音频自采集(PCM)";
+"Custom Audio Source (PCM)" = "音频自采集(PCM)";
 "Custom Audio Render" = "音频自渲染";
 "Custom Video Source" = "视频自采集";
-"Custom Video Source(Push)" = "视频自采集(Push)";
-"Custom Video Source(Multi)" = "多路视频自采集";
+"Multiple Video Sources" = "多路视频自采集";
 "Custom Video Render" = "视频自渲染(Metal)";
 "Quick Switch Channel" = "快速切换频道";
 "Join Multiple Channels" = "加入多频道";
@@ -27,7 +26,7 @@
 "Audio Mixing" = "音频文件混音";
 "Raw Video Data" = "视频裸数据";
 "Simple Filter Extension" = "插件系统";
-"Precall Test" = "通话前网络/设备测试";
+"Pre-call Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";
 "Local Composite Graph" = "本地合图";
@@ -115,12 +114,12 @@
 "Broadcaster" = "主播";
 "Audience" = "观众";
 "Pick Role" = "选择角色";
-"Create Data Stream" = "创建数据流";
+"Send Data Stream" = "发送数据流";
 "Raw Audio Data" = "音频裸数据";
 "Screen Share + Camera" = "屏幕共享 + 摄像头";
 "please input channel name!" = "请输入频道名！";
 "Video Process" = "视频增强";
-"Agora Beauty" = "Agora 美颜";
+"Beauty 2.0" = "美颜 2.0";
 "Rhythm Player" = "虚拟节拍器";
 "Spatial Audio" = "空间音效";
 "Please move the red icon to experience the 3D audio effect" = "请移动红色图标体验3D音频效果";
@@ -131,17 +130,17 @@
 "SwitchCamera" = "切换摄像头";
 "remote user has not joined, and cannot take a screenshot" = "远端用户未加入, 无法截图";
 "Screenshot successful" = "截图成功";
-"Picture In Picture(require iOS15)" = "画中画(iOS15支持)";
+"Picture In Picture" = "画中画";
 "please input Token!" = "请输入Token";
 "please input AppId!" = "请输入APPID";
 "stopMicrophoneRecording" = "停止麦克风采集";
-"Ktv copyright music" = "KTV版权音乐";
-"Mutli Camera(iOS13.0+)" = "多路摄像头(iOS13.0+)";
+"KTV Copyright Music" = "KTV版权音乐";
+"Multi Camera" = "多路摄像头";
 "Multipath" = "网络传输高级功能";
 "Simulcast" = "同源多流";
 "Open Rear Camera" = "打开后摄像头";
 "Close Rear Camera" = "关闭后摄像头";
-"Third Beautify" = "第三方美颜";
+"Third-party Beauty" = "第三方美颜";
 "Sense Beautify" = "商汤美颜";
 "FU Beautify" = "相芯美颜";
 "license authorization failed, please check whether the license file is correct" = "license授权失败, 请检查license文件是否正确";
@@ -161,7 +160,7 @@
 "Yellow" = "黄色";
 "preload Channel" = "预加载";
 "cancel preload" = "取消预加载";
-"Audio Router(Third Party Player)" = "音频路由（第三方播放器)";
+"Audio Router (Third-party Player)" = "音频路由（第三方播放器)";
 "Player Type(ijkplayer/avplayer)" = "播放器选择(ijkplayer/原生)";
 "Audio Waveform" = "音频频谱";
 
@@ -203,9 +202,9 @@
 "Powerful Male Singing Voice" = "力量男歌声";
 "Dreamy Female Singing Voice" = "梦幻女歌声";
 
-"Transparent Render"= "透明渲染";
+"Transparent Rendering"= "透明渲染";
 
-"URL Streaming(RTE Player)"= "URL拉流(RTE Player)";
+"URL Streaming (RTE Player)"= "URL拉流(RTE Player)";
 
 "Makeup Enable" = "美妆开关";
 "Eyebrow Style" = "眉毛类型";

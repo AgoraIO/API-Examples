@@ -9,7 +9,7 @@
         <!--Screen Share-->
         <scene sceneID="pbK-2b-qbr">
             <objects>
-                <viewController title="Stream Encryption" storyboardIdentifier="ScreenShare" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="ScreenShare" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Screen Share" storyboardIdentifier="ScreenShare" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="ScreenShare" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GAN-Bp-SzP">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

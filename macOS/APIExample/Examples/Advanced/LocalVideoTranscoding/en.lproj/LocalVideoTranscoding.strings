@@ -5,8 +5,8 @@
 /* Class = "NSButtonCell"; title = "Generate thumbnail"; ObjectID = "G2K-yC-ti4"; */
 "G2K-yC-ti4.title" = "Generate thumbnail";
 
-/* Class = "NSViewController"; title = "Stream Encryption"; ObjectID = "Gwp-vd-c2J"; */
-"Gwp-vd-c2J.title" = "Stream Encryption";
+/* Class = "NSViewController"; title = "Local Video Transcoding"; ObjectID = "Gwp-vd-c2J"; */
+"Gwp-vd-c2J.title" = "Local Video Transcoding";
 
 /* Class = "NSTextFieldCell"; title = "Virtual Background"; ObjectID = "I7C-7c-uwc"; */
 "I7C-7c-uwc.title" = "Virtual Background";

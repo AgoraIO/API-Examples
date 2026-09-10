@@ -95,41 +95,41 @@ APIExample/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming" — setClientRole
     │       ├── RTMPStreaming/               # "RTMP Streaming" — push to CDN
-    │       ├── VideoMetadata/               # "Video Metadata" — send/receive metadata
-    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
-    │       ├── CustomPcmAudioSource/        # "Custom Audio Source" — push PCM audio
+    │       ├── VideoMetadata/               # "Media Metadata" — send/receive metadata
+    │       ├── VoiceChanger/                # "Voice Effects" — voice beautifier/effects
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)" — push PCM audio
     │       ├── CustomAudioRender/           # "Custom Audio Render" — pull audio rendering
     │       ├── CustomAudioSource/           # (legacy custom audio source)
-    │       ├── CustomVideoSourcePush/       # "Custom Video Source(Push)" — push external video
-    │       ├── CustomVideoSourcePushMulti/  # "Custom Video Source(Multi)" — multi-track push
+    │       ├── CustomVideoSourcePush/       # "Custom Video Source" — push external video
+    │       ├── CustomVideoSourcePushMulti/  # "Multiple Video Sources" — multi-track push
     │       ├── CustomVideoRender/           # "Custom Video Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── RawVideoData/                # "Raw Video Data"
     │       ├── RawMediaData/                # (legacy raw media data)
-    │       ├── PictureInPicture/            # "Picture In Picture (iOS15+)"
+    │       ├── PictureInPicture/            # "Picture In Picture"
     │       ├── SimpleFilter/                # "Simple Filter Extension"
     │       ├── QuickSwitchChannel/          # "Quick Switch Channel"
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       ├── MediaPlayer/                 # "Media Player"
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── LocalCompositeGraph/         # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
-    │       ├── AgoraBeauty/                 # "Agora Beauty"
+    │       ├── AgoraBeauty/                 # "Beauty 2.0"
     │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
-    │       ├── ThirdBeautify/               # "Third Beautify" — third-party beauty SDK
+    │       ├── ThirdBeautify/               # "Third-party Beauty" — third-party beauty SDK
     │       ├── ARKit/                       # "ARKit"
-    │       ├── AudioRouterPlayer/           # "Audio Router (Third Party Player)"
+    │       ├── AudioRouterPlayer/           # "Audio Router (Third-party Player)"
     │       ├── AudioWaveform/               # "Audio Waveform"
-    │       ├── TransparentRender/           # "Transparent Render"
+    │       ├── TransparentRender/           # "Transparent Rendering"
     │       ├── RtePlayer/                   # "URL Streaming (RTE Player)"
     │       ├── Simulcast/                   # "Simulcast"
     │       ├── Multipath/                   # "Multipath"
@@ -203,10 +203,11 @@ the upsert and review skills.
 
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
-    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
 
-If `KeyCenter.Certificate` is nil, token generation is skipped and a nil token is used — valid for projects without App Certificate.
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

@@ -16,8 +16,8 @@
 /* Element = "buttonCell"; title = "Start collection"; ObjectID = "UNg-f5-Jxh"; */
 "UNg-f5-Jxh.title" = "开始采集";
 
-/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "实时视频通话/直播";
+/* Element = "viewController"; title = "Multi Camera"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "多路摄像头";
 
 /* Element = "buttonCell"; title = "Start collecting"; ObjectID = "irM-5L-9uT"; */
 "irM-5L-9uT.title" = "开始采集";

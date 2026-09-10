@@ -20,7 +20,7 @@ See [README.md — Obtain an App Id](README.md#obtain-an-app-id).
 
 - Do NOT use XML layouts, `Fragment`, or `ViewBinding` — Compose only.
 - Do NOT use `View`-based widgets directly in Compose UI — wrap with `AndroidView` if unavoidable.
-- Keep one remembered `RtcEngine` per case and pair it with `DisposableEffect(rtcEngine) { onDispose { } }`. The effect must clean up the exact engine it owns. `onDispose` runs when the effect leaves composition or a key changes; `Unit` is valid when ownership is constant. Use a lifecycle-owner key only when engine creation and teardown both follow that owner's lifetime.
+- Keep one remembered `RtcEngine` per case, directly or in a remembered case session holder. Pair ownership with `DisposableEffect(rtcEngine)` or `DisposableEffect(session) { onDispose { } }`; a session holder creates its engine in that effect. The effect must clean up the exact engine it owns. `onDispose` runs when the effect leaves composition or a key changes; `Unit` is valid when ownership is constant. Use a lifecycle-owner key only when engine creation and teardown both follow that owner's lifetime.
 - Save user inputs with `rememberSaveable`; keep live session state such as joined status and assigned UID with the current engine so it resets when that engine is recreated.
 - Always call `rtcEngine.leaveChannel()` before `RtcEngine.destroy()` in `onDispose`.
 - Permissions use `rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions())`.

@@ -72,15 +72,15 @@ APIExample-OC/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming"
     │       ├── RTMPStreaming/               # "RTMP Streaming"
-    │       ├── VideoMetadata/               # "Video Metadata"
-    │       ├── VoiceChanger/                # "Voice Changer"
-    │       ├── CustomPcmAudioSource/        # "Custom Audio Source"
+    │       ├── VideoMetadata/               # "Media Metadata"
+    │       ├── VoiceChanger/                # "Voice Effects"
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
-    │       ├── CustomVideoSourcePush/       # "Custom Video Source (Push)"
+    │       ├── CustomVideoSourcePush/       # "Custom Video Source"
     │       ├── CustomVideoRender/           # "Custom Video Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── RawVideoData/                # "Raw Video Data"
-    │       ├── PictureInPicture/            # "Picture In Picture (iOS15+)"
+    │       ├── PictureInPicture/            # "Picture In Picture"
     │       ├── SimpleFilter/                # "Simple Filter Extension"
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
@@ -89,11 +89,11 @@ APIExample-OC/
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── VideoProcess/                # "Video Process"
     │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── Simulcast/                   # "Simulcast"
     │       ├── Multipath/                   # "Multipath"
     │       └── LocalCompositeGraph/         # "Local Composite Graph"
@@ -149,19 +149,25 @@ viewDidLoad    → [AgoraRtcEngineKit sharedEngineWithAppId:delegate:]
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear: when isMovingFromParentViewController is true
+willMoveToParentViewController: when parent == nil
                → [engine leaveChannel:]
                → [AgoraRtcEngineKit destroy]
 ```
 
-Navigation cleanup is guarded by `isMovingFromParentViewController`, as shown in the
+Navigation cleanup uses `willMoveToParentViewController:` with `parent == nil`, as shown in the
 upsert and review skills. Merely covering the controller does not end the case;
 `dealloc` is not the primary scene-exit hook.
 
 ## Token Flow
 
-```objc
-[[NetworkManager shared] generateTokenWithChannelName:channelName success:^(NSString *token) {
-    [self.agoraKit joinChannelByToken:token channelId:channelName uid:0 mediaOptions:options];
-}];
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.
+
+Import `APIExample_OC-swift.h` for the Swift `NetworkManager`. Its Objective-C selector is
+`generateTokenWithChannelName:uid:success:`; the Swift default UID is not an OC overload.

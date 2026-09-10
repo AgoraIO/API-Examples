@@ -9,7 +9,7 @@
         <!--Join Channel Video-->
         <scene sceneID="bmq-gY-cAa">
             <objects>
-                <viewController title="Join Channel Video" storyboardIdentifier="LiveStreaming" id="YjT-yy-DnJ" customClass="LiveStreamingMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Live Streaming" storyboardIdentifier="LiveStreaming" id="YjT-yy-DnJ" customClass="LiveStreamingMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
                         <rect key="frame" x="0.0" y="0.0" width="798" height="600"/>
                         <subviews>

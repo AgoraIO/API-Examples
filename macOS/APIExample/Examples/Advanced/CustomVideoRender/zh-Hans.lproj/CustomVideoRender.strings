@@ -1,5 +1,5 @@
-/* Element = "viewController"; title = "Custom Video Source(MediaIO)"; ObjectID = "jEL-F4-BwV"; */
-"jEL-F4-BwV.title" = "视频自渲染";
+/* Element = "viewController"; title = "Custom Video Render"; ObjectID = "jEL-F4-BwV"; */
+"jEL-F4-BwV.title" = "视频自渲染(Metal)";
 
 /* Element = "box"; title = "Box"; ObjectID = "jwa-os-AjB"; */
 "jwa-os-AjB.title" = "Box";

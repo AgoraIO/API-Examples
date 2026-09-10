@@ -49,7 +49,7 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
  * This demo demonstrates how to make a one-to-one video call
  */
 @Example(
-        index = 33,
+        index = 27,
         group = ADVANCED,
         name = R.string.item_localvideotranscoding,
         actionId = R.id.action_mainFragment_to_LocalVideoTranscoding,

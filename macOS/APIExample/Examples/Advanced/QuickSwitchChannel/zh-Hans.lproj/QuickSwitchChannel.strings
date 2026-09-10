@@ -7,5 +7,5 @@
 /* Element = "buttonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
 "Lhu-U1-6qh.title" = "加入频道";
 
-/* Element = "viewController"; title = "Raw Video Data"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "视频裸数据";
+/* Element = "viewController"; title = "Quick Switch Channel"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "快速切换频道";

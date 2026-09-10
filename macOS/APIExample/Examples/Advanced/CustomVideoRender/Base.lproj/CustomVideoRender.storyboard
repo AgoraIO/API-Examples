@@ -9,7 +9,7 @@
         <!--Custom Video Render-->
         <scene sceneID="Ynb-nU-e0m">
             <objects>
-                <viewController title="Custom Video Source(MediaIO)" storyboardIdentifier="CustomVideoRender" id="jEL-F4-BwV" userLabel="Custom Video Render" customClass="CustomVideoRender" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Custom Video Render" storyboardIdentifier="CustomVideoRender" id="jEL-F4-BwV" userLabel="Custom Video Render" customClass="CustomVideoRender" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="gpM-qr-mFH">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

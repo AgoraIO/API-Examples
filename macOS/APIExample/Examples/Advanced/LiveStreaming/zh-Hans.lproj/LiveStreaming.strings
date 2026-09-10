@@ -23,8 +23,8 @@
 /* Class = "NSTextFieldCell"; title = "S or l flow"; ObjectID = "XH3-Ib-cXr"; */
 "zOU-d9-jDn.title" = "大小流";
 
-/* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "实时视频通话/直播";
+/* Class = "NSViewController"; title = "Live Streaming"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "RTC实时直播/主播/观众";
 
 /* Class = "NSButtonCell"; title = "Snap Shot"; ObjectID = "cDh-B1-x3E"; */
 "hca-Of-3bM.title" = "截图";

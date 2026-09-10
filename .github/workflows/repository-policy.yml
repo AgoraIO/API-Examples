@@ -205,3 +205,27 @@ jobs:
 
       - name: Validate AI assets
         run: python3 .github/ci/policy/validate_ai_assets.py
+
+  template-lifecycle:
+    name: Template lifecycle (${{ matrix.check }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: apple
+            runner: macos-14
+          - check: kotlin
+            runner: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        if: matrix.check == 'kotlin'
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compile and exercise template lifecycles
+        env:
+          TEMPLATE_CHECK: ${{ matrix.check }}
+        run: python3 .github/ci/policy/check_templates.py "$TEMPLATE_CHECK"

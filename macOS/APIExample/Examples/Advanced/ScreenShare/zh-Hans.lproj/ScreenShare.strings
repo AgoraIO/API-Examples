@@ -7,8 +7,8 @@
 /* Element = "buttonCell"; title = "Window Share"; ObjectID = "GY6-hd-Bf5"; */
 "GY6-hd-Bf5.title" = "窗口共享";
 
-/* Element = "viewController"; title = "Stream Encryption"; ObjectID = "Gwp-vd-c2J"; */
-"Gwp-vd-c2J.title" = "码流加密";
+/* Element = "viewController"; title = "Screen Share"; ObjectID = "Gwp-vd-c2J"; */
+"Gwp-vd-c2J.title" = "屏幕共享";
 
 /* Element = "buttonCell"; title = "Display Share"; ObjectID = "SAX-wa-nOm"; */
 "SAX-wa-nOm.title" = "屏幕共享";

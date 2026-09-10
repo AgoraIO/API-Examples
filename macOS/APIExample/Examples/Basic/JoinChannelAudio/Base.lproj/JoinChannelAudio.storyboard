@@ -9,7 +9,7 @@
         <!--Join Channel Audio-->
         <scene sceneID="MLt-Ta-hJM">
             <objects>
-                <viewController title="Join Channel Audio" storyboardIdentifier="JoinChannelAudio" id="jAv-ZA-ecf" customClass="JoinChannelAudioMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Join a channel (Audio)" storyboardIdentifier="JoinChannelAudio" id="jAv-ZA-ecf" customClass="JoinChannelAudioMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Ia1-8V-pu1">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

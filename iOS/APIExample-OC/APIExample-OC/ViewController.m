@@ -52,33 +52,33 @@
         [[MenuItem alloc]initWithName:@"Local or remote recording".localized storyboard:@"JoinChannelVideoRecorder" controller:@""]
     ]];
     [array addObject:basicSection];
-    MenuSection *anvancedSection = [[MenuSection alloc] initWithName:@"Anvanced" rows:@[
+    MenuSection *anvancedSection = [[MenuSection alloc] initWithName:@"Advanced" rows:@[
         [[MenuItem alloc]initWithName:@"Live Streaming".localized storyboard:@"LiveStreaming" controller:@"LiveStreaming"],
         [[MenuItem alloc]initWithName:@"RTMP Streaming".localized storyboard:@"RTMPStreaming" controller:@""],
-        [[MenuItem alloc]initWithName:@"Video Metadata".localized storyboard:@"VideoMetadata" controller:@""],
-        [[MenuItem alloc]initWithName:@"Voice Changer".localized storyboard:@"VoiceChanger" controller:@""],
-        [[MenuItem alloc]initWithName:@"Custom Audio Source".localized storyboard:@"CustomPcmAudioSource" controller:@""],
+        [[MenuItem alloc]initWithName:@"Media Metadata".localized storyboard:@"VideoMetadata" controller:@""],
+        [[MenuItem alloc]initWithName:@"Voice Effects".localized storyboard:@"VoiceChanger" controller:@""],
+        [[MenuItem alloc]initWithName:@"Custom Audio Source (PCM)".localized storyboard:@"CustomPcmAudioSource" controller:@""],
         [[MenuItem alloc]initWithName:@"Custom Audio Render".localized storyboard:@"CustomAudioRender" controller:@""],
-        [[MenuItem alloc]initWithName:@"Custom Video Source(Push)".localized storyboard:@"CustomVideoSourcePush" controller:@""],
-        [[MenuItem alloc]initWithName:@"Custom Video Render".localized storyboard:@"CustomVideoRender" controller:@""],
         [[MenuItem alloc]initWithName:@"Raw Audio Data".localized storyboard:@"RawAudioData" controller:@""],
+        [[MenuItem alloc]initWithName:@"Audio Mixing".localized storyboard:@"AudioMixing" controller:@""],
+        [[MenuItem alloc]initWithName:@"Custom Video Source".localized storyboard:@"CustomVideoSourcePush" controller:@""],
+        [[MenuItem alloc]initWithName:@"Custom Video Render".localized storyboard:@"CustomVideoRender" controller:@""],
         [[MenuItem alloc]initWithName:@"Raw Video Data".localized storyboard:@"RawVideoData" controller:@""],
-        [[MenuItem alloc]initWithName:@"Picture In Picture(require iOS15)".localized storyboard:@"PictureInPicture" controller:@""],
+        [[MenuItem alloc]initWithName:@"Picture In Picture".localized storyboard:@"PictureInPicture" controller:@""],
         [[MenuItem alloc]initWithName:@"Simple Filter Extension".localized storyboard:@"SimpleFilter" controller:@""],
+        [[MenuItem alloc]initWithName:@"Video Process".localized storyboard:@"VideoProcess" controller:@""],
+        [[MenuItem alloc]initWithName:@"Local Composite Graph".localized storyboard:@"LocalCompositeGraph" controller:@""],
         [[MenuItem alloc]initWithName:@"Join Multiple Channels".localized storyboard:@"JoinMultiChannel" controller:@""],
         [[MenuItem alloc]initWithName:@"Stream Encryption".localized storyboard:@"StreamEncryption" controller:@""],
-        [[MenuItem alloc]initWithName:@"Audio Mixing".localized storyboard:@"AudioMixing" controller:@""],
         [[MenuItem alloc]initWithName:@"Media Player".localized storyboard:@"MediaPlayer" controller:@""],
         [[MenuItem alloc]initWithName:@"Screen Share".localized storyboard:@"ScreenShare" controller:@""],
-        [[MenuItem alloc]initWithName:@"Video Process".localized storyboard:@"VideoProcess" controller:@""],
-        [[MenuItem alloc]initWithName:@"Create Data Stream".localized storyboard:@"CreateDataStream" controller:@""],
+        [[MenuItem alloc]initWithName:@"Send Data Stream".localized storyboard:@"CreateDataStream" controller:@""],
         [[MenuItem alloc]initWithName:@"Media Channel Relay".localized storyboard:@"MediaChannelRelay" controller:@""],
         [[MenuItem alloc]initWithName:@"Spatial Audio".localized storyboard:@"SpatialAudio" controller:@""],
         [[MenuItem alloc]initWithName:@"Content Inspect".localized storyboard:@"ContentInspect" controller:@""],
-        [[MenuItem alloc]initWithName:@"Mutli Camera(iOS13.0+)".localized storyboard:@"MutliCamera" controller:@""],
+        [[MenuItem alloc]initWithName:@"Multi Camera".localized storyboard:@"MutliCamera" controller:@""],
         [[MenuItem alloc]initWithName:@"Simulcast".localized storyboard:@"Simulcast" controller:@""],
         [[MenuItem alloc]initWithName:@"Multipath".localized storyboard:@"Multipath" controller:@""],
-        [[MenuItem alloc]initWithName:@"LocalCompositeGraph".localized storyboard:@"LocalCompositeGraph" controller:@""],
     ]];
     [array addObject:anvancedSection];
     

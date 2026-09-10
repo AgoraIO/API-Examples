@@ -6,10 +6,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Custom Audio Source-->
+        <!--Custom Audio Source (PCM)-->
         <scene sceneID="8TL-n1-6v3">
             <objects>
-                <viewController title="Custom Audio Source" storyboardIdentifier="CustomAudioSource" id="8Q5-xy-D8A" userLabel="Custom Audio Source" customClass="CustomAudioSource" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Custom Audio Source (PCM)" storyboardIdentifier="CustomAudioSource" id="8Q5-xy-D8A" userLabel="Custom Audio Source (PCM)" customClass="CustomAudioSource" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="FZZ-AO-hoG">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

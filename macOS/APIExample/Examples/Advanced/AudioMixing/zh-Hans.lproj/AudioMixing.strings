@@ -40,8 +40,8 @@
 /* Element = "buttonCell"; title = "Stop Additional Effect"; ObjectID = "iQT-DV-ynF"; */
 "iQT-DV-ynF.title" = "停止附加音效";
 
-/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
-"jAv-ZA-ecf.title" = "实时音频通话/直播";
+/* Element = "viewController"; title = "Audio Mixing"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "音频文件混音";
 
 /* Element = "buttonCell"; title = "Pause"; ObjectID = "mcr-Pl-O4W"; */
 "mcr-Pl-O4W.title" = "暂停";

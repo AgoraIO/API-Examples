@@ -19,5 +19,5 @@
 /* Element = "box"; title = "Box"; ObjectID = "j41-op-nLI"; */
 "j41-op-nLI.title" = "Box";
 
-/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
-"jAv-ZA-ecf.title" = "实时音频通话/直播";
+/* Element = "viewController"; title = "Join a channel (Audio)"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "实时语音通话/直播";

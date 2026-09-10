@@ -32,7 +32,7 @@ import io.agora.rte.exception.RteException;
  * This demo demonstrates how to make a live stream with url
  */
 @Example(
-        index = 42,
+        index = 43,
         group = ADVANCED,
         name = R.string.ultra_live_streaming_with_url,
         actionId = R.id.action_mainFragment_to_url_live_stream,

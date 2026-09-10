@@ -17,9 +17,11 @@ struct MenuItem: Identifiable {
     let id = UUID()
     var name: String
     var view: AnyView
-    init(name: String, view: AnyView) {
+    var requiresIOS15: Bool
+    init(name: String, view: AnyView, requiresIOS15: Bool = false) {
         self.name = name
         self.view = view
+        self.requiresIOS15 = requiresIOS15
     }
 }
 
@@ -35,44 +37,49 @@ struct ContentView: View {
             MenuItem(name: "Local or remote recording".localized,
                      view: AnyView(JoinChannelVideoRecorderEntry()))
         ]),
-        MenuSection(name: "Anvanced", rows: [
+        MenuSection(name: "Advanced", rows: [
             MenuItem(name: "Live Streaming".localized,
                      view: AnyView(LiveStreamingEntry())),
-            MenuItem(name: "Video Metadata".localized,
-                     view: AnyView(VideoMetadataEntry())),
-            MenuItem(name: "Custom Audio Source(PCM)".localized,
-                     view: AnyView(CustomPCMAudioSourceEntry())),
-            MenuItem(name: "Raw Audio Data".localized,
-                     view: AnyView(RawAudioDataEntry())),
-            MenuItem(name: "Raw Video Data".localized,
-                     view: AnyView(RawVideoDataEntry())),
-            MenuItem(name: "Local Video Transcoding".localized,
-                     view: AnyView(LocalVideoTranscodingEntry())),
-            MenuItem(name: "Voice Changer".localized,
-                     view: AnyView(VoiceChangerEntry())),
             MenuItem(name: "RTMP Streaming".localized,
                      view: AnyView(RTMPStreamEntry())),
+            MenuItem(name: "Media Metadata".localized,
+                     view: AnyView(VideoMetadataEntry())),
+            MenuItem(name: "Voice Effects".localized,
+                     view: AnyView(VoiceChangerEntry())),
+            MenuItem(name: "Custom Audio Source (PCM)".localized,
+                     view: AnyView(CustomPCMAudioSourceEntry())),
             MenuItem(name: "Custom Audio Render".localized,
                      view: AnyView(CustomAudioRenderEntry())),
+            MenuItem(name: "Raw Audio Data".localized,
+                     view: AnyView(RawAudioDataEntry())),
+            MenuItem(name: "Audio Mixing".localized,
+                     view: AnyView(AudioMixingEntry())),
+            MenuItem(name: "Audio Waveform".localized,
+                     view: AnyView(AudioWaveformEntry())),
+            MenuItem(name: "Raw Video Data".localized,
+                     view: AnyView(RawVideoDataEntry())),
             MenuItem(name: "Picture In Picture".localized,
-                     view: AnyView(PictureInPictureEntry())),
+                     view: AnyView(PictureInPictureEntry()),
+                     requiresIOS15: true),
+            MenuItem(name: "Video Process".localized,
+                     view: AnyView(VideoProcessEntry())),
+            MenuItem(name: "Local Video Transcoding".localized,
+                     view: AnyView(LocalVideoTranscodingEntry())),
+            MenuItem(name: "Local Composite Graph".localized,
+                     view: AnyView(LocalCompositeGraphEntry())),
             MenuItem(name: "Quick Switch Channel".localized,
                      view: AnyView(QuickSwitchChannelEntry())),
             MenuItem(name: "Join Multiple Channels".localized,
                      view: AnyView(JoinMultiChannelEntry())),
             MenuItem(name: "Stream Encryption".localized,
                      view: AnyView(StreamEncryptionEntry())),
-            MenuItem(name: "Audio Mixing".localized,
-                     view: AnyView(AudioMixingEntry())),
-            MenuItem(name: "Precall Test".localized,
+            MenuItem(name: "Pre-call Test".localized,
                      view: AnyView(PrecallTest())),
             MenuItem(name: "Media Player".localized,
                      view: AnyView(MediaPlayerEntry())),
             MenuItem(name: "Screen Share".localized,
                      view: AnyView(ScreenShareEntry())),
-            MenuItem(name: "Video Process".localized,
-                     view: AnyView(VideoProcessEntry())),
-            MenuItem(name: "Create Data Stream".localized,
+            MenuItem(name: "Send Data Stream".localized,
                      view: AnyView(CreateDataStreamEntry())),
             MenuItem(name: "Media Channel Relay".localized,
                      view: AnyView(MediaChannelRelayEntry())),
@@ -80,19 +87,16 @@ struct ContentView: View {
                      view: AnyView(SpatialAudioEntry())),
             MenuItem(name: "Content Inspect".localized,
                      view: AnyView(ContentInspectEntry())),
-            MenuItem(name: "Mutli Camera(iOS13.0+)".localized,
+            MenuItem(name: "Multi Camera".localized,
                      view: AnyView(MutliCameraEntry())),
-            MenuItem(name: "Ktv copyright music".localized,
+            MenuItem(name: "KTV Copyright Music".localized,
                      view: AnyView(KtvCopyrightMusic())),
             MenuItem(name: "ARKit".localized,
                      view: AnyView(ARKitEntry())),
-            MenuItem(name: "Audio Waveform".localized,
-                     view: AnyView(AudioWaveformEntry())),
             MenuItem(name: "Simulcast".localized,
                      view: AnyView(SimulcastEntry())),
             MenuItem(name: "Multipath".localized,
-                     view: AnyView(MultipathEntry())),
-            MenuItem(name: "LocalCompositeGraph".localized, view: AnyView(LocalCompositeGraphEntry()))
+                     view: AnyView(MultipathEntry()))
         ])
     ]
 
@@ -119,7 +123,7 @@ struct ContentView: View {
 struct MenuItemView: View {
     var item: MenuItem
     var body: some View {
-        if item.name == "Picture In Picture".localized {
+        if item.requiresIOS15 {
             if #available(iOS 15.0, *) {
                 NavigationLink(destination: {
                     item.view.navigationTitle(item.name)

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Create Data Stream Entry-->
+        <!--Send Data Stream Entry-->
         <scene sceneID="ZvU-O5-z0B">
             <objects>
                 <viewController storyboardIdentifier="EntryViewController" id="d1Y-M6-f0F" customClass="CreateDataStreamEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
@@ -61,7 +61,7 @@
             </objects>
             <point key="canvasLocation" x="-38" y="-30"/>
         </scene>
-        <!--Create Data Stream Main-->
+        <!--Send Data Stream Main-->
         <scene sceneID="OOn-EF-p2U">
             <objects>
                 <viewController storyboardIdentifier="CreateDataStream" id="WPo-JO-3Gj" customClass="CreateDataStreamMain" customModule="APIExample" sceneMemberID="viewController">

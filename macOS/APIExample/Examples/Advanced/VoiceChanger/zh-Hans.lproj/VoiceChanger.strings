@@ -37,8 +37,8 @@
 /* Element = "textFieldCell"; title = "125hz"; ObjectID = "iEy-1i-vf4"; */
 "iEy-1i-vf4.title" = "125hz";
 
-/* Element = "viewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
-"jAv-ZA-ecf.title" = "实时音频通话/直播";
+/* Element = "viewController"; title = "Voice Effects"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "美声/音效";
 
 /* Element = "textFieldCell"; title = "8Khz"; ObjectID = "k68-jy-Jcs"; */
 "k68-jy-Jcs.title" = "8Khz";

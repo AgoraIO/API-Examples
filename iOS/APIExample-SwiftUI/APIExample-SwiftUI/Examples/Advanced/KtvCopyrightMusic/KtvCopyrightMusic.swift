@@ -10,7 +10,7 @@ import SwiftUI
 struct KtvCopyrightMusic: View {
     var body: some View {
         ZStack {
-            Button("Ktv copyright music".localized) {
+            Button("KTV Copyright Music".localized) {
                 let urlString = "https://docs.agora.io/en/interactive-live-streaming/overview/product-overview?platform=ios"
                 
                 if let url = URL(string: urlString) {

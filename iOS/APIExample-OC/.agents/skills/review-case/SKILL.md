@@ -12,6 +12,19 @@ metadata:
 
 # review-case — APIExample-OC
 
+## Pending Permission and Token Requests
+
+Review the complete lifecycle against [the creation template](../upsert-case/SKILL.md).
+All request/engine ownership transitions must run on main. Freeze channel/UID and request
+generation before requesting permission or Token; before joining, check that the generation
+and engine identity are still current. Leave invalidates pending work even before joined;
+destroy also clears the engine. Repeated cleanup must not destroy another case's engine.
+Weak references alone do not invalidate a request when its owner remains alive.
+
+Exercise delayed permission and Token responses after leave/destroy, repeated cleanup,
+rapid reopen and out-of-order responses. Only the current request may join. Also check
+permission denial, absent required Token and a nonzero join result. Never log credentials.
+
 ## Review Dimensions (in priority order)
 
 ### 1. Engine Lifecycle
@@ -19,18 +32,10 @@ metadata:
 **Check:**
 - `[AgoraRtcEngineKit sharedEngineWithConfig:delegate:]` called in `viewDidLoad` (not in Entry VC)
 - `[self.agoraKit leaveChannel:]` + `[AgoraRtcEngineKit destroy]` called when leaving
-- Cleanup triggered by `isMovingFromParentViewController` in `viewDidDisappear:`, or in `dealloc`
+- Navigation cleanup invalidates requests in `willMoveToParentViewController:` when `parent == nil`; modal presentation needs its own explicit dismissal cleanup
 
-**Correct:**
-```objc
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isMovingFromParentViewController) {
-        [self.agoraKit leaveChannel:nil];
-        [AgoraRtcEngineKit destroy];
-    }
-}
-```
+**Correct:** Use `willMoveToParentViewController:` with `parent == nil` and the
+idempotent `onDestroy` in the creation template. Temporary disappearance is not teardown.
 
 **Wrong:**
 ```objc
@@ -75,13 +80,10 @@ All `AgoraRtcEngineDelegate` callbacks may arrive on a background thread.
 - Delegate property on `AgoraRtcEngineKit` is `weak` (it is by SDK design, but verify no strong cycle)
 - No `__unsafe_unretained` used for delegate or view references
 
-**Correct:**
-```objc
-__weak typeof(self) weakSelf = self;
-[[NetworkManager shared] generateTokenWithChannelName:channelName success:^(NSString *token) {
-    [weakSelf.agoraKit joinChannelByToken:token ...];
-}];
-```
+Import `APIExample_OC-swift.h` for `NetworkManager` and call
+`generateTokenWithChannelName:uid:success:` with the snapshotted UID. Swift's `uid = 0`
+does not generate an Objective-C selector without `uid:`. Use the complete guarded block
+in the creation template; a weak reference without session validation is insufficient.
 
 ---
 
@@ -163,5 +165,5 @@ Severity levels:
 
 - Verify `NS_ASSUME_NONNULL_BEGIN/END` wraps the header to reduce nullability warnings
 - Verify `IBOutlet` properties are `weak` (Xcode default, but worth confirming)
-- `isMovingFromParentViewController` is the correct guard in `viewDidDisappear:` for navigation-based cleanup — do NOT use `isBeingDismissed` (that's for modal presentation)
+- For navigation removal, use `willMoveToParentViewController:` with `parent == nil`; distinguish it from temporary disappearance and modal dismissal
 - ARC is enabled — no manual `retain`/`release` calls should appear

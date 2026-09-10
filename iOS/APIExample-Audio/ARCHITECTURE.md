@@ -50,14 +50,14 @@ APIExample-Audio/
     │   │   ├── JoinChannelAudio/            # "Join a channel (Audio)"
     │   │   └── JoinChannelAudio(Token)/     # "Join a channel (Token)"
     │   └── Advanced/
-    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
+    │       ├── VoiceChanger/                # "Voice Effects" — voice beautifier/effects
     │       ├── CustomAudioSource/           # "Custom Audio Source"
     │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── AudioMixing/                 # "Audio Mixing"
     │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       └── SpatialAudio/                # "Spatial Audio"
     │
     ├── Resources/                           # Audio sample files
@@ -130,8 +130,11 @@ the upsert and review skills.
 
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
-    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

@@ -9,7 +9,7 @@
         <!--Video Process-->
         <scene sceneID="bmq-gY-cAa">
             <objects>
-                <viewController title="Video Process" storyboardIdentifier="AgoraBeauty" id="YjT-yy-DnJ" customClass="AgoraBeauty" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Beauty 2.0" storyboardIdentifier="AgoraBeauty" id="YjT-yy-DnJ" customClass="AgoraBeauty" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <subviews>

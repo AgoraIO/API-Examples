@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Create Data Stream Entry-->
+        <!--Send Data Stream Entry-->
         <scene sceneID="x72-3b-GCg">
             <objects>
                 <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="CreateDataStreamEntry" sceneMemberID="viewController">
@@ -60,10 +60,10 @@
             </objects>
             <point key="canvasLocation" x="-694" y="931"/>
         </scene>
-        <!--Create Data Stream-->
+        <!--Send Data Stream-->
         <scene sceneID="537-qh-Aaa">
             <objects>
-                <viewController storyboardIdentifier="CreateDataStream" title="Create Data Stream" id="p70-sh-D1h" customClass="CreateDataStream" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateDataStream" title="Send Data Stream" id="p70-sh-D1h" customClass="CreateDataStream" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OcG-X2-s5p">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

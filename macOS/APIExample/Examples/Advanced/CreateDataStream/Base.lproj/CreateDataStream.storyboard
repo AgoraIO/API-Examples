@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Create Data Stream-->
+        <!--Send Data Stream-->
         <scene sceneID="FTD-bT-A3y">
             <objects>
                 <viewController storyboardIdentifier="CreateDataStream" id="ddQ-xA-Ik0" customClass="CreateDataStream" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">

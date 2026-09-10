@@ -12,6 +12,19 @@ metadata:
 
 # review-case — APIExample
 
+## Pending Permission and Token Requests
+
+Review the complete lifecycle against [the creation template](../upsert-case/SKILL.md).
+All request/engine ownership transitions must run on main. Freeze channel/UID and request
+generation before requesting permission or Token; before joining, check that the generation
+and engine identity are still current. Leave invalidates pending work even before joined;
+destroy also clears the engine. Repeated cleanup must not destroy another case's engine.
+Weak references alone do not invalidate a request when its owner remains alive.
+
+Exercise delayed permission and Token responses after leave/destroy, repeated cleanup,
+rapid reopen and out-of-order responses. Only the current request may join. Also check
+permission denial, absent required Token and a nonzero join result. Never log credentials.
+
 ## Review Dimensions (in priority order)
 
 ### 1. Engine Lifecycle
@@ -23,16 +36,9 @@ The most critical dimension. Leaks here cause crashes in subsequent examples.
 - `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called in `willMove(toParent:)` when `parent == nil`
 - No engine instance stored beyond the Main VC's lifetime
 
-**Correct:**
-```swift
-override func willMove(toParent parent: UIViewController?) {
-    super.willMove(toParent: parent)
-    if parent == nil {
-        agoraKit?.leaveChannel()
-        AgoraRtcEngineKit.destroy()
-    }
-}
-```
+**Correct:** Call the creation template’s idempotent `onDestroy()` from
+`willMove(toParent:)` when `parent == nil`. It invalidates pending permission/Token work
+before leaving, destroying and clearing the owned engine.
 
 **Wrong:**
 ```swift
@@ -78,13 +84,9 @@ func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: I
 - Microphone permission requested before `joinChannel()` for all cases
 - `joinChannel()` called only inside the permission grant callback, not before
 
-**Correct:**
-```swift
-AgoraAudioSession.sharedInstance().requestRecordPermission { [weak self] granted in
-    guard granted else { return }
-    self?.agoraKit?.joinChannel(...)
-}
-```
+**Correct:** Pass the case’s actual camera/microphone permission request to
+`requestJoin(channelName:requestPermission:)` in the creation template. Its guarded main-queue
+continuation checks the request and engine lifetime before requesting a Token or joining.
 
 ---
 

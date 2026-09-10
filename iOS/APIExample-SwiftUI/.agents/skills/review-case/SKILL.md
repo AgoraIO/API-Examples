@@ -12,6 +12,19 @@ metadata:
 
 # review-case — APIExample-SwiftUI
 
+## Pending Permission and Token Requests
+
+Review the complete lifecycle against [the creation template](../upsert-case/SKILL.md).
+All request/engine ownership transitions must run on main. Freeze channel/UID and request
+generation before requesting permission or Token; before joining, check that the generation
+and engine identity are still current. Leave invalidates pending work even before joined;
+destroy also clears the engine. Repeated cleanup must not destroy another case's engine.
+Weak references alone do not invalidate a request when its owner remains alive.
+
+Exercise delayed permission and Token responses after leave/destroy, repeated cleanup,
+rapid reopen and out-of-order responses. Only the current request may join. Also check
+permission denial, absent required Token and a nonzero join result. Never log credentials.
+
 ## Review Dimensions (in priority order)
 
 ### 1. Engine Lifecycle

@@ -45,50 +45,50 @@ APIExample/
         │
         ├── examples/                        # All cases live here — ClassUtils scans this package
         │   ├── basic/                       # group = "BASIC" (index 0–9)
-        │   │   ├── JoinChannelVideoByToken.java # [0] "Live Interactive Video Streaming(Token Verify)"
-        │   │   ├── JoinChannelVideo.java        # [1] "Live Interactive Video Streaming"
-        │   │   └── JoinChannelAudio.java        # [2] "Live Interactive Audio Streaming"
+        │   │   ├── JoinChannelVideoByToken.java # [0] "Join a channel (Token)"
+        │   │   ├── JoinChannelVideo.java        # [1] "Join a channel (Video)"
+        │   │   └── JoinChannelAudio.java        # [2] "Join a channel (Audio)"
         │   ├── advanced/                        # group = "ADVANCED" (index 10+)
-        │   │   ├── LiveStreaming.java           # [10] "RTC Live Streaming" — setClientRole, broadcaster/audience
-        │   │   ├── RTMPStreaming.java           # [11] "Push Streams to CDN" — RTMP push streaming
+        │   │   ├── LiveStreaming.java           # [10] "Live Streaming" — setClientRole, broadcaster/audience
+        │   │   ├── RTMPStreaming.java           # [11] "RTMP Streaming" — RTMP push streaming
         │   │   ├── MediaMetadata.java           # [12] "Media Metadata" — send/receive metadata in video stream
-        │   │   ├── VoiceEffects.java            # [13] "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
-        │   │   ├── customaudio/CustomAudioSource.java  # [14] "Custom Audio Sources" — push external audio
+        │   │   ├── VoiceEffects.java            # [13] "Voice Effects" — setVoiceBeautifierPreset
+        │   │   ├── customaudio/CustomAudioSource.java  # [14] "Custom Audio Source (PCM)" — push external audio
         │   │   ├── customaudio/CustomAudioRender.java  # [15] "Custom Audio Render" — pull audio for custom rendering
-        │   │   ├── PushExternalVideoYUV.java    # [16] "Custom Video Source" — push YUV external video
-        │   │   ├── CustomRemoteVideoRender.java # [17] "Custom Video Renderer" — custom remote video rendering
-        │   │   ├── ProcessAudioRawData.java     # [18] "Raw Audio Data" — audio raw data processing
-        │   │   ├── MultiVideoSourceTracks.java  # [19] "Multi Video Source Tracks" — multiple video sources
-        │   │   ├── ProcessRawData.java          # [20] "Raw Video Data" — video raw data processing
-        │   │   ├── SimpleExtension.java         # [21] "Simple Extension" — custom video extension
-        │   │   ├── PictureInPicture.java        # [22] "Picture In Picture" — PiP mode
-        │   │   ├── VideoQuickSwitch.java        # [24] "Quick Switch Channel" — fast channel switching
-        │   │   ├── JoinMultipleChannel.java     # [25] "Join Multiple Channel" — multi-channel join
-        │   │   ├── ChannelEncryption.java       # [26] "Media Stream Encryption" — built-in encryption
-        │   │   ├── PlayAudioFiles.java          # [27] "Play Audio Files" — audio mixing
-        │   │   ├── PreCallTest.java             # [28] "Pre-call Tests" — network/device test before joining
-        │   │   ├── MediaPlayer.java             # [29] "MediaPlayer" — play media files
-        │   │   ├── MediaRecorder.java           # [30] "Local/Remote MediaRecorder" — record media streams
-        │   │   ├── ScreenSharing.java           # [31] "Screen Sharing" — screen capture & share
-        │   │   ├── VideoProcessExtension.java   # [32] "Video Process Extension" — video filter extension
-        │   │   ├── LocalVideoTranscoding.java   # [33] "LocalVideoTranscoding" — local video compositing
+        │   │   ├── PushExternalVideoYUV.java    # [20] "Custom Video Source" — push YUV external video
+        │   │   ├── CustomRemoteVideoRender.java # [22] "Custom Video Render" — custom remote video rendering
+        │   │   ├── ProcessAudioRawData.java     # [16] "Raw Audio Data" — audio raw data processing
+        │   │   ├── MultiVideoSourceTracks.java  # [21] "Multi Video Source Tracks" — multiple video sources
+        │   │   ├── ProcessRawData.java          # [23] "Raw Video Data" — video raw data processing
+        │   │   ├── SimpleExtension.java         # [25] "Simple Filter Extension" — custom video extension
+        │   │   ├── PictureInPicture.java        # [24] "Picture In Picture" — PiP mode
+        │   │   ├── VideoQuickSwitch.java        # [28] "Quick Switch Channel" — fast channel switching
+        │   │   ├── JoinMultipleChannel.java     # [29] "Join Multiple Channels" — multi-channel join
+        │   │   ├── ChannelEncryption.java       # [30] "Stream Encryption" — built-in encryption
+        │   │   ├── PlayAudioFiles.java          # [17] "Play Audio Files" — audio mixing
+        │   │   ├── PreCallTest.java             # [31] "Pre-call Test" — network/device test before joining
+        │   │   ├── MediaPlayer.java             # [32] "Media Player" — play media files
+        │   │   ├── MediaRecorder.java           # [33] "Media Recorder" — record media streams
+        │   │   ├── ScreenSharing.java           # [34] "Screen Share" — screen capture & share
+        │   │   ├── VideoProcessExtension.java   # [26] "Video Process" — video filter extension
+        │   │   ├── LocalVideoTranscoding.java   # [27] "Local Video Transcoding" — local video compositing
         │   │   ├── RhythmPlayer.java            # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   │   ├── SendDataStream.java          # [35] "Send Data Stream" — data channel messaging
-        │   │   ├── HostAcrossChannel.java       # [36] "Relay Streams across Channels" — cross-channel relay
+        │   │   ├── HostAcrossChannel.java       # [36] "Media Channel Relay" — cross-channel relay
         │   │   ├── SpatialSound.java            # [37] "Spatial Audio" — 3D spatial audio
         │   │   ├── ContentInspect.java          # [38] "Content Inspect" — content moderation
-        │   │   ├── ThirdPartyBeauty.java        # [39] "Third-party beauty" — third-party beauty SDK
-        │   │   ├── KtvCopyrightMusic.java       # [40] "KTV Copyright Music" — licensed music
-        │   │   ├── TransparentRendering.java    # [41] "TransparentRendering" — alpha channel rendering
-        │   │   ├── UrlLiveStream.java           # [42] "Ultra Live Streaming with Url" — URL-based live stream
-        │   │   ├── AgoraBeauty.java             # [43] "Agora beauty 2.0" — built-in beauty effects
+        │   │   ├── ThirdPartyBeauty.java        # [40] "Third-party Beauty" — third-party beauty SDK
+        │   │   ├── KtvCopyrightMusic.java       # [39] "KTV Copyright Music" — licensed music
+        │   │   ├── TransparentRendering.java    # [42] "Transparent Rendering" — alpha channel rendering
+        │   │   ├── UrlLiveStream.java           # [43] "URL Streaming (RTE Player)" — URL-based live stream
+        │   │   ├── AgoraBeauty.java             # [41] "Beauty 2.0" — built-in beauty effects
         │   │   ├── Simulcast.java               # [44] "Simulcast" — multi-quality stream publishing
         │   │   ├── Multipath.java               # [45] "Multipath" — multi-path transmission
         │   │   ├── beauty/                      # Third-party beauty integrations
         │   │   └── videoRender/                 # Custom video rendering helpers
         │   └── audio/                           # Audio-specific cases (grouped as BASIC)
-        │       ├── AudioWaveform.java           # [5] "Audio Waveform" — audio visualization
-        │       ├── AudioRouterPlayer.java       # [6] "AudioRouter(Third Party Player)" — third-party audio routing
+        │       ├── AudioWaveform.java           # [18] "Audio Waveform" — audio visualization
+        │       ├── AudioRouterPlayer.java       # [19] "Audio Router (Third-party Player)" — third-party audio routing
         │       └── AudioRouterPlayer*.java      # Exo / Ijk / Native variants
         │
         ├── service/
@@ -118,7 +118,7 @@ APIExample/
 | Streaming from RTC to CDN | `advanced/RTMPStreaming.java` | `startRtmpStreamWithTranscoding()`, `startRtmpStreamWithoutTranscoding()`, `stopRtmpStream()`, `updateRtmpTranscoding()` | Demonstrates pushing media streams from RTC to a CDN via RTMP |
 | Media Metadata | `advanced/MediaMetadata.java` | `registerMediaMetadataObserver()`, `sendAudioMetadata()` | Demonstrates sending and receiving metadata alongside video streams |
 | Set the Voice Beautifier and Effects | `advanced/VoiceEffects.java` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setAudioEffectParameters()`, `setLocalVoicePitch()`, `setLocalVoiceEqualization()`, `setLocalVoiceReverb()`, `setLocalVoiceFormant()`, `setAINSMode()`, `enableVoiceAITuner()` | Demonstrates voice beautifier presets, audio effects, voice conversion, and AI noise suppression |
-| Custom Audio Sources | `advanced/customaudio/CustomAudioSource.java` | `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `enableCustomAudioLocalPlayback()`, `destroyCustomAudioTrack()` | Demonstrates pushing external audio frames via a custom audio track |
+| Custom Audio Source (PCM) | `advanced/customaudio/CustomAudioSource.java` | `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `enableCustomAudioLocalPlayback()`, `destroyCustomAudioTrack()` | Demonstrates pushing external audio frames via a custom audio track |
 | Custom Audio Render | `advanced/customaudio/CustomAudioRender.java` | `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Demonstrates pulling audio frames for custom audio rendering |
 | Custom Video Source | `advanced/PushExternalVideoYUV.java` | `setExternalVideoSource()`, `pushExternalVideoFrame()`, `setExternalRemoteEglContext()` | Demonstrates pushing external YUV video frames as a custom video source |
 | Custom Video Renderer | `advanced/CustomRemoteVideoRender.java` | `registerVideoFrameObserver()`, `setExternalRemoteEglContext()` | Demonstrates custom rendering of remote video streams via video frame observer |
@@ -146,7 +146,7 @@ APIExample/
 | KTV Copyright Music | `advanced/KtvCopyrightMusic.java` | N/A (browser-based documentation link) | Demonstrates the KTV copyright music feature via documentation reference |
 | TransparentRendering | `advanced/TransparentRendering.java` | `setExternalVideoSource()`, `pushExternalVideoFrame()`, `createMediaPlayer()`, `startPreview()` | Demonstrates alpha-channel transparent video rendering |
 | Ultra Live Streaming with Url | `advanced/UrlLiveStream.java` | `Rte()`, `Player()`, `Canvas()`, `player.openWithUrl()`, `player.stop()` | Demonstrates ultra-low-latency live streaming playback via URL using the RTE SDK |
-| Agora beauty 2.0 | `advanced/AgoraBeauty.java` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Demonstrates built-in Agora beauty effects with face shaping and virtual background |
+| Beauty 2.0 | `advanced/AgoraBeauty.java` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Demonstrates built-in Agora beauty effects with face shaping and virtual background |
 | Simulcast | `advanced/Simulcast.java` | `setSimulcastConfig()`, `setRemoteVideoStreamType()` | Demonstrates publishing multiple quality streams with simulcast |
 | Multipath | `advanced/Multipath.java` | `joinChannel()`, `updateChannelMediaOptions()` | Demonstrates multi-path transmission for improved network reliability |
 | Audio Waveform | `audio/AudioWaveform.java` | `enableAudio()`, `enableAudioVolumeIndication()` | Demonstrates real-time audio waveform visualization |

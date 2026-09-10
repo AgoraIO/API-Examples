@@ -230,7 +230,7 @@ class VoiceChanger: BaseViewController {
     }
     func initSelectVoiceChangerPicker() {
         selectVoiceChangerPicker.isEnabled = false
-        selectVoiceChangerPicker.label.stringValue = "Voice Changer".localized
+        selectVoiceChangerPicker.label.stringValue = "Voice Effects".localized
         selectVoiceChangerPicker.picker.addItems(withTitles: voiceChangers.map { $0.description() })
         selectVoiceChangerPicker.onSelectChanged {[weak self] in
             guard let self = self else {return}

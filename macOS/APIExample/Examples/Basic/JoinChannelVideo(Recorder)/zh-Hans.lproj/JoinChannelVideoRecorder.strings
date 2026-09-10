@@ -4,5 +4,5 @@
 /* Element = "buttonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
 "Lhu-U1-6qh.title" = "加入频道";
 
-/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "实时视频通话/直播";
+/* Element = "viewController"; title = "Local or remote recording"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "本地/远端录制";

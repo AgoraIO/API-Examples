@@ -225,41 +225,39 @@ void CAPIExampleDlg::InitSceneDialog()
 	//advanced list
 	// m_vecAdvanced.push_back(advancedRtmpInject);
 	m_vecAdvanced.push_back(advancedRtmpStreaming);
-	m_vecAdvanced.push_back(advancedCrossChannel);
 	m_vecAdvanced.push_back(advancedMetadata);
+	m_vecAdvanced.push_back(advancedBeautyAudio);
+	m_vecAdvanced.push_back(advancedAudioProfile);
+	// m_vecAdvanced.push_back(advancedAudioEffect);
+	m_vecAdvanced.push_back(advancedCustomAudioCapture);
+	m_vecAdvanced.push_back(advancedOriginalAudio);
+	m_vecAdvanced.push_back(advancedAudioMixing);
+	m_vecAdvanced.push_back(advancedCustomVideoCapture);
+	m_vecAdvanced.push_back(advancedMultiVideoSource);
+	m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
+	m_vecAdvanced.push_back(advancedOriginalVideo);
+	m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
+	m_vecAdvanced.push_back(advancedMultiChannel);
+	m_vecAdvanced.push_back(advancedMediaEncrypt);
+	m_vecAdvanced.push_back(advancedCustomEncrypt);
+	m_vecAdvanced.push_back(advancedPerCallTest);
 	m_vecAdvanced.push_back(advancedMediaPlayer);
 	m_vecAdvanced.push_back(advancedMediaRecorder);
 	m_vecAdvanced.push_back(advancedScreenCap);
-	m_vecAdvanced.push_back(advancedAudioProfile);
-	m_vecAdvanced.push_back(advancedAudioMixing);
-	// m_vecAdvanced.push_back(advancedAudioEffect);
-	m_vecAdvanced.push_back(advancedCustomVideoCapture);
-	m_vecAdvanced.push_back(advancedOriginalVideo);
-	m_vecAdvanced.push_back(advancedCustomAudioCapture);
-	m_vecAdvanced.push_back(advancedOriginalAudio);
-	m_vecAdvanced.push_back(advancedCustomEncrypt);
-	m_vecAdvanced.push_back(advancedMultiChannel);
-	m_vecAdvanced.push_back(advancedMultiVideoSource);
-	m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
-	m_vecAdvanced.push_back(advancedPerCallTest);
+	m_vecAdvanced.push_back(advancedCrossChannel);
+	m_vecAdvanced.push_back(SpatialAudio);
+	m_vecAdvanced.push_back(beautyFace);
+	m_vecAdvanced.push_back(beautyFace2);
+	m_vecAdvanced.push_back(TransparentBackground);
+	m_vecAdvanced.push_back(RteUrlPlayer);
 	m_vecAdvanced.push_back(advancedAudioVolume);
 	//m_vecAdvanced.push_back(advancedReportInCall);
 	m_vecAdvanced.push_back(advancedRegionConn);
-	m_vecAdvanced.push_back(advancedMediaEncrypt);
-	m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
-	m_vecAdvanced.push_back(beautyFace);
-	m_vecAdvanced.push_back(beautyFace2);
-	m_vecAdvanced.push_back(advancedBeautyAudio);
-	m_vecAdvanced.push_back(SpatialAudio);
+	m_vecAdvanced.push_back(advancedSimulcast);
+	m_vecAdvanced.push_back(Multipath);
 	m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
 	m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
 	m_pMultiChannelDlg->MoveWindow(&rcWnd);
-
-	//transparent bg
-	m_vecAdvanced.push_back(TransparentBackground);
-	m_vecAdvanced.push_back(RteUrlPlayer);
-	m_vecAdvanced.push_back(Multipath);
-	m_vecAdvanced.push_back(advancedSimulcast);
 
 	//inject
 	m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);

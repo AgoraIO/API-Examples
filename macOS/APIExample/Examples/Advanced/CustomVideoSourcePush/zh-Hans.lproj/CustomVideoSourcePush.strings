@@ -7,5 +7,5 @@
 /* Element = "buttonCell"; title = "Join"; ObjectID = "bCD-1H-KfP"; */
 "bCD-1H-KfP.title" = "加入频道";
 
-/* Element = "viewController"; title = "Custom Video Source (Push)"; ObjectID = "sXF-vm-Rrb"; */
-"sXF-vm-Rrb.title" = "视频自采集（Push）";
+/* Element = "viewController"; title = "Custom Video Source"; ObjectID = "sXF-vm-Rrb"; */
+"sXF-vm-Rrb.title" = "视频自采集";

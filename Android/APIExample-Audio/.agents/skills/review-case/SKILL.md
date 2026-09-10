@@ -46,3 +46,9 @@ Use this skill after a case has been created or modified in `APIExample-Audio/`.
 
 - Never approve any video API usage in the audio-only project
 - Never skip the build command
+
+## Initialization Failure
+
+`RtcEngine.create(config)` throws a checked exception. Catch it inside the Fragment lifecycle
+override, release any returned engine if later configuration fails, clear the field and show
+a failure state. Do not add `throws Exception` to the override or allow Join with a null engine.

@@ -9,7 +9,7 @@
         <!--Screen Share-->
         <scene sceneID="pbK-2b-qbr">
             <objects>
-                <viewController title="Stream Encryption" storyboardIdentifier="LocalVideoTranscoding" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="LocalVideoTranscoding" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Local Video Transcoding" storyboardIdentifier="LocalVideoTranscoding" id="Gwp-vd-c2J" userLabel="Local Video Transcoding" customClass="LocalVideoTranscoding" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GAN-Bp-SzP">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

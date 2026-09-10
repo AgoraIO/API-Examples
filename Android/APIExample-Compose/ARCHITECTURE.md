@@ -29,37 +29,37 @@ APIExample-Compose/
         │
         ├── model/
         │   ├── Example.kt                   # data class: name: Int, content: @Composable
-        │   ├── Examples.kt                  # Hardcoded lists: BasicExampleList, AdvanceExampleList
+        │   ├── Examples.kt                  # Hardcoded lists: BasicExampleList, AdvancedExampleList
         │   └── Components.kt                # Groups the two lists into Components for the home screen
         │
         ├── samples/                         # One .kt file per case — all @Composable
-        │   ├── JoinChannelVideoToken.kt     # Basic: "Join Video Channel (With Token)"
-        │   ├── JoinChannelVideo.kt          # Basic: "Join Video Channel" — canonical reference
-        │   ├── JoinChannelAudio.kt          # Basic: "Join Audio Channel"
+        │   ├── JoinChannelVideoToken.kt     # Basic: "Join a channel (Token)"
+        │   ├── JoinChannelVideo.kt          # Basic: "Join a channel (Video)" — canonical reference
+        │   ├── JoinChannelAudio.kt          # Basic: "Join a channel (Audio)"
         │   ├── LiveStreaming.kt             # Advanced: "Live Streaming" — setClientRole
         │   ├── RTMPStreaming.kt             # Advanced: "RTMP Streaming" — push to CDN
         │   ├── MediaMetadata.kt             # Advanced: "Media Metadata" — send/receive metadata
         │   ├── VoiceEffects.kt              # Advanced: "Voice Effects" — voice beautifier/effects
-        │   ├── OriginAudioData.kt           # Advanced: "Origin Audio Data" — raw audio processing
-        │   ├── CustomAudioSource.kt         # Advanced: "Custom Audio Source" — push external audio
+        │   ├── OriginAudioData.kt           # Advanced: "Raw Audio Data" — raw audio processing
+        │   ├── CustomAudioSource.kt         # Advanced: "Custom Audio Source (PCM)" — push external audio
         │   ├── CustomAudioRender.kt         # Advanced: "Custom Audio Render" — pull audio rendering
-        │   ├── OriginVideoData.kt           # Advanced: "Origin Video Data" — raw video processing
+        │   ├── OriginVideoData.kt           # Advanced: "Raw Video Data" — raw video processing
         │   ├── CustomVideoSource.kt         # Advanced: "Custom Video Source" — push external video
         │   ├── CustomVideoRender.kt         # Advanced: "Custom Video Render" — custom video rendering
         │   ├── PictureInPicture.kt          # Advanced: "Picture In Picture" — PiP mode
-        │   ├── JoinMultiChannel.kt          # Advanced: "Join Multi Channel" — multi-channel join
-        │   ├── ChannelEncryption.kt         # Advanced: "Channel Encryption" — built-in encryption
+        │   ├── JoinMultiChannel.kt          # Advanced: "Join Multiple Channels" — multi-channel join
+        │   ├── ChannelEncryption.kt         # Advanced: "Stream Encryption" — built-in encryption
         │   ├── PlayAudioFiles.kt            # Advanced: "Play Audio Files" — audio mixing
-        │   ├── PreCallTest.kt               # Advanced: "Pre Call Test" — network/device test
+        │   ├── PreCallTest.kt               # Advanced: "Pre-call Test" — network/device test
         │   ├── MediaRecorder.kt             # Advanced: "Media Recorder" — record media streams
         │   ├── MediaPlayer.kt               # Advanced: "Media Player" — play media files
-        │   ├── ScreenSharing.kt             # Advanced: "Screen Sharing" — screen capture & share
-        │   ├── VideoProcessExtension.kt     # Advanced: "Video Process Extension" — video filter
+        │   ├── ScreenSharing.kt             # Advanced: "Screen Share" — screen capture & share
+        │   ├── VideoProcessExtension.kt     # Advanced: "Video Process" — video filter
         │   ├── RhythmPlayer.kt              # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   ├── LocalVideoTranscoding.kt     # Advanced: "Local Video Transcoding" — local compositing
         │   ├── SendDataStream.kt            # Advanced: "Send Data Stream" — data channel messaging
-        │   ├── HostAcrossChannel.kt         # Advanced: "Host Across Channel" — cross-channel relay
-        │   ├── SpatialSound.kt              # Advanced: "Spatial Sound" — 3D spatial audio
+        │   ├── HostAcrossChannel.kt         # Advanced: "Media Channel Relay" — cross-channel relay
+        │   ├── SpatialSound.kt              # Advanced: "Spatial Audio" — 3D spatial audio
         │
         ├── ui/
         │   ├── home/
@@ -103,7 +103,7 @@ APIExample-Compose/
 | Media Metadata | `MediaMetadata.kt` | `joinChannel()`, `enableVideo()`, `registerMediaMetadataObserver()` | Sends and receives video metadata through the IMetadataObserver interface |
 | Voice Effects | `VoiceEffects.kt` | `joinChannel()`, `enableAudio()`, `setVoiceBeautifierPreset()`, `setVoiceConversionPreset()`, `setAudioEffectPreset()`, `setAudioEffectParameters()`, `setAINSMode()` | Applies voice beautifier, voice changer, style transformation, and noise suppression presets |
 | Origin Audio Data | `OriginAudioData.kt` | `joinChannel()`, `enableAudio()`, `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Accesses and rewrites raw audio frames via the IAudioFrameObserver interface |
-| Custom Audio Source | `CustomAudioSource.kt` | `joinChannel()`, `enableAudio()`, `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `destroyCustomAudioTrack()`, `enableCustomAudioLocalPlayback()` | Pushes external audio from a file into a custom audio track |
+| Custom Audio Source (PCM) | `CustomAudioSource.kt` | `joinChannel()`, `enableAudio()`, `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `destroyCustomAudioTrack()`, `enableCustomAudioLocalPlayback()` | Pushes external audio from a file into a custom audio track |
 | Custom Audio Render | `CustomAudioRender.kt` | `joinChannel()`, `enableAudio()`, `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Pulls remote audio frames and renders them through a custom AudioTrack player |
 | Origin Video Data | `OriginVideoData.kt` | `joinChannel()`, `enableVideo()`, `registerVideoFrameObserver()` | Captures raw video frames via IVideoFrameObserver for screenshot functionality |
 | Custom Video Source | `CustomVideoSource.kt` | `joinChannel()`, `enableVideo()`, `pushExternalVideoFrameById()` | Pushes external video frames in I420, NV21, NV12, or Texture2D format |
@@ -129,9 +129,9 @@ Registration is **manual** — no reflection, no annotation scanning.
 
 **To add a case, update at least four project-local artifacts:**
 
-**1. `model/Examples.kt`** — append to `BasicExampleList` or `AdvanceExampleList`:
+**1. `model/Examples.kt`** — append to `BasicExampleList` or `AdvancedExampleList`:
 ```kotlin
-val AdvanceExampleList = listOf(
+val AdvancedExampleList = listOf(
     // … existing entries …
     Example(R.string.example_my_new_case) { MyNewCase() }
 )

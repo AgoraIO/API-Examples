@@ -30,7 +30,7 @@ class ThirdBeautifyEntry: BaseViewController {
         // resign channel text field
         channelTextField.resignFirstResponder()
         
-        let actionSheetVC = UIAlertController(title: "Third Beautify".localized, message: nil, preferredStyle: .actionSheet)
+        let actionSheetVC = UIAlertController(title: "Third-party Beauty".localized, message: nil, preferredStyle: .actionSheet)
         
         let sense = UIAlertAction(title: "Sense Beautify".localized, style: .default) { _ in
             self.jumpHandler(type: .sense)

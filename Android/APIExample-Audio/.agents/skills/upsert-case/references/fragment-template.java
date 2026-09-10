@@ -1,5 +1,6 @@
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -35,13 +36,24 @@ public abstract class AudioExampleCaseTemplate extends BaseFragment {
         config.mEventHandler = iRtcEngineEventHandler;
         config.mAreaCode =
                 ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
-        engine = RtcEngine.create(config);
-        engine.setParameters("{\"rtc.report_app_scenario\":{\"appScenario\":100,\"serviceType\":11,\"appVersion\":\""
-                + RtcEngine.getSdkVersion() + "\"}}");
-        LocalAccessPointConfiguration privateCloud =
-                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
-        if (privateCloud != null) {
-            engine.setLocalAccessPoint(privateCloud);
+        try {
+            engine = RtcEngine.create(config);
+            engine.setParameters("{\"rtc.report_app_scenario\":{\"appScenario\":100,\"serviceType\":11,\"appVersion\":\""
+                    + RtcEngine.getSdkVersion() + "\"}}");
+            LocalAccessPointConfiguration privateCloud =
+                    ((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig();
+            if (privateCloud != null) {
+                engine.setLocalAccessPoint(privateCloud);
+            }
+        } catch (Exception error) {
+            // Creation/configuration can fail; release any engine already returned to us.
+            if (engine != null) {
+                engine.leaveChannel();
+                RtcEngine.destroy();
+                engine = null;
+            }
+            Log.e("AudioExample", "RTC initialization failed", error);
+            // Show a localized failure state in the concrete case; disable Join until retry succeeds.
         }
     }
 

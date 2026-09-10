@@ -47,7 +47,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This demo demonstrates how to make a one-to-one video call
  */
 @Example(
-        index = 26,
+        index = 30,
         group = ADVANCED,
         name = R.string.item_channelencryption,
         actionId = R.id.action_mainFragment_to_channel_encryption,

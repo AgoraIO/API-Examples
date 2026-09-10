@@ -10,8 +10,8 @@
 /* Element = "buttonCell"; title = "Destory Track"; ObjectID = "fY0-1R-m7R"; */
 "fY0-1R-m7R.title" = "销毁Track";
 
-/* Element = "viewController"; title = "Custom Video Source (Push)"; ObjectID = "sXF-vm-Rrb"; */
-"sXF-vm-Rrb.title" = "音频自采集(Push)";
+/* Element = "viewController"; title = "Multiple Video Sources"; ObjectID = "sXF-vm-Rrb"; */
+"sXF-vm-Rrb.title" = "多路视频源";
 
 /* Element = "buttonCell"; title = "Create VideoTrack"; ObjectID = "tbi-87-lo2"; */
 "tbi-87-lo2.title" = "创建采集Track";

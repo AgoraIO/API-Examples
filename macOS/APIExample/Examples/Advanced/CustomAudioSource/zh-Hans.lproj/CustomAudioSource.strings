@@ -1,5 +1,5 @@
-/* Element = "viewController"; title = "Custom Audio Source"; ObjectID = "8Q5-xy-D8A"; */
-"8Q5-xy-D8A.title" = "音频自采集";
+/* Element = "viewController"; title = "Custom Audio Source (PCM)"; ObjectID = "8Q5-xy-D8A"; */
+"8Q5-xy-D8A.title" = "音频自采集(PCM)";
 
 /* Element = "textFieldCell"; title = "Play the local PCM"; ObjectID = "UzT-xh-vr5"; */
 "UzT-xh-vr5.title" = "播放本地 PCM";

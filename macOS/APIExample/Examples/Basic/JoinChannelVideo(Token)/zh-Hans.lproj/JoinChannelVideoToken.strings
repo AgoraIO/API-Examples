@@ -13,8 +13,8 @@
 /* Element = "textFieldCell"; title = "AppID"; ObjectID = "UCG-Zk-hiI"; */
 "UCG-Zk-hiI.title" = "AppID";
 
-/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "实时视频通话/直播";
+/* Element = "viewController"; title = "Join a channel (Token)"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "实时视频通话/直播(Token验证)";
 
 /* Element = "tokenFieldCell"; placeholderString = "Please the input token"; ObjectID = "ZMh-gp-u55"; */
 "ZMh-gp-u55.placeholderString" = "请输入Token";

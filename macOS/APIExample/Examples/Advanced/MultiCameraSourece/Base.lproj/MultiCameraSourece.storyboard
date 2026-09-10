@@ -9,7 +9,7 @@
         <!--Join Channel Video-->
         <scene sceneID="bmq-gY-cAa">
             <objects>
-                <viewController title="Join Channel Video" storyboardIdentifier="MultiCameraSourece" id="YjT-yy-DnJ" customClass="MultiCameraSoureceMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Multi Camera" storyboardIdentifier="MultiCameraSourece" id="YjT-yy-DnJ" customClass="MultiCameraSoureceMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <subviews>

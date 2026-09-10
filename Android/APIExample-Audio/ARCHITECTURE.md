@@ -41,20 +41,20 @@ APIExample-Audio/
         │
         ├── examples/                        # All cases live here — ClassUtils scans this package
         │   ├── basic/                       # group = "BASIC" (index 0–9)
-        │   │   ├── JoinChannelAudioByToken.java # [0] "Live Interactive Audio Streaming(Token Verify)"
-        │   │   └── JoinChannelAudio.java        # [1] "Live Interactive Audio Streaming"
+        │   │   ├── JoinChannelAudioByToken.java # [0] "Join a channel (Token)"
+        │   │   └── JoinChannelAudio.java        # [1] "Join a channel (Audio)"
         │   ├── advanced/                        # group = "ADVANCED" (index 10+)
-        │   │   ├── VoiceEffects.java            # [10] "Set the Voice Beautifier and Effects" — setVoiceBeautifierPreset
-        │   │   ├── customaudio/CustomAudioSource.java  # [11] "Custom Audio Sources" — push external audio
+        │   │   ├── VoiceEffects.java            # [10] "Voice Effects" — setVoiceBeautifierPreset
+        │   │   ├── customaudio/CustomAudioSource.java  # [11] "Custom Audio Source (PCM)" — push external audio
         │   │   ├── customaudio/CustomAudioRender.java  # [12] "Custom Audio Render" — pull audio for custom rendering
         │   │   ├── customaudio/AudioPlayer.java        # helper for CustomAudioRender
         │   │   ├── ProcessAudioRawData.java     # [13] "Raw Audio Data" — audio raw data processing
         │   │   ├── PlayAudioFiles.java          # [14] "Play Audio Files" — audio mixing
-        │   │   ├── PreCallTest.java             # [15] "Pre-call Tests" — network/device test before joining
+        │   │   ├── PreCallTest.java             # [15] "Pre-call Test" — network/device test before joining
         │   │   ├── RhythmPlayer.java            # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   │   └── SpatialSound.java            # [17] "Spatial Audio" — 3D spatial audio
         │   └── audio/                           # Audio-specific cases (grouped as ADVANCED)
-        │       └── AudioWaveform.java           # [18] "Audio Waveform" — audio visualization
+        │       └── AudioWaveform.java           # [16] "Audio Waveform" — audio visualization
         │
         └── utils/
             ├── ClassUtils.java              # DEX scanner — auto-discovers @Example classes
@@ -74,7 +74,7 @@ APIExample-Audio/
 | Live Interactive Audio Streaming(Token Verify) | `basic/JoinChannelAudioByToken.java` | `RtcEngine.create()`, `joinChannel()`, `setClientRole()` | Demonstrates audio-only calling with manual App ID and token input |
 | Live Interactive Audio Streaming | `basic/JoinChannelAudio.java` | `RtcEngine.create()`, `joinChannel()`, `setAudioProfile()`, `setAudioScenario()`, `muteLocalAudioStream()`, `enableInEarMonitoring()`, `adjustRecordingSignalVolume()`, `adjustPlaybackSignalVolume()` | Demonstrates audio-only calling with volume controls, in-ear monitoring, and audio routing |
 | Set the Voice Beautifier and Effects | `advanced/VoiceEffects.java` | `setVoiceBeautifierPreset()`, `setAudioEffectPreset()`, `setVoiceConversionPreset()`, `setAudioEffectParameters()`, `setLocalVoicePitch()`, `setLocalVoiceEqualization()`, `setLocalVoiceReverb()`, `setLocalVoiceFormant()`, `setAINSMode()`, `enableVoiceAITuner()` | Demonstrates voice beautifier presets, audio effects, voice conversion, and AI noise suppression |
-| Custom Audio Sources | `advanced/customaudio/CustomAudioSource.java` | `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `enableCustomAudioLocalPlayback()`, `destroyCustomAudioTrack()` | Demonstrates pushing external audio frames via a custom audio track |
+| Custom Audio Source (PCM) | `advanced/customaudio/CustomAudioSource.java` | `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `enableCustomAudioLocalPlayback()`, `destroyCustomAudioTrack()` | Demonstrates pushing external audio frames via a custom audio track |
 | Custom Audio Render | `advanced/customaudio/CustomAudioRender.java` | `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Demonstrates pulling audio frames for custom audio rendering |
 | Raw Audio Data | `advanced/ProcessAudioRawData.java` | `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Demonstrates processing raw audio data through the audio frame observer |
 | Play Audio Files | `advanced/PlayAudioFiles.java` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()`, `getAudioEffectManager()`, `adjustAudioMixingVolume()` | Demonstrates audio mixing and sound effect playback |

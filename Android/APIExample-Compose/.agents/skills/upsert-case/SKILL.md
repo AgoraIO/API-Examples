@@ -36,6 +36,8 @@ Use this skill to add or update a case in `APIExample-Compose/`. It owns the ful
 - Run `./gradlew assembleDebug` from `APIExample-Compose/`
 - Confirm the edited case updates `Examples.kt`, `strings.xml`, `values-zh/strings.xml` when needed, and `ARCHITECTURE.md`
 - Use `rememberSaveable` for user inputs, and keep joined status/assigned UID in `remember` with the current engine; a recreated engine starts without an RTC session. Keep `RtcEngine` and other non-serializable objects out of saved state.
+- Exercise permission/Token pending → leave/dispose → delayed response, rapid reopen and reordered responses. Join must use the frozen channel/UID and current engine only.
+- Keep one permission launch outstanding until its result is consumed, even if Leave invalidates that request.
 - Confirm the public Composable stays stateful and the preview stays on the private view function
 
 ## Out of scope

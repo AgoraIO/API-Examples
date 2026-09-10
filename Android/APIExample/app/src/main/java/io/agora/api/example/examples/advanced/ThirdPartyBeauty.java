@@ -29,7 +29,7 @@ import io.agora.api.example.examples.advanced.beauty.SenseTimeBeautySDK;
  * The type Third party beauty.
  */
 @Example(
-        index = 39,
+        index = 40,
         group = ADVANCED,
         name = R.string.item_third_party_beauty,
         actionId = R.id.action_mainFragment_to_third_party_beauty,

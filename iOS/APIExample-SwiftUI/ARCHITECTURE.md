@@ -78,8 +78,8 @@ APIExample-SwiftUI/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming"
     │       ├── RTMPStream/                  # "RTMP Streaming"
-    │       ├── VideoMetadata/               # "Video Metadata"
-    │       ├── VoiceChanger/                # "Voice Changer"
+    │       ├── VideoMetadata/               # "Media Metadata"
+    │       ├── VoiceChanger/                # "Voice Effects"
     │       ├── CustomPCMAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
@@ -89,18 +89,18 @@ APIExample-SwiftUI/
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       ├── MediaPlayer/                 # "Media Player"
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── LocalVideoTranscoding/       # "Local Video Transcoding"
     │       ├── LocalVideoComposition/       # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
     │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
     │       ├── ARKit/                       # "ARKit"
     │       ├── AudioWaveform/               # "Audio Waveform"
@@ -178,8 +178,11 @@ UIKit video views (`VideoUIView`) are bridged into SwiftUI via `UIViewRepresenta
 
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelName) { token in
-    self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

@@ -69,7 +69,7 @@ Create `<ExampleName>.m`:
 #import "<ExampleName>.h"
 #import <AgoraRtcKit/AgoraRtcKit.h>
 #import "KeyCenter.h"
-#import "NetworkManager.h"
+#import "APIExample_OC-swift.h"
 
 @interface <ExampleName>Entry ()
 @property (weak, nonatomic) IBOutlet UITextField *channelTextField;
@@ -87,40 +87,101 @@ Create `<ExampleName>.m`:
 @end
 
 @interface <ExampleName>Main () <AgoraRtcEngineDelegate>
-@property (nonatomic, strong) AgoraRtcEngineKit *agoraKit;
+@property (nonatomic, strong, nullable) AgoraRtcEngineKit *agoraKit;
+@property (nonatomic) NSUInteger tokenRequestID;
 @end
 
 @implementation <ExampleName>Main
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString *channelName = self.configs[@"channelName"];
+    [self setupRTC];
+}
+
+- (void)setupRTC {
+    NSAssert([NSThread isMainThread], @"RTC lifecycle must run on main");
+    if (self.agoraKit != nil) return;
     AgoraRtcEngineConfig *config = [AgoraRtcEngineConfig new];
     config.appId = [KeyCenter AppId];
     self.agoraKit = [AgoraRtcEngineKit sharedEngineWithConfig:config delegate:self];
-    // configure engine, request permissions, then join
-    [[NetworkManager shared] generateTokenWithChannelName:channelName success:^(NSString *token) {
-        AgoraRtcChannelMediaOptions *option = [AgoraRtcChannelMediaOptions new];
-        [self.agoraKit joinChannelByToken:token channelId:channelName
-                                      uid:0 mediaOptions:option joinSuccess:nil];
-    }];
+    // Configure media, then call requestJoin:requestPermission: with the actual permission flow.
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isMovingFromParentViewController) {
-        [self.agoraKit leaveChannel:nil];
-        [AgoraRtcEngineKit destroy];
-    }
+- (void)requestJoin:(NSString *)channelName
+ requestPermission:(void (^)(void (^)(BOOL)))requestPermission {
+    NSAssert([NSThread isMainThread], @"RTC lifecycle must run on main");
+    AgoraRtcEngineKit *engine = self.agoraKit;
+    if (engine == nil || channelName.length == 0) return;
+    NSString *channel = [channelName copy];
+    NSUInteger uid = 0;
+    NSUInteger requestID = ++self.tokenRequestID;
+    __weak typeof(self) weakSelf = self;
+    __weak AgoraRtcEngineKit *weakEngine = engine;
+    requestPermission(^(BOOL granted) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            typeof(self) self = weakSelf;
+            AgoraRtcEngineKit *engine = weakEngine;
+            if (!self || !engine || self.tokenRequestID != requestID || self.agoraKit != engine) return;
+            if (!granted) {
+                NSLog(@"Permission denied");
+                return;
+            }
+            [[NetworkManager shared] generateTokenWithChannelName:channel uid:uid success:^(NSString * _Nullable token) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    typeof(self) self = weakSelf;
+                    AgoraRtcEngineKit *engine = weakEngine;
+                    if (!self || !engine || self.tokenRequestID != requestID || self.agoraKit != engine) return;
+                    if ([KeyCenter Certificate].length > 0 && token.length == 0) {
+                        NSLog(@"Token request failed");
+                        return;
+                    }
+                    AgoraRtcChannelMediaOptions *option = [AgoraRtcChannelMediaOptions new];
+                    option.clientRoleType = AgoraClientRoleBroadcaster;
+                    option.publishMicrophoneTrack = YES;
+                    // Configure video publication/canvases only after camera permission.
+                    int result = [engine joinChannelByToken:token channelId:channel
+                                                       uid:uid mediaOptions:option joinSuccess:nil];
+                    if (result != 0) NSLog(@"joinChannel failed: %d", result);
+                });
+            }];
+        });
+    });
+}
+
+- (void)leaveChannel {
+    NSAssert([NSThread isMainThread], @"RTC lifecycle must run on main");
+    self.tokenRequestID += 1;
+    [self.agoraKit leaveChannel:nil];
+}
+
+- (void)onDestroy {
+    [self leaveChannel]; // Invalidate even while permission/Token/join is pending.
+    if (self.agoraKit == nil) return;
+    // Stop case-owned capture, players, timers and observers here.
+    [AgoraRtcEngineKit destroy];
+    self.agoraKit = nil;
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent {
+    [super willMoveToParentViewController:parent];
+    if (parent == nil) [self onDestroy];
 }
 @end
 
 @implementation <ExampleName>Main (AgoraRtcEngineDelegate)
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinChannel:(NSString *)channel
             withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-    NSLog(@"Joined: %@ uid: %lu", channel, (unsigned long)uid);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.agoraKit != engine) return;
+        NSLog(@"Joined: %@ uid: %lu", channel, (unsigned long)uid);
+    });
 }
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode {
-    NSLog(@"Error: %ld", (long)errorCode);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.agoraKit != engine) return;
+        NSLog(@"Error: %ld", (long)errorCode);
+    });
 }
 @end
 ```
@@ -163,6 +224,13 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 
 ---
 
+This is a skeleton: call `requestJoin:requestPermission:` from setup or the Join action,
+passing the channel from `configs` and the case's actual permission request. The permission
+completion reports granted/denied; never use an unconditional grant in a real case. Keep
+setup, join, leave and destroy on main. A user Leave action must call `leaveChannel`.
+`NetworkManager` is Swift: import the generated `APIExample_OC-swift.h`; Swift default
+arguments do not remove `uid:` from the Objective-C selector.
+
 ## Verification Checklist
 
 - [ ] Folder created under correct category (Basic / Advanced)
@@ -177,6 +245,9 @@ Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
 - [ ] `__weak typeof(self) weakSelf = self` used in blocks that capture `self`
 - [ ] Camera/microphone permissions requested before `joinChannelByToken:`
 - [ ] Case Index row added/updated in `ARCHITECTURE.md`
+- [ ] Permission/Token pending → leave/destroy → delayed callback does not join
+- [ ] Repeat cleanup, reopen and out-of-order responses preserve only the current request
+- [ ] Required Token failures and nonzero join returns are handled without logging credentials
 - [ ] Project builds without errors
 
 ---

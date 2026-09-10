@@ -4,8 +4,8 @@
 /* Element = "buttonCell"; title = "Join"; ObjectID = "5CP-OV-fSv"; */
 "5CP-OV-fSv.title" = "加入频道";
 
-/* Element = "viewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
-"IBJ-wZ-9Xx.title" = "加入多频道";
+/* Element = "viewController"; title = "Media Channel Relay"; ObjectID = "IBJ-wZ-9Xx"; */
+"IBJ-wZ-9Xx.title" = "跨频道流转发";
 
 /* Element = "buttonCell"; title = "Start Relay"; ObjectID = "NQw-hk-hUl"; */
 "NQw-hk-hUl.title" = "开始转发";

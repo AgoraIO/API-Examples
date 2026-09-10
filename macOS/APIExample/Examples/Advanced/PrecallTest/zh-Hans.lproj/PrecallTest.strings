@@ -13,8 +13,8 @@
 /* Element = "textFieldCell"; title = "Please say something.."; ObjectID = "BPe-Gx-enC"; */
 "BPe-Gx-enC.title" = "尝试说一些话...";
 
-/* Element = "viewController"; title = "Custom Video Source(MediaIO)"; ObjectID = "Gwp-vd-c2J"; */
-"Gwp-vd-c2J.title" = "通话前测试";
+/* Element = "viewController"; title = "Pre-call Test"; ObjectID = "Gwp-vd-c2J"; */
+"Gwp-vd-c2J.title" = "通话前网络/设备测试";
 
 /* Element = "textFieldCell"; title = "10"; ObjectID = "L6F-q4-SNZ"; */
 "L6F-q4-SNZ.title" = "10";
