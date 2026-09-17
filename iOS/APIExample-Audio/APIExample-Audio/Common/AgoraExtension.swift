@@ -305,7 +305,7 @@ extension UIAlertController {
 extension UIApplication {
     /// The top most view controller
     static var topMostViewController: UIViewController? {
-        return UIApplication.shared.keyWindow?.rootViewController?.visibleViewController
+        return UIViewController.keyWindow?.rootViewController?.visibleViewController
     }
 }
 

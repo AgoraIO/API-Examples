@@ -1,7 +1,28 @@
 # ARCHITECTURE.md
 
-Four independent iOS example projects sharing one Xcode workspace, each managing dependencies via CocoaPods.
+Four independent iOS example projects, each with its own Xcode workspace and CocoaPods dependencies.
 For internal details of each project, see the project-level `ARCHITECTURE.md`.
+
+---
+
+## Deployment Targets and Lifecycle
+
+| Project | Minimum iOS | App lifecycle |
+| --- | --- | --- |
+| `APIExample` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
+| `APIExample-Audio` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
+| `APIExample-OC` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
+| `APIExample-SwiftUI` | 14.0 | SwiftUI `App` and `WindowGroup` |
+
+The app and extension deployment targets remain unchanged. The Audio project has no app
+extension. Choose an Xcode version that supports the project's deployment target; see
+[Apple's Xcode support table](https://developer.apple.com/support/xcode/). Adopting the
+scene lifecycle does not require increasing the minimum iOS version.
+
+The three UIKit apps configure a single application scene and retain the iOS 12 startup
+path. SwiftUI keeps its existing scene configuration. See
+[Apple TN3187](https://developer.apple.com/documentation/technotes/tn3187-migrating-to-the-uikit-scene-based-life-cycle)
+and each project's architecture document for window ownership and UI presentation rules.
 
 ---
 

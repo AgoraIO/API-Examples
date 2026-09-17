@@ -8,6 +8,76 @@
 
 import UIKit
 import Foundation
+import Floaty
+
+// Floaty.global creates a window without a scene. Keep this button in the app's view hierarchy.
+final class LogFloatingButton: Floaty {
+    override init() {
+        super.init()
+        configure()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configure()
+    }
+
+    func show(in container: UIView) {
+        if superview !== container {
+            container.addSubview(self)
+        }
+        container.bringSubviewToFront(self)
+    }
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        updateSafeAreaPadding()
+    }
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        updateSafeAreaPadding()
+    }
+
+    private func configure() {
+        // Floaty 4.2 reads AppDelegate.window for safe-area placement, which is nil with scenes.
+        relativeToSafeArea = false
+        isDraggable = true
+        addItem(title: "Send Logs") { [weak self] _ in
+            self?.shareLogs()
+        }
+        addItem(title: "Clean Up") { _ in
+            LogUtils.cleanUp()
+        }
+    }
+
+    private func updateSafeAreaPadding() {
+        let insets = superview?.safeAreaInsets ?? .zero
+        let horizontal = 14 + insets.right
+        let vertical = 14 + insets.bottom
+        if paddingX != horizontal { paddingX = horizontal }
+        if paddingY != vertical { paddingY = vertical }
+    }
+
+    private func shareLogs() {
+        guard var presenter = window?.rootViewController else { return }
+        while let presented = presenter.presentedViewController {
+            presenter = presented
+        }
+        guard !(presenter is UIActivityViewController), !presenter.isBeingDismissed else { return }
+
+        LogUtils.writeAppLogsToDisk()
+        let activity = UIActivityViewController(
+            activityItems: [URL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)],
+            applicationActivities: nil
+        )
+        activity.modalPresentationStyle = .popover
+        activity.popoverPresentationController?.sourceView = self
+        activity.popoverPresentationController?.sourceRect = bounds
+        presenter.present(activity, animated: true)
+    }
+}
+
 
 enum LogLevel {
     case info, warning, error

@@ -1,5 +1,21 @@
 # ARCHITECTURE.md — APIExample
 
+## Application Lifecycle
+
+The app and its extensions retain iOS 12 support. On iOS 12, `AppDelegate` creates the
+window and loads the initial controller from `Main.storyboard`. On iOS 13 and later,
+`Info.plist` declares a single application scene: UIKit loads `Main.storyboard` and
+assigns its window to `SceneDelegate`. Scene declarations and window APIs are guarded
+by iOS availability checks; the window helper retains its iOS 12 fallback.
+Do not rebuild the root controller on scene activation or end RTC sessions merely because
+the scene enters the background. Use a build toolchain that supports the deployment target;
+adopting the scene lifecycle does not require raising the minimum iOS version.
+
+`ViewController` owns a `LogFloatingButton` defined in `Common/LogViewController.swift`.
+It is attached to the navigation container after appearance so it remains available in
+example pages on both iOS 12 and later. Its safe-area placement and share sheet use its
+own view/window hierarchy; do not use `Floaty.global`, which creates a window without a scene.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |
@@ -61,6 +77,7 @@ APIExample/
 ├── libs/                                    # Local SDK frameworks (when not using CocoaPods)
 └── APIExample/
     ├── AppDelegate.swift
+    ├── SceneDelegate.swift                  # Window owned by the application scene
     ├── ViewController.swift                 # Root menu controller — MenuItem registration lives here
     ├── Info.plist
     ├── APIExample.entitlements

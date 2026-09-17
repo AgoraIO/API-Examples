@@ -13,7 +13,8 @@ After users upgrade their iOS devices to iOS 14.0, and use an app that integrate
 
 ## Prerequisites
 
-- Xcode 13.0+
+- iOS 12.0 or later
+- Xcode 13.0 or later with support for an iOS 12 deployment target ([Xcode support](https://developer.apple.com/support/xcode/))
 - Physical iOS device (iPhone or iPad)
 - iOS simulator is NOT supported
 

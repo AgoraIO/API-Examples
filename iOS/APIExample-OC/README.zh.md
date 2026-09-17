@@ -14,7 +14,8 @@
 
 ## 环境准备
 
-- Xcode 13.0 或更高版本
+- iOS 12.0 或更高版本
+- Xcode 13.0 或更高版本，且该版本支持将最低部署目标设为 iOS 12（[Xcode 支持范围](https://developer.apple.com/support/xcode/)）
 - iPhone 或 iPad 真机
 - 不支持 iOS 模拟器
 

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Floaty
 import AgoraRtcKit
 
 struct MenuSection {
@@ -80,27 +79,14 @@ class ViewController: AGViewController {
             MenuItem(name: "Multipath".localized, storyboard: "Multipath", controller: "MultipathEntry"),
         ])
     ]
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        Floaty.global.button.addItem(title: "Send Logs", handler: { _ in
-            LogUtils.writeAppLogsToDisk()
-            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), 
-                                                                          isDirectory: true)],
-                                                    applicationActivities: nil)
-            activity.modalPresentationStyle = .popover
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                activity.popoverPresentationController?.sourceView = Floaty.global.button
-            }
-            self.present(activity, animated: true, completion: nil)
-        })
-        
-        Floaty.global.button.addItem(title: "Clean Up", handler: { _ in
-            LogUtils.cleanUp()
-        })
-        Floaty.global.button.isDraggable = true
-        Floaty.global.show()
+    private let logButton = LogFloatingButton()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // The navigation view survives pushes to individual examples.
+        logButton.show(in: navigationController?.view ?? view)
     }
-    
+
     @IBAction func onSettings(_ sender: UIBarButtonItem) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else {

@@ -11,7 +11,7 @@ import AVFoundation
 extension UIScreen {
     static var currentScreenSize: CGSize {
         // Get the main window's available size
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+        guard let window = UIViewController.keyWindow else {
             return CGSize.zero
         }
         
@@ -26,8 +26,8 @@ extension UIScreen {
     }
 }
 
-let cl_screenWidht = UIScreen.currentScreenSize.width
-let cl_screenHeight = UIScreen.currentScreenSize.height
+var cl_screenWidht: CGFloat { UIScreen.currentScreenSize.width }
+var cl_screenHeight: CGFloat { UIScreen.currentScreenSize.height }
 class AlertManager: NSObject {
     private struct AlertViewCache {
         var view: UIView?

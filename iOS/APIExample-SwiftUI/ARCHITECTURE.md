@@ -1,5 +1,11 @@
 # ARCHITECTURE.md — APIExample-SwiftUI
 
+## Application Lifecycle
+
+The app and its broadcast extension retain their original iOS 14 minimum. `APIExample_SwiftUIApp`
+uses the SwiftUI `App` lifecycle and `WindowGroup`; do not add a UIKit app/scene delegate.
+UIKit presentation helpers resolve key windows from foreground `UIWindowScene` instances.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Floaty
 
 struct MenuSection {
     var name: String
@@ -39,25 +38,14 @@ class ViewController: AGViewController {
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio"),
         ]),
     ]
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        Floaty.global.button.addItem(title: "Send Logs", handler: {item in
-            LogUtils.writeAppLogsToDisk()
-            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
-            activity.modalPresentationStyle = .popover
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                activity.popoverPresentationController?.sourceView = Floaty.global.button
-            }
-            self.present(activity, animated: true, completion: nil)
-        })
-        
-        Floaty.global.button.addItem(title: "Clean Up", handler: {item in
-            LogUtils.cleanUp()
-        })
-        Floaty.global.button.isDraggable = true
-        Floaty.global.show()
+    private let logButton = LogFloatingButton()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // The navigation view survives pushes to individual examples.
+        logButton.show(in: navigationController?.view ?? view)
     }
-    
+
     @IBAction func onSettings(_ sender:UIBarButtonItem) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }

@@ -150,9 +150,7 @@ struct MenuItemView: View {
         let alert = UIAlertController(title: "Unsupported", message: "Picture in Picture is not supported on this version of iOS.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-            rootViewController.present(alert, animated: true, completion: nil)
-        }
+        UIViewController.cl_topViewController()?.present(alert, animated: true)
     }
 }
 
