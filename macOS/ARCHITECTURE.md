@@ -95,7 +95,7 @@ All examples share utilities from `APIExample/Common/`:
 | CustomVideoSourcePushMulti | `Examples/Advanced/CustomVideoSourcePushMulti/` | `setExternalVideoSource()`, `pushVideoFrame()` with multiple sources | Multiple custom video sources |
 | JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/` | `createRtcChannel()`, `joinChannel()` on multiple channels | Join and manage multiple channels simultaneously |
 | LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `addVideoWatermark()` with `WatermarkConfig`, `startRtmpStreamWithTranscoding()`, `stopRtmpStream()` | Live streaming with watermark configuration and RTMP transcoding |
-| LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoding()`, `updateLocalTranscodingConfig()`, `stopLocalVideoTranscoding()` | Local video transcoding and composition |
+| LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `getScreenCaptureSources()`, `startLocalVideoTranscoder()`, `updateLocalTranscoderConfiguration()`, `stopLocalVideoTranscoder()` | Local video transcoding and composition |
 | MediaPlayer | `Examples/Advanced/MediaPlayer/` | `createMediaPlayer()`, `open()`, `play()`, `pause()`, `stop()` | Media file playback and control |
 | MultiCameraSourece | `Examples/Advanced/MultiCameraSourece/` | `enumerateDevices()`, `setDevice()` with multiple cameras | Multiple camera source selection |
 | Multipath | `Examples/Advanced/Multipath/` | `enableMultipath()`, `setMultipathConfig()` | Multipath redundancy for reliability |

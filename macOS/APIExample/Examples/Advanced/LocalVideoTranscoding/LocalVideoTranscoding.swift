@@ -21,13 +21,12 @@ class LocalVideoTranscoding: BaseViewController {
         layoutVideos(2)
     }
     
-    var windowManager: WindowList = WindowList()
-    var windowlist:[Window] = [], screenlist:[Window] = []
+    var screenlist: [AgoraScreenCaptureSourceInfo] = []
     /**
      --- Screen Picker ---
      */
     @IBOutlet weak var selectScreenPicker: Picker!
-    var selectedScreen: Window? {
+    var selectedScreen: AgoraScreenCaptureSourceInfo? {
         let index = self.selectScreenPicker.indexOfSelectedItem
         if index >= 0 && index < screenlist.count {
             return screenlist[index]
@@ -36,9 +35,14 @@ class LocalVideoTranscoding: BaseViewController {
         }
     }
     func initSelectScreenPicker() {
-        screenlist = windowManager.items.filter({$0.type == .screen})
+        let sources = agoraKit.getScreenCaptureSources(withThumbSize: .zero, iconSize: .zero, includeScreen: true)
+        screenlist = sources?.filter { $0.type == .screen } ?? []
         selectScreenPicker.label.stringValue = "Screen Share".localized
-        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+        selectScreenPicker.picker.removeAllItems()
+        selectScreenPicker.picker.addItems(withTitles: screenlist.enumerated().map { index, source in
+            let name = source.sourceName.isEmpty ? "Screen \(index + 1)" : source.sourceName
+            return "\(name)(\(source.sourceId))"
+        })
     }
     var isScreenSharing: Bool = false {
         didSet {
@@ -109,7 +113,7 @@ class LocalVideoTranscoding: BaseViewController {
         params.highLightWidth = 5
         params.highLightColor = .green
         params.highLighted = true
-        let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
+        let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.sourceId), regionRect: .zero, captureParams: params)
         
         if result == 0 {
             isScreenSharing = true
@@ -248,8 +252,6 @@ class LocalVideoTranscoding: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // prepare window manager and list
-        windowManager.getList()
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
