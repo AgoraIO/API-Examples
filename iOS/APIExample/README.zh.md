@@ -14,8 +14,8 @@
 
 ## 环境准备
 
-- iOS 12.0 或更高版本
-- Xcode 13.0 或更高版本，且该版本支持将最低部署目标设为 iOS 12（[Xcode 支持范围](https://developer.apple.com/support/xcode/)）
+- iOS 12.0 或更高版本；使用 Xcode 27 SDK 构建的安装包要求 iOS 15.0 或更高版本
+- Xcode 13.0 或更高版本，且支持所需部署目标（[Xcode 支持范围](https://developer.apple.com/support/xcode/)）。使用 iOS 27 SDK 时，主 App、扩展和 Pods 自动采用 iOS 15 部署目标；需要兼容 iOS 12 的安装包时，使用支持该目标的旧工具链。
 - iPhone 或 iPad 真机
 - 不支持 iOS 模拟器
 

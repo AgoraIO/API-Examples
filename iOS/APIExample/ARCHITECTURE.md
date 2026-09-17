@@ -2,7 +2,10 @@
 
 ## Application Lifecycle
 
-The app and its extensions retain iOS 12 support. On iOS 12, `AppDelegate` creates the
+The app and its extensions default to iOS 12. SDK-conditional build settings raise the
+minimum to iOS 15 when using iOS 27 SDKs, and the Podfile applies the same minimum to Pods.
+Use a toolchain supporting iOS 12 deployment for packages intended for iOS 12 devices.
+On iOS 12, `AppDelegate` creates the
 window and loads the initial controller from `Main.storyboard`. On iOS 13 and later,
 `Info.plist` declares a single application scene: UIKit loads `Main.storyboard` and
 assigns its window to `SceneDelegate`. Scene declarations and window APIs are guarded
@@ -23,7 +26,7 @@ own view/window hierarchy; do not use `Floaty.global`, which creates a window wi
 | JoinChannelVideo | `Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift` | `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()` | Basic video call — join channel and render local/remote video |
 | JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/JoinChannelVideoToken.swift` | `joinChannel(byToken:)`, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
 | JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/JoinChannelVideoRecorder.swift` | `createMediaRecorder()`, `joinChannel()`, `setupLocalVideo()` | Local and remote stream recording |
-| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `enableAudioVolumeIndication()`, `adjustRecordingSignalVolume()` | Basic audio call with volume and in-ear monitoring controls |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `enableAudioVolumeIndication()`, `adjustRecordingSignalVolume()` | Basic audio call with relay, scenario, volume and in-ear monitoring controls; participant area adapts to available height |
 | LiveStreaming | `Examples/Advanced/LiveStreaming/LiveStreaming.swift` | `setClientRole()`, `setVideoScenario()`, `preloadChannel()`, `enableCameraCenterStage()` | Interactive live streaming with role switching and camera features |
 | RTMPStreaming | `Examples/Advanced/RTMPStreaming/RTMPStreaming.swift` | `startRtmpStreamWithoutTranscoding()`, `startRtmpStream(withTranscoding:)`, `updateRtmpTranscoding()`, `stopRtmpStream()` | Push stream to CDN with optional transcoding |
 | VideoMetadata | `Examples/Advanced/VideoMetadata/VideoMetadata.swift` | `setMediaMetadataDataSource()`, `setMediaMetadataDelegate()` | Send and receive metadata attached to video stream |

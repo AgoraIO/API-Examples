@@ -13,8 +13,8 @@ After users upgrade their iOS devices to iOS 14.0, and use an app that integrate
 
 ## Prerequisites
 
-- iOS 12.0 or later
-- Xcode 13.0 or later with support for an iOS 12 deployment target ([Xcode support](https://developer.apple.com/support/xcode/))
+- iOS 12.0 or later; builds using Xcode 27 SDKs require iOS 15.0 or later
+- Xcode 13.0 or later with support for the intended deployment target ([Xcode support](https://developer.apple.com/support/xcode/)). iOS 27 SDKs automatically select an iOS 15 deployment target for the app, extensions, and Pods; use a compatible older toolchain for iOS 12 packages.
 - Physical iOS device (iPhone or iPad)
 - iOS simulator is NOT supported
 

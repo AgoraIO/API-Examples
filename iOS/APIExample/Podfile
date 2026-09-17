@@ -1,5 +1,4 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '12.0'
 
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
@@ -39,4 +38,17 @@ end
 
 pre_install do |installer|
 #  system("sh .download_script.sh 4.7.0 true")
+end
+
+# Xcode 27 SDKs require iOS 15; retain each pod's default for older SDKs.
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      current = Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] || '12.0')
+      minimum = [current, Gem::Version.new('15.0')].max.to_s
+      %w[iphoneos27.* iphonesimulator27.*].each do |sdk|
+        config.build_settings["IPHONEOS_DEPLOYMENT_TARGET[sdk=#{sdk}]"] = minimum
+      end
+    end
+  end
 end

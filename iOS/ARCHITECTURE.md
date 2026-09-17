@@ -9,13 +9,16 @@ For internal details of each project, see the project-level `ARCHITECTURE.md`.
 
 | Project | Minimum iOS | App lifecycle |
 | --- | --- | --- |
-| `APIExample` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
+| `APIExample` | 12.0 by default; 15.0 with iOS 27 SDKs | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
 | `APIExample-Audio` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
 | `APIExample-OC` | 12.0 | AppDelegate window on iOS 12; SceneDelegate on iOS 13+ |
 | `APIExample-SwiftUI` | 14.0 | SwiftUI `App` and `WindowGroup` |
 
-The app and extension deployment targets remain unchanged. The Audio project has no app
-extension. Choose an Xcode version that supports the project's deployment target; see
+APIExample uses SDK-conditional iOS 15 deployment targets for the app and extensions
+when building with iOS 27 SDKs. Its Podfile applies the same minimum to generated Pods
+targets. The default iOS 12 configuration remains for toolchains that support it; an
+iOS 27 SDK build produces an app requiring iOS 15 or later. The Audio project has no app
+extension. Choose an Xcode version that supports the effective deployment target; see
 [Apple's Xcode support table](https://developer.apple.com/support/xcode/). Adopting the
 scene lifecycle does not require increasing the minimum iOS version.
 
