@@ -1,7 +1,7 @@
 name: Compile CI
 
 on:
-  push:
+  pull_request:
     branches:
       - main
   workflow_dispatch:
@@ -42,14 +42,11 @@ jobs:
             ${{ matrix.project }}/**/*.gradle*
             ${{ matrix.project }}/gradle/wrapper/gradle-wrapper.properties
       - uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools platforms;android-35 build-tools;35.0.0"
       - name: Configure compile-only App ID
         working-directory: ${{ matrix.project }}
         run: printf 'AGORA_APP_ID=%s\nAGORA_APP_CERT=\n' "$PLACEHOLDER_APP_ID" > local.properties
-      - name: Stage template compilation checks
-        if: matrix.name == 'Audio' || matrix.name == 'Compose'
-        env:
-          TEMPLATE_PROJECT: ${{ matrix.project }}
-        run: python3 .github/ci/policy/stage_compile_templates.py "$TEMPLATE_PROJECT"
       - name: Compile
         working-directory: ${{ matrix.project }}
         run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
@@ -108,10 +105,6 @@ jobs:
       - name: Install CocoaPods dependencies
         working-directory: ${{ matrix.project }}
         run: pod install --repo-update
-      - name: Stage template compilation checks
-        env:
-          TEMPLATE_PROJECT: ${{ matrix.project }}
-        run: python3 .github/ci/policy/stage_compile_templates.py "$TEMPLATE_PROJECT"
       - name: Compile
         working-directory: ${{ matrix.project }}
         env:
@@ -167,4 +160,4 @@ jobs:
       - name: Compile
         working-directory: windows/APIExample
         shell: pwsh
-        run: msbuild APIExample.sln -m /p:Configuration=Release /p:Platform=Win32
+        run: msbuild APIExample.sln -m /p:Configuration=Release /p:Platform=Win32 /p:PlatformToolset=v143

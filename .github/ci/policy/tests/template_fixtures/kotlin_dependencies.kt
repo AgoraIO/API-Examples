@@ -8,9 +8,8 @@ class Handler(looper: Looper) {
         fun drain() { while (queue.isNotEmpty()) queue.removeFirst()() }
     }
 }
-object BuildConfig { const val AGORA_APP_ID = "" }
+object BuildConfig { const val AGORA_APP_ID = ""; var AGORA_APP_CERT = "" }
 object SettingPreferences { fun getArea() = 0 }
-object AgoraConfig { var certificate = ""; fun getAppCertificate() = certificate }
 object TokenUtils {
     data class Request(val channel: String, val uid: Int, val callback: (String?) -> Unit)
     val requests = mutableListOf<Request>()

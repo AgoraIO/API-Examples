@@ -51,7 +51,7 @@ evidence in `.github/pull_request_template.md`.
 | `HOOKS-GUIDE.md` | Git hook installation (sensitive-info detection, commit-message rules) |
 | `.pre-commit-config.yaml` | Pre-commit hook configuration |
 | `.gitleaks.toml` | Gitleaks allowlist configuration |
-| `.github/workflows/compile.yml` | Post-release compile-only checks using a placeholder App ID |
+| `.github/workflows/compile.yml` | Pull request compile-only checks using a placeholder App ID |
 | `.github/workflows/repository-policy.yml` | Remote sensitive-information, commit-message, and AI asset checks |
 | `.github/ci/build/` | Jenkins release packaging entry points |
 | `.github/ci/README.md` | CI ownership, entry points, and local verification |
@@ -78,4 +78,4 @@ Never commit a real App ID, App Certificate, or token. The mechanism differs by 
 
 The iOS, macOS, and Windows credential files are tracked placeholder files, not git-ignored. Editing one to build locally leaves a real credential in a tracked file, so never stage it. The safety net is the gitleaks pre-commit hook (see Git Hooks above), not `.gitignore` — do not rely on git ignoring these paths.
 
-GitHub Actions compilation uses an all-zero 32-character placeholder App ID and does not run RTC sessions. It must not use repository secrets, App Certificates, or tokens. The compile workflow runs automatically only after changes reach `main`, when the referenced SDK version is available from public package repositories.
+GitHub Actions compilation uses an all-zero 32-character placeholder App ID and does not run RTC sessions. It must not use repository secrets, App Certificates, or tokens. The compile workflow runs for pull requests targeting `main` and can be started manually; referenced SDK versions must be available from public package repositories before the pull request can pass.

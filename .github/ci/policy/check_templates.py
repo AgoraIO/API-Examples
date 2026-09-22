@@ -2,7 +2,7 @@
 """Compile/execute canonical template code. Missing compilers or inputs fail, never skip.
 
 Native lifecycle tests use controlled dependencies. android-sdk checks real SDK interfaces;
-Compile CI additionally stages complete templates into their actual application targets.
+stage_compile_templates.py can add complete templates to disposable application checkouts.
 """
 import argparse
 import os

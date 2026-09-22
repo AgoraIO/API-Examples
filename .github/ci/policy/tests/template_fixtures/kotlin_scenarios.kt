@@ -27,9 +27,9 @@ fun main() {
     check(!sut.beginJoin("new-before-old-permission-returns"))
     sut.onPermissionResult(true); check(TokenUtils.requests.size == count)
     check(sut.beginJoin("denied")); sut.onPermissionResult(false); check(TokenUtils.requests.size == count)
-    AgoraConfig.certificate = "enabled-in-test"
+    BuildConfig.AGORA_APP_CERT = "enabled-in-test"
     request("missing-token"); respond(count, null); check(joins() == 2)
-    AgoraConfig.certificate = ""
+    BuildConfig.AGORA_APP_CERT = ""
     request("no-certificate"); respond(count + 1, null); check(joins() == 3)
     sut.leave(); RtcEngine.joinResult = -1
     request("join-error"); respond(count + 2); check(errors.any { it.contains("joinChannel failed") })

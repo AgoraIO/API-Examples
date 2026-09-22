@@ -17,8 +17,9 @@ After creating the venv described above, run the packaging helper tests from the
 
 Keep the Jenkins entry point and `build/` paths stable: external jobs and existing scripts
 refer to them directly. A lack of repository-local callers does not establish that an
-external entry point is unused. GitHub compilation uses public SDK dependencies and
-produces compile evidence; Jenkins owns release artifacts and signing evidence.
+external entry point is unused. GitHub compilation runs for pull requests targeting `main`,
+uses public SDK dependencies, and produces compile evidence; Jenkins owns release artifacts
+and signing evidence.
 
 ## Template checks
 
@@ -46,10 +47,10 @@ supplies the Kotlin CLI. Missing compilers, missing template sections or missing
 the check rather than silently skipping it. No SDK download or credentials are needed for
 these controlled regressions.
 
-`compile.yml` additionally calls `policy/stage_compile_templates.py` before compiling Android
-Audio/Compose and all four iOS projects. The helper adds complete template sources to the
-actual app target, including Xcode Sources membership, so its SDK and project interfaces are
-checked with the normal build. It intentionally mutates the checkout: run it only in a
-disposable CI/scratch checkout, never a developer working tree with pending changes. It does
-not add menu entries or run the example. Template/fixture checks do not replace the normal
-application build, permission UI integration, case registration or device validation.
+`compile.yml` builds the checked-in application targets without staging generated template
+sources, keeping the pull request gate focused on application compilation and public dependency
+resolution. To check a complete template against a real project interface, run
+`policy/stage_compile_templates.py` only in a disposable CI/scratch checkout before that
+project's normal build. The helper mutates source and Xcode project files; never run it in a
+developer working tree with pending changes. Template/fixture checks do not replace permission
+UI integration, case registration or device validation.

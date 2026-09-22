@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import io.agora.api.example.compose.BuildConfig
 import io.agora.api.example.compose.data.SettingPreferences
-import io.agora.api.example.compose.utils.AgoraConfig
 import io.agora.api.example.compose.utils.TokenUtils
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -126,7 +125,7 @@ private class ExampleCaseSession(
             onError("Permission denied")
             return
         }
-        val tokenRequired = AgoraConfig.getAppCertificate().isNotEmpty()
+        val tokenRequired = BuildConfig.AGORA_APP_CERT.isNotEmpty()
         // genToken supports projects without an App Certificate as well.
         TokenUtils.genToken(request.channel, request.uid) { token ->
             mainHandler.post {

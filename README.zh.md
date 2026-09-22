@@ -13,6 +13,7 @@
 | Android | Java        | [Android/APIExample-Audio](Android/APIExample-Audio)     | [RTC Java Audio SDK](https://doc.shengwang.cn/doc/rtc/android/resources)      |
 | iOS     | Swift       | [iOS/APIExample](iOS/APIExample)                         | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
 | iOS     | Objective-C | [iOS/APIExample-OC](iOS/APIExample-OC)                   | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
+| iOS     | Swift       | [iOS/APIExample-SwiftUI](iOS/APIExample-SwiftUI)         | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
 | iOS     | Swift       | [iOS/APIExample-Audio](iOS/APIExample-Audio)             | [RTC Objective-C Audio SDK](https://doc.shengwang.cn/doc/rtc/ios/resources)   |
 | macOS   | Swift       | [macOS](macOS)                                           | [RTC Objective-C Video SDK](https://doc.shengwang.cn/doc/rtc/macos/resources) |
 | Windows | C++         | [windows](windows)                                       | [RTC C++ Video SDK](https://doc.shengwang.cn/doc/rtc/windows/resources)       |

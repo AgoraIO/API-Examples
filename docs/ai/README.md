@@ -41,10 +41,10 @@ Reuse it for later checks; do not install the validator into the system Python e
 The same checks run in `.github/workflows/repository-policy.yml` for pushes and pull requests.
 That workflow also compiles and executes selected Android/iOS template lifecycle regressions.
 After editing creation templates, run the relevant native checks documented in
-[CI template checks](../../.github/ci/README.md#template-checks). The post-release compile
-workflow also builds the complete Android Audio/Compose and four iOS templates in their real
-application targets. Structural validation alone does not establish template API correctness
-or safe asynchronous cleanup.
+[CI template checks](../../.github/ci/README.md#template-checks). The `main` pull request
+compile workflow builds the checked-in applications without generating additional template
+sources. Structural validation alone does not establish template API correctness or safe
+asynchronous cleanup.
 
 The requirement contract owns shared behavior. Platform implementations may differ only
 when the SDK, UI framework, permission model, or operating system requires it, and the
