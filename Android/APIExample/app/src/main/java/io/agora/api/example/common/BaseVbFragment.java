@@ -59,7 +59,7 @@ public abstract class BaseVbFragment<T extends ViewBinding> extends BaseFragment
              */
             config.mContext = context.getApplicationContext();
             /*
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
             /* The channel profile.
@@ -77,7 +77,7 @@ public abstract class BaseVbFragment<T extends ViewBinding> extends BaseFragment
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = engineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*

@@ -1,5 +1,21 @@
 # ARCHITECTURE.md — APIExample-Audio
 
+## Application Lifecycle
+
+The app retains iOS 12 support. On iOS 12, `AppDelegate` creates the
+window and loads the initial controller from `Main.storyboard`. On iOS 13 and later,
+`Info.plist` declares a single application scene: UIKit loads `Main.storyboard` and
+assigns its window to `SceneDelegate`. Scene declarations and window APIs are guarded
+by iOS availability checks; the window helper retains its iOS 12 fallback.
+Do not rebuild the root controller on scene activation or end RTC sessions merely because
+the scene enters the background. Use a build toolchain that supports the deployment target;
+adopting the scene lifecycle does not require raising the minimum iOS version.
+
+`ViewController` owns a `LogFloatingButton` defined in `Common/LogViewController.swift`.
+It is attached to the navigation container after appearance so it remains available in
+example pages on both iOS 12 and later. Its safe-area placement and share sheet use its
+own view/window hierarchy; do not use `Floaty.global`, which creates a window without a scene.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |
@@ -12,7 +28,7 @@
 | CustomAudioRender | `Examples/Advanced/CustomAudioRender/CustomAudioRender.swift` | `enableExternalAudioSink()`, `pullPlaybackAudioFrameRawData()` | Pull audio frames for custom rendering |
 | RawAudioData | `Examples/Advanced/RawAudioData/RawAudioData.swift` | `setAudioFrameDelegate()` | Capture raw audio PCM data via delegate |
 | AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.swift` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | PrecallTest | `Examples/Advanced/PrecallTest/PrecallTest.swift` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()`, `setEnableSpeakerphone()` | 3D spatial audio with media player integration |
 
@@ -23,6 +39,7 @@ APIExample-Audio/
 ├── Podfile                                  # CocoaPods dependencies (AgoraAudio_iOS, Floaty, AGEVideoLayout)
 └── APIExample-Audio/
     ├── AppDelegate.swift
+    ├── SceneDelegate.swift                  # Window owned by the application scene
     ├── ViewController.swift                 # Root menu controller — MenuItem registration lives here
     ├── Info.plist
     ├── APIExample.entitlements
@@ -50,14 +67,14 @@ APIExample-Audio/
     │   │   ├── JoinChannelAudio/            # "Join a channel (Audio)"
     │   │   └── JoinChannelAudio(Token)/     # "Join a channel (Token)"
     │   └── Advanced/
-    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
+    │       ├── VoiceChanger/                # "Voice Effects" — voice beautifier/effects
     │       ├── CustomAudioSource/           # "Custom Audio Source"
     │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       └── SpatialAudio/                # "Spatial Audio"
     │
     ├── Resources/                           # Audio sample files
@@ -81,9 +98,11 @@ struct MenuItem {
 }
 ```
 
-**To add a case, edit exactly two things:**
-1. Add a `MenuItem` to the `menus` array in `ViewController.swift`
-2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift file(s) and storyboard
+A registered case connects the `MenuItem`, its Swift controller(s), and its storyboard.
+New source files must belong to the Xcode target's Sources build phase, and storyboards,
+localized files, and media assets must belong to Resources. Follow
+[upsert-case](.agents/skills/upsert-case/SKILL.md) for the complete change procedure and
+update the Case Index when the case changes.
 
 ## Entry/Main ViewController Pattern
 
@@ -117,15 +136,22 @@ viewDidLoad    → AgoraRtcEngineKit.sharedEngine(withAppId:delegate:)
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear / willMove(toParent:)
+willMove(toParent:) when parent == nil
                → engine.leaveChannel()
                → AgoraRtcEngineKit.destroy()
 ```
 
+For navigation-based cases, cleanup runs when the controller is removed from its parent.
+Temporary disappearance alone must not destroy the engine; follow the guarded cleanup in
+the upsert and review skills.
+
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
-    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

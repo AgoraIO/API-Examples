@@ -11,6 +11,9 @@
 namespace agora {
 namespace rtc {
 
+/**
+ * @brief The IMediaRecorder interface.
+ */
 class IMediaRecorder : public RefCountInterface {
  protected:
   virtual ~IMediaRecorder() {}
@@ -32,7 +35,7 @@ class IMediaRecorder : public RefCountInterface {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    */
   virtual int setMediaRecorderObserver(media::IMediaRecorderObserver* callback) = 0;
   /**
@@ -69,7 +72,7 @@ class IMediaRecorder : public RefCountInterface {
    *
    * @return
    * - 0: Success.
-   * - < 0: Failure. See `Error Codes` for details and resolution suggestions.
+   * - < 0: Failure.
    *   - -2: Invalid parameter. Please ensure that:
    *     - The specified recording file path is correct and writable.
    *     - The specified recording file format is correct.

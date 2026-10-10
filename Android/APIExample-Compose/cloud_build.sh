@@ -33,8 +33,7 @@ else
   fi
 fi
 
-#change android maven to china repos
-sed -ie "s#google()#maven { url = uri(\"https://maven.aliyun.com/repository/public\") }\n        google()#g" settings.gradle.kts
+# Maven repositories are configured in settings; mirror only the Gradle distribution.
 sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g" gradle/wrapper/gradle-wrapper.properties
 
 set_local_property() {

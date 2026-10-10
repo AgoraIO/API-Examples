@@ -9,11 +9,12 @@ After users upgrade their iOS devices to iOS 14.0, and use an app that integrate
 
 ![](../pictures/ios_14_privacy.png)
 
-[Solution](https://docs.agora.io/en/help/integration-issues/local_network_privacy)
+[Solution](https://docs.agora.io/en/api-reference/faq/integration/local_network_privacy)
 
 ## Prerequisites
 
-- Xcode 13.0+
+- iOS 12.0 or later; builds using Xcode 27 SDKs require iOS 15.0 or later
+- Xcode 13.0 or later with support for the intended deployment target ([Xcode support](https://developer.apple.com/support/xcode/)). iOS 27 SDKs automatically select an iOS 15 deployment target for the app, extensions, and Pods; use a compatible older toolchain for iOS 12 packages.
 - Physical iOS device (iPhone or iPad)
 - iOS simulator is NOT supported
 
@@ -23,14 +24,10 @@ This section shows you how to prepare, build, and run the sample application.
 
 ### Prepare Dependencies
 
-Change directory into **iOS** folder, run following command to install project dependencies,
+Change to the sample directory and install the project dependencies with CocoaPods. See the [official CocoaPods guide](https://guides.cocoapods.org/using/getting-started.html) for installation instructions.
 
-use cocoapods
-
-[install cocoapods](http://t.zoukankan.com/lijiejoy-p-9680485.html)
-
-
-```
+```bash
+cd iOS/APIExample
 pod install
 ```
 
@@ -71,15 +68,32 @@ To build and run the sample application, get an App Id:
 
 You are all set. Now connect your iPhone or iPad device and run the project.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.bundle.zip` from Agora technical support and extract it to `iOS/APIExample/APIExample/Resources/`.
+
+The extracted resources should have the following structure:
+
+```text
+iOS/APIExample/APIExample/Resources/
+└── AgoraBeautyMaterial.bundle/
+    ├── beauty_material_functional/
+    │   ├── config.json
+    │   └── ...
+    └── ...
+```
+
+The extracted bundle is ignored by Git.
+
 ## Contact Us
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first
+- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/api-reference/faq) first
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - You can find full API documentation at [Document Center](https://docs.agora.io/en/)
 - If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
+- You can file bugs about this sample at [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## License
 

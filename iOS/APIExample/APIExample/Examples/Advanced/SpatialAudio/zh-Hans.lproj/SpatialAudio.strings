@@ -1,0 +1,20 @@
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "KY8-Lq-ig9"; */
+"KY8-Lq-ig9.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "ikL-dH-tRM"; */
+"ikL-dH-tRM.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Please move the red icon to experience the 3D audio effect."; ObjectID = "Mot-iW-9hr"; */
+"Mot-iW-9hr.text" = "请拖动红色图标，体验 3D 空间音效。";
+
+/* Class = "UILabel"; text = "Room"; ObjectID = "50N-si-iu5"; */
+"50N-si-iu5.text" = "房间";
+
+/* Class = "UILabel"; text = "Room"; ObjectID = "z3G-5f-sV9"; */
+"z3G-5f-sV9.text" = "房间";
+
+/* Class = "UILabel"; text = "microphone"; ObjectID = "aRz-9z-yXN"; */
+"aRz-9z-yXN.text" = "麦克风";
+
+/* Class = "UILabel"; text = "Sound barrier"; ObjectID = "E1d-Pe-1qs"; */
+"E1d-Pe-1qs.text" = "隔音屏障";

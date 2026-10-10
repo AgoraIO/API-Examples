@@ -85,54 +85,53 @@
     <string name="streaming_mode">Enhanced Low Latency</string>
     <string name="preload">Preload</string>
 
-    <string name="item_joinaudio">Live Interactive Audio Streaming</string>
-    <string name="item_joinvideo">Live Interactive Video Streaming</string>
-    <string name="item_joinvideo_by_token">Live Interactive Video Streaming(Token Verify)</string>
+    <string name="item_joinaudio">Join a channel (Audio)</string>
+    <string name="item_joinvideo">Join a channel (Video)</string>
+    <string name="item_joinvideo_by_token">Join a channel (Token)</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust the Volume</string>
-    <string name="item_joinmultichannel">Join Multiple Channel</string>
-    <string name="item_precalltest">Pre-call Tests</string>
-    <string name="item_hostacrosschannel">Relay Streams across Channels</string>
+    <string name="item_joinmultichannel">Join Multiple Channels</string>
+    <string name="item_precalltest">Pre-call Test</string>
+    <string name="item_hostacrosschannel">Media Channel Relay</string>
     <string name="item_setaudioprofile">Set the Audio Profile</string>
     <string name="item_playaudiofiles">Play Audio Files</string>
-    <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
+    <string name="item_voiceeffects">Voice Effects</string>
 
-    <string name="item_mediaplayer">MediaPlayer</string>
-    <string name="item_audiorouter_player">AudioRouter(Third Party Player)</string>
+    <string name="item_mediaplayer">Media Player</string>
+    <string name="item_audiorouter_player">Audio Router (Third-party Player)</string>
     <string name="item_audiowaveform">Audio Waveform</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
-    <string name="item_rtctortmp">Streaming from RTC to CDN</string>
+    <string name="item_rtctortmp">RTMP Streaming</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_multiVideoSourceTracks">Multi Video Source Tracks</string>
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Multiple Video Sources</string>
-    <string name="item_screensharing">Scree Sharing</string>
-    <string name="item_customaudiosource">Custom Audio Sources</string>
+    <string name="item_screensharing">Screen Share</string>
+    <string name="item_customaudiosource">Custom Audio Source (PCM)</string>
     <string name="item_customaudiorender">Custom Audio Render</string>
-    <string name="item_customremoterender">Custom Video Renderer</string>
+    <string name="item_customremoterender">Custom Video Render</string>
     <string name="item_processraw">Raw Video Data</string>
     <string name="item_mediametadata">Media Metadata</string>
     <string name="item_streamencrypt">Media Stream Encryption(Custom Encoder)</string>
-    <string name="item_channelencryption">Media Stream Encryption</string>
+    <string name="item_channelencryption">Stream Encryption</string>
     <string name="item_setvideoprofile">Set the Video Profile</string>
     <string name="item_superresolution">Super Resolution</string>
-    <string name="item_livestreaming">RTC Live Streaming</string>
+    <string name="item_livestreaming">Live Streaming</string>
     <string name="item_twoProcessScreenShare">Multi Process - Screen Sharing</string>
     <string name="item_raw_audio">Raw Audio Data</string>
-    <string name="item_ext">Simple Extension</string>
+    <string name="item_ext">Simple Filter Extension</string>
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
     <string name="item_spatial_sound">Spatial Audio</string>
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
-    <string name="item_third_party_beauty">Third-party beauty</string>
-    <string name="item_agora_beauty">Agora beauty 2.0</string>
+    <string name="item_third_party_beauty">Third-party Beauty</string>
+    <string name="item_agora_beauty">Beauty 2.0</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
-    <string name="item_media_recorder">Local/Remote MediaRecorder</string>
-    <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
-    <string name="item_face_capture">Face Capture</string>
+    <string name="item_media_recorder">Media Recorder</string>
+    <string name="item_localvideotranscoding">Local Video Transcoding</string>
     <string name="item_simulcast">Simulcast</string>
     <string name="item_multipath">Multipath</string>
 
@@ -205,7 +204,6 @@
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="agora_beauty">his example demonstrates how to integrate agora beauty 2.0.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
-    <string name="face_capture_tip">This example demonstrates how to use face capture function.</string>
     <string name="transparent_rendering">This example demonstrates how to use transparent rendering.</string>
     <string name="tip_ultra_live_streaming_with_url">This example demonstrates how to use ultra live stream with url.</string>
     <string name="tip_simulcast">This example demonstrates how to use Simulcast</string>
@@ -245,7 +243,7 @@
     <string name="echo_record_countdown">Recording Countdown</string>
     <string name="echo_playing_countdown">Playing Countdown</string>
     <string name="recording_start">Recording on Microphone</string>
-    <string name="item_videoProcessExtension">Video Enhancement</string>
+    <string name="item_videoProcessExtension">Video Process</string>
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
@@ -349,8 +347,6 @@
     <string name="faceunity_beauty">FaceUnityBeauty</string>
     <string name="body_beauty">Body Beauty</string>
     <string name="faceunity_integrate_tip">FaceUnity library is not integrated! Please read README before compiling</string>
-    <string name="bytedance_beauty">ByteDance Beauty</string>
-    <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please read README before compiling</string>
 
     <string name="private_clound">Private Cloud</string>
     <string name="ip_address">IP Address</string>
@@ -403,11 +399,13 @@
     <string name="channel_profile_cloud_gaming" translatable="false">CLOUD_GAMING</string>
     <string name="channel_profile_communication_1v1" translatable="false">COMMUNICATION_1v1</string>
     <string name="audio_route_default">default</string>
-    <string name="audio_route_speakerphone">speakerphone</string>
-    <string name="audio_route_earpiece">earpiece</string>
     <string name="audio_route_headset">headset</string>
-    <string name="audio_route_headset_typec">headset(TypeC)</string>
+    <string name="audio_route_earpiece">earpiece</string>
+    <string name="audio_route_headset_no_mic">headset(no mic)</string>
+    <string name="audio_route_speakerphone">speakerphone</string>
+    <string name="audio_route_loudspeaker">external speaker(unsupported)</string>
     <string name="audio_route_headset_bluetooth">bluetooth headset</string>
+    <string name="audio_route_headset_typec">USB device(Type-C)</string>
     <string name="third_party_player">Third Party Player</string>
     <string name="third_party_player_ijk" translatable="false">IjkPlayer</string>
     <string name="third_party_player_exo" translatable="false">ExoPlayer</string>
@@ -419,7 +417,6 @@
     <string name="player_stream">Player Stream</string>
     <string name="publish_stream">Publish Stream</string>
     <string name="audio_stream_index">AudioStream%d</string>
-    <string name="face_capture_authentication">Please contact Agora customer service to obtain the face capture certificate and configure it to the AUTHENTICATION constant.</string>
     <string name="notifications_enable_tip">Please turn on notification permission to prevent background recording from being interrupted.</string>
     <string name="notifications_enable_screen_tip">Please turn on notification permission to prevent background
         screen sharing from being interrupted.</string>
@@ -434,8 +431,8 @@
     <string name="camera_focal_urltra_wide">Urltra Wide</string>
     <string name="camera_focal_telephoto">Telephoto</string>
     <string name="enter_pip">Enter picture in picture mode</string>
-    <string name="item_transparentrendering">TransparentRendering</string>
-    <string name="ultra_live_streaming_with_url">Ultra Live Streaming with Url</string>
+    <string name="item_transparentrendering">Transparent Rendering</string>
+    <string name="ultra_live_streaming_with_url">URL Streaming (RTE Player)</string>
     <string name="local_fps_set">local fps, range：1-60</string>
     <string name="remote_fps_set">remote fps, range：1-60</string>
     <string name="scenario">scenario</string>
@@ -458,4 +455,12 @@
     <string name="multipath_mode">Multipath Mode</string>
     <string name="multipath_type">Multipath Type</string>
     <string name="set_layers_config">Set Layers Config(Maximum 3)</string>
+    <string name="agora_beauty_style_basic">Basic</string>
+    <string name="agora_beauty_style_ordinary">Ordinary</string>
+    <string name="agora_beauty_style_anchor">Anchor</string>
+    <string name="agora_makeup_style_young">Young</string>
+    <string name="agora_makeup_style_mature">Mature</string>
+    <string name="agora_filter_style_daily">Daily</string>
+    <string name="agora_filter_style_moonlight">Moonlight</string>
+    <string name="agora_filter_style_cream">Cream</string>
 </resources>

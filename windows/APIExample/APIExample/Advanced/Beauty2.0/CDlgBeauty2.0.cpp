@@ -190,6 +190,10 @@ bool CDlgBeauty2::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_video_filters_clear_vision"));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("clear_vision"));
+	if (ret == 0) {
+		m_rtcEngine->setParameters("{\"rtc.video.yuvconverter_enable_hardware_buffer\":true}");
+		InitializeBeautyResources();
+	}
 	
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
@@ -256,9 +260,11 @@ void CDlgBeauty2::UnInitAgora()
 void CDlgBeauty2::CleanupBeautyResources()
 {
 	if (m_videoEffectObject && m_rtcEngine) {
+		mBeautyDlgEx->SetVideoEffectObject(nullptr);
 		m_rtcEngine->destroyVideoEffectObject(m_videoEffectObject);
-		m_videoEffectObject = nullptr;
-		
+		m_videoEffectObject.reset();
+	}
+	if (m_rtcEngine) {
 		m_rtcEngine->enableExtension(
 			"agora_video_filters_clear_vision", 
 			"clear_vision", 
@@ -266,6 +272,33 @@ void CDlgBeauty2::CleanupBeautyResources()
 			agora::media::PRIMARY_CAMERA_SOURCE
 		);
 	}
+}
+
+void CDlgBeauty2::InitializeBeautyResources()
+{
+	if (!m_rtcEngine || !m_initialize || m_videoEffectObject) {
+		return;
+	}
+
+	CString strModelPath = GetExePath() + _T("\\beauty_agora\\beauty_material_functional");
+	if (!PathFileExists(strModelPath)) {
+		CString strMsg;
+		strMsg.Format(_T("Beauty resource path not exist: %s"), strModelPath);
+		AfxMessageBox(strMsg);
+		return;
+	}
+
+	std::string modelPath = cs2utf8(strModelPath);
+	m_videoEffectObject = m_rtcEngine->createVideoEffectObject(
+		modelPath.c_str(),
+		agora::media::PRIMARY_CAMERA_SOURCE
+	);
+	if (!m_videoEffectObject) {
+		AfxMessageBox(_T("Create VideoEffectObject failed"));
+		return;
+	}
+
+	mBeautyDlgEx->SetVideoEffectObject(m_videoEffectObject.get());
 }
 
 //Initialize the Ctrl Text.
@@ -347,7 +380,7 @@ BOOL CDlgBeauty2::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	mBeautyDlgEx->Create(CDlgBeautyEx2::IDD);
-	mBeautyDlgEx->initData(&m_initialize, &m_rtcEngine, this);
+	mBeautyDlgEx->initData(this);
 	mBeautyDlgEx->InitCtrlText();
 	InitCtrlText();
 	for (int i = 0; i < 2; ++i) {
@@ -366,22 +399,27 @@ void CDlgBeauty2::SetBeauty()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
-	BeautyOptions option;
-	option.rednessLevel = m_sldRedness.GetPos() / 100.0f;
-	option.lighteningLevel = m_sdlLightening.GetPos() / 100.0f;
-	option.smoothnessLevel = m_sldSmoothness.GetPos() / 100.0f;
-	option.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbContrast.GetCurSel();
-	int ret = m_rtcEngine->setBeautyEffectOptions(m_chkBeauty.GetCheck() != 0, option);
-	if (ret < 0) {
-		CString strInfo;
-		strInfo.Format(_T("setBeautyEffectOptions: %d"), ret);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (m_videoEffectObject) {
+		bool enabled = m_chkBeauty.GetCheck() != 0;
+		if (enabled) {
+			m_videoEffectObject->addOrUpdateVideoEffect(
+				static_cast<uint32_t>(agora::rtc::IVideoEffectObject::VIDEO_EFFECT_NODE_ID::BEAUTY),
+				""
+			);
+			m_videoEffectObject->setVideoEffectBoolParam("face_shape_beauty_option", "enable", false);
+		}
+		m_videoEffectObject->setVideoEffectBoolParam("beauty_effect_option", "enable", enabled);
+		m_videoEffectObject->setVideoEffectFloatParam("beauty_effect_option", "redness", m_sldRedness.GetPos() / 100.0f);
+		m_videoEffectObject->setVideoEffectStringParam("beauty_effect_option", "whiten_lut_path", "");
+		m_videoEffectObject->setVideoEffectFloatParam("beauty_effect_option", "lightness", m_sdlLightening.GetPos() / 100.0f);
+		m_videoEffectObject->setVideoEffectFloatParam("beauty_effect_option", "smoothness", m_sldSmoothness.GetPos() / 100.0f);
+		m_videoEffectObject->setVideoEffectIntParam("beauty_effect_option", "contrast", m_cmbContrast.GetCurSel());
 	}
 
 	FilterEffectOptions optionFilter;
 	optionFilter.path = "built_in_whiten_filter";
 	optionFilter.strength = mSliderBright.GetPos() / 100.0f;
-	ret = m_rtcEngine->setFilterEffectOptions(m_chkBeauty.GetCheck() != 0, optionFilter);
+	int ret = m_rtcEngine->setFilterEffectOptions(m_chkBeauty.GetCheck() != 0, optionFilter);
 	if (ret < 0) {
 		CString strInfo;
 		strInfo.Format(_T("setFilterEffectOptions: %d"), ret);

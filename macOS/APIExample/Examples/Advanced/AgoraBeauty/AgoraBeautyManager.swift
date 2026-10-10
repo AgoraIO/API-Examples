@@ -15,8 +15,8 @@ class AgoraBeautyManager {
     private lazy var faceshapeOption = AgoraFaceShapeBeautyOptions()
     private var styleParam: [String : Any] = ["enable_mu": false]
     private var m_bundle_copied = false;
-    let beauty_material_path: String = NSHomeDirectory() + "/Documents/beauty_material.bundle";
-    let m_current_material_name = "beauty_material_v2.0.0";
+    let beauty_material_path: String = NSHomeDirectory() + "/Documents/AgoraBeautyMaterial.bundle";
+    let m_current_material_name = "beauty_material_functional";
 
     init(agoraKit: AgoraRtcEngineKit? = nil) {
         self.agoraKit = agoraKit
@@ -35,23 +35,36 @@ class AgoraBeautyManager {
                                   extension: "clear_vision",
                                   enabled: true,
                                   sourceType: .primaryCamera)
-        copyBeautyBundle()
+        guard copyBeautyBundle() else {
+            agoraKit?.enableExtension(withVendor: "agora_video_filters_clear_vision",
+                                      extension: "clear_vision",
+                                      enabled: false,
+                                      sourceType: .primaryCamera)
+            return
+        }
         let path = beauty_material_path + "/" + m_current_material_name;
         videoEffectObject = agoraKit?.createVideoEffectObject(bundlePath: path, sourceType: AgoraMediaSourceType.primaryCamera)
         agoraKit?.setParameters("{\"rtc.video.yuvconverter_enable_hardware_buffer\":true}")
 
     }
     
-    private func copyBeautyBundle() {
+    private func copyBeautyBundle() -> Bool {
         if (m_bundle_copied) {
-            return
+            return true
         }
-        let bundle_path = Bundle.main.path(forResource: "beauty_material", ofType: "bundle")
+        guard let bundle_path = Bundle.main.path(forResource: "AgoraBeautyMaterial", ofType: "bundle") else {
+            return false
+        }
         if FileManager.default.fileExists(atPath: beauty_material_path) {
             try? FileManager.default.removeItem(atPath: beauty_material_path)
         }
-        try? FileManager.default.copyItem(atPath: bundle_path!, toPath: beauty_material_path)
+        do {
+            try FileManager.default.copyItem(atPath: bundle_path, toPath: beauty_material_path)
+        } catch {
+            return false
+        }
         m_bundle_copied = true
+        return true
     }
     
     private func addEffect(node : UInt) {
@@ -161,6 +174,7 @@ class AgoraBeautyManager {
         }
         set {
             guard let effectObj = videoEffectObject else { return }
+            effectObj.setVideoEffectStringParam(option: "beauty_effect_option", key: "whiten_lut_path", stringValue: "")
             effectObj.setVideoEffectFloatParam(option: "beauty_effect_option", key: "lightness", floatValue: newValue)
         }
     }

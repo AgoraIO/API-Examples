@@ -1,32 +1,32 @@
 <resources>
     <string name="app_name" translatable="false">APIExample-Compose</string>
-    <string name="example_join_channel_video">Join Video Channel</string>
-    <string name="example_join_channel_audio">Join Audio Channel</string>
+    <string name="example_join_channel_video">Join a channel (Video)</string>
+    <string name="example_join_channel_audio">Join a channel (Audio)</string>
     <string name="example_live_streaming">Live Streaming</string>
-    <string name="example_join_channel_video_token">Join Video Channel (With Token)</string>
+    <string name="example_join_channel_video_token">Join a channel (Token)</string>
     <string name="example_rtmp_streaming">RTMP Streaming</string>
     <string name="example_media_metadata">Media Metadata</string>
     <string name="example_voice_effects">Voice Effects</string>
-    <string name="example_customaudiosource">Custom Audio Source</string>
+    <string name="example_customaudiosource">Custom Audio Source (PCM)</string>
     <string name="example_customaudiorender">Custom Audio Render</string>
     <string name="example_customvideosource">Custom Video Source</string>
     <string name="example_customvideorender">Custom Video Render</string>
-    <string name="example_originaudiodata">Origin Audio Data</string>
-    <string name="example_originvideodata">Origin Video Data</string>
-    <string name="example_joinmultichannel">Join Multi Channel</string>
-    <string name="example_channelencryption">Channel Encryption</string>
+    <string name="example_originaudiodata">Raw Audio Data</string>
+    <string name="example_originvideodata">Raw Video Data</string>
+    <string name="example_joinmultichannel">Join Multiple Channels</string>
+    <string name="example_channelencryption">Stream Encryption</string>
     <string name="example_playaudiofiles">Play Audio Files</string>
-    <string name="example_precalltest">Pre Call Test</string>
+    <string name="example_precalltest">Pre-call Test</string>
     <string name="example_mediarecorder">Media Recorder</string>
     <string name="example_mediaplayer">Media Player</string>
-    <string name="example_screensharing">Screen Sharing</string>
-    <string name="example_videoprocessextension">Video Process Extension</string>
+    <string name="example_screensharing">Screen Share</string>
+    <string name="example_videoprocessextension">Video Process</string>
     <string name="example_localvideotranscoding">Local Video Transcoding</string>
     <string name="example_senddatastream">Send Data Stream</string>
     <string name="example_rhythmplayer">Rhythm Player</string>
-    <string name="example_hostacrosschannel">Host Across Channel</string>
+    <string name="example_hostacrosschannel">Media Channel Relay</string>
     <string name="example_pictureinpicture">Picture In Picture</string>
-    <string name="example_spatialsound">Spaital Sound</string>
+    <string name="example_spatialsound">Spatial Audio</string>
 
     <string name="encryption_mode">Encryption Mode</string>
     <string name="encryption_key">Encryption Key</string>

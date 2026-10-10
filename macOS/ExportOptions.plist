@@ -5,17 +5,10 @@
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>
-	<string>developer</string>
-	<key>provisioningProfiles</key>
-	<dict>
-		<key>io.agora.api.examples</key>
-		<string>AgoraLab2020</string>
-	</dict>
-	<key>signingCertificate</key>
-	<string>Apple Development</string>
+	<string>debugging</string>
 	<key>signingStyle</key>
-	<string>manual</string>
+	<string>automatic</string>
 	<key>teamID</key>
-	<string>JDPG69R49Z</string>
+	<string>YS397FG5PA</string>
 </dict>
 </plist>

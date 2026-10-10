@@ -55,9 +55,9 @@ class StreamEncryptionRTC: NSObject, ObservableObject {
             if ret != 0 {
                 // for errors please take a look at:
                 // swiftlint:disable line_length
-                // CN https://docs.agora.io/cn/live-streaming-premium-legacy/API%20Reference/oc/Classes/AgoraRtcChannel.html?platform=iOS#//api/name/enableEncryption:encryptionConfig:
+                // CN https://doc.shengwang.cn/doc/rtc/ios/advanced-features/channel-encryption
                 // swiftlint:enable line_length
-                // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
+                // EN https://docs.agora.io/en/realtime-media/rtc/build/secure-and-protect-channels/media-stream-encryption
                 LogUtils.log(message: "enableEncryption call failed: \(ret), please check your params", level: .error)
             }
         } else {
@@ -147,8 +147,8 @@ extension StreamEncryptionRTC: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agorawarningcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)

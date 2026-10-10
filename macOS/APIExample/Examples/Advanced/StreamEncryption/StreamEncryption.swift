@@ -244,8 +244,8 @@ class StreamEncryption: BaseViewController {
                 let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
                 if ret != 0 {
                     // for errors please take a look at:
-                    // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                    // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
+                    // CN https://doc.shengwang.cn/doc/rtc/macos/advanced-features/channel-encryption
+                    // EN https://docs.agora.io/en/realtime-media/rtc/build/secure-and-protect-channels/media-stream-encryption
                     LogUtils.log(message: "enableEncryption call failed: \(ret), please check your params", level: .error)
                 }
                 // set up local video to render your local camera preview
@@ -283,8 +283,8 @@ class StreamEncryption: BaseViewController {
                     self.isProcessing = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                    // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
             })
@@ -345,8 +345,8 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agorawarningcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
@@ -355,8 +355,8 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)

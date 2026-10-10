@@ -6,6 +6,7 @@
 *.xcworkspacedata
 
 *.zip
+APIExample/APIExample/Resources/AgoraBeautyMaterial.bundle/
 agora_sdk
 *.xcarchive
 */libs
@@ -15,7 +16,6 @@ Packaging.log
 *.app
 FULib/
 SenseLib/
-ByteEffectLib/
 
 # Xcode
 #

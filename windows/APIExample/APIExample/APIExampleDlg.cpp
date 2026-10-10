@@ -225,42 +225,39 @@ void CAPIExampleDlg::InitSceneDialog()
 	//advanced list
 	// m_vecAdvanced.push_back(advancedRtmpInject);
 	m_vecAdvanced.push_back(advancedRtmpStreaming);
-	m_vecAdvanced.push_back(advancedCrossChannel);
 	m_vecAdvanced.push_back(advancedMetadata);
+	m_vecAdvanced.push_back(advancedBeautyAudio);
+	m_vecAdvanced.push_back(advancedAudioProfile);
+	// m_vecAdvanced.push_back(advancedAudioEffect);
+	m_vecAdvanced.push_back(advancedCustomAudioCapture);
+	m_vecAdvanced.push_back(advancedOriginalAudio);
+	m_vecAdvanced.push_back(advancedAudioMixing);
+	m_vecAdvanced.push_back(advancedCustomVideoCapture);
+	m_vecAdvanced.push_back(advancedMultiVideoSource);
+	m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
+	m_vecAdvanced.push_back(advancedOriginalVideo);
+	m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
+	m_vecAdvanced.push_back(advancedMultiChannel);
+	m_vecAdvanced.push_back(advancedMediaEncrypt);
+	m_vecAdvanced.push_back(advancedCustomEncrypt);
+	m_vecAdvanced.push_back(advancedPerCallTest);
 	m_vecAdvanced.push_back(advancedMediaPlayer);
 	m_vecAdvanced.push_back(advancedMediaRecorder);
 	m_vecAdvanced.push_back(advancedScreenCap);
-	m_vecAdvanced.push_back(advancedAudioProfile);
-	m_vecAdvanced.push_back(advancedAudioMixing);
-	// m_vecAdvanced.push_back(advancedAudioEffect);
-	m_vecAdvanced.push_back(advancedCustomVideoCapture);
-	m_vecAdvanced.push_back(advancedOriginalVideo);
-	m_vecAdvanced.push_back(advancedCustomAudioCapture);
-	m_vecAdvanced.push_back(advancedOriginalAudio);
-	m_vecAdvanced.push_back(advancedFaceCapture);
-	m_vecAdvanced.push_back(advancedCustomEncrypt);
-	m_vecAdvanced.push_back(advancedMultiChannel);
-	m_vecAdvanced.push_back(advancedMultiVideoSource);
-	m_vecAdvanced.push_back(advancedMultiVideoSourceTracks);
-	m_vecAdvanced.push_back(advancedPerCallTest);
+	m_vecAdvanced.push_back(advancedCrossChannel);
+	m_vecAdvanced.push_back(SpatialAudio);
+	m_vecAdvanced.push_back(beautyFace);
+	m_vecAdvanced.push_back(beautyFace2);
+	m_vecAdvanced.push_back(TransparentBackground);
+	m_vecAdvanced.push_back(RteUrlPlayer);
 	m_vecAdvanced.push_back(advancedAudioVolume);
 	//m_vecAdvanced.push_back(advancedReportInCall);
 	m_vecAdvanced.push_back(advancedRegionConn);
-	m_vecAdvanced.push_back(advancedMediaEncrypt);
-	m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
-	m_vecAdvanced.push_back(beautyFace);
-	m_vecAdvanced.push_back(beautyFace2);
-	m_vecAdvanced.push_back(advancedBeautyAudio);
-	m_vecAdvanced.push_back(SpatialAudio);
+	m_vecAdvanced.push_back(advancedSimulcast);
+	m_vecAdvanced.push_back(Multipath);
 	m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
 	m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
 	m_pMultiChannelDlg->MoveWindow(&rcWnd);
-
-	//transparent bg
-	m_vecAdvanced.push_back(TransparentBackground);
-	m_vecAdvanced.push_back(RteUrlPlayer);
-	m_vecAdvanced.push_back(Multipath);
-	m_vecAdvanced.push_back(advancedSimulcast);
 
 	//inject
 	m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
@@ -311,10 +308,6 @@ void CAPIExampleDlg::InitSceneDialog()
 	m_pOriginalAudioDlg = new CAgoraOriginalAudioDlg(&m_staMainArea);
 	m_pOriginalAudioDlg->Create(CAgoraOriginalAudioDlg::IDD);
 	m_pOriginalAudioDlg->MoveWindow(&rcWnd);
-
-	m_pAgoraFaceCaptureDlg = new CAgoraFaceCaptureDlg(&m_staMainArea);
-	m_pAgoraFaceCaptureDlg->Create(CAgoraFaceCaptureDlg::IDD);
-	m_pAgoraFaceCaptureDlg->MoveWindow(&rcWnd);
 
 	//custom encrypt
 	m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
@@ -444,7 +437,7 @@ void CAPIExampleDlg::InitSceneList()
 
 void CAPIExampleDlg::OnBnClickedButtonFaq()
 {
-	ShellExecute(NULL, L"open", L"https://docs.agora.io/cn/Video/faq", NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, L"open", L"https://docs.agora.io/en/api-reference/faq", NULL, NULL, SW_SHOWNORMAL);
 }
 
 
@@ -596,10 +589,6 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pOriginalAudioDlg->InitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_SHOW);
 	}
-	else if (selectedText.Compare(advancedFaceCapture) == 0) {
-		m_pAgoraFaceCaptureDlg->InitAgora();
-		m_pAgoraFaceCaptureDlg->ShowWindow(SW_SHOW);
-	}
 	else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->InitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
@@ -744,10 +733,6 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedOriginalAudio) == 0) {
 		m_pOriginalAudioDlg->UnInitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_HIDE);
-	}
-	else if (str.Compare(advancedFaceCapture) == 0) {
-		m_pAgoraFaceCaptureDlg->UnInitAgora();
-		m_pAgoraFaceCaptureDlg->ShowWindow(SW_HIDE);
 	}
 	else if (str.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->UnInitAgora();

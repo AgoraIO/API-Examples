@@ -9,6 +9,15 @@ using namespace rte;
 #define WM_PLAYER_PREPARED (WM_USER + 10002)
 #define WM_PLAYER_STATE (WM_USER + 10003)
 #define WM_PLAYER_EVENT (WM_USER + 1004)
+#define WM_PLAYER_STREAM_DATA (WM_USER + 10005)
+
+struct RteStreamVolumeEvent
+{
+	std::string channelName;
+	std::string streamId;
+	int32_t volume;
+};
+
 class PlayerObserverAdapter:public PlayerObserver
 {
 public:
@@ -24,6 +33,7 @@ public:
 		const uint8_t* data, size_t length) override;
 	void onPlayerInfoUpdated(const rte::PlayerInfo* info) override;
 	void onAudioVolumeIndication(int32_t volume) override;
+	void onStreamDataReceived(const rte::PlayerStreamData* streamData) override;
 
 };
 
@@ -39,6 +49,7 @@ public:
 	void UnInitAgora();
 	void onStateChanged(rte::PlayerState old_state, rte::PlayerState new_state,rte::Error* err) override;
 	void onEvent(rte::PlayerEvent event) override;
+	void onStreamDataReceived(const rte::PlayerStreamData* streamData) override;
 	enum
 	{
 		IDD = IDD_DIALOG_RTE_PLAYER
@@ -80,6 +91,7 @@ private:
 	afx_msg LRESULT OnPrepared(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnPlayerStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnPlayerOnEvent(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnPlayerStreamData(WPARAM wParam, LPARAM lParam);
 	CListBox mListInfo;
 	CStatic mVideoWnd;
 };

@@ -15,6 +15,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    if (@available(iOS 13.0, *)) {
+        // UIKit creates the window using the scene storyboard configuration.
+    } else {
+        self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateInitialViewController];
+        [self.window makeKeyAndVisible];
+    }
     return YES;
 }
 

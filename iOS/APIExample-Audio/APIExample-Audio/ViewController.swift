@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Floaty
 
 struct MenuSection {
     var name: String
@@ -28,37 +27,25 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Token)".localized, storyboard: "JoinChannelAudioToken", controller: ""),
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
-        MenuSection(name: "Anvanced", rows: [
-            MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
+        MenuSection(name: "Advanced", rows: [
+            MenuItem(name: "Voice Effects".localized, storyboard: "VoiceChanger", controller: ""),
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: ""),
-            MenuItem(name: "Custom Audio Source(PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
+            MenuItem(name: "Custom Audio Source (PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
             MenuItem(name: "Audio Mixing".localized, storyboard: "AudioMixing", controller: ""),
-            MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
-            MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
+            MenuItem(name: "Pre-call Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio"),
         ]),
     ]
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        Floaty.global.button.addItem(title: "Send Logs", handler: {item in
-            LogUtils.writeAppLogsToDisk()
-            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
-            activity.modalPresentationStyle = .popover
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                activity.popoverPresentationController?.sourceView = Floaty.global.button
-            }
-            self.present(activity, animated: true, completion: nil)
-        })
-        
-        Floaty.global.button.addItem(title: "Clean Up", handler: {item in
-            LogUtils.cleanUp()
-        })
-        Floaty.global.button.isDraggable = true
-        Floaty.global.show()
+    private let logButton = LogFloatingButton()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // The navigation view survives pushes to individual examples.
+        logButton.show(in: navigationController?.view ?? view)
     }
-    
+
     @IBAction func onSettings(_ sender:UIBarButtonItem) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }

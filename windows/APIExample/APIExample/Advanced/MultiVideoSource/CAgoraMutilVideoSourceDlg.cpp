@@ -11,6 +11,30 @@
 
 IMPLEMENT_DYNAMIC(CAgoraMutilVideoSourceDlg, CDialogEx)
 
+namespace {
+bool GetPrimaryDisplayId(IRtcEngine* rtcEngine, int64_t& displayId)
+{
+	SIZE sourceSize = { 64, 64 };
+	IScreenCaptureSourceList* sources = rtcEngine->getScreenCaptureSources(sourceSize, sourceSize, true);
+	if (!sources)
+		return false;
+
+	bool found = false;
+	for (unsigned int i = 0; i < sources->getCount(); ++i) {
+		ScreenCaptureSourceInfo source = sources->getSourceInfo(i);
+		if (source.type != ScreenCaptureSourceType_Screen)
+			continue;
+
+		displayId = source.sourceId;
+		found = true;
+		if (source.primaryMonitor)
+			break;
+	}
+	sources->release();
+	return found;
+}
+}
+
 CAgoraMutilVideoSourceDlg::CAgoraMutilVideoSourceDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD, pParent)
 {
@@ -1073,17 +1097,23 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen()
 	std::string szChannelId = cs2utf8(strChannelName);
 
 	if (!m_bStartScreenSharing) {
-
-		agora::rtc::Rectangle rc;
 		ScreenCaptureParameters scp;
 		scp.frameRate = 15;
 		scp.bitrate = 0;
-		HWND hWnd = ::GetDesktopWindow();
-		RECT destop_rc;
-		::GetWindowRect(hWnd, &destop_rc);
-		scp.dimensions.width = destop_rc.right - destop_rc.left;
-		scp.dimensions.height = destop_rc.bottom - destop_rc.top;
-		m_rtcEngine->startScreenCaptureByScreenRect(rc, rc, scp);
+		int64_t displayId = 0;
+		if (!GetPrimaryDisplayId(m_rtcEngine, displayId)) {
+			AfxMessageBox(_T("No screen is available for capture"));
+			return;
+		}
+
+		agora::rtc::Rectangle regionRect;
+		int ret = m_rtcEngine->startScreenCaptureByDisplayId(displayId, regionRect, scp);
+		if (ret != 0) {
+			CString str;
+			str.Format(_T("start screen capture failed: %d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
+			return;
+		}
 
 		screenConnection.localUid = generateUid();
 		m_screenEventHandler.SetId(screenConnection.localUid);
@@ -1111,10 +1141,19 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen()
 		options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		// joinChannelEx secondary camera capture(broadcaster)
 		screenConnection.channelId = szChannelId.data();
-		int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, screenConnection, options2, &m_screenEventHandler);
+		ret = m_rtcEngine->joinChannelEx(APP_TOKEN, screenConnection, options2, &m_screenEventHandler);
 		CString str;
 		str.Format(_T("joinChannelEx: %d"), ret);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
+		if (ret != 0) {
+			m_rtcEngine->stopPreview(VIDEO_SOURCE_SCREEN);
+			m_rtcEngine->stopScreenCapture();
+			canvas.view = nullptr;
+			m_rtcEngine->setupLocalVideo(canvas);
+			m_videoWnds[4].Reset();
+			m_btnScreenCapture.SetWindowText(MultiVideoSourceStartCapture);
+			return;
+		}
 	}
 	else {
 		VideoCanvas canvas;
@@ -1141,4 +1180,3 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonCaptureScreen()
 	m_bStartScreenSharing = !m_bStartScreenSharing;
 
 }
-

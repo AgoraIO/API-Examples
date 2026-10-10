@@ -25,7 +25,8 @@ macOS/
 │   │           └── SKILL.md          # Per-example agent guide (present or forthcoming)
 │   ├── Common/              # Shared utilities (KeyCenter, GlobalSettings, LogUtils, Util)
 │   ├── Resources/
-│   ├── Base.lproj/          # Storyboard and localization
+│   ├── Base.lproj/          # Base storyboards
+│   ├── zh-Hans.lproj/       # Simplified Chinese project localization
 │   ├── AppDelegate.swift
 │   └── ViewController.swift # Main window controller
 ├── SimpleFilter/            # Specialized filter example
@@ -33,10 +34,9 @@ macOS/
 ├── APIExample.xcworkspace/  # Xcode workspace
 ├── libs/                    # SDK libraries
 ├── Pods/                    # CocoaPods dependencies
-├── .agent/skills/           # Agent skills
-│   ├── create-api-example/
-│   ├── find-api-example/
-│   └── migrate-api-to-project/
+├── .agents/skills/query-cases/  # Read-only case and registration discovery
+├── .agents/skills/upsert-case/  # Add or modify a case
+├── .agents/skills/review-case/  # Review lifecycle, threading, and conventions
 ├── AGENTS.md                # Agent guide
 └── ARCHITECTURE.md          # This file
 ```
@@ -69,7 +69,7 @@ All examples are registered in `APIExample/ViewController.swift` via a menu or l
 ### Common Utilities
 
 All examples share utilities from `APIExample/Common/`:
-- `KeyCenter` — App ID and token
+- `KeyCenter` — App ID and optional Certificate
 - `GlobalSettings` — Shared runtime configuration
 - `LogUtils` — SDK log path
 - `Util` — Privatization configuration
@@ -78,12 +78,12 @@ All examples share utilities from `APIExample/Common/`:
 
 | Case | Path | Key APIs | Description |
 |------|------|----------|-------------|
-| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/` | `createAgoraRtcEngine()`, `joinChannel()`, `leaveChannel()`, `destroy()` | Basic audio call — join channel and manage audio stream |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/` | `createAgoraRtcEngine()`, `setAudioScenario()`, `joinChannel()`, `leaveChannel()`, `destroy()` | Basic audio call — select an audio scenario, join a channel, and manage the audio stream |
 | JoinChannelVideo | `Examples/Basic/JoinChannelVideo/` | `createAgoraRtcEngine()`, `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()`, `leaveChannel()`, `destroy()` | Basic video call — join channel and render local/remote video |
 | JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/` | `createAgoraRtcEngine()`, `joinChannel()` with token, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
 | JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/` | `createAgoraRtcEngine()`, `joinChannel()`, `startAudioRecording()`, `stopAudioRecording()` | Video call with local audio recording |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `setBeautyEffectOptions()`, `setVideoEncoderConfiguration()` | Beauty filter and enhancement effects |
-| AudioMixing | `Examples/Advanced/AudioMixing/` | `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()` | Audio file mixing and playback control |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Beauty filter and enhancement effects |
+| AudioMixing | `Examples/Advanced/AudioMixing/` | `setAudioScenario()`, `startAudioMixing()`, `stopAudioMixing()`, `pauseAudioMixing()`, `resumeAudioMixing()` | Audio scenario selection, file mixing, and playback control |
 | ChannelMediaRelay | `Examples/Advanced/ChannelMediaRelay/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Relay media streams across multiple channels |
 | ContentInspect | `Examples/Advanced/ContentInspect/` | `enableContentInspect()`, `disableContentInspect()` | Content inspection and moderation |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Custom data stream creation and messaging |
@@ -93,10 +93,9 @@ All examples share utilities from `APIExample/Common/`:
 | CustomVideoSourceMediaIO | `Examples/Advanced/CustomVideoSourceMediaIO/` | `setExternalVideoSource()`, `pushVideoFrame()` with MediaIO | Custom video source with media I/O |
 | CustomVideoSourcePush | `Examples/Advanced/CustomVideoSourcePush/` | `setExternalVideoSource()`, `pushVideoFrame()` | Custom video source push |
 | CustomVideoSourcePushMulti | `Examples/Advanced/CustomVideoSourcePushMulti/` | `setExternalVideoSource()`, `pushVideoFrame()` with multiple sources | Multiple custom video sources |
-| FaceCapture | `Examples/Advanced/FaceCapture/` | `enableFaceDetection()`, `getFaceDetectionResult()` | Face detection and capture |
 | JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/` | `createRtcChannel()`, `joinChannel()` on multiple channels | Join and manage multiple channels simultaneously |
-| LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `startRtmpStreamWithTranscoding()`, `stopRtmpStream()` | RTMP live streaming with transcoding |
-| LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoding()`, `updateLocalTranscodingConfig()`, `stopLocalVideoTranscoding()` | Local video transcoding and composition |
+| LiveStreaming | `Examples/Advanced/LiveStreaming/` | `setClientRole()`, `addVideoWatermark()` with `WatermarkConfig`, `startRtmpStreamWithTranscoding()`, `stopRtmpStream()` | Live streaming with watermark configuration and RTMP transcoding |
+| LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `getScreenCaptureSources()`, `startLocalVideoTranscoder()`, `updateLocalTranscoderConfiguration()`, `stopLocalVideoTranscoder()` | Local video transcoding and composition |
 | MediaPlayer | `Examples/Advanced/MediaPlayer/` | `createMediaPlayer()`, `open()`, `play()`, `pause()`, `stop()` | Media file playback and control |
 | MultiCameraSourece | `Examples/Advanced/MultiCameraSourece/` | `enumerateDevices()`, `setDevice()` with multiple cameras | Multiple camera source selection |
 | Multipath | `Examples/Advanced/Multipath/` | `enableMultipath()`, `setMultipathConfig()` | Multipath redundancy for reliability |
@@ -108,7 +107,7 @@ All examples share utilities from `APIExample/Common/`:
 | RtePlayer | `Examples/Advanced/RtePlayer/` | `createMediaPlayer()`, `open()` with RTE protocol | RTE protocol media playback |
 | RTMPStreaming | `Examples/Advanced/RTMPStreaming/` | `startRtmpStreamWithTranscoding()`, `updateRtmpTranscodingConfig()`, `stopRtmpStream()` | RTMP streaming with live transcoding |
 | ScreenShare | `Examples/Advanced/ScreenShare/` | `startScreenCapture()`, `updateScreenCaptureParameters()`, `stopScreenCapture()` | Screen sharing and capture |
-| SimpleFilter | `Examples/Advanced/SimpleFilter/` | `setVideoEncoderConfiguration()`, `setBeautyEffectOptions()` | Simple video filter effects |
+| SimpleFilter | `Examples/Advanced/SimpleFilter/` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `onEventWithContext()` | Simple audio and video filter extensions with context-aware event callbacks |
 | Simulcast | `Examples/Advanced/Simulcast/` | `setSimulcastConfig()`, `enableSimulcast()` | Simulcast streaming with multiple bitrates |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/` | `getLocalSpatialAudioEngine()`, `updateSelfPosition()`, `updateRemotePosition()` | 3D spatial audio positioning |
 | StreamEncryption | `Examples/Advanced/StreamEncryption/` | `enableEncryption()`, `setEncryptionConfig()` | Stream encryption and security |
@@ -117,39 +116,28 @@ All examples share utilities from `APIExample/Common/`:
 
 ## Engine Lifecycle
 
-```
-1. Create Engine
-   createAgoraRtcEngine()
-   
-2. Initialize Engine
-   initialize(AgoraRtcEngineConfig)
-   
-3. Enable Features (optional)
-   enableVideo(), enableAudio()
-   
-4. Setup Local Media (optional)
-   setupLocalVideo(), startAudioMixing()
-   
-5. Join Channel
-   joinChannel(token, channelName, uid)
-   
-6. Handle Callbacks
-   onJoinChannelSuccess(), onUserJoined(), onUserOffline()
-   
-7. Leave Channel
-   leaveChannel()
-   
-8. Destroy Engine
-   destroy()
-```
+The main case controller creates its engine using
+`AgoraRtcEngineKit.sharedEngine(with:delegate:)` and `AgoraRtcEngineConfig`. After media
+configuration and permission checks, it joins with
+`joinChannel(byToken:channelId:uid:mediaOptions:)`.
+
+The host calls `viewWillBeRemovedFromSplitView()` when switching cases. Cleanup invalidates
+pending Token/join requests, stops case-owned media, calls `leaveChannel(nil)` and
+`AgoraRtcEngineKit.destroy()`, then clears the engine reference. SDK delegate callbacks may
+arrive on background threads; AppKit updates go to the main queue.
+
+See [upsert-case](.agents/skills/upsert-case/SKILL.md) and
+[review-case](.agents/skills/review-case/SKILL.md) for implementation and verification steps.
 
 ## Token Flow
 
-Token is obtained from `KeyCenter.swift` and passed to `joinChannel()`:
+`KeyCenter` supplies AppId and optional Certificate. The basic case uses
+`NetworkManager.shared.generateToken(channelName:uid:success:)` to obtain a Token for the
+same channel and UID passed to `joinChannel(byToken:channelId:uid:mediaOptions:)`. A case may
+also expose explicit Token input. There is no `KeyCenter.Token` API.
 
-```swift
-let token = KeyCenter.Token(channelName: channelName)
-agoraKit.joinChannel(byToken: token, channelName: channelName, info: nil, uid: 0)
-```
-
-For production, tokens should be generated server-side and refreshed before expiration.
+When Certificate is absent, the helper returns nil for projects that do not require Token
+authentication. When authentication is required, handle a failed request explicitly, and
+refresh expiring tokens using `renewToken(_:)`. Before using an asynchronous response,
+confirm the request still belongs to the active case and engine. Production tokens should
+be generated on a server.

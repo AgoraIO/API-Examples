@@ -25,12 +25,14 @@ Configure your Agora App ID in `APIExample/Common/KeyCenter.swift`:
 struct KeyCenter {
     static let AppId: String = "<#YOUR_APP_ID#>"
     
-    // Token is optional for testing, but required for production
-    static func Token(channelName: String) -> String {
-        return "<#YOUR_TOKEN#>"
-    }
+    static let Certificate: String? = nil
 }
 ```
+
+The current KeyCenter has AppId and Certificate only. Cases obtain tokens through
+`NetworkManager.shared.generateToken(channelName:uid:success:)` in
+`APIExample/Common/NetworkManager/NetworkManager.swift`. Never stage real credentials in
+this tracked configuration file.
 
 ## Architecture Red Lines
 
@@ -61,9 +63,10 @@ All work must conform to the rules defined in `ARCHITECTURE.md`:
 
 ### Use Project-Level SKILLs
 
-For broader tasks, use the skills in `.agent/skills/`:
+For broader tasks, use the skills in `.agents/skills/`:
 
 | Task | Skill | When to use |
 |------|-------|-------------|
-| Add or modify an example | `.agent/skills/upsert-case/` | Need to create a new API demo or update an existing one |
-| Code review | `.agent/skills/review-case/` | Review example code for lifecycle, thread safety, and convention compliance |
+| Find an existing example | `.agents/skills/query-cases/` | Need to locate a case by feature or API and verify its menu/storyboard registration |
+| Add or modify an example | `.agents/skills/upsert-case/` | Need to create a new API demo or update an existing one |
+| Code review | `.agents/skills/review-case/` | Review example code for lifecycle, thread safety, and convention compliance |

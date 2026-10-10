@@ -16,9 +16,12 @@
         <item>Channel1</item>
     </string-array>
     <string-array name="audioScenario">
-        <item>DEFAULT</item>
-        <item>GAME_STREAMING</item>
-        <item>CHATROOM</item>
+        <item>AUDIO_SCENARIO_DEFAULT</item>
+        <item>AUDIO_SCENARIO_GAME_STREAMING</item>
+        <item>AUDIO_SCENARIO_CHATROOM</item>
+        <item>AUDIO_SCENARIO_CHORUS</item>
+        <item>AUDIO_SCENARIO_MEETING</item>
+        <item>AUDIO_SCENARIO_AI_CLIENT</item>
     </string-array>
     <string-array name="audioChatBeautifier">
         <item>OFF</item>
@@ -204,7 +207,6 @@
         <item>VD_960x720</item>
         <item>VD_1280x720</item>
         <item>VD_1920x1080</item>
-        <item>VD_1920x1080</item>
         <item>VD_2540x1440</item>
         <item>VD_3840x2160</item>
     </string-array>
@@ -259,10 +261,14 @@
         <item>@string/channel_profile_communication_1v1</item>
     </string-array>
     <string-array name="audio_route">
-        <item>@string/audio_route_speakerphone</item>
-        <item>@string/audio_route_earpiece</item>
+        <item>@string/audio_route_default</item>
         <item>@string/audio_route_headset</item>
+        <item>@string/audio_route_earpiece</item>
+        <item>@string/audio_route_headset_no_mic</item>
+        <item>@string/audio_route_speakerphone</item>
+        <item>@string/audio_route_loudspeaker</item>
         <item>@string/audio_route_headset_bluetooth</item>
+        <item>@string/audio_route_headset_typec</item>
     </string-array>
 
     <string-array name="third_party_players">
@@ -338,6 +344,7 @@
         <item>APPLICATION_SCENARIO_1V1</item>
     </string-array>
     <string-array name="video_module_postion">
+        <item>VIDEO_MODULE_POSITION_POST_CAPTURER</item>
         <item>VIDEO_MODULE_POSITION_PRE_RENDERER</item>
         <item>VIDEO_MODULE_POSITION_PRE_ENCODER</item>
         <item>VIDEO_MODULE_POSITION_POST_CAPTURER_ORIGIN</item>
@@ -396,20 +403,37 @@
     </string-array>
 
     <string-array name="agora_beauty_style">
-        <item>模板女</item>
-        <item>模板男</item>
-        <item>模板自然</item>
+        <item>@string/agora_beauty_style_basic</item>
+        <item>@string/agora_beauty_style_ordinary</item>
+        <item>@string/agora_beauty_style_anchor</item>
+    </string-array>
+
+    <string-array name="agora_beauty_style_keys">
+        <item>Beauty-Basic</item>
+        <item>Beauty-Ordinary</item>
+        <item>Beauty-Anchor</item>
     </string-array>
 
     <string-array name="agora_makeup_style">
-        <item>学妹妆</item>
-        <item>学姐妆</item>
+        <item>@string/agora_makeup_style_young</item>
+        <item>@string/agora_makeup_style_mature</item>
+    </string-array>
+
+    <string-array name="agora_makeup_style_keys">
+        <item>Makeup-Young</item>
+        <item>Makeup-Mature</item>
     </string-array>
 
     <string-array name="agora_filter_style">
-        <item>原生</item>
-        <item>冷白</item>
-        <item>嫩白</item>
+        <item>@string/agora_filter_style_daily</item>
+        <item>@string/agora_filter_style_moonlight</item>
+        <item>@string/agora_filter_style_cream</item>
+    </string-array>
+
+    <string-array name="agora_filter_style_keys">
+        <item>Filter-Daily</item>
+        <item>Filter-Moonlight</item>
+        <item>Filter-Cream</item>
     </string-array>
 
     <string-array name="layer_mode">

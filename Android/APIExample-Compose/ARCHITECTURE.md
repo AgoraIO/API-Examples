@@ -7,16 +7,16 @@ APIExample-Compose/
 ├── gradle.properties                        # rtc_sdk_version
 ├── AGENTS.md                                # Agent entry point — build commands, red lines, skill index
 ├── ARCHITECTURE.md                          # This file — directory layout, patterns, registration
-├── .kiro/
-│   ├── hooks/
-│   │   └── build-on-task-complete.json      # Runs assembleDebug after each spec task completes
-│   ├── skills/
-│   │   ├── add-new-case/SKILL.md            # Step-by-step guide for adding a new Compose case
-│   │   └── query-cases/SKILL.md             # Query existing cases by API, group, or list position
-│   └── steering/
-│       ├── project-routing.md               # Which sub-project to use; hard constraints (always included)
-│       ├── coding-standards.md              # RtcEngine lifecycle, Kotlin/Compose rules (always included)
-│       └── complex-case-spec.md             # Spec workflow for complex cases (manual inclusion)
+├── .agents/
+│   └── skills/
+│       ├── upsert-case/
+│       │   ├── SKILL.md                     # Add or update a Compose case
+│       │   └── references/
+│       │       └── composable-template.kt   # Compose lifecycle/state reference skeleton
+│       ├── query-cases/
+│       │   └── SKILL.md                     # Query existing cases by API, group, or list position
+│       └── review-case/
+│           └── SKILL.md                     # Review a Compose case against project red lines
 └── app/src/main/
     ├── AndroidManifest.xml
     ├── assets/                              # Audio/video sample files
@@ -29,37 +29,37 @@ APIExample-Compose/
         │
         ├── model/
         │   ├── Example.kt                   # data class: name: Int, content: @Composable
-        │   ├── Examples.kt                  # Hardcoded lists: BasicExampleList, AdvanceExampleList
+        │   ├── Examples.kt                  # Hardcoded lists: BasicExampleList, AdvancedExampleList
         │   └── Components.kt                # Groups the two lists into Components for the home screen
         │
         ├── samples/                         # One .kt file per case — all @Composable
-        │   ├── JoinChannelVideoToken.kt     # Basic: "Join Video Channel (With Token)"
-        │   ├── JoinChannelVideo.kt          # Basic: "Join Video Channel" — canonical reference
-        │   ├── JoinChannelAudio.kt          # Basic: "Join Audio Channel"
+        │   ├── JoinChannelVideoToken.kt     # Basic: "Join a channel (Token)"
+        │   ├── JoinChannelVideo.kt          # Basic: "Join a channel (Video)" — canonical reference
+        │   ├── JoinChannelAudio.kt          # Basic: "Join a channel (Audio)"
         │   ├── LiveStreaming.kt             # Advanced: "Live Streaming" — setClientRole
         │   ├── RTMPStreaming.kt             # Advanced: "RTMP Streaming" — push to CDN
         │   ├── MediaMetadata.kt             # Advanced: "Media Metadata" — send/receive metadata
         │   ├── VoiceEffects.kt              # Advanced: "Voice Effects" — voice beautifier/effects
-        │   ├── OriginAudioData.kt           # Advanced: "Origin Audio Data" — raw audio processing
-        │   ├── CustomAudioSource.kt         # Advanced: "Custom Audio Source" — push external audio
+        │   ├── OriginAudioData.kt           # Advanced: "Raw Audio Data" — raw audio processing
+        │   ├── CustomAudioSource.kt         # Advanced: "Custom Audio Source (PCM)" — push external audio
         │   ├── CustomAudioRender.kt         # Advanced: "Custom Audio Render" — pull audio rendering
-        │   ├── OriginVideoData.kt           # Advanced: "Origin Video Data" — raw video processing
+        │   ├── OriginVideoData.kt           # Advanced: "Raw Video Data" — raw video processing
         │   ├── CustomVideoSource.kt         # Advanced: "Custom Video Source" — push external video
         │   ├── CustomVideoRender.kt         # Advanced: "Custom Video Render" — custom video rendering
         │   ├── PictureInPicture.kt          # Advanced: "Picture In Picture" — PiP mode
-        │   ├── JoinMultiChannel.kt          # Advanced: "Join Multi Channel" — multi-channel join
-        │   ├── ChannelEncryption.kt         # Advanced: "Channel Encryption" — built-in encryption
+        │   ├── JoinMultiChannel.kt          # Advanced: "Join Multiple Channels" — multi-channel join
+        │   ├── ChannelEncryption.kt         # Advanced: "Stream Encryption" — built-in encryption
         │   ├── PlayAudioFiles.kt            # Advanced: "Play Audio Files" — audio mixing
-        │   ├── PreCallTest.kt               # Advanced: "Pre Call Test" — network/device test
+        │   ├── PreCallTest.kt               # Advanced: "Pre-call Test" — network/device test
         │   ├── MediaRecorder.kt             # Advanced: "Media Recorder" — record media streams
         │   ├── MediaPlayer.kt               # Advanced: "Media Player" — play media files
-        │   ├── ScreenSharing.kt             # Advanced: "Screen Sharing" — screen capture & share
-        │   ├── VideoProcessExtension.kt     # Advanced: "Video Process Extension" — video filter
-        │   ├── RhythmPlayer.kt              # Advanced: "Rhythm Player" — metronome playback
+        │   ├── ScreenSharing.kt             # Advanced: "Screen Share" — screen capture & share
+        │   ├── VideoProcessExtension.kt     # Advanced: "Video Process" — video filter
+        │   ├── RhythmPlayer.kt              # Hidden — APIs deprecated since RTC SDK 4.6.0
         │   ├── LocalVideoTranscoding.kt     # Advanced: "Local Video Transcoding" — local compositing
         │   ├── SendDataStream.kt            # Advanced: "Send Data Stream" — data channel messaging
-        │   ├── HostAcrossChannel.kt         # Advanced: "Host Across Channel" — cross-channel relay
-        │   ├── SpatialSound.kt              # Advanced: "Spatial Sound" — 3D spatial audio
+        │   ├── HostAcrossChannel.kt         # Advanced: "Media Channel Relay" — cross-channel relay
+        │   ├── SpatialSound.kt              # Advanced: "Spatial Audio" — 3D spatial audio
         │
         ├── ui/
         │   ├── home/
@@ -103,7 +103,7 @@ APIExample-Compose/
 | Media Metadata | `MediaMetadata.kt` | `joinChannel()`, `enableVideo()`, `registerMediaMetadataObserver()` | Sends and receives video metadata through the IMetadataObserver interface |
 | Voice Effects | `VoiceEffects.kt` | `joinChannel()`, `enableAudio()`, `setVoiceBeautifierPreset()`, `setVoiceConversionPreset()`, `setAudioEffectPreset()`, `setAudioEffectParameters()`, `setAINSMode()` | Applies voice beautifier, voice changer, style transformation, and noise suppression presets |
 | Origin Audio Data | `OriginAudioData.kt` | `joinChannel()`, `enableAudio()`, `registerAudioFrameObserver()`, `setRecordingAudioFrameParameters()`, `setPlaybackAudioFrameParameters()` | Accesses and rewrites raw audio frames via the IAudioFrameObserver interface |
-| Custom Audio Source | `CustomAudioSource.kt` | `joinChannel()`, `enableAudio()`, `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `destroyCustomAudioTrack()`, `enableCustomAudioLocalPlayback()` | Pushes external audio from a file into a custom audio track |
+| Custom Audio Source (PCM) | `CustomAudioSource.kt` | `joinChannel()`, `enableAudio()`, `createCustomAudioTrack()`, `pushExternalAudioFrame()`, `destroyCustomAudioTrack()`, `enableCustomAudioLocalPlayback()` | Pushes external audio from a file into a custom audio track |
 | Custom Audio Render | `CustomAudioRender.kt` | `joinChannel()`, `enableAudio()`, `setExternalAudioSink()`, `pullPlaybackAudioFrame()` | Pulls remote audio frames and renders them through a custom AudioTrack player |
 | Origin Video Data | `OriginVideoData.kt` | `joinChannel()`, `enableVideo()`, `registerVideoFrameObserver()` | Captures raw video frames via IVideoFrameObserver for screenshot functionality |
 | Custom Video Source | `CustomVideoSource.kt` | `joinChannel()`, `enableVideo()`, `pushExternalVideoFrameById()` | Pushes external video frames in I420, NV21, NV12, or Texture2D format |
@@ -117,7 +117,7 @@ APIExample-Compose/
 | Media Player | `MediaPlayer.kt` | `joinChannel()`, `enableVideo()`, `createMediaPlayer()`, `open()`, `play()`, `stop()`, `updateChannelMediaOptions()` | Plays media files and publishes the player track to the channel |
 | Screen Sharing | `ScreenSharing.kt` | `joinChannel()`, `enableVideo()`, `startScreenCapture()`, `stopScreenCapture()`, `updateScreenCaptureParameters()`, `setScreenCaptureScenario()` | Captures and shares the device screen with scenario and audio options |
 | Video Process Extension | `VideoProcessExtension.kt` | `joinChannel()`, `enableVideo()`, `setBeautyEffectOptions()`, `setLowlightEnhanceOptions()`, `setColorEnhanceOptions()`, `setVideoDenoiserOptions()`, `enableVirtualBackground()`, `enableExtension()` | Applies beauty filters, low-light enhancement, color enhancement, denoiser, and virtual background |
-| Rhythm Player | `RhythmPlayer.kt` | `joinChannel()`, `startRhythmPlayer()`, `stopRhythmPlayer()`, `updateChannelMediaOptions()` | Plays a metronome beat track and publishes it to the channel |
+| Rhythm Player (hidden) | `RhythmPlayer.kt` | `joinChannel()`, `startRhythmPlayer()`, `stopRhythmPlayer()`, `updateChannelMediaOptions()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | Local Video Transcoding | `LocalVideoTranscoding.kt` | `joinChannel()`, `enableVideo()`, `startLocalVideoTranscoder()`, `stopLocalVideoTranscoder()`, `startCameraCapture()`, `stopCameraCapture()` | Composites camera and media player streams into a single transcoded video |
 | Send Data Stream | `SendDataStream.kt` | `joinChannel()`, `enableVideo()`, `createDataStream()`, `sendStreamMessage()` | Sends and receives real-time data messages through a data channel |
 | Host Across Channel | `HostAcrossChannel.kt` | `joinChannel()`, `enableVideo()`, `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relays media streams from one channel to another for cross-channel hosting |
@@ -127,11 +127,11 @@ APIExample-Compose/
 
 Registration is **manual** — no reflection, no annotation scanning.
 
-**To add a case, edit exactly two files:**
+**To add a case, update at least four project-local artifacts:**
 
-**1. `model/Examples.kt`** — append to `BasicExampleList` or `AdvanceExampleList`:
+**1. `model/Examples.kt`** — append to `BasicExampleList` or `AdvancedExampleList`:
 ```kotlin
-val AdvanceExampleList = listOf(
+val AdvancedExampleList = listOf(
     // … existing entries …
     Example(R.string.example_my_new_case) { MyNewCase() }
 )
@@ -143,8 +143,14 @@ val AdvanceExampleList = listOf(
 fun MyNewCase() { … }
 ```
 
-No `nav_graph.xml`, no `@Example` annotation, no action ID. `NavGraph.kt` routes to cases by their
-index in the list — the order in `Examples.kt` is the display order.
+**3. `res/values/strings.xml`** — add the user-facing example title.
+
+**4. `ARCHITECTURE.md`** — update the case index so discovery tooling stays current.
+
+Update `res/values-zh/strings.xml` too when the case title should remain localized alongside the existing examples.
+
+No `nav_graph.xml`, no `@Example` annotation, and no action ID. `NavGraph.kt` routes to cases by their
+position in the list — the order in `Examples.kt` is the display order inside the target list.
 
 ## Composable Case Pattern
 
@@ -160,13 +166,13 @@ MyNewCase()                     ← public, stateful: owns RtcEngine, state, per
 val rtcEngine = remember {
     RtcEngine.create(RtcEngineConfig().apply {
         mContext = context
-        mAppId = AgoraConfig.getAppId()
+        mAppId = BuildConfig.AGORA_APP_ID
         mEventHandler = object : IRtcEngineEventHandler() { … }
     })
 }
-DisposableEffect(lifecycleOwner) {  // key must be lifecycleOwner, not Unit
+DisposableEffect(rtcEngine) {  // cleanup belongs to this engine
     onDispose {
-        if (isJoined) rtcEngine.leaveChannel()
+        rtcEngine.leaveChannel()
         RtcEngine.destroy()
     }
 }
@@ -184,9 +190,13 @@ permissionLauncher.launch(arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.per
 ```
 
 **State rules:**
-- `rememberSaveable` — values that must survive rotation (channelName, isJoined, uid)
-- `remember` — objects that must not be recreated (RtcEngine, collections)
+- `rememberSaveable` — user inputs that should survive recreation, such as channelName
+- `remember` — the engine, non-serializable objects, and live session state (isJoined, assigned uid); a new engine starts without a session
 - `IRtcEngineEventHandler` callbacks can mutate Compose state directly — the snapshot system is thread-safe
+
+`onDispose` runs when its effect leaves composition, even with a constant `Unit` key.
+Keys control effect replacement. If a lifecycle owner becomes a key, engine creation must
+follow the same ownership changes so the UI never reuses an engine that was just destroyed.
 
 ## Token Flow
 

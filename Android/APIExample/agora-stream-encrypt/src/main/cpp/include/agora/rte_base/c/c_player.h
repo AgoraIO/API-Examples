@@ -368,6 +368,38 @@ typedef enum RtePlayerMetadataType {
   kRtePlayerMetadataTypeSei
 } RtePlayerMetadataType;
 
+/**
+ * @brief Audio volume information for a stream.
+ *
+ * @since v4.5.3
+ *
+ * @details This object contains the audio volume information for a stream, including the channel
+ * it belongs to, the stream id (which corresponds to the RTC uid), and the current volume level.
+ */
+typedef struct RteStreamAudioVolumeInfo {
+  /** The RTC channel name. */
+  char* channel_name;
+  /** The stream identifier. */
+  char* stream_id;
+  /** The audio volume. The value range is [0, 255]. */
+  int32_t volume;
+} RteStreamAudioVolumeInfo;
+
+/**
+ * @brief Stream data of the Player.
+ *
+ * @since v4.5.3
+ *
+ * @details This object contains the stream data of the Player, including the volume information of
+ * each audio stream before audio mixing.
+ */
+typedef struct RtePlayerStreamData {
+  /** Array of per-stream audio volume entries before audio mixing. */
+  RteStreamAudioVolumeInfo* audio_volumes;
+  /** Number of elements in audio_volumes. */
+  int32_t audio_volumes_cnt;
+} RtePlayerStreamData;
+
 typedef enum RteAudioDualMonoMode {
   RteAudioDualMonoStereo,
   RteAudioDualMonoLeft,
@@ -465,13 +497,43 @@ struct RtePlayerObserver {
 
   void (*on_audio_volume_indication)(RtePlayerObserver *observer,
                                          int32_t volume);
+
+  /**
+   * @brief Stream data callback.
+   *
+   * @since v4.5.3
+   *
+   * @details This callback reports the stream data of the Player. The current RtePlayerStreamData
+   * contains the volume information of each audio stream before audio mixing.
+   *
+   * @example If you use the Agora cloud transcoding service for audio mixing and use the Player to
+   * play the mixed audio RTE URL, you can use this callback to get the volume information of each
+   * audio stream before mixing.
+   *
+   * @param observer The player observer.
+   * @param stream_data The received stream data.
+   * @return void
+   */
+  void (*on_stream_data_received)(RtePlayerObserver *observer,
+                                RtePlayerStreamData *stream_data);
 };
 
 AGORA_RTE_API_C void RtePlayerInfoInit(RtePlayerInfo *info, RteError *err);
 AGORA_RTE_API_C void RtePlayerInfoCopy(RtePlayerInfo *dest, const RtePlayerInfo *src, RteError *err);
 AGORA_RTE_API_C void RtePlayerInfoDeinit(RtePlayerInfo *info, RteError *err);
 
+AGORA_RTE_API_C void RteStreamAudioVolumeInfoInit(RteStreamAudioVolumeInfo *info, RteError *err);
+AGORA_RTE_API_C void RteStreamAudioVolumeInfoDeinit(RteStreamAudioVolumeInfo *info, RteError *err);
+AGORA_RTE_API_C void RteStreamAudioVolumeInfoCopy(RteStreamAudioVolumeInfo *dest, const RteStreamAudioVolumeInfo *src, RteError *err);
+AGORA_RTE_API_C void RteStreamAudioVolumeInfoSetChannelName(RteStreamAudioVolumeInfo *info, const char *channel_name, RteError *err);
+AGORA_RTE_API_C void RteStreamAudioVolumeInfoSetStreamId(RteStreamAudioVolumeInfo *info, const char *stream_id, RteError *err);
+
+AGORA_RTE_API_C void RtePlayerStreamDataInit(RtePlayerStreamData *data, RteError *err);
+AGORA_RTE_API_C void RtePlayerStreamDataDeinit(RtePlayerStreamData *data, RteError *err);
+AGORA_RTE_API_C void RtePlayerStreamDataCopy(RtePlayerStreamData *dest, const RtePlayerStreamData *src, RteError *err);
+
 AGORA_RTE_API_C void RtePlayerStatsInit(RtePlayerStats *stats, RteError *err);
+AGORA_RTE_API_C void RtePlayerStatsCopy(RtePlayerStats *dest, const RtePlayerStats *src, RteError *err);
 AGORA_RTE_API_C void RtePlayerStatsDeinit(RtePlayerStats *stats, RteError *err);
 
 AGORA_RTE_API_C void RteMediaTrackInfoInit(RteMediaTrackInfo *info,

@@ -139,7 +139,7 @@ class AgoraBeautyMain: BaseViewController {
         })
         
         beautyManager = AgoraBeautyManager(agoraKit: agoraKit)
-        beautyManager.beautyMakeupStyle = "default makeup style".localized
+        beautyManager.beautyMakeupStyle = "Makeup-Young"
         beautyManager.makeUpEnable = false
         setupUI()
     }
@@ -154,8 +154,8 @@ class AgoraBeautyMain: BaseViewController {
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
-            AgoraRtcEngineKit.destroy()
             beautyManager.destory()
+            AgoraRtcEngineKit.destroy()
         }
     }
     
@@ -256,8 +256,8 @@ extension AgoraBeautyMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agorawarningcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
@@ -416,9 +416,13 @@ extension AgoraBeautyMain {
                 switchView.addTarget(self, action: #selector(makeupSwitchAction(_:)), for: .valueChanged)
                 valueView = switchView
             } else if type == "segment" {
-                let value = makeupList[i]["value"] as? [String] ?? []
+                let value = makeupList[i]["title"] as? [String] ?? []
                 let segmentView = UISegmentedControl(items: value)
-                segmentView.selectedSegmentIndex = Int(getDefaultSegmentValueForKey(key: key))
+                let defaultValue = Int(getDefaultSegmentValueForKey(key: key))
+                let values = makeupList[i]["value"] as? [Int] ?? []
+                let defaultIndex = values.firstIndex(of: defaultValue) ?? 0
+
+                segmentView.selectedSegmentIndex = defaultIndex
                 segmentView.addTarget(self, action: #selector(makeupSegmentAction(_:)), for: .valueChanged)
                 valueView = segmentView
             }
@@ -470,6 +474,8 @@ extension AgoraBeautyMain {
             return beautyManager.lashStrength
         } else if key == "browStrength" {
             return beautyManager.browStrength
+        } else if key == "wocanStrength" {
+            return beautyManager.wocanStrength
         }
         return 0
     }
@@ -497,6 +503,8 @@ extension AgoraBeautyMain {
             return beautyManager.lipStyle
         } else if key == "lipColor" {
             return beautyManager.lipColor
+        } else if key == "wocanStyle" {
+            return beautyManager.wocanStyle
         }
         return 0
     }
@@ -525,6 +533,8 @@ extension AgoraBeautyMain {
             beautyManager.lashStrength = value
         } else if key == "browStrength" {
             beautyManager.browStrength = value
+        } else if key == "wocanStrength" {
+            beautyManager.wocanStrength = value
         }
     }
     
@@ -544,7 +554,9 @@ extension AgoraBeautyMain {
         let index = view.tag - 1000
         let makeupList = beautyManager.makeupList
         let key = makeupList[index]["key"] as? String ?? ""
-        let value = Int32(view.selectedSegmentIndex)
+        let values = makeupList[index]["value"] as? [Int] ?? []
+        guard values.indices.contains(view.selectedSegmentIndex) else { return }
+        let value = Int32(values[view.selectedSegmentIndex])
         makeupParams[key] = value
         if key == "pupilStyle" {
             beautyManager.pupilStyle = value
@@ -568,6 +580,8 @@ extension AgoraBeautyMain {
             beautyManager.lipStyle = value
         } else if key == "lipColor" {
             beautyManager.lipColor = value
+        } else if key == "wocanStyle" {
+            beautyManager.wocanStyle = value
         }
     }
     
@@ -714,6 +728,6 @@ extension AgoraBeautyMain {
     
     @objc func beautyShapeSegmentAction(_ view: UISegmentedControl) {
         let style = AgoraFaceShapeStyle(rawValue: UInt(view.selectedSegmentIndex)) ?? .female
-        beautyManager.beautyShapeStyle = style == .male ? "Male Template Title".localized : "Female Template Title".localized
+        beautyManager.beautyShapeStyle = style == .male ? "Beauty-Ordinary" : "Beauty-Basic"
     }
 }

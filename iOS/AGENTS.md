@@ -24,6 +24,7 @@ SDK version: each project's `Podfile` specifies the version.
 ## Architecture Red Lines
 
 - Do NOT share source files, storyboards, or SDK dependencies between projects
+- Preserve the existing minimum iOS versions and availability checks; see [Deployment Targets and Lifecycle](ARCHITECTURE.md#deployment-targets-and-lifecycle).
 - Do NOT add video rendering APIs (`enableVideo`, `setupLocalVideo`) to `APIExample-Audio/`
 - Do NOT call SDK APIs on a background thread without dispatching UI updates to the main thread
 - Do NOT commit `KeyCenter.swift` / `KeyCenter.m` with real App IDs or certificates

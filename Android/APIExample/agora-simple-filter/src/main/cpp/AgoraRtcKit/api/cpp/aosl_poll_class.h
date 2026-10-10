@@ -20,20 +20,25 @@
 #include <api/aosl_poll.h>
 #include <api/cpp/aosl_ares_class.h>
 
-#if (__cplusplus >= 201103) || (defined (_MSC_VER) && _MSC_VER >= 1800)
-#include <memory>
-#endif
-
 #include <map>
 #include <vector>
 
-
+/**
+ * Convenience class for polling multiple aosl_ares_class objects.
+ * Remarks:
+ *      The class stores the watched refs, delegates the wait to aosl_poll(),
+ *      and preserves the subset that became signaled for indexed access after
+ *      poll() returns.
+ **/
 class aosl_poll_class {
 private:
 	std::map<aosl_ref_t, const aosl_ares_class *> poll_refs;
 	std::vector<const aosl_ares_class *> signaled_refs;
 
 public:
+	/**
+	 * Add an async-result object to the polling set.
+	 **/
 	void add (const aosl_ares_class &tail)
 	{
 		poll_refs [tail.ref ()] = &tail;
@@ -62,7 +67,15 @@ public:
 			add (*areses [i]);
 	}
 
-	/* poll the constructed async results */
+	/**
+	 * Poll the constructed async-result set.
+	 * Parameters:
+	 *        min: minimum number of signaled refs required to return;
+	 *      timeo: timeout in milliseconds.
+	 * Return value:
+	 *         >=0 number of signaled refs reported by aosl_poll();
+	 *          <0 failure.
+	 **/
 	int poll (size_t min, intptr_t timeo)
 	{
 		aosl_ref_t local_refs [32];
@@ -96,19 +109,25 @@ public:
 		return err;
 	}
 
-	/* total async results count */
+	/**
+	 * Total watched async-result count.
+	 **/
 	size_t total ()
 	{
 		return poll_refs.size ();
 	}
 
-	/* signaled async results count */
+	/**
+	 * Count of refs recorded as signaled by the last poll() call.
+	 **/
 	size_t signaled ()
 	{
 		return signaled_refs.size ();
 	}
 
-	/* operator for accessing the signaled async results */
+	/**
+	 * Indexed access to the refs signaled in the last poll() call.
+	 **/
 	const aosl_ares_class *operator [] (size_t idx)
 	{
 		if (idx < signaled_refs.size ())

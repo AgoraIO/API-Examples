@@ -1,5 +1,16 @@
 # ARCHITECTURE.md — APIExample-OC
 
+## Application Lifecycle
+
+The app and its extensions retain iOS 12 support. On iOS 12, `AppDelegate` creates the
+window and loads the initial controller from `Main.storyboard`. On iOS 13 and later,
+`Info.plist` declares a single application scene: UIKit loads `Main.storyboard` and
+assigns its window to `SceneDelegate`. Scene declarations and window APIs are guarded
+by iOS availability checks; the window helper retains its iOS 12 fallback.
+Do not rebuild the root controller on scene activation or end RTC sessions merely because
+the scene enters the background. Use a build toolchain that supports the deployment target;
+adopting the scene lifecycle does not require raising the minimum iOS version.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |
@@ -26,7 +37,7 @@
 | ScreenShare | `Examples/Advanced/ScreenShare/ScreenShare.m` | `startScreenCapture:`, `updateScreenCapture:`, `stopScreenCapture` | Screen capture and sharing via ReplayKit extension |
 | LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.m` | `startLocalVideoTranscoder:`, `startCameraCapture:config:`, `enableVirtualBackground:backData:segData:` | Composite multiple video sources locally before publishing |
 | VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.m` | `setBeautyEffectOptions:options:`, `enableVirtualBackground:backData:segData:`, `enableExtensionWithVendor:` | Built-in beauty, virtual background, and video enhancement |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.m` | `startRhythmPlayer:sound2:config:`, `stopRhythmPlayer` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/RhythmPlayer.m` | `startRhythmPlayer:sound2:config:`, `stopRhythmPlayer` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.m` | `createDataStream:config:`, `sendStreamMessage:data:` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.m` | `startOrUpdateChannelMediaRelay:`, `stopChannelMediaRelay`, `pauseAllChannelMediaRelay`, `resumeAllChannelMediaRelay` | Relay media stream to multiple destination channels |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.m` | `createMediaPlayerWithDelegate:`, `updateChannelWithMediaOptions:` | 3D spatial audio with media player integration |
@@ -48,6 +59,7 @@ APIExample-OC/
 └── APIExample-OC/
     ├── main.m
     ├── AppDelegate.h / .m
+    ├── SceneDelegate.h / .m                 # Window owned by the application scene
     ├── ViewController.h / .m                # Root menu controller — MenuItem registration lives here
     ├── Info.plist
     ├── APIExample-Bridging-Header.h
@@ -72,15 +84,15 @@ APIExample-OC/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming"
     │       ├── RTMPStreaming/               # "RTMP Streaming"
-    │       ├── VideoMetadata/               # "Video Metadata"
-    │       ├── VoiceChanger/                # "Voice Changer"
-    │       ├── CustomPcmAudioSource/        # "Custom Audio Source"
+    │       ├── VideoMetadata/               # "Media Metadata"
+    │       ├── VoiceChanger/                # "Voice Effects"
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
-    │       ├── CustomVideoSourcePush/       # "Custom Video Source (Push)"
+    │       ├── CustomVideoSourcePush/       # "Custom Video Source"
     │       ├── CustomVideoRender/           # "Custom Video Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── RawVideoData/                # "Raw Video Data"
-    │       ├── PictureInPicture/            # "Picture In Picture (iOS15+)"
+    │       ├── PictureInPicture/            # "Picture In Picture"
     │       ├── SimpleFilter/                # "Simple Filter Extension"
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
@@ -88,12 +100,12 @@ APIExample-OC/
     │       ├── MediaPlayer/                 # "Media Player"
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── VideoProcess/                # "Video Process"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── Simulcast/                   # "Simulcast"
     │       ├── Multipath/                   # "Multipath"
     │       └── LocalCompositeGraph/         # "Local Composite Graph"
@@ -121,12 +133,11 @@ Registration is **manual** via the `+[MenuSection menus]` method in `ViewControl
 
 Each example has its own `.storyboard` file. The VC with identifier `entry` (default `"EntryViewController"`) is instantiated directly from that storyboard.
 
-**To add a case, edit exactly two things:**
-1. Add a `MenuItem` to the `+[MenuSection menus]` method in `ViewController.m`:
-   ```objc
-   [[MenuItem alloc] initWithName:@"My New Case".localized storyboard:@"MyNewCase" controller:@""]
-   ```
-2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the `.h/.m` files and storyboard
+A registered case connects a `MenuItem` in `+[MenuSection menus]`, its `.h/.m` files, and
+its storyboard. The implementation must belong to the Xcode target's Sources build phase;
+the storyboard and new localized/media assets must belong to Resources. Follow
+[upsert-case](.agents/skills/upsert-case/SKILL.md) for the complete change procedure and
+update the Case Index when the case changes.
 
 ## Entry/Main ViewController Pattern
 
@@ -150,15 +161,25 @@ viewDidLoad    → [AgoraRtcEngineKit sharedEngineWithAppId:delegate:]
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear / dealloc
+willMoveToParentViewController: when parent == nil
                → [engine leaveChannel:]
                → [AgoraRtcEngineKit destroy]
 ```
 
+Navigation cleanup uses `willMoveToParentViewController:` with `parent == nil`, as shown in the
+upsert and review skills. Merely covering the controller does not end the case;
+`dealloc` is not the primary scene-exit hook.
+
 ## Token Flow
 
-```objc
-[[NetworkManager shared] generateTokenWithChannelName:channelName success:^(NSString *token) {
-    [self.agoraKit joinChannelByToken:token channelId:channelName uid:0 mediaOptions:options];
-}];
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.
+
+Import `APIExample_OC-swift.h` for the Swift `NetworkManager`. Its Objective-C selector is
+`generateTokenWithChannelName:uid:success:`; the Swift default UID is not an OC overload.

@@ -14,8 +14,8 @@
 /* Class = "NSMenuItem"; title = "1V3"; ObjectID = "VNU-so-ajb"; */
 "VNU-so-ajb.title" = "1V3";
 
-/* Class = "NSViewController"; title = "Join Channel Video"; ObjectID = "YjT-yy-DnJ"; */
-"YjT-yy-DnJ.title" = "Video Call/Live Streaming";
+/* Class = "NSViewController"; title = "Live Streaming"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "Live Streaming";
 
 /* Class = "NSMenuItem"; title = "1V8"; ObjectID = "cH4-ft-u77"; */
 "cH4-ft-u77.title" = "1V8";

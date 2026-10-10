@@ -28,11 +28,6 @@
 -keep class com.softsugar.**{*;}
 -keep class com.sensetime.**{*;}
 
-# bytedance
--keep class com.effectsar.**{*;}
--keep class com.bes.**{*;}
--keep class com.amazing.**{*;}
-
 # ijkplayer
 -keep class tv.danmaku.ijk.media.player.** {*;}
 -keep class tv.danmaku.ijk.media.player.IjkMediaPlayer{*;}

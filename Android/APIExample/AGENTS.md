@@ -30,7 +30,7 @@ Both are `false` by default. Do not enable unless the feature explicitly require
 - Do NOT use Jetpack Compose — this project is XML + ViewBinding only.
 - Each case Fragment must create and destroy its own `RtcEngine` instance.
 - Always call `engine.leaveChannel()` before `RtcEngine.destroy()` in `onDestroy()`.
-- Call `RtcEngine.destroy()` via `handler.post(RtcEngine::destroy)` — direct call blocks the main thread (ANR).
+- Existing cases defer `RtcEngine.destroy()` with `handler.post(RtcEngine::destroy)`. This handler uses the main Looper: posting defers work but does not move it off the UI thread. Never destroy from an SDK callback, and finish destruction before creating the next engine. If moving destruction to a worker, serialize teardown and subsequent initialization explicitly.
 - All `IRtcEngineEventHandler` callbacks run on a background thread — use `runOnUIThread()` for UI updates.
 - Always call `checkOrRequestPermission()` before `joinChannel()`.
 - `setParameters(...)` is required in every case for backend reporting — do not omit it.
@@ -40,9 +40,9 @@ Both are `false` by default. Do not enable unless the feature explicitly require
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| upsert-case | `.agent/skills/upsert-case/` | Add a new case or modify an existing one |
-| query-cases | `.agent/skills/query-cases/` | Query and browse existing cases |
-| review-case | `.agent/skills/review-case/` | Review a case against project red lines |
+| upsert-case | `.agents/skills/upsert-case/` | Add a new case or modify an existing one |
+| query-cases | `.agents/skills/query-cases/` | Query and browse existing cases |
+| review-case | `.agents/skills/review-case/` | Review a case against project red lines |
 
 ## Further Reading
 

@@ -261,7 +261,7 @@ class Config {
 };
 
 /**
- * The Rte class, which is the base interface of the Agora Real Time Engagement SDK.
+ * @brief The Rte class, which is the base interface of the Agora Real Time Engagement SDK.
  * @since v4.4.0
  */
 class Rte {

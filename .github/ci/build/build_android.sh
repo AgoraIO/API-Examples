@@ -104,7 +104,7 @@ if [ "$api_examples_branch_stripped" = "main" ]; then
     echo "Branch is main, skipping version consistency check (main branch is trusted)"
     echo "Using version: $SDK_VERSION"
 else
-    # Extract version number from branch name (supports formats like dev/4.6.2, release/4.6.2, etc.)
+    # Extract version number from branch name (supports formats like dev/4.7.0, release/4.7.0, etc.)
     BRANCH_NAME_VERSION=$(echo $api_examples_branch | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
 
     if [ -z "$BRANCH_NAME_VERSION" ]; then
@@ -113,7 +113,7 @@ else
         echo "❌ CI BUILD FAILED: CANNOT EXTRACT VERSION FROM BRANCH"
         echo "=========================================="
         echo "Cannot extract version from branch name: $api_examples_branch"
-        echo "Branch name must contain version number (e.g., dev/4.6.2, release/4.6.2)"
+        echo "Branch name must contain version number (e.g., dev/4.7.0, release/4.7.0)"
         echo "=========================================="
         exit 1
     fi
@@ -257,4 +257,3 @@ else
 fi
 echo "Output package: $OUTPUT_ZIP_NAME"
 echo "=========================================="
-

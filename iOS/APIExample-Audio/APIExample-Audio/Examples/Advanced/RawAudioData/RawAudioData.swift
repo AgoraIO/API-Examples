@@ -11,7 +11,7 @@
 /// 1.Register obesever: agoraKit.setAudioFrameDelegate(self)
 /// 2.Call back AgoraAudioFrameDelegate to get raw audio frame data
 ///
-/// More detail: https://docs.agora.io/en/Interactive%20Broadcast/raw_data_audio_apple?platform=iOS
+/// More detail: https://docs.agora.io/en/realtime-media/rtc/build/customize-audio-processing/stream-raw-audio/ios
 
 import AgoraRtcKit
 import AGEVideoLayout
@@ -42,7 +42,7 @@ class RawAudioDataViewController: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
-                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                // en: https://api-ref.agora.io/en/voice-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
                 // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
@@ -117,7 +117,7 @@ extension RawAudioDataViewController: AgoraAudioFrameDelegate {
 // MARK: - AgoraRtcEngineDelegate
 extension RawAudioDataViewController: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+        // en: https://api-ref.agora.io/en/voice-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
         // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error: \(errorCode.description)")

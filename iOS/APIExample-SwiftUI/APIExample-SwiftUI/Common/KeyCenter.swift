@@ -32,7 +32,4 @@ class KeyCenter: NSObject {
      PS: If the project does not have certificates enabled, leave this field blank.
      */
     static let Certificate: String? = nil
-    
-    
-    static let FaceCaptureLicense: String? = nil
 }

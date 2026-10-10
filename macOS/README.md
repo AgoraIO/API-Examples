@@ -7,7 +7,8 @@ This project presents you a set of API examples to help you understand how to us
 
 ## Prerequisites
 
-- Xcode 13.0+
+- macOS 12.0 or later
+- Xcode 13.1+
 
 ## Quick Start
 
@@ -15,14 +16,10 @@ This section shows you how to prepare, build, and run the sample application.
 
 ### Prepare Dependencies
 
-Change directory into **macOS** folder, run following command to install project dependencies,
+Change to the `macOS` directory and install the project dependencies with CocoaPods. See the [official CocoaPods guide](https://guides.cocoapods.org/using/getting-started.html) for installation instructions.
 
-use cocoapods
-
-[install cocoapods](http://t.zoukankan.com/lijiejoy-p-9680485.html)
-
-
-```
+```bash
+cd macOS
 pod install
 ```
 
@@ -64,16 +61,33 @@ To build and run the sample application, get an App Id:
 
 Then you can compile and run the project using `APIExample.xcworkspace`.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.bundle.zip` from Agora technical support and extract it to `macOS/APIExample/Resources/`.
+
+The extracted resources should have the following structure:
+
+```text
+macOS/APIExample/Resources/
+└── AgoraBeautyMaterial.bundle/
+    ├── beauty_material_functional/
+    │   ├── config.json
+    │   └── ...
+    └── ...
+```
+
+The extracted bundle is ignored by Git.
+
 
 ## Contact Us
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first
+- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/api-reference/faq) first
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - You can find full API documentation at [Document Center](https://docs.agora.io/en/)
 - If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
+- You can file bugs about this sample at [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## License
 

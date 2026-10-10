@@ -1,9 +1,8 @@
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join Channel";
-
-/* Class = "UIButton"; normalTitle = "Send metadata"; ObjectID = "ucb-dZ-rMR"; */
-"ucb-dZ-rMR.normalTitle" = "Send SEI Message";
+/* Element = "button"; normalTitle = "Send metadata"; ObjectID = "ucb-dZ-rMR"; */
+"ucb-dZ-rMR.normalTitle" = "发送SEI消息";

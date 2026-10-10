@@ -21,13 +21,12 @@ class LocalVideoTranscoding: BaseViewController {
         layoutVideos(2)
     }
     
-    var windowManager: WindowList = WindowList()
-    var windowlist:[Window] = [], screenlist:[Window] = []
+    var screenlist: [AgoraScreenCaptureSourceInfo] = []
     /**
      --- Screen Picker ---
      */
     @IBOutlet weak var selectScreenPicker: Picker!
-    var selectedScreen: Window? {
+    var selectedScreen: AgoraScreenCaptureSourceInfo? {
         let index = self.selectScreenPicker.indexOfSelectedItem
         if index >= 0 && index < screenlist.count {
             return screenlist[index]
@@ -36,9 +35,14 @@ class LocalVideoTranscoding: BaseViewController {
         }
     }
     func initSelectScreenPicker() {
-        screenlist = windowManager.items.filter({$0.type == .screen})
+        let sources = agoraKit.getScreenCaptureSources(withThumbSize: .zero, iconSize: .zero, includeScreen: true)
+        screenlist = sources?.filter { $0.type == .screen } ?? []
         selectScreenPicker.label.stringValue = "Screen Share".localized
-        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+        selectScreenPicker.picker.removeAllItems()
+        selectScreenPicker.picker.addItems(withTitles: screenlist.enumerated().map { index, source in
+            let name = source.sourceName.isEmpty ? "Screen \(index + 1)" : source.sourceName
+            return "\(name)(\(source.sourceId))"
+        })
     }
     var isScreenSharing: Bool = false {
         didSet {
@@ -109,7 +113,7 @@ class LocalVideoTranscoding: BaseViewController {
         params.highLightWidth = 5
         params.highLightColor = .green
         params.highLighted = true
-        let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
+        let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.sourceId), regionRect: .zero, captureParams: params)
         
         if result == 0 {
             isScreenSharing = true
@@ -248,8 +252,6 @@ class LocalVideoTranscoding: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // prepare window manager and list
-        windowManager.getList()
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -355,8 +357,8 @@ extension LocalVideoTranscoding: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agorawarningcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
@@ -365,8 +367,8 @@ extension LocalVideoTranscoding: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)

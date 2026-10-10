@@ -8,8 +8,8 @@
 import UIKit
 import AVFoundation
 
-public let cl_screenWidht = UIScreen.main.bounds.width
-public let cl_screenHeight = UIScreen.main.bounds.height
+public var cl_screenWidht: CGFloat { UIViewController.keyWindow?.bounds.width ?? 0 }
+public var cl_screenHeight: CGFloat { UIViewController.keyWindow?.bounds.height ?? 0 }
 class AlertManager: NSObject {
     private struct AlertViewCache {
         var view: UIView?

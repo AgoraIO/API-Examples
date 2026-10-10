@@ -32,6 +32,9 @@ struct RtcConnection {
       : channelId(channel_id), localUid(local_uid) {}
 };
 
+/**
+ * @brief The IRtcEngineEventHandlerEx class.
+ */
 class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
  public:
   using IRtcEngineEventHandler::eventHandlerType;
@@ -1135,7 +1138,7 @@ public:
      * optional. You will automatically exit the channel 24 hours after successfully joining in.
      * - If you need to join different channels at the same time or switch between channels, Agora
      * recommends using a wildcard token so that you don't need to apply for a new token every time
-     * joining a channel. See `Secure authentication with tokens`.
+     * joining a channel.
      * @param connection The connection information. See `RtcConnection`.
      * @param options The channel media options. See `ChannelMediaOptions`.
      * @param eventHandler The callback class of `IRtcEngineEx`. See `IRtcEngineEventHandler`. You can
@@ -1320,7 +1323,6 @@ public:
      * @details
      * Sets the encoder configuration for the local video. Each configuration profile corresponds to a
      * set of video parameters, including the resolution, frame rate, and bitrate.
-     * Call timing: Call this method after `joinChannelEx`.
      *
      * @note The `config` specified in this method is the maximum value under ideal network conditions.
      * If the video engine cannot render the video using the specified `config` due to unreliable
@@ -1353,8 +1355,7 @@ public:
      * Once the remote user leaves the channel, the SDK unbinds the remote user.
      *
      * @note
-     * - Call this method after `joinChannelEx`.
-     * - To update the rendering or mirror mode of the remote video view during a call, use the
+     * To update the rendering or mirror mode of the remote video view during a call, use the
      * `setRemoteRenderModeEx` method.
      *
      * @param canvas The remote video view settings. See `VideoCanvas`.
@@ -1722,6 +1723,27 @@ public:
      */
     virtual int setRemoteRenderModeEx(uid_t uid, media::base::RENDER_MODE_TYPE renderMode,
                                       VIDEO_MIRROR_MODE_TYPE mirrorMode, const RtcConnection& connection) = 0;
+
+    /**
+     * Sets the rotation of remote render.
+     *
+     * @since v4.6.4
+     * 
+     * @note
+     * For example, the sending end is a screen sharing scene. 
+     * When the screen of the sending end changes horizontally or vertically, 
+     * the rendered screen of the receiving end also wants to change synchronously with that of the peer end. 
+     * In this case, you can set the angle of the receiving end.
+     * 
+     * @param uid The user ID of the remote user.
+     * @param rotation The clockwise rotation angle. See #VIDEO_ORIENTATION.
+     * @param connection The RTC connection. See #RtcConnection.
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int setRemoteRenderRotationEx(uid_t uid, VIDEO_ORIENTATION rotation, const RtcConnection& connection) = 0;
+  
     /**
      * @brief Enables loopback audio capturing.
      *
@@ -1891,7 +1913,7 @@ public:
      * stream will be destroyed when leaving the channel, and the data stream needs to be recreated if
      * needed.
      * If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
-     * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+     * real-time messaging and status synchronization, it is recommended to use [Signaling](https://docs.agora.io/en/signaling/overview/product-overview).
      *
      * @param streamId An output parameter; the ID of the data stream created.
      * @param config The configurations for the data stream. See `DataStreamConfig`.
@@ -1920,7 +1942,7 @@ public:
      *
      * @note
      * - If you need a more comprehensive solution for low-latency, high-concurrency, and scalable
-     * real-time messaging and status synchronization, it is recommended to use `Signaling`.
+     * real-time messaging and status synchronization, it is recommended to use [Signaling](https://docs.agora.io/en/signaling/overview/product-overview).
      * - Call this method after `joinChannelEx`.
      * - Ensure that you call `createDataStreamEx(int* streamId, const DataStreamConfig& config, const
      * RtcConnection& connection)` to create a data channel before calling this
@@ -2067,7 +2089,7 @@ public:
      * Agora supports reporting and analyzing customized messages. This function is in the beta stage
      * with a free trial. The ability provided in its beta test version is reporting a maximum of 10
      * message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string
-     * not exceeding 100 bytes. To try out this function, contact `support@agora.io` and discuss the
+     * not exceeding 100 bytes. To try out this function, contact sales and discuss the
      * format of customized messages with us.
      *
      */
@@ -2113,8 +2135,8 @@ public:
      * @brief Starts pushing media streams to a CDN without transcoding.
      *
      * @details
-     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-     * API`.
+     * Agora recommends that you use the server-side Media Push function. For details, see [Pushing streams using RESTful
+     * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
      * You can call this method to push an audio or video stream to the specified CDN address. This
      * method can push media streams to only one CDN address at a time, so if you need to push streams
      * to multiple addresses, call this method multiple times.
@@ -2146,8 +2168,8 @@ public:
      * @brief Starts Media Push and sets the transcoding configuration.
      *
      * @details
-     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-     * API`.
+     * Agora recommends that you use the server-side Media Push function. For details, see [Pushing streams using RESTful
+     * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
      * You can call this method to push a live audio-and-video stream to the specified CDN address and
      * set the transcoding configuration. This method can push media streams to only one CDN address at
      * a time, so if you need to push streams to multiple addresses, call this method multiple times.
@@ -2200,8 +2222,8 @@ public:
      * @brief Stops pushing media streams to a CDN.
      *
      * @details
-     * Agora recommends that you use the server-side Media Push function. For details, see `Use RESTful
-     * API`.
+     * Agora recommends that you use the server-side Media Push function. For details, see [Pushing streams using RESTful
+     * APIs](https://docs.agora.io/en/media-push/develop/restful-api).
      * You can call this method to stop the live stream on the specified CDN address. This method can
      * stop pushing media streams to only one CDN address at a time, so if you need to stop pushing
      * streams to multiple addresses, call this method multiple times.
@@ -2317,7 +2339,8 @@ public:
      */
     virtual int resumeAllChannelMediaRelayEx(const RtcConnection& connection) = 0;
 
-   /** Gets the user information by passing in the user account.
+   /** 
+    * @brief Gets the user information by passing in the user account.
     *  It is same as agora::rtc::IRtcEngine::getUserInfoByUserAccount.
     *
     * @param userAccount The user account of the user. Ensure that you set this parameter.
@@ -2332,7 +2355,8 @@ public:
     */
     virtual int getUserInfoByUserAccountEx(const char* userAccount, rtc::UserInfo* userInfo, const RtcConnection& connection) = 0;
 
-    /** Gets the user information by passing in the user ID.
+    /** 
+    * @brief Gets the user information by passing in the user ID.
     *  It is same as agora::rtc::IRtcEngine::getUserInfoByUid.
     *
     * @param uid The user ID of the remote user. Ensure that you set this parameter.
@@ -2350,7 +2374,7 @@ public:
     /**
      * @brief Enables or disables dual-stream mode on the sender side.
      *
-     * @deprecated v4.2.0. This method is deprecated. Use setDualStreamModeEx instead
+     * @deprecated v4.2.0. This method is deprecated. Use setDualStreamModeEx instead.
      *
      * @details
      * You can call this method to enable or disable the dual-stream mode on the publisher side. Dual
@@ -2419,7 +2443,7 @@ public:
     /**
      * @brief Sets the simulcast video stream configuration.
      *
-     * @since v4.6.0
+     * @technical preview
      *
      * @details
      * This method can be called in scenarios involving multiple channels. You can call the

@@ -14,6 +14,7 @@ void PlayerObserverAdapter::onMetadata(rte::PlayerMetadataType type,
 	const uint8_t* data, size_t length) {}
 void PlayerObserverAdapter::onPlayerInfoUpdated(const rte::PlayerInfo* info) {}
 void PlayerObserverAdapter::onAudioVolumeIndication(int32_t volume) {}
+void PlayerObserverAdapter::onStreamDataReceived(const rte::PlayerStreamData* streamData) {}
 
 IMPLEMENT_DYNAMIC(CRtePlayerDlg, CDialogEx)
 
@@ -42,6 +43,7 @@ BEGIN_MESSAGE_MAP(CRtePlayerDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(WM_PLAYER_PREPARED), &CRtePlayerDlg::OnPrepared)
 	ON_MESSAGE(WM_MSGID(WM_PLAYER_STATE), &CRtePlayerDlg::OnPlayerStateChanged)
 	ON_MESSAGE(WM_MSGID(WM_PLAYER_EVENT), &CRtePlayerDlg::OnPlayerOnEvent)
+	ON_MESSAGE(WM_MSGID(WM_PLAYER_STREAM_DATA), &CRtePlayerDlg::OnPlayerStreamData)
 	ON_BN_CLICKED(IDC_BUTTON_START, &CRtePlayerDlg::OnBnClickedButtonStart)
 	ON_BN_CLICKED(IDC_BUTTON_STOP, &CRtePlayerDlg::OnBnClickedButtonStop)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CRtePlayerDlg::OnBnClickedButtonPlay)
@@ -168,15 +170,16 @@ bool CRtePlayerDlg::InitAgora()
 // UnInitialize the Agora SDK
 void CRtePlayerDlg::UnInitAgora()
 {
+	if (mRtePlayer)
+	{
+		mRtePlayer->UnregisterObserver(this);
+		delete mRtePlayer;
+		mRtePlayer = nullptr;
+	}
 	if (mCanvas)
 	{
 		delete mCanvas;
 		mCanvas = nullptr;
-	}
-	if (mRtePlayer)
-	{
-		delete mRtePlayer;
-		mRtePlayer = nullptr;
 	}
 	if (mRte)
 	{
@@ -200,6 +203,23 @@ void CRtePlayerDlg::onStateChanged(rte::PlayerState old_state, rte::PlayerState 
 void CRtePlayerDlg::onEvent(rte::PlayerEvent event)
 {
 	::PostMessage(m_hWnd, WM_MSGID(WM_PLAYER_EVENT), (WPARAM)event, 0);
+}
+
+void CRtePlayerDlg::onStreamDataReceived(const rte::PlayerStreamData* streamData)
+{
+	if (!streamData)
+		return;
+
+	for (const auto& volumeInfo : streamData->AudioVolumes())
+	{
+		auto* event = new RteStreamVolumeEvent{
+			volumeInfo.ChannelName(), volumeInfo.StreamId(), volumeInfo.Volume()};
+		if (!::PostMessage(m_hWnd, WM_MSGID(WM_PLAYER_STREAM_DATA),
+			reinterpret_cast<WPARAM>(event), 0))
+		{
+			delete event;
+		}
+	}
 }
 
 void CRtePlayerDlg::OnBnClickedButtonStart()
@@ -351,5 +371,19 @@ LRESULT CRtePlayerDlg::OnPlayerOnEvent(WPARAM wParam, LPARAM lParam)
 	default:
 		break;
 	}
+	return 0;
+}
+
+LRESULT CRtePlayerDlg::OnPlayerStreamData(WPARAM wParam, LPARAM lParam)
+{
+	auto* event = reinterpret_cast<RteStreamVolumeEvent*>(wParam);
+	if (!event)
+		return 0;
+
+	CString strInfo;
+	strInfo.Format(_T("stream volume: channel=%s, stream=%s, volume=%d"),
+		utf82cs(event->channelName), utf82cs(event->streamId), event->volume);
+	mListInfo.AddString(strInfo);
+	delete event;
 	return 0;
 }

@@ -11,6 +11,19 @@ fi
 
 cd ${PROJECT_PATH}
 
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.bundle.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.bundle.zip" || exit 1
+rm -rf APIExample/Resources/AgoraBeautyMaterial.bundle
+unzip -q AgoraBeautyMaterial.bundle.zip -d APIExample/Resources || exit 1
+rm -f AgoraBeautyMaterial.bundle.zip
+test -f APIExample/Resources/AgoraBeautyMaterial.bundle/beauty_material_functional/config.json || exit 1
+
+echo "start download sense resource from Artifactory"
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o vender_sense_iOS.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sense_iOS.zip" || exit 1
+rm -rf SenseLib
+unzip -q vender_sense_iOS.zip || exit 1
+rm -f vender_sense_iOS.zip
+test -f SenseLib/SENSEME.lic || exit 1
+
 echo "start download fu resource from Artifactory"
 curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o vender_fu_iOS.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_fu_iOS.zip" || exit 1
 rm -rf FULib
@@ -22,6 +35,7 @@ test -f FULib/authpack.h || exit 1
 sed -i -e "s#\#  pod 'ijkplayer'#  pod 'ijkplayer'#g" Podfile
 
 # Enable third-party beauty filters
+sed -i -e "s#\#  pod 'SenseLib'#  pod 'SenseLib'#g" Podfile
 sed -i -e "s#\#  pod 'fuLib'#  pod 'fuLib'#g" Podfile
 
 echo "work space: $WORKSPACE"

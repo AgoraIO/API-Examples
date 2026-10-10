@@ -9,7 +9,7 @@
         <!--Audio Mixing-->
         <scene sceneID="MLt-Ta-hJM">
             <objects>
-                <viewController title="Join Channel Audio" storyboardIdentifier="AudioMixing" id="jAv-ZA-ecf" userLabel="Audio Mixing" customClass="AudioMixing" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Audio Mixing" storyboardIdentifier="AudioMixing" id="jAv-ZA-ecf" userLabel="Audio Mixing" customClass="AudioMixing" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Tct-wa-cbu">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

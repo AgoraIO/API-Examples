@@ -6,7 +6,9 @@ This project presents you a set of API examples to help you understand how to us
 
 ## Prerequisites
 
-- Android Studio 3.0+
+- Android Studio Ladybug (2024.2.1) or later
+- JDK 17
+- Android SDK Platform 35
 - Physical Android device
 - Android simulator is supported
 
@@ -44,14 +46,41 @@ This project contains third-party beauty integration examples, which cannot be e
 without configuring resources and certificates. The resource certificate configuration method is as
 follows:
 
-#### Agora
+During Gradle configuration, the project automatically downloads and caches the SenseTime 9.3.1
+Android libraries declared in `app/vendors.gradle`. The first Gradle sync therefore requires network
+access. This download does not include the SenseTime assets or license listed below; provide those
+files separately.
 
-1. Contact Agora technical support to obtain beauty resources
-2. Put the beauty resources in the corresponding path
+#### Agora Beauty 2.0
 
-| Agora Beauty Resources | Location                         |
-|------------------------|----------------------------------|
-| beauty resources       | app/src/main/assets/beauty_agora |
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally:
+
+1. Obtain `AgoraBeautyMaterial.zip` from Agora technical support.
+2. Extract `AgoraBeautyMaterial.zip` to `app/src/main/assets/beauty_agora/`.
+
+The extracted resources should have the following structure:
+
+```text
+app/src/main/assets/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+The material directory is ignored by Git.
+
+#### SenseTime
+
+1. Contact SenseTime customer service to obtain the download link and certificate of the beauty sdk
+2. Unzip the beauty sdk, and copy the following resources to the corresponding path
+
+| SenseTime Beauty SDK Path                                            | Location                                                 |
+|----------------------------------------------------------------------|----------------------------------------------------------|
+| Android/models                                                       | app/src/main/assets/beauty_sensetime/models              |
+| Android/sample/SenseMeEffects/app/src/main/assets/sticker_face_shape | app/src/main/assets/beauty_sensetime/sticker_face_shape  |
+| Android/sample/SenseMeEffects/app/src/main/assets/style_lightly      | app/src/main/assets/beauty_sensetime/style_lightly       |
+| Android/sample/SenseMeEffects/app/src/main/assets/makeup_lip         | app/src/main/assets/beauty_sensetime/makeup_lip          |
+| SenseME.lic                                                          | app/src/main/assets/beauty_sensetime/license/SenseME.lic |
 
 #### FaceUnity
 
@@ -97,7 +126,7 @@ Android/APIExample/agora-simple-filter/src/main/cpp
 This project contains custom stream encrypt examples, which cannot be enabled by default. 
 The configuration method is as follows:
 
-1. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs; Replace the hight_level_api/include .h files in the Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora directory.
+1. Download [Agora SDK RESOURCE](https://docs.agora.io/en/sdks?platform=android), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-stream-encrypt/src/main/agoraLibs; Replace the high_level_api/include .h files in the Android/APIExample/agora-stream-encrypt/src/main/cpp/include/agora directory.
 
 ```text
 Android/APIExample/agora-stream-encrypt/src/main/agoraLibs
@@ -117,7 +146,7 @@ Android/APIExample/agora-stream-encrypt/src/main/cpp
 
 ## Contact Us
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first
+- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/api-reference/faq) first
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)

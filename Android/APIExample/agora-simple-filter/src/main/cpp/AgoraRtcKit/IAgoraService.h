@@ -165,6 +165,13 @@ struct AgoraServiceConfiguration {
    */
   bool domainLimit;
 
+  /**
+   * Provides the technical preview functionalities or special customizations by configuring the SDK with JSON options.
+   * Pointer to the set parameters in a JSON string.
+   * @technical preview
+   */
+  const char* parameters;
+
   AgoraServiceConfiguration() : enableAudioProcessor(true),
                                 enableAudioDevice(true),
                                 enableVideo(false),
@@ -177,7 +184,8 @@ struct AgoraServiceConfiguration {
                                 useStringUid(false),
                                 serviceObserver(NULL),
                                 useExternalEglContext(false),
-                                domainLimit(false){}
+                                domainLimit(false),
+                                parameters(NULL){}
 };
 /**
  * The audio session configurations.
@@ -578,21 +586,6 @@ class IAgoraService {
       agora_refptr<rtc::IAudioPcmDataSender> audioSource) = 0;
 
   /**
-   * Creates a local audio track object with a PCM data sender and returns the pointer.
-   *
-   * Once created, this track can be used to send PCM audio data.
-   *
-   * @param audioSource The pointer to the PCM audio data sender: \ref agora::rtc::IAudioPcmDataSender "IAudioPcmDataSender".
-   * @param enableAec Whether enable audio echo cancellation for PCM audio data.
-   * @return
-   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
-   * - A null pointer: Failure.
-   * - `INVALID_STATE`, if `enableAudioProcessor` in \ref agora::base::AgoraServiceConfiguration "AgoraServiceConfiguration" is set as `false`.
-   */
-  virtual agora_refptr<rtc::ILocalAudioTrack> createCustomAudioTrack(
-      agora_refptr<rtc::IAudioPcmDataSender> audioSource, bool enableAec) = 0;
-
-  /**
    * Creates a local audio track object with a audio mixer source and returns the pointer.
    *
    * Once created, this track can be used to send PCM audio data.
@@ -671,12 +664,13 @@ class IAgoraService {
    * @param enableAec Whether enable audio echo cancellation for loopback recording. If loopback
    *                  recording device is a virtual sound card, it should be false, or it should be true.
    * @param overlap Whether overlap playout signal.
+   * @param standaloneAdm Whether use standalone ADM.
    * @return
    * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalAudioTrack> createRecordingDeviceAudioTrack(
-      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec, bool overlap) = 0;
+      agora_refptr<rtc::IRecordingDeviceSource> audioSource, bool enableAec, bool overlap, bool standaloneAdm) = 0;
 
   /**
    * Creates an audio device manager object and returns the pointer.

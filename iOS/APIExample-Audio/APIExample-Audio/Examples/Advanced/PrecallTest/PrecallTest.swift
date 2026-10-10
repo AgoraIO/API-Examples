@@ -63,8 +63,8 @@ class PrecallTestEntry : BaseViewController
         let ret = agoraKit.startEchoTest(withConfig: testConfig)
         if ret != 0 {
             // for errors please take a look at:
-            // CN https://doc.shengwang.cn/api-ref/rtc/ios/error-code:
-            // EN https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+            // CN: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+            // EN https://api-ref.agora.io/en/voice-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
             showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
         }
         showPopover(isValidate: false, seconds: 10) {[unowned self] in

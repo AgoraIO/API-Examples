@@ -1,25 +1,23 @@
+/* Element = "textField"; placeholder = "Please the input APPID"; ObjectID = "2mk-8S-AvJ"; */
+"2mk-8S-AvJ.placeholder" = "请输入 App ID";
 
-/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
-"GWc-L5-fZV.placeholder" = "Enter channel name";
+/* Element = "textField"; placeholder = "Please the input Token"; ObjectID = "5la-r7-Gna"; */
+"5la-r7-Gna.placeholder" = "请输入 Token";
 
-/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
-"Iy0-Dq-h5x.title" = "Join Channel";
+/* Element = "label"; text = "Token"; ObjectID = "9wv-tJ-ykp"; */
+"9wv-tJ-ykp.text" = "Token";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
-"VpM-9W-auG.normalTitle" = "Button";
+/* Element = "textField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
 
-/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
-"kbN-ZR-nNn.normalTitle" = "Join Channel";
+/* Element = "label"; text = "AppID"; ObjectID = "aN0-QQ-AHf"; */
+"aN0-QQ-AHf.text" = "AppID";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
-"kf0-3f-UI5.normalTitle" = "Button";
+/* Element = "button"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
 
-/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
-"p70-sh-D1h.title" = "Real-time Video Call";
+/* Element = "viewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "视频实时通话";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
-"wHl-zh-dFe.normalTitle" = "Button";
-
-"5la-r7-Gna.placeholder" = "Enter Token";
-
-"2mk-8S-AvJ.placeholder" = "Enter APPID";
+/* Element = "label"; text = "Channel Name"; ObjectID = "vai-NU-aAm"; */
+"vai-NU-aAm.text" = "频道名";

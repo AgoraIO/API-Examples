@@ -103,9 +103,6 @@
     <Filter Include="Advanced\MultiVideoSourceTracks">
       <UniqueIdentifier>{a7d62827-b116-4a28-b8e7-2e5fddbce712}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\FaceCapture">
-      <UniqueIdentifier>{53c31cfd-3175-427f-afd2-102e745ae081}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Basic\JoinChannelVideoByToken">
       <UniqueIdentifier>{f40fbcc5-c4fb-4581-a7b2-05cbcc5f737c}</UniqueIdentifier>
     </Filter>
@@ -270,9 +267,6 @@
     <ClInclude Include="VideoExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.h">
-      <Filter>Advanced\FaceCapture</Filter>
-    </ClInclude>
     <ClInclude Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.h">
       <Filter>Basic\JoinChannelVideoByToken</Filter>
     </ClInclude>
@@ -433,9 +427,6 @@
     </ClCompile>
     <ClCompile Include="VideoExtractor.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced\FaceCapture\CAgoraFaceCaptureDlg.cpp">
-      <Filter>Advanced\FaceCapture</Filter>
     </ClCompile>
     <ClCompile Include="Basic\JoinChannelVideoByToken\CJoinChannelVideoByTokenDlg.cpp">
       <Filter>Basic\JoinChannelVideoByToken</Filter>

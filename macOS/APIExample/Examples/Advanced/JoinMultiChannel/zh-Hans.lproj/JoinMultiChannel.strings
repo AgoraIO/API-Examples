@@ -1,27 +1,17 @@
+/* Element = "textFieldCell"; title = "StopMicrophoneRecording"; ObjectID = "8xH-sF-b4v"; */
+"8xH-sF-b4v.title" = "停止麦克风录制";
 
-/* Class = "NSTextFieldCell"; placeholderString = "Channel Name 2"; ObjectID = "Ab2-sI-Ld3"; */
-"Ab2-sI-Ld3.placeholderString" = "Enter Channel Name 2";
+/* Element = "viewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
+"IBJ-wZ-9Xx.title" = "加入多频道";
 
-/* Class = "NSButtonCell"; title = "Unpublish"; ObjectID = "Hvn-10-7hC"; */
-"Hvn-10-7hC.title" = "Stop Publishing";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "MNt-M8-kuV"; */
+"MNt-M8-kuV.title" = "加入频道";
 
-/* Class = "NSViewController"; title = "Join Multiple Channels"; ObjectID = "IBJ-wZ-9Xx"; */
-"IBJ-wZ-9Xx.title" = "Join Multiple Channels";
+/* Element = "box"; title = "Box"; ObjectID = "opZ-iY-E6e"; */
+"opZ-iY-E6e.title" = "Box";
 
-/* Class = "NSButtonCell"; title = "Publish"; ObjectID = "Rau-85-whm"; */
-"Rau-85-whm.title" = "Publish";
+/* Element = "buttonCell"; title = "Join"; ObjectID = "tEg-NJ-QGq"; */
+"tEg-NJ-QGq.title" = "加入频道";
 
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "Xtr-fU-GZ5"; */
-"Xtr-fU-GZ5.title" = "Leave Channel";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Zjl-Vt-wOj"; */
-"Zjl-Vt-wOj.title" = "Join Channel";
-
-/* Class = "NSTextFieldCell"; placeholderString = "Channel Name 1"; ObjectID = "p0a-zy-yqS"; */
-"p0a-zy-yqS.placeholderString" = "Enter Channel Name 1";
-
-/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "ttd-9y-14q"; */
-"ttd-9y-14q.title" = "Leave Ex Channel";
-
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "u6j-cJ-1Pe"; */
-"OwT-ZJ-qpk.title" = "Join Ex Channel";
+/* Element = "buttonCell"; title = "take snapshot ex"; ObjectID = "wzZ-2k-bnO"; */
+"wzZ-2k-bnO.title" = "截图";

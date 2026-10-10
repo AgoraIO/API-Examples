@@ -91,8 +91,6 @@ if [ -z "$sdk_url" -o "$sdk_url" = "none" ]; then
    echo "sdk_url is empty"
    echo unzip_name: $unzip_name 
    mkdir -p ./$unzip_name/samples
-   cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
-   ls -al ./$unzip_name/samples/API-Example/
 else 
    sdk_url_flag=true
    zip_name=${sdk_url##*/}
@@ -111,20 +109,25 @@ else
    rm -f ./$unzip_name/Package.swift
    
    mkdir ./$unzip_name/samples
-   cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
-   ls -al ./$unzip_name/samples/API-Example/
+fi
+
+cp -rf ./macOS ./$unzip_name/samples/APIExample || exit 1
+ls -al ./$unzip_name/samples/API-Example/
+if [ $sdk_url_flag = true ]; then
    mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 fi
 
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile $sdk_url_flag
 
-echo "start compress"
-7za a -tzip result.zip -r $unzip_name > log.txt
-echo "start move to"
-echo $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
-mv result.zip $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+if [ "$compress_apiexample" != true ]; then
+    echo "start compress"
+    7za a -tzip result.zip -r $unzip_name > log.txt
+    echo "start move to"
+    echo $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+    mv result.zip $WORKSPACE/Agora_APIExample_mac_${BUILD_NUMBER}_$zip_name
+fi
 
-if [ $compress_apiexample = true ]; then
+if [ "$compress_apiexample" = true ]; then
     # Use BRANCH_VERSION for the package name (already validated to match SDK version)
     sdk_version="${BRANCH_VERSION}"
     echo "Using version for package: $sdk_version"
@@ -144,4 +147,8 @@ if [ $compress_apiexample = true ]; then
     ls -al $WORKSPACE/
 fi
 
-
+if [ $compile_project = true ]; then
+    cd ./$unzip_name/samples/APIExample
+    ./cloud_build.sh || exit 1
+    cd -
+fi

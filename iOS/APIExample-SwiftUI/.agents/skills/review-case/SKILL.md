@@ -1,0 +1,166 @@
+---
+name: review-case
+description: >
+  Structured code review for a case in the APIExample-SwiftUI project.
+  Checks engine lifecycle, SwiftUI state ownership, thread safety, permissions, and API correctness.
+license: MIT
+metadata:
+  author: APIExample Team
+  version: 1.0.0
+  platform: iOS
+---
+
+# review-case — APIExample-SwiftUI
+
+## Pending Permission and Token Requests
+
+Review the complete lifecycle against [the creation template](../upsert-case/SKILL.md).
+All request/engine ownership transitions must run on main. Freeze channel/UID and request
+generation before requesting permission or Token; before joining, check that the generation
+and engine identity are still current. Leave invalidates pending work even before joined;
+destroy also clears the engine. Repeated cleanup must not destroy another case's engine.
+Weak references alone do not invalidate a request when its owner remains alive.
+
+Exercise delayed permission and Token responses after leave/destroy, repeated cleanup,
+rapid reopen and out-of-order responses. Only the current request may join. Also check
+permission denial, absent required Token and a nonzero join result. Never log credentials.
+
+## Review Dimensions (in priority order)
+
+### 1. Engine Lifecycle
+
+**Check:**
+- `AgoraRtcEngineKit` created inside `setupRTC()` of the RTC class, not in the Entry view
+- `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called inside `onDestroy()`
+- `setupRTC()` called from `.onAppear`, `onDestroy()` called from `.onDisappear`
+- No engine instance retained beyond the RTC object's lifetime
+
+**Correct:**
+```swift
+.onAppear { rtc.setupRTC(configs: configs) }
+.onDisappear { rtc.onDestroy() }
+```
+
+**Wrong:**
+```swift
+// Missing onDisappear — engine never destroyed
+.onAppear { rtc.setupRTC(configs: configs) }
+```
+
+---
+
+### 2. SwiftUI State Ownership
+
+**Check:**
+- A main view that constructs its RTC object declares it as `@StateObject`
+- `@ObservedObject` is used only when a stable owner constructs and injects the RTC object
+- Entry view does not hold a reference to the RTC object
+- `@Published` properties used for state that drives UI updates
+
+**Correct:**
+```swift
+struct MyCase: View {
+    @StateObject private var rtc = MyCaseRTC()
+}
+
+struct InjectedCase: View {
+    @ObservedObject var rtc: MyCaseRTC
+}
+```
+
+**Wrong:**
+```swift
+struct MyCase: View {
+    @ObservedObject private var rtc = MyCaseRTC()  // recreated view does not own object identity
+}
+```
+
+---
+
+### 3. Thread Safety
+
+All `AgoraRtcEngineDelegate` callbacks may arrive on a background thread.
+
+**Check:**
+- Every `@Published` property mutation inside a delegate callback is dispatched to `DispatchQueue.main`
+- No direct SwiftUI state mutation on background thread
+
+**Correct:**
+```swift
+func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+    DispatchQueue.main.async {
+        self.remoteUid = uid
+    }
+}
+```
+
+---
+
+### 4. Permissions
+
+**Check:**
+- Camera/microphone permissions requested before `joinChannel()`
+- `joinChannel()` called only inside the permission grant callback
+
+---
+
+### 5. Error Handling
+
+**Check:**
+- Return value of `joinChannel()` checked
+- `rtcEngine(_:didOccurError:)` implemented and logged
+- Token expiry handled if token is used
+
+---
+
+### 6. Code Conventions
+
+**Check:**
+- RTC class inherits `NSObject`, conforms to `ObservableObject` and `AgoraRtcEngineDelegate`
+- Entry view named `<ExampleName>Entry`, main view named `<ExampleName>`
+- RTC class named `<ExampleName>RTC`
+- `configs` dictionary used to pass data from Entry to Main
+- No SDK calls inside SwiftUI `body` computed property
+
+---
+
+### 7. Resource Cleanup
+
+**Check:**
+- Audio files / custom audio tracks stopped in `onDestroy()`
+- External video sources unregistered in `onDestroy()`
+- Media player destroyed if created
+- Screen capture stopped if started
+- Multi-camera capture stopped if started
+
+---
+
+### 8. Xcode Target Membership
+
+For a new or moved case, verify `APIExample-SwiftUI.xcodeproj/project.pbxproj` explicitly
+adds every Swift file to the `APIExample-SwiftUI` target's Sources build phase and every new
+asset or localized file to its Resources build phase. A file existing in the folder is not
+enough. Do not require a project-file edit for an existing build input that was only modified.
+
+---
+
+## Review Output Format
+
+```
+[SEVERITY] file/line — issue description
+Suggestion: how to fix
+```
+
+Severity levels:
+- `[CRITICAL]` — crash, leak, or incorrect behavior
+- `[WARNING]` — convention violation or subtle bug risk
+- `[INFO]` — style or minor improvement
+
+---
+
+## SwiftUI-Specific Checks
+
+- `onAppear` can fire multiple times (e.g., sheet dismiss, navigation pop/push) — verify `setupRTC` is idempotent or guarded
+- `onDisappear` fires when the view is covered by another view in a `TabView` — verify this does not prematurely destroy the engine
+- Video rendering views (`VideoView` / `VideoUIView`) must be created before `setupRTC` is called so the canvas can be set up correctly
+- `[weak self]` required in all closures capturing `self` inside the RTC class to avoid retain cycles

@@ -45,7 +45,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This demo demonstrates how to make a one-to-one video call
  */
 @Example(
-        index = 41,
+        index = 42,
         group = ADVANCED,
         name = R.string.item_transparentrendering,
         actionId = R.id.action_mainFragment_to_transparentrendering,
@@ -96,7 +96,7 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
              */
             config.mContext = context.getApplicationContext();
             /*
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
             /* The channel profile.
@@ -114,7 +114,7 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*
@@ -253,9 +253,9 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
 
         /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/authentication-workflow/android
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/deploy-token-server*/
         int uid = new Random().nextInt(1000) + 100000;
         TokenUtils.gen(requireContext(), channelId, uid, ret -> {
 
@@ -265,8 +265,8 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+                // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 return;
             }
@@ -295,7 +295,10 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
                 //  kAlphaStitchRight = 4
                 //};
                 frame.setAlphaStitchMode(3);
-                engine.pushExternalVideoFrame(frame);
+                int ret = engine.pushExternalVideoFrameById(frame, 0);
+                if (ret != Constants.ERR_OK) {
+                    Log.w(TAG, "pushExternalVideoFrameById error: " + ret);
+                }
             }
         });
 
@@ -325,7 +328,7 @@ public class TransparentRendering extends BaseFragment implements View.OnClickLi
         /**
          * Error code description can be found at:
          * en: {@see https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror}
-         * cn: {@see https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror}
+         * cn: {@see https://doc.shengwang.cn/api-ref/rtc/android/error-code}
          */
         @Override
         public void onError(int err) {

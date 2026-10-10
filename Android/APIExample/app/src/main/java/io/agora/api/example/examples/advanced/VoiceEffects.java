@@ -247,7 +247,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              */
             config.mContext = context.getApplicationContext();
             /*
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
             /* The channel profile.
@@ -265,7 +265,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /*
@@ -395,16 +395,17 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         /*In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // audio config
-        engine.setAudioProfile(
-                Constants.AudioProfile.getValue(Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())),
-                Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()))
+        int selectedAudioProfile = Constants.AudioProfile.getValue(
+                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString())
         );
+        engine.setAudioProfile(selectedAudioProfile);
+        engine.setAudioScenario(getAudioScenarioValue(audioScenario.getSelectedItem().toString()));
 
         /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/authentication-workflow/android
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/deploy-token-server*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
             /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
@@ -416,8 +417,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+                // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
                 return;
@@ -435,7 +436,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
          */
         @Override
         public void onError(int err) {
@@ -578,7 +579,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         }
 
         if (parent == audioScenario) {
-            engine.setAudioScenario(Constants.AudioScenario.getValue(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString())));
+            engine.setAudioScenario(getAudioScenarioValue(audioScenario.getSelectedItem().toString()));
             return;
         }
 
@@ -653,6 +654,17 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             String item = parent.getSelectedItem().toString();
             engine.enableVoiceAITuner(enable, enable ? Constants.VOICE_AI_TUNER_TYPE.valueOf(item) : Constants.VOICE_AI_TUNER_TYPE.VOICE_AI_TUNER_MATURE_MALE);
         }
+    }
+
+    private int getAudioScenarioValue(String label) {
+        return switch (label) {
+            case "AUDIO_SCENARIO_GAME_STREAMING" -> Constants.AUDIO_SCENARIO_GAME_STREAMING;
+            case "AUDIO_SCENARIO_CHATROOM" -> Constants.AUDIO_SCENARIO_CHATROOM;
+            case "AUDIO_SCENARIO_CHORUS" -> Constants.AUDIO_SCENARIO_CHORUS;
+            case "AUDIO_SCENARIO_MEETING" -> Constants.AUDIO_SCENARIO_MEETING;
+            case "AUDIO_SCENARIO_AI_CLIENT" -> Constants.AUDIO_SCENARIO_AI_CLIENT;
+            default -> Constants.AUDIO_SCENARIO_DEFAULT;
+        };
     }
 
     private int getVoiceConversionValue(String label) {

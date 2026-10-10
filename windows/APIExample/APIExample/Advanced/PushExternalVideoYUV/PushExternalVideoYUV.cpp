@@ -113,26 +113,34 @@ bool PushExternalVideoYUV::InitAgora()
 	m_videoFrame.type = agora::media::base::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
 	m_imgBuffer = new BYTE[YUVReader::VIDEO_FRAME_SIZE]{ 0 };
 
-	m_imgBuffer16 = new uint16_t[WIDHT_HDR * HEIGHT_HDR * 1.5]{ 0 };
-	CString videoUrl = GetExePath() + _T("\\hdr_1280_720.yuv");
+	CString videoUrl = GetExePath() + _T("\\res\\hdr_1280_720.yuv");
 	std::string tmp = cs2utf8(videoUrl);
 	std::ifstream file(tmp, std::ios::binary);
 	if (!file) {
 		AfxMessageBox(_T("open hdr file failed"));
+		UnInitAgora();
+		return false;
 	}
 	file.seekg(0, std::ios::end);
 	std::streamsize fileSize = file.tellg();
 	file.seekg(0, std::ios::beg);
-	if (fileSize % sizeof(uint16_t) != 0) {
-		AfxMessageBox(_T(" hdr file format is wrong"));
+	const std::streamsize expectedFileSize =
+		static_cast<std::streamsize>(WIDHT_HDR) * HEIGHT_HDR * 3 * sizeof(uint16_t) / 2;
+	if (fileSize != expectedFileSize) {
+		AfxMessageBox(_T("hdr file size is wrong"));
+		UnInitAgora();
+		return false;
 	}
 	std::vector<char> fileBuffer(fileSize);
 	if (!file.read(fileBuffer.data(), fileSize)) {
 		AfxMessageBox(_T("read hdr file failed"));
+		UnInitAgora();
+		return false;
 	}
 	file.close();
+	m_imgBuffer16 = new uint16_t[WIDHT_HDR * HEIGHT_HDR * 3 / 2]{ 0 };
 	uint16_t* uint16Buffer = reinterpret_cast<uint16_t*>(fileBuffer.data());
-	memcpy_s(m_imgBuffer16, fileSize, uint16Buffer, fileSize);
+	memcpy_s(m_imgBuffer16, expectedFileSize, uint16Buffer, fileSize);
 
 	m_rtcEngine->startPreview(VIDEO_SOURCE_CUSTOM);
 	return true;
@@ -267,7 +275,10 @@ void PushExternalVideoYUV::OnClickedButtonJoinchannel()
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 
-			yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+			if (!yuvReader.start(std::bind(&PushExternalVideoYUV::OnYUVRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4))) {
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("open sample.yuv failed"));
+				AfxMessageBox(_T("open sample.yuv failed"));
+			}
 		}
 	}
 	else {

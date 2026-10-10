@@ -23,9 +23,9 @@ To obtain an App ID, see [README.md](README.md#obtain-an-app-id).
 
 | Task | Skill | When to use |
 |------|-------|-------------|
-| Add or modify a case | `.agent/skills/upsert-case/` | Need to create a new audio API demo or update an existing one |
-| Code review | `.agent/skills/review-case/` | Review case code for lifecycle, thread safety, and audio-only convention compliance |
-| Find an existing case | `.agent/skills/query-cases/` | Locate which file demonstrates a specific API or feature |
+| Add or modify a case | `.agents/skills/upsert-case/` | Need to create a new audio API demo or update an existing one |
+| Code review | `.agents/skills/review-case/` | Review case code for lifecycle, thread safety, and audio-only convention compliance |
+| Find an existing case | `.agents/skills/query-cases/` | Locate which file demonstrates a specific API or feature |
 
 ## Further Reading
 

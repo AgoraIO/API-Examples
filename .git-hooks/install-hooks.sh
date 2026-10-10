@@ -1,165 +1,87 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Functions for colored text output
-print_green() {
-    echo -e "\033[0;32m$1\033[0m"
-}
+set -euo pipefail
 
-print_yellow() {
-    echo -e "\033[0;33m$1\033[0m"
-}
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-print_red() {
-    echo -e "\033[0;31m$1\033[0m"
-}
-
-# Function to add executable permissions
-ensure_executable() {
-    if [ -f "$1" ] && [ ! -x "$1" ]; then
-        chmod +x "$1"
-        print_green "Added executable permission to $1"
-    fi
-}
-
-# Ensure script runs from project root directory
-if [ ! -d ".git" ]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    cd "$(dirname "$SCRIPT_DIR")" || { print_red "Cannot find project root directory"; exit 1; }
-    
-    if [ ! -d ".git" ]; then
-        print_red "Please run this script from the project root directory"
-        exit 1
-    fi
+if ! repo_root="$(git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null)"; then
+    echo "Error: .git-hooks must be inside a Git repository." >&2
+    exit 1
 fi
 
-# Check if pre-commit is installed
-if ! command -v pre-commit &> /dev/null; then
-    print_yellow "pre-commit not found, attempting to install..."
-    if command -v pip3 &> /dev/null; then
-        pip3 install pre-commit
-    elif command -v pip &> /dev/null; then
-        pip install pre-commit
-    else
-        print_red "pip not found, please install Python and pip first, then run this script again"
-        exit 1
+cd "$repo_root"
+
+has_error=false
+
+hooks_path="$(git config --path --get core.hooksPath || true)"
+
+if ! command -v pre-commit >/dev/null 2>&1; then
+    echo "Error: pre-commit is required. Install it from https://pre-commit.com/#install" >&2
+    has_error=true
+fi
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    echo "Error: gitleaks is required. Install it from https://github.com/gitleaks/gitleaks#installing" >&2
+    has_error=true
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "Error: python3 is required to validate commit messages." >&2
+    has_error=true
+fi
+
+required_files=(
+    ".pre-commit-config.yaml"
+    ".gitleaks.toml"
+    ".git-hooks/run-gitleaks.sh"
+    ".git-hooks/check-commit-message.sh"
+    ".git-hooks/pre-commit-dispatcher.sh"
+)
+
+for required_file in "${required_files[@]}"; do
+    if [[ ! -f "$required_file" ]]; then
+        echo "Error: required file not found: $required_file" >&2
+        has_error=true
     fi
-    
-    if [ $? -ne 0 ]; then
-        print_red "Failed to install pre-commit, please install manually: pip install pre-commit"
-        exit 1
-    fi
-    print_green "pre-commit installed successfully!"
+done
+
+if [[ "$has_error" == true ]]; then
+    exit 1
+fi
+
+if [[ -z "$hooks_path" ]]; then
+    pre-commit install --hook-type pre-commit --hook-type commit-msg
 else
-    print_green "pre-commit is already installed!"
-fi
+    if [[ "$hooks_path" == /* ]]; then
+        hooks_dir="$hooks_path"
+    else
+        hooks_dir="$repo_root/$hooks_path"
+    fi
 
-# Check if gitleaks is installed (required)
-if ! command -v gitleaks &> /dev/null; then
-    print_red "❌ gitleaks not found - this is a required security tool!"
-    print_yellow "Installation guide: https://github.com/gitleaks/gitleaks#installing"
-    
-    # Attempt automatic installation (based on OS)
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        print_yellow "Detected macOS, attempting to install gitleaks via Homebrew..."
-        if command -v brew &> /dev/null; then
-            brew install gitleaks
-            if [ $? -eq 0 ]; then
-                print_green "gitleaks installed successfully!"
-            else
-                print_red "Cannot automatically install gitleaks, please install manually"
-                exit 1
+    dispatcher_source=".git-hooks/pre-commit-dispatcher.sh"
+    dispatcher_marker="api-examples-pre-commit-dispatcher"
+
+    for hook_type in pre-commit commit-msg; do
+        hook_target="$hooks_dir/$hook_type"
+        if [[ -e "$hook_target" || -L "$hook_target" ]]; then
+            if ! grep -Fq "$dispatcher_marker" "$hook_target" 2>/dev/null; then
+                echo "Error: refusing to replace existing hook: $hook_target" >&2
+                echo "Make that hook invoke pre-commit, then run this script again." >&2
+                has_error=true
             fi
-        else
-            print_red "Homebrew not found, please install Homebrew or install gitleaks manually"
-            exit 1
         fi
-    else
-        print_red "Please install gitleaks manually and try again"
+    done
+
+    if [[ "$has_error" == true ]]; then
         exit 1
     fi
-else
-    print_green "gitleaks is installed!"
+
+    mkdir -p "$hooks_dir"
+    install -m 0755 "$dispatcher_source" "$hooks_dir/pre-commit"
+    install -m 0755 "$dispatcher_source" "$hooks_dir/commit-msg"
+    echo "Installed pre-commit dispatchers in configured hook path: $hooks_dir"
 fi
 
-# Check required files and directories
-if [ ! -d ".git-hooks" ]; then
-    print_red "Cannot find .git-hooks directory, please ensure you're in the correct project"
-    exit 1
-fi
-
-if [ ! -f ".gitleaks.toml" ]; then
-    print_red "Cannot find .gitleaks.toml configuration file, please ensure it exists"
-    exit 1
-fi
-
-if [ ! -f ".git-hooks/check-commit-message.sh" ]; then
-    print_red "Cannot find .git-hooks/check-commit-message.sh file, please ensure it exists"
-    exit 1
-fi
-
-# Ensure all scripts have executable permissions
-print_yellow "Granting executable permissions to hook scripts..."
-ensure_executable ".git-hooks/check-commit-message.sh"
-ensure_executable ".git-hooks/post-commit"
-ensure_executable ".git-hooks/pre-commit"
-
-# Install pre-commit hook
-print_yellow "Installing pre-commit hook..."
-pre-commit install
-if [ $? -ne 0 ]; then
-    print_red "Failed to install pre-commit hook!"
-    exit 1
-fi
-print_green "pre-commit hook installed successfully!"
-
-# Install commit-msg hook
-print_yellow "Installing commit-msg hook..."
-pre-commit install --hook-type commit-msg
-if [ $? -ne 0 ]; then
-    print_red "Failed to install commit-msg hook!"
-    exit 1
-fi
-print_green "pre-commit commit-msg hook installed successfully!"
-
-# Copy and set up custom hooks
-print_yellow "Setting up custom hooks..."
-# Copy commit-msg hook
-cp .git-hooks/check-commit-message.sh .git/hooks/commit-msg
-chmod +x .git/hooks/commit-msg
-
-# Copy post-commit hook (if exists)
-if [ -f ".git-hooks/post-commit" ]; then
-    cp .git-hooks/post-commit .git/hooks/post-commit
-    chmod +x .git/hooks/post-commit
-fi
-
-# Copy pre-commit hook (if exists)
-if [ -f ".git-hooks/pre-commit" ]; then
-    # Backup pre-commit hook
-    if [ -f ".git/hooks/pre-commit" ]; then
-        cp .git/hooks/pre-commit .git/hooks/pre-commit.bak
-    fi
-    
-    cp .git-hooks/pre-commit .git/hooks/pre-commit.custom
-    chmod +x .git/hooks/pre-commit.custom
-    
-    # Add custom pre-commit to existing hook chain
-    if [ -f ".git/hooks/pre-commit" ]; then
-        HOOK_CONTENT=$(cat .git/hooks/pre-commit)
-        if ! grep -q "pre-commit.custom" .git/hooks/pre-commit; then
-            echo -e "\n# Run custom pre-commit hook\n.git/hooks/pre-commit.custom || exit 1" >> .git/hooks/pre-commit
-            chmod +x .git/hooks/pre-commit
-        fi
-    else
-        echo -e "#!/bin/bash\n\n# Run custom pre-commit hook\n.git/hooks/pre-commit.custom" > .git/hooks/pre-commit
-        chmod +x .git/hooks/pre-commit
-    fi
-fi
-
-pre-commit clean && pre-commit install && pre-commit install --hook-type commit-msg
-
-print_green "================================================================"
-print_green "🎉 Git hooks setup complete! Your repository now has:"
-print_green "  - Sensitive information leak detection using gitleaks"
-print_green "  - Chinese character detection in commit messages"
-print_green "================================================================" 
+echo "Git hooks installed successfully:"
+echo "  - staged changes are scanned for sensitive information"
+echo "  - commit messages containing Chinese characters are rejected"

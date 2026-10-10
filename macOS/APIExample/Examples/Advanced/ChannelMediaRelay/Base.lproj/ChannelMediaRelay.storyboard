@@ -9,7 +9,7 @@
         <!--Channel Media Relay-->
         <scene sceneID="JdG-nN-J4D">
             <objects>
-                <viewController title="Join Multiple Channels" storyboardIdentifier="ChannelMediaRelay" id="IBJ-wZ-9Xx" userLabel="Channel Media Relay" customClass="ChannelMediaRelay" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Media Channel Relay" storyboardIdentifier="ChannelMediaRelay" id="IBJ-wZ-9Xx" userLabel="Media Channel Relay" customClass="ChannelMediaRelay" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="MiM-ZG-Cth">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -1,0 +1,11 @@
+/* Element = "box"; title = "Box"; ObjectID = "AaY-nf-6bC"; */
+"AaY-nf-6bC.title" = "Box";
+
+/* Element = "buttonCell"; title = "Join"; ObjectID = "PJX-oJ-utz"; */
+"PJX-oJ-utz.title" = "加入频道";
+
+/* Element = "textFieldCell"; title = "Enable Multipath"; ObjectID = "Vkx-Fw-cJJ"; */
+"Vkx-Fw-cJJ.title" = "启用多路径";
+
+/* Element = "viewController"; title = "Multipath"; ObjectID = "zLf-Ex-oud"; */
+"zLf-Ex-oud.title" = "网络传输高级功能";

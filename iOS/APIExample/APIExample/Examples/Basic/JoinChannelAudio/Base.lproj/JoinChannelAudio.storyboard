@@ -327,7 +327,6 @@
                             <constraint firstItem="GY1-XL-g0X" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="Y4R-ov-Xa8"/>
                             <constraint firstItem="GY1-XL-g0X" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="top" id="Ykh-Yy-mgM"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="ZSa-KH-yee"/>
-                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="40.333333333333258" id="ba2-K4-u5o"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="bottom" secondItem="GY1-XL-g0X" secondAttribute="top" id="dm2-Jc-OHM"/>
                             <constraint firstItem="jWN-Gp-FR1" firstAttribute="centerX" secondItem="G65-cd-JJr" secondAttribute="centerX" id="ep1-WB-HcT"/>
                             <constraint firstItem="G65-cd-JJr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="16" id="gOg-KB-n6f"/>
@@ -336,8 +335,8 @@
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="hfz-wu-F5K"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="bottom" constant="7.6666666666666288" id="iqU-0k-VdA"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
-                            <constraint firstItem="jWN-Gp-FR1" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="437" id="p85-fQ-RcF"/>
-                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="jWN-Gp-FR1" secondAttribute="bottom" constant="-4.3333333333333712" id="wK0-PV-h5D"/>
+                            <constraint firstItem="jWN-Gp-FR1" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="8" id="p85-fQ-RcF"/>
+                            <constraint firstItem="G65-cd-JJr" firstAttribute="top" secondItem="jWN-Gp-FR1" secondAttribute="bottom" constant="8" id="wK0-PV-h5D"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="bottom" secondItem="Rjn-1J-hHR" secondAttribute="top" id="wKd-Na-ieb"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>

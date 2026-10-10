@@ -79,7 +79,7 @@ private:
 	bool m_initialize = false;
 	bool m_joinChannel = false;
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
-	agora::rtc::IVideoEffectObject* m_videoEffectObject = nullptr;
+	agora_refptr<agora::rtc::IVideoEffectObject> m_videoEffectObject;
 	CBeautyEventHandler2 m_eventHandler;
 	CAGVideoWnd m_videoWnds[2];
 	CDlgBeautyEx2* mBeautyDlgEx;

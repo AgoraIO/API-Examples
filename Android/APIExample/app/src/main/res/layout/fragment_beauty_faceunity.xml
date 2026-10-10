@@ -61,17 +61,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#99000000"
+        android:minHeight="56dp"
         android:orientation="horizontal"
-        android:paddingVertical="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <CheckBox
             android:id="@+id/cb_face_beautify"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
+            android:checked="false"
             android:text="@string/face_beautify"
             android:textColor="@color/sel_text_yellow_white"
             tools:checked="true" />
@@ -79,20 +80,22 @@
         <CheckBox
             android:id="@+id/cb_makeup"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
+            android:checked="false"
             android:text="@string/makeup"
             android:textColor="@color/sel_text_yellow_white" />
 
         <CheckBox
             android:id="@+id/cb_sticker"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
+            android:checked="false"
             android:text="@string/sticker"
             android:textColor="@color/sel_text_yellow_white" />
 

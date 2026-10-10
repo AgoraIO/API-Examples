@@ -11,7 +11,7 @@
 /// 1.Register obesever: agoraKit.setVideoFrameDelegate(self)
 /// 2.Call back AgoraVideoFrameDelegate to get raw video frame data
 ///
-/// More detail: https://docs.agora.io/en/Interactive%20Broadcast/raw_data_video_apple?platform=macOS
+/// More detail: https://docs.agora.io/en/realtime-media/rtc/build/capture-and-render-video/raw-video-processing/macos
 
 import Foundation
 import AgoraRtcKit
@@ -86,8 +86,8 @@ class RawVideoData: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
-                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+                // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
         })
@@ -136,8 +136,8 @@ extension RawVideoData: AgoraVideoFrameDelegate {
 // MARK: - AgoraRtcEngineDelegate
 extension RawVideoData: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-        // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+        // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+        // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }

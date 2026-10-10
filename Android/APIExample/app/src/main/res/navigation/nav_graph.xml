@@ -138,9 +138,6 @@
             android:id="@+id/action_mainFragment_agora_beauty"
             app:destination="@id/AgoraBeauty" />
         <action
-            android:id="@+id/action_mainFragment_to_face_capture"
-            app:destination="@id/faceCapture" />
-        <action
             android:id="@+id/action_mainFragment_to_transparentrendering"
             app:destination="@id/transparentRendering" />
         <action
@@ -177,9 +174,19 @@
         tools:layout="@layout/fragment_third_party_beauty">
 
         <action
+            android:id="@+id/action_third_party_beauty_to_scene_time"
+            app:destination="@id/SceneTimeBeauty" />
+
+        <action
             android:id="@+id/action_third_party_beauty_to_faceunity"
             app:destination="@id/FaceUnityBeauty" />
     </fragment>
+
+    <fragment
+        android:id="@+id/SceneTimeBeauty"
+        android:name="io.agora.api.example.examples.advanced.beauty.SenseTimeBeauty"
+        android:label="@string/scenetime_beauty"
+        tools:layout="@layout/fragment_beauty_scenetime" />
 
     <fragment
         android:id="@+id/FaceUnityBeauty"
@@ -390,12 +397,6 @@
         android:name="io.agora.api.example.examples.advanced.KtvCopyrightMusic"
         android:label="@string/item_ktv_copyright_music"
         tools:layout="@layout/fragment_base_browser" />
-
-    <fragment
-        android:id="@+id/faceCapture"
-        android:name="io.agora.api.example.examples.advanced.FaceCapture"
-        android:label="@string/item_face_capture"
-        tools:layout="@layout/fragment_face_capture" />
 
     <fragment
         android:id="@+id/transparentRendering"

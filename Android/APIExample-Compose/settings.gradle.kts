@@ -14,6 +14,16 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // Resolve RTC SDK modules and their infrastructure dependencies from the official source.
+        exclusiveContent {
+            forRepository {
+                maven { url = uri("https://download.agora.io/maven/") }
+            }
+            filter {
+                includeGroup("io.agora.rtc")
+                includeGroup("io.agora.infra")
+            }
+        }
         google()
         mavenCentral()
     }

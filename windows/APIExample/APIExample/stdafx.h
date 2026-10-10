@@ -57,7 +57,6 @@
 #pragma comment(lib, "agora_rtc_sdk.dll.lib")
 #pragma comment(lib, "libagora_segmentation_extension.dll.lib")
 //#pragma comment(lib, "libagora_video_process.dll.lib")
-#pragma comment(lib, "libagora-ffmpeg.dll.lib")
 using namespace agora;
 using namespace agora::rtc;
 using namespace agora::media;
@@ -112,10 +111,8 @@ using namespace agora::media;
 #define EID_RECORDER_STATE_CHANGE	0x00000034
 #define EID_RECORDER_INFO_UPDATE	0x00000035
 #define EID_EXTENSION_EVENT	0x00000036
-#define EID_ON_CAPTURE_VIDEOFRAME	0x00000037
 #define EID_ERROR	0x00000038
 
-#define EID_ON_FACE_INFO	0x00000039
 #define EID_ON_RECV_AUDIO_METADATA				0x0000003A
 #define EID_MULTIPATH_STATS 0x0000003B
 #define EID_NETWORK_TYPE_CHANGED 0x0000003C

@@ -9,7 +9,7 @@
         <!--Precall Test-->
         <scene sceneID="pbK-2b-qbr">
             <objects>
-                <viewController title="Custom Video Source(MediaIO)" storyboardIdentifier="PrecallTest" id="Gwp-vd-c2J" userLabel="Precall Test" customClass="PrecallTest" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Pre-call Test" storyboardIdentifier="PrecallTest" id="Gwp-vd-c2J" userLabel="Pre-call Test" customClass="PrecallTest" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GAN-Bp-SzP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

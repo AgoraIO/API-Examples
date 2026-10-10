@@ -37,12 +37,10 @@ windows/
 │   │   ├── CSceneDialog.cpp     # Shared dialog helper, not the case registration source
 │   │   └── CSceneDialog.h
 │   ├── APIExample.sln           # Visual Studio solution
-│   ├── cicd/                    # CI/CD scripts
 │   └── .vscode/                 # VS Code configuration
-├── .agent/skills/               # Agent skills
-│   ├── create-api-example/
-│   ├── find-api-example/
-│   └── migrate-api-to-project/
+├── .agents/skills/query-cases/  # Read-only case and registration discovery
+├── .agents/skills/upsert-case/  # Add or modify a case
+├── .agents/skills/review-case/  # Review lifecycle, threading, and conventions
 ├── AGENTS.md                    # Agent guide
 └── ARCHITECTURE.md              # This file
 ```
@@ -61,7 +59,7 @@ Each example is a dialog class that:
 - Inherits from `CDialogEx` or `CDialog`
 - Implements message handlers via `BEGIN_MESSAGE_MAP` / `END_MESSAGE_MAP`
 - Manages its own Agora engine lifecycle
-- Implements `IAgoraRtcEngineEventHandler` interface
+- Implements `IRtcEngineEventHandler` interface
 - Owns all UI controls and state for that example
 
 ### Naming Convention
@@ -77,15 +75,15 @@ All examples are registered in `APIExampleDlg.h` and `APIExampleDlg.cpp`. The lo
 
 ### Configuration Management
 
-Configuration is centralized in `CConfig` class:
-- App ID management
-- Token generation
-- Global settings (resolution, frame rate, etc.)
+`CConfig` supplies the App ID and localized strings. `GET_APP_ID` expands to
+`cs2utf8(CConfig::GetInstance()->GetAPP_ID())`; keep that UTF-8 value alive while initializing
+the engine. Media settings belong to the selected case. Token input/generation is described
+below and is not a static CConfig API.
 
 ### Common Utilities
 
 All examples share utilities:
-- `CConfig` — App ID, token, and global settings
+- `CConfig` — App ID and localized strings
 - `VideoExtractor` — Video frame extraction
 - `YUVReader` — YUV file reading
 - DirectShow and DirectSound wrappers
@@ -101,13 +99,12 @@ All examples share utilities:
 | AudioProfile | `Advanced/AudioProfile/` | `setAudioProfile()`, `setAudioScenario()` | Audio profile and scenario configuration |
 | AudioVolume | `Advanced/AudioVolume/` | `adjustRecordingSignalVolume()`, `adjustPlaybackSignalVolume()`, `adjustUserPlaybackSignalVolume()` | Audio volume adjustment and control |
 | Beauty | `Advanced/Beauty/` | `setBeautyEffectOptions()`, `setVideoEncoderConfiguration()` | Beauty filter and enhancement effects |
-| Beauty2.0 | `Advanced/Beauty2.0/` | `setBeautyEffectOptions()` with v2.0 API | Enhanced beauty effects with v2.0 API |
+| Beauty2.0 | `Advanced/Beauty2.0/` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `setVideoEffectFloatParam()` | Enhanced beauty effects with v2.0 API |
 | BeautyAudio | `Advanced/BeautyAudio/` | `setBeautyEffectOptions()`, `setAudioEffectPreset()` | Combined audio and video beauty effects |
 | CrossChannel | `Advanced/CrossChannel/` | `startChannelMediaRelay()`, `updateChannelMediaRelay()`, `stopChannelMediaRelay()` | Media relay across multiple channels |
-| CustomAudioCapture | `Advanced/CustomAudioCapture/` | `setExternalAudioSource()`, `pushAudioFrame()` | Custom audio source capture |
+| CustomAudioCapture | `Advanced/CustomAudioCapture/` | `createCustomAudioTrack()`, `pushAudioFrame()`, `destroyCustomAudioTrack()` | Custom audio source capture |
 | CustomEncrypt | `Advanced/CustomEncrypt/` | `setEncryptionConfig()`, `enableEncryption()` | Custom stream encryption |
 | CustomVideoCapture | `Advanced/CustomVideoCapture/` | `setExternalVideoSource()`, `pushVideoFrame()` | Custom video source capture |
-| FaceCapture | `Advanced/FaceCapture/` | `enableFaceDetection()`, `getFaceDetectionResult()` | Face detection and capture |
 | LocalVideoTranscoding | `Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoding()`, `updateLocalTranscodingConfig()`, `stopLocalVideoTranscoding()` | Local video transcoding and composition |
 | MediaEncrypt | `Advanced/MediaEncrypt/` | `setEncryptionConfig()`, `enableEncryption()` | Media stream encryption |
 | MediaPlayer | `Advanced/MediaPlayer/` | `createMediaPlayer()`, `open()`, `play()`, `pause()`, `stop()` | Media file playback and control |
@@ -134,39 +131,38 @@ All examples share utilities:
 
 ## Engine Lifecycle
 
-```
-1. Create Engine
-   createAgoraRtcEngine()
-   
-2. Initialize Engine
-   initialize(RtcEngineContext)
-   
-3. Enable Features (optional)
-   enableVideo(), enableAudio()
-   
-4. Setup Local Media (optional)
-   setupLocalVideo(), startAudioMixing()
-   
-5. Join Channel
-   joinChannel(token, channelName, uid)
-   
-6. Handle Callbacks
-   onJoinChannelSuccess(), onUserJoined(), onUserOffline()
-   
-7. Leave Channel
-   leaveChannel()
-   
-8. Release Engine
-   release()
-```
+`APIExampleDlg.cpp` owns the scene lifecycle:
+
+1. `InitSceneDialog()` precreates each dialog. `OnInitDialog()` sets up UI only.
+2. `CreateScene()` calls the selected dialog's `InitAgora()` and shows it. Create the engine
+   with `createAgoraRtcEngine()`, initialize it with `RtcEngineContext`, and configure the
+   media required by the case before joining.
+3. SDK callbacks post messages to the dialog's UI thread through `IRtcEngineEventHandler`.
+4. `ReleaseScene()` calls `UnInitAgora()` and hides the dialog. Invalidate pending requests,
+   leave the channel, stop owned media, release the engine and clear its pointer here.
+
+The current SDK's `release(nullptr)` completes destruction synchronously. Keep the callback
+receiver alive until release finishes, then detach it and discard stale queued messages.
+Do not release inside an SDK callback. Complete cleanup before the next scene initializes.
+Hidden scene dialogs are not destroyed, so `PostNcDestroy()` or a destructor alone cannot
+provide scene-exit cleanup. Standalone windows may use destruction hooks only when their
+actual exit path destroys the window and matches host ownership.
+
+See [upsert-case](.agents/skills/upsert-case/SKILL.md) and
+[review-case](.agents/skills/review-case/SKILL.md) for registration and validation details.
 
 ## Token Flow
 
-Token is obtained from `CConfig` and passed to `joinChannel()`:
+Use the case's explicit Token input (as in `Basic/JoinChannelVideoByToken/`) or its existing
+asynchronous helper. CConfig has no GetToken method. Pass the same channel and UID used to
+obtain the Token to one of the SDK's actual join overloads:
 
 ```cpp
-const char* token = CConfig::GetToken(channelName);
-m_rtcEngine->joinChannel(token, channelName, "", 0);
+// token, channelName and uid are values owned by the active case.
+int result = m_rtcEngine->joinChannel(token.c_str(), channelName.c_str(), "", uid);
+// Check result, then wait for onJoinChannelSuccess before showing a joined state.
 ```
 
-For production, tokens should be generated server-side and refreshed before expiration.
+Handle request failure and expiring tokens explicitly; renew only while the original
+scene/engine is active. Production tokens should be generated server-side. Never stage
+real App IDs, App Certificates or tokens.

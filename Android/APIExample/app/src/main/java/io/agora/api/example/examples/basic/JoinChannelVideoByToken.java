@@ -85,7 +85,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             // The context of Android Activity
             config.mContext = requireContext().getApplicationContext();
             // The App ID issued to you by Agora.
-            // See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+            // See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
             config.mAppId = appId;
             // The channel profile.
             // CHANNEL_PROFILE_COMMUNICATION(0): Communication. Agora recommends using the live streaming profile
@@ -100,7 +100,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             // RtcEngineEventHandler is an abstract class providing default implementation.
             // he SDK uses this class to report to the app on SDK runtime events.
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             // This parameter is for reporting the usages of APIExample to agora background.
@@ -154,7 +154,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                     showLongToast(getString(R.string.app_id_empty));
                     return;
                 }
-                if (createRtcEngine(appId)) {
+                if (engine != null || createRtcEngine(appId)) {
                     joinChannel(channelId, token);
                 }
 
@@ -217,8 +217,8 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+            // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
@@ -236,20 +236,38 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
          */
         @Override
         public void onError(int err) {
             super.onError(err);
-            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
-            if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
-                engine.leaveChannel();
-                runOnUIThread(() -> join.setEnabled(true));
+//            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
+        }
 
-                if (Constants.ERR_INVALID_TOKEN == err) {
+        /**
+         * Occurs when the network connection state changes.
+         * @param state The current connection state.
+         * @param reason Reason for connection status change
+         */
+        @Override
+        public void onConnectionStateChanged(int state, int reason) {
+            super.onConnectionStateChanged(state, reason);
+            if (reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN || reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
+                engine.leaveChannel();
+                runOnUIThread(() -> {
+                    joined = false;
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.join));
+                    for (ViewGroup value : remoteViews.values()) {
+                        value.removeAllViews();
+                    }
+                    remoteViews.clear();
+                });
+
+                if (Constants.CONNECTION_CHANGED_INVALID_TOKEN == reason) {
                     showAlert(getString(R.string.token_invalid));
                 }
-                if (Constants.ERR_TOKEN_EXPIRED == err) {
+                if (Constants.CONNECTION_CHANGED_TOKEN_EXPIRED == reason) {
                     showAlert(getString(R.string.token_expired));
                 }
             }

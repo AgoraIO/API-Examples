@@ -9,7 +9,7 @@
         <!--Custom Video Source(Push)-->
         <scene sceneID="lAY-XF-tLd">
             <objects>
-                <viewController title="Custom Video Source (Push)" storyboardIdentifier="CustomVideoSourcePush" id="sXF-vm-Rrb" userLabel="Custom Video Source(Push)" customClass="CustomVideoSourcePush" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Custom Video Source" storyboardIdentifier="CustomVideoSourcePush" id="sXF-vm-Rrb" userLabel="Custom Video Source" customClass="CustomVideoSourcePush" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="LC5-eJ-VQW">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

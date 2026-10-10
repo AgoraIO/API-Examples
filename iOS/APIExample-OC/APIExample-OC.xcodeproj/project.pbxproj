@@ -16,6 +16,7 @@
 		C2C764A5CC78FAC392BE5584 /* Pods_Agora_ScreenShare_Extension_OC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6720DD8507EB2C642C0FD /* Pods_Agora_ScreenShare_Extension_OC.framework */; };
 		DD8A1F7F2CA50749001CEC51 /* AgoraPCMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8A1F7E2CA50749001CEC51 /* AgoraPCMPlayer.m */; };
 		E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF02A5D004F009947CF /* AppDelegate.m */; };
+		E07E25502B2E7E4203C5B06A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E08D17F052D0A72FB0F67299 /* SceneDelegate.m */; };
 		E70ADDF72A5D004F009947CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70ADDF62A5D004F009947CF /* ViewController.m */; };
 		E70ADDFA2A5D004F009947CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDF82A5D004F009947CF /* Main.storyboard */; };
 		E70ADDFC2A5D0050009947CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70ADDFB2A5D0050009947CF /* Assets.xcassets */; };
@@ -187,6 +188,8 @@
 		AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Simulcast.storyboard; path = Base.lproj/Simulcast.storyboard; sourceTree = "<group>"; };
 		AB84741C2DF9CD9300B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Multipath.strings; sourceTree = "<group>"; };
 		AB84741E2DF9CD9B00B4DB73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Simulcast.strings; sourceTree = "<group>"; };
+		ABB90ACA2DF728F8007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Multipath.strings"; sourceTree = "<group>"; };
+		ABB90ACC2DF7293C007FDDEB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Simulcast.strings"; sourceTree = "<group>"; };
 		B653B1910F3D2DB664FFCA69 /* Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		BBBCB16091148F518866D952 /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
 		C4F0E8C20AFE260912A60198 /* Pods-Agora-ScreenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension-OC/Pods-Agora-ScreenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
@@ -196,7 +199,9 @@
 		E22416FC36DE1212EE1E1760 /* Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScrrenShare-Extension-OC/Pods-Agora-ScrrenShare-Extension-OC.release.xcconfig"; sourceTree = "<group>"; };
 		E70ADDEC2A5D004F009947CF /* APIExample-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70ADDEF2A5D004F009947CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1DE07CD517FCB9D0AF085070 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		E70ADDF02A5D004F009947CF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E08D17F052D0A72FB0F67299 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		E70ADDF52A5D004F009947CF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		E70ADDF62A5D004F009947CF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E70ADDFB2A5D0050009947CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -460,7 +465,9 @@
 				E70ADE0B2A5D00B1009947CF /* Common */,
 				E70ADE0C2A5D00C0009947CF /* Resources */,
 				E70ADDEF2A5D004F009947CF /* AppDelegate.h */,
+				1DE07CD517FCB9D0AF085070 /* SceneDelegate.h */,
 				E70ADDF02A5D004F009947CF /* AppDelegate.m */,
+				E08D17F052D0A72FB0F67299 /* SceneDelegate.m */,
 				E70ADDF52A5D004F009947CF /* ViewController.h */,
 				E70ADDF62A5D004F009947CF /* ViewController.m */,
 				E70ADDF82A5D004F009947CF /* Main.storyboard */,
@@ -1311,6 +1318,7 @@
 				E70ADEE62A6A71FE009947CF /* ExternalAudio.mm in Sources */,
 				E70ADDF72A5D004F009947CF /* ViewController.m in Sources */,
 				E70ADDF12A5D004F009947CF /* AppDelegate.m in Sources */,
+				E07E25502B2E7E4203C5B06A /* SceneDelegate.m in Sources */,
 				E70ADEEB2A6A727E009947CF /* UIColor+CSRGB.m in Sources */,
 				E70ADE7A2A60F214009947CF /* AlertManager.swift in Sources */,
 				E70ADE402A5D4D05009947CF /* JSONObject.swift in Sources */,
@@ -1395,6 +1403,7 @@
 			children = (
 				AB84740D2DF9CD7900B4DB73 /* Multipath.storyboard */,
 				AB84741C2DF9CD9300B4DB73 /* en */,
+				ABB90ACA2DF728F8007FDDEB /* zh-Hans */,
 			);
 			name = Multipath.storyboard;
 			sourceTree = "<group>";
@@ -1404,6 +1413,7 @@
 			children = (
 				AB8474132DF9CD7900B4DB73 /* Simulcast.storyboard */,
 				AB84741E2DF9CD9B00B4DB73 /* en */,
+				ABB90ACC2DF7293C007FDDEB /* zh-Hans */,
 			);
 			name = Simulcast.storyboard;
 			sourceTree = "<group>";
@@ -1620,7 +1630,6 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1628,7 +1637,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1662,7 +1671,6 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Request Mic Access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1670,7 +1678,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1703,7 +1711,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1732,7 +1740,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-oc.Agora-ScreenShare-Extension-OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

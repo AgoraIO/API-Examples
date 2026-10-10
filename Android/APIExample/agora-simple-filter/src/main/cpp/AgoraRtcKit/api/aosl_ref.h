@@ -28,7 +28,7 @@ typedef struct _internal_ref_od_ *aosl_ref_t;
 
 #define AOSL_REF_INVALID ((aosl_ref_t)(intptr_t)NULL)
 
-#define aosl_ref_invalid(ref) ((intptr_t)(ref) <= 0)
+#define aosl_ref_invalid(ref) ((aosl_ref_t)(ref) == AOSL_REF_INVALID)
 
 
 /**
@@ -52,8 +52,32 @@ typedef void (*aosl_ref_dtor_t) (void *arg);
  *                 0 the destroy caller will not wait other threads;
  * Return value:
  *         the ref object id, please use aosl_ref_invalid macro to check whether failed.
+ * Remarks:
+ *     destroy_wait is one of the most important lifetime policy switches:
+ *     1. if non-zero, aosl_ref_destroy() waits for in-flight normal ref ops
+ *        such as hold/read/write to finish before the destroy completes;
+ *     2. if 0, destroy only marks the object destroyed and does not wait for
+ *        those in-flight users.
+ *     AOSL ares objects are a typical case that usually do not need waiting.
  **/
 extern __aosl_api__ aosl_ref_t aosl_ref_create (void *arg, aosl_ref_dtor_t dtor, int destroy_wait);
+
+#define AOSL_REF_NEWID 0x00000001
+
+/**
+ * The reference object creating with flags function prototype, which is used to create a ref object.
+ * Parameters:
+ *            flags: creating flags bitmask, which specified some special attributes of the ref object;
+ *              arg: the parameter attached with the reference object;
+ *             dtor: the ref object destructor function, which will be invoked when
+ *                   the ref object is deleted;
+ *     destroy_wait:
+ *            none-0 the destroy caller will wait other threads to release the ref object;
+ *                 0 the destroy caller will not wait other threads;
+ * Return value:
+ *         the ref object id, please use aosl_ref_invalid macro to check whether failed.
+ **/
+extern __aosl_api__ aosl_ref_t aosl_ref_create_flags (int flags, void *arg, aosl_ref_dtor_t dtor, int destroy_wait);
 
 /**
  * Returns the total ref objects count.
@@ -98,6 +122,10 @@ typedef void (*aosl_ref_func_t) (void *arg, uintptr_t argc, uintptr_t argv []);
  * Return value:
  *            0: success
  *           <0: failure with aosl_errno set
+ * Remarks:
+ *     hold protects the object lifetime by usage count, but does not take the
+ *     internal read/write lock. For destroy_wait refs, an already-running hold
+ *     callback still delays aosl_ref_destroy() until the callback returns.
  **/
 extern __aosl_api__ int aosl_ref_hold (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_ref_hold_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
@@ -113,6 +141,9 @@ extern __aosl_api__ int aosl_ref_hold_argv (aosl_ref_t ref, aosl_ref_func_t f, u
  * Return value:
  *            0: success
  *           <0: failure with aosl_errno set
+ * Remarks:
+ *     Multiple read callbacks may run concurrently. For destroy_wait refs,
+ *     aosl_ref_destroy() waits until in-flight read callbacks return.
  **/
 extern __aosl_api__ int aosl_ref_read (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_ref_read_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
@@ -128,6 +159,10 @@ extern __aosl_api__ int aosl_ref_read_argv (aosl_ref_t ref, aosl_ref_func_t f, u
  * Return value:
  *            0: success
  *           <0: failure with aosl_errno set
+ * Remarks:
+ *     write is exclusive against other read/write callbacks. For destroy_wait
+ *     refs, aosl_ref_destroy() waits until the in-flight write callback
+ *     returns.
  **/
 extern __aosl_api__ int aosl_ref_write (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_ref_write_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
@@ -137,7 +172,7 @@ extern __aosl_api__ int aosl_ref_write_argv (aosl_ref_t ref, aosl_ref_func_t f, 
  * Hold the ref object with the saved magic, and invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
- *          magic: the saved magic variable address;
+ *          magic: the saved magic of the ref object;
  *              f: the callback function;
  *           argc: the args count
  *            ...: variable args
@@ -153,7 +188,7 @@ extern __aosl_api__ int aosl_ref_magic_hold_argv (aosl_ref_t ref, aosl_ref_magic
  * Read lock the ref object with the saved magic, and invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
- *          magic: the saved magic variable address;
+ *          magic: the saved magic of the ref object;
  *              f: the callback function;
  *           argc: the args count
  *            ...: variable args
@@ -169,7 +204,7 @@ extern __aosl_api__ int aosl_ref_magic_read_argv (aosl_ref_t ref, aosl_ref_magic
  * Write lock the ref object with the saved magic, and invoke the specified callback function.
  * Parameters:
  *            ref: the ref object id;
- *          magic: the saved magic variable address;
+ *          magic: the saved magic of the ref object;
  *              f: the callback function;
  *           argc: the args count
  *            ...: variable args
@@ -191,6 +226,17 @@ extern __aosl_api__ int aosl_ref_magic_write_argv (aosl_ref_t ref, aosl_ref_magi
  * Return value:
  *            0: success
  *           <0: failure with aosl_errno set
+ * Remarks:
+ *     unsafe is intentionally different from hold/read/write:
+ *     1. it is allowed to run even after the ref has already been marked
+ *        destroyed internally, as long as the internal object is still
+ *        reachable;
+ *     2. destroy_wait destroyers do not wait for unsafe/maystall sections in
+ *        the same way they wait normal hold/read/write users;
+ *     3. after the callback returns, unsafe reports -EPERM if the ref has
+ *        already become destroyed.
+ *     This mode is mainly for final cleanup paths and advanced lifecycle
+ *     control, not for normal business access.
  **/
 extern __aosl_api__ int aosl_ref_unsafe (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_ref_unsafe_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
@@ -206,6 +252,11 @@ extern __aosl_api__ int aosl_ref_unsafe_argv (aosl_ref_t ref, aosl_ref_func_t f,
  * Return value:
  *            0: success
  *           <0: failure with aosl_errno set
+ * Remarks:
+ *     maystall currently shares the same exported implementation as unsafe.
+ *     Use it when the callback may block for a long time and therefore should
+ *     not force destroy_wait callers to wait for it like a normal read/write
+ *     user.
  **/
 extern __aosl_api__ int aosl_ref_maystall (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, ...);
 extern __aosl_api__ int aosl_ref_maystall_args (aosl_ref_t ref, aosl_ref_func_t f, uintptr_t argc, va_list args);
@@ -322,6 +373,16 @@ extern __aosl_api__ int aosl_ref_set_scope (aosl_ref_t ref, aosl_ref_t scope_ref
  * Return value:
  *        0: success
  *       <0: failed, and aosl_errno indicates what error occurs
+ * Remarks:
+ *     Destroy has two logically separate effects:
+ *     1. mark the ref object as destroying/destroyed so that later normal
+ *        hold/read/write attempts fail;
+ *     2. optionally uninstall and free the ref object when do_delete != 0.
+ *     For destroy_wait refs, destroy waits for in-flight normal hold/read/
+ *     write users to leave before it reports completion. It does not turn an
+ *     already-running direct hold/read/write callback into free_only; those
+ *     callbacks run their normal path and only later callers observe the
+ *     destroyed state.
  **/
 extern __aosl_api__ int aosl_ref_destroy (aosl_ref_t ref, int do_delete);
 

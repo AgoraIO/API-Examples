@@ -1,0 +1,264 @@
+---
+name: upsert-case
+description: >
+  Add a new API demo case or modify an existing one in the APIExample (UIKit + Swift) project.
+  Covers folder creation, Entry/Main Swift file, storyboard, MenuItem registration, Xcode target
+  membership, and Case Index update.
+license: MIT
+metadata:
+  author: APIExample Team
+  version: 1.0.0
+  platform: iOS
+---
+
+# upsert-case — APIExample
+
+## When to Use
+
+- **Add**: the feature has no existing case in `Examples/Basic/` or `Examples/Advanced/`
+- **Modify**: the case already exists — update the existing `.swift` and storyboard first, then check registration and docs
+
+Before adding, search the Case Index in `ARCHITECTURE.md` to confirm the case does not already exist.
+
+## Files to Touch
+
+| Scenario | Files |
+|----------|-------|
+| Add new case | New folder + `.swift` file + `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` (MenuItem), `APIExample.xcodeproj/project.pbxproj` (target membership), `ARCHITECTURE.md` (Case Index) |
+| Modify existing case | Existing `.swift` file(s), optionally `Base.lproj/<ExampleName>.storyboard`, `ViewController.swift` if registration/wiring changed, `ARCHITECTURE.md` (Case Index); update the project file only for new or moved build inputs |
+
+---
+
+## Modify Existing Case
+
+When repairing or rebuilding an existing case, use this order instead of the new-case flow:
+
+1. Locate the existing `.swift` implementation and update the actual runtime logic first
+2. Update the existing storyboard if scene wiring, outlets, actions, or controller identifiers changed
+3. Check `APIExample/ViewController.swift` and fix the `MenuItem` only if registration or `controller` / `storyboard` wiring is wrong
+4. Update `ARCHITECTURE.md` last if the case path, APIs, or description changed
+
+Do not skip implementation edits just because the case folder already exists.
+
+## Step 1 — Create the Example Folder
+
+```
+APIExample/Examples/[Basic|Advanced]/<ExampleName>/
+```
+
+Use `Basic/` for fundamental channel join demos, `Advanced/` for everything else.
+
+## Step 2 — Create the Swift File
+
+Create `<ExampleName>.swift` containing both Entry and Main classes:
+
+```swift
+import UIKit
+import AgoraRtcKit
+
+class <ExampleName>Entry: UIViewController {
+    @IBOutlet weak var channelTextField: UITextField!
+
+    @IBAction func onJoinPressed(_ sender: UIButton) {
+        guard let channelName = channelTextField.text, !channelName.isEmpty else { return }
+        let storyboard = UIStoryboard(name: "<ExampleName>", bundle: nil)
+        guard let mainVC = storyboard.instantiateViewController(
+            withIdentifier: "<ExampleName>") as? <ExampleName>Main else { return }
+        mainVC.configs = ["channelName": channelName]
+        navigationController?.pushViewController(mainVC, animated: true)
+    }
+}
+
+class <ExampleName>Main: BaseViewController {
+    private(set) var agoraKit: AgoraRtcEngineKit?
+    private var tokenRequestID = 0
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupRTC()
+    }
+
+    func setupRTC() {
+        precondition(Thread.isMainThread)
+        guard agoraKit == nil else { return }
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configure this case's media, then call requestJoin(channelName:requestPermission:).
+        // Supply the project's permission flow; its completion must report granted/denied.
+    }
+
+    // Main-queue entry point. A new request supersedes any pending permission/Token response.
+    func requestJoin(channelName: String,
+                     requestPermission: (@escaping (Bool) -> Void) -> Void) {
+        precondition(Thread.isMainThread)
+        guard let engine = agoraKit, !channelName.isEmpty else { return }
+        tokenRequestID += 1
+        let requestID = tokenRequestID
+        let uid: UInt = 0
+        requestPermission { [weak self, weak engine] granted in
+            DispatchQueue.main.async { [weak self, weak engine] in
+                guard let self = self, let engine = engine,
+                      self.tokenRequestID == requestID, self.agoraKit === engine else { return }
+                guard granted else {
+                    LogUtils.log(message: "Permission denied", level: .error)
+                    return
+                }
+                NetworkManager.shared.generateToken(channelName: channelName, uid: uid) { [weak self, weak engine] token in
+                    DispatchQueue.main.async { [weak self, weak engine] in
+                        guard let self = self, let engine = engine,
+                              self.tokenRequestID == requestID, self.agoraKit === engine else { return }
+                        if !(KeyCenter.Certificate ?? "").isEmpty && (token ?? "").isEmpty {
+                            LogUtils.log(message: "Token request failed", level: .error)
+                            return
+                        }
+                        let option = AgoraRtcChannelMediaOptions()
+                        option.clientRoleType = .broadcaster
+                        option.publishMicrophoneTrack = true
+                        // Configure camera publication/canvases for video cases after camera permission.
+                        let result = engine.joinChannel(byToken: token, channelId: channelName,
+                                                        uid: uid, mediaOptions: option)
+                        if result != 0 {
+                            LogUtils.log(message: "joinChannel failed: \(result)", level: .error)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func leaveChannel() {
+        precondition(Thread.isMainThread)
+        tokenRequestID += 1
+        agoraKit?.leaveChannel(nil)
+    }
+
+    func onDestroy() {
+        precondition(Thread.isMainThread)
+        leaveChannel() // Invalidate callbacks even while Token/permission/join is pending.
+        guard agoraKit != nil else { return }
+        // Stop case-owned capture, players, timers and observers here.
+        AgoraRtcEngineKit.destroy()
+        agoraKit = nil
+    }
+
+    override func willMove(toParent parent: UIViewController?) {
+        super.willMove(toParent: parent)
+        if parent == nil { onDestroy() }
+    }
+}
+
+extension <ExampleName>Main: AgoraRtcEngineDelegate {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String,
+                   withUid uid: UInt, elapsed: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.agoraKit === engine else { return }
+            LogUtils.log(message: "Joined: \(channel) uid: \(uid)", level: .info)
+        }
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.agoraKit === engine else { return }
+            LogUtils.log(message: "Error: \(errorCode.rawValue)", level: .error)
+        }
+    }
+}
+```
+
+## Step 3 — Create the Storyboard
+
+Create `APIExample/Examples/[Basic|Advanced]/<ExampleName>/Base.lproj/<ExampleName>.storyboard` with two scenes:
+
+| Scene | Storyboard ID | Class |
+|-------|--------------|-------|
+| Entry | `EntryViewController` | `<ExampleName>Entry` |
+| Main  | `<ExampleName>` | `<ExampleName>Main` |
+
+Connect a `Show` segue or use the manual push in `onJoinPressed`.
+
+Keep the storyboard inside the example folder. Do not place new case storyboards in the shared `APIExample/Base.lproj/` directory.
+
+## Default Entry UI Convention
+
+Unless the user explicitly asks for a different flow, use this default Entry layout and interaction:
+
+- One channel input field (`UITextField`) with placeholder `"Enter channel name".localized`
+- One join button (`UIButton`) with title `"Join".localized`
+- Join action validates non-empty channel name, dismisses keyboard, and pushes Main VC
+- Pass config via `configs = ["channelName": channelName]`
+
+Rationale:
+- This matches the dominant pattern used by existing APIExample cases
+- Keeps new cases consistent with existing user interaction and navigation
+- Minimizes refactor cost when RTC join logic is added later
+
+## Step 4 — Register the MenuItem
+
+Add to the `menus` array in `APIExample/ViewController.swift`:
+
+```swift
+MenuItem(name: "<Display Name>".localized,
+         storyboard: "<ExampleName>",
+         controller: "<ExampleName>")
+```
+
+Place it in the correct section (Basic / Advanced).
+
+## Step 5 — Add Files to the Xcode Target
+
+This project uses explicit Xcode groups and build phases. For a new case, update
+`APIExample.xcodeproj/project.pbxproj` so the Swift file belongs to the `APIExample`
+target's Sources build phase and the storyboard belongs to its Resources build phase.
+Add any new localized or media resources to Resources as well. Existing-file edits do not
+require a project-file change unless a build input was added or moved.
+
+## Step 6 — Update the Case Index
+
+Add a row to the `## Case Index` table in `ARCHITECTURE.md`:
+
+```markdown
+| <ExampleName> | `Examples/[Basic|Advanced]/<ExampleName>/<ExampleName>.swift` | `keyApi1()`, `keyApi2()` | One-line description |
+```
+
+Key APIs: list 2–5 core SDK methods the case demonstrates. Do not list `joinChannel`, `leaveChannel`, `destroy`, or `sharedEngine` unless they are the primary focus.
+
+---
+
+The lifecycle code is a skeleton: wire `requestJoin(channelName:requestPermission:)` from
+setup or the Join action, passing the channel from `configs` and the case's actual permission
+request. Never replace the permission closure with an unconditional grant in a real case.
+Keep setup, join, leave and destroy on the main queue. A user Leave action must call
+`leaveChannel()` so pending requests are invalidated, even before the SDK reports joined.
+
+## Verification Checklist
+
+- [ ] Folder created under correct category (Basic / Advanced)
+- [ ] Both Entry and Main classes exist in the Swift file
+- [ ] Main inherits `BaseViewController`
+- [ ] Storyboard has correct scene IDs
+- [ ] Entry scene follows default UI convention (channel input + Join button), unless the user requested otherwise
+- [ ] MenuItem added to `ViewController.swift`
+- [ ] New Swift files are in the `APIExample` target's Sources build phase
+- [ ] New storyboards, localized files, and media assets are in the target's Resources build phase
+- [ ] `leaveChannel()` + `AgoraRtcEngineKit.destroy()` called in `willMove(toParent:)` when `parent == nil`
+- [ ] UI updates inside delegate callbacks dispatched to `DispatchQueue.main`
+- [ ] Camera/microphone permissions requested before `joinChannel()`
+- [ ] Case Index row added/updated in `ARCHITECTURE.md`
+- [ ] Permission/Token pending → leave/destroy → delayed callback does not join
+- [ ] Repeat cleanup, reopen and out-of-order Token responses preserve only the active request
+- [ ] Missing required Token and nonzero join return produce a failure state without logging credentials
+- [ ] Project builds without errors
+
+---
+
+## NEVER
+
+- NEVER create `AgoraRtcEngineKit` in the Entry VC
+- NEVER call `leaveChannel` or `destroy` in `viewDidDisappear` — use `willMove(toParent:)` with `parent == nil`
+- NEVER update UI directly inside `AgoraRtcEngineDelegate` callbacks — always `DispatchQueue.main.async { }`
+- NEVER add a new scene to `Main.storyboard` — each case must have its own `.storyboard` file
+- NEVER add a source or resource file without adding it to the `APIExample` target
+- NEVER share an `AgoraRtcEngineKit` instance between cases
+- NEVER call `joinChannel` before requesting camera/microphone permissions
+- NEVER skip updating the Case Index in `ARCHITECTURE.md`

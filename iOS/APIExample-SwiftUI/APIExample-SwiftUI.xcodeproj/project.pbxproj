@@ -74,8 +74,6 @@
 		4C9309B02CBA91530085EFF9 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309562CBA91520085EFF9 /* RawVideoData.swift */; };
 		4C9309B12CBA91530085EFF9 /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309582CBA91520085EFF9 /* ARKit.swift */; };
 		4C9309B22CBA91530085EFF9 /* ARKitRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309592CBA91520085EFF9 /* ARKitRTC.swift */; };
-		4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */; };
-		4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095C2CBA91520085EFF9 /* FaceCapture.swift */; };
 		4C9309B52CBA91530085EFF9 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095E2CBA91520085EFF9 /* MutliCamera.swift */; };
 		4C9309B62CBA91530085EFF9 /* MutliCameraRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */; };
 		4C9309B72CBA91530085EFF9 /* StreamEncryptionRTC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */; };
@@ -175,7 +173,8 @@
 		4C9306A02CB961150085EFF9 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		4C9306A12CB961150085EFF9 /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
 		4C9306A22CB961150085EFF9 /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
-		4C9306A32CB961150085EFF9 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		C0DE47012CB961150085EFF9 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C0DE47022CB961150085EFF9 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4C9306A42CB961150085EFF9 /* AR.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = AR.scnassets; sourceTree = "<group>"; };
 		4C9306A52CB961150085EFF9 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
 		4C9306A62CB961150085EFF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -254,8 +253,6 @@
 		4C9309562CBA91520085EFF9 /* RawVideoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
 		4C9309582CBA91520085EFF9 /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
 		4C9309592CBA91520085EFF9 /* ARKitRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKitRTC.swift; sourceTree = "<group>"; };
-		4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCaptureRTC.swift; sourceTree = "<group>"; };
-		4C93095C2CBA91520085EFF9 /* FaceCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceCapture.swift; sourceTree = "<group>"; };
 		4C93095E2CBA91520085EFF9 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
 		4C93095F2CBA91520085EFF9 /* MutliCameraRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCameraRTC.swift; sourceTree = "<group>"; };
 		4C9309612CBA91520085EFF9 /* StreamEncryptionRTC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptionRTC.swift; sourceTree = "<group>"; };
@@ -625,7 +622,6 @@
 				4C9309662CBA91520085EFF9 /* CreateDataStream */,
 				4C9309872CBA91530085EFF9 /* CustomAudioRender */,
 				4C93096E2CBA91520085EFF9 /* CustomPCMAudioSource */,
-				4C93095A2CBA91520085EFF9 /* FaceCapture */,
 				4C9309712CBA91520085EFF9 /* JoinMultiChannel */,
 				4C9309692CBA91520085EFF9 /* KtvCopyrightMusic */,
 				4C9309632CBA91520085EFF9 /* LiveStreaming */,
@@ -683,15 +679,6 @@
 				4C9309592CBA91520085EFF9 /* ARKitRTC.swift */,
 			);
 			path = ARKit;
-			sourceTree = "<group>";
-		};
-		4C93095A2CBA91520085EFF9 /* FaceCapture */ = {
-			isa = PBXGroup;
-			children = (
-				4C93095B2CBA91520085EFF9 /* FaceCaptureRTC.swift */,
-				4C93095C2CBA91520085EFF9 /* FaceCapture.swift */,
-			);
-			path = FaceCapture;
 			sourceTree = "<group>";
 		};
 		4C93095D2CBA91520085EFF9 /* MutliCamera */ = {
@@ -1014,6 +1001,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 4C9306802CB9607E0085EFF9;
 			productRefGroup = 4C93068A2CB9607E0085EFF9 /* Products */;
@@ -1219,8 +1207,6 @@
 				4C9309D32CBA91530085EFF9 /* LocalVideoTranscoding.swift in Sources */,
 				4C93076C2CB961150085EFF9 /* VideoView.swift in Sources */,
 				4C9307722CB961150085EFF9 /* AgoraExtension.swift in Sources */,
-				4C9309B32CBA91530085EFF9 /* FaceCaptureRTC.swift in Sources */,
-				4C9309B42CBA91530085EFF9 /* FaceCapture.swift in Sources */,
 				4C9309DF2CBA91530085EFF9 /* VideoProcessRTC.swift in Sources */,
 				4C93076B2CB961150085EFF9 /* AgoraYUVImageSourcePush.m in Sources */,
 				4C9307C62CB961160085EFF9 /* ContentView.swift in Sources */,
@@ -1261,6 +1247,18 @@
 			targetProxy = 4C9307E92CB963390085EFF9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4C9306A32CB961150085EFF9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C0DE47012CB961150085EFF9 /* en */,
+				C0DE47022CB961150085EFF9 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4C9306952CB9607F0085EFF9 /* Debug */ = {
@@ -1405,7 +1403,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1444,7 +1442,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1474,7 +1472,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1505,7 +1503,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples-swiftUI.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

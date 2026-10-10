@@ -128,7 +128,7 @@ public:
 	void ResumeStatus();
 	// start or stop capture.
 	// if bEnable is true start capture otherwise stop capture.
-	void EnableCaputre(BOOL bEnable);
+	BOOL EnableCaputre(BOOL bEnable);
 	
 	bool m_joinChannel = false;
 	bool m_initialize = false;
@@ -137,6 +137,7 @@ public:
 	bool m_extenalRenderAudio = false;
     IRtcEngine* m_rtcEngine = nullptr;
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	agora::rtc::track_id_t m_customAudioTrackId = agora::rtc::INVALID_TRACK_ID;
 	
 	CAGVideoWnd m_localVideoWnd;
     CAgoraCaptureAduioDlgEngineEventHandler		m_eventHandler;

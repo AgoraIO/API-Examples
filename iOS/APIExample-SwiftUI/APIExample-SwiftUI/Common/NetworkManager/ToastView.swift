@@ -202,20 +202,16 @@ class ToastView: UIView {
 }
 extension UIViewController {
     static var keyWindow: UIWindow? {
-        // Get connected scenes
-        if #available(iOS 13.0, *) {
-            return UIApplication.shared.connectedScenes
-            // Keep only active scenes, onscreen and visible to the user
-                .filter { $0.activationState == .foregroundActive }
-            // Keep only the first `UIWindowScene`
-                .first(where: { $0 is UIWindowScene })
-            // Get its associated windows
-                .flatMap({ $0 as? UIWindowScene })?.windows
-            // Finally, keep only the key window
-                .first(where: \.isKeyWindow)
-        } else {
-            return UIApplication.shared.keyWindow
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        // Prefer the active scene; startup and system dialogs can temporarily make it inactive.
+        for state in [UIScene.ActivationState.foregroundActive, .foregroundInactive] {
+            if let window = scenes.filter({ $0.activationState == state })
+                .flatMap({ $0.windows })
+                .first(where: \.isKeyWindow) {
+                return window
+            }
         }
+        return nil
     }
     static func cl_topViewController(_ viewController: UIViewController? = nil) -> UIViewController? {
         let viewController = viewController ?? keyWindow?.rootViewController

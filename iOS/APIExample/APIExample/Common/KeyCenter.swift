@@ -33,5 +33,4 @@ class KeyCenter: NSObject {
      */
     static let Certificate: String? = nil
     
-    static let FaceCaptureLicense: String? = nil
 }

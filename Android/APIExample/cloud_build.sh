@@ -30,11 +30,6 @@ else
   fi
 fi
 
-#change android maven to china repos
-#sed -ie "s#google()#maven { url \"https\://maven.aliyun.com/repository/public\" }\n        google()#g" settings.gradle
-#sed -ie "s#https://services.gradle.org/distributions#https://mirrors.cloud.tencent.com/gradle#g"
-# gradle/wrapper/gradle-wrapper.properties
-
 set_local_property() {
   key="$1"
   value="$2"
@@ -84,18 +79,18 @@ fi
 sed -i -e "s#applicationId \"io.agora.api.example\"#applicationId \"io.agora.entfull\"#g" app/build.gradle
 rm -f app/build.gradle-e
 cd app/src/main || exit 1
+curl --fail --location -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -o AgoraBeautyMaterial.zip "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/AgoraBeautyMaterial.zip" || exit 1
+rm -rf assets/beauty_agora
+mkdir -p assets/beauty_agora
+unzip -q AgoraBeautyMaterial.zip -d assets/beauty_agora || exit 1
+rm -f AgoraBeautyMaterial.zip
+test -f assets/beauty_agora/beauty_material_functional/config.json || exit 1
 curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_faceunity_resources_apiexample.zip"
 unzip -o vender_faceunity_resources_apiexample.zip
 rm -f vender_faceunity_resources_apiexample.zip
-#curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_bytedance_resources_apiexample.zip"
-#unzip -o vender_bytedance_resources_apiexample.zip
-#rm -f vender_bytedance_resources_apiexample.zip
-#curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sensetime_resources_apiexample.zip"
-#unzip -o vender_sensetime_resources_apiexample.zip
-#rm -f vender_sensetime_resources_apiexample.zip
-curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_agora_resources_apiexample.4.6.2.zip"
-unzip -o vender_agora_resources_apiexample.4.6.2.zip
-rm -f vender_agora_resources_apiexample.4.6.2.zip
+curl -L -H "X-JFrog-Art-Api:${JFROG_API_KEY}" -O "https://artifactory-api.bj2.agoralab.co/artifactory/qa_test_data/beauty/vender_sensetime_resources_apiexample.zip"
+unzip -o vender_sensetime_resources_apiexample.zip
+rm -f vender_sensetime_resources_apiexample.zip
 cd - || exit 1
 
 ./gradlew clean || exit 1

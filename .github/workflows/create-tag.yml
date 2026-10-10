@@ -34,18 +34,28 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Validate tag name
+        env:
+          TAG: ${{ inputs.tag }}
+        run: git check-ref-format "refs/tags/$TAG"
+
       - name: Push tag
         if: inputs.action == 'push'
+        env:
+          TAG: ${{ inputs.tag }}
+          TAG_MESSAGE: ${{ inputs.message }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -n "${{ inputs.message }}" ]; then
-            git tag -a "${{ inputs.tag }}" -m "${{ inputs.message }}"
+          if [ -n "$TAG_MESSAGE" ]; then
+            git tag -a -m "$TAG_MESSAGE" -- "$TAG"
           else
-            git tag "${{ inputs.tag }}"
+            git tag -- "$TAG"
           fi
-          git push origin "${{ inputs.tag }}"
+          git push origin "refs/tags/$TAG:refs/tags/$TAG"
 
       - name: Delete tag
         if: inputs.action == 'delete'
-        run: git push origin --delete "${{ inputs.tag }}"
+        env:
+          TAG: ${{ inputs.tag }}
+        run: git push origin ":refs/tags/$TAG"

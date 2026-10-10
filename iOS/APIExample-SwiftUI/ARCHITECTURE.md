@@ -1,5 +1,11 @@
 # ARCHITECTURE.md — APIExample-SwiftUI
 
+## Application Lifecycle
+
+The app and its broadcast extension retain their original iOS 14 minimum. `APIExample_SwiftUIApp`
+uses the SwiftUI `App` lifecycle and `WindowGroup`; do not add a UIKit app/scene delegate.
+UIKit presentation helpers resolve key windows from foreground `UIWindowScene` instances.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |
@@ -27,8 +33,7 @@
 | LocalVideoTranscoding | `Examples/Advanced/LocalVideoTranscoding/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `createMediaPlayer()` | Transcode multiple video sources locally before publishing |
 | LocalVideoComposition | `Examples/Advanced/LocalVideoComposition/` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()` | Composite camera and screen capture into one stream |
 | VideoProcess | `Examples/Advanced/VideoProcess/` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/` | `enableExtension()`, `createVideoEffectObject()`, `setFilterEffectOptions()` | Agora beauty extension with makeup and virtual background |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden because the APIs are deprecated since RTC SDK 4.6.0 |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
@@ -37,7 +42,6 @@
 | KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/` | — | Links to KTV copyright music documentation |
 | ARKit | `Examples/Advanced/ARKit/` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
 | AudioWaveform | `Examples/Advanced/AudioWaveform/` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
-| FaceCapture | `Examples/Advanced/FaceCapture/` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
 | Simulcast | `Examples/Advanced/Simulcast/` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
 | Multipath | `Examples/Advanced/Multipath/` | `updateChannel()` | Multi-path network transmission configuration |
 
@@ -80,8 +84,8 @@ APIExample-SwiftUI/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming"
     │       ├── RTMPStream/                  # "RTMP Streaming"
-    │       ├── VideoMetadata/               # "Video Metadata"
-    │       ├── VoiceChanger/                # "Voice Changer"
+    │       ├── VideoMetadata/               # "Media Metadata"
+    │       ├── VoiceChanger/                # "Voice Effects"
     │       ├── CustomPCMAudioSource/        # "Custom Audio Source (PCM)"
     │       ├── CustomAudioRender/           # "Custom Audio Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
@@ -91,27 +95,25 @@ APIExample-SwiftUI/
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       ├── MediaPlayer/                 # "Media Player"
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── LocalVideoTranscoding/       # "Local Video Transcoding"
     │       ├── LocalVideoComposition/       # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
-    │       ├── AgoraBeauty/                 # "Agora Beauty"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
     │       ├── ARKit/                       # "ARKit"
     │       ├── AudioWaveform/               # "Audio Waveform"
-    │       ├── FaceCapture/                 # "Face Capture"
     │       ├── Simulcast/                   # "Simulcast"
     │       └── Multipath/                   # "Multipath"
     │
-    ├── Resources/                           # Audio/video sample files
+    ├── Resources/                           # Audio/video sample files and en/zh-Hans localizations
     ├── Assets.xcassets/
     └── Preview Content/
 ```
@@ -131,12 +133,15 @@ struct MenuItem: Identifiable {
 
 Navigation uses SwiftUI `NavigationLink`. Each `MenuItem` holds an `AnyView` wrapping the Entry view.
 
-**To add a case, edit exactly two things:**
+**To add a case, update implementation, registration, and Xcode target membership:**
 1. Add a `MenuItem` to the `menus` array in `ContentView.swift`:
    ```swift
    MenuItem(name: "My New Case".localized, view: AnyView(MyNewCaseEntry()))
    ```
 2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift files
+3. Add the new Swift files to the `APIExample-SwiftUI` target's Sources build phase in
+   `APIExample-SwiftUI.xcodeproj/project.pbxproj`; add any new assets or localized files to
+   its Resources build phase
 
 ## Entry/RTC Pattern
 
@@ -153,7 +158,8 @@ Every example is split into two parts:
 - Implements all delegate callbacks
 
 **Main View** (`<ExampleName> : View`)
-- Holds the RTC object as `@ObservedObject`
+- Uses `@StateObject` when it creates and owns the RTC object
+- Uses `@ObservedObject` only when a stable owner creates and injects the RTC object
 - Calls `setupRTC()` in `.onAppear`
 - Calls `onDestroy()` in `.onDisappear`
 
@@ -178,8 +184,11 @@ UIKit video views (`VideoUIView`) are bridged into SwiftUI via `UIViewRepresenta
 
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelName) { token in
-    self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
+
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

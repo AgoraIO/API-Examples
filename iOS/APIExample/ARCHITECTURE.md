@@ -1,5 +1,24 @@
 # ARCHITECTURE.md — APIExample
 
+## Application Lifecycle
+
+The app and its extensions default to iOS 12. SDK-conditional build settings raise the
+minimum to iOS 15 when using iOS 27 SDKs, and the Podfile applies the same minimum to Pods.
+Use a toolchain supporting iOS 12 deployment for packages intended for iOS 12 devices.
+On iOS 12, `AppDelegate` creates the
+window and loads the initial controller from `Main.storyboard`. On iOS 13 and later,
+`Info.plist` declares a single application scene: UIKit loads `Main.storyboard` and
+assigns its window to `SceneDelegate`. Scene declarations and window APIs are guarded
+by iOS availability checks; the window helper retains its iOS 12 fallback.
+Do not rebuild the root controller on scene activation or end RTC sessions merely because
+the scene enters the background. Use a build toolchain that supports the deployment target;
+adopting the scene lifecycle does not require raising the minimum iOS version.
+
+`ViewController` owns a `LogFloatingButton` defined in `Common/LogViewController.swift`.
+It is attached to the navigation container after appearance so it remains available in
+example pages on both iOS 12 and later. Its safe-area placement and share sheet use its
+own view/window hierarchy; do not use `Floaty.global`, which creates a window without a scene.
+
 ## Case Index
 
 | Case | Path | Key APIs | Description |
@@ -7,7 +26,7 @@
 | JoinChannelVideo | `Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift` | `joinChannel()`, `setupLocalVideo()`, `setupRemoteVideo()` | Basic video call — join channel and render local/remote video |
 | JoinChannelVideo(Token) | `Examples/Basic/JoinChannelVideo(Token)/JoinChannelVideoToken.swift` | `joinChannel(byToken:)`, `setupLocalVideo()`, `setupRemoteVideo()` | Video call with token authentication |
 | JoinChannelVideo(Recorder) | `Examples/Basic/JoinChannelVideo(Recorder)/JoinChannelVideoRecorder.swift` | `createMediaRecorder()`, `joinChannel()`, `setupLocalVideo()` | Local and remote stream recording |
-| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `enableAudioVolumeIndication()`, `adjustRecordingSignalVolume()` | Basic audio call with volume and in-ear monitoring controls |
+| JoinChannelAudio | `Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift` | `joinChannel()`, `setAudioProfile()`, `enableAudioVolumeIndication()`, `adjustRecordingSignalVolume()` | Basic audio call with relay, scenario, volume and in-ear monitoring controls; participant area adapts to available height |
 | LiveStreaming | `Examples/Advanced/LiveStreaming/LiveStreaming.swift` | `setClientRole()`, `setVideoScenario()`, `preloadChannel()`, `enableCameraCenterStage()` | Interactive live streaming with role switching and camera features |
 | RTMPStreaming | `Examples/Advanced/RTMPStreaming/RTMPStreaming.swift` | `startRtmpStreamWithoutTranscoding()`, `startRtmpStream(withTranscoding:)`, `updateRtmpTranscoding()`, `stopRtmpStream()` | Push stream to CDN with optional transcoding |
 | VideoMetadata | `Examples/Advanced/VideoMetadata/VideoMetadata.swift` | `setMediaMetadataDataSource()`, `setMediaMetadataDelegate()` | Send and receive metadata attached to video stream |
@@ -32,19 +51,18 @@
 | ScreenShare | `Examples/Advanced/ScreenShare/ScreenShare.swift` | `startScreenCapture()`, `updateScreenCapture()`, `stopScreenCapture()`, `setScreenCaptureScenario()` | Screen capture and sharing via ReplayKit extension |
 | LocalCompositeGraph | `Examples/Advanced/LocalCompositeGraph/LocalCompositeGraph.swift` | `startLocalVideoTranscoder()`, `startCameraCapture()`, `startScreenCapture()`, `enableVirtualBackground()` | Composite multiple video sources locally before publishing |
 | VideoProcess | `Examples/Advanced/VideoProcess/VideoProcess.swift` | `setBeautyEffectOptions()`, `enableVirtualBackground()`, `enableExtension()` | Built-in beauty, virtual background, and video enhancement |
-| AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `enableExtension()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
-| RhythmPlayer | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Play metronome-style rhythm audio |
+| AgoraBeauty | `Examples/Advanced/AgoraBeauty/AgoraBeauty.swift` | `createVideoEffectObject()`, `setVideoEffectStringParam()`, `enableVirtualBackground()` | Agora beauty extension with virtual background |
+| RhythmPlayer (hidden) | `Examples/Advanced/RhythmPlayer/RhythmPlayer.swift` | `startRhythmPlayer()`, `stopRhythmPlayer()` | Source retained for reference; hidden from the menu because the Rhythm Player APIs are deprecated since RTC SDK 4.6.0 |
 | CreateDataStream | `Examples/Advanced/CreateDataStream/CreateDataStream.swift` | `createDataStream()`, `sendStreamMessage()` | Create and send data stream messages between users |
 | MediaChannelRelay | `Examples/Advanced/MediaChannelRelay/MediaChannelRelay.swift` | `startOrUpdateChannelMediaRelay()`, `stopChannelMediaRelay()`, `pauseAllChannelMediaRelay()`, `resumeAllChannelMediaRelay()` | Relay media stream to multiple destination channels |
 | SpatialAudio | `Examples/Advanced/SpatialAudio/SpatialAudio.swift` | `createMediaPlayer()`, `updateChannel()` | 3D spatial audio with media player integration |
 | ContentInspect | `Examples/Advanced/ContentInspect/ContentInspect.swift` | `enableContentInspect()`, `switchCamera()` | Moderate content in video stream |
 | MutliCamera | `Examples/Advanced/MutliCamera/MutliCamera.swift` | `enableMultiCamera()`, `startCameraCapture()`, `stopCameraCapture()` | Capture from front and back cameras simultaneously (iOS 13+) |
 | KtvCopyrightMusic | `Examples/Advanced/KtvCopyrightMusic/KtvCopyrightMusic.swift` | — | Links to KTV copyright music documentation |
-| ThirdBeautify | `Examples/Advanced/ThirdBeautify/ThirdBeautify.swift` | `enableExtension()` | Third-party beauty SDK integration (ByteDance / FaceUnity / SenseTime) |
+| ThirdBeautify | `Examples/Advanced/ThirdBeautify/ThirdBeautify.swift` | `enableExtension()` | Third-party beauty SDK integration (FaceUnity / SenseTime) |
 | ARKit | `Examples/Advanced/ARKit/ARKit.swift` | `setVideoFrameDelegate()`, `enableInstantMediaRendering()`, `startMediaRenderingTracing()` | Push ARKit face tracking frames as custom video source |
 | AudioRouterPlayer | `Examples/Advanced/AudioRouterPlayer/AudioRouterPlayer.swift` | `setEnableSpeakerphone()` | Control audio output routing with third-party player |
 | AudioWaveform | `Examples/Advanced/AudioWaveform/AudioWaveform.swift` | `setAudioProfile()`, `enableAudioVolumeIndication()` | Visualize audio waveform from volume callbacks |
-| FaceCapture | `Examples/Advanced/FaceCapture/FaceCapture.swift` | `enableExtension()`, `setExtensionPropertyWithVendor()`, `setFaceInfoDelegate()` | Face capture and lip sync via Agora extension |
 | TransparentRender | `Examples/Advanced/TransparentRender/TransparentRender.swift` | `createMediaPlayer()`, `setExternalVideoSource()`, `pushExternalVideoFrame()` | Render video with transparent background |
 | RtePlayer | `Examples/Advanced/RtePlayer/RtePlayer.swift` | `AgoraRte`, `AgoraRtePlayer`, `AgoraRteCanvas` | URL-based stream playback via RTE Player API |
 | Simulcast | `Examples/Advanced/Simulcast/Simulcast.swift` | `setSimulcastConfig()`, `setRemoteVideoStream()` | Publish multiple video quality layers simultaneously |
@@ -57,12 +75,12 @@ APIExample/
 ├── Podfile                                  # CocoaPods dependencies (AgoraRtcEngine_iOS, Floaty, AGEVideoLayout, etc.)
 ├── SimpleFilter/                            # Optional C++ audio/video extension module
 ├── Agora-ScreenShare-Extension/             # ReplayKit broadcast extension for screen sharing
-├── ByteEffectLib/                           # Optional ByteDance beauty SDK resources
 ├── FULib/                                   # Optional FaceUnity beauty SDK resources
 ├── SenseLib/                                # Optional SenseTime beauty SDK resources
 ├── libs/                                    # Local SDK frameworks (when not using CocoaPods)
 └── APIExample/
     ├── AppDelegate.swift
+    ├── SceneDelegate.swift                  # Window owned by the application scene
     ├── ViewController.swift                 # Root menu controller — MenuItem registration lives here
     ├── Info.plist
     ├── APIExample.entitlements
@@ -97,42 +115,41 @@ APIExample/
     │   └── Advanced/
     │       ├── LiveStreaming/               # "Live Streaming" — setClientRole
     │       ├── RTMPStreaming/               # "RTMP Streaming" — push to CDN
-    │       ├── VideoMetadata/               # "Video Metadata" — send/receive metadata
-    │       ├── VoiceChanger/                # "Voice Changer" — voice beautifier/effects
-    │       ├── CustomPcmAudioSource/        # "Custom Audio Source" — push PCM audio
+    │       ├── VideoMetadata/               # "Media Metadata" — send/receive metadata
+    │       ├── VoiceChanger/                # "Voice Effects" — voice beautifier/effects
+    │       ├── CustomPcmAudioSource/        # "Custom Audio Source (PCM)" — push PCM audio
     │       ├── CustomAudioRender/           # "Custom Audio Render" — pull audio rendering
     │       ├── CustomAudioSource/           # (legacy custom audio source)
-    │       ├── CustomVideoSourcePush/       # "Custom Video Source(Push)" — push external video
-    │       ├── CustomVideoSourcePushMulti/  # "Custom Video Source(Multi)" — multi-track push
+    │       ├── CustomVideoSourcePush/       # "Custom Video Source" — push external video
+    │       ├── CustomVideoSourcePushMulti/  # "Multiple Video Sources" — multi-track push
     │       ├── CustomVideoRender/           # "Custom Video Render"
     │       ├── RawAudioData/                # "Raw Audio Data"
     │       ├── RawVideoData/                # "Raw Video Data"
     │       ├── RawMediaData/                # (legacy raw media data)
-    │       ├── PictureInPicture/            # "Picture In Picture (iOS15+)"
+    │       ├── PictureInPicture/            # "Picture In Picture"
     │       ├── SimpleFilter/                # "Simple Filter Extension"
     │       ├── QuickSwitchChannel/          # "Quick Switch Channel"
     │       ├── JoinMultiChannel/            # "Join Multiple Channels"
     │       ├── StreamEncryption/            # "Stream Encryption"
     │       ├── AudioMixing/                 # "Audio Mixing"
-    │       ├── PrecallTest/                 # "Precall Test"
+    │       ├── PrecallTest/                 # "Pre-call Test"
     │       ├── MediaPlayer/                 # "Media Player"
     │       ├── ScreenShare/                 # "Screen Share"
     │       ├── LocalCompositeGraph/         # "Local Composite Graph"
     │       ├── VideoProcess/                # "Video Process"
-    │       ├── AgoraBeauty/                 # "Agora Beauty"
-    │       ├── RhythmPlayer/                # "Rhythm Player"
-    │       ├── CreateDataStream/            # "Create Data Stream"
+    │       ├── AgoraBeauty/                 # "Beauty 2.0"
+    │       ├── RhythmPlayer/                # Hidden — APIs deprecated since RTC SDK 4.6.0
+    │       ├── CreateDataStream/            # "Send Data Stream"
     │       ├── MediaChannelRelay/           # "Media Channel Relay"
     │       ├── SpatialAudio/                # "Spatial Audio"
     │       ├── ContentInspect/              # "Content Inspect"
-    │       ├── MutliCamera/                 # "Multi Camera (iOS13+)"
+    │       ├── MutliCamera/                 # "Multi Camera"
     │       ├── KtvCopyrightMusic/           # "KTV Copyright Music"
-    │       ├── ThirdBeautify/               # "Third Beautify" — third-party beauty SDK
+    │       ├── ThirdBeautify/               # "Third-party Beauty" — third-party beauty SDK
     │       ├── ARKit/                       # "ARKit"
-    │       ├── AudioRouterPlayer/           # "Audio Router (Third Party Player)"
+    │       ├── AudioRouterPlayer/           # "Audio Router (Third-party Player)"
     │       ├── AudioWaveform/               # "Audio Waveform"
-    │       ├── FaceCapture/                 # "Face Capture"
-    │       ├── TransparentRender/           # "Transparent Render"
+    │       ├── TransparentRender/           # "Transparent Rendering"
     │       ├── RtePlayer/                   # "URL Streaming (RTE Player)"
     │       ├── Simulcast/                   # "Simulcast"
     │       ├── Multipath/                   # "Multipath"
@@ -167,9 +184,11 @@ struct MenuItem {
 
 Most examples use path 2 (their own storyboard).
 
-**To add a case, edit exactly two things:**
-1. Add a `MenuItem` to the `menus` array in `ViewController.swift`
-2. Create the example folder under `Examples/Basic/` or `Examples/Advanced/` with the Swift file(s) and storyboard
+A registered case connects the `MenuItem`, its Swift controller(s), and its storyboard.
+New source files must belong to the Xcode target's Sources build phase, and storyboards,
+localized files, and media assets must belong to Resources. Follow
+[upsert-case](.agents/skills/upsert-case/SKILL.md) for the complete change procedure and
+update the Case Index when the case changes.
 
 ## Entry/Main ViewController Pattern
 
@@ -193,17 +212,22 @@ viewDidLoad    → AgoraRtcEngineKit.sharedEngine(withAppId:delegate:)
                       ↓
                  [AgoraRtcEngineDelegate callbacks — may be on background thread]
                       ↓
-viewDidDisappear / willMove(toParent:)
+willMove(toParent:) when parent == nil
                → engine.leaveChannel()
                → AgoraRtcEngineKit.destroy()
 ```
 
+For navigation-based cases, cleanup runs when the controller is removed from its parent.
+Temporary disappearance alone must not destroy the engine; follow the guarded cleanup in
+the upsert and review skills.
+
 ## Token Flow
 
-```swift
-NetworkManager.shared.generateToken(channelName: channelId, uid: uid) { token in
-    self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: uid, mediaOptions: options)
-}
-```
+Use the guarded permission → Token → join implementation in
+[upsert-case](.agents/skills/upsert-case/SKILL.md). Snapshot channel, UID, request generation
+and engine identity before asynchronous work. Recheck them on main before each continuation;
+leave/destroy invalidates pending requests and destroy clears engine ownership. Weak capture
+alone does not protect a still-alive controller whose RTC session has ended.
 
-If `KeyCenter.Certificate` is nil, token generation is skipped and a nil token is used — valid for projects without App Certificate.
+A nil/empty Token is allowed only when no App Certificate is configured. Reject a missing
+required Token and check the SDK join return code without logging credentials.

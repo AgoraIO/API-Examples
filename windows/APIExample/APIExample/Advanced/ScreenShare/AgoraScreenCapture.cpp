@@ -107,6 +107,7 @@ bool CAgoraScreenCapture::InitAgora()
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
+	InitMonitorInfos();
 	m_btnJoinChannel.EnableWindow(TRUE);
 	return true;
 }
@@ -286,22 +287,41 @@ BOOL CAgoraScreenCapture::OnInitDialog()
 	m_cmbScreenScenario.InsertString(2, _T("Video"));
 	m_cmbScreenScenario.InsertString(3, _T("RDC"));
 	ResumeStatus();
-    InitMonitorInfos();
 	return TRUE;  
 }
 
 void CAgoraScreenCapture::InitMonitorInfos()
 {
-	m_monitors.EnumMonitor();
-    std::vector<CMonitors::MonitorInformation>  infos = m_monitors.GetMonitors();
-	for (size_t i = 0; i < infos.size(); i++) {
-		char szName[MAX_PATH] = { 0 };
-		sprintf_s(szName, MAX_PATH, "Display%d", i + 1);
-		CString strDevice = infos[i].monitorInfo.szDevice;
-		strDevice.Replace(L"\\\\.\\", L"");
-		m_cmbScreenRegion.InsertString(i, strDevice.GetBuffer(0));
+	m_cmbScreenRegion.ResetContent();
+	m_displaySources.clear();
+	if (!m_rtcEngine)
+		return;
+
+	SIZE sourceSize = { 64, 64 };
+	IScreenCaptureSourceList* sources =
+		m_rtcEngine->getScreenCaptureSources(sourceSize, sourceSize, true);
+	if (!sources) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("getScreenCaptureSources failed"));
+		return;
 	}
-	m_cmbScreenRegion.SetCurSel(0);
+
+	for (unsigned int i = 0; i < sources->getCount(); ++i) {
+		ScreenCaptureSourceInfo source = sources->getSourceInfo(i);
+		if (source.type != ScreenCaptureSourceType_Screen)
+			continue;
+
+		m_displaySources.push_back({ source.sourceId, source.position });
+		CString displayName;
+		if (source.sourceName && source.sourceName[0] != '\0')
+			displayName = utf82cs(source.sourceName);
+		else
+			displayName.Format(_T("Display %u"), static_cast<unsigned int>(m_displaySources.size()));
+		m_cmbScreenRegion.AddString(displayName);
+	}
+	sources->release();
+
+	if (!m_displaySources.empty())
+		m_cmbScreenRegion.SetCurSel(0);
 }
 
 //The JoinChannel button's click handler.
@@ -353,19 +373,25 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
 {
     if (!m_rtcEngine || !m_initialize)
         return;
-    HWND hWnd = NULL;
 	if (m_cmbScreenCap.GetCurSel() < 0 || m_cmbScreenCap.GetCurSel() >= m_listWnd.GetSize()) {
 		return;
 	}
-    hWnd = (HWND)m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel())).sourceId;
+	const int64_t windowId =
+		m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel())).sourceId;
     int ret = 0;
-    m_windowShare = !m_windowShare;
-    if (m_windowShare)
+    if (!m_windowShare)
     {
         //start screen capture in the engine.
 		agora::rtc::Rectangle rcCapWnd;
 		m_screenParam.windowFocus = true;
-		ret = m_rtcEngine->startScreenCaptureByWindowId((int64_t)hWnd, rcCapWnd, m_screenParam);
+		ret = m_rtcEngine->startScreenCaptureByWindowId(windowId, rcCapWnd, m_screenParam);
+		if (ret != 0) {
+			CString strInfo;
+			strInfo.Format(_T("start share window failed: %d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			return;
+		}
+		m_windowShare = true;
 		//start preview in the engine.
 		m_rtcEngine->startPreview(VIDEO_SOURCE_TYPE::VIDEO_SOURCE_SCREEN);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
@@ -384,10 +410,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("updateChannelMediaOptions"));
 		}
 		
-        if (ret== 0)
-            m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window succees！"));
-        else
-            m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window failed！"));
+        m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window success"));
         m_btnStartCap.SetWindowText(screenShareCtrlEndCap);
         m_btnShareScreen.EnableWindow(FALSE);
 
@@ -403,6 +426,8 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop screen share stop failed！"));
         m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
         m_btnShareScreen.EnableWindow(TRUE);
+		if (ret == 0)
+			m_windowShare = false;
     }
 }
 
@@ -804,29 +829,40 @@ bool CMonitors::GetWindowRect(HWND hWnd, agora::rtc::Rectangle& regionRect)
 
 void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 {
-    m_screenShare = !m_screenShare;
-    if (m_screenShare) {
-        int sel = m_cmbScreenRegion.GetCurSel();
-		int heightX = GetSystemMetrics(SM_CXSCREEN);
-		int heightY = GetSystemMetrics(SM_CYSCREEN);
-        m_screenRegion = { 0,0,heightX,heightY };
+    if (!m_rtcEngine || !m_initialize)
+		return;
 
-		CString displayId = L"";
-		m_cmbScreenRegion.GetWindowText(displayId);
-		int id = _ttoi(displayId.Mid(strlen("display"))) - 1;
-		float scale = m_sldScale.GetPos() * 1.0f / 100;
-		agora::rtc::Rectangle rcCapWnd = { m_screenRegion.x, m_screenRegion.y, (int)(m_screenRegion.width * scale), (int)(m_screenRegion.height * scale) };
+    if (!m_screenShare) {
+		const int selected = m_cmbScreenRegion.GetCurSel();
+		if (selected < 0 || selected >= static_cast<int>(m_displaySources.size())) {
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("No shareable display selected"));
+			return;
+		}
+
+		const DisplayCaptureSource& display = m_displaySources[selected];
+		m_screenRegion = display.position;
+		const float scale = m_sldScale.GetPos() / 100.0f;
+		agora::rtc::Rectangle rcCapWnd = {
+			0, 0,
+			static_cast<int>(m_screenRegion.width * scale),
+			static_cast<int>(m_screenRegion.height * scale)
+		};
 		m_screenParam.windowFocus = true;
-		m_rtcEngine->startScreenCaptureByDisplayId(id, rcCapWnd, m_screenParam);
-       
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startScreenCaptureByDisplayId"));
+		const int ret = m_rtcEngine->startScreenCaptureByDisplayId(
+			display.sourceId, rcCapWnd, m_screenParam);
+
 		CString strInfo;
-		strInfo.Format(_T("DisplayId: %d"), id);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strInfo);
+		strInfo.Format(_T("startScreenCaptureByDisplayId: id=%lld, ret=%d"),
+			static_cast<long long>(display.sourceId), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		if (ret != 0)
+			return;
+
+		m_screenShare = true;
 		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
 		//start preview in the engine.
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startPreview "));
+		m_rtcEngine->startPreview(VIDEO_SOURCE_SCREEN_PRIMARY);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		if (m_joinChannel) {
 			ChannelMediaOptions option;
 			option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -839,15 +875,22 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("updateChannelMediaOptions"));
 		}
         m_btnStartCap.EnableWindow(FALSE);
-		m_screenShare = true;
 		m_btnWndExeclude.EnableWindow(TRUE);
 		m_chkHighLight.EnableWindow(FALSE);
     }
     else {
-        m_rtcEngine->stopScreenCapture();
-		m_btnShareScreen.SetWindowText(screenShareCtrlShareSCreen);
-        m_btnStartCap.EnableWindow(TRUE);
-		m_screenShare = false;
+        const int ret = m_rtcEngine->stopScreenCapture();
+		if (ret == 0) {
+			m_btnShareScreen.SetWindowText(screenShareCtrlShareSCreen);
+			m_btnStartCap.EnableWindow(TRUE);
+			m_screenShare = false;
+			m_btnWndExeclude.EnableWindow(FALSE);
+			m_chkHighLight.EnableWindow(TRUE);
+		} else {
+			CString strInfo;
+			strInfo.Format(_T("stop screen capture failed: %d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		}
     }
 }
 

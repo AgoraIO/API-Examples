@@ -38,6 +38,21 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 
 > If you run into permission or execution policy errors, try running as administrator, or adjust the local PowerShell execution policy and try again.
 
+### Agora Beauty 2.0 Resources
+
+The Agora Beauty 2.0 material package is not included in this repository. Before building locally, obtain `AgoraBeautyMaterial.zip` from Agora technical support and extract it to `windows/APIExample/Release/beauty_agora/`.
+
+The extracted resources should have the following structure:
+
+```text
+windows/APIExample/Release/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+The `Release` directory is ignored by Git.
+
 ## Basic Scene
 
 
@@ -143,13 +158,13 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 
 ## Connect Us
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/cn/faq) first
+- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/api-reference/faq) first
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - You can find full API documentation at [Document Center](https://docs.agora.io/en/)
 - If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Broadcasting/issues)
+- You can file bugs about this sample at [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## License
 

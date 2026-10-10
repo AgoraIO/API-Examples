@@ -44,6 +44,21 @@
 
 > 若遇权限或执行策略报错，可尝试以管理员运行，或调整本机 PowerShell 执行策略后再试。
 
+### Agora 美颜 2.0 资源
+
+Agora 美颜 2.0 资源包不包含在仓库中。本地构建前，从 Agora 技术支持获取 `AgoraBeautyMaterial.zip`，并解压到 `windows/APIExample/Release/beauty_agora/`。
+
+解压后的资源目录结构如下：
+
+```text
+windows/APIExample/Release/beauty_agora/
+└── beauty_material_functional/
+    ├── config.json
+    └── ...
+```
+
+`Release` 目录已被 Git 忽略。
+
 ## 基础场景
 
 ### 直播互动
@@ -166,13 +181,13 @@
 
 ## 联系我们
 
-- 如果你遇到了困难，可以先参阅[常见问题](https://docs.agora.io/cn/faq)
+- 如果你遇到了困难，可以先参阅[常见问题](https://doc.shengwang.cn/faq/list)
 - 如果你想了解更多官方示例，可以参考[官方SDK示例](https://github.com/AgoraIO)
 - 如果你想了解声网SDK在复杂场景下的应用，可以参考[官方场景案例](https://github.com/AgoraIO-usecase)
 - 如果你想了解声网的一些社区开发者维护的项目，可以查看[社区](https://github.com/AgoraIO-Community)
 - 完整的 API 文档见 [文档中心](https://docs.agora.io/cn/)
 - 若遇到问题需要开发者帮助，你可以到 [开发者社区](https://rtcdeveloper.com/) 提问
-- 如果发现了示例代码的 bug，欢迎提交 [issue](https://github.com/AgoraIO/Basic-Video-Broadcasting/issues)
+- 如果发现了示例代码的 bug，欢迎提交 [issue](https://github.com/AgoraIO/API-Examples/issues)
 
 ## 代码许可
 

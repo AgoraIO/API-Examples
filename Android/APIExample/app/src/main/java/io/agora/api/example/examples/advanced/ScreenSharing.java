@@ -60,7 +60,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * screen share stream during an audio-video call.
  */
 @Example(
-        index = 31,
+        index = 34,
         group = ADVANCED,
         name = R.string.item_screensharing,
         actionId = R.id.action_mainFragment_to_ScreenSharing,
@@ -154,7 +154,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
              */
             config.mContext = context.getApplicationContext();
             /*
-             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/realtime-media/setup-service-and-credentials"> How to get the App ID</a>
              */
             config.mAppId = getAgoraAppId();
             /* The channel profile.
@@ -172,7 +172,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AUDIO_SCENARIO_DEFAULT;
             config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /*
@@ -417,9 +417,9 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
 
         /*
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/authentication-workflow/android
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+         *      https://docs.agora.io/en/realtime-media/rtc/build/authenticate-users/deploy-token-server*/
         TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
             /* Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
@@ -436,8 +436,8 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // en: https://docs.agora.io/en/realtime-media/rtc/reference/error-codes
+                // cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 return;
             }
@@ -454,7 +454,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         /**
          * Error code description can be found at:
          * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://doc.shengwang.cn/api-ref/rtc/android/error-code
          */
         @Override
         public void onError(int err) {
@@ -513,6 +513,18 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                 showLongToast("Screen sharing stopped by user in status bar");
             } else if (event == Constants.LOCAL_VIDEO_EVENT_TYPE_SCREEN_CAPTURE_SYSTEM_INTERNAL_ERROR) {
                 showLongToast("Screen sharing error occurred");
+            }
+        }
+
+        @Override
+        public void onPermissionGranted(int permission) {
+            super.onPermissionGranted(permission);
+            if (permission == Constants.RECORD_AUDIO) {
+                showLongToast("Recording permission granted");
+            } else if (permission == Constants.CAMERA) {
+                showLongToast("Camera permission granted");
+            } else if (permission == Constants.SCREEN_CAPTURE) {
+                showLongToast("Screen capture permission granted");
             }
         }
 

@@ -8,6 +8,8 @@ CAGDShowAudioCapture::CAGDShowAudioCapture()
 	, m_ptrCaptureGraphBuilder2(NULL)
 	, m_nCapSelected(-1)
 {
+	engine_ = nullptr;
+	audioTrackId_ = agora::rtc::INVALID_TRACK_ID;
 	memset(m_szActiveDeviceID, 0, MAX_PATH*sizeof(TCHAR));
 
     filterSourceName  = _T("Audio Filter");
@@ -639,7 +641,7 @@ void CAGDShowAudioCapture::Stop()
 void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
 {
     BYTE *pBuffer;
-    if (!sample || !engine_)
+    if (!sample || !engine_ || audioTrackId_ == agora::rtc::INVALID_TRACK_ID)
         return;
     
     int size = sample->GetActualDataLength();
@@ -655,7 +657,7 @@ void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
 	int fps = m_audioFrame.samplesPerSec / m_audioFrame.samplesPerChannel;
 	memcpy(m_audioFrame.buffer,pBuffer , size);
 	SIZE_T nSize = m_audioFrame.samplesPerChannel *  m_audioFrame.channels *  m_audioFrame.bytesPerSample;
-	mediaEngine->pushAudioFrame(&m_audioFrame);
+	mediaEngine->pushAudioFrame(&m_audioFrame, audioTrackId_);
 
     //CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
 }

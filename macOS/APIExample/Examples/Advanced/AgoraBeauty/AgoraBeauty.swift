@@ -33,7 +33,6 @@ class AgoraBeauty: BaseViewController {
     let backgroundTypes = AgoraVirtualBackgroundSourceType.allValues()
     var agoraKit: AgoraRtcEngineKit!
     var beautyManager: AgoraBeautyManager!
-    var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
     var whintening = 0.5
@@ -77,7 +76,7 @@ class AgoraBeauty: BaseViewController {
     
     private func setupBeautyManager() {
         beautyManager = AgoraBeautyManager(agoraKit: agoraKit)
-        beautyManager.beautyMakeupStyle = "default makeup style".localized
+        beautyManager.beautyMakeupStyle = "Makeup-Young"
         beautyManager.makeUpEnable = false
     }
     
@@ -88,6 +87,7 @@ class AgoraBeauty: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        beautyManager.destory()
         AgoraRtcEngineKit.destroy()
     }
     
@@ -97,10 +97,10 @@ class AgoraBeauty: BaseViewController {
         channelField.field.placeholderString = "Channel Name".localized
         joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
         
-        lightenSlider.floatValue = beautifyOption.lighteningLevel
-        ruddySlider.floatValue = beautifyOption.rednessLevel
-        sharpSlider.floatValue = beautifyOption.sharpnessLevel
-        smoothingSlider.floatValue = beautifyOption.smoothnessLevel
+        lightenSlider.floatValue = beautyManager.lightness
+        ruddySlider.floatValue = beautyManager.redness
+        sharpSlider.floatValue = beautyManager.sharpness
+        smoothingSlider.floatValue = beautyManager.smoothness
         
         initSelectResolutionPicker()
         initSelectFpsPicker()
@@ -153,8 +153,8 @@ class AgoraBeauty: BaseViewController {
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                    // en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
             })
@@ -174,15 +174,7 @@ class AgoraBeauty: BaseViewController {
     }
     
     @IBAction func onBeautySliderChange(_ sender: NSSwitch) {
-        if sender.state == .on {
-            if agoraKit.isFeatureAvailable(onDevice: .videoPreprocessBeauty) {
-                agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
-            } else {
-                showAlert(message: "The feature is unavailable in the device!")
-            }
-        } else {
-            agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
-        }
+        beautyManager.basicBeautyEnable = sender.state == .on
     }
     
     @IBAction func onLightenSliderChange(_ sender: NSSlider) {
@@ -386,8 +378,8 @@ extension AgoraBeauty: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agorawarningcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
@@ -396,8 +388,8 @@ extension AgoraBeauty: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-    /// cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+    /// en: https://api-ref.agora.io/en/video-sdk/macos/4.x/documentation/agorartckit/agoraerrorcode
+    /// cn: https://doc.shengwang.cn/api-ref/rtc/macos/error-code
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)

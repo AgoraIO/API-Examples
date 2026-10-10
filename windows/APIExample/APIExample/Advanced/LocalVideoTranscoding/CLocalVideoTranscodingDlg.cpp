@@ -10,6 +10,30 @@
 
 IMPLEMENT_DYNAMIC(CLocalVideoTranscodingDlg, CDialogEx)
 
+namespace {
+bool GetPrimaryDisplayId(IRtcEngine* rtcEngine, int64_t& displayId)
+{
+	SIZE sourceSize = { 64, 64 };
+	IScreenCaptureSourceList* sources = rtcEngine->getScreenCaptureSources(sourceSize, sourceSize, true);
+	if (!sources)
+		return false;
+
+	bool found = false;
+	for (unsigned int i = 0; i < sources->getCount(); ++i) {
+		ScreenCaptureSourceInfo source = sources->getSourceInfo(i);
+		if (source.type != ScreenCaptureSourceType_Screen)
+			continue;
+
+		displayId = source.sourceId;
+		found = true;
+		if (source.primaryMonitor)
+			break;
+	}
+	sources->release();
+	return found;
+}
+}
+
 CLocalVideoTranscodingDlg::CLocalVideoTranscodingDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_LOCAL_VIDEO_TRANSCODING, pParent)
 {
@@ -78,12 +102,12 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		CString strInfo;
-		agora::rtc::Rectangle rect;
 		auto params = agora::rtc::ScreenCaptureParameters(640, 360, 15, 800);
-
-		RECT rc;		
-		::GetWindowRect(GetDesktopWindow()->GetSafeHwnd(), &rc);
-		rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
+		int64_t displayId = 0;
+		if (!GetPrimaryDisplayId(m_rtcEngine, displayId)) {
+			AfxMessageBox(_T("No screen is available for capture"));
+			return;
+		}
 
 		
 		//primary camera configuration
@@ -111,8 +135,15 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 
 		//start Screen capture
-		ret = m_rtcEngine->startScreenCaptureByScreenRect(rect, rect, params);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start Screen capture"));
+		agora::rtc::Rectangle regionRect;
+		ret = m_rtcEngine->startScreenCaptureByDisplayId(displayId, regionRect, params);
+		if (ret != 0) {
+			m_rtcEngine->stopCameraCapture(VIDEO_SOURCE_CAMERA_PRIMARY);
+			strInfo.Format(_T("start screen capture failed: %d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			return;
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start screen capture"));
 		int i = 0;
 		//screen
 		stream_infos[i].sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;

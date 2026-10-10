@@ -8,6 +8,7 @@
 xcshareddata
 */libs
 *.zip
+APIExample/Resources/AgoraBeautyMaterial.bundle/
 agora_sdk
 *.xcarchive
 

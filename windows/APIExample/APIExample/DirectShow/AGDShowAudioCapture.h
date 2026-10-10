@@ -49,6 +49,7 @@ public:
 
 	void InitAudioFrame();
 	agora::rtc::IRtcEngine* engine_;
+	agora::rtc::track_id_t audioTrackId_;
 
 	agora::media::IAudioFrameObserver::AudioFrame				m_audioFrame;
 protected:

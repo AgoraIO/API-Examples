@@ -21,7 +21,7 @@ import io.agora.api.example.databinding.FragmentAudiorouterPlayerBinding;
  * The type Audio router player.
  */
 @Example(
-        index = 6,
+        index = 19,
         group = ADVANCED,
         name = R.string.item_audiorouter_player,
         actionId = R.id.action_mainFragment_to_AudioRouterPlayer,
