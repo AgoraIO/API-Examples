@@ -3,7 +3,7 @@ platform :ios, '12.0'
 #source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 def common_pods
-   # pod 'AgoraRtcEngine_iOS', '4.7.0'
+   # pod 'AgoraRtcEngine_iOS', '4.7.1'
    pod 'sdk', :path => 'sdk.podspec'
 end
   
@@ -37,7 +37,7 @@ target 'SimpleFilter' do
 end
 
 pre_install do |installer|
-#  system("sh .download_script.sh 4.7.0 true")
+#  system("sh .download_script.sh 4.7.1 true")
 end
 
 # Xcode 27 SDKs require iOS 15; retain each pod's default for older SDKs.
