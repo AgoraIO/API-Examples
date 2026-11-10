@@ -44,7 +44,7 @@ own view/window hierarchy; do not use `Floaty.global`, which creates a window wi
 | SimpleFilter | `Examples/Advanced/SimpleFilter/SimpleFilter.swift` | `enableExtension()`, `setExtensionPropertyWithVendor()` | Apply audio/video filter via Agora Extension API |
 | QuickSwitchChannel | `Examples/Advanced/QuickSwitchChannel/QuickSwitchChannel.swift` | `joinChannel()`, `leaveChannel()` | Quickly switch between channels as audience |
 | JoinMultiChannel | `Examples/Advanced/JoinMultiChannel/JoinMultiChannel.swift` | `joinChannelEx()`, `takeSnapshotEx()` | Join multiple channels simultaneously via ex connection |
-| StreamEncryption | `Examples/Advanced/StreamEncryption/StreamEncryption.swift` | `enableEncryption()` | Built-in and custom stream encryption |
+| StreamEncryption | `Examples/Advanced/StreamEncryption/StreamEncryption.swift` | `enableEncryption()` | Built-in and custom stream encryption with session-guarded callbacks and complete engine cleanup on exit |
 | AudioMixing | `Examples/Advanced/AudioMixing/AudioMixing.swift` | `startAudioMixing()`, `stopAudioMixing()`, `adjustAudioMixingVolume()`, `setEffectsVolume()` | Mix local audio file with microphone input |
 | PrecallTest | `Examples/Advanced/PrecallTest/PrecallTest.swift` | `startEchoTest()`, `stopEchoTest()`, `startLastmileProbeTest()`, `stopLastmileProbeTest()` | Pre-call echo test and last-mile network probe |
 | MediaPlayer | `Examples/Advanced/MediaPlayer/MediaPlayer.swift` | `createMediaPlayer()`, `updateChannelEx()` | Play media files and publish to channel via media player |

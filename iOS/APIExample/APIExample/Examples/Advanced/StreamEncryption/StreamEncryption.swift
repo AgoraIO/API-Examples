@@ -79,6 +79,8 @@ class StreamEncryptionMain: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
+    private var joinRequestID = 0
+    private var customEncryptionRegistered = false
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -128,6 +130,7 @@ class StreamEncryptionMain: BaseViewController {
         } else {
             // your own custom algorithm encryption
             AgoraCustomEncryption.registerPacketProcessing(agoraKit)
+            customEncryptionRegistered = true
         }
         
         // enable video module and set up video encoding configs
@@ -147,6 +150,9 @@ class StreamEncryptionMain: BaseViewController {
     }
     
     private func joinChannel(channelName: String) {
+        guard let engine = agoraKit else { return }
+        joinRequestID += 1
+        let requestID = joinRequestID
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -166,21 +172,33 @@ class StreamEncryptionMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token,
-                                                   channelId: channelName,
-                                                   info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
-                self.isJoined = true
-                LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        NetworkManager.shared.generateToken(channelName: channelName) { [weak self, weak engine] token in
+            DispatchQueue.main.async { [weak self, weak engine] in
+                guard let self = self, let engine = engine,
+                      self.joinRequestID == requestID, self.agoraKit === engine else { return }
+                if !(KeyCenter.Certificate ?? "").isEmpty && (token ?? "").isEmpty {
+                    self.showAlert(title: "Error", message: "Token request failed")
+                    return
+                }
+                let result = engine.joinChannel(byToken: token, channelId: channelName,
+                                                info: nil, uid: 0) { [weak self, weak engine] channel, uid, elapsed in
+                    DispatchQueue.main.async { [weak self, weak engine] in
+                        guard let self = self, let engine = engine,
+                              self.joinRequestID == requestID, self.agoraKit === engine,
+                              channel == channelName else { return }
+                        self.isJoined = true
+                        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+                    }
+                }
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
+                    // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
             }
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://api-ref.agora.io/en/video-sdk/ios/4.x/documentation/agorartckit/agoraerrorcode
-                // cn: https://doc.shengwang.cn/api-ref/rtc/ios/error-code
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-        })
+        }
     }
     
     func getEncryptionSaltFromServer() -> Data {
@@ -192,22 +210,30 @@ class StreamEncryptionMain: BaseViewController {
     }
 
     override func willMove(toParent parent: UIViewController?) {
+        super.willMove(toParent: parent)
         if parent == nil {
-            // leave channel when exiting the view
-            
-            agoraKit.leaveChannel()
-            agoraKit.enableEncryption(false, encryptionConfig: AgoraEncryptionConfig())
-            guard let useCustom = configs["useCustom"] as? Bool else { return }
-            if useCustom {
-                // deregister packet processing
-                AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
-                if isJoined {
-                    agoraKit.leaveChannel { (stats) -> Void in
-                        LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                    }
-                }
-            }
+            destroyEngine()
         }
+    }
+
+    private func destroyEngine() {
+        // Invalidate pending Token and SDK callbacks before releasing this session.
+        joinRequestID += 1
+        isJoined = false
+        guard let engine = agoraKit else { return }
+        agoraKit = nil
+        engine.delegate = nil
+        engine.stopPreview()
+        if customEncryptionRegistered {
+            AgoraCustomEncryption.deregisterPacketProcessing(engine)
+            customEncryptionRegistered = false
+        }
+        engine.leaveChannel()
+        engine.enableEncryption(false, encryptionConfig: AgoraEncryptionConfig())
+        let canvas = AgoraRtcVideoCanvas()
+        canvas.view = nil
+        engine.setupLocalVideo(canvas)
+        AgoraRtcEngineKit.destroy()
     }
 }
 
@@ -237,17 +263,17 @@ extension StreamEncryptionMain: AgoraRtcEngineDelegate {
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        DispatchQueue.main.async { [weak self, weak engine] in
+            guard let self = self, let engine = engine, self.agoraKit === engine else { return }
+            LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+
+            // Only one remote video view is available for this tutorial.
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            videoCanvas.view = self.remoteVideo.videoView
+            videoCanvas.renderMode = .hidden
+            engine.setupRemoteVideo(videoCanvas)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -255,16 +281,16 @@ extension StreamEncryptionMain: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
-        // to unlink your view from sdk, so that your view reference will be released
-        // note the video will stay at its last frame, to completely remove it
-        // you will need to remove the EAGL sublayer from your binded view
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = nil
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        DispatchQueue.main.async { [weak self, weak engine] in
+            guard let self = self, let engine = engine, self.agoraKit === engine else { return }
+            LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+
+            // Unlink the remote view so the SDK releases its reference.
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            videoCanvas.view = nil
+            videoCanvas.renderMode = .hidden
+            engine.setupRemoteVideo(videoCanvas)
+        }
     }
 }
