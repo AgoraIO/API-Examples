@@ -1,8 +1,11 @@
+source 'https://download.agora.io/cocoapods/'
+source 'https://cdn.cocoapods.org/'
+
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
 def common_pods
-  pod 'AgoraRtcEngine_iOS', '4.7.0'
+  pod 'AgoraRtcEngine_iOS', '4.7.1'
 #  pod 'sdk', :path => 'sdk.podspec'
 end
 
@@ -26,5 +29,5 @@ target 'SimpleFilter' do
 end
 
 pre_install do |installer|
-  # system("sh .download_script.sh 4.7.0 true")
+  # system("sh .download_script.sh 4.7.1 true")
 end

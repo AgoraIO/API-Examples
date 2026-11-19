@@ -28,6 +28,18 @@ not inject an Aliyun Maven repository for RTC dependencies. Validate Maven resol
 without a local SDK and with a fresh dependency cache; compiling with a bundled SDK does
 not validate the public repository.
 
+## Apple SDK source
+
+All four iOS projects and the macOS project declare
+`https://download.agora.io/cocoapods/` before `https://cdn.cocoapods.org/` in their
+Podfiles. The Agora source provides the overseas SDK specs; the public CocoaPods CDN
+remains available for third-party pods. This overseas repository uses the Agora Maven
+and CocoaPods endpoints, not the Shengwang domestic endpoints.
+
+The iOS UIKit full project retains its local `sdk.podspec` release integration.
+Its declared sources apply to published pods, including the SDK when compile CI switches
+the local dependency to `AgoraRtcEngine_iOS`.
+
 ## Scope Rules
 
 - SDK version, dependency, credential plumbing, CI, and packaging changes require review of
