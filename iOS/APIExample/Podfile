@@ -1,6 +1,8 @@
+source 'https://download.agora.io/cocoapods/'
+source 'https://cdn.cocoapods.org/'
+
 platform :ios, '12.0'
 
-#source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 def common_pods
    # pod 'AgoraRtcEngine_iOS', '4.7.1'
